@@ -14,3 +14,7 @@ target/
 hs_err_pid*
 /target/
 *~
+
+#intellij specific files
+.idea
+*.iml

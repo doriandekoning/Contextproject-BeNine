@@ -9,7 +9,6 @@
    <url>http://maven.apache.org</url>
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<checkstyle.plugin.version>2.17</checkstyle.plugin.version>
 		<pmd.plugin.version>3.6</pmd.plugin.version>
 		<findbugs.plugin.version>3.0.2</findbugs.plugin.version>      
    </properties>
@@ -28,24 +27,6 @@
    </dependencies>
    <build>
       <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>${checkstyle.plugin.version}</version>
-            <configuration>
-               <failOnViolation>true</failOnViolation>
-               <configLocation>checkstyle.xml</configLocation>
-            </configuration>
-            <executions>
-               <execution>
-                  <id>verify-style</id>
-                  <phase>process-classes</phase>
-                  <goals>
-                     <goal>check</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>

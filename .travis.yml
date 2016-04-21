@@ -7,6 +7,7 @@ notifications:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+script: cd backend && mvn test
 env:
   - BUILD_PR_BRANCH=true
   - BUILD_PR_BRANCH=false
