@@ -11,7 +11,7 @@ suite("Routes", function() {
 			server
       		.get("/")
       		.end(function (err, res) {
-      			assert.equal("Hello World!", res.text);
+      			assert.equal("Fails!", res.text);
       			done();
       		});
 		});
