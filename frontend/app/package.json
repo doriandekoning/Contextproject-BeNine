@@ -1,0 +1,20 @@
+{
+  "name": "polycast-webinterface",
+  "version": "1.0.0",
+  "description": "Web interface to communicate with the backend server controlling the cameras.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "request": "2.x",
+    "express": "^4.x"
+  },
+  "devDependencies": {
+    "mocha": "2.x",
+    "supertest": "1.x"
+  }
+}
