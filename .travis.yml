@@ -7,10 +7,16 @@ notifications:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - cd frontend
+  - nvm install v4
+  - nvm use v4
+  - npm install -g mocha
+  - npm install
+
 #Add other test runs here by adding && and running commands
 # to change to the correct dir and run the tests
 # (for example for the test of the node)
-script: cd backend && mvn test
+script: cd backend && mvn test && npm test
 env:
   - BUILD_PR_BRANCH=true
   - BUILD_PR_BRANCH=false
