@@ -1,17 +1,22 @@
 var supertest = require('supertest');
 var server = require('../app/router');
 var assert = require('chai').assert;
+var fs = require('fs');
+var path = require('path');
 
 server = supertest(server);
 
 suite("Routes", function() {
 	// Test suite for / route.
-	suite("/", function () {
-		test('should return Hello World!', function(done) {
+	suite("GET /", function () {
+		test('should return index.html', function(done) {
 			server
       		.get("/")
       		.end(function (err, res) {
-      			assert.equal("Hello World!", res.text);
+      			// First read index.html file contents.
+      			var index = fs.readFileSync(path.join(__dirname + '/../app/web/index.html'));
+      			// Now compare these to the plaintext returned by the GET request.
+      			assert.equal(index.toString(), res.text);
       			done();
       		});
 		});
