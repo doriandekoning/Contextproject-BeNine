@@ -1,4 +1,4 @@
-package benine.backend;
+package com.benine.backend;
 
 import com.benine.backend.Config;
 import com.benine.backend.ConfigReader;
