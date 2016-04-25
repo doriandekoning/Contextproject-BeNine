@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.fail;
 
@@ -46,5 +47,9 @@ public class ConfigReaderTest {
   public final void testConfigReaderBadFormatted()  throws Exception {
     String fileLoc =  "resources" + File.separator + "configs" + File.separator + "testconfig3.conf";
     ConfigReader.readConfig(fileLoc);
+  }
+  @Test(expected=IOException.class)
+  public final void testThrowExceptionFileNonExistentFile() throws Exception {
+    ConfigReader.readConfig("there/does/not/exist");
   }
 }
