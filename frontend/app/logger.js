@@ -12,14 +12,23 @@ var levels = {
 
 var self = {
 
+	/**
+	 * Returns the name of the logfile.
+	 * @return {String} 		name of the logfile.
+	 */	
 	getLogname: function() {
 		return logfilename;
 	},
 
-	resetLog: function () {
+	/**
+	 * Clears the logfile, this is called once the server starts.
+	 * @return -
+	 */
+	resetLog: function (callback) {
 		fs.writeFile(logfilename, '', function(err) {
 			if (err) throw err;
-			self.logMessage("INFO", 'Succesfully cleared log file.');
+			self.logMessage("DEBUG", 'Succesfully cleared log file.');
+			callback();
 		});
 	},
 
@@ -27,7 +36,7 @@ var self = {
 	 * Formats the log string.
 	 * @param  {String} level   The level
 	 * @param  {String} message The message to be logged.
-	 * @return {[type]}         The log string format.
+	 * @return {String}         The log string format.
 	 */
 	formatLog: function (level, message) {
 		var date = new Date().toLocaleString();
