@@ -21,7 +21,7 @@ suite("Logger", function() {
                   test('should format ' + level + ' correctly', function(done) {
                         var time = new Date().toLocaleString();
                         var message = "Test";
-                        assert.equal("[" + time + "][" + level + "]>\t\t" + message, logger.formatLog(level, message));
+                        assert.equal("" + message, logger.formatLog(level, message));
                         done();
                   });
             });
