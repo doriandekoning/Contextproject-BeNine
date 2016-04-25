@@ -48,15 +48,8 @@ public class ConfigReader {
       // Check if line is a valid config line
     } else if (wellFormed.matcher(whiteSpaceRemoved).matches()) {
       // Check if the line contains data or is just a comment
-      pattern = Pattern.compile("(.*=.*)");
-      matcher = pattern.matcher(whiteSpaceRemoved);
-      // Line is valid
-      if (matcher.matches()) {
-        String[] stringSplit = whiteSpaceRemoved.split("#")[0].split("=");
+        String[] stringSplit = whiteSpaceRemoved.split("=");
         return stringSplit;
-      } else {
-        return null;
-      }
     } else {
       throw new InvalidConfigFileException("Mallformed line: " + whiteSpaceRemoved);
     }

@@ -19,29 +19,19 @@ import static org.junit.Assert.fail;
 public class ConfigReaderTest {
 
   @Test
-  public final void testConfigReader() {
+  public final void testConfigReader() throws Exception {
     Config cfg = new Config();
     cfg.addAttribute("Test", "1234");
-    try {
-      Config readConfig = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "testconfig1.conf");
-      Assert.assertEquals(cfg, readConfig);
-    } catch (Exception e) {
-      e.printStackTrace();
-      fail();
-    }
+    Config readConfig = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "testconfig1.conf");
+    Assert.assertEquals(cfg, readConfig);
   }
 
   @Test
-  public final void testConfigReaderOnlyComment() {
+  public final void testConfigReaderOnlyComment() throws Exception {
     Config cfg = new Config();
     String fileLoc = "resources" + File.separator + "configs" + File.separator + "testconfig2.conf";
-    try {
-      Config readConfig = ConfigReader.readConfig(fileLoc);
-      Assert.assertEquals(cfg, readConfig);
-    } catch (Exception e) {
-      e.printStackTrace();
-      fail();
-    }
+    Config readConfig = ConfigReader.readConfig(fileLoc);
+    Assert.assertEquals(cfg, readConfig);
   }
   @Test(expected=Exception.class)
   public final void testConfigReaderBadFormatted()  throws Exception {
@@ -51,5 +41,14 @@ public class ConfigReaderTest {
   @Test(expected=IOException.class)
   public final void testThrowExceptionFileNonExistentFile() throws Exception {
     ConfigReader.readConfig("there/does/not/exist");
+  }
+
+  @Test
+  public final void testReadingMultipleAttributes() throws Exception {
+    Config cfg = new Config();
+    cfg.addAttribute("Test", "1234");
+    cfg.addAttribute("Name", "beNine");
+    Config readConfig = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "testconfig4.conf");
+    Assert.assertEquals(cfg, readConfig);
   }
 }
