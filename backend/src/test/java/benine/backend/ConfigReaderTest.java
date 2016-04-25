@@ -1,6 +1,4 @@
-package com.benine.backend.test;
-
-import com.benine.backend.ConfigReader;
+package benine.backend;
 
 import org.junit.Test;
 import org.junit.Assert;
