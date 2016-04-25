@@ -9,7 +9,7 @@ import java.util.jar.Attributes;
  */
 public class Config {
 
-    Attributes attributes;
+    private Attributes attributes;
 
     /**
      * Create new Config object.
@@ -40,6 +40,13 @@ public class Config {
         }
     }
 
-    //TODO equals method
+    public boolean equals(Object other) {
+        if(other instanceof Config) {
+            Config that = (Config) other;
+            return this.attributes.equals(that.attributes);
+        }else{
+            return false;
+        }
+    }
 
 }
