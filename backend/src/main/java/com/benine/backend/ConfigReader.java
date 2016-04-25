@@ -51,7 +51,7 @@ public class ConfigReader {
         String[] stringSplit = whiteSpaceRemoved.split("=");
         return stringSplit;
     } else {
-      throw new InvalidConfigFileException("Mallformed line: " + whiteSpaceRemoved);
+      throw new InvalidConfigFileException("Malformed  line: " + whiteSpaceRemoved);
     }
 
 
