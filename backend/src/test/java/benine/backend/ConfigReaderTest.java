@@ -2,6 +2,7 @@ package benine.backend;
 
 import com.benine.backend.Config;
 import com.benine.backend.ConfigReader;
+import com.benine.backend.ConfigReader.InvalidConfigFileException;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -16,19 +17,34 @@ import static org.junit.Assert.fail;
  */
 public class ConfigReaderTest {
 
-    @Test
-    public final void ConfigReaderTest() {
-        Config cfg = new Config();
-        cfg.addAttribute("Test", "1234");
-        try {
-            Config readConfig = ConfigReader.readConfig("resources"+ File.separator + "configs" + File.separator + "testconfig1.conf");
-            Assert.assertEquals(cfg, readConfig);
-        }catch(Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+  @Test
+  public final void testConfigReader() {
+    Config cfg = new Config();
+    cfg.addAttribute("Test", "1234");
+    try {
+      Config readConfig = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "testconfig1.conf");
+      Assert.assertEquals(cfg, readConfig);
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail();
     }
+  }
 
-    // TODO tests for bad weather behaviour, multiple lines etc.
-
+  @Test
+  public final void testConfigReaderOnlyComment() {
+    Config cfg = new Config();
+    String fileLoc = "resources" + File.separator + "configs" + File.separator + "testconfig2.conf";
+    try {
+      Config readConfig = ConfigReader.readConfig(fileLoc);
+      Assert.assertEquals(cfg, readConfig);
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail();
+    }
+  }
+  @Test(expected=Exception.class)
+  public final void testConfigReaderBadFormatted()  throws Exception {
+    String fileLoc =  "resources" + File.separator + "configs" + File.separator + "testconfig3.conf";
+    ConfigReader.readConfig(fileLoc);
+  }
 }
