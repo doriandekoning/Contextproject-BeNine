@@ -24,7 +24,7 @@ public class Config {
      * @param value The value of the attribute.
      */
     public void addAttribute(String attribute, String value) {
-        attributes.put(attribute, value);
+        attributes.put(new Attributes.Name(attribute), value);
     }
     /**
      * Get the value associated with this attribute from the config.
@@ -33,7 +33,7 @@ public class Config {
      */
     public String getValue(String attributeName) {
         try{
-            return attributes.getValue(attributeName);
+            return attributes.getValue(new Attributes.Name(attributeName));
         }catch(IllegalArgumentException e){
             //TODO log that the config value is not found
             return "";
