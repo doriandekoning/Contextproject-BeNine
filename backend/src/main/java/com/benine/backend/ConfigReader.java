@@ -1,4 +1,4 @@
-package com.benine;
+package com.benine.backend;
 
 /**
  * Class used for reading configuration details from a .config file and creates a new config object.

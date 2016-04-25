@@ -1,4 +1,4 @@
-package com.benine;
+package com.benine.backend;
 
 public class Main {
 
