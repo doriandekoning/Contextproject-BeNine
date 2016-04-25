@@ -1,4 +1,5 @@
 var fs = require('fs');
+var logfilename = "events.log";
 
 // Contains all loglevels, ordered on importance. (0 being most important.)
 var levels = {
@@ -11,6 +12,17 @@ var levels = {
 
 var self = {
 
+	getLogname: function() {
+		return logfilename;
+	},
+
+	resetLog: function () {
+		fs.writeFile(logfilename, '', function(err) {
+			if (err) throw err;
+			self.logMessage("INFO", 'Succesfully cleared log file.');
+		});
+	},
+
 	/**
 	 * Formats the log string.
 	 * @param  {String} level   The level
@@ -19,7 +31,7 @@ var self = {
 	 */
 	formatLog: function (level, message) {
 		var date = new Date().toLocaleString();
-		var logString = "[" + date + "][" + level + "]>\t" + message;
+		var logString = "[" + date + "][" + level + "]>\t\t" + message;
 		return logString;
 	},
 
@@ -41,7 +53,9 @@ var self = {
 		if (!levels.hasOwnProperty(level)) {
 			throw new Error("Incorrect Logger usage.");
 		} else {
-			console.log(self.formatLog(level, message));
+			fs.appendFile(logfilename, self.formatLog(level, message) + '\n', function (err) {
+				if (err) throw err;
+			});
 		}
 	}
 
