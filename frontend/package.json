@@ -4,7 +4,8 @@
   "description": "Web interface to communicate with the backend server controlling the cameras.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -u tdd"
+    "test": "mocha -u tdd",
+    "coverage": "istanbul cover _mocha -- -u tdd"
   },
   "engines": {
     "node": ">=4.0.0"
@@ -16,6 +17,7 @@
   "devDependencies": {
     "mocha": "2.x",
     "chai": "3.x",
-    "supertest": "1.x"
+    "supertest": "1.x",
+    "istanbul": "0.4.x"
   }
 }
