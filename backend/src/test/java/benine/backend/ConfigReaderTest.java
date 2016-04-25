@@ -29,4 +29,6 @@ public class ConfigReaderTest {
         }
     }
 
+    // TODO tests for bad weather behaviour, multiple lines etc.
+
 }

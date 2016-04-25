@@ -26,4 +26,6 @@ public class ConfigTest {
         Assert.assertEquals("Overwritten", cfg.getValue("Username"));
     }
 
+    //TODO test for equals method
+
 }
