@@ -23,7 +23,9 @@ public class ConfigReader {
     while ((line = br.readLine()) != null) {
       // Handle each line
       String[] parsedLine = parseLine(line);
-      cfg.addAttribute(parsedLine[0], parsedLine[1]);
+      if(parsedLine!=null) {
+        cfg.addAttribute(parsedLine[0], parsedLine[1]);
+      }
     }
     return cfg;
   }
@@ -36,28 +38,36 @@ public class ConfigReader {
    */
   private static String[] parseLine(String line) throws InvalidConfigFileException {
     // Remove comments (everything after a #)
-    Pattern pattern = Pattern.compile("(#.*)|([\\s*+])");
-    Matcher matcher = pattern.matcher(line);
-    line = matcher.replaceAll("");
-    // Check if line is a valid config line
-    pattern = Pattern.compile("(.*=.*)");
-    matcher = pattern.matcher(line);
-    // Line is valid
-    if (matcher.matches()) {
-      String[] stringSplit = line.split("=");
-      System.out.println("Stringsplit length:" + stringSplit.length + stringSplit[0]);
-      return stringSplit;
-    } else {
-      // TODO specify bad weather behaviour
+    Pattern pattern = Pattern.compile("([\\s*+])");
+    Pattern wellFormed = Pattern.compile("\\w*=\\w*");
+    Matcher matcher = pattern.matcher(line.split("#")[0]);
+    String whiteSpaceRemoved = matcher.replaceAll("");
+    // If the line only contains a comment return null
+    if(whiteSpaceRemoved.equals("")) {
       return null;
+      // Check if line is a valid config line
+    } else if (wellFormed.matcher(whiteSpaceRemoved).matches()) {
+      // Check if the line contains data or is just a comment
+      pattern = Pattern.compile("(.*=.*)");
+      matcher = pattern.matcher(whiteSpaceRemoved);
+      // Line is valid
+      if (matcher.matches()) {
+        String[] stringSplit = whiteSpaceRemoved.split("#")[0].split("=");
+        return stringSplit;
+      } else {
+        return null;
+      }
+    } else {
+      throw new InvalidConfigFileException("Mallformed line: " + whiteSpaceRemoved);
     }
+
 
   }
 
   /**
    * Exception thrown when config file is not valid.
    */
-  private static class InvalidConfigFileException extends Exception {
+  public static class InvalidConfigFileException extends Exception {
     public InvalidConfigFileException(String reason) {
       super(reason);
     }
