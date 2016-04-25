@@ -26,6 +26,31 @@ public class ConfigTest {
         Assert.assertEquals("Overwritten", cfg.getValue("Username"));
     }
 
-    //TODO test for equals method
+    @Test
+    public final void TestEqualsEqual() {
+        Config cfg1 = new Config();
+        Config cfg2 = new Config();
+        cfg1.addAttribute("Username", "Test123");
+        cfg2.addAttribute("Username", "Test123");
+        Assert.assertEquals(cfg1, cfg2);
+    }
 
+    @Test
+    public final void TestEqualsNonEqualAttribute(){
+        Config cfg1 = new Config();
+        Config cfg2 = new Config();
+        cfg1.addAttribute("Name", "Test123");
+        cfg2.addAttribute("Username", "Test123456");
+        Assert.assertNotEquals(cfg1, cfg2);
+    }
+
+    @Test
+    public final void TestEqualsNonEqualAmountAttributes() {
+        Config cfg1 = new Config();
+        Config cfg2 = new Config();
+        cfg1.addAttribute("Name", "Test123");
+        cfg2.addAttribute("Name", "Test123");
+        cfg1.addAttribute("Username", "Test123456");
+        Assert.assertNotEquals(cfg1, cfg2);
+    }
 }
