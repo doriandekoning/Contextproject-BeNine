@@ -1,11 +1,13 @@
 package com.benine.backend;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,15 @@ import java.util.List;
  * Created by dorian on 26-4-16.
  */
 public class LogWriterTest {
+  @Before
+  public void init() throws IOException {
+    // Create logs dir if it does not exist
+    Path p = Paths.get("logs");
+    if (!Files.exists(p)) {
+      Files.createDirectories(p);
+    }
+  }
+
   @Test
   public void testCreateLogWriter() throws Exception {
     // Check this doesnt throw an exception

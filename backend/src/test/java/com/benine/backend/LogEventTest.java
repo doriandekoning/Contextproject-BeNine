@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 public class LogEventTest {
 
+
   @Test
   public void TestEqualsDifferentLogEvent() {
     LogEvent event1 = new LogEvent("11:11", "TestEvent", LogEvent.Type.DEBUG);
