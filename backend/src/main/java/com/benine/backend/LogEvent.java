@@ -75,6 +75,7 @@ public class LogEvent {
   /**
    * Compares an object to this logevent, returns if both are equal.
    * @param other Object to compare to
+   * @return true if this equals other, false otherwise
    */
   public boolean equals(Object other) {
     if(other instanceof LogEvent) {
