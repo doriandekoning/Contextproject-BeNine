@@ -13,6 +13,8 @@ public class LogWriter {
   //TODO get this from config
   private int maxLogBufferSize = 25;
 
+  private int minLogLevel = 4;
+
   private String logLocation;
 
   private PrintWriter writer;
@@ -32,6 +34,9 @@ public class LogWriter {
    * Writes LogEvent to file.
    */
   public void write(LogEvent event) throws IOException {
+    if(event.getType().getValue()>minLogLevel) {
+      return;
+    }
     // If the log level is high write the buffer and write this event immidiately
     // because this might indicate a crash (soon).
     if (event.getType().getValue() < 3) {
@@ -56,6 +61,12 @@ public class LogWriter {
       buffer.remove(0);
     }
     writer.flush();
+  }
+  /**
+   * Sets the minimum log level.
+   */
+  public void setMinLogLevel(int newMinLevel) {
+    this.minLogLevel = newMinLevel;
   }
   /**
    * Closes this Writer.

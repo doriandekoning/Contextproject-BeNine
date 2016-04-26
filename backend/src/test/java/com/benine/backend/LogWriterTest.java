@@ -37,11 +37,17 @@ public class LogWriterTest {
   @Test
   public void testWriteLogLowType() throws Exception {
     LogWriter logWriter = new LogWriter("logs/testlog.log");
-    LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.TRACE);
+    LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
     logWriter.write(event);
     logWriter.flush();
     List<String> contents = Files.readAllLines(Paths.get("logs/testlog.log"));
     Assert.assertEquals(contents.get(0), event.toString());
     logWriter.close();
+  }
+  @Test
+  public void testWriteLogMinLogLevel() throws Exception {
+    LogWriter logWriter = new LogWriter("logs/testlog.log");
+    logWriter.setMinLogLevel(1);
+    LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
   }
 }
