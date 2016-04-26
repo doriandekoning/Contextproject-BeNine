@@ -3,6 +3,7 @@ package com.benine.backend;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * Class used to write to the log file.
@@ -11,7 +12,9 @@ public class LogWriter {
 
   private String logLocation;
 
-  PrintWriter writer;
+  private PrintWriter writer;
+
+  private ArrayList<LogEvent> buffer = new ArrayList<LogEvent>();
 
   /**
    * Creates a new LogWriter, should be deleted by calling the destoy method.
@@ -25,21 +28,33 @@ public class LogWriter {
   /**
    * Writes LogEvent to file.
    */
-  public void write(LogEvent e) throws IOException {
-    writer.write(e.toString());
+  public void write(LogEvent event) throws IOException {
+    // If the log level is high write the buffer and write this event immidiately
+    // because this might indicate a crash (soon).
+    if(event.getType().getValue() < 3) {
+      flush();
+      writer.write(event.toString());
+    }
+    buffer.add(event);
   }
+
+  // TODO Write method for a List of logEvents.
   /**
    * Flushes the buffer of this logwriter.
    */
   public void flush() {
+    while (!buffer.isEmpty()) {
+      LogEvent event = buffer.get(0);
+      writer.write(event.toString());
+      buffer.remove(0);
+    }
     writer.flush();
-    //TODO Implement buffer for lower priority logevents
   }
   /**
    * Closes this Writer.
    */
   public void close() {
-    writer.close();
+    flush();
   }
 
 }
