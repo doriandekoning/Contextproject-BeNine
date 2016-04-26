@@ -37,10 +37,11 @@ public class LogWriter {
     if (event.getType().getValue() < 3) {
       flush();
       writer.write(event.toString());
-    }
-    buffer.add(event);
-    if (buffer.size() > maxLogBufferSize) {
-      flush();
+    }else {
+      buffer.add(event);
+      if (buffer.size() > maxLogBufferSize) {
+        flush();
+      }
     }
   }
 
