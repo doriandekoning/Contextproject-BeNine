@@ -42,16 +42,51 @@ public class LogEvent {
     }
 
   }
-
   /**
    * Creates a new logEvent
    * @param time time the event happened
    * @param description description of the event
-   * @param type int indicating the log level
+   * @param type indicating the log level
+   * @param except the associated exception
    */
-  public LogEvent(String time, String description, Type type) {
+  public LogEvent(String time, String description, Type type, Exception except) {
     this.time = time;
     this.description = description;
     this.type = type;
+    this.exception = except;
+  }
+  /**
+   * Creates a new logEvent
+   * @param time time the event happened
+   * @param description description of the event
+   * @param type indicating the log level
+   */
+  public LogEvent(String time, String description, Type type) {
+    this(time, description, type, null);
+  }
+  /**
+   * Creates a new Logevent with the default level (INFO)
+   * @param time time the event happened
+   * @param description description of the event
+   */
+  public LogEvent(String time, String description) {
+    this(time, description, Type.INFO, null);
+  }
+  /**
+   * Compares an object to this logevent, returns if both are equal.
+   * @param other Object to compare to
+   */
+  public boolean Equals(Object other) {
+    if(other instanceof LogEvent) {
+      LogEvent that = (LogEvent)other;
+      if(that.exception.equals(this.exception)&&
+              that.type.equals(this.type)&&
+              that.time.equals(this.time)&&
+              that.description.equals(this.description)) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 }
