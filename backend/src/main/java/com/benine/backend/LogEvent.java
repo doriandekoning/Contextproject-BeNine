@@ -4,7 +4,8 @@ package com.benine.backend;
  * Represents an event that happens and has to be logged.
  */
 public class LogEvent {
-  private String time, description;
+  private String time;
+  private String description;
   private Exception exception;
   private Type type;
 
@@ -27,7 +28,8 @@ public class LogEvent {
      */
     DEBUG(4),
     /**
-     * Trace logs everything that happens in the system and could possibly be of any interest when debugging.
+     * Trace logs everything that happens in the system
+     * and could possibly be of any interest when debugging.
      */
     TRACE(5);
 
@@ -37,13 +39,18 @@ public class LogEvent {
       this.level = level;
     }
 
+    /**
+     * Returns the value.
+     * @return int representation of the level.
+     */
     public int getValue() {
       return level;
     }
 
   }
+
   /**
-   * Creates a new logEvent
+   * Creates a new logEvent.
    * @param time time the event happened
    * @param description description of the event
    * @param type indicating the log level
@@ -55,8 +62,9 @@ public class LogEvent {
     this.type = type;
     this.exception = except;
   }
+
   /**
-   * Creates a new logEvent
+   * Creates a new logEvent.
    * @param time time the event happened
    * @param description description of the event
    * @param type indicating the log level
@@ -64,14 +72,16 @@ public class LogEvent {
   public LogEvent(String time, String description, Type type) {
     this(time, description, type, null);
   }
+
   /**
-   * Creates a new Logevent with the default level (INFO)
+   * Creates a new Logevent with the default level (INFO).
    * @param time time the event happened
    * @param description description of the event
    */
   public LogEvent(String time, String description) {
     this(time, description, Type.INFO, null);
   }
+
   /**
    * Creates a string representation of this LogEvent.
    * @return String representation of this object.
@@ -90,31 +100,30 @@ public class LogEvent {
     }
     return builder.toString();
   }
+
   /**
    * Getter for the type of this LogEvent.
    */
   public Type getType() {
     return this.type;
   }
+
   /**
    * Compares an object to this logevent, returns if both are equal.
    * @param other Object to compare to
    * @return true if this equals other, false otherwise
    */
   public boolean equals(Object other) {
-    if(other instanceof LogEvent) {
+    if (other instanceof LogEvent) {
       LogEvent that = (LogEvent)other;
-      if(((this.exception == null
-                && that.exception==null)
-                || (that.exception!= null
+      return ((this.exception == null
+                && that.exception == null)
+                || (that.exception != null
                 && that.exception.equals(this.exception))
               )
               && that.type.equals(this.type)
               && that.time.equals(this.time)
-              && that.description.equals(this.description)) {
-        return true;
-      }
-      return false;
+              && that.description.equals(this.description);
     }
     return false;
   }

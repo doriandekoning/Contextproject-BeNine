@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,6 @@ import java.util.List;
  * Class used to write to the log file.
  */
 public class LogWriter {
-
-  //TODO get this from config
-  private int maxLogBufferSize = 25;
 
   private long maxLogSize = 1000000;
 
@@ -39,11 +35,12 @@ public class LogWriter {
     this.logLocation = logLocation;
     writer = new PrintWriter(new FileWriter(logLocation + ".log"));
   }
+
   /**
    * Writes LogEvent to file.
    */
   public void write(LogEvent event) throws IOException {
-    if(event.getType().getValue()>minLogLevel) {
+    if (event.getType().getValue() > minLogLevel) {
       return;
     }
     // If the log level is high write the buffer and write this event immidiately
@@ -51,21 +48,24 @@ public class LogWriter {
     if (event.getType().getValue() < 3) {
       flush();
       hardWrite(event);
-    }else {
+    } else {
       buffer.add(event);
+      int maxLogBufferSize = 25;
       if (buffer.size() > maxLogBufferSize) {
         flush();
       }
     }
   }
+
   /**
    * Writes a list of logEvents to the list.
    */
   public void write(List<LogEvent> eventList) throws IOException {
-    for(LogEvent e : eventList) {
+    for (LogEvent e : eventList) {
       write(e);
     }
   }
+
   /**
    * Flushes the buffer of this logwriter.
    */
@@ -76,49 +76,53 @@ public class LogWriter {
     }
     writer.flush();
   }
+
   /**
    * Sets the minimum log level.
    */
   public void setMinLogLevel(int newMinLevel) {
     this.minLogLevel = newMinLevel;
   }
+
   /**
    * Sets the max log size.
    */
   public void setMaxLogSize(int maxLogSize) {
     this.maxLogSize = maxLogSize;
   }
+
   /**
    * Closes this Writer.
    */
   public void close() {
     flush();
   }
+
   /**
-   * Writes to filewriter
+   * Writes to filewriter.
    */
   private void hardWrite(LogEvent event) {
-    writer.write(event.toString()+ "\n");
+    writer.write(event.toString() + "\n");
     logSize++;
     // Every 100 log items check log file size
-    if(logSize%100 == 0) {
+    if (logSize % 100 == 0) {
       File oldFile = new File(logLocation + ".log");
       double fileSize = oldFile.length();
-      if(fileSize>maxLogSize) {
+      if (fileSize > maxLogSize) {
         System.out.println("Trying to create a backup");
         // Check if old logfile exits if so delete it
-        try{
+        try {
           Files.delete(Paths.get(logLocation + "-old.log"));
         } catch (Exception e) {
 
         }
-        try{
+        try {
           File backupFile = new File(logLocation + "-old.log");
           oldFile.renameTo(backupFile);
           logSize = 0;
           writer = new PrintWriter(new FileWriter(logLocation  + ".log"));
         } catch (Exception e) {
-
+          e.printStackTrace();
         }
       }
     }
