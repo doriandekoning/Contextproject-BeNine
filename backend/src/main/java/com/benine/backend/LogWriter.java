@@ -28,5 +28,5 @@ public class LogWriter {
   public void close() {
     writer.close();
   }
-  
+
 }
