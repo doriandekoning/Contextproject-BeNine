@@ -73,6 +73,24 @@ public class LogEvent {
     this(time, description, Type.INFO, null);
   }
   /**
+   * Creates a string representation of this LogEvent.
+   * @return String representation of this object.
+   */
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append('[');
+    builder.append(this.type);
+    builder.append(':');
+    builder.append(this.time);
+    builder.append(']');
+    builder.append(this.description);
+    builder.append(", ");
+    if (this.exception != null) {
+      builder.append(exception);
+    }
+    return builder.toString();
+  }
+  /**
    * Compares an object to this logevent, returns if both are equal.
    * @param other Object to compare to
    * @return true if this equals other, false otherwise
