@@ -90,7 +90,7 @@ public class LogWriter {
   /**
    * Writes to filewriter
    */
-  private void hardWrite(LogEvent event) throws IOException {
+  private void hardWrite(LogEvent event) {
     writer.write(event.toString()+ "\n");
     logSize++;
     // Every 100 log items check log file size
@@ -103,6 +103,7 @@ public class LogWriter {
           Files.delete(Paths.get(logLocation + "-old.log"));
           File backupFile = new File(logLocation + "-old.log");
           oldFile.renameTo(backupFile);
+          logSize = 0;
         } catch (Exception e) {
 
         }

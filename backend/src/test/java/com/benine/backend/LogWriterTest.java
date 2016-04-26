@@ -17,18 +17,18 @@ public class LogWriterTest {
   @Test
   public void testCreateLogWriter() throws Exception {
     // Check this doesnt throw an exception
-    LogWriter logWriter = new LogWriter("logs/log1.log");
+    LogWriter logWriter = new LogWriter("logs/log1");
     logWriter.close();
   }
   @Test(expected=IOException.class)
   public void testCreateLogWriterException() throws Exception {
     // This should throw an exception
-    LogWriter logWriter = new LogWriter("nonexsistentdirectory/log1.log");
+    LogWriter logWriter = new LogWriter("nonexsistentdirectory/log1");
     logWriter.close();
   }
   @Test
   public void testWriteLogHighType() throws Exception {
-    LogWriter logWriter = new LogWriter("logs/testlog.log");
+    LogWriter logWriter = new LogWriter("logs/testlog");
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.CRITICAL);
     logWriter.write(event);
     logWriter.close();
@@ -37,7 +37,7 @@ public class LogWriterTest {
   }
   @Test
   public void testWriteLogLowType() throws Exception {
-    LogWriter logWriter = new LogWriter("logs/testlog.log");
+    LogWriter logWriter = new LogWriter("logs/testlog");
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
     logWriter.write(event);
     logWriter.flush();
@@ -47,13 +47,13 @@ public class LogWriterTest {
   }
   @Test
   public void testWriteLogMinLogLevel() throws Exception {
-    LogWriter logWriter = new LogWriter("logs/testlog.log");
+    LogWriter logWriter = new LogWriter("logs/testlog");
     logWriter.setMinLogLevel(1);
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
   }
   @Test
   public void testWriteLogItemList() throws Exception {
-    LogWriter logWriter = new LogWriter("logs/multipletestlog.log");
+    LogWriter logWriter = new LogWriter("logs/multipletestlog");
     LogEvent event = new LogEvent("12:12:12", "This is a testEvent", LogEvent.Type.DEBUG);
     LogEvent otherevent = new LogEvent("24:24:24", "This is a another event", LogEvent.Type.CRITICAL);
     List<LogEvent> list = new ArrayList<LogEvent>();
