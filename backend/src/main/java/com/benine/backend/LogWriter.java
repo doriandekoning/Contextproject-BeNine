@@ -10,6 +10,9 @@ import java.util.ArrayList;
  */
 public class LogWriter {
 
+  //TODO get this from config
+  private int maxLogBufferSize = 25;
+
   private String logLocation;
 
   private PrintWriter writer;
@@ -31,11 +34,14 @@ public class LogWriter {
   public void write(LogEvent event) throws IOException {
     // If the log level is high write the buffer and write this event immidiately
     // because this might indicate a crash (soon).
-    if(event.getType().getValue() < 3) {
+    if (event.getType().getValue() < 3) {
       flush();
       writer.write(event.toString());
     }
     buffer.add(event);
+    if (buffer.size() > maxLogBufferSize) {
+      flush();
+    }
   }
 
   // TODO Write method for a List of logEvents.
