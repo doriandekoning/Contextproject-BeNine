@@ -80,12 +80,12 @@ public class LogEvent {
     StringBuilder builder = new StringBuilder();
     builder.append('[');
     builder.append(this.type);
-    builder.append(':');
+    builder.append('|');
     builder.append(this.time);
     builder.append(']');
     builder.append(this.description);
-    builder.append(", ");
     if (this.exception != null) {
+      builder.append(", ");
       builder.append(exception);
     }
     return builder.toString();

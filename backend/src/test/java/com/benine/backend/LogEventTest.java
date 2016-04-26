@@ -50,11 +50,11 @@ public class LogEventTest {
   @Test
   public void testToStringNoException() {
     LogEvent event1 = new LogEvent("11:11", "Other Test Event", LogEvent.Type.INFO);
-    Assert.assertEquals("[INFO - 11:11]Other Test Event", event1.toString());
+    Assert.assertEquals("[INFO|11:11]Other Test Event", event1.toString());
   }
   @Test
   public void testToStringException() {
     LogEvent event1 = new LogEvent("11:11", "Other Test Event", LogEvent.Type.INFO, new IOException("Error occurred"));
-    Assert.assertEquals("[INFO - 11:11]Other Test Event, " + new IOException("Error occurred").toString(), event1.toString());
+    Assert.assertEquals("[INFO|11:11]Other Test Event, " + new IOException("Error occurred").toString(), event1.toString());
   }
 }
