@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,12 @@ public class LogWriter {
     this.minLogLevel = newMinLevel;
   }
   /**
+   * Sets the max log size.
+   */
+  public void setMaxLogSize(int maxLogSize) {
+    this.maxLogSize = maxLogSize;
+  }
+  /**
    * Closes this Writer.
    */
   public void close() {
@@ -98,12 +105,18 @@ public class LogWriter {
       File oldFile = new File(logLocation + ".log");
       double fileSize = oldFile.length();
       if(fileSize>maxLogSize) {
+        System.out.println("Trying to create a backup");
         // Check if old logfile exits if so delete it
         try{
           Files.delete(Paths.get(logLocation + "-old.log"));
+        } catch (Exception e) {
+
+        }
+        try{
           File backupFile = new File(logLocation + "-old.log");
           oldFile.renameTo(backupFile);
           logSize = 0;
+          writer = new PrintWriter(new FileWriter(logLocation  + ".log"));
         } catch (Exception e) {
 
         }

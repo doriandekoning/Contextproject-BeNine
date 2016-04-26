@@ -67,4 +67,19 @@ public class LogWriterTest {
     List<String> contents = Files.readAllLines(Paths.get("logs/multipletestlog.log"));
     Assert.assertEquals(stringList, contents);
   }
+  @Test
+  public void testMaxLogSize() throws Exception {
+    LogWriter writer = new LogWriter("logs/maxlogsizetestlog");
+    LogEvent event = new LogEvent("event", "description", LogEvent.Type.DEBUG);
+    writer.setMaxLogSize(370);
+    for(int i = 0; i < 110; i ++) {
+      writer.write(event);
+    }
+    writer.close();
+    List<String> contents = Files.readAllLines(Paths.get("logs/maxlogsizetestlog.log"));
+    Assert.assertEquals(contents.get(0), event.toString());
+    Assert.assertEquals(10, contents.size());
+    contents = Files.readAllLines(Paths.get("logs/maxlogsizetestlog-old.log"));
+    Assert.assertEquals(contents.get(0), event.toString());
+  }
 }
