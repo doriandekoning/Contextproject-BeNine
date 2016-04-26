@@ -4,14 +4,16 @@
   "description": "Web interface to communicate with the backend server controlling the cameras.",
   "main": "server.js",
   "scripts": {
-    "test": "istanbul cover _mocha -- -u tdd"
+    "test": "istanbul cover _mocha -- -u tdd",
+    "postinstall": "bower install bootstrap"
   },
   "engines": {
     "node": ">=4.0.0"
   },
   "dependencies": {
     "request": "2.x",
-    "express": "^4.x"
+    "express": "^4.x",
+    "bower": "1.7.9"
   },
   "devDependencies": {
     "mocha": "2.x",

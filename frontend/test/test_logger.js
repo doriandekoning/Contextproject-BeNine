@@ -1,4 +1,4 @@
-var logger = require('../app/logger');
+var logger = require('../modules/logger');
 var assert = require('chai').assert;
 var path = require('path');
 var fs = require('fs');

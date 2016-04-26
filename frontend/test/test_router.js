@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var server = require('../app/router');
+var server = require('../modules/router');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
@@ -14,7 +14,7 @@ suite("Routes", function() {
       		.get("/")
       		.end(function (err, res) {
       			// First read index.html file contents.
-      			var index = fs.readFileSync(path.join(__dirname + '/../app/web/index.html'));
+      			var index = fs.readFileSync(path.join(__dirname + '/../public/index.html'));
       			// Now compare these to the plaintext returned by the GET request.
       			assert.equal(index.toString(), res.text);
       			done();
