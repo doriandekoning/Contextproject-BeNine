@@ -84,7 +84,7 @@ public interface Camera {
 	 * Request if the auto focus is on.
 	 * @return true if auto focus is on.
 	 */
-	boolean getAutoFocusOn();
+	boolean isAutoFocusOn();
 	
 	/**
 	 * Set the control of the iris to on.
@@ -96,7 +96,7 @@ public interface Camera {
 	 * Request if the auto iris is on.
 	 * @return true if the auto iris is on.
 	 */
-	boolean getAutoIrisOn();
+	boolean isAutoIrisOn();
 	
 	/**
 	 * Set the iris position.
@@ -113,5 +113,10 @@ public interface Camera {
 	 */
 	int getIrisPos();
 	
+	/**
+	 * Get the URL to the stream of this camera.
+	 * @return URL in string format.
+	 */
+	String getStreamLink();	
 
 }
