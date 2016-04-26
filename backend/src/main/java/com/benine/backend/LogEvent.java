@@ -76,13 +76,17 @@ public class LogEvent {
    * Compares an object to this logevent, returns if both are equal.
    * @param other Object to compare to
    */
-  public boolean Equals(Object other) {
+  public boolean equals(Object other) {
     if(other instanceof LogEvent) {
       LogEvent that = (LogEvent)other;
-      if(that.exception.equals(this.exception)&&
-              that.type.equals(this.type)&&
-              that.time.equals(this.time)&&
-              that.description.equals(this.description)) {
+      if(((this.exception == null
+                && that.exception==null)
+                || (that.exception!= null
+                && that.exception.equals(this.exception))
+              )
+              && that.type.equals(this.type)
+              && that.time.equals(this.time)
+              && that.description.equals(this.description)) {
         return true;
       }
       return false;
