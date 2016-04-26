@@ -1,8 +1,11 @@
 package com.benine.backend;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +17,13 @@ public class LogWriter {
   //TODO get this from config
   private int maxLogBufferSize = 25;
 
+  private long maxLogSize = 1000000;
+
   private int minLogLevel = 4;
 
   private String logLocation;
+
+  private int logSize = 0;
 
   private PrintWriter writer;
 
@@ -29,7 +36,7 @@ public class LogWriter {
    */
   public LogWriter(String logLocation) throws IOException {
     this.logLocation = logLocation;
-    writer = new PrintWriter(new FileWriter(logLocation));
+    writer = new PrintWriter(new FileWriter(logLocation + ".log"));
   }
   /**
    * Writes LogEvent to file.
@@ -42,7 +49,7 @@ public class LogWriter {
     // because this might indicate a crash (soon).
     if (event.getType().getValue() < 3) {
       flush();
-      writer.write(event.toString() + "\n");
+      hardWrite(event);
     }else {
       buffer.add(event);
       if (buffer.size() > maxLogBufferSize) {
@@ -63,8 +70,7 @@ public class LogWriter {
    */
   public void flush() {
     while (!buffer.isEmpty()) {
-      LogEvent event = buffer.get(0);
-      writer.write(event.toString()+ "\n");
+      hardWrite(buffer.get(0));
       buffer.remove(0);
     }
     writer.flush();
@@ -80,6 +86,28 @@ public class LogWriter {
    */
   public void close() {
     flush();
+  }
+  /**
+   * Writes to filewriter
+   */
+  private void hardWrite(LogEvent event) throws IOException {
+    writer.write(event.toString()+ "\n");
+    logSize++;
+    // Every 100 log items check log file size
+    if(logSize%100 == 0) {
+      File oldFile = new File(logLocation + ".log");
+      double fileSize = oldFile.length();
+      if(fileSize>maxLogSize) {
+        // Check if old logfile exits if so delete it
+        try{
+          Files.delete(Paths.get(logLocation + "-old.log"));
+          File backupFile = new File(logLocation + "-old.log");
+          oldFile.renameTo(backupFile);
+        } catch (Exception e) {
+
+        }
+      }
+    }
   }
 
 }
