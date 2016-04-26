@@ -23,6 +23,19 @@ public class LogWriter {
     writer = new PrintWriter(new FileWriter(logLocation));
   }
   /**
+   * Writes LogEvent to file.
+   */
+  public void write(LogEvent e) throws IOException {
+    writer.write(e.toString());
+  }
+  /**
+   * Flushes the buffer of this logwriter.
+   */
+  public void flush() {
+    writer.flush();
+    //TODO Implement buffer for lower priority logevents
+  }
+  /**
    * Closes this Writer.
    */
   public void close() {

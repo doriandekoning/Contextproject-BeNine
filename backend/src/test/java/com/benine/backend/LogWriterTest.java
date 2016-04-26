@@ -30,9 +30,9 @@ public class LogWriterTest {
     LogWriter logWriter = new LogWriter("logs/testlog.log");
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.CRITICAL);
     logWriter.write(event);
+    logWriter.close();
     List<String> contents = Files.readAllLines(Paths.get("logs/testlog.log"));
     Assert.assertEquals(contents.get(0), event.toString());
-    logWriter.close();
   }
   @Test
   public void testWriteLogLowType() throws Exception {
