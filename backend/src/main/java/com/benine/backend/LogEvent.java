@@ -91,6 +91,12 @@ public class LogEvent {
     return builder.toString();
   }
   /**
+   * Getter for the type of this LogEvent.
+   */
+  public Type getType() {
+    return this.type;
+  }
+  /**
    * Compares an object to this logevent, returns if both are equal.
    * @param other Object to compare to
    * @return true if this equals other, false otherwise
