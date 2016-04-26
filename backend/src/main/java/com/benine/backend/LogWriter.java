@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class used to write to the log file.
@@ -41,7 +42,7 @@ public class LogWriter {
     // because this might indicate a crash (soon).
     if (event.getType().getValue() < 3) {
       flush();
-      writer.write(event.toString());
+      writer.write(event.toString() + "\n");
     }else {
       buffer.add(event);
       if (buffer.size() > maxLogBufferSize) {
@@ -49,15 +50,21 @@ public class LogWriter {
       }
     }
   }
-
-  // TODO Write method for a List of logEvents.
+  /**
+   * Writes a list of logEvents to the list.
+   */
+  public void write(List<LogEvent> eventList) throws IOException {
+    for(LogEvent e : eventList) {
+      write(e);
+    }
+  }
   /**
    * Flushes the buffer of this logwriter.
    */
   public void flush() {
     while (!buffer.isEmpty()) {
       LogEvent event = buffer.get(0);
-      writer.write(event.toString());
+      writer.write(event.toString()+ "\n");
       buffer.remove(0);
     }
     writer.flush();

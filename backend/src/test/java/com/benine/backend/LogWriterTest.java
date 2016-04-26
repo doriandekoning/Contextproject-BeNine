@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,5 +50,21 @@ public class LogWriterTest {
     LogWriter logWriter = new LogWriter("logs/testlog.log");
     logWriter.setMinLogLevel(1);
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
+  }
+  @Test
+  public void testWriteLogItemList() throws Exception {
+    LogWriter logWriter = new LogWriter("logs/multipletestlog.log");
+    LogEvent event = new LogEvent("12:12:12", "This is a testEvent", LogEvent.Type.DEBUG);
+    LogEvent otherevent = new LogEvent("24:24:24", "This is a another event", LogEvent.Type.CRITICAL);
+    List<LogEvent> list = new ArrayList<LogEvent>();
+    list.add(event);
+    list.add(otherevent);
+    List<String> stringList = new ArrayList<String>();
+    stringList.add(event.toString());
+    stringList.add(otherevent.toString());
+    logWriter.write(list);
+    logWriter.close();
+    List<String> contents = Files.readAllLines(Paths.get("logs/multipletestlog.log"));
+    Assert.assertEquals(stringList, contents);
   }
 }
