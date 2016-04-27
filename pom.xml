@@ -8,6 +8,7 @@
    <name>context-project</name>
    <url>http://maven.apache.org</url>
    <modules>
+	<module>cameramodule</module>
 	<module>backend</module>
    </modules>
 </project>
