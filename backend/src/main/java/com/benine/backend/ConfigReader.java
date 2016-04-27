@@ -23,7 +23,7 @@ public class ConfigReader {
     while ((line = br.readLine()) != null) {
       // Handle each line
       String[] parsedLine = parseLine(line);
-      if(parsedLine!=null) {
+      if (parsedLine != null) {
         cfg.addAttribute(parsedLine[0], parsedLine[1]);
       }
     }
@@ -43,13 +43,12 @@ public class ConfigReader {
     Matcher matcher = pattern.matcher(line.split("#")[0]);
     String whiteSpaceRemoved = matcher.replaceAll("");
     // If the line only contains a comment return null
-    if(whiteSpaceRemoved.equals("")) {
+    if (whiteSpaceRemoved.equals("")) {
       return null;
       // Check if line is a valid config line
     } else if (wellFormed.matcher(whiteSpaceRemoved).matches()) {
       // Check if the line contains data or is just a comment
-        String[] stringSplit = whiteSpaceRemoved.split("=");
-        return stringSplit;
+      return whiteSpaceRemoved.split("=");
     } else {
       throw new InvalidConfigFileException("Malformed  line: " + whiteSpaceRemoved);
     }
