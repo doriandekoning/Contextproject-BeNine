@@ -1,10 +1,22 @@
 /* navbar */
-.navbar-default {
-    background-color: #666666;
-    border-color: #E7E7E7;
-}
+
 
 body{
-	padding-top: 50px;
-	padding-bottom: 20px;
+		background-color: #5E6B75;
+		padding: 90px 10px 20px;
+		
+	}
+	.navbar-collapse{
+		position: absolute;
+		right: 0px;
+		width: 300px;
+		padding: 10px;
+	}
+	
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
 }
