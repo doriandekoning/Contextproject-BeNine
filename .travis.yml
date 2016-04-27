@@ -15,7 +15,7 @@ before_install:
 #Add other test runs here by adding && and running commands
 # to change to the correct dir and run the tests
 # (for example for the test of the node)
-script: cd ../backend && mvn test && cd ../frontend && npm test
+script: mvn test && cd ../frontend && npm test
 env:
   - BUILD_PR_BRANCH=true
   - BUILD_PR_BRANCH=false
