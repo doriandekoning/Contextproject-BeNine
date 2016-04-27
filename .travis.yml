@@ -10,7 +10,6 @@ before_install:
   - cd frontend
   - nvm install v4
   - nvm use v4
-  - npm install -g mocha
   - npm install
 
 #Add other test runs here by adding && and running commands
