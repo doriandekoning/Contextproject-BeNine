@@ -25,6 +25,7 @@ hs_err_pid*
 logs
 *.log
 npm-debug.log*
+bower_components
 
 # Runtime data
 pids
