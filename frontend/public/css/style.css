@@ -3,3 +3,8 @@
     background-color: #666666;
     border-color: #E7E7E7;
 }
+
+body{
+	padding-top: 50px;
+	padding-bottom: 20px;
+}

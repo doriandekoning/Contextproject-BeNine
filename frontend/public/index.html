@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- for rendering and touch zooming -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	
+	<!-- Title of the webpage as seen in the tabindex-->
 	<title>Preset Control Web Application</title>
 
 	<!-- Bootstrap -->
@@ -14,13 +16,87 @@
 </head>
 
 <body>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<nav class="navbar navbar-default navbar-fixed-top">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
-     <a class="navbar-brand" href="#">PolyCast WebInterface</a>
+  
+	<!-- Header of the webpage with an explanation of what they're seeing -->
+	<div class="navbar-header">
+		<p class="navbar-brand" >PolyCast WebInterface</p> 
+		<!-- Indicates the server status -->
+		<!--<button type="button" class="btn btn-success">Server Status</button> -->
+		<!-- Yellow indicates a conflict with the camera -->
+		<!-- <button type="button" class="btn btn-warning">Camera Conflict</button> -->
+		
+		<div class="alert alert-success" role="alert">
+			<strong>Server Status</strong> 
+		</div>
+		<div class="alert alert-warning" role="alert">
+			<strong>Camera Conflict</strong> 
+		</div>
+    </div>
+	
+	<div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+				<!-- Yellow and Green markings beneath presets/ camera's explained-->
+				<div class="alert alert-success" role="alert">
+					<strong>Server Status</strong> 
+				</div>
+				<div class="alert alert-warning" role="alert">
+					<strong>Camera Conflict</strong> 
+				</div>
+			  </li>                  
+            </ul>
+    </div>
   </div>
 </nav>
+
+	<div class="container theme-showcase" role="main">
+		<div class="row">
+        <div class="col-md-6">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th colspan="3">Presets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td> Preset 1</td>
+                <td> Preset 2</td>
+                <td> Preset 3</td>
+                <td> Preset 4</td>
+              </tr>
+             
+              <tr>
+                <td> Preset 5</td>
+                <td> Preset 6</td>
+                <td> Preset 7</td>
+                <td> Preset 8</td>
+              </tr>
+              <tr>
+                <td> Preset 9</td>
+                <td> Preset 10</td>
+                <td> Preset 11</td>
+				<td> Preset 12</td>
+              </tr>
+			  <tr>
+                <td> Preset 13</td>
+                <td> Preset 14</td>
+                <td> Preset 15</td>
+				<td> Preset 16</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+	</div>
+	
+
+    
+	<!-- At the end of the document so the page loads faster -->
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
