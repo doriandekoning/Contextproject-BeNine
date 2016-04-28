@@ -1,17 +1,7 @@
-/* navbar */
-
-
-body{
-		background-color: #5E6B75;
-		padding: 90px 10px 20px;
-		
-	}
-	.navbar-collapse{
-		position: absolute;
-		right: 0px;
-		width: 300px;
-		padding: 10px;
-	}
+body {
+  background-color: #999999;
+  padding-top: 50px;
+}		
 	
 .theme-showcase > p > .btn {
   margin: 5px 0;
@@ -19,4 +9,60 @@ body{
 
 .theme-showcase .navbar .container {
   width: auto;
+}
+
+.label {
+	position: relative;
+	top: 12px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.carousel-inner .col-sm-3 {
+	padding: 0;
+}
+
+.carousel-inner .row img {
+	width: 100%;
+	height: 144px;
+}
+
+.row {
+	padding: 0;
+	margin: 0;
+}
+
+.row .col-xs-6 {
+	padding: 0;
+	margin: 0;
+}
+
+.row .col-xs-6 .col-xs-3  {
+	padding: 0;
+	margin: 0;
+}
+
+.row .col-xs-6 .col-xs-3 img {
+	width: 100%;
+	height: 80px;
+	padding: 0;
+	margin: 0;
+}
+
+.row .col-xs-6 .col-xs-3 h5 {
+	width: 100%;
+	padding: 2px;
+	margin: 0;
+}
+
+.row .col-xs-6 .col-xs-3 .available {
+	background-color: #5cb85c;
+}
+
+.row .col-xs-6 .col-xs-3 .selected {
+	background-color: #f0ad4e;
+}
+
+.row .col-xs-6 .col-xs-3 .unavailable {
+	background-color: #d9534f;
 }
