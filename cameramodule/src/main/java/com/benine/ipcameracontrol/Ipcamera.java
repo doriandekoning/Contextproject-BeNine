@@ -67,18 +67,25 @@ public class Ipcamera implements Camera {
 
   @Override
   public int getZoomPosition() {
-    // TODO Auto-generated method stub
+    String res = sendCommand("%23GZ");
+    if (res.substring(0, 2).equals("gz")) {
+      return Integer.valueOf(res.substring(2), 16);
+    }
     return 0;
   }
 
   @Override
-  public void zoomTo(int zPos) {
-    // TODO Auto-generated method stub
+  public void zoomTo(int zpos) {
+    zpos = Math.max(0, zpos);
+    zpos = Math.min(2730, zpos);
+    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
   }
 
   @Override
   public void zoom(int dir) {
-    // TODO Auto-generated method stub
+    dir = Math.max(1, dir);
+    dir = Math.min(99, dir);
+    sendCommand("%23Z" + dir);
   }
 
   @Override
