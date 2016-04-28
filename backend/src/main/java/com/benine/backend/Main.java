@@ -12,20 +12,13 @@ public class Main {
 
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
-    // Setup logger
-    System.out.println("Im freerereeeee");
 
-    try {
-      logger = new LogWriter("logs" + File.separator + "mainlog");
-    }catch(IOException e) {
-      System.out.println("Cannot create log file");
-      e.printStackTrace();
-    }
     // TODO Switch adress and max backlog to config
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
+
     try {
       HttpServer server = HttpServer.create(address, 10);
-      server.createContext("/getCameras", new GetCameraHandler());
+      server.createContext("/", new  CameraHandler());
       System.out.println("Server running at: " + server.getAddress());
       server.start();
       while(true) {
