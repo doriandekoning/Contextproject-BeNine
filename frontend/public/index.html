@@ -28,13 +28,14 @@
 	}
 	
 	
+	
 	</style>
 	
 </head>
 
 <body>
 
-<!-- Header of the webpage with an explanation of what they're seeing -->
+<!-- Header of the webpage with an explanation of what they're seeing. The alerts should have a different interface in the final version -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
   
@@ -62,13 +63,13 @@
   </div>
 </nav>
 
-	<!-- Main page with the camera's -->
+	<!-- Main page with the camera's. The images have fixed width-->
 	<div class="container theme-showcase" role="main">
 		<div class = "row">
       
 		   <div class = "col-xs-2">
 			  <div class = "img">
-					<img src = "test4.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test4.jpg" width= "150" height="100">						
 			  </div>
 			  <div class = "caption">
 				 <h4>Camera 1</h4>
@@ -77,7 +78,7 @@
 		   
 		   <div class = "col-xs-2">
 			  <div class = "img">
-					<img src = "test3.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test3.jpg" width= "150" height="100">						
 				</div>
 			  <div class = "caption">
 				 <h4>Camera 2</h4>
@@ -86,7 +87,7 @@
 		   
 			 <div class = "col-xs-2">
 				<div class = "img">
-					<img src = "test4.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test4.jpg" width= "150" height="100">						
 				</div>
 			  <div class = "caption">
 				 <h4>Camera 3</h4>
@@ -95,7 +96,7 @@
 		   
 		   <div class = "col-xs-2">
 			  <div class = "img">
-					<img src = "test3.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test3.jpg" width= "150" height="100">						
 				</div>
 			  <div class = "caption">
 				 <h4>Camera 4</h4>
@@ -104,7 +105,7 @@
 		 
 			<div class = "col-xs-2">
 			  <div class = "img">
-					<img src = "test4.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test4.jpg" width= "150" height="100">						
 				</div>
 			  <div class = "caption">
 				 <h4>Camera 5</h4>
@@ -113,38 +114,39 @@
 		   
 			<div class = "col-xs-2">
 			  <div class = "img">
-					<img src = "test3.jpg" alt = "Generic placeholder thumbnail" width= "150" height="100">						
+					<img src = "test3.jpg" width= "150" height="100">						
 				</div>
 			  <div class = "caption">
 				 <h4>Camera 6</h4>
 			  </div>
 			</div> 
    
-   	<!-- Slider to control the camera's -->
-      <div class = "col-xs-12">
-		  <div id="page_switcher" class="carousel slide" data-ride="carousel">
-			<!-- Indicates how many pages with camera's there are -->
-			<ol class="carousel-indicators">
-			  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-			  <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-			  <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-			</ol>
-			
-			<!-- A previous button for switching the camera's -->
-			<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-			  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-			  <span class="sr-only">Previous</span>
-			</a>
-			<!-- A next button for switching the camera's -->
-			<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-			  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-			  <span class="sr-only">Next</span>
-			</a>
-		  </div>
-	  </div>
-	  
+   	<!-- Slider to control the camera's. This is in the wrong place.  -->
+			<div class = "col-xs-12">
+				<div id="page_switcher" class="carousel slide" data-ride="carousel">
+					<!-- Indicates how many pages with camera's there are -->
+					<ol class="carousel-indicators">
+						<li data-target="#start" data-slide-to="0" class="active"></li>
+						<li data-target="#page1" data-slide-to="1"></li>
+						<li data-target="#page2" data-slide-to="2"></li>
+					</ol>
+					
+					<!-- A previous button for switching the camera's -->
+					<a class="left carousel-control" href="#Previous-camera's" role="button" data-slide="prev">
+					  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					  <span class="sr-only">Previous</span>
+					</a>
+					<!-- A next button for switching the camera's -->
+					<a class="right carousel-control" href="#Next-camera's" role="button" data-slide="next">
+					  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					  É<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>
 		</div>
 		
+		<!-- All of the presets available. The white border around the image can be fixed by making it an image, 
+		but did this for now because there has to come a beam (green, yellow etc.) beneath it with preset nr. -->
 		<div class= "row">
 			<h3> Presets </h3>
 		</div>
@@ -153,31 +155,31 @@
 			<div class = "col-xs-6">
       
 			   <div class = "col-xs-3">
-				  <div class ="img">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" width= "100" >
+				  <div class ="thumbnail">
+					 <img src = "test2.jpg" width= "100" >
 					 <h4>Preset 1</h4>
 				  </div>
 				 
 			   </div>
 			   
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
 					 <h4>Preset 2</h4>
 				  </div>
 			   </div>
 			   
 				 <div class = "col-xs-3">
-				  <div class ="thumbnail rel-pos">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
+				  <div class ="thumbnail">
+					 <img src = "test2.jpg" width= "100" >
 					 <h4>Preset 3</h4>
 				  
 				  </div>
 				</div>
 				
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
 					 <h4>Preset 4</h4>
 				  </div>
 			   </div>			
@@ -189,31 +191,31 @@
       
 			   <div class = "col-xs-3">
 				  <div class ="thumbnail">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 1</h4>
+					 <img src = "test2.jpg" width= "100"  >
+					 <h4>Preset 5</h4>
 				  </div>
 				 
 			   </div>
 			   
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 2</h4>
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
+					 <h4>Preset 6</h4>
 				  </div>
 			   </div>
 			   
 				 <div class = "col-xs-3">
-				  <div class ="thumbnail rel-pos">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 3</h4>
+				  <div class ="thumbnail">
+					 <img src = "test2.jpg" width= "100"  >
+					 <h4>Preset 7</h4>
 				  
 				  </div>
 				</div>
 				
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 4</h4>
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
+					 <h4>Preset 8</h4>
 				  </div>
 			   </div>			
 			</div>
@@ -224,110 +226,36 @@
       
 			   <div class = "col-xs-3">
 				  <div class ="thumbnail">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 1</h4>
+					 <img src = "test2.jpg" width= "100"  >
+					 <h4>Preset 9</h4>
 				  </div>
 				 
 			   </div>
 			   
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 2</h4>
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
+					 <h4>Preset 10</h4>
 				  </div>
 			   </div>
 			   
 				 <div class = "col-xs-3">
-				  <div class ="thumbnail rel-pos">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 3</h4>
-				  
-				  </div>
-				</div>
-				
-			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 4</h4>
-				  </div>
-			   </div>			
-			</div>
-		</div>
-		
-		<div class = "row">
-			<div class = "col-xs-6">
-      
-			   <div class = "col-xs-3">
 				  <div class ="thumbnail">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 1</h4>
-				  </div>
-				 
-			   </div>
-			   
-			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 2</h4>
-				  </div>
-			   </div>
-			   
-				 <div class = "col-xs-3">
-				  <div class ="thumbnail rel-pos">
-					 <img src = "test2.jpg" alt = "Generic placeholder thumbnail" >
-					 <h4>Preset 3</h4>
+					 <img src = "test2.jpg" width= "100"  >
+					 <h4>Preset 11</h4>
 				  
 				  </div>
 				</div>
 				
 			   <div class = "col-xs-3">
-				  <div href = "#" class = "thumbnail">
-					 <img src = "test5.jpg" alt = "Generic placeholder thumbnail">
-					 <h4>Preset 4</h4>
+				  <div class = "thumbnail">
+					 <img src = "test5.jpg" width= "100" >
+					 <h4>Preset 12</h4>
 				  </div>
 			   </div>			
 			</div>
 		</div>
 		
-		<!-- <div class="row">
-        <div class="col-md-6">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th colspan="4">Presets</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td> Preset 1</td>
-                <td> Preset 2</td>
-                <td> Preset 3</td>
-                <td> Preset 4</td>
-              </tr>
-             
-              <tr>
-                <td> Preset 5</td>
-                <td> Preset 6</td>
-                <td> Preset 7</td>
-                <td> Preset 8</td>
-              </tr>
-              <tr>
-                <td> Preset 9</td>
-                <td> Preset 10</td>
-                <td> Preset 11</td>
-				<td> Preset 12</td>
-              </tr>
-			  <tr>
-                <td> Preset 13</td>
-                <td> Preset 14</td>
-                <td> Preset 15</td>
-				<td> Preset 16</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-	</div> -->
-	
 	
 	</div>
 	
