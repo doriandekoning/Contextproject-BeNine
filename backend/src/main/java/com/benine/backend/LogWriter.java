@@ -46,23 +46,44 @@ public class LogWriter {
   // TODO Add write method for non event
   // TODO remove throws from write methods
   /**
+   * Creates a LogEvent (at the current system time) and writes it to a file
+   * @param description the description of the logevent
+   * @param type the type of the logevent
+   */
+  public void write(String description, LogEvent.Type type) {
+    write(new LogEvent(System.currentTimeMillis()+ "", description, type));
+  }
+  /**
+   * Creates a LogEvent (at a specified time) and writes it to a file
+   * @param time the time the event happened
+   * @param description the description of the logevent
+   * @param type the type of the logevent
+   */
+  public void write(String time, String description, LogEvent.Type type) {
+    write(new LogEvent(time, description, type));
+  }
+  /**
    * Writes LogEvent to file.
    */
-  public void write(LogEvent event) throws IOException {
-    if (event.getType().getValue() > minLogLevel) {
-      return;
-    }
-    // If the log level is high write the buffer and write this event immidiately
-    // because this might indicate a crash (soon).
-    if (event.getType().getValue() < 3) {
-      flush();
-      hardWrite(event);
-    } else {
-      buffer.add(event);
-      int maxLogBufferSize = 25;
-      if (buffer.size() > maxLogBufferSize) {
-        flush();
+  public void write(LogEvent event) {
+    try {
+      if (event.getType().getValue() > minLogLevel) {
+        return;
       }
+      // If the log level is high write the buffer and write this event immidiately
+      // because this might indicate a crash (soon).
+      if (event.getType().getValue() < 3) {
+        flush();
+        hardWrite(event);
+      } else {
+        buffer.add(event);
+        int maxLogBufferSize = 25;
+        if (buffer.size() > maxLogBufferSize) {
+          flush();
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

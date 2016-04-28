@@ -47,6 +47,15 @@ public class LogWriterTest {
     Assert.assertEquals(contents.get(0), event.toString());
   }
   @Test
+  public void testWriteMoEvent() throws Exception {
+    LogWriter logWriter = new LogWriter("logs/testlog");
+    logWriter.write("10:10", "desc", LogEvent.Type.CRITICAL);
+    LogEvent refEvent = new LogEvent("10:10", "desc", LogEvent.Type.CRITICAL);
+    logWriter.close();
+    List<String> contents = Files.readAllLines(Paths.get("logs/testlog.log"));
+    Assert.assertEquals(contents.get(0), refEvent.toString());
+  }
+  @Test
   public void testWriteLogLowType() throws Exception {
     LogWriter logWriter = new LogWriter("logs/testlog");
     LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);

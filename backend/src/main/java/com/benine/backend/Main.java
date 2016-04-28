@@ -2,7 +2,6 @@ package com.benine.backend;
 
 import com.sun.net.httpserver.HttpServer;
 
-import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,15 +23,12 @@ public class Main {
     }
     // TODO Switch adress and max backlog to config
     InetSocketAddress adress = new InetSocketAddress(8888);
-    HttpServer server = new HttpServer.create(adress, 10);
-
     try {
-      logger.write(new LogEvent(System.currentTimeMillis() + "",
-              "Starting http server at ip adress: " + config.getValue("ipadress")
-                      + ":" + config.getValue("port"), LogEvent.Type.INFO));
-    }catch (Exception e) {
-      e.printStackTrace();
+      HttpServer server = HttpServer.create(adress, 10);
+    } catch (Exception e) {
+      logger.write("Unable to start server", LogEvent.Type.CRITICAL);
     }
+
   }
 
   public static Config getConfig() {
