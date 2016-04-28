@@ -43,15 +43,13 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public int zoomTo(int zPos) {
+  public void zoomTo(int zPos) {
     // TODO Auto-generated method stub
-    return 0;
   }
 
   @Override
-  public int zoom(int dir) {
+  public void zoom(int dir) {
     // TODO Auto-generated method stub
-    return 0;
   }
 
   @Override
