@@ -32,10 +32,11 @@
 
 <body>
 
+<!-- Header of the webpage with an explanation of what they're seeing -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
   
-	<!-- Header of the webpage with an explanation of what they're seeing -->
+	
 	<div class="navbar-header">
 		<h2>PolyCast WebInterface</h2> 
 	</div>
@@ -55,54 +56,95 @@
 				</div>
 			</li>
 		</ul>
-	</div>
-	
-    
-	
+	</div>	
   </div>
 </nav>
 
-	<!-- Main page with the presets and the controls -->
+	<!-- Main page with the camera's -->
 	<div class="container theme-showcase" role="main">
-	<div class = "row">
+		<div class = "row">
+      
+		   <div class = "col-xs-2">
+			  <div class ="thumbnail">
+				 <img src = "test4.jpg" alt = "Generic placeholder thumbnail" >
+			  </div>
+			  <div class = "caption">
+				 <h4>Camera 1</h4>
+			  </div>
+		   </div>
+		   
+		   <div class = "col-xs-2">
+			  <div href = "#" class = "thumbnail">
+				 <img src = "test3.jpg" alt = "Generic placeholder thumbnail">
+			   </div>
+			  <div class = "caption">
+				 <h4>Camera 2</h4>
+			  </div>
+		   </div>
+		   
+			 <div class = "col-xs-2">
+			  <div class ="thumbnail">
+				 <img src = "test4.jpg" alt = "Generic placeholder thumbnail" >
+			  </div>
+			  <div class = "caption">
+				 <h4>Camera 3</h4>
+			  </div>
+		   </div>
+		   
+		   <div class = "col-xs-2">
+			  <div href = "#" class = "thumbnail">
+				 <img src = "test3.jpg" alt = "Generic placeholder thumbnail">
+			   </div>
+			  <div class = "caption">
+				 <h4>Camera 4</h4>
+			  </div>
+		   </div>
+		 
+			<div class = "col-xs-2">
+			  <div class ="thumbnail">
+				 <img src = "test4.jpg" alt = "Generic placeholder thumbnail" >
+			  </div>
+			  <div class = "caption">
+				 <h4>Camera 5</h4>
+			  </div>
+		   </div>
+		   
+			<div class = "col-xs-2">
+			  <div href = "#" class = "thumbnail">
+				 <img src = "test3.jpg" alt = "Generic placeholder thumbnail">
+			   </div>
+			  <div class = "caption">
+				 <h4>Camera 6</h4>
+			  </div>
+			</div> 
    
-   <div class = "col-sm-6 col-md-3">
-      <div class = "thumbnail">
-         <img src = "test4.jpg" alt = "Generic placeholder thumbnail">
+   	<!-- Slider to control the camera's -->
+      <div class = "col-xs-12">
+	  <div id="page_switcher" class="carousel slide" data-ride="carousel">
+		<!-- Indicates how many pages with camera's there are -->
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol>
+        
+		<!-- A previous button for switching the camera's -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+		<!-- A next button for switching the camera's -->
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
       </div>
-	  <div class = "caption">
-         <h4>Preset 1</h4>
 	  </div>
-   </div>
+	  
+		</div>
+	</div>
    
-   <div class = "col-sm-6 col-md-3">
-      <div class ="thumbnail">
-         <img src = "test4.jpg" alt = "Generic placeholder thumbnail" >
-      </div>
-	  <div class = "caption">
-         <h4>Preset 2</h4>
-	  </div>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <div href = "#" class = "thumbnail">
-         <img src = "test3.jpg" alt = "Generic placeholder thumbnail">
-       </div>
-	  <div class = "caption">
-         <h4>Preset 3</h4>
-	  </div>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <div href = "#" class = "thumbnail">
-         <img src = "test3.jpg" alt = "Generic placeholder thumbnail">
-       </div>
-	  <div class = "caption">
-         <h4>Preset 4</h4>
-	  </div>
-   </div>
-   
-</div>
+     
 		<!-- <div class="row">
         <div class="col-md-6">
           <table class="table table-bordered">
@@ -142,25 +184,7 @@
         </div>
 	</div> -->
 	
-		<!-- Get to the next camera's -->
-      <div id="page_switcher" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        </ol>
-        
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-	  
-	</div>
+	
 
     
 	<!-- At the end of the document so the page loads faster -->
