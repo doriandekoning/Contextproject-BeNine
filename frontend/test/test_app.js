@@ -1,10 +1,10 @@
 var supertest = require('supertest');
-var server = require('../modules/router');
+var app = require('../app');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 
-server = supertest(server);
+server = supertest(app);
 
 suite("Routes", function() {
 	// Test suite for / route.

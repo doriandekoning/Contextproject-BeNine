@@ -36,6 +36,7 @@ public class ConfigReader {
    * @return Null if line is a comment or string array with attribute value and key.
    * @throws InvalidConfigFileException if the config file is not valid
    */
+  //TODO add support .s in value
   private static String[] parseLine(String line) throws InvalidConfigFileException {
     // Remove comments (everything after a #)
     Pattern pattern = Pattern.compile("([\\s*+])");
