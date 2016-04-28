@@ -1,7 +1,7 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>BeNine</groupId>
-	<artifactId>cameramodule</artifactId>
+	<artifactId>databasemodule</artifactId>
 	<version>0.0.1</version>
 <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
