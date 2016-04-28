@@ -5,5 +5,7 @@ package com.benine;
  * @author Bryan
  */
 public interface Database {
+	
+	
 
 }

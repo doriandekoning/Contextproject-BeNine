@@ -8,11 +8,17 @@ import java.sql.Statement;
 
 public class DatabaseConnector {
 
-	public static void main(String[] argv) throws SQLException, ClassNotFoundException {
+	/**
+	 * Connect with the database.
+	 * @param argv
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	public void connect(String[] argv) throws SQLException, ClassNotFoundException {
 
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = null;
-		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "tavsan");
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/contextprojectdatabase", "root", "password");
 
 	}
 }
