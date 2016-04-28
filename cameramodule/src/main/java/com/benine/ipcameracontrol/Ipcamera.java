@@ -150,32 +150,45 @@ public class Ipcamera implements Camera {
 
   @Override
   public void setAutoIrisOn(boolean on) {
-    // TODO Auto-generated method stub
-    
+    if (on) {
+      sendCommand("%23D31");
+    } else {
+      sendCommand("%23D30");
+    }
   }
 
   @Override
   public boolean isAutoIrisOn() {
-    // TODO Auto-generated method stub
+    String res = sendCommand("%23D3");
+    if (res.substring(0, 2).equals("d3")) {
+      if (res.substring(2).equals("1")) {
+        return true;
+      }
+    }
     return false;
   }
-
+  
+  /**
+   * Iris position must be between 1 and 99.
+   * 1 is close and 99 is open.
+   */
   @Override
   public void setIrisPos(int pos) {
-    // TODO Auto-generated method stub
-    
+    pos = Math.max(1, pos);
+    pos = Math.min(99, pos);
+    sendCommand("%23I" + pos);
   }
 
   @Override
   public int getIrisPos() {
-    // TODO Auto-generated method stub
-    return 0;
+    String res = sendCommand("%23GI");
+    
+    return Integer.valueOf(res.substring(2, 5), 16);
   }
 
   @Override
   public String getStreamLink() {
-    // TODO Auto-generated method stub
-    return null;
+    return "http://" + ipadres + "/cgi-bin/mjpeg";
   }
   
   private String sendCommand(String cmd) {
