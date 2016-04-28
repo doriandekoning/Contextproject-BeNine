@@ -22,9 +22,15 @@ public class Main {
       e.printStackTrace();
     }
     // TODO Switch adress and max backlog to config
-    InetSocketAddress adress = new InetSocketAddress(8888);
+    InetSocketAddress address = new InetSocketAddress("localhost", 8888);
     try {
-      HttpServer server = HttpServer.create(adress, 10);
+      HttpServer server = HttpServer.create(address, 10);
+      server.createContext("/getCameras", new GetCameraHandler());
+      System.out.println("Server running at: " + server.getAddress());
+      server.start();
+      while(true) {
+        Thread.sleep(100);
+      }
     } catch (Exception e) {
       logger.write("Unable to start server", LogEvent.Type.CRITICAL);
     }
