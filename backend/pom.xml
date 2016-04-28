@@ -9,6 +9,7 @@
 		<findbugs.plugin.version>3.0.2</findbugs.plugin.version>     
 		<checkstyle.plugin.version>2.17</checkstyle.plugin.version>
 		<cameramodule.version>0.0.1</cameramodule.version>
+		<databasemodule.version>0.0.1</databasemodule.version>
    </properties>
    <dependencies>
       <dependency>
@@ -34,6 +35,13 @@
 		<version>${cameramodule.version}</version>
 		<scope>system</scope>
 		<systemPath>${project.basedir}/../cameramodule/target/cameramodule-${cameramodule.version}.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>BeNine</groupId>
+		<artifactId>databasemodule</artifactId>
+		<version>${databasemodule.version}</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/../databasemodule/target/databasemodule-${databasemodule.version}.jar</systemPath>
 	</dependency>
    </dependencies>
    <build>
