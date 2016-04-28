@@ -61,7 +61,7 @@
             <version>${checkstyle.plugin.version}</version>
             <configuration>
                <failOnViolation>true</failOnViolation>
-               <configLocation>checkstyle.xml</configLocation>
+               <configLocation>../checkstyle.xml</configLocation>
             </configuration>
             <executions>
                <execution>
