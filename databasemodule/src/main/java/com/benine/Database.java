@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Ege
  */
 public interface Database {
-	
+
 	/**
 	 * Add a preset to the database.
 	 * @param camera ID of the camera
@@ -35,21 +35,17 @@ public interface Database {
 	 * Add a moving preset to the database.
 	 * @param camera ID of the camera
 	 * @param cameraPresetNumber ID of the preset for the camera
-	 * @param beginPreset Begin of the preset
-	 * @param endPreset End of the preset
-	 * @param time Time from begin to end in ms
+	 * @param mPreset The preset to be added
 	 */
-	void addMovingPreset(int camera, int cameraPresetNumber, Preset beginPreset, Preset endPreset, int time);
+	void addMovingPreset(int camera, int cameraPresetNumber, MovingPreset mPreset);
 	
 	/**
 	 * Update a moving preset to the database.
 	 * @param camera ID of the camera
 	 * @param cameraPresetNumber ID of the preset for the camera
-	 * @param beginPreset Begin of the preset
-	 * @param endPreset End of the preset
-	 * @param time Time from begin to end in ms
+	 * @param mPreset The preset to be updated
 	 */
-	void updateMovingPreset(int camera, int cameraPresetNumber, Preset beginPreset, Preset endPreset, int time);
+	void updateMovingPreset(int camera, int cameraPresetNumber, MovingPreset mPreset);
 	
 	/**
 	 * Delete a moving preset from the database.
@@ -62,19 +58,47 @@ public interface Database {
 	 * Returns a preset of the camera.
 	 * @param camera ID of the camera
 	 * @param cameraPresetNumber ID of the preset of the camera
-	 * @return
+	 * @return A preset
 	 */
 	Preset getPreset(int camera, int cameraPresetNumber);
 	
 	/**
-	 * Returns all the presets
-	 * @return
+	 * Returns all the presets.
+	 * @return all the presets
 	 */
 	ArrayList<Preset> getAllPresets();
 	
 	/**
-	 * Returns all the presets of the camera
-	 * @return
+	 * Returns all the presets of the camera.
+	 * @param cameraID ID of the camera
+	 * @return the presets of the given camera
 	 */
-	ArrayList<Preset> getAllPresetsCamera();
+	ArrayList<Preset> getAllPresetsCamera(int cameraID);
+	
+	/**
+	 * Returns a moving preset of the camera.
+	 * @param camera ID of the camera
+	 * @param cameraPresetNumber ID of the moving preset of the camera
+	 * @return A moving preset
+	 */
+	MovingPreset getMovingPreset(int camera, int cameraPresetNumber);
+	
+	/**
+	 * Returns all the moving presets.
+	 * @return The moving presets
+	 */
+	ArrayList<MovingPreset> getAllMovingPresets();
+	
+	/**
+	 * Returns The moving presets of the camera.
+	 * @param cameraID ID of the camera
+	 * @return The moving presets of the given camera
+	 */
+	ArrayList<MovingPreset> getAllMovingPresetsCamera(int cameraID);
+	
+	/**
+	 * Tries to connect to database server and database.
+	 * @return The database
+	 */
+	Database connectToDatabase();
 }
