@@ -91,5 +91,35 @@ public class IpcameraTest {
     mockServerClient.verify(request, VerificationTimes.once());
     assertEquals(res, 1621, 0.000001);
   }
+  
+  @Test
+  public final void testZoomTo() {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#AXZBAB"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
+
+    camera.zoomTo(1622);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
+  public final void testZoom() {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#Z80"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("zS80"));
+
+    camera.zoom(80);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
 
 }
