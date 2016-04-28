@@ -10,5 +10,6 @@
    <modules>
 	<module>cameramodule</module>
 	<module>backend</module>
+	<module>databasemodule</module>
    </modules>
 </project>
