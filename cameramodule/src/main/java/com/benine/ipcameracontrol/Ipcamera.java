@@ -103,8 +103,9 @@ public class Ipcamera implements Camera {
     String res = sendCommand("%23GF");
     if (res.substring(0, 2).equals("gf")) {
       return Integer.valueOf(res.substring(2), 16);
+    } else {
+      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
     }
-    return 0;
   }
 
   /**
@@ -146,9 +147,12 @@ public class Ipcamera implements Camera {
     if (res.substring(0, 2).equals("d1")) {
       if (res.substring(2).equals("1")) {
         return true;
+      } else {
+        return false;
       }
+    } else {
+      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
     }
-    return false;
   }
 
   @Override
@@ -167,6 +171,8 @@ public class Ipcamera implements Camera {
       if (res.substring(2).equals("1")) {
         return true;
       }
+    } else {
+      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
     }
     return false;
   }
@@ -174,7 +180,6 @@ public class Ipcamera implements Camera {
   /**
    * Iris position must be between 1 and 99.
    * 1 is close and 99 is open.
-   * @throws IpcameraConnectionException 
    */
   @Override
   public void setIrisPos(int pos) throws IpcameraConnectionException {

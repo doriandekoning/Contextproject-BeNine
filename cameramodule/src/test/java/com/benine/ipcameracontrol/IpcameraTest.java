@@ -141,6 +141,19 @@ public class IpcameraTest {
     assertEquals(res, 2626, 0.000001);
   }
   
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testGetFocusPositionException() throws IpcameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#GF"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("ggA42"));
+
+    camera.getFocusPos();
+  }
+  
   @Test
   public final void testSetFocus() throws IpcameraConnectionException {
     parameterList = new ArrayList<Parameter>();
@@ -201,6 +214,19 @@ public class IpcameraTest {
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertFalse(res);
+  }
+  
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testIsAutoFocusOffException() throws IpcameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#D1"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("K10"));
+
+    camera.isAutoFocusOn();
   }
   
   @Test
@@ -295,6 +321,19 @@ public class IpcameraTest {
     assertTrue(res);
   }
   
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testIsAutoIrisOnException() throws IpcameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#D3"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("p31"));
+
+    camera.isAutoIrisOn();
+  }
+  
   @Test
   public final void testSetIrisPosition() throws IpcameraConnectionException {
     parameterList = new ArrayList<Parameter>();
@@ -326,6 +365,8 @@ public class IpcameraTest {
     
     assertEquals(res, 3394, 0.000001);
   }
+  
+  
   
   @Test
   public final void testGetStreamLink() {
