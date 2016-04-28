@@ -31,7 +31,7 @@ public class IpcameraTest {
   private ArrayList<Parameter> parameterList;
 
   @Test
-  public final void testMoveToHomePosition() {
+  public final void testMoveToHomePosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#APS80008000111"));
@@ -46,7 +46,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testMoveWithSpecifiedSpeed() {
+  public final void testMoveWithSpecifiedSpeed() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#PTS0199"));
@@ -62,7 +62,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetPosition() {
+  public final void testGetPosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#APC"));
@@ -79,7 +79,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetZoomPosition() {
+  public final void testGetZoomPosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GZ"));
@@ -95,7 +95,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testZoomTo() {
+  public final void testZoomTo() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#AXZBAB"));
@@ -110,7 +110,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testZoom() {
+  public final void testZoom() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#Z80"));
@@ -125,7 +125,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetFocusPosition() {
+  public final void testGetFocusPosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GF"));
@@ -142,7 +142,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetFocus() {
+  public final void testSetFocus() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#AXFFFF"));
@@ -157,7 +157,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testMoveFocus() {
+  public final void testMoveFocus() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#F80"));
@@ -172,7 +172,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoFocusOn() {
+  public final void testIsAutoFocusOn() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D1"));
@@ -188,7 +188,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoFocusOff() {
+  public final void testIsAutoFocusOff() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D1"));
@@ -204,7 +204,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoFocusOff() {
+  public final void testSetAutoFocusOff() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D10"));
@@ -219,7 +219,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoFocusOn() {
+  public final void testSetAutoFocusOn() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D11"));
@@ -234,7 +234,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoIrisOff() {
+  public final void testSetAutoIrisOff() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D30"));
@@ -249,7 +249,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoIrisOn() {
+  public final void testSetAutoIrisOn() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D31"));
@@ -264,7 +264,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoIrisOff() {
+  public final void testIsAutoIrisOff() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D3"));
@@ -280,7 +280,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoIrisOn() {
+  public final void testIsAutoIrisOn() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D3"));
@@ -296,7 +296,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetIrisPosition() {
+  public final void testSetIrisPosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#I80"));
@@ -311,7 +311,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetIrisPosition() {
+  public final void testGetIrisPosition() throws IpconnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GI"));
@@ -335,6 +335,13 @@ public class IpcameraTest {
 
     String res = camera.getStreamLink();
     assertEquals(res, "http://127.0.0.1:9000/cgi-bin/mjpeg");
+  }
+  
+  
+  @Test(expected = IpconnectionException.class)
+  public final void testNonExcistingIpAdres() throws IpconnectionException {
+    Ipcamera camera = new Ipcamera("1.2.3.4");
+    camera.getIrisPos();
   }
 
 }
