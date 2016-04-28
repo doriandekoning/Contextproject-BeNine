@@ -1,4 +1,4 @@
-package test.java.benine.ipcameracontrol;
+package com.benine.ipcameracontrol;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
