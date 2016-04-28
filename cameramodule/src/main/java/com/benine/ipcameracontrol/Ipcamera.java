@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 
 /**
@@ -25,21 +27,41 @@ public class Ipcamera implements Camera {
     ipadres = ip;
   }
 
+  /**
+   * Supported range:
+   * pan: -175 to 175 degrees.
+   * tilt: -30 to 210 degrees.
+   * pan speed: 1 to 30.
+   * tilt speed: 0 to 2.
+   */
   @Override
   public void moveTo(double pan, double tilt, int panSpeed, int tiltSpeed) {
     sendCommand("%23APS" + convertPanToHex(pan) + convertTiltToHex(tilt) 
                     + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
   }
-
+  
+  /**
+   * Values must be between 1 and 99 otherwise they will be rounded.
+   * Hereby is 1 max speed to left or downward.
+   * 99 is max speed to right or upward.
+   */
   @Override
   public void move(int pan, int tilt) {
-    // TODO Auto-generated method stub
-    
+    pan = Math.max(1, pan);
+    pan = Math.min(99, pan);
+    tilt = Math.max(1, tilt);
+    tilt = Math.min(99, tilt);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendCommand("%23PTS" + formatter.format(pan) + formatter.format(tilt));
   }
 
   @Override
   public double[] getPosition() {
-    // TODO Auto-generated method stub
+    String res = sendCommand("%23APC");
+    if (res.substring(0, 3).equals("aPC")) {
+      return new double[]{convertPanToDouble(res.substring(3, 7)),
+                                  convertTiltToDouble(res.substring(7))};
+    }
     return null;
   }
 
@@ -144,6 +166,15 @@ public class Ipcamera implements Camera {
     pan = Math.max(0, pan);
     return Integer.toHexString(pan);
   }
+  
+  /**
+   * Convert the hexadecimal presentation of the tilt position to degrees.
+   * @param tilt position in hexadecimal.
+   * @return tilt position in degrees.
+   */
+  private double convertTiltToDouble(String tilt) {
+    return (int)(((Integer.valueOf(tilt, 16) - 7284) / 121.3541667) + 0.5) - 30;
+  }
  
   /**
    * Convert the tilt position in a range the camera supports.
@@ -166,6 +197,15 @@ public class Ipcamera implements Camera {
     tilt = Math.min(2, tilt);
     tilt = Math.max(0, tilt);
     return tilt;
+  }
+  
+  /**
+   * Converts hexadecimal representation to degrees.
+   * @param pan hexadecimal pan position.
+   * @return pan position in degrees.
+   */
+  private double convertPanToDouble(String pan) {
+    return (int)(((Integer.valueOf(pan, 16) - 11530) / 121.3628571) + 0.5) - 175;
   }
   
   /**
