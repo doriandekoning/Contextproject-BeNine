@@ -18,13 +18,13 @@ import java.text.NumberFormat;
 
 public class Ipcamera implements Camera {
 
-  String ipadres;
+  String ipaddress;
 
   /**
    *Create a new IP Camera object.
    */
   public Ipcamera(String ip) {
-    ipadres = ip;
+    ipaddress = ip;
   }
 
   /**
@@ -104,7 +104,7 @@ public class Ipcamera implements Camera {
     if (res.substring(0, 2).equals("gf")) {
       return Integer.valueOf(res.substring(2), 16);
     } else {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
     }
   }
 
@@ -151,7 +151,7 @@ public class Ipcamera implements Camera {
         return false;
       }
     } else {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
     }
   }
 
@@ -172,7 +172,7 @@ public class Ipcamera implements Camera {
         return true;
       }
     } else {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
     }
     return false;
   }
@@ -197,18 +197,18 @@ public class Ipcamera implements Camera {
 
   @Override
   public String getStreamLink() {
-    return "http://" + ipadres + "/cgi-bin/mjpeg";
+    return "http://" + ipaddress + "/cgi-bin/mjpeg";
   }
   
   private String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
     try {
-      InputStream com = new URL("http://" + ipadres + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
+      InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(com));
       res = buf.readLine();
       com.close();
     } catch (IOException excep) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
     }
     
     return res;
