@@ -73,7 +73,10 @@ public class Ipcamera implements Camera {
     }
     return 0;
   }
-
+  /**
+   * position must be between 0 and 2730.
+   * Otherwise it will be rounded to the nearest supported number.
+   */
   @Override
   public void zoomTo(int zpos) {
     zpos = Math.max(0, zpos);
@@ -81,6 +84,10 @@ public class Ipcamera implements Camera {
     sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
   }
 
+  /**
+   * Between 1 and 99, 1 is max speed to wide and 99 is max speed tele.
+   * Otherwise it will be rounded to the nearest supported number.
+   */
   @Override
   public void zoom(int dir) {
     dir = Math.max(1, dir);
@@ -90,31 +97,54 @@ public class Ipcamera implements Camera {
 
   @Override
   public int getFocusPos() {
-    // TODO Auto-generated method stub
+    String res = sendCommand("%23GF");
+    if (res.substring(0, 2).equals("gf")) {
+      return Integer.valueOf(res.substring(2), 16);
+    }
     return 0;
   }
 
+  /**
+   * Focus position must be a number between 0 and 2730.
+   * Otherwise it will be rounded to the nearest supported number.
+   */
   @Override
   public void setFocusPos(int pos) {
-    // TODO Auto-generated method stub
-    
+    pos = Math.max(0, pos);
+    pos = Math.min(2730, pos);
+    sendCommand("%23AXF" + Integer.toHexString(pos + 1365));
   }
 
+  /**
+   * Focus speed must be between 1 and 99.
+   * Otherwise it will be rounded to the nearest supported number.
+   * 1: max speed near direction.
+   * 99: max speed far direction.
+   */
   @Override
   public void moveFocus(int speed) {
-    // TODO Auto-generated method stub
-    
+    speed = Math.max(1, speed);
+    speed = Math.min(99, speed);
+    sendCommand("%23F" + speed);
   }
 
   @Override
   public void setAutoFocusOn(boolean on) {
-    // TODO Auto-generated method stub
-    
+    if (on) {
+      sendCommand("%23D11");
+    } else {
+      sendCommand("%23D10");
+    }
   }
 
   @Override
   public boolean isAutoFocusOn() {
-    // TODO Auto-generated method stub
+    String res = sendCommand("%23D1");
+    if (res.substring(0, 2).equals("d1")) {
+      if (res.substring(2).equals("1")) {
+        return true;
+      }
+    }
     return false;
   }
 
