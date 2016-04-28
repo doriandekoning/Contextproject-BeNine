@@ -1,17 +1,17 @@
 package com.benine.ipcameracontrol;
 
 /**
- * Exception class for problems with the IP connection.
+ * Exception class for problems with the camera connection.
  * @author Bryan
  *
  */
-public class IpconnectionException extends Exception {
+public class CameraConnectionException extends Exception {
   
   /**
-   * Create Ip connection exception.
+   * Create camera connection exception.
    * @param message to give extra information with exception.
    */
-  public IpconnectionException(String message) {
+  public CameraConnectionException(String message) {
     super(message);
   }
 

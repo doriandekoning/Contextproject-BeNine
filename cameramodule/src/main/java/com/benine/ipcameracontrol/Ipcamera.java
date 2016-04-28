@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -34,11 +33,10 @@ public class Ipcamera implements Camera {
    * tilt: -30 to 210 degrees.
    * pan speed: 1 to 30.
    * tilt speed: 0 to 2.
-   * @throws IpconnectionException when command can not be send.
    */
   @Override
   public void moveTo(double pan, double tilt, int panSpeed, int tiltSpeed) 
-                                                                    throws IpconnectionException {
+                                                                throws IpcameraConnectionException {
     sendCommand("%23APS" + convertPanToHex(pan) + convertTiltToHex(tilt) 
                     + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
   }
@@ -47,10 +45,9 @@ public class Ipcamera implements Camera {
    * Values must be between 1 and 99 otherwise they will be rounded.
    * Hereby is 1 max speed to left or downward.
    * 99 is max speed to right or upward.
-   * @throws IpconnectionException 
    */
   @Override
-  public void move(int pan, int tilt) throws IpconnectionException {
+  public void move(int pan, int tilt) throws IpcameraConnectionException {
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
@@ -60,7 +57,7 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public double[] getPosition() throws IpconnectionException {
+  public double[] getPosition() throws IpcameraConnectionException {
     String res = sendCommand("%23APC");
     if (res.substring(0, 3).equals("aPC")) {
       return new double[]{convertPanToDouble(res.substring(3, 7)),
@@ -70,20 +67,20 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public int getZoomPosition() throws IpconnectionException {
+  public int getZoomPosition() throws IpcameraConnectionException {
     String res = sendCommand("%23GZ");
     if (res.substring(0, 2).equals("gz")) {
       return Integer.valueOf(res.substring(2), 16);
     }
     return 0;
   }
+  
   /**
    * position must be between 0 and 2730.
    * Otherwise it will be rounded to the nearest supported number.
-   * @throws IpconnectionException 
    */
   @Override
-  public void zoomTo(int zpos) throws IpconnectionException {
+  public void zoomTo(int zpos) throws IpcameraConnectionException {
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
     sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
@@ -92,17 +89,17 @@ public class Ipcamera implements Camera {
   /**
    * Between 1 and 99, 1 is max speed to wide and 99 is max speed tele.
    * Otherwise it will be rounded to the nearest supported number.
-   * @throws IpconnectionException 
+   * @throws IpcameraConnectionException when command can not be send.
    */
   @Override
-  public void zoom(int dir) throws IpconnectionException {
+  public void zoom(int dir) throws IpcameraConnectionException {
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
     sendCommand("%23Z" + dir);
   }
 
   @Override
-  public int getFocusPos() throws IpconnectionException {
+  public int getFocusPos() throws IpcameraConnectionException {
     String res = sendCommand("%23GF");
     if (res.substring(0, 2).equals("gf")) {
       return Integer.valueOf(res.substring(2), 16);
@@ -113,10 +110,9 @@ public class Ipcamera implements Camera {
   /**
    * Focus position must be a number between 0 and 2730.
    * Otherwise it will be rounded to the nearest supported number.
-   * @throws IpconnectionException 
    */
   @Override
-  public void setFocusPos(int pos) throws IpconnectionException {
+  public void setFocusPos(int pos) throws IpcameraConnectionException {
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
     sendCommand("%23AXF" + Integer.toHexString(pos + 1365));
@@ -127,17 +123,16 @@ public class Ipcamera implements Camera {
    * Otherwise it will be rounded to the nearest supported number.
    * 1: max speed near direction.
    * 99: max speed far direction.
-   * @throws IpconnectionException 
    */
   @Override
-  public void moveFocus(int speed) throws IpconnectionException {
+  public void moveFocus(int speed) throws IpcameraConnectionException {
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     sendCommand("%23F" + speed);
   }
 
   @Override
-  public void setAutoFocusOn(boolean on) throws IpconnectionException {
+  public void setAutoFocusOn(boolean on) throws IpcameraConnectionException {
     if (on) {
       sendCommand("%23D11");
     } else {
@@ -146,7 +141,7 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public boolean isAutoFocusOn() throws IpconnectionException {
+  public boolean isAutoFocusOn() throws IpcameraConnectionException {
     String res = sendCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {
       if (res.substring(2).equals("1")) {
@@ -157,7 +152,7 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public void setAutoIrisOn(boolean on) throws IpconnectionException {
+  public void setAutoIrisOn(boolean on) throws IpcameraConnectionException {
     if (on) {
       sendCommand("%23D31");
     } else {
@@ -166,7 +161,7 @@ public class Ipcamera implements Camera {
   }
 
   @Override
-  public boolean isAutoIrisOn() throws IpconnectionException {
+  public boolean isAutoIrisOn() throws IpcameraConnectionException {
     String res = sendCommand("%23D3");
     if (res.substring(0, 2).equals("d3")) {
       if (res.substring(2).equals("1")) {
@@ -179,17 +174,17 @@ public class Ipcamera implements Camera {
   /**
    * Iris position must be between 1 and 99.
    * 1 is close and 99 is open.
-   * @throws IpconnectionException 
+   * @throws IpcameraConnectionException 
    */
   @Override
-  public void setIrisPos(int pos) throws IpconnectionException {
+  public void setIrisPos(int pos) throws IpcameraConnectionException {
     pos = Math.max(1, pos);
     pos = Math.min(99, pos);
     sendCommand("%23I" + pos);
   }
 
   @Override
-  public int getIrisPos() throws IpconnectionException {
+  public int getIrisPos() throws IpcameraConnectionException {
     String res = sendCommand("%23GI");
     
     return Integer.valueOf(res.substring(2, 5), 16);
@@ -200,7 +195,7 @@ public class Ipcamera implements Camera {
     return "http://" + ipadres + "/cgi-bin/mjpeg";
   }
   
-  private String sendCommand(String cmd) throws IpconnectionException {
+  private String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
     try {
       InputStream com = new URL("http://" + ipadres + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
@@ -208,7 +203,7 @@ public class Ipcamera implements Camera {
       res = buf.readLine();
       com.close();
     } catch (IOException excep) {
-      throw new IpconnectionException("Sending command to camera at" + ipadres + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipadres + " failed");
     }
     
     return res;
