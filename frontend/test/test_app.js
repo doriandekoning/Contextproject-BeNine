@@ -4,7 +4,7 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 
-server = supertest(app);
+var server = supertest(app);
 
 suite("Routes", function() {
 	// Test suite for / route.
