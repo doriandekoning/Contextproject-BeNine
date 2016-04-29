@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var logfilename = "events.log";
 
 // Contains all loglevels, ordered on importance. (0 being most important.)
@@ -25,7 +26,7 @@ var self = {
 	 * @return -
 	 */
 	resetLog: function (callback) {
-		fs.writeFile(logfilename, '', function(err) {
+		fs.writeFile(path.join(__dirname + '/../' + logfilename), '', function(err) {
 			if (err) throw err;
 			self.logMessage("DEBUG", 'Succesfully cleared log file.');
 			callback();
@@ -62,7 +63,7 @@ var self = {
 		if (!levels.hasOwnProperty(level)) {
 			throw new Error("Incorrect Logger usage.");
 		} else {
-			fs.appendFile(logfilename, self.formatLog(level, message) + '\n', function (err) {
+			fs.appendFile(path.join(__dirname + '/../' + logfilename), self.formatLog(level, message) + '\n', function (err) {
 				if (err) throw err;
 			});
 		}
