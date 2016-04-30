@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
-   <body>
-      
-
-      <div id="CubePositionX" style="position:fixed; left:90%; bottom:4%; color:grey;"></div>
-      <div id="CubePositionY" style="position:fixed; left:90%; bottom:8%; color:grey;"> </div>
-
-      <script src="http://threejs.org/build/three.min.js"></script>
-      <script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-      <script src="../virtualjoystick.js"></script>
-      <script>
+	<body>
+		<!-- Additional information about the position of the cube. -->
+		<div id="CubePositionX" style="position:fixed; left:90%; bottom:4%; color:grey;"></div>
+		<div id="CubePositionY" style="position:fixed; left:90%; bottom:8%; color:grey;"> </div>
+		
+		<!--Scripts to be used -->
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
+		<script src="../virtualjoystick.js"></script>
+		<script>
 	  
-		<!-- Creating variables --> 
+		<!-- Creating variables. Three.js is an existing 3D javascript library. --> 
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+		<!-- THREE.Clock() starts a clock that is used for the animation --> 
 		var clock = new THREE.Clock();
 		var keyboard = new THREEx.KeyboardState();
 
 		<!-- Adding a new joystick to the webpage. It is positioned at 1350, 620. The inner ball can be moved 50 away from the middle. StationaryBase is true to have a fixed position. Mousesupport is true so that the joystick can be moved around. -->
 		var joystick = new VirtualJoystick({mouseSupport: true, stationaryBase: true, baseX: 1350,baseY: 620,limitStickTravel: true, stickRadius: 50});
+		
+		<!-- THREE.WebGLRenderer is a renderer that displays the scenes using WebGL -->
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild(renderer.domElement);
@@ -46,7 +49,6 @@
 		camera.position.z = 160;
 		cube.rotation.x = 0.4;
 		cube.rotation.y = 0.6;
-
 
 
 		var debugText1 = document.getElementById("CubePositionX");
@@ -100,8 +102,9 @@
 		   }
 		   renderer.render( scene, camera );
 		   
-		   debugText1.innerHTML = "Cube position X: " + cube.position.x.toFixed(1);
-		   debugText2.innerHTML = "Cube position Y: " + cube.position.y.toFixed(1);
+		   <!-- Displaying the debug information about the position of the cube. .toFixed is used to define how much decimal numbers are shown -->
+		   debugText1.innerHTML = "Cube Position X: " + cube.position.x.toFixed(2);
+		   debugText2.innerHTML = "Cube Position Y: " + cube.position.y.toFixed(2);
 		   
 		}
 		function onWindowResize(){
