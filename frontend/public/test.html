@@ -19,7 +19,7 @@
 		var keyboard = new THREEx.KeyboardState();
 
 		<!-- Adding a new joystick to the webpage. It is positioned at 1350, 620. The inner ball can be moved 50 away from the middle. StationaryBase is true to have a fixed position. Mousesupport is true so that the joystick can be moved around. -->
-		var joystick = new VirtualJoystick({mouseSupport: true, stationaryBase: true, baseX: 1350,baseY: 620,limitStickTravel: true, stickRadius: 50});
+		var joystick = new VirtualJoystick({mouseSupport: true, stationaryBase: true, baseX: 1550,baseY: 620,limitStickTravel: true, stickRadius: 50});
 		
 		<!-- THREE.WebGLRenderer is a renderer that displays the scenes using WebGL -->
 		var renderer = new THREE.WebGLRenderer();
@@ -39,7 +39,7 @@
 		var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 		scene.add(sphere);
 
-
+		<!-- Setting the light, camera position and rotation of the cube visible -->
 		var light = new THREE.PointLight( 'rgb(255,255,255)', 1, 0 );
 		scene.add(light);
 		var sunRiseFlag = true;
@@ -50,7 +50,7 @@
 		cube.rotation.x = 0.4;
 		cube.rotation.y = 0.6;
 
-
+		<!-- Get the data of the position of the cube -->
 		var debugText1 = document.getElementById("CubePositionX");
 		var debugText2 = document.getElementById("CubePositionY");
 		animate();
@@ -58,47 +58,40 @@
 		function animate(){
 		   
 		   requestAnimationFrame(animate);
+		   
+		   <!-- Get delta gives back the seconds that have passed since starting the clock -->
 		   frameTime = clock.getDelta();
-		   if(sunRiseFlag == true){
-			  sunHeight = sunHeight + 60 * frameTime;
-		   }
-		   if(sunRiseFlag == false){
-			  sunHeight = sunHeight - 60 * frameTime;
-		   }
-		   if(sunHeight > 150){
-			  sunHeight = 150;
-			  sunRiseFlag = false;
-		   }
-		   if(sunHeight < 0){
-			  sunHeight = 0;
-			  sunRiseFlag = true;
-		   }
-		   light.position.set(50,sunHeight,50);
+		   
+		  <!-- Adjust the light so that the cube is visible -->
+		   light.position.set(100,sunHeight,1000);
 		   sphere.position = light.position;
 		   
+		   <!-- Assigning keys to move the object around. The number before *frameTime indicates the speed of the cube (or camera), should be made variable. -->
 		   if( keyboard.pressed("D") ){
-		 cube.position.x = cube.position.x + 60 * frameTime;
+		 cube.position.x = cube.position.x + 30 * frameTime;
 		   }
 		   if( keyboard.pressed("A") ){
-		 cube.position.x = cube.position.x - 60 * frameTime;
+		 cube.position.x = cube.position.x - 30 * frameTime;
 		   }
 		   if( keyboard.pressed("W") ){
-		 cube.position.y = cube.position.y + 60 * frameTime;
+		 cube.position.y = cube.position.y + 30 * frameTime;
 		   }
 		   if( keyboard.pressed("S") ){
-		 cube.position.y = cube.position.y - 60 * frameTime;
+		 cube.position.y = cube.position.y - 30 * frameTime;
 		   }
+		   
+		   <!-- Using the joystick to move the object around. -->
 		   if( joystick.right() ){
-		 cube.position.x = cube.position.x + 60 * frameTime;    
+		 cube.position.x = cube.position.x + 30 * frameTime;    
 		   }
 		   if( joystick.left() ){
-		 cube.position.x = cube.position.x - 60 * frameTime;     
+		 cube.position.x = cube.position.x - 30 * frameTime;     
 		   }
 		   if( joystick.up() ){
-		 cube.position.y = cube.position.y + 60 * frameTime;       
+		 cube.position.y = cube.position.y + 30 * frameTime;       
 		   }
 		   if( joystick.down() ){
-		 cube.position.y = cube.position.y - 60 * frameTime;
+		 cube.position.y = cube.position.y - 30 * frameTime;
 		   }
 		   renderer.render( scene, camera );
 		   
