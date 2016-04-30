@@ -5,7 +5,7 @@
 		<div id="CubePositionX" style="position:fixed; left:90%; bottom:4%; color:grey;"></div>
 		<div id="CubePositionY" style="position:fixed; left:90%; bottom:8%; color:grey;"> </div>
 		
-		<!--Scripts to be used -->
+		<!--Scripts to be used for the joystick part-->
 		<script src="http://threejs.org/build/three.min.js"></script>
 		<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
 		<script src="../virtualjoystick.js"></script>
@@ -63,7 +63,7 @@
 		   frameTime = clock.getDelta();
 		   
 		  <!-- Adjust the light so that the cube is visible -->
-		   light.position.set(100,sunHeight,1000);
+		   light.position.set(100,sunHeight,50);
 		   sphere.position = light.position;
 		   
 		   <!-- Assigning keys to move the object around. The number before *frameTime indicates the speed of the cube (or camera), should be made variable. -->
