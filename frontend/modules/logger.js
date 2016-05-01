@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var default_path = path.join(__dirname + '/../events.log')
+var default_path = path.join(__dirname + '/../events.log');
 
 var self = {
     // Contains all loglevels ordered on importance and their naming. (0 being most important.)
@@ -10,7 +10,7 @@ var self = {
         WARNING	: { name: "WARNING", importance: 1},
         INFO	: { name: "INFO", importance: 2},
         DEBUG	: { name: "DEBUG", importance: 3},
-        TRACE	: { name: "TRACE", importance: 4},
+        TRACE	: { name: "TRACE", importance: 4}
     },
 	/**
 	 * Clears the logfile, this is called once the server starts.
@@ -23,7 +23,7 @@ var self = {
         
         try {
             fs.writeFileSync(logger_path, '');
-            self.logMessage(self.levels.DEBUG, 'Succesfully cleared log file.');
+            self.logMessage(self.levels.DEBUG, 'Successfully cleared log file.');
         } catch (e) {
             console.log(e)
         }
@@ -53,6 +53,7 @@ var self = {
 	 * Validates a log message, and calls log to log the message.
 	 * @param  {object} level   The level
 	 * @param  {String} message The message to be logged.
+     * @param  {String=} logger_path to the logger.
 	 * @return Calls log if valid, else throws exception.
 	 */
 	logMessage: function(level, message, logger_path) {

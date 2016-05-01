@@ -31,7 +31,7 @@ var self = {
     /**
      * Loads the config from file, if not existent a new file is created and the default is returned.
      * @param config_path       Path to the config file.
-     * @returns {JSON}
+     * @returns {object}
      */
     load: function (config_path) {
         // If no path specified, use the default.
