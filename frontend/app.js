@@ -6,10 +6,10 @@ var path = require('path');
 var express = require('express');
 var app = express();
 
+// Reset the logfile.
+logger.resetLog();
 // Initialize config file.
 var config = cfg.load();
-// Once the server starts, reset the logfile.
-logger.resetLog();
 
 
 app.use('/public', express.static(__dirname + '/public'));
