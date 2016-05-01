@@ -4,7 +4,7 @@ var path = require('path');
 var default_path = path.join(__dirname + '/../events.log');
 
 var self = {
-    // Contains all loglevels ordered on importance and their naming. (0 being most important.)
+    // Contains all log levels ordered on importance and their naming. (0 being most important.)
     levels: {
         ERROR 	: { name: "ERROR", importance: 0},
         WARNING	: { name: "WARNING", importance: 1},
@@ -37,13 +37,12 @@ var self = {
 	 */
 	formatLog: function (level, message) {
 		var date = new Date().toLocaleString();
-		var logString = "[" + date + "][" + level["name"] + "]>\t\t" + message;
-		return logString;
+		return "[" + date + "][" + level["name"] + "]>\t\t" + message;
 	},
 
 	/**
 	 * Returns the possible log level keys.
-	 * @return {Array.String} Array of keys.
+	 * @return {String[]} Array of keys.
 	 */
 	getLevels: function() {
 		return Object.keys(self.levels);

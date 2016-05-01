@@ -2,7 +2,7 @@ var fs = require("fs");
 var path = require("path");
 var logger = require("./logger");
 
-var default_path = path.join(__dirname + '/../config.json')
+var default_path = path.join(__dirname + '/../config.json');
 var default_config = {};
 
 default_config.server = "localhost";
@@ -59,6 +59,6 @@ var self = {
             }
         }
     }
-}
+};
 
 module.exports = self;
