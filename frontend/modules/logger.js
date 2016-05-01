@@ -13,15 +13,6 @@ var levels = {
 };
 
 var self = {
-
-	/**
-	 * Returns the name of the logfile.
-	 * @return {String} 		name of the logfile.
-	 */	
-	getLogname: function() {
-		return logfilename;
-	},
-
 	/**
 	 * Clears the logfile, this is called once the server starts.
 	 * Generates a new logfile if not existent.
