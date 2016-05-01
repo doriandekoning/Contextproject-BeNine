@@ -1,6 +1,7 @@
 var fs = require("fs");
 var path = require("path");
 
+var default_path = path.join(__dirname + '/../config.json')
 var default_config = {};
 
 default_config.server = "localhost";
@@ -32,6 +33,11 @@ var self = {
      * @returns {JSON Object}
      */
     load: function (config_path) {
+        // If no path specified, use the default.
+        if (config_path === undefined) {
+            config_path = default_path;
+        }
+
         // First check if the file exists, if it doesn't insert the default config.
         if (self.exists(config_path)) {
             try {

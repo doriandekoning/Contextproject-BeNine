@@ -7,7 +7,7 @@ var express = require('express');
 var app = express();
 
 // Initialize config file.
-var config = cfg.load(path.join(__dirname + '/config.json'));
+var config = cfg.load();
 
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
