@@ -8,6 +8,9 @@ var app = express();
 
 // Initialize config file.
 var config = cfg.load();
+// Once the server starts, reset the logfile.
+logger.resetLog();
+
 
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
@@ -19,8 +22,6 @@ app.get('/', function (req, res) {
 });
 
 app.listen(3000, function () {
-	// Once the server starts, reset the logfile.
-	logger.resetLog()
     logger.logMessage("INFO", "Server listening on port 3000!");
 });
 
