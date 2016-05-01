@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
-var logfilename = "events.log";
-var logpath = path.join(__dirname + '/../' + logfilename);
+
+var default_path = path.join(__dirname + '/../events.log')
 
 // Contains all loglevels, ordered on importance. (0 being most important.)
 var levels = {
@@ -24,14 +24,20 @@ var self = {
 
 	/**
 	 * Clears the logfile, this is called once the server starts.
+	 * Generates a new logfile if not existent.
 	 * @return -
 	 */
-	resetLog: function (callback) {
-		fs.writeFile(logpath, '', function(err) {
-			if (err) throw err;
-			self.logMessage("DEBUG", 'Succesfully cleared log file.');
-			callback();
-		});
+	resetLog: function (logger_path) {
+        if (logger_path === undefined) {
+            logger_path = default_path;
+        }
+        
+        try {
+            fs.writeFileSync(logger_path, '');
+            self.logMessage("DEBUG", 'Succesfully cleared log file.');
+        } catch (e) {
+            if (err) throw err;
+        }
 	},
 
 	/**
@@ -60,11 +66,15 @@ var self = {
 	 * @param  {String} message The message to be logged.
 	 * @return Calls log if valid, else throws exception.
 	 */
-	logMessage: function(level, message) {
+	logMessage: function(level, message, logger_path) {
+        if (logger_path === undefined) {
+            logger_path = default_path;
+        }
+        
 		if (!levels.hasOwnProperty(level)) {
 			throw new Error("Incorrect Logger usage.");
 		} else {
-			fs.appendFile(logpath, self.formatLog(level, message) + '\n', function (err) {
+			fs.appendFile(logger_path, self.formatLog(level, message) + '\n', function (err) {
 				if (err) throw err;
 			});
 		}

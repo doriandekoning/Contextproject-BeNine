@@ -20,9 +20,8 @@ app.get('/', function (req, res) {
 
 app.listen(3000, function () {
 	// Once the server starts, reset the logfile.
-	logger.resetLog(function () {
-		logger.logMessage("INFO", "Server listening on port 3000!");
-	});
+	logger.resetLog()
+    logger.logMessage("INFO", "Server listening on port 3000!");
 });
 
 module.exports = app;
