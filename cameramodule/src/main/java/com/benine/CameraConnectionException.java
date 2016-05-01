@@ -1,4 +1,4 @@
-package com.benine.ipcameracontrol;
+package com.benine;
 
 /**
  * Exception class for problems with the camera connection.
