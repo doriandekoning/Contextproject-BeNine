@@ -13,6 +13,8 @@ import org.mockserver.model.HttpResponse;
 import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
+import com.benine.CameraConnectionException;
+
 import java.util.ArrayList;
 
 /**
@@ -260,7 +262,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoIrisOff() throws IpcameraConnectionException {
+  public final void testSetAutoIrisOff() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D30"));
@@ -269,7 +271,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
 
-    camera.setAutoIrisOn(false);
+    camera.getIris().setAutoIrisOn(false);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -284,7 +286,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
 
-    camera.setAutoIrisOn(true);
+    camera.getIris().setAutoIrisOn(true);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -299,7 +301,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
 
-    boolean res = camera.isAutoIrisOn();
+    boolean res = camera.getIris().isAutoIrisOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertFalse(res);
@@ -315,7 +317,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
 
-    boolean res = camera.isAutoIrisOn();
+    boolean res = camera.getIris().isAutoIrisOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertTrue(res);
@@ -331,7 +333,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("p31"));
 
-    camera.isAutoIrisOn();
+    camera.getIris().isAutoIrisOn();
   }
   
   @Test
@@ -344,7 +346,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
 
-    camera.setIrisPos(80);
+    camera.getIris().setIrisPos(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -359,7 +361,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("giD421"));
 
-    int res = camera.getIrisPos();
+    int res = camera.getIris().getIrisPos();
     
     mockServerClient.verify(request, VerificationTimes.once());
     
@@ -382,7 +384,7 @@ public class IpcameraTest {
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws IpcameraConnectionException {
     Ipcamera camera = new Ipcamera("1.2.3.4");
-    camera.getIrisPos();
+    camera.getIris().getIrisPos();
   }
 
 }

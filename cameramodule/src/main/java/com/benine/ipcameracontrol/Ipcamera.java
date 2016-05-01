@@ -16,7 +16,7 @@ import java.text.NumberFormat;
  * @author Bryan
  */
 
-public class Ipcamera implements Camera {
+public class Ipcamera extends Camera {
 
   String ipaddress;
 
@@ -25,6 +25,7 @@ public class Ipcamera implements Camera {
    */
   public Ipcamera(String ip) {
     ipaddress = ip;
+    setIris(new IpcameraIris(this));
   }
 
   /**
@@ -155,52 +156,14 @@ public class Ipcamera implements Camera {
     }
   }
 
-  @Override
-  public void setAutoIrisOn(boolean on) throws IpcameraConnectionException {
-    if (on) {
-      sendCommand("%23D31");
-    } else {
-      sendCommand("%23D30");
-    }
-  }
-
-  @Override
-  public boolean isAutoIrisOn() throws IpcameraConnectionException {
-    String res = sendCommand("%23D3");
-    if (res.substring(0, 2).equals("d3")) {
-      if (res.substring(2).equals("1")) {
-        return true;
-      }
-    } else {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
-    }
-    return false;
-  }
   
-  /**
-   * Iris position must be between 1 and 99.
-   * 1 is close and 99 is open.
-   */
-  @Override
-  public void setIrisPos(int pos) throws IpcameraConnectionException {
-    pos = Math.max(1, pos);
-    pos = Math.min(99, pos);
-    sendCommand("%23I" + pos);
-  }
-
-  @Override
-  public int getIrisPos() throws IpcameraConnectionException {
-    String res = sendCommand("%23GI");
-    
-    return Integer.valueOf(res.substring(2, 5), 16);
-  }
 
   @Override
   public String getStreamLink() {
     return "http://" + ipaddress + "/cgi-bin/mjpeg";
   }
   
-  private String sendCommand(String cmd) throws IpcameraConnectionException {
+  protected String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
     try {
       InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
