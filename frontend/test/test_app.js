@@ -3,6 +3,7 @@ var app = require('../app');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
+var suite = require("mocha/lib/mocha.js").suite;
 
 var server = supertest(app);
 

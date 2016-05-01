@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 });
 
 app.listen(3000, function () {
-    logger.logMessage("INFO", "Server listening on port 3000!");
+    logger.logMessage(logger.levels.INFO, "Server listening on port 3000!");
 });
 
 module.exports = app;

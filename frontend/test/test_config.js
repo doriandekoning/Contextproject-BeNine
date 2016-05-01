@@ -2,6 +2,8 @@ var config = require('../modules/config');
 var assert = require('chai').assert;
 var path = require('path');
 var fs = require('fs');
+var teardown = require("mocha/lib/mocha.js").teardown;
+var suite = require("mocha/lib/mocha.js").suite;
 
 var config_path = path.join(__dirname + '/testconfig.json');
 
