@@ -59,7 +59,6 @@ var self = {
         if (logger_path === undefined) {
             logger_path = default_path;
         }
-        console.log(level);
 		if (!self.levels.hasOwnProperty(level["name"])) {
 			throw new Error("Incorrect Logger usage.");
 		} else {
