@@ -6,9 +6,18 @@ var default_config = {};
 default_config.server = "localhost";
 
 var self = {
+    /**
+     * Getter method for the default config.
+     * @returns {JSON Object}
+     */
     getDefaultConfig: function () {
         return default_config;
     },
+    /**
+     * Checks if a file exists.
+     * @param config_path   Path to the file to check.
+     * @returns {boolean}
+     */
     exists: function (config_path) {
         try {
             fs.statSync(config_path);
@@ -17,6 +26,11 @@ var self = {
             return false;
         }
     },
+    /**
+     * Loads the config from file, if not existent a new file is created and the default is returned.
+     * @param config_path       Path to the config file.
+     * @returns {JSON Object}
+     */
     load: function (config_path) {
         // First check if the file exists, if it doesn't insert the default config.
         if (self.exists(config_path)) {
