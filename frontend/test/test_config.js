@@ -25,7 +25,7 @@ suite("Config", function () {
             assert.equal(config.exists(config_path), true);
             done();
         });
-        test('should return false if a configfile does not exist.', function (done) {
+        test('should return false if a config file does not exist.', function (done) {
             assert.equal(config.exists(config_path), false);
             done();
         });

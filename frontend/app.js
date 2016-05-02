@@ -1,16 +1,13 @@
-var logger = require('./modules/logger');
-var cfg = require('./modules/config');
-
 var path = require('path');
+
+var logger = require('./modules/logger');
+var config = require('./modules/config');
 
 var express = require('express');
 var app = express();
 
 // Reset the logfile.
 logger.resetLog();
-// Initialize config file.
-var config = cfg.load();
-
 
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
