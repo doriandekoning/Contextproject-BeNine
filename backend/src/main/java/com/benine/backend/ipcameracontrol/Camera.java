@@ -1,6 +1,6 @@
-package com.benine;
+package com.benine.backend.ipcameracontrol;
 
-import com.benine.ipcameracontrol.CameraConnectionException;
+import com.benine.backend.ipcameracontrol.CameraConnectionException;
 
 /**
  * Interface for communication with remote camera's.

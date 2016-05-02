@@ -1,4 +1,4 @@
-package com.benine;
+package com.benine.backend.database;
 
 /**
  * A moving preset to be able to add to the database

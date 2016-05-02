@@ -24,7 +24,7 @@
          <version>2.0.49-beta</version>
       </dependency>
       <dependency>
-		<groupId>org.mock-server</groupId>
+	<groupId>org.mock-server</groupId>
 		<artifactId>mockserver-netty</artifactId>
 		<version>3.10.2</version>
 		<scope>test</scope>
