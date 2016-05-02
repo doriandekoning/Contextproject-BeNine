@@ -65,8 +65,9 @@ public class Ipcamera extends Camera {
     if (res.substring(0, 3).equals("aPC")) {
       return new double[]{convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7))};
+    } else {
+      throw new IpcameraConnectionException("Getting the position of the camera failed.");
     }
-    return null;
   }
 
   

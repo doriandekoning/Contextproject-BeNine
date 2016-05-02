@@ -77,6 +77,19 @@ public class IpcameraTest {
     assertEquals(0, res[0], 0.000001);
     assertEquals(180, res[1], 0.000001);
   }
+  
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testGetPositionException() throws IpcameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#APC"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPP80008000"));
+
+    camera.getPosition();
+  }
    
   @Test
   public final void testGetStreamLink() {

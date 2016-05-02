@@ -15,8 +15,9 @@ public class IpcameraZoom implements ZoomFunctions {
     String res = camera.sendCommand("%23GZ");
     if (res.substring(0, 2).equals("gz")) {
       return Integer.valueOf(res.substring(2), 16);
+    } else {
+      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.");
     }
-    return 0;
   }
   
   /**
