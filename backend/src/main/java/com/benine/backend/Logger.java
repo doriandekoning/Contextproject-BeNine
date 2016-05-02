@@ -2,6 +2,7 @@ package com.benine.backend;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by dorian on 2-5-16.
@@ -45,6 +46,16 @@ public class Logger {
    */
   public void log(String time, String message, LogEvent.Type type) {
     LogEvent event = new LogEvent(time, message, type);
+    System.out.println(event.toString());
+    writer.write(event);
+  }
+  /**
+   * Logs item at current time
+   * @param message the description of the logevent
+   * @param type The type of the logevent.
+   */
+  public void log(String message, LogEvent.Type type) {
+    LogEvent event = new LogEvent(new Date().toString(), message, type);
     System.out.println(event.toString());
     writer.write(event);
   }
