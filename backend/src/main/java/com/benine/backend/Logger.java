@@ -24,4 +24,10 @@ public class Logger {
   public Logger() throws IOException {
     this.writer = new LogWriter(Main.getConfig().getValue("standardloglocation"));
   }
+
+  public void log(String time, String message, int level) {
+    LogEvent event = new LogEvent(time, message, LogEvent.Type.getType(level));
+    System.out.println(event.toString());
+    writer.write(event);
+  }
 }
