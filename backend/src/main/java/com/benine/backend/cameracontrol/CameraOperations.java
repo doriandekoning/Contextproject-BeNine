@@ -5,6 +5,6 @@ package com.benine.backend.cameracontrol;
  * @author Bryan
  *
  */
-public interface CameraAttribute  {
+public interface CameraOperations  {
 
 }

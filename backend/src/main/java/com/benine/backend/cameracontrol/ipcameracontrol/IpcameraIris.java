@@ -1,14 +1,13 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.CameraAttribute;
-import com.benine.backend.cameracontrol.CameraConnectionException;
+import com.benine.backend.cameracontrol.CameraOperations;
 
 /**
  * IP camera Iris class for functions of the iris in IP Camera's.
  * @author Bryan
  *
  */
-public class IpcameraIris implements CameraAttribute {
+public class IpcameraIris implements CameraOperations {
   
   Ipcamera camera;
   
@@ -19,7 +18,7 @@ public class IpcameraIris implements CameraAttribute {
   /**
    * Set the control of the iris to on.
    * @param on true for auto iris on.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public void setAutoIrisOn(boolean on) throws IpcameraConnectionException {
     if (on) {
@@ -32,7 +31,7 @@ public class IpcameraIris implements CameraAttribute {
   /**
    * Request if the auto iris is on.
    * @return true if the auto iris is on.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23D3");
@@ -53,7 +52,7 @@ public class IpcameraIris implements CameraAttribute {
   * 1 is closed iris.
   * 99 is open iris.
   * @param pos to set the iris to.
-  * @throws CameraConnectionException when command can not be completed.
+  * @throws IpcameraConnectionException when command can not be completed.
   */
   public void setIrisPos(int pos) throws IpcameraConnectionException {
     pos = Math.max(1, pos);
@@ -64,7 +63,7 @@ public class IpcameraIris implements CameraAttribute {
   /**
    * Get the current iris position.
    * @return the current iris position.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public int getIrisPos() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23GI");

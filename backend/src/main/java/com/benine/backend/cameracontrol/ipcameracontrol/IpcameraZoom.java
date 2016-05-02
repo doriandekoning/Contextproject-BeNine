@@ -1,9 +1,8 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.CameraAttribute;
-import com.benine.backend.cameracontrol.CameraConnectionException;
+import com.benine.backend.cameracontrol.CameraOperations;
 
-public class IpcameraZoom implements CameraAttribute {
+public class IpcameraZoom implements CameraOperations {
   
   Ipcamera camera;
   
@@ -14,7 +13,7 @@ public class IpcameraZoom implements CameraAttribute {
   /**
    * Get the current zoom position.
    * @return the current zoom position.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public int getZoomPosition() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23GZ");
@@ -28,7 +27,7 @@ public class IpcameraZoom implements CameraAttribute {
   /**
    * Zoom to a specified position.
    * @param zpos position to zoom to.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws IpcameraConnectionException {
     zpos = Math.max(0, zpos);
@@ -42,7 +41,7 @@ public class IpcameraZoom implements CameraAttribute {
    * 99 is max speed in tele direction.
    * 1 is max speed in wide direction.
    * @param dir zoom direction.
-   * @throws CameraConnectionException when command can not be completed.
+   * @throws IpcameraConnectionException when command can not be completed.
    */
   public void zoom(int dir) throws IpcameraConnectionException {
     dir = Math.max(1, dir);

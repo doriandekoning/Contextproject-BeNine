@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class Camera {
   
-  private ArrayList<CameraAttribute> attributes;
+  private ArrayList<CameraOperations> operations;
 
   /**
   * Move the camera to the specified position.
@@ -46,16 +46,23 @@ public abstract class Camera {
   /**
    * Get the URL to the stream of this camera.
    * @return URL in string format.
-   * @throws CameraConnectionException when command can not be completed.
    */
   public abstract String getStreamLink();
-
-  public ArrayList<CameraAttribute> getAttributes() {
-    return attributes;
+  
+  /**
+   * Get a list of operations possible for this camera.
+   * @return ArrayList of CameraOperations
+   */
+  public ArrayList<CameraOperations> getOperations() {
+    return operations;
   }
-
-  public void setAttributes(ArrayList<CameraAttribute> attributes) {
-    this.attributes = attributes;
+  
+  /**
+   * Set the list of camera operations for this camera.
+   * @param operations ArrayList of CameraOperations to set.
+   */
+  public void setOperations(ArrayList<CameraOperations> operations) {
+    this.operations = operations;
   }
 
 }

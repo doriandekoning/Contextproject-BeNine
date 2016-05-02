@@ -1,7 +1,7 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
 import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraAttribute;
+import com.benine.backend.cameracontrol.CameraOperations;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,15 +22,16 @@ public class Ipcamera extends Camera {
   String ipaddress;
 
   /**
-   *Create a new IP Camera object.
+   *  Create a new IP Camera object.
+   *  @param ip address of this camera.
    */
   public Ipcamera(String ip) {
     ipaddress = ip;
-    ArrayList<CameraAttribute> list = new ArrayList<CameraAttribute>();
+    ArrayList<CameraOperations> list = new ArrayList<CameraOperations>();
     list.add(new IpcameraIris(this));
     list.add(new IpcameraZoom(this));
     list.add(new IpcameraFocus(this));
-    setAttributes(list);
+    setOperations(list);
   }
 
   /**
