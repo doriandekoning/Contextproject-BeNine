@@ -81,7 +81,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetZoomPosition() throws IpcameraConnectionException {
+  public final void testGetZoomPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GZ"));
@@ -90,14 +90,14 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gz655"));
 
-    int res = camera.getZoomPosition();
+    int res = camera.getZoom().getZoomPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertEquals(res, 1621, 0.000001);
   }
   
   @Test
-  public final void testZoomTo() throws IpcameraConnectionException {
+  public final void testZoomTo() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#AXZBAB"));
@@ -106,13 +106,13 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
 
-    camera.zoomTo(1622);
+    camera.getZoom().zoomTo(1622);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
   
   @Test
-  public final void testZoom() throws IpcameraConnectionException {
+  public final void testZoom() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#Z80"));
@@ -121,7 +121,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("zS80"));
 
-    camera.zoom(80);
+    camera.getZoom().zoom(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -277,7 +277,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetAutoIrisOn() throws IpcameraConnectionException {
+  public final void testSetAutoIrisOn() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D31"));
@@ -292,7 +292,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoIrisOff() throws IpcameraConnectionException {
+  public final void testIsAutoIrisOff() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D3"));
@@ -308,7 +308,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testIsAutoIrisOn() throws IpcameraConnectionException {
+  public final void testIsAutoIrisOn() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D3"));
@@ -324,7 +324,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testIsAutoIrisOnException() throws IpcameraConnectionException {
+  public final void testIsAutoIrisOnException() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D3"));
@@ -337,7 +337,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testSetIrisPosition() throws IpcameraConnectionException {
+  public final void testSetIrisPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#I80"));
@@ -352,7 +352,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetIrisPosition() throws IpcameraConnectionException {
+  public final void testGetIrisPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GI"));
@@ -382,7 +382,7 @@ public class IpcameraTest {
   
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testNonExcistingIpAdres() throws IpcameraConnectionException {
+  public final void testNonExcistingIpAdres() throws CameraConnectionException {
     Ipcamera camera = new Ipcamera("1.2.3.4");
     camera.getIris().getIrisPos();
   }

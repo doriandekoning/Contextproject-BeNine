@@ -8,6 +8,8 @@ package com.benine;
 public abstract class Camera {
   
   private IrisFunctions iris;
+  
+  private ZoomFunctions zoom;
 
   /**
   * Move the camera to the specified position.
@@ -40,29 +42,7 @@ public abstract class Camera {
    */
   public abstract double[] getPosition() throws CameraConnectionException;
 
-  /**
-   *  Get the current zoom position.
-   * @return the current zoom position.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract int getZoomPosition() throws CameraConnectionException;
-
-  /**
-   * Zoom to a specified position.
-   * @param zpos position to zoom to.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract void zoomTo(int zpos) throws CameraConnectionException;
-
-  /**
-   * Zoom with the specified speed.
-   * Value between 1 and 99 where 51 is stop zoom.
-   * 99 is max speed in tele direction.
-   * 1 is max speed in wide direction.
-   * @param dir zoom direction.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract void zoom(int dir) throws CameraConnectionException;
+  
   
   /**
    * Get the focus position.
@@ -110,13 +90,37 @@ public abstract class Camera {
    * @throws CameraConnectionException when command can not be completed.
    */
   public abstract String getStreamLink();
-
+  
+  /**
+   * Get the functions to control the iris of this camera.
+   * @return Iris fucntions object.
+   */
   public IrisFunctions getIris() {
     return iris;
   }
-
+  
+  /**
+   * Set the iris functions of this camera.
+   * @param iris function object.
+   */
   public void setIris(IrisFunctions iris) {
     this.iris = iris;
+  }
+  
+  /**
+   * Get the zoom functions.
+   * @return zoom functions object.
+   */
+  public ZoomFunctions getZoom() {
+    return zoom;
+  }
+  
+  /**
+   * Set the zoom functions to control the zooming of this camera.
+   * @param zoom function object.
+   */
+  public void setZoom(ZoomFunctions zoom) {
+    this.zoom = zoom;
   }
 
 }
