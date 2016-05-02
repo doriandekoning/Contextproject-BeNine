@@ -80,51 +80,6 @@ public class IpcameraTest {
     assertEquals(180, res[1], 0.000001);
   }
   
-  @Test
-  public final void testGetZoomPosition() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#GZ"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("gz655"));
-
-    int res = camera.getZoom().getZoomPosition();
-    
-    mockServerClient.verify(request, VerificationTimes.once());
-    assertEquals(res, 1621, 0.000001);
-  }
-  
-  @Test
-  public final void testZoomTo() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#AXZBAB"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
-
-    camera.getZoom().zoomTo(1622);
-    
-    mockServerClient.verify(request, VerificationTimes.once());
-  }
-  
-  @Test
-  public final void testZoom() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#Z80"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("zS80"));
-
-    camera.getZoom().zoom(80);
-    
-    mockServerClient.verify(request, VerificationTimes.once());
-  }
   
   
   
@@ -251,7 +206,7 @@ public class IpcameraTest {
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws CameraConnectionException {
     Ipcamera camera = new Ipcamera("1.2.3.4");
-    camera.getIris().getIrisPos();
+    camera.move(180, 50);
   }
 
 }
