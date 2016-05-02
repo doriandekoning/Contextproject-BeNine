@@ -29,20 +29,6 @@
 		<version>3.10.2</version>
 		<scope>test</scope>
        </dependency>
-	<dependency>
-		<groupId>BeNine</groupId>
-		<artifactId>cameramodule</artifactId>
-		<version>${cameramodule.version}</version>
-		<scope>system</scope>
-		<systemPath>${project.basedir}/../cameramodule/target/cameramodule-${cameramodule.version}.jar</systemPath>
-	</dependency>
-	<dependency>
-		<groupId>BeNine</groupId>
-		<artifactId>databasemodule</artifactId>
-		<version>${databasemodule.version}</version>
-		<scope>system</scope>
-		<systemPath>${project.basedir}/../databasemodule/target/databasemodule-${databasemodule.version}.jar</systemPath>
-	</dependency>
 	  <dependency>
 		<groupId>com.googlecode.json-simple</groupId>
 		<artifactId>json-simple</artifactId>

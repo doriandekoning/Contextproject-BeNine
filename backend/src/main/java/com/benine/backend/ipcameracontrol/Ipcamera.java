@@ -1,4 +1,4 @@
-package com.benine.ipcameracontrol;
+package com.benine.backend.ipcameracontrol;
 
 import com.benine.Camera;
 
