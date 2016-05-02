@@ -26,24 +26,27 @@ public class LoggerTest {
     System.setOut(new PrintStream(out));
     doNothing().when(logwriter).write(anyString(), anyString(), any());
     doNothing().when(logwriter).write(anyString(), any());
-    doNothing().when(logwriter).write(any());
+    doNothing().when(logwriter).write(anyList());
+    doNothing().when(logwriter).write(any(LogEvent.class));
   }
 
   @Test
   public void testLoggerToConsole() {
     Logger logger = new Logger(logwriter);
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("[CRITICAL|this moment]Hello", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
   }
 
   @Test
   public void testLoggerToFile() {
-    Logger logger = new Logger(logwriter);
-    logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     // Check if one of the write methods is called on the logwriter mock
     doAnswer(count).when(logwriter).write(any(), any(), any());
     doAnswer(count).when(logwriter).write(any(), any());
-    doAnswer(count).when(logwriter).write(any());
+    doAnswer(count).when(logwriter).write(anyList());
+    doAnswer(count).when(logwriter).write(any(LogEvent.class));
+    Logger logger = new Logger(logwriter);
+
+    logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals(1, counter);
     counter=0;
   }
