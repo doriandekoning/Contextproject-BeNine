@@ -9,6 +9,7 @@ Installing the front-end server:
 
 Running the front-end server:
 - Run `node app` to start the server.
+- You can now visit the server via http://localhost:3000
 - Tests can be run by running `npm test`.
 
 ### Back end
