@@ -10,6 +10,13 @@ import com.benine.ipcameracontrol.Ipcamera;
 public class CameraHandler {
   
   /**
+   * Constructor of the camera handler.
+   */
+  public CameraHandler(){
+    
+  }
+  
+  /**
    * Creates a camera object as specified in camSpec.
    * @param camSpec specification of the camera 0: type, 1: additional info.
    * @return Camera object.

@@ -17,6 +17,11 @@ import org.mockserver.verify.VerificationTimes;
 
 import com.benine.CameraConnectionException;
 
+/**
+ * Test class to test the IP Camera Iris functions class.
+ * The mock server is used to simulate the camera.
+ * @author Bryan
+ */
 public class IpcameraIrisTest {
   
   @Rule
