@@ -3,7 +3,6 @@ package com.benine.backend.cameracontrol;
 /**
  * Interface for camera iris functions.
  * @author Bryan
- *
  */
 public interface IrisFunctions {
   

@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraHandler.InvalidCameraTypeException;
+import com.benine.backend.cameracontrol.CameraCreator.InvalidCameraTypeException;
 import com.benine.backend.cameracontrol.ipcameracontrol.Ipcamera;
-import com.benine.backend.cameracontrol.CameraHandler;
+import com.benine.backend.cameracontrol.CameraCreator;
 
 /**
  * Test class to test the Camera handler wich creates camera objects.
@@ -16,11 +16,11 @@ import com.benine.backend.cameracontrol.CameraHandler;
  */
 public class CameraHandlerTest {
   
-  CameraHandler handler;
+  CameraCreator handler;
   
   @Before
   public void setup(){
-    handler = new CameraHandler();
+    handler = new CameraCreator();
   }
   
   @Test

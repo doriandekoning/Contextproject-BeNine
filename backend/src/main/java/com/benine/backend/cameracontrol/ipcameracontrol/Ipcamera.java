@@ -1,5 +1,6 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
+import com.benine.backend.cameracontrol.Camera;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,9 +9,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-
-import com.benine.backend.cameracontrol.Camera;
-
 
 /**
  * Class to communicate with an IP Camera.

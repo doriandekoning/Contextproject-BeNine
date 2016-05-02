@@ -7,12 +7,12 @@ import com.benine.backend.cameracontrol.ipcameracontrol.Ipcamera;
  * @author Bryan
  *
  */
-public class CameraHandler {
+public class CameraCreator {
   
   /**
    * Constructor of the camera handler.
    */
-  public CameraHandler(){
+  public CameraCreator(){
     
   }
   

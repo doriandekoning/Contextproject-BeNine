@@ -3,7 +3,6 @@ package com.benine.backend.cameracontrol;
 /**
  * Interface for Focus functions of camera's.
  * @author Bryan
- *
  */
 public interface FocusFunctions {
   
