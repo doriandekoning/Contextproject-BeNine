@@ -1,5 +1,7 @@
 package com.benine.backend.cameracontrol;
 
+import java.util.ArrayList;
+
 /**
  * Interface for communication with remote camera's.
  * @author Bryan
@@ -7,11 +9,7 @@ package com.benine.backend.cameracontrol;
 
 public abstract class Camera {
   
-  private IrisFunctions iris;
-  
-  private ZoomFunctions zoom;
-  
-  private FocusFunctions focus;
+  private ArrayList<CameraAttribute> attributes;
 
   /**
   * Move the camera to the specified position.
@@ -51,53 +49,13 @@ public abstract class Camera {
    * @throws CameraConnectionException when command can not be completed.
    */
   public abstract String getStreamLink();
-  
-  /**
-   * Get the functions to control the iris of this camera.
-   * @return Iris fucntions object.
-   */
-  public IrisFunctions getIris() {
-    return iris;
+
+  public ArrayList<CameraAttribute> getAttributes() {
+    return attributes;
   }
-  
-  /**
-   * Set the iris functions of this camera.
-   * @param iris function object.
-   */
-  public void setIris(IrisFunctions iris) {
-    this.iris = iris;
-  }
-  
-  /**
-   * Get the zoom functions.
-   * @return zoom functions object.
-   */
-  public ZoomFunctions getZoom() {
-    return zoom;
-  }
-  
-  /**
-   * Set the zoom functions to control the zooming of this camera.
-   * @param zoom function object.
-   */
-  public void setZoom(ZoomFunctions zoom) {
-    this.zoom = zoom;
-  }
-  
-  /**
-   * Get the focus functions.
-   * @return focus functions object.
-   */
-  public FocusFunctions getFocus() {
-    return focus;
-  }
-  
-  /**
-   * Set the focus functions object.
-   * @param focus functions object.
-   */
-  public void setFocus(FocusFunctions focus) {
-    this.focus = focus;
+
+  public void setAttributes(ArrayList<CameraAttribute> attributes) {
+    this.attributes = attributes;
   }
 
 }

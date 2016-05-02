@@ -29,6 +29,7 @@ public class IpcameraIrisTest {
 
   private MockServerClient mockServerClient;
   private Ipcamera camera = new Ipcamera("127.0.0.1:9000");
+  private IpcameraIris iris = new IpcameraIris(camera);
 
   private ArrayList<Parameter> parameterList;
   
@@ -42,7 +43,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
 
-    camera.getIris().setAutoIrisOn(false);
+    iris.setAutoIrisOn(false);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -57,7 +58,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
 
-    camera.getIris().setAutoIrisOn(true);
+    iris.setAutoIrisOn(true);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -72,7 +73,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
 
-    boolean res = camera.getIris().isAutoIrisOn();
+    boolean res = iris.isAutoIrisOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertFalse(res);
@@ -88,7 +89,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
 
-    boolean res = camera.getIris().isAutoIrisOn();
+    boolean res = iris.isAutoIrisOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertTrue(res);
@@ -104,7 +105,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("p31"));
 
-    camera.getIris().isAutoIrisOn();
+    iris.isAutoIrisOn();
   }
   
   @Test
@@ -117,7 +118,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
 
-    camera.getIris().setIrisPos(80);
+    iris.setIrisPos(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -132,7 +133,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("giD421"));
 
-    int res = camera.getIris().getIrisPos();
+    int res = iris.getIrisPos();
     
     mockServerClient.verify(request, VerificationTimes.once());
     

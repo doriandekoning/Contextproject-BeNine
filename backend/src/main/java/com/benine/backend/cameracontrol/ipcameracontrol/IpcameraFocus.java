@@ -1,8 +1,9 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.FocusFunctions;
+import com.benine.backend.cameracontrol.CameraAttribute;
+import com.benine.backend.cameracontrol.CameraConnectionException;
 
-public class IpcameraFocus implements FocusFunctions {
+public class IpcameraFocus implements CameraAttribute {
   
   Ipcamera camera;
   
@@ -10,7 +11,11 @@ public class IpcameraFocus implements FocusFunctions {
     camera = cam;
   }
   
-  @Override
+  /**
+   * Get the focus position.
+   * @return focus position.
+   * @throws CameraConnectionException when command can not be completed.
+   */
   public int getFocusPos() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23GF");
     if (res.substring(0, 2).equals("gf")) {
@@ -21,10 +26,10 @@ public class IpcameraFocus implements FocusFunctions {
   }
 
   /**
-   * Focus position must be a number between 0 and 2730.
-   * Otherwise it will be rounded to the nearest supported number.
+   * Set the focus position
+   * @param pos position of the focus to move to.
+   * @throws CameraConnectionException when command can not be completed.
    */
-  @Override
   public void setFocusPos(int pos) throws IpcameraConnectionException {
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
@@ -32,19 +37,24 @@ public class IpcameraFocus implements FocusFunctions {
   }
 
   /**
-   * Focus speed must be between 1 and 99.
-   * Otherwise it will be rounded to the nearest supported number.
-   * 1: max speed near direction.
-   * 99: max speed far direction.
+   * Move the focus in the specified direction.
+   * Values between 1 and 99 where 50 is stop focusing.
+   * 1 is focus nearer with max speed
+   * 99 is focus further with max speed
+   * @param speed value with which speed is focusing.
+   * @throws CameraConnectionException when command can not be completed.
    */
-  @Override
   public void moveFocus(int speed) throws IpcameraConnectionException {
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     camera.sendCommand("%23F" + speed);
   }
 
-  @Override
+  /**
+   * Turn auto focus on or off.
+   * @param on true for auto focus on.
+   * @throws CameraConnectionException when command can not be completed.
+   */
   public void setAutoFocusOn(boolean on) throws IpcameraConnectionException {
     if (on) {
       camera.sendCommand("%23D11");
@@ -52,8 +62,12 @@ public class IpcameraFocus implements FocusFunctions {
       camera.sendCommand("%23D10");
     }
   }
-
-  @Override
+  
+  /**
+   * Request if the auto focus is on.
+   * @return true if auto focus is on.
+   * @throws CameraConnectionException when command can not be completed.
+   */
   public boolean isAutoFocusOn() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {

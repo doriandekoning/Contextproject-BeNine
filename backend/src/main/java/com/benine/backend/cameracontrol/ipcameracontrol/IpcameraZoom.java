@@ -1,8 +1,9 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.ZoomFunctions;
+import com.benine.backend.cameracontrol.CameraAttribute;
+import com.benine.backend.cameracontrol.CameraConnectionException;
 
-public class IpcameraZoom implements ZoomFunctions {
+public class IpcameraZoom implements CameraAttribute {
   
   Ipcamera camera;
   
@@ -10,7 +11,11 @@ public class IpcameraZoom implements ZoomFunctions {
     camera = cam;
   }
   
-  @Override
+  /**
+   * Get the current zoom position.
+   * @return the current zoom position.
+   * @throws CameraConnectionException when command can not be completed.
+   */
   public int getZoomPosition() throws IpcameraConnectionException {
     String res = camera.sendCommand("%23GZ");
     if (res.substring(0, 2).equals("gz")) {
@@ -21,10 +26,10 @@ public class IpcameraZoom implements ZoomFunctions {
   }
   
   /**
-   * position must be between 0 and 2730.
-   * Otherwise it will be rounded to the nearest supported number.
+   * Zoom to a specified position.
+   * @param zpos position to zoom to.
+   * @throws CameraConnectionException when command can not be completed.
    */
-  @Override
   public void zoomTo(int zpos) throws IpcameraConnectionException {
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
@@ -32,11 +37,13 @@ public class IpcameraZoom implements ZoomFunctions {
   }
 
   /**
-   * Between 1 and 99, 1 is max speed to wide and 99 is max speed tele.
-   * Otherwise it will be rounded to the nearest supported number.
-   * @throws IpcameraConnectionException when command can not be send.
+   * Zoom with the specified speed.
+   * Value between 1 and 99 where 51 is stop zoom.
+   * 99 is max speed in tele direction.
+   * 1 is max speed in wide direction.
+   * @param dir zoom direction.
+   * @throws CameraConnectionException when command can not be completed.
    */
-  @Override
   public void zoom(int dir) throws IpcameraConnectionException {
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
