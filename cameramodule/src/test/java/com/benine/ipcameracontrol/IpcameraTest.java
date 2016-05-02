@@ -127,7 +127,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetFocusPosition() throws IpcameraConnectionException {
+  public final void testGetFocusPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GF"));
@@ -136,7 +136,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gfA42"));
 
-    int res = camera.getFocusPos();
+    int res = camera.getFocus().getFocusPos();
     
     mockServerClient.verify(request, VerificationTimes.once());
     
@@ -144,7 +144,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testGetFocusPositionException() throws IpcameraConnectionException {
+  public final void testGetFocusPositionException() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#GF"));
@@ -153,11 +153,11 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("ggA42"));
 
-    camera.getFocusPos();
+    camera.getFocus().getFocusPos();
   }
   
   @Test
-  public final void testSetFocus() throws IpcameraConnectionException {
+  public final void testSetFocus() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#AXFFFF"));
@@ -166,13 +166,13 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("axfFFF"));
 
-    camera.setFocusPos(2882);
+    camera.getFocus().setFocusPos(2882);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
   
   @Test
-  public final void testMoveFocus() throws IpcameraConnectionException {
+  public final void testMoveFocus() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#F80"));
@@ -181,13 +181,13 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("fs80"));
 
-    camera.moveFocus(80);
+    camera.getFocus().moveFocus(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
   
   @Test
-  public final void testIsAutoFocusOn() throws IpcameraConnectionException {
+  public final void testIsAutoFocusOn() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D1"));
@@ -196,14 +196,14 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d11"));
 
-    boolean res = camera.isAutoFocusOn();
+    boolean res = camera.getFocus().isAutoFocusOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertTrue(res);
   }
   
   @Test
-  public final void testIsAutoFocusOff() throws IpcameraConnectionException {
+  public final void testIsAutoFocusOff() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D1"));
@@ -212,14 +212,14 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d10"));
 
-    boolean res = camera.isAutoFocusOn();
+    boolean res = camera.getFocus().isAutoFocusOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertFalse(res);
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testIsAutoFocusOffException() throws IpcameraConnectionException {
+  public final void testIsAutoFocusOffException() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D1"));
@@ -228,11 +228,11 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("K10"));
 
-    camera.isAutoFocusOn();
+    camera.getFocus().isAutoFocusOn();
   }
   
   @Test
-  public final void testSetAutoFocusOff() throws IpcameraConnectionException {
+  public final void testSetAutoFocusOff() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D10"));
@@ -241,13 +241,13 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d10"));
 
-    camera.setAutoFocusOn(false);
+    camera.getFocus().setAutoFocusOn(false);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
   
   @Test
-  public final void testSetAutoFocusOn() throws IpcameraConnectionException {
+  public final void testSetAutoFocusOn() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D11"));
@@ -256,7 +256,7 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d11"));
 
-    camera.setAutoFocusOn(true);
+    camera.getFocus().setAutoFocusOn(true);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }

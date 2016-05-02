@@ -10,6 +10,8 @@ public abstract class Camera {
   private IrisFunctions iris;
   
   private ZoomFunctions zoom;
+  
+  private FocusFunctions focus;
 
   /**
   * Move the camera to the specified position.
@@ -42,47 +44,6 @@ public abstract class Camera {
    */
   public abstract double[] getPosition() throws CameraConnectionException;
 
-  
-  
-  /**
-   * Get the focus position.
-   * @return focus position.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract int getFocusPos() throws CameraConnectionException;
-
-  /**
-   * Set the focus position
-   * @param pos position of the focus to move to.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract void setFocusPos(int pos) throws CameraConnectionException;
-
-  /**
-   * Move the focus in the specified direction.
-   * Values between 1 and 99 where 50 is stop focusing.
-   * 1 is focus nearer with max speed
-   * 99 is focus further with max speed
-   * @param speed value with which speed is focusing.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract void moveFocus(int speed) throws CameraConnectionException;
-
-  /**
-   * Turn auto focus on or off.
-   * @param on true for auto focus on.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract void setAutoFocusOn(boolean on) throws CameraConnectionException;
-
-  /**
-   * Request if the auto focus is on.
-   * @return true if auto focus is on.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public abstract boolean isAutoFocusOn() throws CameraConnectionException;
-
- 
 
   /**
    * Get the URL to the stream of this camera.
@@ -121,6 +82,22 @@ public abstract class Camera {
    */
   public void setZoom(ZoomFunctions zoom) {
     this.zoom = zoom;
+  }
+  
+  /**
+   * Get the focus functions.
+   * @return focus functions object.
+   */
+  public FocusFunctions getFocus() {
+    return focus;
+  }
+  
+  /**
+   * Set the focus functions object.
+   * @param focus functions object.
+   */
+  public void setFocus(FocusFunctions focus) {
+    this.focus = focus;
   }
 
 }
