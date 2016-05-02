@@ -25,8 +25,26 @@ public class Logger {
     this.writer = new LogWriter(Main.getConfig().getValue("standardloglocation"));
   }
 
+  /**
+   * Logs item.
+   * @param time the time to register the logevent at.
+   * @param message the description of the logevent
+   * @param level An int specifying the level of the logevent.
+   */
   public void log(String time, String message, int level) {
-    LogEvent event = new LogEvent(time, message, LogEvent.Type.getType(level));
+    LogEvent event = new LogEvent(time, message, LogEvent.Type.values()[level]);
+    System.out.println(event.toString());
+    writer.write(event);
+  }
+
+  /**
+   * Logs item.
+   * @param time the time to register the logevent at.
+   * @param message the description of the logevent
+   * @param type The type of the logevent.
+   */
+  public void log(String time, String message, LogEvent.Type type) {
+    LogEvent event = new LogEvent(time, message, type);
     System.out.println(event.toString());
     writer.write(event);
   }
