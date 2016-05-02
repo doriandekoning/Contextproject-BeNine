@@ -1,4 +1,4 @@
-package com.benine.ipcameracontrol;
+package com.benine.backend.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -381,7 +381,7 @@ public class IpcameraTest {
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws IpcameraConnectionException {
-    Ipcamera camera = new Ipcamera("1.2.3.4");
+    Ipcamera camera = new Ipcamera("1.300.3.4");
     camera.getIrisPos();
   }
 
