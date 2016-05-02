@@ -146,6 +146,7 @@ public class LogWriter {
         }
         try {
           File backupFile = new File(logLocation + "-old.log");
+          writer.close();
           oldFile.renameTo(backupFile);
           logSize = 0;
           writer = new PrintWriter(new FileWriter(logLocation  + ".log"));
