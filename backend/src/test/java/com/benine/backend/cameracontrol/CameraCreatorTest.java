@@ -14,7 +14,7 @@ import com.benine.backend.cameracontrol.CameraCreator;
  * Test class to test the Camera handler wich creates camera objects.
  * @author Bryan
  */
-public class CameraHandlerTest {
+public class CameraCreatorTest {
   
   CameraCreator handler;
   
