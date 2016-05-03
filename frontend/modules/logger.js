@@ -31,7 +31,7 @@ Logger.prototype.resetLog = function (logger_path) {
 
     try {
         fs.writeFileSync(logger_path, '');
-        self.logMessage(self.levels.DEBUG, 'Successfully cleared log file.');
+        this.logMessage(this.levels.DEBUG, 'Successfully cleared log file.');
     } catch (e) {
         console.log(e)
     }
