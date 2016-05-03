@@ -35,6 +35,7 @@ public class LoggerTest {
     Logger logger = new Logger(logwriter);
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
+    out.reset();
   }
 
   @Test
@@ -49,6 +50,7 @@ public class LoggerTest {
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals(1, counter);
     counter=0;
+    out.reset();
   }
 
 
@@ -58,6 +60,7 @@ public class LoggerTest {
     logger.disableConsoleLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals("", out.toString());
+    out.reset();
   }
 
   @Test
@@ -82,6 +85,7 @@ public class LoggerTest {
     logger.enableConsoleLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals("", out.toString());
+    out.reset();
   }
 
   @Test
@@ -97,6 +101,7 @@ public class LoggerTest {
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals(0, counter);
     counter=0;
+    out.reset();
   }
 
   @Test
@@ -110,7 +115,7 @@ public class LoggerTest {
   public void testLoggerDisableFileLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableFileLogging();
-    Assert.assertFalse(logger.consoleFileEnabled());
+    Assert.assertFalse(logger.fileLoggingEnabled());
   }
 
   @Test
@@ -122,11 +127,11 @@ public class LoggerTest {
   }
 
   @Test
-  public void testLoggerDisableFileLogging() {
+  public void testLoggerReEnableFileLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableFileLogging();
     logger.enableFileLogging();
-    Assert.assertTrue(logger.consoleFileEnabled());
+    Assert.assertTrue(logger.fileLoggingEnabled());
   }
 
   private Answer count = invocation -> {

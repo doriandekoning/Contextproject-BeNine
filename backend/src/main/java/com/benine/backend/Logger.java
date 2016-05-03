@@ -11,6 +11,9 @@ public class Logger {
 
   private LogWriter writer;
 
+  private boolean consoleLoggingEnabled;
+  private boolean fileLoggingEnabled;
+
   /**
    * Creates a new logger object and logs to given output.
    * @param writer the logwriter
@@ -60,4 +63,44 @@ public class Logger {
     writer.write(event);
   }
 
+  /**
+   * Returns if there is currently being logged to the console.
+   * @return true if there is being logged to the console
+   */
+  public boolean consoleLoggingEnabled() {
+    return consoleLoggingEnabled;
+  }
+
+  /**
+   * Returns if there is currently being logged to the file.
+   * @return true if there is being logged to the file
+   */
+  public boolean fileLoggingEnabled() {
+    return fileLoggingEnabled;
+  }
+
+  /**
+   * Disables logging to console.
+   */
+  public void disableConsoleLogging() {
+    consoleLoggingEnabled = false;
+  }
+  /**
+   * Disables logging to file.
+   */
+  public void disableFileLogging() {
+    fileLoggingEnabled = false;
+  }
+  /**
+   * Disables logging to console.
+   */
+  public void enableConsoleLogging() {
+    consoleLoggingEnabled = true;
+  }
+  /**
+   * Disables logging to file.
+   */
+  public void enableFileLogging() {
+    fileLoggingEnabled = true;
+  }
 }
