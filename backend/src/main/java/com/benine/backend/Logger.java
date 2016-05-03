@@ -59,4 +59,5 @@ public class Logger {
     System.out.println(event.toString());
     writer.write(event);
   }
+
 }
