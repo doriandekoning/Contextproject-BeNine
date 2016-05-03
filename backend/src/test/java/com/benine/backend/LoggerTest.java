@@ -31,7 +31,7 @@ public class LoggerTest {
   }
 
   @Test
-  public void testLoggerToConsole() {
+  public void testLogToConsole() {
     Logger logger = new Logger(logwriter);
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
     Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
@@ -39,7 +39,7 @@ public class LoggerTest {
   }
 
   @Test
-  public void testLoggerToFile() {
+  public void testLogToFile() {
     // Check if one of the write methods is called on the logwriter mock
     doAnswer(count).when(logwriter).write(any(), any(), any());
     doAnswer(count).when(logwriter).write(any(), any());
@@ -55,16 +55,16 @@ public class LoggerTest {
 
 
   @Test
-  public void testLoggerNotToConsoleWhenDisabled() {
+  public void testNotToConsoleWhenDisabled() {
     Logger logger = new Logger(logwriter);
     logger.disableConsoleLogging();
-    logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
+    logger.log("this moment", "Hello World", LogEvent.Type.CRITICAL);
     Assert.assertEquals("", out.toString());
     out.reset();
   }
 
   @Test
-  public void testLoggerNoToFileWhenDisabled() {
+  public void testNoToFileWhenDisabled() {
     // Check if one of the write methods is called on the logwriter mock
     doAnswer(count).when(logwriter).write(any(), any(), any());
     doAnswer(count).when(logwriter).write(any(), any());
@@ -79,17 +79,17 @@ public class LoggerTest {
 
 
   @Test
-  public void testLoggerToConsoleWhenReEnabled() {
+  public void testToConsoleWhenReEnabled() {
     Logger logger = new Logger(logwriter);
     logger.disableConsoleLogging();
     logger.enableConsoleLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
     out.reset();
   }
 
   @Test
-  public void testLoggerToFileWhenReEnabled() {
+  public void testToFileWhenReEnabled() {
     // Check if one of the write methods is called on the logwriter mock
     doAnswer(count).when(logwriter).write(any(), any(), any());
     doAnswer(count).when(logwriter).write(any(), any());
@@ -99,27 +99,27 @@ public class LoggerTest {
     logger.disableFileLogging();
     logger.enableFileLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals(0, counter);
+    Assert.assertEquals(1, counter);
     counter=0;
     out.reset();
   }
 
   @Test
-  public void testLoggerDisableConsoleLogging() {
+  public void testDisableConsoleLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableConsoleLogging();
     Assert.assertFalse(logger.consoleLoggingEnabled());
   }
 
   @Test
-  public void testLoggerDisableFileLogging() {
+  public void testDisableFileLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableFileLogging();
     Assert.assertFalse(logger.fileLoggingEnabled());
   }
 
   @Test
-  public void testLoggerReEnableConsoleLogging() {
+  public void testReEnableConsoleLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableConsoleLogging();
     logger.enableConsoleLogging();
@@ -127,7 +127,7 @@ public class LoggerTest {
   }
 
   @Test
-  public void testLoggerReEnableFileLogging() {
+  public void testReEnableFileLogging() {
     Logger logger = new Logger(logwriter);
     logger.disableFileLogging();
     logger.enableFileLogging();

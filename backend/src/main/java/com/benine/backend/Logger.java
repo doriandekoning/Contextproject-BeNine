@@ -11,8 +11,8 @@ public class Logger {
 
   private LogWriter writer;
 
-  private boolean consoleLoggingEnabled;
-  private boolean fileLoggingEnabled;
+  private boolean consoleLoggingEnabled = true;
+  private boolean fileLoggingEnabled  = true;
 
   /**
    * Creates a new logger object and logs to given output.
@@ -36,9 +36,7 @@ public class Logger {
    * @param level An int specifying the level of the logevent.
    */
   public void log(String time, String message, int level) {
-    LogEvent event = new LogEvent(time, message, LogEvent.Type.values()[level]);
-    System.out.println(event.toString());
-    writer.write(event);
+    log(new LogEvent(time, message, LogEvent.Type.values()[level]));
   }
 
   /**
@@ -48,9 +46,7 @@ public class Logger {
    * @param type The type of the logevent.
    */
   public void log(String time, String message, LogEvent.Type type) {
-    LogEvent event = new LogEvent(time, message, type);
-    System.out.println(event.toString());
-    writer.write(event);
+    log(new LogEvent(time, message, type));
   }
   /**
    * Logs item at current time
@@ -58,9 +54,19 @@ public class Logger {
    * @param type The type of the logevent.
    */
   public void log(String message, LogEvent.Type type) {
-    LogEvent event = new LogEvent(new Date().toString(), message, type);
-    System.out.println(event.toString());
-    writer.write(event);
+    log(new LogEvent(new Date().toString(), message, type));
+  }
+  /**
+   * Logs logevent.
+   * @param event event to log.
+   */
+  public void log(LogEvent event) {
+    if(consoleLoggingEnabled) {
+      System.out.println(event.toString());
+    }
+    if(fileLoggingEnabled) {
+      writer.write(event);
+    }
   }
 
   /**
