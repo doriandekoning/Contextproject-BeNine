@@ -60,7 +60,7 @@ Config.prototype.exists = function (config_path) {
     } catch (e) {
         return false;
     }
-}
+};
 
 /**
  * Returns the config JSON.
@@ -68,7 +68,7 @@ Config.prototype.exists = function (config_path) {
  */
 Config.prototype.get = function () {
     return this.config;
-}
+};
 
 /**
  * Returns the default config.
@@ -76,6 +76,6 @@ Config.prototype.get = function () {
  */
 Config.prototype.getDefaultConfig = function () {
     return default_config;
-}
+};
 
 module.exports = new Config();

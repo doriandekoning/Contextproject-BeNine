@@ -13,7 +13,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 // return the index.html page.
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
-})
+});
 
 app.listen(3000, function () {
     logger.logMessage(logger.levels.INFO, "Server listening on port 3000!");
