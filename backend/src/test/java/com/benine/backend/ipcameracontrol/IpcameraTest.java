@@ -381,7 +381,7 @@ public class IpcameraTest {
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws IpcameraConnectionException {
-    Ipcamera camera = new Ipcamera("1.300.3.4");
+    Ipcamera camera = new Ipcamera("1.2.3.400");
     camera.getIrisPos();
   }
 
