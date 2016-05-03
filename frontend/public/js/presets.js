@@ -8,8 +8,10 @@ $.get('http://localhost:3000/api/getserver', function(data) {
     $.holdReady(false);
 });
 
+// Document is ready, we can now manipulate it.
 $(document).ready(function() {
-    
+
+    $("#preset_area").remove();
     console.log('Page has loaded successfully.');
 
 });
