@@ -28,8 +28,8 @@ public class IpcameraIrisTest {
   public MockServerRule mockServerRule = new MockServerRule(this, 9000);
 
   private MockServerClient mockServerClient;
-  private Ipcamera camera = new Ipcamera("127.0.0.1:9000");
-  private IpcameraIris iris = new IpcameraIris(camera);
+  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private IrisIPCamera iris = new IrisIPCamera(camera);
 
   private ArrayList<Parameter> parameterList;
   

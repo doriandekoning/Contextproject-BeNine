@@ -28,8 +28,8 @@ public class IpcameraFocusTest {
   public MockServerRule mockServerRule = new MockServerRule(this, 9000);
 
   private MockServerClient mockServerClient;
-  private Ipcamera camera = new Ipcamera("127.0.0.1:9000");
-  private IpcameraFocus focus = new IpcameraFocus(camera);
+  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private FocussingIPCamera focus = new FocussingIPCamera(camera);
 
   private ArrayList<Parameter> parameterList;
   
@@ -125,7 +125,7 @@ public class IpcameraFocusTest {
     assertFalse(res);
   }
   
-  @Test(expected = IpcameraConnectionException.class)
+  @Test(expected = CameraConnectionException.class)
   public final void testIsAutoFocusOffException() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));

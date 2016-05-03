@@ -1,17 +1,18 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.CameraOperations;
+import com.benine.backend.cameracontrol.Camera;
+import com.benine.backend.cameracontrol.CameraConnectionException;
+import com.benine.backend.cameracontrol.IrisCamera;
 
 /**
  * IP camera Iris class for functions of the iris in IP Camera's.
  * @author Bryan
- *
  */
-public class IpcameraIris implements CameraOperations {
+public class IrisIPCamera implements IrisCamera {
   
-  Ipcamera camera;
+  Camera camera;
   
-  public IpcameraIris(Ipcamera cam) {
+  public IrisIPCamera(Camera cam) {
     camera = cam;
   }
   
@@ -20,9 +21,9 @@ public class IpcameraIris implements CameraOperations {
    * @param on true for auto iris on.
    * @throws IpcameraConnectionException when command can not be completed.
    */
-  public void setAutoIrisOn(boolean on) throws IpcameraConnectionException {
+  public void setAutoIrisOn(boolean on) throws CameraConnectionException {
     if (on) {
-      camera.sendCommand("%23D31");
+      sendCommand("%23D31");
     } else {
       camera.sendCommand("%23D30");
     }
@@ -33,8 +34,8 @@ public class IpcameraIris implements CameraOperations {
    * @return true if the auto iris is on.
    * @throws IpcameraConnectionException when command can not be completed.
    */
-  public boolean isAutoIrisOn() throws IpcameraConnectionException {
-    String res = camera.sendCommand("%23D3");
+  public boolean isAutoIrisOn() throws CameraConnectionException {
+    String res = sendCommand("%23D3");
     if (res.substring(0, 2).equals("d3")) {
       if (res.substring(2).equals("1")) {
         return true;
@@ -54,10 +55,10 @@ public class IpcameraIris implements CameraOperations {
   * @param pos to set the iris to.
   * @throws IpcameraConnectionException when command can not be completed.
   */
-  public void setIrisPos(int pos) throws IpcameraConnectionException {
+  public void setIrisPos(int pos) throws CameraConnectionException {
     pos = Math.max(1, pos);
     pos = Math.min(99, pos);
-    camera.sendCommand("%23I" + pos);
+    sendCommand("%23I" + pos);
   }
 
   /**
@@ -65,10 +66,15 @@ public class IpcameraIris implements CameraOperations {
    * @return the current iris position.
    * @throws IpcameraConnectionException when command can not be completed.
    */
-  public int getIrisPos() throws IpcameraConnectionException {
-    String res = camera.sendCommand("%23GI");
+  public int getIrisPos() throws CameraConnectionException {
+    String res = sendCommand("%23GI");
     
     return Integer.valueOf(res.substring(2, 5), 16);
+  }
+
+  @Override
+  public String sendCommand(String cmd) throws CameraConnectionException {
+    return camera.sendCommand(cmd);
   }
 
 }

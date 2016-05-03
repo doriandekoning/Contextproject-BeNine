@@ -1,6 +1,10 @@
 package com.benine.backend.cameracontrol;
 
-import com.benine.backend.cameracontrol.ipcameracontrol.Ipcamera;
+import com.benine.backend.cameracontrol.ipcameracontrol.FocussingIPCamera;
+import com.benine.backend.cameracontrol.ipcameracontrol.IPCamera;
+import com.benine.backend.cameracontrol.ipcameracontrol.IrisIPCamera;
+import com.benine.backend.cameracontrol.ipcameracontrol.MovingIPCamera;
+import com.benine.backend.cameracontrol.ipcameracontrol.ZoomingIPCamera;
 
 /**
  * Class to create camera objects.
@@ -35,9 +39,11 @@ public class CameraCreator {
    * @return Camera object.
    */
   public Camera createIpcamera(String ipaddress) {
-    Ipcamera res = new Ipcamera(ipaddress);
-
-    return res;
+    Camera ipcamera = new IPCamera(ipaddress);
+    Camera zoomcam = new ZoomingIPCamera(ipcamera);
+    Camera focuscam = new FocussingIPCamera(zoomcam);
+    Camera iriscam = new IrisIPCamera(focuscam);
+    return new MovingIPCamera(iriscam);
   }
   
   /**

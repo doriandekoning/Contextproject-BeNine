@@ -1,37 +1,22 @@
 package com.benine.backend.cameracontrol.ipcameracontrol;
 
 import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraOperations;
+import com.benine.backend.cameracontrol.CameraConnectionException;
+import com.benine.backend.cameracontrol.MovingCamera;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 /**
- * Class to communicate with an IP Camera.
+ * Concrete decorator of an IP Camera.
  * @author Bryan
  */
-
-public class Ipcamera extends Camera {
-
-  String ipaddress;
-
-  /**
-   *  Create a new IP Camera object.
-   *  @param ip address of this camera.
-   */
-  public Ipcamera(String ip) {
-    ipaddress = ip;
-    ArrayList<CameraOperations> list = new ArrayList<CameraOperations>();
-    list.add(new IpcameraIris(this));
-    list.add(new IpcameraZoom(this));
-    list.add(new IpcameraFocus(this));
-    setOperations(list);
+public class MovingIPCamera implements MovingCamera {
+  
+  Camera camera;
+  
+  public MovingIPCamera(Camera camera) {
+    this.camera = camera;
   }
 
   /**
@@ -40,10 +25,15 @@ public class Ipcamera extends Camera {
    * tilt: -30 to 210 degrees.
    * pan speed: 1 to 30.
    * tilt speed: 0 to 2.
+   * @param pan in degrees horizontal axis.
+   * @param tilt in degrees vertical axis.
+   * @param panSpeed integer to specify the speed of the pan movement.
+   * @param tiltSpeed integer to specify the speed of the tilt movement.
+   * @throws CameraConnectionException when command can not be completed.
    */
   @Override
   public void moveTo(double pan, double tilt, int panSpeed, int tiltSpeed) 
-                                                                throws IpcameraConnectionException {
+                                                                throws CameraConnectionException {
     sendCommand("%23APS" + convertPanToHex(pan) + convertTiltToHex(tilt) 
                     + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
   }
@@ -52,9 +42,12 @@ public class Ipcamera extends Camera {
    * Values must be between 1 and 99 otherwise they will be rounded.
    * Hereby is 1 max speed to left or downward.
    * 99 is max speed to right or upward.
+   * @param pan movement direction over horizontal axis.
+   * @param tilt movement direction over vertical axis.
+   * @throws CameraConnectionException when command can not be completed.
    */
   @Override
-  public void move(int pan, int tilt) throws IpcameraConnectionException {
+  public void move(int pan, int tilt) throws CameraConnectionException {
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
@@ -64,7 +57,7 @@ public class Ipcamera extends Camera {
   }
 
   @Override
-  public double[] getPosition() throws IpcameraConnectionException {
+  public double[] getPosition() throws CameraConnectionException {
     String res = sendCommand("%23APC");
     if (res.substring(0, 3).equals("aPC")) {
       return new double[]{convertPanToDouble(res.substring(3, 7)),
@@ -72,31 +65,6 @@ public class Ipcamera extends Camera {
     } else {
       throw new IpcameraConnectionException("Getting the position of the camera failed.");
     }
-  }
-
-  
-
-
-
-  
-
-  @Override
-  public String getStreamLink() {
-    return "http://" + ipaddress + "/cgi-bin/mjpeg";
-  }
-  
-  protected String sendCommand(String cmd) throws IpcameraConnectionException {
-    String res = null;
-    try {
-      InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      BufferedReader buf = new BufferedReader(new InputStreamReader(com));
-      res = buf.readLine();
-      com.close();
-    } catch (IOException excep) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
-    }
-    
-    return res;
   }
   
   /**
@@ -165,4 +133,8 @@ public class Ipcamera extends Camera {
     return Integer.toHexString((int) (pan + 0.5));
   }
 
+  @Override
+  public String sendCommand(String cmd) throws CameraConnectionException {
+    return camera.sendCommand(cmd);
+  }
 }

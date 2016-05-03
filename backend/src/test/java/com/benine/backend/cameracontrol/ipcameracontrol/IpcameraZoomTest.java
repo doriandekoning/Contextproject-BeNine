@@ -26,8 +26,8 @@ public class IpcameraZoomTest {
   public MockServerRule mockServerRule = new MockServerRule(this, 9000);
 
   private MockServerClient mockServerClient;
-  private Ipcamera camera = new Ipcamera("127.0.0.1:9000");
-  private IpcameraZoom zoom = new IpcameraZoom(camera);
+  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private ZoomingIPCamera zoom = new ZoomingIPCamera(camera);
 
   private ArrayList<Parameter> parameterList;
   

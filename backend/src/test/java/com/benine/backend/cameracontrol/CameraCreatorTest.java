@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import com.benine.backend.cameracontrol.Camera;
 import com.benine.backend.cameracontrol.CameraCreator.InvalidCameraTypeException;
-import com.benine.backend.cameracontrol.ipcameracontrol.Ipcamera;
 import com.benine.backend.cameracontrol.CameraCreator;
 
 /**
@@ -27,7 +26,7 @@ public class CameraCreatorTest {
   public void testIpcameraCreation() throws InvalidCameraTypeException{
     String[] spec = {"ipcamera", "127.0.0.1:3000"};
     Camera camera = handler.createCamera(spec);
-    assertTrue(camera instanceof Ipcamera);
+    assertTrue(camera instanceof Camera);
   }
   
   @Test(expected = InvalidCameraTypeException.class)

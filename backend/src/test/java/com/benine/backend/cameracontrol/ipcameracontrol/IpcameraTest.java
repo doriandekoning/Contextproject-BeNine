@@ -26,12 +26,12 @@ public class IpcameraTest {
   public MockServerRule mockServerRule = new MockServerRule(this, 9000);
 
   private MockServerClient mockServerClient;
-  private Ipcamera camera = new Ipcamera("127.0.0.1:9000");
+  private MovingIPCamera camera = new MovingIPCamera(new IPCamera("127.0.0.1:9000"));
 
   private ArrayList<Parameter> parameterList;
 
   @Test
-  public final void testMoveToHomePosition() throws IpcameraConnectionException {
+  public final void testMoveToHomePosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#APS80008000111"));
@@ -46,7 +46,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testMoveWithSpecifiedSpeed() throws IpcameraConnectionException {
+  public final void testMoveWithSpecifiedSpeed() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#PTS0199"));
@@ -62,7 +62,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetPosition() throws IpcameraConnectionException {
+  public final void testGetPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#APC"));
@@ -79,7 +79,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testGetPositionException() throws IpcameraConnectionException {
+  public final void testGetPositionException() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#APC"));
@@ -97,13 +97,13 @@ public class IpcameraTest {
     parameterList.add(new Parameter("res", "1"));
     parameterList.add(new Parameter("cmd", "#D30"));
 
-    String res = camera.getStreamLink();
+    String res = ((IPCamera) camera.camera).getStreamLink();
     assertEquals(res, "http://127.0.0.1:9000/cgi-bin/mjpeg");
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws CameraConnectionException {
-    Ipcamera camera = new Ipcamera("1.300.3.4");
+    MovingIPCamera camera = new MovingIPCamera(new IPCamera("1.300.3.4"));
     camera.move(180, 50);
   }
 
