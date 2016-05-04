@@ -1,4 +1,6 @@
-package com.benine;
+package com.benine.backend.database;
+
+import org.json.simple.JSONObject;
 
 /**
  * A moving preset to be able to add to the database
@@ -30,6 +32,23 @@ public class Preset {
 		this.focus = focus;
 		this.iris = iris;
 		this.autofocus = autofocus;
+	}
+
+  /**
+	 * Returns a JSON representation of this object.
+	 * @return JSON representation of this object.
+	 */
+	public String toJSON() {
+		JSONObject json = new JSONObject();
+
+		json.put("pan", new Integer(pan));
+		json.put("tilt", new Integer(tilt));
+		json.put("zoom", new Integer(zoom));
+		json.put("focus", new Integer(focus));
+		json.put("iris", new Integer(iris));
+		json.put("autofocus", new Boolean(autofocus));
+
+		return json.toString();
 	}
 
 }

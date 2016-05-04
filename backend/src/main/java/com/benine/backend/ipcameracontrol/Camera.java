@@ -1,6 +1,6 @@
-package com.benine;
+package com.benine.backend.ipcameracontrol;
 
-import com.benine.ipcameracontrol.CameraConnectionException;
+import com.benine.backend.ipcameracontrol.CameraConnectionException;
 
 /**
  * Interface for communication with remote camera's.
@@ -139,5 +139,11 @@ public interface Camera {
    * @throws CameraConnectionException when command can not be completed.
    */
   String getStreamLink();
+
+  /**
+   * Returns a JSON representation of this camera.
+   * @return A JSON representation of thisge camera.
+   */
+  String toJSON() throws CameraConnectionException;
 
 }

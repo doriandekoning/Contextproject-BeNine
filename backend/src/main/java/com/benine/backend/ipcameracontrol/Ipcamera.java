@@ -1,6 +1,7 @@
-package com.benine.ipcameracontrol;
+package com.benine.backend.ipcameracontrol;
 
-import com.benine.Camera;
+
+import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -280,4 +281,24 @@ public class Ipcamera implements Camera {
     return Integer.toHexString((int) (pan + 0.5));
   }
 
+
+  /**
+   * Returns a JSON representation of this camera.
+   * @return A JSON representation of this camera.
+   */
+  @Override
+  public String toJSON() throws CameraConnectionException {
+    JSONObject json = new JSONObject();
+    json.put("pan", new Double(getPosition()[0]));
+    json.put("tilt", new Double(getPosition()[1]));
+    json.put("zoom", new Double(getZoomPosition()));
+    json.put("focus", new Double(getFocusPos()));
+    json.put("autofocus", new Boolean(isAutoFocusOn()));
+    json.put("iris", new Double(getIrisPos()));
+    json.put("autoiris", new Boolean(isAutoIrisOn()));
+    json.put("videostream", new Boolean(getStreamLink()));
+
+    return  json.toString();
+
+  }
 }
