@@ -2,6 +2,7 @@ package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.http.CameraInfoHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class Main {
 
     try {
       HttpServer server = HttpServer.create(address, 10);
-      server.createContext("/", new  CameraHandler());
+      server.createContext("/getCameraInfo", new CameraInfoHandler());
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
       while(true) {
@@ -56,5 +57,13 @@ public class Main {
       e.printStackTrace();
     }
     return null;
+  }
+
+  /**
+   * Returns the cameraController.
+   * @return the cameracontroller
+   */
+  public static CameraController getCameraController() {
+    return cameraController;
   }
 }

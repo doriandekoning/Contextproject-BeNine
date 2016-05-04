@@ -9,6 +9,8 @@ public class CameraController {
 
   private ArrayList<Camera> cameras = new ArrayList<>();
 
+
+
   /**
    * Adds a new camera to control.
    * @param c
