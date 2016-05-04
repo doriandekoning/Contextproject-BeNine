@@ -40,7 +40,8 @@ public class ConfigReader {
   private static String[] parseLine(String line) throws InvalidConfigFileException {
     // Remove comments (everything after a #)
     Pattern pattern = Pattern.compile("([\\s*+])");
-    Pattern wellFormed = Pattern.compile(".{1,}=.{1,}");
+    //All config files that have a word as key are accepted. The value can contain all characters.
+    Pattern wellFormed = Pattern.compile("\\w*=.{1,}");
     Matcher matcher = pattern.matcher(line.split("#")[0]);
     String whiteSpaceRemoved = matcher.replaceAll("");
     // If the line only contains a comment return null
