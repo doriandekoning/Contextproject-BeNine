@@ -10,13 +10,12 @@ public interface MovingCamera extends Camera {
    * Move the camera to the specified position.
    * Tilt speed values: 1:SLOW, 2:MID, 3: FAST.
    * Pan speed values: 1 - 30.
-   * @param pan in degrees horizontal axis.
-   * @param tilt in degrees vertical axis.
+   * @param pos position to move to.
    * @param panSpeed integer to specify the speed of the pan movement.
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public abstract void moveTo(double pan, double tilt, int panSpeed, int tiltSpeed)
+  public abstract void moveTo(Position pos, int panSpeed, int tiltSpeed)
                                                      throws CameraConnectionException;
 
   /**
@@ -35,6 +34,6 @@ public interface MovingCamera extends Camera {
     * @return array with two values 0: Pan, 1: Tilt both in degrees.
     * @throws CameraConnectionException when command can not be completed.
     */
-  public abstract double[] getPosition() throws CameraConnectionException;
+  public abstract Position getPosition() throws CameraConnectionException;
 
 }

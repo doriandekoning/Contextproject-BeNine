@@ -15,6 +15,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
+import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera; 
 
 /**
@@ -39,16 +40,15 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * tilt: -30 to 210 degrees.
    * pan speed: 1 to 30.
    * tilt speed: 0 to 2.
-   * @param pan in degrees horizontal axis.
-   * @param tilt in degrees vertical axis.
+   * @param pos position to move to.
    * @param panSpeed integer to specify the speed of the pan movement.
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
    */
   @Override
-  public void moveTo(double pan, double tilt, int panSpeed, int tiltSpeed) 
+  public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
-    sendCommand("%23APS" + convertPanToHex(pan) + convertTiltToHex(tilt) 
+    sendCommand("%23APS" + convertPanToHex(pos.getPan()) + convertTiltToHex(pos.getTilt()) 
                     + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
   }
   
@@ -71,11 +71,11 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   }
 
   @Override
-  public double[] getPosition() throws CameraConnectionException {
+  public Position getPosition() throws CameraConnectionException {
     String res = sendCommand("%23APC");
     if (res.substring(0, 3).equals("aPC")) {
-      return new double[]{convertPanToDouble(res.substring(3, 7)),
-                                  convertTiltToDouble(res.substring(7))};
+      return new Position(convertPanToDouble(res.substring(3, 7)),
+                                  convertTiltToDouble(res.substring(7)));
     } else {
       throw new IpcameraConnectionException("Getting the position of the camera failed.");
     }
@@ -347,8 +347,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("pan", new Double(getPosition()[0]));
-    json.put("tilt", new Double(getPosition()[1]));
+    json.put("pan", new Double(getPosition().getPan()));
+    json.put("tilt", new Double(getPosition().getTilt()));
     json.put("zoom", new Double(getZoomPosition()));
     json.put("focus", new Double(getFocusPos()));
     json.put("autofocus", new Boolean(isAutoFocusOn()));

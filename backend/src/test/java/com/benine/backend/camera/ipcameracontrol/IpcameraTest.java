@@ -12,6 +12,7 @@ import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,8 @@ public class IpcameraTest {
     mockServerClient.when(request).respond(HttpResponse.response().withBody("aPS80008000111"));
     
     //move with pan speed 17 and tilt speed 1
-    camera.moveTo(0, 180, 17, 1);
+    Position pos = new Position(0, 180);
+    camera.moveTo(pos, 17, 1);
     mockServerClient.verify(request, VerificationTimes.once());
   }
   
@@ -71,11 +73,11 @@ public class IpcameraTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("aPC80008000"));
 
-    double[] res = camera.getPosition();
+    Position res = camera.getPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
-    assertEquals(0, res[0], 0.000001);
-    assertEquals(180, res[1], 0.000001);
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
