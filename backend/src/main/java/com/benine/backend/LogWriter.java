@@ -88,7 +88,7 @@ public class LogWriter {
   /**
    * Writes a list of logEvents to the list.
    */
-  public void write(List<LogEvent> eventList) throws IOException {
+  public void write(List<LogEvent> eventList) {
     for (LogEvent e : eventList) {
       write(e);
     }
