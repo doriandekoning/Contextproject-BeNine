@@ -97,8 +97,25 @@ public interface Database {
 	ArrayList<DatabaseMovingPreset> getAllMovingPresetsCamera(int cameraID);
 	
 	/**
-	 * Tries to connect to database server and database.
-	 * @return The database
+	 * Tries to connect to database server.
+	 * @return True if the connection is succeeded.
 	 */
-	Database connectToDatabase();
+	boolean connectToDatabaseServer();
+
+	/**
+	 * Check if the database is present in the server.
+	 * @return True if the database is present, false otherwise
+     */
+	boolean checkDatabase();
+
+	/**
+	 * Creates new database, overrides the old one if there is one.
+     */
+	void resetDatabase();
+
+	/**
+	 * Closes the connection to the server.
+	 */
+	void closeConnection();
+
 }
