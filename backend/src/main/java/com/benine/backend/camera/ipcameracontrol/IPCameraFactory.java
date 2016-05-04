@@ -15,21 +15,28 @@ import com.benine.backend.camera.CameraFactory;
  */
 public class IPCameraFactory extends CameraFactory {
 	
-	public static LogWriter logger;
+	public static LogWriter logger = setupLogger();
   
   /**
    * Constructor of the camera handler.
    */
   public IPCameraFactory(){
-	  // Setup logger
-	  try {
-	      logger = new LogWriter("logs" + File.separator + "mainlog");
-	  } catch(IOException e) {
-		  System.out.println("Cannot create log file");
-	      e.printStackTrace();
-	  }
+
   }
-  
+
+  /**
+   *
+   */
+  private Logger setupLogger() {
+    // Setup logger
+    try {
+      logger = new LogWriter("logs" + File.separator + "mainlog");
+    } catch (IOException e) {
+      System.out.println("Cannot create log file");
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Creates a camera object as specified in camSpec.
    * @param camSpec specification of the camera 0: type, 1: additional info.
