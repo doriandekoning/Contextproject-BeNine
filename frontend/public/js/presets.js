@@ -14,7 +14,6 @@ $(document).ready(function() {
 
     // Generate the presets.
     generatePresets();
-
     console.log('Page has loaded successfully.');
 
 });
@@ -26,7 +25,7 @@ function generatePresets() {
 }
 
 function addPresetRow() {
-    var preset_row, preset_column, preset_image_div, preset_image, preset_caption, row_container, img
+    var preset_row, preset_column, row_container
 
     preset_row = $('<div class="row"></div>');
     row_container = $('<div class="col-xs-6"></div>');
@@ -52,7 +51,7 @@ function addPreset(elem) {
     var preset_image, preset_caption, preset_image_div;
 
     preset_image_div = $('<div class = "none"></div>');
-    preset_image = $('<img data-src="holder.js/128x100?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
     preset_image_div.attr("id", "preset_" + presetcounter);
