@@ -25,10 +25,10 @@ import com.benine.backend.camera.CameraConnectionException;
 public class IpcameraIrisTest {
   
   @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 9000);
+  public MockServerRule mockServerRule = new MockServerRule(this, 9003);
 
   private MockServerClient mockServerClient;
-  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private IPCamera camera = new IPCamera("127.0.0.1:9003");
 
   private ArrayList<Parameter> parameterList;
   

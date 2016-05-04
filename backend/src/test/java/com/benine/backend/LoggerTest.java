@@ -34,7 +34,7 @@ public class LoggerTest {
   public void testLogToConsole() {
     Logger logger = new Logger(logwriter);
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello" + System.lineSeparator(), out.toString());
     out.reset();
   }
 
@@ -84,7 +84,7 @@ public class LoggerTest {
     logger.disableConsoleLogging();
     logger.enableConsoleLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello" + System.lineSeparator(), out.toString());
     out.reset();
   }
 
