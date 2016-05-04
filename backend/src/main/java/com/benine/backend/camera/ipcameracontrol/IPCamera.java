@@ -49,7 +49,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
-	IPCameraFactory.logger.write("Move IP camera", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Move IP camera", LogEvent.Type.INFO);
     sendCommand("%23APS" + convertPanToHex(pos.getPan()) + convertTiltToHex(pos.getTilt()) 
                     + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
   }
@@ -64,7 +64,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   @Override
   public void move(int pan, int tilt) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Move IP camera with specified speed.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Move IP camera with specified speed.", LogEvent.Type.INFO);
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
@@ -75,7 +75,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   @Override
   public Position getPosition() throws CameraConnectionException {
-	IPCameraFactory.logger.write("Get the position of the IP camera.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Get the position of the IP camera.", LogEvent.Type.INFO);
     String res = sendCommand("%23APC");
     if (res.substring(0, 3).equals("aPC")) {
       return new Position(convertPanToDouble(res.substring(3, 7)),
@@ -159,10 +159,10 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public int getFocusPos() throws CameraConnectionException {
     String res = sendCommand("%23GF");
     if (res.substring(0, 2).equals("gf")) {
-    	IPCameraFactory.logger.write("Get focus position of the IP Camera.", LogEvent.Type.INFO);
+    	IPCameraFactory.logger.log("Get focus position of the IP Camera.", LogEvent.Type.INFO);
       return Integer.valueOf(res.substring(2), 16);
     } else {
-    	IPCameraFactory.logger.write("Getting the focus position failed", LogEvent.Type.CRITICAL);
+    	IPCameraFactory.logger.log("Getting the focus position failed", LogEvent.Type.CRITICAL);
       throw new IpcameraConnectionException("Sending command to get focus position failed");
     }
   }
@@ -173,7 +173,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setFocusPos(int pos) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Set focus position camera.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
     sendCommand("%23AXF" + Integer.toHexString(pos + 1365));
@@ -188,7 +188,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void moveFocus(int speed) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Move focus IP camera.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     sendCommand("%23F" + speed);
@@ -200,7 +200,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setAutoFocusOn(boolean on) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Set auto focus: " + on, LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Set auto focus: " + on, LogEvent.Type.INFO);
     if (on) {
       sendCommand("%23D11");
     } else {
@@ -214,7 +214,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoFocusOn() throws CameraConnectionException {
-	IPCameraFactory.logger.write("Checking autofocus failed.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Checking autofocus failed.", LogEvent.Type.INFO);
     String res = sendCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {
       if (res.substring(2).equals("1")) {
@@ -223,7 +223,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
         return false;
       }
     } else {
-      IPCameraFactory.logger.write("Changing auto focus failed.", LogEvent.Type.CRITICAL);
+      IPCameraFactory.logger.log("Changing auto focus failed.", LogEvent.Type.CRITICAL);
       throw new CameraConnectionException("Sending command to test autofocus failed");
     }
   }
@@ -234,7 +234,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws IpcameraConnectionException when command can not be completed.
    */
   public void setAutoIrisOn(boolean on) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Changing auto iris.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Changing auto iris.", LogEvent.Type.INFO);
     if (on) {
       sendCommand("%23D31");
     } else {
@@ -248,14 +248,14 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws IpcameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException {
-	IPCameraFactory.logger.write("Checking auto iris.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Checking auto iris.", LogEvent.Type.INFO);
     String res = sendCommand("%23D3");
     if (res.substring(0, 2).equals("d3")) {
       if (res.substring(2).equals("1")) {
         return true;
       }
     } else {
-      IPCameraFactory.logger.write("Changing auto iris.", LogEvent.Type.CRITICAL);
+      IPCameraFactory.logger.log("Changing auto iris.", LogEvent.Type.CRITICAL);
       throw new IpcameraConnectionException(
           "Sending the message to test if auto iris is on to camera failed");
     }
@@ -282,7 +282,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws IpcameraConnectionException when command can not be completed.
    */
   public int getIrisPos() throws CameraConnectionException {
-	IPCameraFactory.logger.write("Get iris position.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Get iris position.", LogEvent.Type.INFO);
     String res = sendCommand("%23GI");
     return Integer.valueOf(res.substring(2, 5), 16);
   }
@@ -293,12 +293,12 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getZoomPosition() throws CameraConnectionException {
-	IPCameraFactory.logger.write("Get zoom position.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Get zoom position.", LogEvent.Type.INFO);
     String res = sendCommand("%23GZ");
     if (res.substring(0, 2).equals("gz")) {
       return Integer.valueOf(res.substring(2), 16);
     } else {
-      IPCameraFactory.logger.write("Changing zoom position failed.", LogEvent.Type.CRITICAL);
+      IPCameraFactory.logger.log("Changing zoom position failed.", LogEvent.Type.CRITICAL);
       throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.");
     }
   }
@@ -309,7 +309,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws CameraConnectionException {
-	IPCameraFactory.logger.write("Zoom to zoom position.", LogEvent.Type.INFO);
+	IPCameraFactory.logger.log("Zoom to zoom position.", LogEvent.Type.INFO);
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
     sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
