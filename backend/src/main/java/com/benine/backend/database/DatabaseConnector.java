@@ -6,17 +6,17 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
 
-	/**
-	 * Connect with the database.
-	 * @param argv
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
-	public void connect() throws SQLException, ClassNotFoundException {
+  /**
+   * Connect with the database.
+   * @param argv
+   * @throws SQLException
+   * @throws ClassNotFoundException
+   */
+  public void connect() throws SQLException, ClassNotFoundException {
 
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = null;
-		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection connection = null;
+    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
 
-	}
+  }
 }

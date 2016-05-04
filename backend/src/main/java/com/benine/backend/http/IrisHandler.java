@@ -13,6 +13,11 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 public class IrisHandler extends RequestHandler {
+  /**
+   * Handles a request
+   * @param exchange the exchange containing data about the request.
+   * @throws IOException when an error occurs with responding to the request.
+   */
   public void handle(HttpExchange exchange) throws IOException {
     //TODO add logging stuff
     // Extract camera id from function and amount to zoom in

@@ -22,7 +22,7 @@ public class CameraController {
 
   /**
    * Adds a new camera to control.
-   * @param c
+   * @param c the camera to add to this controller.
    */
   public void addCamera(Camera c) {
     highestIdInUse++;
@@ -32,7 +32,7 @@ public class CameraController {
 
 
   /**
-   *
+   * Sets up the logger.
    */
   private static Logger setupLogger() {
     // Setup logger
