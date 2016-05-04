@@ -22,6 +22,7 @@ public class MySQLDatabase implements Database{
         movingPresetId = 0;
     }
 
+    @Override
     public boolean isConnected() throws SQLException {
         return connection != null && !connection.isClosed();
     }
@@ -35,8 +36,12 @@ public class MySQLDatabase implements Database{
         try {Statement statement = connection.createStatement();
             String sql = "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan() + "," + preset.getTilt() +
                     "," + preset.getZoom() + "," + preset.getFocus() + "," + preset.getIris() +"," + auto + ")";
-            ResultSet resultset = statement.executeQuery(sql);
+            statement.executeUpdate(sql);
+            System.out.println(sql);
             sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + "," + camera + "," + presetId + ")";
+            statement.executeUpdate(sql);
+            System.out.println(sql);
+            statement.close();
             presetId++;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +53,7 @@ public class MySQLDatabase implements Database{
     public void deletePreset(int camera, int cameraPresetNumber) {
         try {Statement statement = connection.createStatement();
             String sql = "DELETE FROM presetsdatabase.camerapresets WHERE Camera_ID = " + camera + " AND CameraPresetID = " + cameraPresetNumber;
-            ResultSet resultset = statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,10 +68,12 @@ public class MySQLDatabase implements Database{
         try {Statement statement = connection.createStatement();
             String sql = "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan() + "," + preset.getTilt() +
                     "," + preset.getZoom() + "," + preset.getFocus() + "," + preset.getIris() +"," + auto + ")";
-            ResultSet resultset = statement.executeQuery(sql);
+            statement.executeUpdate(sql);
             sql = "UPDATE presetsdatabase.camerapresets SET Presets_ID = " + presetId + "WHERE Camera_ID = " + camera +
                     "AND CameraPresetID = " + cameraPresetNumber;
+            statement.executeUpdate(sql);
             presetId++;
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,8 +83,10 @@ public class MySQLDatabase implements Database{
     public DatabasePreset getPreset(int camera, int cameraPresetNumber) {
         DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
         try {Statement statement = connection.createStatement();
-            String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets JOIN camerapresets ON camerapresets.Preset_ID = presets.ID" +
-                    "WHERE camerapresets.Camera_ID = " + camera + " AND camerapresets.CameraPresetID = "+ cameraPresetNumber;
+            String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets JOIN " +
+                    "presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = presetsDatabase.presets.ID " +
+                    "WHERE presetsDatabase.camerapresets.Camera_ID = " + camera + " AND presetsDatabase.camerapresets.CameraPresetID = "+ cameraPresetNumber;
+            System.out.println(sql);
             ResultSet resultset = statement.executeQuery(sql);
             if(resultset.next()){
                 preset.setPan(resultset.getInt("pan"));
@@ -87,6 +96,8 @@ public class MySQLDatabase implements Database{
                 preset.setIris(resultset.getInt("iris"));
                 preset.setAutofocus(resultset.getInt("autofocus") == 1);
             }
+            resultset.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,6 +120,8 @@ public class MySQLDatabase implements Database{
                 preset.setAutofocus(resultset.getInt("autofocus") == 1);
                 list.add(preset);
             }
+            resultset.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -132,6 +145,8 @@ public class MySQLDatabase implements Database{
                 preset.setAutofocus(resultset.getInt("autofocus") == 1);
                 list.add(preset);
             }
+            resultset.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -143,11 +158,9 @@ public class MySQLDatabase implements Database{
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
-        } catch (SQLException e) {
-            System.out.println("Can't connect to server with error message: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.out.println("No driver found with error message: " + e.getMessage());
         }
+        catch (SQLException e) {}
+        catch (ClassNotFoundException e) {}
         try {
             return !connection.isClosed();
         } catch (SQLException e) {
@@ -160,6 +173,9 @@ public class MySQLDatabase implements Database{
     public boolean checkDatabase() {
         try{
             ResultSet databaseNames = connection.getMetaData().getCatalogs();
+            if(databaseNames == null){
+                return false;
+            }
             while (databaseNames.next()) {
                 String databaseName = databaseNames.getString(1);
                 if(databaseName.equals("presetsDatabase")) return true;
@@ -177,13 +193,9 @@ public class MySQLDatabase implements Database{
         try {
             ScriptRunner sr = new ScriptRunner(connection, false, false);
             Reader reader = new BufferedReader(
-                    new FileReader("backend/database/databasefile.sql"));
+                    new FileReader("database/databasefile.sql"));
             sr.runScript(reader);
-
-        } catch (Exception e) {
-            System.err.println("Failed to Execute"
-                    + " The error is " + e.getMessage());
-        }
+        } catch (Exception e) {}
     }
 
     @Override
@@ -194,6 +206,19 @@ public class MySQLDatabase implements Database{
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void addCamera(int id, int ip, String name) {
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + name + "," + ip + ")";
+            statement.executeUpdate(sql);
+            System.out.println(sql);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

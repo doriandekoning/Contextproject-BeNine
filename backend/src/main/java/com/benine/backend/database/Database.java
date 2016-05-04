@@ -1,5 +1,6 @@
 package com.benine.backend.database;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -7,6 +8,13 @@ import java.util.ArrayList;
  * @author Ege
  */
 public interface Database {
+
+	/**
+	 * Checks if database is connected.
+	 * @return true if database is connected
+	 * @throws SQLException
+     */
+	boolean isConnected() throws SQLException;
 
 	/**
 	 * Add a preset to the database.
@@ -73,5 +81,12 @@ public interface Database {
 	 * Closes the connection to the server.
 	 */
 	void closeConnection();
+
+	/**
+	 * Adds a camera to the database.
+	 * @param id The ID of the camera
+	 * @param ip The IP of the camera
+     */
+	void addCamera(int id, int ip, String name);
 
 }
