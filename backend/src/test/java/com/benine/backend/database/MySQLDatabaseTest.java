@@ -149,17 +149,4 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyConnectionClosed();
     }
 
-    @Test
-    public final void testCheckDatabase() {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
-        database.connectToDatabaseServer();
-        assertFalse(database.checkDatabase());
-        database.resetDatabase();
-        assertFalse(database.checkDatabase());
-        database.closeConnection();
-        verifyAllResultSetsClosed();
-        verifyConnectionClosed();
-    }
-
 }
