@@ -21,8 +21,7 @@ public class Main {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
-    // TODO Switch adress and max backlog to config
-    InetSocketAddress address = new InetSocketAddress("localhost", 8888);
+    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), Integer.parseInt(mainConfig.getValue("serverport")));
 
     // Setup camerahandler
     cameraController = new CameraController();

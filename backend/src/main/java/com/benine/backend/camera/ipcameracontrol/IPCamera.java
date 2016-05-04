@@ -21,7 +21,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   String ipaddress;
 
-  private int id;
+  private int id = -1;
 
   /**
    *  Create a new IP Camera object.
