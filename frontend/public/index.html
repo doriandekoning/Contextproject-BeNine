@@ -13,6 +13,7 @@
 	<title>Preset Control Web Application</title>
 
 	<!-- Bootstrap -->
+
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Bootstrap CSS overwrites -->
 	<link href="public/css/style.css" rel="stylesheet">
@@ -44,51 +45,13 @@
 
 <div id="top_area" class="row">
     <div id="camera_area" class="col-xs-6">
-        <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="false" style="height: 288px">
+        <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="false">
             <!-- Indicators -->
             <ol class="carousel-indicators">
-                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
             </ol>
 
             <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-                <div class="item active">
-                    <div class="row">
-                        <div class="col-sm-6"><img src="public/test.jpg"></div>
-                        <div class="col-sm-6"><img src="public/test1.jpg"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6"><img src="public/test2.jpg"></div>
-                        <div class="col-sm-6"><img src="public/test3.jpg"></div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="row">
-                            <div class="col-sm-6"><img src="public/test.jpg"></div>
-                            <div class="col-sm-6"><img src="public/test1.jpg"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6"><img src="public/test2.jpg"></div>
-                            <div class="col-sm-6"><img src="public/test3.jpg"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="row">
-                            <div class="col-sm-6"><img src="public/test.jpg"></div>
-                            <div class="col-sm-6"><img src="public/test1.jpg"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6"><img src="public/test2.jpg"></div>
-                            <div class="col-sm-6"><img src="public/test3.jpg"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="carousel-inner" role="listbox"></div>
 
             <!-- Controls -->
             <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
@@ -96,7 +59,7 @@
         </div>
     </div>
     <div id="current_camera" class="col-xs-6">
-        <img src="public/test.jpg">
+        <img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg">
     </div>
 </div>
 <!-- Area in which the presets will be generated -->

@@ -43,7 +43,7 @@ body {
 	height: 100%;
 }
 
-#current_camera {
+#current_camera, #camera_area, #carousel {
 	height: 100%;
 }
 
