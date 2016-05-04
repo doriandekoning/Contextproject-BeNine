@@ -14,7 +14,7 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the preset for the camera
 	 * @param preset The preset to be added
 	 */
-	void addPreset(int camera, int cameraPresetNumber, Preset preset);
+	void addPreset(int camera, int cameraPresetNumber, DatabasePreset preset);
 	
 	/**
 	 * Delete a preset from the database.
@@ -29,7 +29,7 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the preset for the camera
 	 * @param preset The preset to be updated
 	 */
-	void updatePreset(int camera, int cameraPresetNumber, Preset preset);
+	void updatePreset(int camera, int cameraPresetNumber, DatabasePreset preset);
 	
 	/**
 	 * Add a moving preset to the database.
@@ -37,7 +37,7 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the preset for the camera
 	 * @param mPreset The preset to be added
 	 */
-	void addMovingPreset(int camera, int cameraPresetNumber, MovingPreset mPreset);
+	void addMovingPreset(int camera, int cameraPresetNumber, DatabaseMovingPreset mPreset);
 	
 	/**
 	 * Update a moving preset to the database.
@@ -45,7 +45,7 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the preset for the camera
 	 * @param mPreset The preset to be updated
 	 */
-	void updateMovingPreset(int camera, int cameraPresetNumber, MovingPreset mPreset);
+	void updateMovingPreset(int camera, int cameraPresetNumber, DatabaseMovingPreset mPreset);
 	
 	/**
 	 * Delete a moving preset from the database.
@@ -60,20 +60,20 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the preset of the camera
 	 * @return A preset
 	 */
-	Preset getPreset(int camera, int cameraPresetNumber);
+	DatabasePreset getPreset(int camera, int cameraPresetNumber);
 	
 	/**
 	 * Returns all the presets.
 	 * @return all the presets
 	 */
-	ArrayList<Preset> getAllPresets();
+	ArrayList<DatabasePreset> getAllPresets();
 	
 	/**
 	 * Returns all the presets of the camera.
 	 * @param cameraID ID of the camera
 	 * @return the presets of the given camera
 	 */
-	ArrayList<Preset> getAllPresetsCamera(int cameraID);
+	ArrayList<DatabasePreset> getAllPresetsCamera(int cameraID);
 	
 	/**
 	 * Returns a moving preset of the camera.
@@ -81,20 +81,20 @@ public interface Database {
 	 * @param cameraPresetNumber ID of the moving preset of the camera
 	 * @return A moving preset
 	 */
-	MovingPreset getMovingPreset(int camera, int cameraPresetNumber);
+	DatabaseMovingPreset getMovingPreset(int camera, int cameraPresetNumber);
 	
 	/**
 	 * Returns all the moving presets.
 	 * @return The moving presets
 	 */
-	ArrayList<MovingPreset> getAllMovingPresets();
+	ArrayList<DatabaseMovingPreset> getAllMovingPresets();
 	
 	/**
 	 * Returns The moving presets of the camera.
 	 * @param cameraID ID of the camera
 	 * @return The moving presets of the given camera
 	 */
-	ArrayList<MovingPreset> getAllMovingPresetsCamera(int cameraID);
+	ArrayList<DatabaseMovingPreset> getAllMovingPresetsCamera(int cameraID);
 	
 	/**
 	 * Tries to connect to database server and database.

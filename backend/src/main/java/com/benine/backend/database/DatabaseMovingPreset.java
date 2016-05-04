@@ -5,10 +5,10 @@ package com.benine.backend.database;
  * @author Ege
  *
  */
-public class MovingPreset {
+public class DatabaseMovingPreset {
 	
-	Preset beginPreset;
-	Preset endPreset;
+	DatabasePreset beginPreset;
+	DatabasePreset endPreset;
 	int time;
 	
 	/**
@@ -17,7 +17,7 @@ public class MovingPreset {
 	 * @param end The end preset
 	 * @param time The time from begin to end in ms
 	 */
-	public MovingPreset(Preset begin, Preset end, int time){
+	public DatabaseMovingPreset(DatabasePreset begin, DatabasePreset end, int time){
 		this.beginPreset = begin;
 		this.endPreset = end;
 		this.time = time;

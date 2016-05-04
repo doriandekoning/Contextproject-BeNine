@@ -5,7 +5,7 @@ package com.benine.backend.database;
  * @author Ege
  *
  */
-public class Preset {
+public class DatabasePreset {
 	
 	private int pan;
 	private int tilt;
@@ -23,7 +23,7 @@ public class Preset {
 	 * @param iris The iris of the preset
 	 * @param autofocus The autofocus of the preset
 	 */
-	public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus) {
+	public DatabasePreset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus) {
 		this.pan = pan;
 		this.tilt = tilt;
 		this.zoom = zoom;
