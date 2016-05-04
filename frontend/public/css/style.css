@@ -4,9 +4,16 @@ body {
 }
 
 /* Navigation bar labels */
+nav .labelcontainer {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+}
+
 nav .label {
     position: relative;
-    top: 12px;
+    top: 15px;
+    right: 10px;
     margin-left: 5px;
     margin-right: 5px;
 }
