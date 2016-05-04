@@ -19,10 +19,12 @@ public class Main {
     // TODO Switch adress and max backlog to config
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
 
+    /////CONNECT TO DATABASE SERVER
     Database database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
     if(!database.checkDatabase()) //If the database does not exist yet, create a new one
       database.resetDatabase();
+    /////
 
     try {
       HttpServer server = HttpServer.create(address, 10);

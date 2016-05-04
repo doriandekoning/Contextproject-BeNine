@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * Created by Ege on 4-5-2016.
  */
 public class MySQLDatabase implements Database{
-    Connection connection;
-    int presetId;
-    int movingPresetId;
+    private Connection connection;
+    private String username = "root";
+    private String password = "root";
+    private int presetId;
 
     public MySQLDatabase() {
         connection = null;
         presetId = 0;
-        movingPresetId = 0;
     }
 
     @Override
@@ -154,10 +154,11 @@ public class MySQLDatabase implements Database{
     public boolean connectToDatabaseServer() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
         }
-        catch (SQLException e) {}
-        catch (ClassNotFoundException e) {}
+        catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         try {
             return !connection.isClosed();
         } catch (SQLException e) {
@@ -192,7 +193,7 @@ public class MySQLDatabase implements Database{
             Reader reader = new BufferedReader(
                     new FileReader("database/databasefile.sql"));
             sr.runScript(reader);
-        } catch (Exception e) {}
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     @Override
