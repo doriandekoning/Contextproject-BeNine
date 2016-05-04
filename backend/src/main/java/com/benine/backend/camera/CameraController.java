@@ -52,4 +52,18 @@ public class CameraController {
   public ArrayList<Camera> getCameras() {
     return cameras;
   }
+
+  /**
+   * Finds camera with specified id.
+   * @param id the id of the camera
+   * @return the camera associated with the specified id or null if it does not exist.
+   */
+  public Camera getCameraById(int id) {
+    for(Camera c : cameras) {
+      if(c.getId() == id) {
+        return c;
+      }
+    }
+    return null;
+  }
 }

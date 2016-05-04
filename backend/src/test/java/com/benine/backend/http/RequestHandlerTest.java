@@ -16,11 +16,11 @@ public class RequestHandlerTest {
     Attributes expected = new Attributes();
     expected.putValue("id", "4");
     expected.putValue("Hello", "World!");
-    Attributes actual = RequestHandler.parseURI("id=4&Hello=World!");
+    Attributes actual = new MovingHandler().parseURI("id=4&Hello=World!");
     Assert.assertEquals(expected, actual);
   }
   @Test(expected=MalformedURIException.class)
   public final void testDecodeMalformedURI() throws MalformedURIException {
-    RequestHandler.parseURI("id=3&id=4");
+    new MovingHandler().parseURI("id=3&id=4");
   }
 }
