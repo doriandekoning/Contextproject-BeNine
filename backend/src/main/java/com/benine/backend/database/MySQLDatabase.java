@@ -151,10 +151,10 @@ public class MySQLDatabase implements Database{
     }
 
     @Override
-    public boolean connectToDatabaseServer(String user, String password) {
+    public boolean connectToDatabaseServer() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", user, password);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
         }
         catch (SQLException e) {}
         catch (ClassNotFoundException e) {}

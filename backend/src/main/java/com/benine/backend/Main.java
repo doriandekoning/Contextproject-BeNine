@@ -20,10 +20,10 @@ public class Main {
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
 
     Database database = new MySQLDatabase();
-    database.connectToDatabaseServer("root", "root"); //Connect to the server
+    database.connectToDatabaseServer(); //Connect to the server
     if(!database.checkDatabase()) //If the database does not exist yet, create a new one
       database.resetDatabase();
-    
+
     try {
       HttpServer server = HttpServer.create(address, 10);
       server.createContext("/", new  CameraHandler());
