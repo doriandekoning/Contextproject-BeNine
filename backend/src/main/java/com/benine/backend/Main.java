@@ -1,5 +1,7 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
@@ -10,12 +12,21 @@ public class Main {
 
   private static Logger logger;
 
+  private static Config mainConfig;
+
+  private static CameraController cameraController;
+
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
+    mainConfig = getConfig();
 
     // TODO Switch adress and max backlog to config
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
-    getConfig();
+
+    // Setup camerahandler
+    cameraController = new CameraController();
+    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera1IP")));
+    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
     try {
       logger = new Logger();
     }catch (Exception e) {
@@ -25,7 +36,7 @@ public class Main {
     try {
       HttpServer server = HttpServer.create(address, 10);
       server.createContext("/", new  CameraHandler());
-      System.out.println("Server running at: " + server.getAddress());
+      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
       while(true) {
         Thread.sleep(100);
