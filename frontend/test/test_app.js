@@ -15,7 +15,7 @@ suite("Routes", function () {
                 .get("/")
                 .end(function (err, res) {
                     // First read index.html file contents.
-                    var index = fs.readFileSync(path.join(__dirname + '/../public/index.html'));
+                    var index = fs.readFileSync(path.join(__dirname + '/../index.html'));
                     // Now compare these to the plaintext returned by the GET request.
                     assert.equal(index.toString(), res.text);
                     done();
