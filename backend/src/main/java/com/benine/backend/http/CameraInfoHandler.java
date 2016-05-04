@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.simple.JSONArray;
@@ -26,7 +27,8 @@ public class CameraInfoHandler implements HttpHandler {
       try {
         camerasJSON.add(cam.toJSON());
       } catch (CameraConnectionException e) {
-        CameraController.logger.log("Cannot connect to camera with id: " + cam.getId(), LogEvent.Type.CRITICAL)
+        //TODO ADD camera id
+        CameraController.logger.log("Cannot connect to camera with id: ", LogEvent.Type.CRITICAL);
       }
     }
     jsonObj.put("cameras", Main.getCameraController().getCameras());

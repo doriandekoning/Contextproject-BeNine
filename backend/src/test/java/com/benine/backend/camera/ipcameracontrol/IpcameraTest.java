@@ -2,6 +2,7 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -117,6 +118,13 @@ public class IpcameraTest {
   public final void testNonExcistingIpAdres() throws CameraConnectionException {
     IPCamera camera = new IPCamera("1.300.3.4");
     camera.move(180, 50);
+  }
+
+  @Test
+  public final void testGetSetId() {
+    IPCamera camera = new IPCamera("1.300.3.4");
+    camera.setId(42);
+    Assert.assertEquals(42, camera.getId());
   }
 
 }

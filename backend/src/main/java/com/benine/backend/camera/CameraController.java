@@ -1,5 +1,10 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.LogWriter;
+import com.benine.backend.Logger;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -9,6 +14,10 @@ public class CameraController {
 
   private ArrayList<Camera> cameras = new ArrayList<>();
 
+  public static Logger logger = setupLogger();
+
+  private int highestIdInUse = 0;
+
 
 
   /**
@@ -16,7 +25,24 @@ public class CameraController {
    * @param c
    */
   public void addCamera(Camera c) {
+    highestIdInUse++;
+    c.setId(highestIdInUse);
     cameras.add(c);
+  }
+
+
+  /**
+   *
+   */
+  private static Logger setupLogger() {
+    // Setup logger
+    try {
+      return new Logger(new LogWriter("logs" + File.separator + "mainlog"));
+    } catch (IOException e) {
+      System.out.println("Cannot create log file");
+      e.printStackTrace();
+      return null;
+    }
   }
 
   /**

@@ -17,5 +17,8 @@ public interface Camera {
   String sendCommand(String cmd) throws CameraConnectionException;
 
   String toJSON() throws CameraConnectionException;
- 
+
+  void setId(int id);
+
+  int getId();
 }
