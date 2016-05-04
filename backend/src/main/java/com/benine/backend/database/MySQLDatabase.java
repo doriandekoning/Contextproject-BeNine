@@ -37,10 +37,8 @@ public class MySQLDatabase implements Database{
             String sql = "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan() + "," + preset.getTilt() +
                     "," + preset.getZoom() + "," + preset.getFocus() + "," + preset.getIris() +"," + auto + ")";
             statement.executeUpdate(sql);
-            System.out.println(sql);
             sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + "," + camera + "," + presetId + ")";
             statement.executeUpdate(sql);
-            System.out.println(sql);
             statement.close();
             presetId++;
         } catch (SQLException e) {
@@ -86,7 +84,6 @@ public class MySQLDatabase implements Database{
             String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets JOIN " +
                     "presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = presetsDatabase.presets.ID " +
                     "WHERE presetsDatabase.camerapresets.Camera_ID = " + camera + " AND presetsDatabase.camerapresets.CameraPresetID = "+ cameraPresetNumber;
-            System.out.println(sql);
             ResultSet resultset = statement.executeQuery(sql);
             if(resultset.next()){
                 preset.setPan(resultset.getInt("pan"));
@@ -154,10 +151,10 @@ public class MySQLDatabase implements Database{
     }
 
     @Override
-    public boolean connectToDatabaseServer() {
+    public boolean connectToDatabaseServer(String user, String password) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", user, password);
         }
         catch (SQLException e) {}
         catch (ClassNotFoundException e) {}
@@ -215,7 +212,6 @@ public class MySQLDatabase implements Database{
             Statement statement = connection.createStatement();
             String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + name + "," + ip + ")";
             statement.executeUpdate(sql);
-            System.out.println(sql);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,10 +1,13 @@
 package com.benine.backend;
 
+import com.benine.backend.database.Database;
+import com.benine.backend.database.MySQLDatabase;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.SQLException;
 
 public class Main {
 
@@ -16,6 +19,11 @@ public class Main {
     // TODO Switch adress and max backlog to config
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
 
+    Database database = new MySQLDatabase();
+    database.connectToDatabaseServer("root", "root"); //Connect to the server
+    if(!database.checkDatabase()) //If the database does not exist yet, create a new one
+      database.resetDatabase();
+    
     try {
       HttpServer server = HttpServer.create(address, 10);
       server.createContext("/", new  CameraHandler());

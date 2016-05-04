@@ -64,7 +64,7 @@ public interface Database {
 	 * Tries to connect to database server.
 	 * @return True if the connection is succeeded.
 	 */
-	boolean connectToDatabaseServer();
+	boolean connectToDatabaseServer(String user, String password);
 
 	/**
 	 * Check if the database is present in the server.
