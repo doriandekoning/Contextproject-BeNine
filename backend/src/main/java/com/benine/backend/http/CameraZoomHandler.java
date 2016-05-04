@@ -19,27 +19,16 @@ public class CameraZoomHandler extends RequestHandler {
 
   public void handle(HttpExchange exchange) throws IOException {
     //TODO add logging stuff
-    JSONObject jsonObj = new JSONObject();
-    ArrayList<Camera> cameras = Main.getCameraController().getCameras();
-
-
     // Extract camera id from function and amount to zoom in
     try {
-      Attributes parsedURI = RequestHandler.parseURI(exchange.getRequestURI().getQuery());
+      Attributes parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException e) {
       //TODO Log exception
       String response = "{\"succes\":\"false\"}";
-      exchange.sendResponseHeaders(200, response.length());
-      OutputStream out = exchange.getResponseBody();
-      out.write(response.getBytes());
-      out.close();
+      respond(exchange, response);
       return;
     }
-    //TODO zoom
-    String response = "{\"succes\":\"false\"}";
-    exchange.sendResponseHeaders(200, response.length());
-    OutputStream out = exchange.getResponseBody();
-    out.write(response.getBytes());
-    out.close();
+    JSONObject jsonObj = new JSONObject();
+
   }
 }

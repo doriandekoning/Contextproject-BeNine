@@ -1,7 +1,10 @@
 package com.benine.backend.http;
 
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.jar.Attributes;
 
 /**
@@ -14,7 +17,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @return an attributes object containing key->value(string->string)
    * pairs for the uri parameters.
    */
-  public static Attributes parseURI(String uri) throws MalformedURIException {
+  public Attributes parseURI(String uri) throws MalformedURIException {
     Attributes params = new Attributes();
     for(String pair : uri.split("&")) {
       String[] splitPair = pair.split("=");
@@ -25,6 +28,26 @@ public abstract class RequestHandler implements HttpHandler {
     }
     return params;
   }
+
+  /**
+   * Responds to a request with status 200.
+   * @param exchange the exchange to respond to.
+   * @param response a string with the response.
+   */
+  public void respond(HttpExchange exchange, String response) {
+    try {
+      exchange.sendResponseHeaders(200, response.length());
+      OutputStream out = exchange.getResponseBody();
+      out.write(response.getBytes());
+      out.close();
+    } catch (IOException e) {
+      // TODO Log exception
+    }
+
+
+  }
+
+
 
 
 }
