@@ -27,7 +27,6 @@ public class IpcameraZoomTest {
 
   private MockServerClient mockServerClient;
   private IPCamera camera = new IPCamera("127.0.0.1:9000");
-  private ZoomingIPCamera zoom = new ZoomingIPCamera(camera);
 
   private ArrayList<Parameter> parameterList;
   
@@ -41,7 +40,7 @@ public class IpcameraZoomTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gz655"));
 
-    int res = zoom.getZoomPosition();
+    int res = camera.getZoomPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertEquals(res, 1621, 0.000001);
@@ -57,7 +56,7 @@ public class IpcameraZoomTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gs655"));
 
-    zoom.getZoomPosition();
+    camera.getZoomPosition();
   }
   
   @Test
@@ -70,7 +69,7 @@ public class IpcameraZoomTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
 
-    zoom.zoomTo(1622);
+    camera.zoomTo(1622);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -85,7 +84,7 @@ public class IpcameraZoomTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("zS80"));
 
-    zoom.zoom(80);
+    camera.zoom(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }

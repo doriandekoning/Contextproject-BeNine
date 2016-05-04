@@ -1,5 +1,6 @@
 package com.benine.backend.camera;
 
+
 /**
  * Interface for communication with remote camera's.
  * @author Bryan
@@ -14,5 +15,7 @@ public interface Camera {
    * @throws CameraConnectionException when the request fails.
    */
   String sendCommand(String cmd) throws CameraConnectionException;
+
+String toJSON() throws CameraConnectionException;
  
 }

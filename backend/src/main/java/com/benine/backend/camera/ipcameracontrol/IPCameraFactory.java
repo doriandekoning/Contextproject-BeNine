@@ -51,11 +51,7 @@ public class IPCameraFactory extends CameraFactory {
    * @return Camera object.
    */
   public Camera createIpcamera(String ipaddress) {
-    Camera ipcamera = new IPCamera(ipaddress);
-    Camera zoomcam = new ZoomingIPCamera(ipcamera);
-    Camera focuscam = new FocussingIPCamera(zoomcam);
-    Camera iriscam = new IrisIPCamera(focuscam);
-    return new MovingIPCamera(iriscam);
+    return new IPCamera(ipaddress);
   }
   
 

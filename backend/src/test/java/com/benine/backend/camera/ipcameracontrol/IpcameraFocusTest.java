@@ -29,7 +29,6 @@ public class IpcameraFocusTest {
 
   private MockServerClient mockServerClient;
   private IPCamera camera = new IPCamera("127.0.0.1:9000");
-  private FocussingIPCamera focus = new FocussingIPCamera(camera);
 
   private ArrayList<Parameter> parameterList;
   
@@ -43,7 +42,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gfA42"));
 
-    int res = focus.getFocusPos();
+    int res = camera.getFocusPos();
     
     mockServerClient.verify(request, VerificationTimes.once());
     
@@ -60,7 +59,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("ggA42"));
 
-    focus.getFocusPos();
+    camera.getFocusPos();
   }
   
   @Test
@@ -73,7 +72,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("axfFFF"));
 
-    focus.setFocusPos(2882);
+    camera.setFocusPos(2882);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -88,7 +87,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("fs80"));
 
-    focus.moveFocus(80);
+    camera.moveFocus(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -103,7 +102,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d11"));
 
-    boolean res = focus.isAutoFocusOn();
+    boolean res = camera.isAutoFocusOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertTrue(res);
@@ -119,7 +118,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d10"));
 
-    boolean res = focus.isAutoFocusOn();
+    boolean res = camera.isAutoFocusOn();
     
     mockServerClient.verify(request, VerificationTimes.once());
     assertFalse(res);
@@ -135,7 +134,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("K10"));
 
-    focus.isAutoFocusOn();
+    camera.isAutoFocusOn();
   }
   
   @Test
@@ -148,7 +147,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d10"));
 
-    focus.setAutoFocusOn(false);
+    camera.setAutoFocusOn(false);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -163,7 +162,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("d11"));
 
-    focus.setAutoFocusOn(true);
+    camera.setAutoFocusOn(true);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
