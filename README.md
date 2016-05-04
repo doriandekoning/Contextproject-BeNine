@@ -1,13 +1,16 @@
 # Contextproject-BeNine
 
+## Installation
+### Front End
+Installing the front-end server:
+- Install NodeJS v4.0 from https://nodejs.org 
+- Launch terminal, cd to the frontend directory.
+- Run `npm install`.
 
-## Frontend
-Installing the frontend:
-1. Make sure NodeJS v4 is installed on your system.
-2. Open a terminal inside the frontend directory.
-2. Run "npm install".
-3. Run "node app" to start the server.
-Tests can be run by running npm test.
+Running the front-end server:
+- Run `node app` to start the server.
+- You can now visit the server via http://localhost:3000
+- Tests can be run by running `npm test`.
 
-## Backend
-Build the backend using maven with the supplied pom file.
+### Back end
+Build the back-end server using `maven install` with the supplied `pom.xml` file. 

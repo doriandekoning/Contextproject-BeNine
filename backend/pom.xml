@@ -24,25 +24,11 @@
          <version>2.0.49-beta</version>
       </dependency>
       <dependency>
-		<groupId>org.mock-server</groupId>
+	<groupId>org.mock-server</groupId>
 		<artifactId>mockserver-netty</artifactId>
 		<version>3.10.2</version>
 		<scope>test</scope>
        </dependency>
-	<dependency>
-		<groupId>BeNine</groupId>
-		<artifactId>cameramodule</artifactId>
-		<version>${cameramodule.version}</version>
-		<scope>system</scope>
-		<systemPath>${project.basedir}/../cameramodule/target/cameramodule-${cameramodule.version}.jar</systemPath>
-	</dependency>
-	<dependency>
-		<groupId>BeNine</groupId>
-		<artifactId>databasemodule</artifactId>
-		<version>${databasemodule.version}</version>
-		<scope>system</scope>
-		<systemPath>${project.basedir}/../databasemodule/target/databasemodule-${databasemodule.version}.jar</systemPath>
-	</dependency>
 	  <dependency>
 		<groupId>com.googlecode.json-simple</groupId>
 		<artifactId>json-simple</artifactId>
@@ -96,6 +82,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.19.1</version>
+            <configuration>
+            	<systemPropertyVariables>
+    					<logback.configurationFile>${basedir}/logback.xml</logback.configurationFile>
+				</systemPropertyVariables>
+			</configuration>
          </plugin>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
