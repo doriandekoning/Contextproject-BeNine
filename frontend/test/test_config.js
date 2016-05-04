@@ -43,4 +43,11 @@ suite("Config", function () {
             done();
         });
     });
+    suite("get", function () {
+        test('should return the correct value of a config parameter.', function (done) {
+            config.load(config_path)
+            assert.equal(config.get('server_port'), 3000);
+            done();
+        });
+    })
 });
