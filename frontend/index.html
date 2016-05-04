@@ -4,10 +4,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-
-	<!-- for rendering and touch zooming -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 	<!-- Title of the webpage as seen in the tabindex-->
 	<title>Preset Control Web Application</title>
@@ -63,12 +61,14 @@
     </div>
 </div>
 <!-- Area in which the presets will be generated -->
+
+<div id="body_area">
 <div id="left_area" class= "col-xs-6">
     <!-- Area in which the presets will be generated -->
 	<div id="preset_area"></div>
 </div>
 <div class= "col-xs-6">CAMERA CONTROL AREA</div>
-
+</div>
 <!-- At the end of the document so the page loads faster -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -76,7 +76,6 @@
 <!-- Holder JS for placeholders -->
 <script src="bower_components/holderjs/holder.js"></script>
 
-<script src="public/js/presets.js"></script>
+<script src="public/js/generator.js"></script>
 </body>
-
 </html>

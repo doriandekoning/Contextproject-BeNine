@@ -1,106 +1,93 @@
 body {
-  background-color: #999999;
-  padding-top: 50px;
-}		
-	
-.theme-showcase > p > .btn {
-  margin: 5px 0;
+    background-color: #999999;
+    padding-top: 50px;
 }
 
-.theme-showcase .navbar .container {
-  width: auto;
+/* Navigation bar labels */
+nav .label {
+    position: relative;
+    top: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.label {
-	position: relative;
-	top: 12px;
-	margin-left: 5px;
-	margin-right: 5px;
+/* Top block consisting of the camera views, and the editing camera view.*/
+#top_area {
+    height: 28vw;
+    overflow: hidden;
 }
 
-.carousel-inner .col-sm-6 {
-	padding: 0;
-	height: 100%;
+/* Camera block carousel */
+#camera_area .carousel-inner * {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height: 100%;
 }
 
-.carousel-inner .row img {
-	width: 100%;
-	height: 100%;
-	border: 0;
-	padding: 0;
-	margin: 0;
+#camera_area .carousel-inner img {
+    width: 100%;
 }
 
-.carousel-inner .row {
-	height: 100%;
-}
-
-.carousel-inner .item {
-	height: 50%;
-}
-
-.carousel-inner {
-	height: 100%;
+#camera_area .carousel-inner .item {
+    height: 50%;
 }
 
 #current_camera, #camera_area, #carousel {
-	height: 100%;
+    height: 100%;
 }
 
 #current_camera img {
-	padding: 0;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-}
-
-#top_area {
-	height: 288px;
-	overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 .row {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .col-xs-6 {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 #left_area .col-xs-3 {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#preset_area {
+    height: 100%;
 }
 
 #preset_area img {
-	width: 100%;
-	height: 80px;
-	border: 0;
-	padding: 0;
-	margin: 0;
+    width: 100%;
+    height: 80px;
+    border: 0;
+    padding: 0;
+    margin: 0;
 }
 
 #left_area h5 {
-	width: 100%;
-	padding: 2px;
-	margin: 0;
-	text-align: center;
+    width: 100%;
+    padding: 2px;
+    margin: 0;
+    text-align: center;
 }
 
 #left_area .available {
-	background-color: #5cb85c;
+    background-color: #5cb85c;
 }
 
 #left_area .selected {
-	background-color: #f0ad4e;
+    background-color: #f0ad4e;
 }
 
 #left_area .unavailable {
-	background-color: #d9534f;
+    background-color: #d9534f;
 }
 
 #left_area .col-xs-3 .none {
-	background-color: #666666;
+    background-color: #666666;
 }

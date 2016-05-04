@@ -80,7 +80,7 @@ function addCameraRow(block) {
         cameracounter++;
 
         camera_element = $('<div class="col-sm-6"></div>');
-        camera_image = $('<img data-src="holder.js/128x77?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+        camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
 
         // Run the placeholder creator.
         Holder.run({
@@ -124,7 +124,6 @@ function addPresetRow() {
     });
 
     // Now append the preset row.
-    preset_row.append(row_container);
     $("#preset_area").append(preset_row);
 }
 
