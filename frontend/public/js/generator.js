@@ -77,22 +77,30 @@ function addCameraBlock() {
  * @param block
  */
 function addCameraRow(block) {
-    var row, camera_image, camera_element;
+    var row, camera_image, camera_element, camera_title;
 
     row = $('<div class="row">');
 
     for (var i = 0; i < 2; i++) {
         cameracounter++;
-
         camera_element = $('<div class="col-sm-6"></div>');
-        camera_image = $('<img src="data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+        camera_element.attr("id", "camera_" + cameracounter);
+        camera_element.attr("camera_number", cameracounter);
+
+        camera_title = $('<div class="camera_title"></div>');
+        camera_icon = $('<span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>');
+        camera_title_text = $('<span>' + cameracounter + '</span>');
+
+        camera_title.append(camera_icon, camera_title_text);
+
+        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
 
         // Run the placeholder creator.
         Holder.run({
             images: camera_image
         });
 
-        camera_element.append(camera_image);
+        camera_element.append(camera_image, camera_title);
         row.append(camera_element);
     }
 
