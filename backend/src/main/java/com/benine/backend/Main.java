@@ -41,6 +41,7 @@ public class Main {
       server.createContext("/iris", new IrisHandler());
       server.createContext("/move", new MovingHandler());
       server.createContext("/zoom", new ZoomingHandler());
+      server.createContext("/preset", new PresetHandler());
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
