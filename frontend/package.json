@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "istanbul cover _mocha -- -u tdd",
-    "postinstall": "bower install bootstrap"
+    "postinstall": "bower install bootstrap && bower install holderjs"
   },
   "engines": {
     "node": ">=4.0.0"
