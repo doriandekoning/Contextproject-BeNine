@@ -18,10 +18,11 @@ public class MovingHandler extends RequestHandler {
     //TODO add logging stuff
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
+    String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
       Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
-      MovingCamera zoomingCam = (MovingCamera)cam;
+      MovingCamera movingCam = (MovingCamera)cam;
       String moveType = parsedURI.getValue("moveType");
       String pan = parsedURI.getValue("pan");
       String tilt = parsedURI.getValue("tilt");
@@ -31,19 +32,19 @@ public class MovingHandler extends RequestHandler {
         throw new MalformedURIException("Invalid value for moveX or moveY");
       }
       if(moveType.equals("relative")) {
-        zoomingCam.move(Integer.parseInt(pan), Integer.parseInt(tilt));
+        movingCam.move(Integer.parseInt(pan), Integer.parseInt(tilt));
       } else if(moveType.equals("absolute")) {
         Position pos = new Position(Integer.parseInt(pan), Integer.parseInt(tilt));
-        zoomingCam.moveTo(pos, Integer.parseInt(panSpeed), Integer.parseInt(tiltSpeed));
+        movingCam.moveTo(pos, Integer.parseInt(panSpeed), Integer.parseInt(tiltSpeed));
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
-
+      response = "{\"succes\":\"true\"}";
     } catch (Exception e) {
       //TODO Log exception
-      String response = "{\"succes\":\"false\"}";
-      respond(exchange, response);
-      return;
+      response = "{\"succes\":\"false\"}";
     }
+    respond(exchange, response);
+    return;
   }
 }

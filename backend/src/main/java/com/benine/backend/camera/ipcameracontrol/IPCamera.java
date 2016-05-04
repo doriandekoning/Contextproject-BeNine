@@ -371,11 +371,11 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       json.put("autoiris", new Boolean(isAutoIrisOn()));
       json.put("videostream", new Boolean(getStreamLink()));
     } catch (Exception e) {
-      //TODO log not possible yet because logger acts funny when used in multiple threads (http handler)
+      //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
     }
     return  json.toString();
-  }
 
+  }
   /**
    * Sets the id of this camera.
    * @param id the id of this camera

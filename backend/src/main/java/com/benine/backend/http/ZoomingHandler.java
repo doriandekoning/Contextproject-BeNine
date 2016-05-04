@@ -16,12 +16,13 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 // Add superclass requesthandler
-public class CameraZoomHandler extends RequestHandler {
+public class ZoomingHandler extends RequestHandler {
 
   public void handle(HttpExchange exchange) throws IOException {
     //TODO add logging stuff
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
+    String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
       Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
@@ -35,13 +36,13 @@ public class CameraZoomHandler extends RequestHandler {
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
-
+      response = "{\"succes\":\"true\"}";
     } catch (Exception e) {
       //TODO Log exception
-      String response = "{\"succes\":\"false\"}";
-      respond(exchange, response);
-      return;
+      response = "{\"succes\":\"false\"}";
     }
+    respond(exchange, response);
+    return;
 
 
   }
