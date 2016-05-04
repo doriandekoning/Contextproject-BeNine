@@ -72,6 +72,10 @@ function addCameraBlock() {
 
 }
 
+/**
+ * Adds a row of two camera's to a block.
+ * @param block
+ */
 function addCameraRow(block) {
     var row, camera_image, camera_element;
 
