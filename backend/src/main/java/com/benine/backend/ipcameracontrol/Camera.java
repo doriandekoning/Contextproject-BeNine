@@ -140,4 +140,10 @@ public interface Camera {
    */
   String getStreamLink();
 
+  /**
+   * Returns a JSON representation of this camera.
+   * @return A JSON representation of thisge camera.
+   */
+  String toJSON() throws CameraConnectionException;
+
 }
