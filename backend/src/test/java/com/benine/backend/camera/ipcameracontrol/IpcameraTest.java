@@ -2,6 +2,7 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
@@ -12,6 +13,7 @@ import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 
 import java.util.ArrayList;
@@ -27,9 +29,17 @@ public class IpcameraTest {
   public MockServerRule mockServerRule = new MockServerRule(this, 9000);
 
   private MockServerClient mockServerClient;
-  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private IPCamera camera;
 
   private ArrayList<Parameter> parameterList;
+  
+  @Before
+  public final void setUp() throws InvalidCameraTypeException{
+	  IPCameraFactory factory = new IPCameraFactory();
+	  String[] camSpec = {"ipcamera", "127.0.0.1:9000"};
+	  camera = factory.createCamera(camSpec);
+  }
+
 
   @Test
   public final void testMoveToHomePosition() throws CameraConnectionException {

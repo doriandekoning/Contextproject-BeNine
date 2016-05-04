@@ -15,7 +15,7 @@ import com.benine.backend.camera.CameraFactory;
  */
 public class IPCameraFactory extends CameraFactory {
 	
-	LogWriter logger;
+	public static LogWriter logger;
   
   /**
    * Constructor of the camera handler.
@@ -36,7 +36,7 @@ public class IPCameraFactory extends CameraFactory {
    * @return Camera object.
    * @throws InvalidCameraTypeException when specified camera type can not be created.
    */
-  public Camera createCamera(String[] camSpec) throws InvalidCameraTypeException {
+  public IPCamera createCamera(String[] camSpec) throws InvalidCameraTypeException {
     switch (camSpec[0]) {
       case "ipcamera" : logger.write("Create IP camera object", LogEvent.Type.INFO); 
       					return createIpcamera(camSpec[1]);
@@ -50,7 +50,7 @@ public class IPCameraFactory extends CameraFactory {
    * @param ipaddress the address of this camera.
    * @return Camera object.
    */
-  public Camera createIpcamera(String ipaddress) {
+  public IPCamera createIpcamera(String ipaddress) {
     return new IPCamera(ipaddress);
   }
   
