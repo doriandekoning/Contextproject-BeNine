@@ -1,15 +1,15 @@
-package com.benine.backend.cameracontrol;
+package com.benine.backend.camera;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.LogWriter;
-import com.benine.backend.cameracontrol.ipcameracontrol.FocussingIPCamera;
-import com.benine.backend.cameracontrol.ipcameracontrol.IPCamera;
-import com.benine.backend.cameracontrol.ipcameracontrol.IrisIPCamera;
-import com.benine.backend.cameracontrol.ipcameracontrol.MovingIPCamera;
-import com.benine.backend.cameracontrol.ipcameracontrol.ZoomingIPCamera;
+import com.benine.backend.camera.ipcameracontrol.FocussingIPCamera;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisIPCamera;
+import com.benine.backend.camera.ipcameracontrol.MovingIPCamera;
+import com.benine.backend.camera.ipcameracontrol.ZoomingIPCamera;
 
 /**
  * Class to create camera objects.

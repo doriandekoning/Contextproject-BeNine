@@ -1,6 +1,6 @@
-package com.benine.backend.cameracontrol;
+package com.benine.backend.camera;
 
-import com.benine.backend.cameracontrol.ipcameracontrol.IpcameraConnectionException;
+import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
 
 /**
  * Decorator of a camera with functions to control the iris of the camera.

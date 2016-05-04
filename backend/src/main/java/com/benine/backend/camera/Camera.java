@@ -1,4 +1,4 @@
-package com.benine.backend.cameracontrol;
+package com.benine.backend.camera;
 
 /**
  * Interface for communication with remote camera's.

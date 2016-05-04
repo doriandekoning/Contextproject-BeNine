@@ -1,13 +1,13 @@
-package com.benine.backend.cameracontrol;
+package com.benine.backend.camera;
 
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraCreator.InvalidCameraTypeException;
-import com.benine.backend.cameracontrol.CameraCreator;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraCreator.InvalidCameraTypeException;
+import com.benine.backend.camera.CameraCreator;
 
 /**
  * Test class to test the Camera handler wich creates camera objects.

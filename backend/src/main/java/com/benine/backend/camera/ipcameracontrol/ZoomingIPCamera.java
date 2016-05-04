@@ -1,8 +1,8 @@
-package com.benine.backend.cameracontrol.ipcameracontrol;
+package com.benine.backend.camera.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraConnectionException;
-import com.benine.backend.cameracontrol.ZoomingCamera;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.ZoomingCamera;
 
 /**
  * Concrete decorator of an IP camera with functions to control the Zooming of the camera.

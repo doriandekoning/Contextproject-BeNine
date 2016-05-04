@@ -1,4 +1,4 @@
-package com.benine.backend.cameracontrol.ipcameracontrol;
+package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ import org.mockserver.model.HttpResponse;
 import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
-import com.benine.backend.cameracontrol.CameraConnectionException;
+import com.benine.backend.camera.CameraConnectionException;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.benine.backend.cameracontrol;
+package com.benine.backend.camera;
 
 /**
  * Decorator of a camera with functions to control the movements of the camera.

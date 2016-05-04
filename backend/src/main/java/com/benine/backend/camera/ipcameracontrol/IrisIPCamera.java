@@ -1,8 +1,8 @@
-package com.benine.backend.cameracontrol.ipcameracontrol;
+package com.benine.backend.camera.ipcameracontrol;
 
-import com.benine.backend.cameracontrol.Camera;
-import com.benine.backend.cameracontrol.CameraConnectionException;
-import com.benine.backend.cameracontrol.IrisCamera;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.IrisCamera;
 
 /**
  * IP camera Iris class for functions of the iris in IP Camera's.
