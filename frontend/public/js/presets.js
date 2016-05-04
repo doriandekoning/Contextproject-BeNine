@@ -25,19 +25,18 @@ function generatePresets() {
 }
 
 function addPresetRow() {
-    var preset_row, preset_column, row_container
+    var preset_row, preset_column, row_container;
 
     preset_row = $('<div class="row"></div>');
-    row_container = $('<div class="col-xs-6"></div>');
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
         preset_column = $('<div class="col-xs-3"></div>');
-        row_container.append(preset_column);
+        preset_row.append(preset_column);
     }
 
     // Now for each column add the preset block.
-    row_container.children().each( function(index, elem) {
+    preset_row.children().each( function(index, elem) {
         presetcounter++;
         addPreset(elem);
     });
