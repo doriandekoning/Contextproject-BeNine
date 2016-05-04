@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by dorian on 4-5-16.
  */
-public class CameraInfoHandler implements HttpHandler {
+public class CameraInfoHandler extends RequestHandler {
 
   public void handle(HttpExchange exchange) throws IOException {
     //TODO add logging stuff

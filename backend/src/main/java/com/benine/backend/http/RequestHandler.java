@@ -1,11 +1,13 @@
 package com.benine.backend.http;
 
+import com.sun.net.httpserver.HttpHandler;
+
 import java.util.jar.Attributes;
 
 /**
  * Created by dorian on 4-5-16.
  */
-public class URIparser {
+public abstract class RequestHandler implements HttpHandler {
   /**
    * Decodes the given (decoded) uri into an attributes table
    * @param uri the uri to parse.
@@ -21,7 +23,6 @@ public class URIparser {
       }
       params.putValue(splitPair[0], splitPair[1]);
     }
-
     return params;
   }
 
