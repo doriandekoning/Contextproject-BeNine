@@ -11,6 +11,13 @@ nav .label {
     margin-right: 5px;
 }
 
+/* These elements need their padding, margin and border reset to show properly */
+.row, .col-xs-6, .col-xs-3 {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
     height: 28vw;
@@ -42,21 +49,7 @@ nav .label {
     height: 100%;
 }
 
-.row {
-    padding: 0;
-    margin: 0;
-}
-
-.col-xs-6 {
-    padding: 0;
-    margin: 0;
-}
-
-#left_area .col-xs-3 {
-    padding: 0;
-    margin: 0;
-}
-
+/* Preset area configuration. */
 #preset_area {
     height: 100%;
 }
@@ -69,25 +62,26 @@ nav .label {
     margin: 0;
 }
 
-#left_area h5 {
+#preset_area h5 {
     width: 100%;
     padding: 2px;
     margin: 0;
     text-align: center;
 }
 
-#left_area .available {
+/* Colors below the preset images */
+#preset_area .available {
     background-color: #5cb85c;
 }
 
-#left_area .selected {
+#preset_area .selected {
     background-color: #f0ad4e;
 }
 
-#left_area .unavailable {
+#preset_area .unavailable {
     background-color: #d9534f;
 }
 
-#left_area .col-xs-3 .none {
+#preset_area .col-xs-3 .none {
     background-color: #666666;
 }
