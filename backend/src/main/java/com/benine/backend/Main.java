@@ -2,7 +2,7 @@ package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.CameraInfoHandler;
+import com.benine.backend.http.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
@@ -38,6 +38,11 @@ public class Main {
     try {
       HttpServer server = HttpServer.create(address, 10);
       server.createContext("/getCameraInfo", new CameraInfoHandler());
+      server.createContext("/focus", new FocussingHandler());
+      server.createContext("/iris", new IrisHandler());
+      server.createContext("/move", new MovingHandler());
+      server.createContext("/zoom", new ZoomingHandler());
+
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
       while(true) {
