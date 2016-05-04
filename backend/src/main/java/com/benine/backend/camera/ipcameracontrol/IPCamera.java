@@ -360,18 +360,22 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("pan", new Double(getPosition().getPan()));
-    json.put("tilt", new Double(getPosition().getTilt()));
-    json.put("zoom", new Double(getZoomPosition()));
-    json.put("focus", new Double(getFocusPos()));
-    json.put("autofocus", new Boolean(isAutoFocusOn()));
-    json.put("iris", new Double(getIrisPos()));
-    json.put("autoiris", new Boolean(isAutoIrisOn()));
-    json.put("videostream", new Boolean(getStreamLink()));
-
+    json.put("id", new Integer(this.id));
+    try {
+      json.put("pan", new Double(getPosition().getPan()));
+      json.put("tilt", new Double(getPosition().getTilt()));
+      json.put("zoom", new Double(getZoomPosition()));
+      json.put("focus", new Double(getFocusPos()));
+      json.put("autofocus", new Boolean(isAutoFocusOn()));
+      json.put("iris", new Double(getIrisPos()));
+      json.put("autoiris", new Boolean(isAutoIrisOn()));
+      json.put("videostream", new Boolean(getStreamLink()));
+    } catch (Exception e) {
+      //TODO log not possible yet because logger acts funny when used in multiple threads (http handler)
+    }
     return  json.toString();
-
   }
+
   /**
    * Sets the id of this camera.
    * @param id the id of this camera

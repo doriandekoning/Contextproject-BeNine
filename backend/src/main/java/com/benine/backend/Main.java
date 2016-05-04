@@ -28,6 +28,7 @@ public class Main {
     cameraController = new CameraController();
     cameraController.addCamera(new IPCamera(mainConfig.getValue("camera1IP")));
     cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
+
     try {
       logger = new Logger();
     }catch (Exception e) {
