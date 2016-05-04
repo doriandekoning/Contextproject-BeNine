@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -27,10 +28,15 @@ public class CameraInfoHandler implements HttpHandler {
       try {
         camerasJSON.add(cam.toJSON());
       } catch (CameraConnectionException e) {
-        //TODO ADD camera id
-        CameraController.logger.log("Cannot connect to camera with id: ", LogEvent.Type.CRITICAL);
+        //TODO Log here when logger supports asyncronous logging
+        //CameraController.logger.log("Cannot connect to camera with id: " + cam.getId(), LogEvent.Type.CRITICAL);
       }
     }
-    jsonObj.put("cameras", Main.getCameraController().getCameras());
+    jsonObj.put("cameras", camerasJSON);
+    String response = jsonObj.toString();
+    exchange.sendResponseHeaders(200, response.length());
+    OutputStream out = exchange.getResponseBody();
+    out.write(response.getBytes());
+    out.close();
   }
 }
