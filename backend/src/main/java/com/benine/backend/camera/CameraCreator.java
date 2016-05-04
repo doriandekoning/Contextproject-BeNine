@@ -1,5 +1,10 @@
 package com.benine.backend.cameracontrol;
 
+import java.io.File;
+import java.io.IOException;
+
+import com.benine.backend.LogEvent;
+import com.benine.backend.LogWriter;
 import com.benine.backend.cameracontrol.ipcameracontrol.FocussingIPCamera;
 import com.benine.backend.cameracontrol.ipcameracontrol.IPCamera;
 import com.benine.backend.cameracontrol.ipcameracontrol.IrisIPCamera;
@@ -12,12 +17,20 @@ import com.benine.backend.cameracontrol.ipcameracontrol.ZoomingIPCamera;
  *
  */
 public class CameraCreator {
+	
+	LogWriter logger;
   
   /**
    * Constructor of the camera handler.
    */
   public CameraCreator(){
-    
+	  // Setup logger
+	  try {
+	      logger = new LogWriter("logs" + File.separator + "mainlog");
+	  } catch(IOException e) {
+		  System.out.println("Cannot create log file");
+	      e.printStackTrace();
+	  }
   }
   
   /**
@@ -28,8 +41,10 @@ public class CameraCreator {
    */
   public Camera createCamera(String[] camSpec) throws InvalidCameraTypeException {
     switch (camSpec[0]) {
-      case "ipcamera" : return createIpcamera(camSpec[1]);
-      default: throw new InvalidCameraTypeException("Type of camera is not right specified");
+      case "ipcamera" : logger.write("Create IP camera object", LogEvent.Type.INFO); 
+      					return createIpcamera(camSpec[1]);
+      default: logger.write("Create IP camera object", LogEvent.Type.WARNING);
+      			throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
   }
   
