@@ -85,7 +85,7 @@ function addCameraRow(block) {
         cameracounter++;
 
         camera_element = $('<div class="col-sm-6"></div>');
-        camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+        camera_image = $('<img src="data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
 
         // Run the placeholder creator.
         Holder.run({

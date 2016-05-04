@@ -32,26 +32,18 @@ nav .label {
 }
 
 /* Camera block carousel */
-#camera_area .carousel-inner * {
+#current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner * {
     border: 0;
     padding: 0;
     margin: 0;
     height: 100%;
 }
 
-#camera_area .carousel-inner img {
-    width: 100%;
-}
-
-#camera_area .carousel-inner .item {
+#camera_area .row {
     height: 50%;
 }
 
-#current_camera, #camera_area, #carousel {
-    height: 100%;
-}
-
-#current_camera img {
+#current_camera img, #camera_area img {
     width: 100%;
     height: 100%;
 }
