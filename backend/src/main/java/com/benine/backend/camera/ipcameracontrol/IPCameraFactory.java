@@ -1,29 +1,26 @@
-package com.benine.backend.camera;
+package com.benine.backend.camera.ipcameracontrol;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.LogWriter;
-import com.benine.backend.camera.ipcameracontrol.FocussingIPCamera;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.IrisIPCamera;
-import com.benine.backend.camera.ipcameracontrol.MovingIPCamera;
-import com.benine.backend.camera.ipcameracontrol.ZoomingIPCamera;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraFactory;
 
 /**
  * Class to create camera objects.
  * @author Bryan
  *
  */
-public class CameraCreator {
+public class IPCameraFactory extends CameraFactory {
 	
 	LogWriter logger;
   
   /**
    * Constructor of the camera handler.
    */
-  public CameraCreator(){
+  public IPCameraFactory(){
 	  // Setup logger
 	  try {
 	      logger = new LogWriter("logs" + File.separator + "mainlog");
@@ -61,19 +58,5 @@ public class CameraCreator {
     return new MovingIPCamera(iriscam);
   }
   
-  /**
-   * Exception thrown when camera object type is not available.
-   */
-  public static class InvalidCameraTypeException extends Exception {
-    
-    /**
-     * Serial version.
-     */
-    private static final long serialVersionUID = 10863715123938677L;
-
-    public InvalidCameraTypeException(String reason) {
-      super(reason);
-    }
-  }
 
 }
