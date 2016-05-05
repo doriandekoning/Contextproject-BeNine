@@ -1,13 +1,16 @@
 package com.benine.backend;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
+
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 /**
@@ -30,11 +33,15 @@ public class LoggerTest {
     doNothing().when(logwriter).write(any(LogEvent.class));
   }
 
+  @After
+  public void cleanup() {
+    System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+  }
   @Test
   public void testLogToConsole() {
     Logger logger = new Logger(logwriter);
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello" + System.lineSeparator(), out.toString());
     out.reset();
   }
 
@@ -84,7 +91,7 @@ public class LoggerTest {
     logger.disableConsoleLogging();
     logger.enableConsoleLogging();
     logger.log("this moment", "Hello", LogEvent.Type.CRITICAL);
-    Assert.assertEquals("[CRITICAL|this moment]Hello\n", out.toString());
+    Assert.assertEquals("[CRITICAL|this moment]Hello" + System.lineSeparator(), out.toString());
     out.reset();
   }
 

@@ -29,8 +29,7 @@ public interface Database {
 
   /**
    * Delete a preset from the database.
-   *
-   * @param camera             ID of the camera
+   * @param camera ID of the camera
    * @param cameraPresetNumber ID of the preset for the camera
    */
   void deletePreset(int camera, int cameraPresetNumber);
@@ -99,5 +98,4 @@ public interface Database {
    * @param ip The IP of the camera
    */
   void addCamera(int id, int ip, String name);
-
 }
