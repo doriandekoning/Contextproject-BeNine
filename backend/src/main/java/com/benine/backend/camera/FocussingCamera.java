@@ -4,7 +4,7 @@ package com.benine.backend.camera;
  * Decorator of a camera with functions to control the Focussing of the camera.
  * @author Bryan
  */
-public interface FocussingCamera extends Camera {
+public interface FocussingCamera extends ControlableCamera {
   
   /**
    * Get the focus position.

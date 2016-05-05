@@ -7,7 +7,7 @@ import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
  * @author Bryan
  *
  */
-public interface IrisCamera extends Camera {
+public interface IrisCamera extends ControlableCamera {
   
   /**
    * Set the control of the iris to on.

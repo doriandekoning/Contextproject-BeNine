@@ -1,5 +1,8 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.http.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
@@ -10,12 +13,21 @@ public class Main {
 
   private static Logger logger;
 
+  private static Config mainConfig;
+
+  private static CameraController cameraController;
+
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
+    mainConfig = getConfig();
 
-    // TODO Switch adress and max backlog to config
-    InetSocketAddress address = new InetSocketAddress("localhost", 8888);
-    getConfig();
+    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), Integer.parseInt(mainConfig.getValue("serverport")));
+
+    // Setup camerahandler
+    cameraController = new CameraController();
+    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera1IP")));
+    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
+
     try {
       logger = new Logger();
     }catch (Exception e) {
@@ -24,8 +36,14 @@ public class Main {
 
     try {
       HttpServer server = HttpServer.create(address, 10);
-      server.createContext("/", new  CameraHandler());
-      System.out.println("Server running at: " + server.getAddress());
+      server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController));
+      server.createContext("/focus", new FocussingHandler(cameraController));
+      server.createContext("/iris", new IrisHandler(cameraController));
+      server.createContext("/move", new MovingHandler(cameraController));
+      server.createContext("/zoom", new ZoomingHandler(cameraController));
+      server.createContext("/preset", new PresetHandler(cameraController));
+
+      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
       while(true) {
         Thread.sleep(100);
@@ -45,5 +63,13 @@ public class Main {
       e.printStackTrace();
     }
     return null;
+  }
+
+  /**
+   * Returns the cameraController.
+   * @return the cameracontroller
+   */
+  public static CameraController getCameraController() {
+    return cameraController;
   }
 }

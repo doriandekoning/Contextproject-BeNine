@@ -2,6 +2,7 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -119,4 +120,16 @@ public class IpcameraTest {
     camera.move(180, 50);
   }
 
+  @Test
+  public final void testGetSetId() {
+    IPCamera camera = new IPCamera("1.300.3.4");
+    camera.setId(4);
+    Assert.assertEquals(4, camera.getId());
+  }
+
+  @Test
+  public final void testUninitializedId(){
+    IPCamera camera = new IPCamera("1.300.3.4");
+    Assert.assertEquals(-1, camera.getId());
+  }
 }
