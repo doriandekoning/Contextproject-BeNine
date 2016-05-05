@@ -1,6 +1,8 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.http.*;
 import com.sun.net.httpserver.HttpServer;
@@ -25,8 +27,10 @@ public class Main {
 
     // Setup camerahandler
     cameraController = new CameraController();
-    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera1IP")));
-    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
+    SimpleCamera camera = new SimpleCamera();
+    camera.setStreamLink("tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    cameraController.addCamera(camera);
+    //cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
 
     try {
       logger = new Logger();
@@ -58,7 +62,7 @@ public class Main {
     // Read config file
     ConfigReader cfReader = new ConfigReader();
     try {
-      return cfReader.readConfig("config" +File.separator + "main.conf");
+      return cfReader.readConfig("configs" +File.separator + "main.conf");
     }catch(Exception e) {
       e.printStackTrace();
     }
