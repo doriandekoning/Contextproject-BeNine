@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- Title of the webpage as seen in the tabindex-->
+	<title>Preset Control Web Application</title>
+
+	<!-- Bootstrap -->
+
+	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Bootstrap CSS overwrites -->
+	<link href="public/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Header of the webpage with an explanation of what the user is seeing. -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">PolyCast WebInterface</a>
+		</div>
+        <div class ="labelcontainer">
+            <span class="label label-success">Server Status</span>
+            <span class="label label-danger">Camera Conflict</span>
+        </div>
+
+	</div>
+</nav>
+
+<div id="top_area" class="row">
+    <div id="camera_area" class="col-xs-6">
+        <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox"></div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
+            <a class="right carousel-control" href="#carousel" role="button" data-slide="next"></a>
+        </div>
+    </div>
+    <div id="current_camera" class="col-xs-6">
+        <img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg">
+        <div class="camera_title">
+            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+            <span>Editing Camera</span></div>
+        </div>
+</div>
+<!-- Area in which the presets will be generated -->
+
+<div id="body_area">
+<div id="left_area" class= "col-xs-6">
+    <!-- Area in which the presets will be generated -->
+	<div id="preset_area"></div>
+</div>
+<div class= "col-xs-6">CAMERA CONTROL AREA</div>
+</div>
+<!-- At the end of the document so the page loads faster -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Holder JS for placeholders -->
+<script src="bower_components/holderjs/holder.js"></script>
+
+<script src="public/js/generator.js"></script>
+</body>
+</html>
