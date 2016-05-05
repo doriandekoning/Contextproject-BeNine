@@ -33,12 +33,12 @@ public class IrisHandler extends RequestHandler {
     IrisCamera irisCam = (IrisCamera)cam;
     String autoOn = parsedURI.getValue("autoIrisOn");
     String setPos = parsedURI.getValue("position");
-    try{
-      if(autoOn != null) {
+    try {
+      if (autoOn != null) {
         boolean autoOnBool = Boolean.parseBoolean(autoOn);
         irisCam.setAutoIrisOn(autoOnBool);
       }
-      if(setPos != null) {
+      if (setPos != null) {
         irisCam.setIrisPos(Integer.parseInt(setPos));
       }
       response = "{\"succes\":\"true\"}";
