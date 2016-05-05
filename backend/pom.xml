@@ -151,7 +151,7 @@
             <artifactId>maven-checkstyle-plugin</artifactId>
             <version>${checkstyle.plugin.version}</version>
             <configuration>
-               <configLocation>checkstyle.xml</configLocation>
+               <configLocation>../checkstyle.xml</configLocation>
             </configuration>
          </plugin>
          <plugin>

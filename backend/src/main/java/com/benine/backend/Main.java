@@ -11,13 +11,19 @@ import java.sql.SQLException;
 
 public class Main {
 
-  private static LogWriter logger;
+  private static Logger logger;
 
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
 
     // TODO Switch adress and max backlog to config
     InetSocketAddress address = new InetSocketAddress("localhost", 8888);
+    getConfig();
+    try {
+      logger = new Logger();
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
 
     /////CONNECT TO DATABASE SERVER
     Database database = new MySQLDatabase();
@@ -35,7 +41,7 @@ public class Main {
         Thread.sleep(100);
       }
     } catch (Exception e) {
-      logger.write("Unable to start server", LogEvent.Type.CRITICAL);
+      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     }
 
   }
@@ -47,13 +53,6 @@ public class Main {
       return cfReader.readConfig("config" +File.separator + "main.conf");
     }catch(Exception e) {
       e.printStackTrace();
-      try {
-        logger.write(new LogEvent(System.currentTimeMillis() + "",
-                "Cannot read main config file",
-                LogEvent.Type.CRITICAL));
-      } catch (Exception exception) {
-        exception.printStackTrace();
-      }
     }
     return null;
   }
