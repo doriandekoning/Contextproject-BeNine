@@ -1,4 +1,6 @@
-package com.benine.backend.ipcameracontrol;
+package com.benine.backend.camera.ipcameracontrol;
+
+import com.benine.backend.camera.CameraConnectionException;
 
 /**
  * Exception class for problems with the IP connection.
