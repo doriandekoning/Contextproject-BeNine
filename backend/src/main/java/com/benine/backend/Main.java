@@ -58,7 +58,7 @@ public class Main {
     // Read config file
     ConfigReader cfReader = new ConfigReader();
     try {
-      return cfReader.readConfig("config" +File.separator + "main.conf");
+      return cfReader.readConfig("configs" + File.separator + "main.conf");
     }catch(Exception e) {
       e.printStackTrace();
     }
