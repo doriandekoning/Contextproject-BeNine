@@ -8,15 +8,14 @@ public class DatabaseConnector {
 
   /**
    * Connect with the database.
-   * @param argv
-   * @throws SQLException
-   * @throws ClassNotFoundException
+   * @throws SQLException thrown when sql query fails.
+   * @throws ClassNotFoundException when class is not found.
    */
   public void connect() throws SQLException, ClassNotFoundException {
 
     Class.forName("com.mysql.jdbc.Driver");
-    Connection connection = null;
-    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
-
+    Connection connection = DriverManager
+                 .getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+      
   }
 }

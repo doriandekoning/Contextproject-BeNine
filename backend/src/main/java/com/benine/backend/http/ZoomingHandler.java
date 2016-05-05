@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -43,7 +42,8 @@ public class ZoomingHandler extends RequestHandler {
       if (zoom != null && zoomto.equals("relative")) {
         zoomingCam.zoom(Integer.parseInt(zoom));
       } else if (zoom != null && zoomto.equals("absolute")) {
-        System.out.println("zoomcam:" + getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id"))));
+        System.out.println("zoomcam:" + getCameraController()
+                            .getCameraById(Integer.parseInt(parsedURI.getValue("id"))));
         zoomingCam.zoomTo(Integer.parseInt(zoom));
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");

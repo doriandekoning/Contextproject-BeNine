@@ -41,11 +41,16 @@ public class Config {
     }
   }
 
-  /**
-   * Checks if the object given equals this object.
-   * @param other the object to check equality with
-   * @return boolean indicating if this is equal to other
-   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((attributes == null) ? 0 : attributes.hashCode());
+    return result;
+  }
+
+  @Override
   public boolean equals(Object other) {
     if (other instanceof Config) {
       Config that = (Config) other;
@@ -54,5 +59,4 @@ public class Config {
       return false;
     }
   }
-
 }

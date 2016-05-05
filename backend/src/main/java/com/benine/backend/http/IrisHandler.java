@@ -1,11 +1,9 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.IrisCamera;
 import com.sun.net.httpserver.HttpExchange;
-import sun.util.resources.cldr.mr.CalendarData_mr_IN;
 
 import java.io.IOException;
 import java.util.jar.Attributes;
@@ -17,10 +15,12 @@ public class IrisHandler extends RequestHandler {
 
   /**
    * Creates a new IrisHandler.
+   * @param controller which controls the cameras.
    */
   public IrisHandler(CameraController controller) {
     super(controller);
   }
+  
   /**
    * Handles a request
    * @param exchange the exchange containing data about the request.

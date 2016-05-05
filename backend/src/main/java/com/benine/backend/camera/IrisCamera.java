@@ -1,7 +1,5 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
-
 /**
  * Decorator of a camera with functions to control the iris of the camera.
  * @author Bryan
@@ -19,7 +17,7 @@ public interface IrisCamera extends ControlableCamera {
   /**
    * Request if the auto iris is on.
    * @return true if the auto iris is on.
-   * @throws IpcameraConnectionException when command can not be completed.
+   * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException;
   

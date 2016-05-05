@@ -34,7 +34,11 @@ public class LogEvent {
     TRACE(5);
 
     private final int level;
-
+    
+    /**
+     * Type of this log event.
+     * @param level log level.
+     */
     Type(int level) {
       this.level = level;
     }
@@ -101,18 +105,23 @@ public class LogEvent {
     return builder.toString();
   }
 
-  /**
-   * Getter for the type of this LogEvent.
-   */
   public Type getType() {
     return this.type;
   }
 
-  /**
-   * Compares an object to this logevent, returns if both are equal.
-   * @param other Object to compare to
-   * @return true if this equals other, false otherwise
-   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((description == null) ? 0 : description.hashCode());
+    result = prime * result + ((exception == null) ? 0 : exception.hashCode());
+    result = prime * result + ((time == null) ? 0 : time.hashCode());
+    result = prime * result + ((type == null) ? 0 : type.hashCode());
+    return result;
+  }
+
+  @Override
   public boolean equals(Object other) {
     if (other instanceof LogEvent) {
       LogEvent that = (LogEvent)other;
@@ -126,5 +135,5 @@ public class LogEvent {
               && that.description.equals(this.description);
     }
     return false;
-  }
+  } 
 }

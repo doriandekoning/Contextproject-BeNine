@@ -15,6 +15,7 @@ public class ConfigReader {
    * Reads a config file from a string and returns an new config object.
    * @param location the location of the file
    * @return A new config object containing the attribute, value pares from the config file.
+   * @throws Exception when config can not be read.
    */
   public static Config readConfig(String location) throws Exception {
     Config cfg = new Config();
@@ -27,6 +28,7 @@ public class ConfigReader {
         cfg.addAttribute(parsedLine[0], parsedLine[1]);
       }
     }
+    br.close();
     return cfg;
   }
 
@@ -62,6 +64,16 @@ public class ConfigReader {
    * Exception thrown when config file is not valid.
    */
   public static class InvalidConfigFileException extends Exception {
+    
+    /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Exception for invalid config file.
+     * @param reason for the file is invalid.
+     */
     public InvalidConfigFileException(String reason) {
       super(reason);
     }

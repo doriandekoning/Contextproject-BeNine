@@ -28,7 +28,8 @@ public abstract class RequestHandler implements HttpHandler {
    * Decodes the given (decoded) uri into an attributes table
    * @param uri the uri to parse.
    * @return an attributes object containing key->value(string->string)
-   *pairs for the uri parameters.
+   *          pairs for the uri parameters.
+   * @throws MalformedURIException when the uri is not well parsed.
    */
   public Attributes parseURI(String uri) throws MalformedURIException {
     Attributes params = new Attributes();
@@ -56,6 +57,7 @@ public abstract class RequestHandler implements HttpHandler {
       out.close();
     } catch (IOException e) {
       // TODO Log exception
+      System.out.println(e);
     }
 
 

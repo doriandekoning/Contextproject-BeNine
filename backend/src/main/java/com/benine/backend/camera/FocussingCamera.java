@@ -11,14 +11,14 @@ public interface FocussingCamera extends ControlableCamera {
    * @return focus position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getFocusPos() throws CameraConnectionException;
+  int getFocusPos() throws CameraConnectionException;
 
   /**
    * Set the focus position
    * @param pos position of the focus to move to.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void setFocusPos(int pos) throws CameraConnectionException;
+  void setFocusPos(int pos) throws CameraConnectionException;
 
   /**
    * Move the focus in the specified direction.
@@ -28,20 +28,20 @@ public interface FocussingCamera extends ControlableCamera {
    * @param speed value with which speed is focusing.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void moveFocus(int speed) throws CameraConnectionException;
+  void moveFocus(int speed) throws CameraConnectionException;
 
   /**
    * Turn auto focus on or off.
    * @param on true for auto focus on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void setAutoFocusOn(boolean on) throws CameraConnectionException;
+  void setAutoFocusOn(boolean on) throws CameraConnectionException;
   
   /**
    * Request if the auto focus is on.
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoFocusOn() throws CameraConnectionException;
+  boolean isAutoFocusOn() throws CameraConnectionException;
 
 }
