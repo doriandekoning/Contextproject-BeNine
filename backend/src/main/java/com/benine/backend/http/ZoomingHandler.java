@@ -3,6 +3,7 @@ package com.benine.backend.http;
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -14,6 +15,14 @@ import java.util.jar.Attributes;
  */
 // Add superclass requesthandler
 public class ZoomingHandler extends RequestHandler {
+
+  /**
+   * Creates a new FocussingHandler.
+   * @param controller the cameracontroller to interact with
+   */
+  public ZoomingHandler(CameraController controller) {
+    super(controller);
+  }
 
   /**
    * Handles incoming httprequest.

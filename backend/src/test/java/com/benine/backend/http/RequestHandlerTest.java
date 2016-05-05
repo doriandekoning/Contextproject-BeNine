@@ -1,11 +1,14 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.OutputStream;
 import java.util.jar.Attributes;
 
@@ -20,12 +23,12 @@ public class RequestHandlerTest {
     Attributes expected = new Attributes();
     expected.putValue("id", "4");
     expected.putValue("Hello", "World!");
-    Attributes actual = new testRequestHandler().parseURI("id=4&Hello=World!");
+    Attributes actual = new testRequestHandler(null).parseURI("id=4&Hello=World!");
     Assert.assertEquals(expected, actual);
   }
   @Test(expected=MalformedURIException.class)
   public final void testDecodeMalformedURI() throws MalformedURIException {
-    new testRequestHandler().parseURI("id=3&id=4");
+    new testRequestHandler(null).parseURI("id=3&id=4");
   }
 
   @Test
@@ -33,7 +36,7 @@ public class RequestHandlerTest {
     HttpExchange mock = mock(HttpExchange.class);
     OutputStream out = mock(OutputStream.class);
     when(mock.getResponseBody()).thenReturn(out);
-    RequestHandler handler = new testRequestHandler();
+    RequestHandler handler = new testRequestHandler(null);
     String response = "response";
     handler.respond(mock, response);
     verify(mock).sendResponseHeaders(200, response.length());
@@ -45,6 +48,10 @@ public class RequestHandlerTest {
 
   // Test used to be able to instantiate RequestHandler
   private class testRequestHandler extends RequestHandler {
+
+    public testRequestHandler(CameraController controller) {
+      super(controller);
+    }
     public void handle(HttpExchange e) {
       // Do nothing
     }

@@ -36,12 +36,12 @@ public class Main {
 
     try {
       HttpServer server = HttpServer.create(address, 10);
-      server.createContext("/getCameraInfo", new CameraInfoHandler());
-      server.createContext("/focus", new FocussingHandler());
-      server.createContext("/iris", new IrisHandler());
-      server.createContext("/move", new MovingHandler());
-      server.createContext("/zoom", new ZoomingHandler());
-      server.createContext("/preset", new PresetHandler());
+      server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController));
+      server.createContext("/focus", new FocussingHandler(cameraController));
+      server.createContext("/iris", new IrisHandler(cameraController));
+      server.createContext("/move", new MovingHandler(cameraController));
+      server.createContext("/zoom", new ZoomingHandler(cameraController));
+      server.createContext("/preset", new PresetHandler(cameraController));
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();

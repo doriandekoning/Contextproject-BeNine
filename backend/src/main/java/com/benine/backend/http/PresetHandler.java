@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Preset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
@@ -13,6 +14,16 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 public class PresetHandler extends RequestHandler {
+
+  /**
+   * Creates a new PresetHandler.
+   * @param controller the cameracontroller to interact with
+   */
+  public PresetHandler(CameraController controller) {
+    super(controller);
+  }
+
+
   /**
    * Handles a request
    * @param exchange the exchange containing data about the request.

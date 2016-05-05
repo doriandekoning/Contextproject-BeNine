@@ -2,8 +2,10 @@ package com.benine.backend.http;
 
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.IrisCamera;
 import com.sun.net.httpserver.HttpExchange;
+import sun.util.resources.cldr.mr.CalendarData_mr_IN;
 
 import java.io.IOException;
 import java.util.jar.Attributes;
@@ -12,6 +14,13 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 public class IrisHandler extends RequestHandler {
+
+  /**
+   * Creates a new IrisHandler.
+   */
+  public IrisHandler(CameraController controller) {
+    super(controller);
+  }
   /**
    * Handles a request
    * @param exchange the exchange containing data about the request.
@@ -29,7 +38,7 @@ public class IrisHandler extends RequestHandler {
       response = "{\"succes\":\"false\"}";
       return;
     }
-    Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    Camera cam =  getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
     IrisCamera irisCam = (IrisCamera)cam;
     String autoOn = parsedURI.getValue("autoIrisOn");
     String setPos = parsedURI.getValue("position");

@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -10,7 +11,19 @@ import java.util.jar.Attributes;
 /**
  * Created by dorian on 4-5-16.
  */
+
 public abstract class RequestHandler implements HttpHandler {
+
+  private CameraController controller;
+
+  /**
+   * Creates a new FocussingHandler.
+   * @param controller the cameracontroller to interact with
+   */
+  public RequestHandler(CameraController controller) {
+    this.controller = controller;
+  }
+
   /**
    * Decodes the given (decoded) uri into an attributes table
    * @param uri the uri to parse.
@@ -48,7 +61,13 @@ public abstract class RequestHandler implements HttpHandler {
 
   }
 
-
+  /**
+   * Returns cameracontroller
+   * @return cameracontroller interacting with.
+   */
+  public CameraController getCameraController() {
+    return controller;
+  }
 
 
 }
