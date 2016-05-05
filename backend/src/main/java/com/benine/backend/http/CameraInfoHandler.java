@@ -34,9 +34,6 @@ public class CameraInfoHandler extends RequestHandler {
     }
     jsonObj.put("cameras", camerasJSON);
     String response = jsonObj.toString();
-    exchange.sendResponseHeaders(200, response.length());
-    OutputStream out = exchange.getResponseBody();
-    out.write(response.getBytes());
-    out.close();
+    respond(exchange, response);
   }
 }

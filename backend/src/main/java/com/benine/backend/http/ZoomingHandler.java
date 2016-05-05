@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -37,8 +38,11 @@ public class ZoomingHandler extends RequestHandler {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
       response = "{\"succes\":\"true\"}";
-    } catch (Exception e) {
+    } catch (MalformedURIException e) {
       //TODO Log exception
+      response = "{\"succes\":\"false\"}";
+    } catch (CameraConnectionException e) {
+      // TODO Log exception
       response = "{\"succes\":\"false\"}";
     }
     respond(exchange, response);

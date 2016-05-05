@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.FocussingCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -21,14 +22,20 @@ public class FocussingHandler extends RequestHandler {
     //TODO add logging stuff
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response;
+    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = Main.getCameraController()
-                      .getCameraById(Integer.parseInt(parsedURI.getValue("id")));
-      FocussingCamera irisCam = (FocussingCamera) cam;
-      String autoOn = parsedURI.getValue("autoFocusOn");
-      String setPos = parsedURI.getValue("position");
+    } catch (MalformedURIException e) {
+      //TODO Log exception
+      respond(exchange, response);
+      return;
+    }
+    Camera cam = Main.getCameraController()
+                    .getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    FocussingCamera irisCam = (FocussingCamera) cam;
+    String autoOn = parsedURI.getValue("autoFocusOn");
+    String setPos = parsedURI.getValue("position");
+    try {
       if (autoOn != null) {
         boolean autoOnBool = Boolean.parseBoolean(autoOn);
         irisCam.setAutoFocusOn(autoOnBool);
@@ -37,12 +44,11 @@ public class FocussingHandler extends RequestHandler {
         irisCam.setFocusPos(Integer.parseInt(setPos));
       }
       response = "{\"succes\":\"true\"}";
-    } catch (Exception e) {
-      //TODO Log exception
-      response = "{\"succes\":\"false\"}";
+    } catch (CameraConnectionException e) {
+      respond(exchange, response);
+      return;
     }
     respond(exchange, response);
-    return;
 
   }
 }

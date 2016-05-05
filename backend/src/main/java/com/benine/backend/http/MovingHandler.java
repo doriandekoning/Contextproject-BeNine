@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.sun.net.httpserver.HttpExchange;
@@ -22,7 +23,7 @@ public class MovingHandler extends RequestHandler {
     //TODO add logging stuff
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response;
+    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
       Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
@@ -32,10 +33,10 @@ public class MovingHandler extends RequestHandler {
       String tilt = parsedURI.getValue("tilt");
       String panSpeed = parsedURI.getValue("panSpeed");
       String tiltSpeed = parsedURI.getValue("tiltSpeed");
-      if(pan == null || tilt == null || panSpeed == null || tiltSpeed == null) {
+      if (pan == null || tilt == null || panSpeed == null || tiltSpeed == null ) {
         throw new MalformedURIException("Invalid value for moveX or moveY");
       }
-      if(moveType.equals("relative")) {
+      if (moveType.equals("relative")) {
         movingCam.move(Integer.parseInt(pan), Integer.parseInt(tilt));
       } else if(moveType.equals("absolute")) {
         Position pos = new Position(Integer.parseInt(pan), Integer.parseInt(tilt));
@@ -44,11 +45,11 @@ public class MovingHandler extends RequestHandler {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
       response = "{\"succes\":\"true\"}";
-    } catch (Exception e) {
+    } catch (MalformedURIException e) {
       //TODO Log exception
-      response = "{\"succes\":\"false\"}";
+    } catch (CameraConnectionException e) {
+      //TODO log exeption
     }
     respond(exchange, response);
-    return;
   }
 }

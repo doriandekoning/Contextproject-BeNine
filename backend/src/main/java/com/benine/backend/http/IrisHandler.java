@@ -25,10 +25,16 @@ public class IrisHandler extends RequestHandler {
     String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
-      IrisCamera irisCam = (IrisCamera)cam;
-      String autoOn = parsedURI.getValue("autoIrisOn");
-      String setPos = parsedURI.getValue("position");
+    } catch (MalformedURIException exception) {
+      // TODO log exception
+      response = "{\"succes\":\"false\"}";
+      return;
+    }
+    Camera cam = Main.getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    IrisCamera irisCam = (IrisCamera)cam;
+    String autoOn = parsedURI.getValue("autoIrisOn");
+    String setPos = parsedURI.getValue("position");
+    try{
       if(autoOn != null) {
         boolean autoOnBool = Boolean.parseBoolean(autoOn);
         irisCam.setAutoIrisOn(autoOnBool);
