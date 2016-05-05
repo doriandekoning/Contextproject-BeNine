@@ -1,5 +1,7 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Config;
+import com.benine.backend.Main;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
  */
 public class MySQLDatabase implements Database{
     private Connection connection;
-    private String username = "root";
-    private String password = "root";
     private int presetId;
 
     public MySQLDatabase() {
@@ -152,9 +152,11 @@ public class MySQLDatabase implements Database{
 
     @Override
     public boolean connectToDatabaseServer() {
+        Config config = Main.getConfig();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                    config.getValue("sqluser"), config.getValue("sqlpassword"));
         }
         catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
