@@ -23,4 +23,32 @@ public class PresetTest {
     Assert.assertEquals(56, jsonObject.get("iris"));
     Assert.assertEquals(true, jsonObject.get("autofocus"));
   }
+
+  @Test
+  public void testGetMethods() {
+    DatabasePreset preset = new DatabasePreset(1, 2, 3, 4, 5, true);
+    Assert.assertEquals(1, preset.getPan());
+    Assert.assertEquals(2, preset.getTilt());
+    Assert.assertEquals(3, preset.getZoom());
+    Assert.assertEquals(4, preset.getFocus());
+    Assert.assertEquals(5, preset.getIris());
+    Assert.assertEquals(true, preset.isAutofocus());
+  }
+
+  @Test
+  public void testSetMethods() {
+    DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
+    preset.setPan(1);
+    preset.setTilt(2);
+    preset.setZoom(3);
+    preset.setFocus(4);
+    preset.setIris(5);
+    preset.setAutofocus(true);
+    Assert.assertEquals(1, preset.getPan());
+    Assert.assertEquals(2, preset.getTilt());
+    Assert.assertEquals(3, preset.getZoom());
+    Assert.assertEquals(4, preset.getFocus());
+    Assert.assertEquals(5, preset.getIris());
+    Assert.assertEquals(true, preset.isAutofocus());
+  }
 }
