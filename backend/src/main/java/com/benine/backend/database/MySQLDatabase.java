@@ -127,14 +127,7 @@ public class MySQLDatabase implements Database {
           + "JOIN camerapresets ON camerapresets.Preset_ID = presets.ID";
       ResultSet resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
-        preset.setPan(resultset.getInt("pan"));
-        preset.setTilt(resultset.getInt("tilt"));
-        preset.setZoom(resultset.getInt("zoom"));
-        preset.setFocus(resultset.getInt("focus"));
-        preset.setIris(resultset.getInt("iris"));
-        preset.setAutofocus(resultset.getInt("autofocus") == 1);
-        list.add(preset);
+        getPresetsFromResultSet(list, resultset);
       }
       resultset.close();
       statement.close();
@@ -155,14 +148,7 @@ public class MySQLDatabase implements Database {
           + cameraId;
       ResultSet resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
-        preset.setPan(resultset.getInt("pan"));
-        preset.setTilt(resultset.getInt("tilt"));
-        preset.setZoom(resultset.getInt("zoom"));
-        preset.setFocus(resultset.getInt("focus"));
-        preset.setIris(resultset.getInt("iris"));
-        preset.setAutofocus(resultset.getInt("autofocus") == 1);
-        list.add(preset);
+        getPresetsFromResultSet(list, resultset);
       }
       resultset.close();
       statement.close();
@@ -178,7 +164,8 @@ public class MySQLDatabase implements Database {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-      connection = DriverManager.getConnection(connect, "root", "root");
+      connection = DriverManager.getConnection(connect, config.getValue("sqluser"),
+          config.getValue("sqlpassword"));
     } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -240,6 +227,21 @@ public class MySQLDatabase implements Database {
       String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + name + "," + ip + ")";
       statement.executeUpdate(sql);
       statement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void getPresetsFromResultSet(ArrayList<DatabasePreset> list, ResultSet resultset) {
+    try {
+      DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
+      preset.setPan(resultset.getInt("pan"));
+      preset.setTilt(resultset.getInt("tilt"));
+      preset.setZoom(resultset.getInt("zoom"));
+      preset.setFocus(resultset.getInt("focus"));
+      preset.setIris(resultset.getInt("iris"));
+      preset.setAutofocus(resultset.getInt("autofocus") == 1);
+      list.add(preset);
     } catch (SQLException e) {
       e.printStackTrace();
     }
