@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class IpcameraTest {
 
   @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 9000);
+  public MockServerRule mockServerRule = new MockServerRule(this, 9002);
 
   private MockServerClient mockServerClient;
   private IPCamera camera;
@@ -36,7 +36,7 @@ public class IpcameraTest {
   @Before
   public final void setUp() throws InvalidCameraTypeException{
 	  IPCameraFactory factory = new IPCameraFactory();
-	  String[] camSpec = {"ipcamera", "127.0.0.1:9000"};
+	  String[] camSpec = {"ipcamera", "127.0.0.1:9002"};
 	  camera = factory.createCamera(camSpec);
   }
 
@@ -110,7 +110,7 @@ public class IpcameraTest {
     parameterList.add(new Parameter("cmd", "#D30"));
 
     String res = camera.getStreamLink();
-    assertEquals(res, "http://127.0.0.1:9000/cgi-bin/mjpeg");
+    assertEquals(res, "http://127.0.0.1:9002/cgi-bin/mjpeg");
   }
   
   @Test(expected = IpcameraConnectionException.class)

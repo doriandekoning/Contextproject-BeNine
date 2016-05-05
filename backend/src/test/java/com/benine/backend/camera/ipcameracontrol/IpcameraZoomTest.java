@@ -23,10 +23,10 @@ import com.benine.backend.camera.CameraConnectionException;
 public class IpcameraZoomTest {
   
   @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 9000);
+  public MockServerRule mockServerRule = new MockServerRule(this, 9001);
 
   private MockServerClient mockServerClient;
-  private IPCamera camera = new IPCamera("127.0.0.1:9000");
+  private IPCamera camera = new IPCamera("127.0.0.1:9001");
 
   private ArrayList<Parameter> parameterList;
   
