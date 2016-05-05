@@ -39,6 +39,7 @@ public class IpcameraTest {
 	  IPCameraFactory factory = new IPCameraFactory();
 	  String[] camSpec = {"ipcamera", "127.0.0.1:9002"};
 	  camera = factory.createCamera(camSpec);
+	  mockServerClient.reset();
   }
 
 
