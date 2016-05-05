@@ -14,7 +14,7 @@ public class CameraController {
 
   private ArrayList<Camera> cameras = new ArrayList<>();
 
-  public static Logger logger = setupLogger();
+  public static final Logger logger = setupLogger();
 
   private int highestIdInUse = 0;
 
@@ -22,17 +22,18 @@ public class CameraController {
 
   /**
    * Adds a new camera to control.
-   * @param c the camera to add to this controller.
+   * @param camera the camera to add to this controller.
    */
-  public void addCamera(Camera c) {
-    c.setId(highestIdInUse);
+  public void addCamera(Camera camera) {
+    camera.setId(highestIdInUse);
     highestIdInUse++;
-    cameras.add(c);
+    cameras.add(camera);
   }
 
 
   /**
    * Sets up the logger.
+   * @return logger object.
    */
   private static Logger setupLogger() {
     // Setup logger
@@ -47,7 +48,7 @@ public class CameraController {
 
   /**
    * Returns the camera list this controller controls.
-   * @return
+   * @return Arraylist of Camera objects.
    */
   public ArrayList<Camera> getCameras() {
     return cameras;
@@ -59,8 +60,8 @@ public class CameraController {
    * @return the camera associated with the specified id or null if it does not exist.
    */
   public Camera getCameraById(int id) {
-    for(Camera c : cameras) {
-      if(c.getId() == id) {
+    for (Camera c : cameras) {
+      if (c.getId() == id) {
         return c;
       }
     }

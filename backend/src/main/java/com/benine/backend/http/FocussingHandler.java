@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;

@@ -10,7 +10,12 @@ public class Position {
   double pan;
   double tilt;
 
-  public Position(double pan, double tilt){
+  /**
+   * Constructor of a position object used for camera positions.
+   * @param pan position in pan direction.
+   * @param tilt position in the tilt direction.
+   */
+  public Position(double pan, double tilt) {
     this.pan = pan;
     this.tilt = tilt;
   }

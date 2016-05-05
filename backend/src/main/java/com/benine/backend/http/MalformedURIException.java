@@ -5,8 +5,14 @@ package com.benine.backend.http;
  */
 
 public class MalformedURIException extends Exception {
+  
   /**
-   * Creaates a new MallformedURIException.
+   * Serial version UID.
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Creates a new MallformedURIException.
    * @param message the message of the exception.
    */
   public MalformedURIException(String message) {

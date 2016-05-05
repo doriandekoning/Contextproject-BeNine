@@ -1,6 +1,10 @@
 package com.benine.backend.http;
 
-import com.benine.backend.camera.*;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.MovingCamera;
+import com.benine.backend.camera.Position;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -43,7 +47,7 @@ public class MovingHandler extends RequestHandler {
       }
       if (moveType.equals("relative")) {
         movingCam.move(Integer.parseInt(pan), Integer.parseInt(tilt));
-      } else if(moveType.equals("absolute")) {
+      } else if (moveType.equals("absolute")) {
         Position pos = new Position(Integer.parseInt(pan), Integer.parseInt(tilt));
         movingCam.moveTo(pos, Integer.parseInt(panSpeed), Integer.parseInt(tiltSpeed));
       } else {
@@ -52,8 +56,10 @@ public class MovingHandler extends RequestHandler {
       response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException e) {
       //TODO Log exception
+      System.out.println(e);
     } catch (CameraConnectionException e) {
       //TODO log exeption
+      System.out.println(e);
     }
     respond(exchange, response);
   }

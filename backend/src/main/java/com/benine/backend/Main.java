@@ -1,8 +1,13 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.*;
+import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.http.CameraInfoHandler;
+import com.benine.backend.http.FocussingHandler;
+import com.benine.backend.http.IrisHandler;
+import com.benine.backend.http.MovingHandler;
+import com.benine.backend.http.PresetHandler;
+import com.benine.backend.http.ZoomingHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
@@ -17,20 +22,27 @@ public class Main {
 
   private static CameraController cameraController;
 
+  /**
+   * Main method of the program.
+   * @param args command line arguments.
+   */
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
-    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), Integer.parseInt(mainConfig.getValue("serverport")));
+    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), 
+                                          Integer.parseInt(mainConfig.getValue("serverport")));
 
     // Setup camerahandler
     cameraController = new CameraController();
-    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera1IP")));
-    cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
+    SimpleCamera camera = new SimpleCamera();
+    camera.setStreamLink("tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    cameraController.addCamera(camera);
+    //cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
 
     try {
       logger = new Logger();
-    }catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
@@ -45,21 +57,26 @@ public class Main {
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
-      while(true) {
+      while (true) {
         Thread.sleep(100);
       }
-    } catch (Exception e) {
+    } catch (IOException e) {
+      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
+    } catch (InterruptedException e) {
       logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     }
 
   }
 
+  /**
+   * Get the main config file.
+   * @return config object.
+   */
   public static Config getConfig() {
     // Read config file
-    ConfigReader cfReader = new ConfigReader();
     try {
-      return cfReader.readConfig("configs" + File.separator + "main.conf");
-    }catch(Exception e) {
+      return ConfigReader.readConfig("configs" + File.separator + "main.conf");
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return null;

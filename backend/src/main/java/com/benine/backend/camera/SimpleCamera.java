@@ -1,12 +1,11 @@
 package com.benine.backend.camera;
 
-import jdk.nashorn.api.scripting.JSObject;
 import org.json.simple.JSONObject;
 
 /**
  * Created by dorian on 5-5-16.
  */
-public class SimpleCamera implements Camera{
+public class SimpleCamera implements Camera {
 
   private int id = -1;
   private String streamLink;
@@ -14,7 +13,7 @@ public class SimpleCamera implements Camera{
   /**
    * Creates a JSON representation of this object.
    * @return A JSON string.
-   * @throws CameraConnectionException
+   * @throws CameraConnectionException thrown when the connection with the camera can't be used.
    */
   @Override
   public String toJSON() throws CameraConnectionException {

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
@@ -31,6 +32,11 @@ public class IpcameraIrisTest {
   private IPCamera camera = new IPCamera("127.0.0.1:9003");
 
   private ArrayList<Parameter> parameterList;
+  
+  @Before
+  public final void setUp(){
+    mockServerClient.reset();
+  }
   
   @Test
   public final void testSetAutoIrisOff() throws CameraConnectionException {

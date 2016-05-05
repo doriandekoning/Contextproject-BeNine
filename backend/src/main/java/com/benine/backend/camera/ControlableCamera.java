@@ -1,8 +1,5 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-
 /**
  * Created by dorian on 5-5-16.
  */

@@ -15,7 +15,7 @@ public interface MovingCamera extends ControlableCamera {
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public abstract void moveTo(Position pos, int panSpeed, int tiltSpeed)
+  void moveTo(Position pos, int panSpeed, int tiltSpeed)
                                                      throws CameraConnectionException;
 
   /**
@@ -27,13 +27,13 @@ public interface MovingCamera extends ControlableCamera {
     * @param tilt movement direction over vertical axis.
     * @throws CameraConnectionException when command can not be completed.
     */
-  public abstract void move(int pan, int tilt) throws CameraConnectionException;
+  void move(int pan, int tilt) throws CameraConnectionException;
 
   /**
     * Get the absolute position of the camera at this moment.
     * @return array with two values 0: Pan, 1: Tilt both in degrees.
     * @throws CameraConnectionException when command can not be completed.
     */
-  public abstract Position getPosition() throws CameraConnectionException;
+  Position getPosition() throws CameraConnectionException;
 
 }
