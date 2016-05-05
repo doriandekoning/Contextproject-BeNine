@@ -1,17 +1,13 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**

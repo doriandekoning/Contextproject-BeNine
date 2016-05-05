@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.IrisCamera;
-import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

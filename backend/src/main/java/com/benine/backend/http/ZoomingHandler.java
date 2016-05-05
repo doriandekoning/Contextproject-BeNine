@@ -5,12 +5,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import org.json.simple.JSONObject;
-
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.jar.Attributes;
 
 /**
@@ -46,8 +41,6 @@ public class ZoomingHandler extends RequestHandler {
       response = "{\"succes\":\"false\"}";
     }
     respond(exchange, response);
-    return;
-
 
   }
 }

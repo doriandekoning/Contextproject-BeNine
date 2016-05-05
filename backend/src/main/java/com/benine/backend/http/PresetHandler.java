@@ -1,9 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Main;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.MovingCamera;
-import com.benine.backend.camera.Position;
 import com.benine.backend.database.Preset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
@@ -50,6 +46,5 @@ public class PresetHandler extends RequestHandler {
       response = new JSONObject().put("presets", json.toString()).toString();
     }
     respond(exchange, response);
-    return;
   }
 }
