@@ -125,10 +125,10 @@ public class LogEvent {
   public boolean equals(Object other) {
     if (other instanceof LogEvent) {
       LogEvent that = (LogEvent)other;
-      return ((this.exception == null
-                && that.exception == null)
-                || (that.exception != null
-                && that.exception.equals(this.exception))
+      return (this.exception == null
+                && that.exception == null
+                || that.exception != null
+                && that.exception.equals(this.exception)
               )
               && that.type.equals(this.type)
               && that.time.equals(this.time)

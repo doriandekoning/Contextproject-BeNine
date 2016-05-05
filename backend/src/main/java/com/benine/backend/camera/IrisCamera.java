@@ -12,14 +12,14 @@ public interface IrisCamera extends ControlableCamera {
    * @param on true for auto iris on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void setAutoIrisOn(boolean on) throws CameraConnectionException;
+  void setAutoIrisOn(boolean on) throws CameraConnectionException;
 
   /**
    * Request if the auto iris is on.
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoIrisOn() throws CameraConnectionException;
+  boolean isAutoIrisOn() throws CameraConnectionException;
   
   /**
   * Set the iris position.
@@ -29,13 +29,13 @@ public interface IrisCamera extends ControlableCamera {
   * @param pos to set the iris to.
   * @throws CameraConnectionException when command can not be completed.
   */
-  public void setIrisPos(int pos) throws CameraConnectionException;
+  void setIrisPos(int pos) throws CameraConnectionException;
 
   /**
    * Get the current iris position.
    * @return the current iris position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getIrisPos() throws CameraConnectionException;
+  int getIrisPos() throws CameraConnectionException;
 
 }

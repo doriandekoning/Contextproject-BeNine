@@ -11,6 +11,7 @@ import com.benine.backend.http.ZoomingHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class Main {
@@ -59,7 +60,9 @@ public class Main {
       while (true) {
         Thread.sleep(100);
       }
-    } catch (Exception e) {
+    } catch (IOException e) {
+      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
+    } catch (InterruptedException e) {
       logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     }
 

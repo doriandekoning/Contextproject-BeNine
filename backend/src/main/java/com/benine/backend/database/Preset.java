@@ -41,12 +41,12 @@ public class Preset {
   public String toJSON() {
     JSONObject json = new JSONObject();
 
-    json.put("pan", new Integer(pan));
-    json.put("tilt", new Integer(tilt));
-    json.put("zoom", new Integer(zoom));
-    json.put("focus", new Integer(focus));
-    json.put("iris", new Integer(iris));
-    json.put("autofocus", new Boolean(autofocus));
+    json.put("pan", Integer.valueOf(pan));
+    json.put("tilt", Integer.valueOf(tilt));
+    json.put("zoom", Integer.valueOf(zoom));
+    json.put("focus", Integer.valueOf(focus));
+    json.put("iris", Integer.valueOf(iris));
+    json.put("autofocus", Boolean.valueOf(autofocus));
 
     return json.toString();
   }

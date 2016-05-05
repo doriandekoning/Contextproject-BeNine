@@ -56,7 +56,5 @@ public class IrisHandler extends RequestHandler {
       response = "{\"succes\":\"false\"}";
     }
     respond(exchange, response);
-    return;
-
   }
 }

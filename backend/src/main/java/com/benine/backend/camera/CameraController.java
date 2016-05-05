@@ -24,7 +24,7 @@ public class CameraController {
    * Adds a new camera to control.
    * @param camera the camera to add to this controller.
    */
-  void addCamera(Camera camera) {
+  public void addCamera(Camera camera) {
     camera.setId(highestIdInUse);
     highestIdInUse++;
     cameras.add(camera);

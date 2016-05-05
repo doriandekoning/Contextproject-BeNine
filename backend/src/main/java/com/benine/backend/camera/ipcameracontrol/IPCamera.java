@@ -13,7 +13,6 @@ import com.benine.backend.camera.ZoomingCamera;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -119,7 +118,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   private String convertTiltToHex(double tilt) {
     tilt = Math.min(210, tilt);
     tilt = Math.max(-30, tilt);
-    tilt = ((tilt + 30) * 121.3541667) + 7284;
+    tilt = (tilt + 30) * 121.3541667 + 7284;
     return Integer.toHexString((int) (tilt + 0.5));
   }
   
@@ -140,7 +139,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @return pan position in degrees.
    */
   private double convertPanToDouble(String pan) {
-    return (int)(((Integer.valueOf(pan, 16) - 11530) / 121.3628571) + 0.5) - 175;
+    return (int)((Integer.valueOf(pan, 16) - 11530) / 121.3628571 + 0.5) - 175;
   }
   
   /**
@@ -151,7 +150,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   private String convertPanToHex(double pan) {
     pan = Math.min(175, pan);
     pan = Math.max(-175, pan);
-    pan = ((pan + 175) * 121.3628571) + 11530;
+    pan = (pan + 175) * 121.3628571 + 11530;
 
     return Integer.toHexString((int) (pan + 0.5));
   }
@@ -352,10 +351,18 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     String res = null;
     try {
       InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      BufferedReader buf = new BufferedReader(new InputStreamReader(com));
-      res = buf.readLine();
-      com.close();
-    } catch (IOException excep) {
+      try {
+        BufferedReader buf = new BufferedReader(new InputStreamReader(
+            com, "UTF8"));
+        res = buf.readLine();
+        com.close();
+      } catch (IOException excep) {
+        throw 
+          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
+      } finally {
+        com.close();
+      }
+    } catch (IOException e) {
       throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
     }
     
@@ -369,18 +376,19 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("id", new Integer(this.id));
+    json.put("id", Integer.valueOf(this.id));
     try {
       json.put("pan", new Double(getPosition().getPan()));
       json.put("tilt", new Double(getPosition().getTilt()));
       json.put("zoom", new Double(getZoomPosition()));
       json.put("focus", new Double(getFocusPos()));
-      json.put("autofocus", new Boolean(isAutoFocusOn()));
+      json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
       json.put("iris", new Double(getIrisPos()));
-      json.put("autoiris", new Boolean(isAutoIrisOn()));
-      json.put("videostream", new Boolean(getStreamLink()));
+      json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
+      json.put("videostream", Boolean.valueOf(getStreamLink()));
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
+      System.out.println(e.toString());
     }
     return  json.toString();
 

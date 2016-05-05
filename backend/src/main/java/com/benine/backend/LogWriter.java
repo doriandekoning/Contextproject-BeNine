@@ -2,7 +2,6 @@ package com.benine.backend;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -161,9 +160,13 @@ public class LogWriter {
         try {
           File backupFile = new File(logLocation + "-old.log");
           writer.close();
-          oldFile.renameTo(backupFile);
+          if (!oldFile.renameTo(backupFile)) {
+            throw new IOException();
+          }
+          
           logSize = 0;
-          writer = new PrintWriter(new FileWriter(logLocation  + ".log"));
+          FileOutputStream fileStream = new FileOutputStream(new File(logLocation  + ".log"));
+          writer = new PrintWriter(new OutputStreamWriter(fileStream, "UTF-8"));
         } catch (Exception e) {
           e.printStackTrace();
         }

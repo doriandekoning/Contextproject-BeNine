@@ -40,6 +40,7 @@ public class CameraInfoHandler extends RequestHandler {
         //TODO Log here when logger supports asyncronous logging
         //CameraController.logger
         //.log("Cannot connect to camera with id: " + cam.getId(), LogEvent.Type.CRITICAL);
+        System.out.println(e.toString());
       }
     }
     jsonObj.put("cameras", camerasJSON);
