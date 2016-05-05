@@ -1,8 +1,11 @@
 body {
     background-color: #999999;
-    padding-top: 50px;
+    height: 100vh;
 }
 
+.navbar {
+    margin: 0;
+}
 /* Navigation bar labels */
 nav .labelcontainer {
     position: absolute;
@@ -25,10 +28,35 @@ nav .label {
     border: 0;
 }
 
+#control_area {
+    height: 100%;
+}
+
+#control_area .row {
+    height: 100%;
+}
+
+#right_area, #left_area {
+    height: 100%;
+}
+
+.zone {
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    right: 50px;
+    bottom: 50px;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
     height: 28vw;
     overflow: hidden;
+}
+
+#body_area {
+    height: 400px;
 }
 
 /* Camera block carousel */
@@ -76,6 +104,8 @@ nav .label {
 /* Preset area configuration. */
 #preset_area {
     height: 100%;
+    overflow: scroll;
+
 }
 
 #preset_area img {

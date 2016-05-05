@@ -15,25 +15,26 @@
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Bootstrap CSS overwrites -->
 	<link href="public/css/style.css" rel="stylesheet">
-
 </head>
 
 <body>
 
-<!-- Header of the webpage with an explanation of what the user is seeing. -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
+<div id="top_navbar">
+    <!-- Header of the webpage with an explanation of what the user is seeing. -->
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
 
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">PolyCast WebInterface</a>
-		</div>
-        <div class ="labelcontainer">
-            <span class="label label-success">Server Status</span>
-            <span class="label label-danger">Camera Conflict</span>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">PolyCast WebInterface</a>
+            </div>
+            <div class ="labelcontainer">
+                <span class="label label-success">Server Status</span>
+                <span class="label label-danger">Camera Conflict</span>
+            </div>
+
         </div>
-
-	</div>
-</nav>
+    </nav>
+</div>
 
 <div id="top_area" class="row">
     <div id="camera_area" class="col-xs-6">
@@ -64,8 +65,29 @@
     <!-- Area in which the presets will be generated -->
 	<div id="preset_area"></div>
 </div>
-<div class= "col-xs-6">CAMERA CONTROL AREA</div>
+<div id="right_area" class= "col-xs-6">
+    <div id="control_area">
+        <div class="row">
+                <div class="zone"></div>
+        </div>
+    </div>
 </div>
+</div>
+
+<script type="text/javascript" src="bower_components/nipplejs/dist/nipplejs.js"></script>
+<script type="text/javascript">
+    var options = {
+        zone: document.querySelector('.zone'),
+        mode: 'static',
+        position: {
+            left: '50%',
+            top: '50%'
+        },
+        color: 'black'
+    };
+    var manager = nipplejs.create(options);
+</script>
+
 <!-- At the end of the document so the page loads faster -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -74,5 +96,6 @@
 <script src="bower_components/holderjs/holder.js"></script>
 
 <script src="public/js/generator.js"></script>
+
 </body>
 </html>
