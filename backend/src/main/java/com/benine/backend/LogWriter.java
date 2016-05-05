@@ -1,6 +1,11 @@
 package com.benine.backend;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,26 +38,28 @@ public class LogWriter {
   public LogWriter(String logLocation) throws IOException {
     this.logLocation = logLocation;
     // Create logs dir if it does not exist
-    Path p = Paths.get("logs");
-    if (!Files.exists(p)) {
-      Files.createDirectories(p);
+    Path path = Paths.get("logs");
+    if (!Files.exists(path)) {
+      Files.createDirectories(path);
     }
-    writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(logLocation + ".log"), StandardCharsets.UTF_8));
+    writer = new PrintWriter(new OutputStreamWriter(
+                    new FileOutputStream(logLocation + ".log"), StandardCharsets.UTF_8));
   }
 
 
   // TODO Add write method for non event
   // TODO remove throws from write methods
   /**
-   * Creates a LogEvent (at the current system time) and writes it to a file
+   * Creates a LogEvent (at the current system time) and writes it to a file.
    * @param description the description of the logevent
    * @param type the type of the logevent
    */
   public void write(String description, LogEvent.Type type) {
-    write(new LogEvent(System.currentTimeMillis()+ "", description, type));
+    write(new LogEvent(System.currentTimeMillis() + "", description, type));
   }
+  
   /**
-   * Creates a LogEvent (at a specified time) and writes it to a file
+   * Creates a LogEvent (at a specified time) and writes it to a file.
    * @param time the time the event happened
    * @param description the description of the logevent
    * @param type the type of the logevent
@@ -60,8 +67,10 @@ public class LogWriter {
   public void write(String time, String description, LogEvent.Type type) {
     write(new LogEvent(time, description, type));
   }
+  
   /**
    * Writes LogEvent to file.
+   * @param event event to write.
    */
   public void write(LogEvent event) {
     try {
@@ -87,6 +96,7 @@ public class LogWriter {
 
   /**
    * Writes a list of logEvents to the list.
+   * @param eventList list of events.
    */
   public void write(List<LogEvent> eventList) {
     for (LogEvent e : eventList) {
@@ -107,6 +117,7 @@ public class LogWriter {
 
   /**
    * Sets the minimum log level.
+   * @param newMinLevel minimal level to log.
    */
   public void setMinLogLevel(int newMinLevel) {
     this.minLogLevel = newMinLevel;
@@ -114,6 +125,7 @@ public class LogWriter {
 
   /**
    * Sets the max log size.
+   * @param maxLogSize max level to log.
    */
   public void setMaxLogSize(int maxLogSize) {
     this.maxLogSize = maxLogSize;
@@ -128,6 +140,7 @@ public class LogWriter {
 
   /**
    * Writes to filewriter.
+   * @param event event to write.
    */
   private void hardWrite(LogEvent event) {
     writer.write(event.toString() + "\n");
@@ -142,14 +155,18 @@ public class LogWriter {
         try {
           Files.delete(Paths.get(logLocation + "-old.log"));
         } catch (Exception e) {
-
+          System.out.println(e);
         }
         try {
           File backupFile = new File(logLocation + "-old.log");
           writer.close();
-          oldFile.renameTo(backupFile);
+          if (!oldFile.renameTo(backupFile)) {
+            throw new IOException();
+          }
+          
           logSize = 0;
-          writer = new PrintWriter(new FileWriter(logLocation  + ".log"));
+          FileOutputStream fileStream = new FileOutputStream(new File(logLocation  + ".log"));
+          writer = new PrintWriter(new OutputStreamWriter(fileStream, "UTF-8"));
         } catch (Exception e) {
           e.printStackTrace();
         }

@@ -5,21 +5,21 @@ package com.benine.backend.camera;
  * @author Bryan
  *
  */
-public interface ZoomingCamera extends Camera {
+public interface ZoomingCamera extends ControlableCamera {
   
   /**
    * Get the current zoom position.
    * @return the current zoom position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getZoomPosition() throws CameraConnectionException;
+  int getZoomPosition() throws CameraConnectionException;
   
   /**
    * Zoom to a specified position.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void zoomTo(int zpos) throws CameraConnectionException;
+  void zoomTo(int zpos) throws CameraConnectionException;
   
   /**
    * Zoom with the specified speed.
@@ -29,6 +29,6 @@ public interface ZoomingCamera extends Camera {
    * @param dir zoom direction.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public void zoom(int dir) throws CameraConnectionException;
+  void zoom(int dir) throws CameraConnectionException;
 
 }

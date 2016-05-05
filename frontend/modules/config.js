@@ -5,7 +5,9 @@ var logger = require("./logger");
 var default_path = path.join(__dirname + '/../config.json');
 var default_config = {};
 
-default_config.server = "localhost";
+default_config.server_port = 3000;
+default_config.backend_server = "localhost";
+default_config.backend_port = 8888;
 
 /**
  * Constructor for a Config object.
@@ -60,15 +62,16 @@ Config.prototype.exists = function (config_path) {
     } catch (e) {
         return false;
     }
-}
+};
 
 /**
  * Returns the config JSON.
+ * @param key     The key to fetch.
  * @returns {Object|*}
  */
-Config.prototype.get = function () {
-    return this.config;
-}
+Config.prototype.get = function (key) {
+    return this.config[key];
+};
 
 /**
  * Returns the default config.
@@ -76,6 +79,6 @@ Config.prototype.get = function () {
  */
 Config.prototype.getDefaultConfig = function () {
     return default_config;
-}
+};
 
 module.exports = new Config();

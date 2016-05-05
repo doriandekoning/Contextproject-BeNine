@@ -1,12 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.benine.backend.LogEvent;
-import com.benine.backend.LogWriter;
-import com.benine.backend.Logger;
-import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraFactory;
 
 /**
@@ -15,9 +10,8 @@ import com.benine.backend.camera.CameraFactory;
  *
  */
 public class IPCameraFactory extends CameraFactory {
-	
-	public static Logger logger = setupLogger();
-  
+
+
   /**
    * Constructor of the camera handler.
    */
@@ -25,19 +19,6 @@ public class IPCameraFactory extends CameraFactory {
 
   }
 
-  /**
-   *
-   */
-  private static Logger setupLogger() {
-    // Setup logger
-    try {
-      return new Logger(new LogWriter("logs" + File.separator + "mainlog"));
-    } catch (IOException e) {
-      System.out.println("Cannot create log file");
-      e.printStackTrace();
-      return null;
-    }
-  }
 
   /**
    * Creates a camera object as specified in camSpec.
@@ -47,10 +28,10 @@ public class IPCameraFactory extends CameraFactory {
    */
   public IPCamera createCamera(String[] camSpec) throws InvalidCameraTypeException {
     switch (camSpec[0]) {
-      case "ipcamera" : logger.log("Create IP camera object", LogEvent.Type.INFO);
-      					return createIpcamera(camSpec[1]);
-      default: logger.log("Create IP camera object", LogEvent.Type.WARNING);
-      			throw new InvalidCameraTypeException("Type of camera is not right specified");
+      case "ipcamera" : CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
+      return createIpcamera(camSpec[1]);
+      default: CameraController.logger.log("Create IP camera object", LogEvent.Type.WARNING);
+      throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
   }
   

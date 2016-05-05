@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,8 +68,9 @@ public class LogWriterTest {
   public void testWriteLogMinLogLevel() throws Exception {
     LogWriter logWriter = new LogWriter("logs/testlog");
     logWriter.setMinLogLevel(1);
-    LogEvent event = new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
+    new LogEvent("42:42:42", "This is a testEvent", LogEvent.Type.DEBUG);
   }
+  
   @Test
   public void testWriteLogItemList() throws Exception {
     LogWriter logWriter = new LogWriter("logs/multipletestlog");
@@ -87,6 +87,7 @@ public class LogWriterTest {
     List<String> contents = Files.readAllLines(Paths.get("logs/multipletestlog.log"));
     Assert.assertEquals(stringList, contents);
   }
+  
   @Test
   public void testMaxLogSize() throws Exception {
     LogWriter writer = new LogWriter("logs/maxlogsizetestlog");

@@ -4,7 +4,7 @@ package com.benine.backend.camera;
  * Decorator of a camera with functions to control the movements of the camera.
  * @author Bryan
  */
-public interface MovingCamera extends Camera {
+public interface MovingCamera extends ControlableCamera {
   
   /**
    * Move the camera to the specified position.
@@ -15,7 +15,7 @@ public interface MovingCamera extends Camera {
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public abstract void moveTo(Position pos, int panSpeed, int tiltSpeed)
+  void moveTo(Position pos, int panSpeed, int tiltSpeed)
                                                      throws CameraConnectionException;
 
   /**
@@ -27,13 +27,13 @@ public interface MovingCamera extends Camera {
     * @param tilt movement direction over vertical axis.
     * @throws CameraConnectionException when command can not be completed.
     */
-  public abstract void move(int pan, int tilt) throws CameraConnectionException;
+  void move(int pan, int tilt) throws CameraConnectionException;
 
   /**
     * Get the absolute position of the camera at this moment.
     * @return array with two values 0: Pan, 1: Tilt both in degrees.
     * @throws CameraConnectionException when command can not be completed.
     */
-  public abstract Position getPosition() throws CameraConnectionException;
+  Position getPosition() throws CameraConnectionException;
 
 }

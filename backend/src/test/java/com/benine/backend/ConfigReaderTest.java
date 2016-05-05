@@ -30,6 +30,15 @@ public class ConfigReaderTest {
     Config readConfig = ConfigReader.readConfig(fileLoc);
     Assert.assertEquals(cfg, readConfig);
   }
+  
+  @Test
+  public final void testConfigIPAdress() throws Exception {
+    Config cfg = new Config();
+    cfg.addAttribute("IPadress", "12.34.56.78");
+    Config readConfig = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "main.conf");
+    Assert.assertEquals(cfg, readConfig);
+  }
+  
   @Test(expected=Exception.class)
   public final void testConfigReaderBadFormatted()  throws Exception {
     String fileLoc =  "resources" + File.separator + "configs" + File.separator + "testconfig3.conf";

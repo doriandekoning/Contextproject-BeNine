@@ -1,6 +1,5 @@
 package com.benine.backend;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -21,6 +20,7 @@ public class Logger {
   public Logger(LogWriter writer) {
     this.writer = writer;
   }
+  
   /**
    * Creates a new Logger object with standard logwriter.
    * @throws IOException if the default log file is for some reason tot accesible
@@ -48,6 +48,7 @@ public class Logger {
   public void log(String time, String message, LogEvent.Type type) {
     log(new LogEvent(time, message, type));
   }
+  
   /**
    * Logs item at current time
    * @param message the description of the logevent
@@ -56,15 +57,16 @@ public class Logger {
   public void log(String message, LogEvent.Type type) {
     log(new LogEvent(new Date().toString(), message, type));
   }
+  
   /**
    * Logs logevent.
    * @param event event to log.
    */
   public void log(LogEvent event) {
-    if(consoleLoggingEnabled) {
+    if (consoleLoggingEnabled) {
       System.out.println(event.toString());
     }
-    if(fileLoggingEnabled) {
+    if (fileLoggingEnabled) {
       writer.write(event);
     }
   }
@@ -91,18 +93,21 @@ public class Logger {
   public void disableConsoleLogging() {
     consoleLoggingEnabled = false;
   }
+  
   /**
    * Disables logging to file.
    */
   public void disableFileLogging() {
     fileLoggingEnabled = false;
   }
+  
   /**
    * Disables logging to console.
    */
   public void enableConsoleLogging() {
     consoleLoggingEnabled = true;
   }
+  
   /**
    * Disables logging to file.
    */
