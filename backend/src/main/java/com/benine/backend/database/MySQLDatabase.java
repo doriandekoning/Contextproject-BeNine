@@ -17,6 +17,9 @@ public class MySQLDatabase implements Database{
     private Connection connection;
     private int presetId;
 
+    /**
+     * Constructor of a MySQL Database.
+     */
     public MySQLDatabase() {
         connection = null;
         presetId = 0;
