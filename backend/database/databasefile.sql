@@ -15,6 +15,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP DATABASE IF EXISTS `presetsDatabase`;
+CREATE DATABASE presetsDatabase;
+USE presetsDatabase;
+
 --
 -- Table structure for table `camera`
 --
@@ -133,6 +137,7 @@ CREATE TABLE `presets` (
   `Zoom` int(11) DEFAULT NULL,
   `Focus` int(11) DEFAULT NULL,
   `Iris` int(11) DEFAULT NULL,
+  `Autofocus` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

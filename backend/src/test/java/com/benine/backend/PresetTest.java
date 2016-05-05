@@ -1,6 +1,6 @@
 package com.benine.backend;
 
-import com.benine.backend.database.Preset;
+import com.benine.backend.database.DatabasePreset;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -13,7 +13,7 @@ public class PresetTest {
 
   @Test
   public void testToJSON() throws JSONException {
-    Preset preset = new Preset(10, 12, 13, 40, 56, true);
+    DatabasePreset preset = new DatabasePreset(10, 12, 13, 40, 56, true);
     String json = preset.toJSON();
     JSONObject jsonObject = new JSONObject(json);
     Assert.assertEquals(10, jsonObject.get("pan"));
