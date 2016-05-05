@@ -6,12 +6,6 @@ var presetcounter = 0;
 // Hold the ready until all data about the backend server is fetched.
 $.holdReady(true);
 
-// TODO: Remove Debug code linking to my machine. 
-$.get('http://10.0.1.203:3000/api/getserver', function(data) {
-    address = 'http://' + data.address + ':' + data.port;
-    $.holdReady(false);
-});
-
 $.get('http://localhost:3000/api/getserver', function(data) {
     address = 'http://' + data.address + ':' + data.port;
     $.holdReady(false);
