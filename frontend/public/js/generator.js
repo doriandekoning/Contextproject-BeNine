@@ -6,7 +6,7 @@ var presetcounter = 0;
 // Hold the ready until all data about the backend server is fetched.
 $.holdReady(true);
 
-$.get('http://localhost:3000/api/getserver', function(data) {
+$.get('http://10.0.1.203:3000/api/getserver', function(data) {
     address = 'http://' + data.address + ':' + data.port;
     $.holdReady(false);
 });
@@ -120,13 +120,14 @@ function addPresetRow() {
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div class="col-xs-3"></div>');
+        preset_column = $('<div></div>');
         preset_row.append(preset_column);
     }
 
     // Now for each column add the preset block.
     preset_row.children().each( function(index, elem) {
         presetcounter++;
+        $(elem).attr("class", "col-xs-3 none");
         addPreset(elem);
     });
 
@@ -141,17 +142,14 @@ function addPresetRow() {
 function addPreset(elem) {
     var preset_image, preset_caption, preset_image_div;
 
-    preset_image_div = $('<div class = "none"></div>');
     preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
-    preset_image_div.attr("id", "preset_" + presetcounter);
 
     // Run the placeholder creator.
     Holder.run({
         images: preset_image
     });
 
-    preset_image_div.append(preset_image, preset_caption);
-    $(elem).append(preset_image_div);
+    $(elem).append(preset_image, preset_caption);
 }
