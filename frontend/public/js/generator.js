@@ -77,7 +77,7 @@ function addCameraRow(block) {
 
     for (var i = 0; i < 2; i++) {
         cameracounter++;
-        camera_element = $('<div class="col-sm-6"></div>');
+        camera_element = $('<div class="col-xs-6"></div>');
         camera_element.attr("id", "camera_" + cameracounter);
         camera_element.attr("camera_number", cameracounter);
 

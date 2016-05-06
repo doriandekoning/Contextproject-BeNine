@@ -115,8 +115,7 @@ nav .label {
 
 /* Preset area configuration. */
 #preset_area {
-    background-color: #787878;
-    display: flex
+    background-color: #1A1A1A;
     flex-direction: column;
     width: 100%;
     margin: 0;
