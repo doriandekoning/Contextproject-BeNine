@@ -6,7 +6,7 @@ var presetcounter = 0;
 // Hold the ready until all data about the backend server is fetched.
 $.holdReady(true);
 
-$.get('http://10.0.1.203:3000/api/getserver', function(data) {
+$.get('http://localhost:3000/api/getserver', function(data) {
     address = 'http://' + data.address + ':' + data.port;
     $.holdReady(false);
 });
@@ -87,7 +87,7 @@ function addCameraRow(block) {
 
         camera_title.append(camera_icon, camera_title_text);
 
-        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b">').get(0);
 
         // Run the placeholder creator.
         Holder.run({
@@ -142,7 +142,7 @@ function addPresetRow() {
 function addPreset(elem) {
     var preset_image, preset_caption, preset_image_div;
 
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" class="img-responsive">').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
 

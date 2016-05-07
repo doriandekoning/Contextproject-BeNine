@@ -15,8 +15,6 @@ nav .labelcontainer {
 
 nav .label {
     position: relative;
-    top: 15px;
-    right: 10px;
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -46,10 +44,6 @@ nav .label {
 
 .body_container {
     height: 100%;
-    max-width: 1366px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     display: flex;
     flex-direction: column;
     background-color: #999999;
@@ -58,7 +52,6 @@ nav .label {
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
     height: 28vw;
-    max-height: 300px;
     overflow: hidden;
 }
 
