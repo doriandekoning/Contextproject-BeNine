@@ -33,7 +33,15 @@ router.get('/getbackend', function (req, res) {
  * All /backend/... calls are rerouted to the backend server.
  */
 router.get('/backend/*', function (req, res) {
-    request(address + req.url).pipe(res);
+    request(address + req.url)
+        .on('error', function (err) {
+            // An error has occured, most likely the server has not been started.
+            if (err.code === 'ECONNREFUSED') {
+                logger.logMessage(logger.levels.ERROR, "Connection with back-end server failed.");
+            }
+        })
+        .pipe(res);
+
 });
 
 module.exports = router;
