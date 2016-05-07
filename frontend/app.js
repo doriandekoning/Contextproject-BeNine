@@ -7,8 +7,6 @@ var api = require('./modules/api');
 var express = require('express');
 var app = express();
 
-console.log(config);
-
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
