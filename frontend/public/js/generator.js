@@ -142,7 +142,7 @@ function addPresetRow() {
 function addPreset(elem) {
     var preset_image, preset_caption, preset_image_div;
 
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" class="img-responsive">').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
 
