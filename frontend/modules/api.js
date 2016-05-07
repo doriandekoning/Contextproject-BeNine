@@ -1,10 +1,20 @@
 var express = require('express');
 var config = require('./config');
+var logger = require('./logger');
 var request = require('request');
 var router = express.Router();
 
 // Address of the backend server.
 var address = "http://" + config.get("backend_server") + ":" + config.get("backend_port");
+logger.logMessage(logger.levels.INFO, "Backend server address: " + address);
+
+/**
+ * Middleware to log every API request.
+ */
+router.use(function (req, res, next) {
+    logger.logMessage(logger.levels.INFO, "Received request: " + req.url);
+    next();
+})
 
 /**
  * First the NodeJS server's own API is defined.
