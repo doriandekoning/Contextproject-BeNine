@@ -14,6 +14,9 @@ var presetcounter = 0;
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 
+    // Update server status every 10 seconds.
+    setInterval(setServerStatus, 10 * 1000);
+
     // Generate the camera block area.
     generateCameraArea();
 
@@ -23,6 +26,19 @@ $(document).ready(function() {
     console.log('Page has loaded successfully.');
 
 });
+
+/**
+ * Sets the backend server status.
+ */
+function setServerStatus() {
+    $.get("http://localhost:3000/api/getinfo", function (data) {
+        if (data.backend.status === "online") {
+            $('#server_status').attr('class', 'label label-success');
+        } else {
+            $('#server_status').attr('class', 'label label-danger');
+        }
+    })
+}
 
 /**
  * Generates the camera area of the app.
