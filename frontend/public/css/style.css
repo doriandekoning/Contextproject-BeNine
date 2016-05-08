@@ -60,7 +60,7 @@ nav .label {
 }
 
 #left_area {
-    overflow: scroll;
+    overflow: hidden;
     display: flex;
     flex: 1;
     padding: 0;
