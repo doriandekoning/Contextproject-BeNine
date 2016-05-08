@@ -47,8 +47,8 @@
             <div class="carousel-inner" role="listbox"></div>
 
             <!-- Controls -->
-            <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
-            <a class="right carousel-control" href="#carousel" role="button" data-slide="next"></a>
+            <a id="carousel-left" class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
+            <a id="carousel-right" class="right carousel-control" href="#carousel" role="button" data-slide="next"></a>
         </div>
     </div>
     <div id="current_camera" class="col-xs-6">
@@ -92,10 +92,14 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
+<!-- HammerJS for supporting touch actions -->
+<script src="bower_components/hammerjs/hammer.min.js"></script>
+
 <!-- Holder JS for placeholders -->
 <script src="bower_components/holderjs/holder.js"></script>
 
 <script src="public/js/generator.js"></script>
+<script src="public/js/touch.js"></script>
 
 </body>
 </html>
