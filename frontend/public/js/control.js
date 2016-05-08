@@ -24,3 +24,15 @@ joystick.on('end', function(evt, data){
 	console.log(50 + " - " + 50); //Joystick released
 });
 
+function inputzoomslider(zoom) {
+	console.log("zoom: " + zoom);
+}
+
+function inputfocusslider(focus) {
+	console.log("Focus: " + focus);
+}
+
+function inputirisslider(iris) {
+	console.log("Iris: "+ iris);
+}
+
