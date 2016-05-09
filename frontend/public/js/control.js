@@ -6,19 +6,21 @@ var currentcamera; //ID of the camera that is selected.
 function loadCameras() {
 	$.get("http://localhost:3000/api/backend/getCameraInfo", function(data) {
 		var obj = JSON.parse(data);
+		// put the information of every camera in cameras.
 		for(var c in obj.cameras){
 			cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
 		}
 	}).done(function() { 
-		console.log(cameras);
+		
 		var place  = 1;
 		var camera_area = $("#camera_area");
+		
+		// show stream of every camera in the carousel.
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
 			camera_div.find('img').attr("src", cameras[c].streamlink);
 			camera_title = camera_div.find('.camera_title');
-	
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
 		}
@@ -28,9 +30,12 @@ function loadCameras() {
 
 function setCurrentCamera(id){
 	currentcamera = id;
+	// Show the current camera in the editing view.
 	$('#current_camera').find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = $('#current_camera').find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
+	
+	//determine which elements of the UI to show
 	if (cameras[id].zoom == undefined) {
 		$('.zoomslider').hide();
 	} else {
@@ -68,31 +73,38 @@ var joystickoptions = {
 };
 
 var joystick = nipplejs.create(joystickoptions);
-var availablemove = 1
-var pan, tilt;
 
-function resetMove(){
-	availablemove = 1;
-	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
-}
+
+
+var distance = 0;
+var angle = 0;
 
 joystick.on('move', function(evt, data){
-	tilt = Math.round((Math.sin(data.angle.radian) * (data.distance / (0.5 * joysticksize)) * 50 ) + 50);
-	pan = Math.round((Math.cos(data.angle.radian) * (data.distance / (0.5 * joysticksize)) * 50 ) + 50);
-	if(availablemove === 1){
-		availablemove = 0;
-		setTimeout(resetMove, 600)
-		$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
-		console.log(pan + " - " + tilt); 
-	}
+	distance = data.distance;
+	angle = data.angle.radian;
 });
 
-joystick.on('end', function(evt, data){
-	console.log(50 + " - " + 50); //Joystick released
-	pan = 50;
-	tilt = 50;
-	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + 50 + "&tilt=" + 50 + "&panSpeed=0&tiltSpeed=0", function(data) {});
+joystick.on('move', activateMove);
+
+joystick.on('end', function(){
+	distance = 0;
+	angle = 0;
+	sendMove();
 });
+
+
+function activateMove(evt, data){
+	joystick.off('move', activateMove);
+	sendMove();
+	setTimeout(function(){ joystick.on('move', activateMove); sendMove();}, 500);
+}
+
+function sendMove(){
+	var tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
+	var pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
+	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
+	console.log(pan + " - " + tilt); 	
+}
 
 var availablezoom = 1;
 var zoompos = 50;

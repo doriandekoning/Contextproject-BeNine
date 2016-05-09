@@ -109,23 +109,15 @@ public class IPCamera2 implements Camera, MovingCamera, ZoomingCamera {
     }
     if (pan == 50 && tilt == 50) {
       sendCommand("ptzStopRun");
-    } else if (pan > 90) {
+    } else if (pan > 85) {
       sendCommand("ptzMoveRight");
-    } else if (pan < 10) {
+    } else if (pan < 15) {
       sendCommand("ptzMoveLeft");
-    } else if (tilt > 90) { 
+    } else if (tilt > 85) { 
       sendCommand("ptzMoveUp");
-    } else if (tilt < 10) { 
+    } else if (tilt < 15) { 
       sendCommand("ptzMoveDown");
-    } else if (pan >= 10 && pan < 50 && tilt > 50 && tilt <= 90) {
-      sendCommand("ptzMoveTopLeft");
-    } else if (pan > 50 && pan <= 90 && tilt > 50 && tilt <= 90) {
-      sendCommand("ptzMoveTopRight");
-    } else if (pan >= 10 && pan < 50 && tilt < 50 && tilt >= 10) {
-      sendCommand("ptzMoveBottomLeft");
-    } else if (pan > 50 && pan <= 90 && tilt < 50 && tilt >= 10) {
-      sendCommand("ptzMoveBottomRight");
-    }
+    } 
     
     
       
