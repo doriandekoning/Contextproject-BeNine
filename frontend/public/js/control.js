@@ -35,11 +35,24 @@ function setCurrentCamera(id){
 		$('.zoomslider').hide();
 	} else {
 		$('.zoomslider').show();
+		$('.zoomslider').val(cameras[id].zoom);
 	}
 	if  (cameras[id].tilt == undefined) {
 		$('.zone').hide();
 	} else {
 		$('.zone').show();
+	}
+	if  (cameras[id].iris == undefined) {
+		$('.iris').hide();
+	} else {
+		$('.iris').show();
+		$('.irisslider').val(cameras[id].iris);
+	}
+	if  (cameras[id].focus == undefined) {
+		$('.focus').hide();
+	} else {
+		$('.focus').show();
+		$('.focusslider').val(cameras[id].focus);
 	}
 }
  
@@ -60,9 +73,7 @@ var pan, tilt;
 
 function resetMove(){
 	availablemove = 1;
-	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {
-			
-	});
+	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 }
 
 joystick.on('move', function(evt, data){
@@ -71,9 +82,7 @@ joystick.on('move', function(evt, data){
 	if(availablemove === 1){
 		availablemove = 0;
 		setTimeout(resetMove, 600)
-		$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {
-			
-		});
+		$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 		console.log(pan + " - " + tilt); 
 	}
 });
@@ -82,9 +91,7 @@ joystick.on('end', function(evt, data){
 	console.log(50 + " - " + 50); //Joystick released
 	pan = 50;
 	tilt = 50;
-	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + 50 + "&tilt=" + 50 + "&panSpeed=0&tiltSpeed=0", function(data) {
-		
-	});
+	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + 50 + "&tilt=" + 50 + "&panSpeed=0&tiltSpeed=0", function(data) {});
 });
 
 var availablezoom = 1;
@@ -130,4 +137,3 @@ function toggleButton(btn){
 		btn.removeClass("btn-danger");
 	}
 }
-

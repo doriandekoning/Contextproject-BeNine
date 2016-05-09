@@ -149,6 +149,8 @@ public class IPCamera2 implements Camera, MovingCamera, ZoomingCamera {
       json.put("pan", new Double(getPosition().getPan()));
       json.put("tilt", new Double(getPosition().getTilt()));
       json.put("zoom", new Double(getZoomPosition()));
+      json.put("iris", 20);
+      json.put("focus", 80);
       json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
