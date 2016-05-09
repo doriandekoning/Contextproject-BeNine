@@ -26,9 +26,9 @@ public class LogWriter {
 
   private int logSize = 0;
 
-  private PrintWriter writer;
+  private volatile PrintWriter writer;
 
-  private ArrayList<LogEvent> buffer = new ArrayList<LogEvent>();
+  private volatile ArrayList<LogEvent> buffer = new ArrayList<LogEvent>();
 
   /**
    * Creates a new LogWriter, should be deleted by calling the destoy method.
@@ -142,7 +142,7 @@ public class LogWriter {
    * Writes to filewriter.
    * @param event event to write.
    */
-  private void hardWrite(LogEvent event) {
+  private synchronized void hardWrite(LogEvent event) {
     writer.write(event.toString() + "\n");
     logSize++;
     // Every 100 log items check log file size
