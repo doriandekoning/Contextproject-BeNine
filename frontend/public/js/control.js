@@ -10,6 +10,7 @@ function loadCameras() {
 			cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
 		}
 	}).done(function() { 
+		console.log(cameras);
 		var place  = 1;
 		var camera_area = $("#camera_area");
 		for (var c in cameras) {
@@ -30,6 +31,16 @@ function setCurrentCamera(id){
 	$('#current_camera').find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = $('#current_camera').find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
+	if(cameras[id].zoom == undefined) {
+		$('.zoomslider').hide();
+	} else {
+		$('.zoomslider').show();
+	}
+	if(cameras[id].tilt == undefined) {
+		$('.zone').hide();
+	} else {
+		$('.zone').show();
+	}
 }
  
 var joystickoptions = {
