@@ -22,8 +22,6 @@ $(document).ready(function() {
 	
 	// Load the available cameras.
 	loadCameras();
-	
-	setCurrentCamera(9);
 
     // Generate the presets area.
     generatePresets();

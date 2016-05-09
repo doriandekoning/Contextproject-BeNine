@@ -52,7 +52,7 @@ router.get('/getinfo', function (req, res) {
  * All /backend/... calls are rerouted to the backend server.
  */
 router.get('/backend/*', function (req, res) {
-    request(address + req.url)
+    request(address + req.url.substring(8))
         .on('error', function (err) {
             // An error has occurred, most likely the server has not been started.
             if (err.code === 'ECONNREFUSED') {
