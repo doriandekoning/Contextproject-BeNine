@@ -31,12 +31,12 @@ function setCurrentCamera(id){
 	$('#current_camera').find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = $('#current_camera').find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
-	if(cameras[id].zoom == undefined) {
+	if (cameras[id].zoom == undefined) {
 		$('.zoomslider').hide();
 	} else {
 		$('.zoomslider').show();
 	}
-	if(cameras[id].tilt == undefined) {
+	if  (cameras[id].tilt == undefined) {
 		$('.zone').hide();
 	} else {
 		$('.zone').show();
@@ -92,19 +92,14 @@ var zoompos = 50;
 
 function resetZoom() {
 	availablezoom = 1;
-	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoompos , function(data) {
-			
-	});
+	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoompos , function(data) {});
 }
 
 function inputzoomslider(zoom) {
 	if(availablezoom === 1){
 		availablezoom = 0;
 		setTimeout(resetZoom, 500);
-		$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoom , function(data) {
-			
-		});
-		
+		$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoom , function(data) {});
 	}
 	zoompos = zoom;
 	console.log("Zoom: " + zoom);
@@ -116,5 +111,23 @@ function inputfocusslider(focus) {
 
 function inputirisslider(iris) {
 	console.log("Iris: "+ iris);
+};
+
+$('#auto_focus').click(function() {	
+	toggleButton($(this));
+});
+
+$('#auto_iris').click(function() {	
+	toggleButton($(this));
+});
+
+function toggleButton(btn){
+	if(btn.attr("class") === "btn btn-success") {
+		btn.addClass("btn-danger");
+		btn.removeClass("btn-success");
+	} else {
+		btn.addClass("btn-success");
+		btn.removeClass("btn-danger");
+	}
 }
 

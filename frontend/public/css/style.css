@@ -96,6 +96,20 @@ input[type=range]:focus {
   outline: none;
 }
 
+#auto_focus {
+	border-radius: 8px;
+    position: absolute;
+    right: 475px;
+	bottom: 240px;
+}
+
+#auto_iris {
+	border-radius: 8px;
+    position: absolute;
+    right: 575px;
+	bottom: 240px;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
     height: 28vw;
