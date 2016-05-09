@@ -16,9 +16,9 @@ before_install:
 # to change to the correct dir and run the tests
 # (for example for the test of the node)
 script:  
+  - cd ../backend
   - mvn install
-  - cd ..
-  - cd frontend 
+  - cd ../frontend
   - npm test
 env:
   - BUILD_PR_BRANCH=true
