@@ -94,24 +94,39 @@ function sendMove(distance, angle){
 
 function inputzoomslider(zoom) {
 	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=absolute&zoom=" + zoom , function(data) {});
-	
 	console.log("Zoom: " + zoom);
 }
 
 function inputfocusslider(focus) {
+	$('#auto_focus').addClass("btn-danger");
+	$('#auto_focus').removeClass("btn-success");
+	$.get("http://localhost:3000/api/backend/focus?id="+ currentcamera + "&autoFocusOn=false&position=" + focus , function(data) {});
 	console.log("Focus: " + focus);
 }
 
 function inputirisslider(iris) {
+	$('#auto_iris').addClass("btn-danger");
+	$('#auto_iris').removeClass("btn-success");
+	$.get("http://localhost:3000/api/backend/iris?id="+ currentcamera + "&autoIrisOn=false&position=" + iris , function(data) {});
 	console.log("Iris: "+ iris);
 };
 
 $('#auto_focus').click(function() {	
 	toggleButton($(this));
+	var on = true;
+	if($(this).hasClass("btn-danger")){
+		on = false;
+	}
+	$.get("http://localhost:3000/api/backend/focus?id="+ currentcamera + "&autoFocusOn=" + on, function(data) {});
 });
 
 $('#auto_iris').click(function() {	
 	toggleButton($(this));
+	var on = true;
+	if($(this).hasClass("btn-danger")){
+		on = false;
+	}
+	$.get("http://localhost:3000/api/backend/iris?id="+ currentcamera + "&autoIrisOn=" + on , function(data) {});
 });
 
 function toggleButton(btn){
