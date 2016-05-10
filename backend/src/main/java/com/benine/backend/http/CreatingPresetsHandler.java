@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Main;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.DatabasePreset;
@@ -51,12 +52,19 @@ public class CreatingPresetsHandler extends RequestHandler {
     String autofocusStr = parsedURI.getValue("autoFocusOn");
     
     //Strings to integers and boolean to be able to create new preset. 
+    int id = Integer.parseInt(idStr);
     int pan = Integer.parseInt(panStr);
     int tilt = Integer.parseInt(tiltStr);
     int zoom = Integer.parseInt(zoomStr);
     int focus = Integer.parseInt(focusStr);
     int iris = Integer.parseInt(irisStr);
     boolean autofocus = Boolean.parseBoolean(autofocusStr);
+    
+    //Create new DatabasePreset
+    DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+     
+    //Adding the new preset to the database
+    Main.getDatabase().addPreset(id, 4, preset);
  
 
   }
