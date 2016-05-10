@@ -15,13 +15,15 @@ import java.util.jar.Attributes;
 public abstract class RequestHandler implements HttpHandler {
 
   private CameraController controller;
+  private int cameraId;
 
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public RequestHandler(CameraController controller) {
+  public RequestHandler(CameraController controller, int cameraId) {
     this.controller = controller;
+    this.cameraId = cameraId;
   }
 
   /**
@@ -71,5 +73,13 @@ public abstract class RequestHandler implements HttpHandler {
     return controller;
   }
 
+
+  /**
+   * Getter for cameraId
+   * @return int cameraid.
+   */
+  public int getCameraId() {
+    return cameraId;
+  }
 
 }

@@ -19,8 +19,8 @@ public class ZoomingHandler extends RequestHandler {
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public ZoomingHandler(CameraController controller) {
-    super(controller);
+  public ZoomingHandler(CameraController controller, int cameraId) {
+    super(controller, cameraId);
   }
 
   /**

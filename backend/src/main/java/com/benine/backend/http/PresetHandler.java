@@ -19,8 +19,8 @@ public class PresetHandler extends RequestHandler {
    * Creates a new PresetHandler.
    * @param controller the cameracontroller to interact with
    */
-  public PresetHandler(CameraController controller) {
-    super(controller);
+  public PresetHandler(CameraController controller, int cameraId) {
+    super(controller, cameraId);
   }
 
 

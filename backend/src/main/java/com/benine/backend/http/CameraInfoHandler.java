@@ -19,8 +19,8 @@ public class CameraInfoHandler extends RequestHandler {
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public CameraInfoHandler(CameraController controller) {
-    super(controller);
+  public CameraInfoHandler(CameraController controller, int cameraId) {
+    super(controller, cameraId);
   }
 
   /**
