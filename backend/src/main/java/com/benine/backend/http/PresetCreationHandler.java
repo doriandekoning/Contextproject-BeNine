@@ -13,14 +13,14 @@ import com.sun.net.httpserver.HttpExchange;
  * @author naomi
  * Class allows creation of a preset by tagging a camera viewpoint location.
 **/
-public class CreatingPresetsHandler extends RequestHandler {
+public class PresetCreationHandler  extends RequestHandler {
   
 
   /**
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
    */
-  public CreatingPresetsHandler(CameraController controller) {
+  public PresetCreationHandler(CameraController controller) {
     super(controller);
   }
   
