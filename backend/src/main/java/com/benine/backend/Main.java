@@ -9,6 +9,7 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.CameraInfoHandler;
+import com.benine.backend.http.CreatingPresetsHandler;
 import com.benine.backend.http.FocussingHandler;
 import com.benine.backend.http.IrisHandler;
 import com.benine.backend.http.MovingHandler;
@@ -67,6 +68,7 @@ public class Main {
       server.createContext("/move", new MovingHandler(cameraController));
       server.createContext("/zoom", new ZoomingHandler(cameraController));
       server.createContext("/preset", new PresetHandler(cameraController));
+      server.createContext("/createPreset", new CreatingPresetsHandler(cameraController));
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
