@@ -3,8 +3,7 @@ package com.benine.backend.http;
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -66,13 +65,21 @@ public class httpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-  public void createHandlers(Camera cam) {
+   private void createHandlers(Camera cam) {
     int camId = cam.getId();
     server.createContext("/camera/"+camId+"/getcamerainfo", new CameraInfoHandler(camController, camId));
-    server.createContext("/camera/"+camId+"/focus", new FocussingHandler(camController, camId));
-    server.createContext("/camera/"+camId+"/iris", new IrisHandler(camController, camId));
-    server.createContext("/camera/"+camId+"/move", new MovingHandler(camController, camId));
-    server.createContext("/camera/"+camId+"/zoom", new ZoomingHandler(camController, camId));
+    if (cam instanceof FocussingCamera) {
+      server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, camId));
+    }
+    if (cam instanceof IrisCamera) {
+      server.createContext("/camera/" + camId + "/iris", new IrisHandler(camController, camId));
+    }
+    if (cam instanceof MovingCamera) {
+      server.createContext("/camera/" + camId + "/move", new MovingHandler(camController, camId));
+    }
+    if (cam instanceof ZoomingCamera) {
+      server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController, camId));
+    }
     server.createContext("/camera/"+camId+"/preset", new PresetHandler(camController, camId));
   }
 
