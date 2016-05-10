@@ -21,8 +21,7 @@ import com.sun.net.httpserver.HttpExchange;
 **/
 public class PresetCreationHandler  extends RequestHandler {
   
-  private static 
-  
+   
   /**
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
@@ -51,12 +50,13 @@ public class PresetCreationHandler  extends RequestHandler {
       if (camera instanceof IPCamera) {
         ipCamera = (IPCamera)camera;
       }
-        
-      int zoom = ((ZoomingCamera)ipCamera).getZoomPosition();
+       
+      //Get everything that is needed to create a new preset.  
+      int zoom = ipCamera.getZoomPosition();
       int pan = (int)ipCamera.getPosition().getPan();
       int tilt = (int)ipCamera.getPosition().getTilt();
-      int focus = ((FocussingCamera)ipCamera).getFocusPos();
-      int iris = ((IrisCamera)ipCamera).getIrisPos();
+      int focus = ipCamera.getFocusPos();
+      int iris = ipCamera.getIrisPos();
       boolean autofocus = ipCamera.isAutoFocusOn();
     
       //Create new DatabasePreset.
@@ -75,26 +75,6 @@ public class PresetCreationHandler  extends RequestHandler {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    
-    //Get the values as String needed to create a preset. 
-    
-//    String idStr = parsedURI.getValue("id");
-//    String panStr = parsedURI.getValue("pan");
-//    String tiltStr = parsedURI.getValue("tilt");
-//    String zoomStr = parsedURI.getValue("zoom");
-//    String focusStr = parsedURI.getValue("focus");
-//    String irisStr = parsedURI.getValue("iris");
-//    String autofocusStr = parsedURI.getValue("autoFocusOn");
-    
-    //Strings to integers and boolean to be able to create new preset. 
-//    int id = Integer.parseInt(idStr);
-//    int pan = Integer.parseInt(panStr);
-//    int tilt = Integer.parseInt(tiltStr);
-//    int zoom = Integer.parseInt(zoomStr);
-//    int focus = Integer.parseInt(focusStr);
-//    int iris = Integer.parseInt(irisStr);
-//    boolean autofocus = Boolean.parseBoolean(autofocusStr);
-    
     
    
 // 
