@@ -5,15 +5,7 @@ import com.benine.backend.database.MySQLDatabase;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.http.CameraInfoHandler;
-import com.benine.backend.http.FocussingHandler;
-import com.benine.backend.http.IrisHandler;
-import com.benine.backend.http.MovingHandler;
-import com.benine.backend.http.PresetHandler;
-import com.benine.backend.http.ZoomingHandler;
-
-import com.sun.net.httpserver.HttpServer;
-
+import com.benine.backend.http.httpController;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -27,6 +19,8 @@ public class Main {
 
   private static CameraController cameraController;
 
+  private static httpController httpController;
+
   /**
    * Main method of the program.
    * @param args command line arguments.
@@ -35,8 +29,7 @@ public class Main {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
-    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), 
-                                          Integer.parseInt(mainConfig.getValue("serverport")));
+
 
     // Setup camerahandler
     cameraController = new CameraController();
@@ -57,8 +50,9 @@ public class Main {
     if(!database.checkDatabase()) //If the database does not exist yet, create a new one
       database.resetDatabase();
     /////
-
-
+    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
+            Integer.parseInt(mainConfig.getValue("serverport")));
+    httpController = new httpController(address, logger, cameraController);
   }
 
   /**

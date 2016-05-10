@@ -31,13 +31,8 @@ public class httpController {
       // TODO create endpoints like /camera/1/ to return camera 1 info
       // TODO create handlers a handler for every camera
       // TODO move handlers to httpHandlerController
-      server.createContext("/camera/0/getcamerainfo", new CameraInfoHandler(camController, 0));
-      server.createContext("/camera/0/focus", new FocussingHandler(camController, 0));
-      server.createContext("/camera/0/iris", new IrisHandler(camController, 0));
-      server.createContext("/camera/0/move", new MovingHandler(camController, 0));
-      server.createContext("/camera/0/zoom", new ZoomingHandler(camController, 0));
-      server.createContext("/camera/0/preset", new PresetHandler(camController, 0));
 
+      createHandlers();
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
       while (true) {
@@ -60,11 +55,25 @@ public class httpController {
     // TODO setup basic handlers
   }
   /**
+   * Creates handlers for all cams in the camera controller.
+   */
+  private void createHandlers() {
+    for(Camera cam : camController.getCameras()){
+      createHandlers(cam);
+    }
+  }
+  /**
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
   public void createHandlers(Camera cam) {
-    //TODO test and implement
+    int camId = cam.getId();
+    server.createContext("/camera/"+camId+"/getcamerainfo", new CameraInfoHandler(camController, camId));
+    server.createContext("/camera/"+camId+"/focus", new FocussingHandler(camController, camId));
+    server.createContext("/camera/"+camId+"/iris", new IrisHandler(camController, camId));
+    server.createContext("/camera/"+camId+"/move", new MovingHandler(camController, camId));
+    server.createContext("/camera/"+camId+"/zoom", new ZoomingHandler(camController, camId));
+    server.createContext("/camera/"+camId+"/preset", new PresetHandler(camController, camId));
   }
 
 }
