@@ -6,7 +6,10 @@ import java.util.jar.Attributes;
 
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.FocussingCamera;
+import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.DatabasePreset;
@@ -18,7 +21,8 @@ import com.sun.net.httpserver.HttpExchange;
 **/
 public class PresetCreationHandler  extends RequestHandler {
   
-
+  private static 
+  
   /**
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
@@ -37,28 +41,39 @@ public class PresetCreationHandler  extends RequestHandler {
     String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
+    
+    
+      int cameraID = Integer.parseInt(parsedURI.getValue("id"));
+      Camera camera =  getCameraController().getCameraById(cameraID);
+      
+      IPCamera ipCamera = null;
+      
+      if (camera instanceof IPCamera) {
+        ipCamera = (IPCamera)camera;
+      }
+        
+      int zoom = ((ZoomingCamera)ipCamera).getZoomPosition();
+      int pan = (int)ipCamera.getPosition().getPan();
+      int tilt = (int)ipCamera.getPosition().getTilt();
+      int focus = ((FocussingCamera)ipCamera).getFocusPos();
+      int iris = ((IrisCamera)ipCamera).getIrisPos();
+      boolean autofocus = ipCamera.isAutoFocusOn();
+    
+      //Create new DatabasePreset.
+      DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+      
+      //Create a random integer for the preset number, should later be changed.
+      Random randomGenerator = new Random();
+      int randomInt = randomGenerator.nextInt(100);
+      //Adding the new preset to the database
+      Main.getDatabase().addPreset(cameraID, randomInt, preset);
+      
     } catch (MalformedURIException e) {
       respond(exchange, response);
       return;
-    }
-    
-    int cameraID = Integer.parseInt(parsedURI.getValue("id"));
-    Camera camera =  getCameraController().getCameraById(cameraID);
-    
-    IPCamera ipCamera;
-    int zoom;
-    int pan;
-    int tilt;
-    int focus;
-    int iris;
-    boolean autofocus;
-    
-    if (camera instanceof IPCamera) {
-      ipCamera = (IPCamera)camera;
-    }
-    
-    if (ipCamera instanceof ZoomingCamera) {
-      zoom = ((ZoomingCamera)ipCamera).getZoomPosition();
+    } catch (CameraConnectionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     
     //Get the values as String needed to create a preset. 
@@ -80,14 +95,8 @@ public class PresetCreationHandler  extends RequestHandler {
 //    int iris = Integer.parseInt(irisStr);
 //    boolean autofocus = Boolean.parseBoolean(autofocusStr);
     
-    //Create new DatabasePreset
-//    DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
-//     
-//    //Create a random integer for the preset number, should later be changed.
-//    Random randomGenerator = new Random();
-//    int randomInt = randomGenerator.nextInt(100);
-//    //Adding the new preset to the database
-//    Main.getDatabase().addPreset(id, randomInt, preset);
+    
+   
 // 
 
   }
