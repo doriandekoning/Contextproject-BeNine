@@ -64,7 +64,13 @@ public class IPCamera2 implements Camera, MovingCamera, ZoomingCamera {
 
   @Override
   public void zoomTo(int zpos) throws CameraConnectionException {
-    //Not Supported
+    if (zpos > 50) {
+      sendCommand("zoomIn");
+    } else if (zpos < 50) {
+      sendCommand("zoomOut");
+    } else {
+      sendCommand("zoomStop");
+    }
   }
 
   @Override

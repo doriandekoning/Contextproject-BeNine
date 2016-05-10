@@ -75,52 +75,26 @@ var joystickoptions = {
 var joystick = nipplejs.create(joystickoptions);
 
 
-
-var distance = 0;
-var angle = 0;
-
 joystick.on('move', function(evt, data){
-	distance = data.distance;
-	angle = data.angle.radian;
+	sendMove(data.distance, data.angle.radian);
 });
 
-joystick.on('move', activateMove);
 
 joystick.on('end', function(){
-	distance = 0;
-	angle = 0;
-	sendMove();
+	sendMove(0, 0);
 });
 
-
-function activateMove(evt, data){
-	joystick.off('move', activateMove);
-	sendMove();
-	setTimeout(function(){ joystick.on('move', activateMove); sendMove();}, 500);
-}
-
-function sendMove(){
+function sendMove(distance, angle){
 	var tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	var pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 	console.log(pan + " - " + tilt); 	
 }
 
-var availablezoom = 1;
-var zoompos = 50;
-
-function resetZoom() {
-	availablezoom = 1;
-	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoompos , function(data) {});
-}
 
 function inputzoomslider(zoom) {
-	if(availablezoom === 1){
-		availablezoom = 0;
-		setTimeout(resetZoom, 500);
-		$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=relative&zoom=" + zoom , function(data) {});
-	}
-	zoompos = zoom;
+	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=absolute&zoom=" + zoom , function(data) {});
+	
 	console.log("Zoom: " + zoom);
 }
 
