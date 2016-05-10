@@ -29,6 +29,7 @@ public class CameraInfoHandler extends RequestHandler {
    * @throws IOException When writing the response fails.
    */
   public void handle(HttpExchange exchange) throws IOException {
+    // TODO give all camera info on /camera request
     //TODO add logging stuff
     JSONObject jsonObj = new JSONObject();
     ArrayList<Camera> cameras = getCameraController().getCameras();
