@@ -37,6 +37,9 @@ $(document).ready(function() {
 function setServerStatus() {
     $.get("http://localhost:3000/api/getinfo", function (data) {
         if (data.backend.status === "online") {
+			if(!$('#server_status').hasClass("label-success")){
+				loadCameras();
+			}
             $('#server_status').attr('class', 'label label-success');
         } else {
             $('#server_status').attr('class', 'label label-danger');

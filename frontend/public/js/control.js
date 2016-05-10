@@ -24,7 +24,6 @@ function loadCameras() {
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
 		}
-		setCurrentCamera(0);
 	});
 }
 
