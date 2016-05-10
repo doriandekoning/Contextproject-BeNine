@@ -60,7 +60,7 @@ public class PresetCreationHandler  extends RequestHandler {
     //Create new DatabasePreset
     DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
      
-    //Create a random integer for the preset number, should later be something like getPresetNumber+1
+    //Create a random integer for the preset number, should later be changed.
     Random randomGenerator = new Random();
     int randomInt = randomGenerator.nextInt(100);
     //Adding the new preset to the database
