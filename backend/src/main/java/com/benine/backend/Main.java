@@ -58,29 +58,6 @@ public class Main {
       database.resetDatabase();
     /////
 
-    try {
-      HttpServer server = HttpServer.create(address, 10);
-      // TODO create endpoint like /camera/ to return all camera info
-      // TODO create endpoints like /camera/1/ to return camera 1 info
-      // TODO create handlers a handler for every camera
-      // TODO move handlers to httpHandlerController
-      server.createContext("/camera/0/getcamerainfo", new CameraInfoHandler(cameraController, 0));
-      server.createContext("/camera/0/focus", new FocussingHandler(cameraController, 0));
-      server.createContext("/camera/0/iris", new IrisHandler(cameraController, 0));
-      server.createContext("/camera/0/move", new MovingHandler(cameraController, 0));
-      server.createContext("/camera/0/zoom", new ZoomingHandler(cameraController, 0));
-      server.createContext("/camera/0/preset", new PresetHandler(cameraController, 0));
-
-      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
-      server.start();
-      while (true) {
-        Thread.sleep(100);
-      }
-    } catch (IOException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
-    } catch (InterruptedException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
-    }
 
   }
 
