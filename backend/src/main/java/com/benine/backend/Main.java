@@ -112,4 +112,12 @@ public class Main {
   public static Database getDatabase() {
     return database;
   }
+  
+  /**
+   * Getter for the logger.
+   * @return the logger.
+   */
+  public static Logger getLogger() {
+    return logger;
+  }
 }
