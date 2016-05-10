@@ -26,10 +26,6 @@ public class httpController {
     this.camController = camController;
     try {
       HttpServer server = HttpServer.create(address, 20);
-      // TODO create endpoint like /camera/ to return all camera info
-      // TODO create endpoints like /camera/1/ to return camera 1 info
-      // TODO create handlers a handler for every camera
-      // TODO move handlers to httpHandlerController
 
       createHandlers();
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
@@ -51,7 +47,7 @@ public class httpController {
    * Creates the basic handlers for endpoints like /camera/.
    */
   private void setupBasicHandlers() {
-    // TODO setup basic handlers
+    server.createContext("/camera/", new CameraInfoHandler(camController, -1));
   }
   /**
    * Creates handlers for all cams in the camera controller.
@@ -67,7 +63,7 @@ public class httpController {
    */
    private void createHandlers(Camera cam) {
     int camId = cam.getId();
-    server.createContext("/camera/"+camId+"/getcamerainfo", new CameraInfoHandler(camController, camId));
+    server.createContext("/camera/" + camId + "/", new CameraInfoHandler(camController, camId));
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, camId));
     }
@@ -80,7 +76,7 @@ public class httpController {
     if (cam instanceof ZoomingCamera) {
       server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController, camId));
     }
-    server.createContext("/camera/"+camId+"/preset", new PresetHandler(camController, camId));
+    server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, camId));
   }
 
 }
