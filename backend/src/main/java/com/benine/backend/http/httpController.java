@@ -25,17 +25,12 @@ public class httpController {
     this.logger = logger;
     this.camController = camController;
     try {
-      HttpServer server = HttpServer.create(address, 20);
+      server = HttpServer.create(address, 20);
 
       createHandlers();
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
-      while (true) {
-        Thread.sleep(100);
-      }
     } catch (IOException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
-    } catch (InterruptedException e) {
       logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     }
 
@@ -61,7 +56,7 @@ public class httpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-   private void createHandlers(Camera cam) {
+   public void createHandlers(Camera cam) {
     int camId = cam.getId();
     server.createContext("/camera/" + camId + "/", new CameraInfoHandler(camController, camId));
     if (cam instanceof FocussingCamera) {
@@ -79,4 +74,22 @@ public class httpController {
     server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, camId));
   }
 
+  /**
+   * Destroys http handler.
+   */
+  public void destroy() {
+    server.stop(0);
+  }
+  /**
+   * Getter for httpserver.
+   */
+  public HttpServer getServer() {
+    return server;
+  }
+  /**
+   * Setter for httpserver.
+   */
+  public void setServer(HttpServer server) {
+    this.server = server;
+  }
 }

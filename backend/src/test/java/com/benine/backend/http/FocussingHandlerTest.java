@@ -27,7 +27,7 @@ public class FocussingHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&autoFocusOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -46,7 +46,7 @@ public class FocussingHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -66,7 +66,7 @@ public class FocussingHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

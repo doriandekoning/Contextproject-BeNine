@@ -28,7 +28,7 @@ public class CameraZoomHandlerTest {
     System.out.println(uri.getQuery());
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController);
+    ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {
@@ -48,7 +48,7 @@ public class CameraZoomHandlerTest {
     System.out.println(uri.getQuery());
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController);
+    ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {

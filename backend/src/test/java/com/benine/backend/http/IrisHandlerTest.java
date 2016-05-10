@@ -26,7 +26,7 @@ public class IrisHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -46,7 +46,7 @@ public class IrisHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -66,7 +66,7 @@ public class IrisHandlerTest {
     URI uri = new  URI("http://localhost/zoom?id=0&position=3&autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, 0);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

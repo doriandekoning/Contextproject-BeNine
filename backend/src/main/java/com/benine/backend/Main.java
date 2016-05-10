@@ -8,6 +8,7 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.http.httpController;
 import java.io.File;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
@@ -53,6 +54,14 @@ public class Main {
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));
     httpController = new httpController(address, logger, cameraController);
+    try {
+      while (true) {
+        Thread.sleep(100);
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      logger.log("Exception occured", LogEvent.Type.CRITICAL);
+    }
   }
 
   /**

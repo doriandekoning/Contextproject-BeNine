@@ -48,7 +48,7 @@ public class RequestHandlerTest {
   private class testRequestHandler extends RequestHandler {
 
     public testRequestHandler(CameraController controller) {
-      super(controller);
+      super(controller, 1);
     }
     public void handle(HttpExchange e) {
       // Do nothing
