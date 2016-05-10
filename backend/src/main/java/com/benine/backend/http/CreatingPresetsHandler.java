@@ -1,16 +1,13 @@
 package com.benine.backend.http;
 
+import java.io.IOException;
+import java.util.Random;
+import java.util.jar.Attributes;
+
 import com.benine.backend.Main;
-import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.jar.Attributes;
 
 /**
  * @author naomi
@@ -63,8 +60,11 @@ public class CreatingPresetsHandler extends RequestHandler {
     //Create new DatabasePreset
     DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
      
+    //Create a random integer for the preset number, should later be something like getPresetNumber+1
+    Random randomGenerator = new Random();
+    int randomInt = randomGenerator.nextInt(100);
     //Adding the new preset to the database
-    Main.getDatabase().addPreset(id, 4, preset);
+    Main.getDatabase().addPreset(id, randomInt, preset);
  
 
   }
