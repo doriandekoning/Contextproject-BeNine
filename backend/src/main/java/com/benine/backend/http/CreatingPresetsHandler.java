@@ -33,22 +33,31 @@ public class CreatingPresetsHandler extends RequestHandler {
   */
   public void handle(HttpExchange exchange) throws IOException {
     Attributes parsedURI;
+    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      //Get the values needed to create a preset. 
-      String id = parsedURI.getValue("id");
-      String pan = parsedURI.getValue("pan");
-      String tilt = parsedURI.getValue("tilt");
-      String zoom = parsedURI.getValue("zoom");
-      String focus = parsedURI.getValue("focus");
-      String iris = parsedURI.getValue("iris");
-      String autofocus = parsedURI.getValue("autoFocusOn");
+    } catch (MalformedURIException e) {
+      respond(exchange, response);
+      return;
     }
     
-    catch (MalformedURIException e) {
-      //TODO Log exception
-      System.out.println(e);
-    }
+    //Get the values as String needed to create a preset. 
+    String idStr = parsedURI.getValue("id");
+    String panStr = parsedURI.getValue("pan");
+    String tiltStr = parsedURI.getValue("tilt");
+    String zoomStr = parsedURI.getValue("zoom");
+    String focusStr = parsedURI.getValue("focus");
+    String irisStr = parsedURI.getValue("iris");
+    String autofocusStr = parsedURI.getValue("autoFocusOn");
+    
+    //Strings to integers and boolean to be able to create new preset. 
+    int pan = Integer.parseInt(panStr);
+    int tilt = Integer.parseInt(tiltStr);
+    int zoom = Integer.parseInt(zoomStr);
+    int focus = Integer.parseInt(focusStr);
+    int iris = Integer.parseInt(irisStr);
+    boolean autofocus = Boolean.parseBoolean(autofocusStr);
+ 
 
   }
 }
