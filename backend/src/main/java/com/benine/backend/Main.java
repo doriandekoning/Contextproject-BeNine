@@ -60,6 +60,10 @@ public class Main {
 
     try {
       HttpServer server = HttpServer.create(address, 10);
+      // TODO create endpoint like /camera/ to return all camera info
+      // TODO create endpoints like /camera/1/ to return camera 1 info
+      // TODO create handlers a handler for every camera
+      // TODO move handlers to httpHandlerController
       server.createContext("/camera/0/getcamerainfo", new CameraInfoHandler(cameraController, 0));
       server.createContext("/camera/0/focus", new FocussingHandler(cameraController, 0));
       server.createContext("/camera/0/iris", new IrisHandler(cameraController, 0));
