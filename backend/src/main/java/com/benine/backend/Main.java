@@ -42,28 +42,9 @@ public class Main {
     // Setup camerahandler
     cameraController = new CameraController();
     
-    //Temporary adding multiple test camera's
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    camera.setStreamLink(mainConfig.getValue("camera1"));
     cameraController.addCamera(camera);
-    Camera camera2 = new IPCamera2("83.128.144.84:88");
-    cameraController.addCamera(camera2);
-    SimpleCamera camera3 = new SimpleCamera();
-    camera3.setStreamLink("http://131.180.123.51/cgi-bin/nph-zms?mode=jpeg&monitor=4&scale=100&maxfps=6&buffer=100");
-    cameraController.addCamera(camera3);
-    SimpleCamera camera4 = new SimpleCamera();
-    camera4.setStreamLink("http://131.180.123.51/cgi-bin/nph-zms?mode=jpeg&monitor=5&scale=100&maxfps=6&buffer=100");
-    cameraController.addCamera(camera4);
-    SimpleCamera camera5 = new SimpleCamera();
-    camera5.setStreamLink("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg");
-    cameraController.addCamera(camera5);
-    SimpleCamera camera6 = new SimpleCamera();
-    camera6.setStreamLink("http://131.180.123.51/cgi-bin/nph-zms?mode=jpeg&monitor=4&scale=100&maxfps=6&buffer=100");
-    cameraController.addCamera(camera6);
-    SimpleCamera camera7 = new SimpleCamera();
-    camera7.setStreamLink("http://131.180.123.51/cgi-bin/nph-zms?mode=jpeg&monitor=5&scale=100&maxfps=6&buffer=100");
-    cameraController.addCamera(camera7);
-    //cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
 
     try {
       logger = new Logger();
