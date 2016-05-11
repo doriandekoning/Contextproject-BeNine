@@ -54,7 +54,7 @@ public class PresetCreationHandler  extends RequestHandler {
           Main.getDatabase().addPreset(cameraID, randomInt, preset);
           responseMessage(exchange, true);
         } else {
-          responseMessage(exchange, true);
+          responseMessage(exchange, false);
         }
       }
     } catch (MalformedURIException e) {
