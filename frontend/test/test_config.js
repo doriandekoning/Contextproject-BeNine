@@ -36,7 +36,7 @@ suite("Config", function () {
             done();
         });
         test('should return the contents of the config file if it exists.', function (done) {
-            var testdata = JSON.stringify({a: 1});
+            var testdata = '{"server_port":3000,"backend_server":"localhost","backend_port":8888}';
             fs.writeFileSync(config_path, testdata);
 
             assert.equal(JSON.stringify(config.load(config_path)), testdata);
