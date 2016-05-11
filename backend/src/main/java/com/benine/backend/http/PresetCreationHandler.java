@@ -34,7 +34,6 @@ public class PresetCreationHandler  extends RequestHandler {
   */
   public void handle(HttpExchange exchange) throws IOException {
     Attributes parsedURI;
-    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
@@ -53,14 +52,13 @@ public class PresetCreationHandler  extends RequestHandler {
           int randomInt = randomGenerator.nextInt(100);
           //Adding the new preset to the database
           Main.getDatabase().addPreset(cameraID, randomInt, preset);
-          response = "{\"succes\":\"true\"}";
-          respond(exchange,response);
+          respond(exchange,responseMessage(true));
         } else {
-          respond(exchange,response);
+          respond(exchange,responseMessage(false));
         }
       }
     } catch (MalformedURIException e) {
-      respond(exchange, response);
+      respond(exchange, responseMessage(false));
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);;
       return;
     }   
@@ -89,5 +87,19 @@ public class PresetCreationHandler  extends RequestHandler {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
     }
     return null;
+  }
+  
+  /**
+   * 
+   * @param correct boolean that is true if the exchange is succesful. False otherwise.
+   * @return response the response message
+   */
+  public String responseMessage(boolean correct) {
+    String response;
+    if (correct == true) {
+      return response = "{\"succes\":\"true\"}";  
+    } else {
+      return response = "{\"succes\":\"false\"}";  
+    }
   }
 }
