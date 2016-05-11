@@ -1,7 +1,13 @@
 package com.benine.backend.http;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.OutputStream;
+
+import com.sun.net.httpserver.HttpExchange;
+
 import org.junit.Test;
 
 import com.benine.backend.camera.CameraConnectionException;
@@ -15,23 +21,6 @@ import junit.framework.Assert;
 @SuppressWarnings("deprecation")
 public class PresetCreationHandlerTest {
 
-  @Test
-  public void testResponseMessageTrue() {
-    CameraController camera = mock(CameraController.class);
-    PresetCreationHandler handler = new PresetCreationHandler(camera);
-    String response = "{\"succes\":\"true\"}"; 
-    String actual= handler.responseMessage(true);
-    Assert.assertTrue(actual.equals(response));
-  }
-  
-  @Test
-  public void testResponseMessageFalse() {
-    CameraController camera = mock(CameraController.class);
-    PresetCreationHandler handler = new PresetCreationHandler(camera);
-    String response = "{\"succes\":\"false\"}"; 
-    String actual= handler.responseMessage(false);
-    Assert.assertTrue(actual.equals(response));
-  }
   @Test
   public void testGetCameraPositions() throws CameraConnectionException {
     CameraController controller = mock(CameraController.class);
@@ -50,18 +39,7 @@ public class PresetCreationHandlerTest {
     Assert.assertEquals(preset.getTilt(), handler.getCameraPositions(ipcamera).getTilt());
     Assert.assertEquals(preset.getZoom(), handler.getCameraPositions(ipcamera).getZoom());
     Assert.assertEquals(preset.isAutofocus(), handler.getCameraPositions(ipcamera).isAutofocus());
-    
-    
-    
   }
-
-//  @Test
-//  public void testHandle() {
-//    CameraController controller = mock(CameraController.class);
-//    PresetCreationHandler handler = new PresetCreationHandler(controller);
-//    
-//    
-//  }
 
 
 }
