@@ -7,6 +7,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.util.jar.Attributes;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dorian on 4-5-16.
@@ -38,7 +40,14 @@ public class IrisHandler extends RequestHandler {
       response = "{\"succes\":\"false\"}";
       return;
     }
-    Camera cam =  getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    // Get path
+    Pattern pattern = Pattern.compile(".*/camera/(\\d*)/.*");
+    String path = exchange.getRequestURI().getPath();
+    Matcher m = pattern.matcher(path);
+    m.matches();
+    int camId = Integer.parseInt(m.group(1));
+
+    Camera cam =  getCameraController().getCameraById(camId);
     IrisCamera irisCam = (IrisCamera)cam;
     String autoOn = parsedURI.getValue("autoIrisOn");
     String setPos = parsedURI.getValue("position");
