@@ -42,6 +42,29 @@ public class RequestHandlerTest {
     verify(out).close();
   }
 
+  @Test
+  public void testResponseMessageTrue() throws Exception {
+    CameraController camera = mock(CameraController.class);
+    PresetCreationHandler handler = new PresetCreationHandler(camera);
+    String response = "{\"succes\":\"true\"}"; 
+    HttpExchange exchange = mock(HttpExchange.class);
+    OutputStream out = mock(OutputStream.class);
+    when(exchange.getResponseBody()).thenReturn(out);
+    handler.responseMessage(exchange, true);
+    verify(exchange).sendResponseHeaders(200, response.length());
+  }
+  
+  @Test
+  public void testResponseMessageFalse() throws Exception {
+    CameraController camera = mock(CameraController.class);
+    PresetCreationHandler handler = new PresetCreationHandler(camera);
+    String response = "{\"succes\":\"false\"}"; 
+    HttpExchange exchange = mock(HttpExchange.class);
+    OutputStream out = mock(OutputStream.class);
+    when(exchange.getResponseBody()).thenReturn(out);
+    handler.responseMessage(exchange, false);
+    verify(exchange).sendResponseHeaders(200, response.length());
+  }
 
 
   // Test used to be able to instantiate RequestHandler
