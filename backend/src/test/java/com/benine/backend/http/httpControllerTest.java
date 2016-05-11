@@ -37,33 +37,7 @@ public class httpControllerTest {
 
     controller.setServer(server);
     controller.createHandlers(ipCam);
-    verify(server).createContext(matches("/camera/345/zoom"), any(FocussingHandler.class));
-    controller.destroy();
-  }
-  @Test
-  public void testCreateHandlersIpCamVerifyIris() {
-    IPCamera ipCam = new IPCamera("localhost");
-    ipCam.setId(345);
-    InetSocketAddress address = new InetSocketAddress("127.0.0.2", 8888);
-    httpController controller = new httpController(address, logger, cameraController);
-    HttpServer server = mock(HttpServer.class);
-
-    controller.setServer(server);
-    controller.createHandlers(ipCam);
-    verify(server).createContext(matches("/camera/345/iris"), any(IrisHandler.class));
-    controller.destroy();
-  }
-  @Test
-  public void testCreateHandlersIpCamVerifyFocus() {
-    IPCamera ipCam = new IPCamera("localhost");
-    ipCam.setId(345);
-    InetSocketAddress address = new InetSocketAddress("127.0.0.3", 8888);
-    httpController controller = new httpController(address, logger, cameraController);
-    HttpServer server = mock(HttpServer.class);
-
-    controller.setServer(server);
-    controller.createHandlers(ipCam);
-    verify(server).createContext(matches("/camera/345/focus"), any(ZoomingHandler.class));
+    verify(cameraController).getCameras();
     controller.destroy();
   }
 }

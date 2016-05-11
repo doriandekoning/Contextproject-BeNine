@@ -8,23 +8,21 @@ import org.junit.Test;
 import java.io.OutputStream;
 import java.net.URI;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by dorian on 4-5-16.
  */
-public class CameraZoomHandlerTest {
+public class CameraInfoHandlerTest {
 
   @Test
-  public void testZoomAbsolute() throws Exception {
+  public void testGetInfo() throws Exception {
     HttpExchange exchange = mock(HttpExchange.class);
     OutputStream out = mock(OutputStream.class);
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?zoomType=absolute&zoom=2");
+    URI uri = new  URI("http://localhost/camera");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
@@ -43,7 +41,8 @@ public class CameraZoomHandlerTest {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?zoomType=relative&zoom=2");
+    URI uri = new  URI("http://localhost/zoom?id=0&zoomType=relative&zoom=2");
+    System.out.println(uri.getQuery());
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
