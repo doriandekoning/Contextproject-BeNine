@@ -61,6 +61,7 @@ public class PresetCreationHandler  extends RequestHandler {
       }
     } catch (MalformedURIException e) {
       respond(exchange, response);
+      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);;
       return;
     }   
     
