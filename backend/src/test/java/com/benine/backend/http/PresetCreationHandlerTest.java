@@ -1,12 +1,7 @@
 package com.benine.backend.http;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.io.OutputStream;
-
-import com.sun.net.httpserver.HttpExchange;
 
 import org.junit.Test;
 
@@ -16,9 +11,8 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.DatabasePreset;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
-@SuppressWarnings("deprecation")
 public class PresetCreationHandlerTest {
 
   @Test
@@ -33,12 +27,12 @@ public class PresetCreationHandlerTest {
     when(ipcamera.isAutoFocusOn()).thenReturn(true);
 
     DatabasePreset preset = new DatabasePreset(0,0,100,33,50,true);
-    Assert.assertEquals(preset.getFocus(), handler.getCameraPositions(ipcamera).getFocus());
-    Assert.assertEquals(preset.getIris(), handler.getCameraPositions(ipcamera).getIris());
-    Assert.assertEquals(preset.getPan(), handler.getCameraPositions(ipcamera).getPan());
-    Assert.assertEquals(preset.getTilt(), handler.getCameraPositions(ipcamera).getTilt());
-    Assert.assertEquals(preset.getZoom(), handler.getCameraPositions(ipcamera).getZoom());
-    Assert.assertEquals(preset.isAutofocus(), handler.getCameraPositions(ipcamera).isAutofocus());
+    Assert.assertEquals(preset.getFocus(), handler.createPreset(ipcamera).getFocus());
+    Assert.assertEquals(preset.getIris(), handler.createPreset(ipcamera).getIris());
+    Assert.assertEquals(preset.getPan(), handler.createPreset(ipcamera).getPan());
+    Assert.assertEquals(preset.getTilt(), handler.createPreset(ipcamera).getTilt());
+    Assert.assertEquals(preset.getZoom(), handler.createPreset(ipcamera).getZoom());
+    Assert.assertEquals(preset.isAutofocus(), handler.createPreset(ipcamera).isAutofocus());
   }
 
 
