@@ -59,4 +59,14 @@ public class PresetsHandler {
     DatabasePreset[] presets = Main.getCameraController().getCameraById(cameraId).getPresets();
     presets[position] = preset;
   }
+
+  /**
+   * Get a preset from a camera with the presetId.
+   * @param cameraId The id of the camera
+   * @param presetId The preset id of the camera
+   * @return The preset
+   */
+  public DatabasePreset getPreset(int cameraId, int presetId) {
+    return Main.getCameraController().getCameraById(cameraId).getPresets()[presetId];
+  }
 }
