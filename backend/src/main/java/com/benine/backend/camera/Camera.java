@@ -30,9 +30,21 @@ public interface Camera {
    */
   int getId();
 
+  /**
+   * Get the list of presets from this camera.
+   * @return The preset array
+   */
   DatabasePreset[] getPresets();
 
+  /**
+   * Set the list of presets from this camera.
+   * @param presets The preset array
+   */
   void setPresets(DatabasePreset[] presets);
 
+  /**
+   * Set the list of presets from this camera of an arraylist.
+   * @param presets The ArrayList of presets
+   */
   void setPresetsFromArrayList(ArrayList<DatabasePreset> presets);
 }
