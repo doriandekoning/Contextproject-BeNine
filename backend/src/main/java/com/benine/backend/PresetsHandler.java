@@ -1,7 +1,9 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.Camera;
-import com.benine.backend.database.DatabasePreset;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+
+import java.util.ArrayList;
 
 /**
  * Created by Ege on 11-5-2016.
@@ -23,11 +25,14 @@ public class PresetsHandler {
   public void resetPresetsInDatabase() {
     Main.getDatabase().resetDatabase();
     for(Camera camera : Main.getCameraController().getCameras()) {
-      //Main.getDatabase().addCamera(camera.getId(), camera.getIP, camera.getName());
-      int i = 0;
-      for(DatabasePreset preset : camera.getPresets()) {
-        Main.getDatabase().addPreset(camera.getId(), i, preset);
-        i++;
+      if(camera instanceof IPCamera){
+        IPCamera ipcamera = (IPCamera) camera;
+        Main.getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
+        int i = 0;
+        for(Preset preset : camera.getPresets()) {
+          Main.getDatabase().addPreset(camera.getId(), i, preset);
+          i++;
+        }
       }
     }
   }
@@ -38,11 +43,11 @@ public class PresetsHandler {
    * @param preset The preset
    * @return The position the preset is added
    */
-  public int addPreset(int cameraId, DatabasePreset preset) {
-    DatabasePreset[] presets = Main.getCameraController().getCameraById(cameraId).getPresets();
-    for (int i = 0; i < presets.length; i++) {
-      if(presets[i] == null) {
-        presets[i] = preset;
+  public int addPreset(int cameraId, Preset preset) {
+    Preset[] cameraPresets = Main.getCameraController().getCameraById(cameraId).getPresets();
+    for (int i = 0; i < cameraPresets.length; i++) {
+      if(cameraPresets[i] == null) {
+        cameraPresets[i] = preset;
         return i;
       }
     }
@@ -55,9 +60,9 @@ public class PresetsHandler {
    * @param preset The preset
    * @param position The position to add the preset
    */
-  public void addPresetAtPosition(int cameraId, DatabasePreset preset, int position) {
-    DatabasePreset[] presets = Main.getCameraController().getCameraById(cameraId).getPresets();
-    presets[position] = preset;
+  public void addPresetAtPosition(int cameraId, Preset preset, int position) {
+    Preset[] cameraPresets = Main.getCameraController().getCameraById(cameraId).getPresets();
+    cameraPresets[position] = preset;
   }
 
   /**
@@ -66,7 +71,7 @@ public class PresetsHandler {
    * @param presetId The preset id of the camera
    * @return The preset
    */
-  public DatabasePreset getPreset(int cameraId, int presetId) {
+  public Preset getPreset(int cameraId, int presetId) {
     return Main.getCameraController().getCameraById(cameraId).getPresets()[presetId];
   }
 }

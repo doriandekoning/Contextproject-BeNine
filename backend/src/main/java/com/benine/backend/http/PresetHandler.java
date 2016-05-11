@@ -1,7 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,13 +45,13 @@ public class PresetHandler extends RequestHandler {
     if (cameraId != null) {
       // Used for retrieving presets from database
       int id = Integer.parseInt(cameraId);
-      ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
+      ArrayList<Preset> presets = new ArrayList<Preset>();
 
       // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
 
 
       JSONArray json = new JSONArray();
-      for (DatabasePreset preset : presets) {
+      for (Preset preset : presets) {
         json.add(preset.toJSON());
       }
       response = new JSONObject().put("presets", json.toString()).toString();
