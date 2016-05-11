@@ -41,21 +41,18 @@ public class PresetHandler extends RequestHandler {
       respond(exchange, "{\"succes\":\"false\"}");
       return;
     }
-    String cameraId = parsedURI.getValue("cameraId");
-    if (cameraId != null) {
-      // Used for retrieving presets from database
-      int id = Integer.parseInt(cameraId);
-      ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
+    int cameraId = getCameraId(exchange);
+    // Used for retrieving presets from database
+    ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
 
-      // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
+    // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
 
 
-      JSONArray json = new JSONArray();
-      for (DatabasePreset preset : presets) {
-        json.add(preset.toJSON());
-      }
-      response = new JSONObject().put("presets", json.toString()).toString();
+    JSONArray json = new JSONArray();
+    for (DatabasePreset preset : presets) {
+      json.add(preset.toJSON());
     }
-    respond(exchange, response);
+    response = new JSONObject().put("presets", json.toString()).toString();
+
   }
 }

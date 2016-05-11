@@ -56,7 +56,7 @@ public abstract class RequestHandler implements HttpHandler {
     try {
       exchange.sendResponseHeaders(200, response.length());
       OutputStream out = exchange.getResponseBody();
-      out.write(response.getBytes());
+      out.write(response.getBytes("UTF-8"));
       out.close();
     } catch (IOException e) {
       // TODO Log exception
