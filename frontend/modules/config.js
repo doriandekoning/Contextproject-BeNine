@@ -19,6 +19,33 @@ var Config = function() {
 };
 
 /**
+ * Validates the config file keys. If one of the default keys is missing or there is a syntax error, it returns false.
+ * @param config_path   Path to config file.
+ * @param callback  A callback function.
+ * @returns {*}
+ */
+Config.prototype.validate = function (config, callback) {
+    var default_keys = Object.keys(default_config);
+    var config_keys = Object.keys(config);
+
+    for (var i = 0; i < default_keys.length; i++) {
+        var key = default_keys[i];
+        if (config_keys.indexOf(key) === -1) {
+            return false;
+        }
+    }
+
+    for (var i = 0; i < config_keys.length; i++) {
+        var key = config_keys[i];
+        if (default_keys.indexOf(key) === -1) {
+            return false;
+        }
+    }
+    
+    return true;
+};
+
+/**
  * Loads the config from file, if not existent a new file is created and the default is returned.
  * @param config_path       Path to the config file.
  * @returns {object}
@@ -29,24 +56,28 @@ Config.prototype.load = function (config_path) {
         config_path = default_path;
     }
 
-    // First check if the file exists, if it doesn't insert the default config.
-    if (this.exists(config_path)) {
-        try {
-            logger.logMessage(logger.levels.INFO, "Reading config file from " + config_path);
-            return JSON.parse(fs.readFileSync(config_path));
-        } catch (e) {
-            logger.logMessage(logger.levels.ERROR, "Config file could not be read from " + config_path + " , using default now.");
-            return default_config;
+    if (this.validate(fs.readFileSync(config_path))) {
+        // First check if the file exists, if it doesn't insert the default config.
+        if (this.exists(config_path)) {
+            try {
+                logger.logMessage(logger.levels.INFO, "Reading config file from " + config_path);
+                return JSON.parse(fs.readFileSync(config_path));
+            } catch (e) {
+                logger.logMessage(logger.levels.ERROR, "Config file could not be read from " + config_path + " , using default now.");
+                return default_config;
+            }
+        } else {
+            try {
+                fs.writeFileSync(config_path, JSON.stringify(default_config));
+                logger.logMessage(logger.levels.INFO, "Successfully created default log file in " + config_path);
+                return default_config;
+            } catch (e) {
+                logger.logMessage(logger.levels.ERROR, "Could not write default config file file at " + config_path + " , using default now.");
+                return default_config;
+            }
         }
     } else {
-        try {
-            fs.writeFileSync(config_path, JSON.stringify(default_config));
-            logger.logMessage(logger.levels.INFO, "Successfully created default log file in " + config_path);
-            return default_config;
-        } catch (e) {
-            logger.logMessage(logger.levels.ERROR, "Could not write default config file file at " + config_path + " , using default now.");
-            return default_config;
-        }
+        return default_config;
     }
 };
 

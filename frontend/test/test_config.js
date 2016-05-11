@@ -66,10 +66,5 @@ suite("Config", function () {
             assert.equal(config.validate(test_config), false);
             done();
         });
-        test('should return false a JSON syntax error occurs.', function (done) {
-            var test_config = JSON.parse('{"server_port":3000,"backend_server","localhost"}');
-            assert.equal(config.validate(test_config), false);
-            done();
-        });
     })
 });
