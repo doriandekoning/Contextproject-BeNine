@@ -52,13 +52,13 @@ public class PresetCreationHandler  extends RequestHandler {
           int randomInt = randomGenerator.nextInt(100);
           //Adding the new preset to the database
           Main.getDatabase().addPreset(cameraID, randomInt, preset);
-          respond(exchange,responseMessage(true));
+          responseMessage(exchange, true);
         } else {
-          respond(exchange,responseMessage(false));
+          responseMessage(exchange, true);
         }
       }
     } catch (MalformedURIException e) {
-      respond(exchange, responseMessage(false));
+      responseMessage(exchange, false);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);;
       return;
     }   
@@ -91,15 +91,18 @@ public class PresetCreationHandler  extends RequestHandler {
   
   /**
    * 
-   * @param correct boolean that is true if the exchange is succesful. False otherwise.
-   * @return response the response message
+   * @param exchange the HttpExchange.
+   * @param correct boolean that is true if the exchange is successful. False otherwise.
    */
-  public String responseMessage(boolean correct) {
+  public void responseMessage(HttpExchange exchange, boolean correct) {
     String response;
     if (correct == true) {
-      return response = "{\"succes\":\"true\"}";  
+      response = "{\"succes\":\"true\"}";  
+      respond(exchange,response);
     } else {
-      return response = "{\"succes\":\"false\"}";  
+      response = "{\"succes\":\"false\"}";  
+      respond(exchange,response);
     }
+    return;
   }
 }
