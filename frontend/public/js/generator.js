@@ -21,7 +21,6 @@ $(document).ready(function() {
     generatePresets();
 
     console.log('Page has loaded successfully.');
-
 });
 
 /**
@@ -42,7 +41,6 @@ function generateCameraArea() {
     carousel.find(".carousel-indicators").children().eq(0).attr('class', 'active');
     // Set first camera block active.
     carousel.find(".carousel-inner").children().eq(0).attr('class', 'item active');
-
 }
 
 /**
@@ -114,7 +112,7 @@ function generatePresets() {
  * Adds a row to the presets area of the app.
  */
 function addPresetRow() {
-    var preset_row, preset_column, row_container;
+    var preset_row, preset_column;
 
     preset_row = $('<div class="row"></div>');
 
@@ -140,11 +138,10 @@ function addPresetRow() {
  * @param elem  A preset_row element.
  */
 function addPreset(elem) {
-    var preset_image, preset_caption, preset_image_div;
+    var preset_image, preset_caption;
 
     preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
-
 
     // Run the placeholder creator.
     Holder.run({
