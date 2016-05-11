@@ -10,6 +10,7 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
 
+import com.benine.backend.database.DatabasePreset;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -19,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 
 /**
@@ -31,12 +33,15 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   private int id = -1;
 
+  DatabasePreset[] presetsFromCamera;
+
   /**
    *  Create a new IP Camera object.
    *  @param ip address of this camera.
    */
   public IPCamera(String ip) {
     ipaddress = ip;
+    presetsFromCamera = new DatabasePreset[16];
   }
   
   /**
@@ -409,7 +414,26 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public int getId() {
     return this.id;
   }
-  
-  
+
+  @Override
+  public DatabasePreset[] getPresets() {
+    return presetsFromCamera;
+  }
+
+  @Override
+  public void setPresets(DatabasePreset[] presets) {
+    presetsFromCamera = presets;
+  }
+
+  @Override
+  public void setPresetsFromArrayList(ArrayList<DatabasePreset> presets) {
+    presetsFromCamera = new DatabasePreset[16];
+    int i = 0;
+    for(DatabasePreset preset : presets) {
+      presetsFromCamera[i] = preset;
+      i++;
+    }
+  }
+
 
 }

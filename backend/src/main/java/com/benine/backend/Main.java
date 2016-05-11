@@ -52,7 +52,7 @@ public class Main {
     }
 
     /////CONNECT TO DATABASE SERVER
-    Database database = new MySQLDatabase();
+    database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
     //If the database does not exist yet, create a new one
     if (!database.checkDatabase()) {
@@ -112,6 +112,7 @@ public class Main {
   public static Database getDatabase() {
     return database;
   }
+
   
   /**
    * Getter for the logger.
@@ -120,4 +121,5 @@ public class Main {
   public static Logger getLogger() {
     return logger;
   }
+
 }
