@@ -24,7 +24,7 @@ public class CameraZoomHandlerTest {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?zoomType=absolute&zoom=2");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=absolute&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
@@ -43,7 +43,7 @@ public class CameraZoomHandlerTest {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?zoomType=relative&zoom=2");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"zoom?zoomType=relative&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     ZoomingHandler zHandler = new ZoomingHandler(camController, 0);

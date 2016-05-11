@@ -43,7 +43,7 @@ public class FocussingHandlerTest {
     FocussingCamera cam = mock(FocussingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     FocussingHandler fHandler = new FocussingHandler(camController, 0);
@@ -63,7 +63,7 @@ public class FocussingHandlerTest {
     FocussingCamera cam = mock(FocussingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3&autoFocusOn=false");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"zoom?position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     FocussingHandler fHandler = new FocussingHandler(camController, 0);
