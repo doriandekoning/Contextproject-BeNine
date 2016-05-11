@@ -3,16 +3,19 @@ var cameracounter = 0;
 var blockcounter = 0;
 var presetcounter = 0;
 
-// Hold the ready until all data about the backend server is fetched.
-$.holdReady(true);
-
-$.get('http://localhost:3000/api/getserver', function(data) {
-    address = 'http://' + data.address + ':' + data.port;
-    $.holdReady(false);
-});
+// The document ready can be hold as follows, might additional data from the server be needed.
+// $.holdReady(true);
+//
+// $.get('http://localhost:3000/api/getserver', function(data) {
+//     address = 'http://' + data.address + ':' + data.port;
+//     $.holdReady(false);
+// });
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
+
+    // Update server status every 10 seconds.
+    setInterval(setServerStatus, 10 * 1000);
 
     // Generate the camera block area.
     generateCameraArea();
@@ -23,6 +26,19 @@ $(document).ready(function() {
     console.log('Page has loaded successfully.');
 
 });
+
+/**
+ * Sets the backend server status.
+ */
+function setServerStatus() {
+    $.get("http://localhost:3000/api/getinfo", function (data) {
+        if (data.backend.status === "online") {
+            $('#server_status').attr('class', 'label label-success');
+        } else {
+            $('#server_status').attr('class', 'label label-danger');
+        }
+    })
+}
 
 /**
  * Generates the camera area of the app.
