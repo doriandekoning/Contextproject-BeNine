@@ -51,13 +51,7 @@ public abstract class RequestHandler implements HttpHandler {
    */
   public void responseMessage(HttpExchange exchange, boolean correct) {
     String response;
-    if (correct == true) {
-      response = "{\"succes\":\"true\"}";  
-      respond(exchange,response);
-    } else {
-      response = "{\"succes\":\"false\"}";  
-      respond(exchange,response);
-    }
+    respond(exchange, response = "{\"succes\":\"" + correct + "\"}");
   }
   
   /**
