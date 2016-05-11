@@ -39,23 +39,19 @@ public class PresetCreationHandler  extends RequestHandler {
         
       int cameraID = Integer.parseInt(parsedURI.getValue("id"));
       Camera camera =  getCameraController().getCameraById(cameraID);
-      IPCamera ipCamera = null;
-      
+            
       if (camera instanceof IPCamera) {
-        ipCamera = (IPCamera)camera;
+        IPCamera ipCamera = (IPCamera)camera;
         
         DatabasePreset preset = createPreset(ipCamera);
-         
-        if (preset != null) {
-          //Create a random integer for the preset number, should later be changed.
-          Random randomGenerator = new Random();
-          int randomInt = randomGenerator.nextInt(100);
-          //Adding the new preset to the database
-          Main.getDatabase().addPreset(cameraID, randomInt, preset);
-          responseMessage(exchange, true);
-        } else {
-          responseMessage(exchange, false);
-        }
+                
+        //Create a random integer for the preset number, should later be changed.
+        Random randomGenerator = new Random();
+        int randomInt = randomGenerator.nextInt(100);
+        //Adding the new preset to the database
+        Main.getDatabase().addPreset(cameraID, randomInt, preset);
+        responseMessage(exchange, true);
+      
       }
     } catch (MalformedURIException e) {
       responseMessage(exchange, false);
