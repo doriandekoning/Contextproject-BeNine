@@ -1,7 +1,10 @@
 package com.benine.backend.http;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.OutputStream;
 
 import org.junit.Test;
 
@@ -10,11 +13,26 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.DatabasePreset;
+import com.sun.net.httpserver.HttpExchange;
 
 import org.junit.Assert;
+import org.junit.Before;
 
 public class PresetCreationHandlerTest {
-
+  private CameraController camera;
+  private PresetCreationHandler handler;
+  private HttpExchange exchangeMock;
+  private OutputStream out;
+  
+  @Before
+  public void initialize(){
+    camera = mock(CameraController.class);
+    handler = new PresetCreationHandler(camera);
+    exchangeMock = mock(HttpExchange.class);
+    out = mock(OutputStream.class);
+    when(exchangeMock.getResponseBody()).thenReturn(out);
+  }
+  
   @Test
   public void testGetCameraPositions() throws CameraConnectionException {
     CameraController controller = mock(CameraController.class);
@@ -35,5 +53,20 @@ public class PresetCreationHandlerTest {
     Assert.assertEquals(preset.isAutofocus(), handler.createPreset(ipcamera).isAutofocus());
   }
 
+
+  
+  @Test
+  public void testResponseMessageTrue() throws Exception {
+    String response = "{\"succes\":\"true\"}"; 
+    handler.responseMessage(exchangeMock, true);
+    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  }
+  
+  @Test
+  public void testResponseMessageFalse() throws Exception {
+    String response = "{\"succes\":\"false\"}"; 
+    handler.responseMessage(exchangeMock, false);
+    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  }
 
 }
