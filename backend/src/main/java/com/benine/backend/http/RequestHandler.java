@@ -58,7 +58,6 @@ public abstract class RequestHandler implements HttpHandler {
       response = "{\"succes\":\"false\"}";  
       respond(exchange,response);
     }
-    return;
   }
   
   /**
