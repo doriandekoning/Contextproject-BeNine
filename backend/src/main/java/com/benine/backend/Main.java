@@ -27,6 +27,8 @@ public class Main {
 
   private static CameraController cameraController;
 
+  private static Database database;
+
   /**
    * Main method of the program.
    * @param args command line arguments.
@@ -52,7 +54,7 @@ public class Main {
     }
 
     /////CONNECT TO DATABASE SERVER
-    Database database = new MySQLDatabase();
+    database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
     if(!database.checkDatabase()) //If the database does not exist yet, create a new one
       database.resetDatabase();
@@ -100,5 +102,13 @@ public class Main {
    */
   public static CameraController getCameraController() {
     return cameraController;
+  }
+
+  /**
+   * Returns the database.
+   * @return the database
+   */
+  public static Database getDatabase() {
+    return database;
   }
 }
