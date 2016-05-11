@@ -7,11 +7,11 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.DatabasePreset;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.util.Random;
 import java.util.jar.Attributes;
-import com.sun.net.httpserver.HttpExchange;
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
@@ -44,7 +44,7 @@ public class PresetCreationHandler  extends RequestHandler {
       if (camera instanceof IPCamera) {
         ipCamera = (IPCamera)camera;
         
-        DatabasePreset preset = getCameraPositions(ipCamera);
+        DatabasePreset preset = createPreset(ipCamera);
          
         if (preset != null) {
           //Create a random integer for the preset number, should later be changed.
@@ -59,7 +59,7 @@ public class PresetCreationHandler  extends RequestHandler {
       }
     } catch (MalformedURIException e) {
       responseMessage(exchange, false);
-      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);;
+      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
       return;
     }   
     
@@ -68,9 +68,8 @@ public class PresetCreationHandler  extends RequestHandler {
   /**
    * @param ipCamera the ipCamera you want to get the position of.
    * @return DatabasePreset preset.
-   * @throws CameraConnectionException thrown if camera isn't an IP Camera. 
    */
-  public DatabasePreset getCameraPositions(IPCamera ipCamera) {
+  public DatabasePreset createPreset(IPCamera ipCamera) {
     try {
       //Get everything that is needed to create a new preset.  
       int zoom = ipCamera.getZoomPosition();
@@ -81,28 +80,12 @@ public class PresetCreationHandler  extends RequestHandler {
       boolean autofocus = ipCamera.isAutoFocusOn();
     
       //Create new DatabasePreset and return it.
-      DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
-      return preset;
+      return new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+      
     } catch (CameraConnectionException e) {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
     }
     return null;
   }
   
-  /**
-   * 
-   * @param exchange the HttpExchange.
-   * @param correct boolean that is true if the exchange is successful. False otherwise.
-   */
-  public void responseMessage(HttpExchange exchange, boolean correct) {
-    String response;
-    if (correct == true) {
-      response = "{\"succes\":\"true\"}";  
-      respond(exchange,response);
-    } else {
-      response = "{\"succes\":\"false\"}";  
-      respond(exchange,response);
-    }
-    return;
-  }
 }
