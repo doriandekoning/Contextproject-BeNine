@@ -1,9 +1,5 @@
 package com.benine.backend.http;
 
-import java.io.IOException;
-import java.util.Random;
-import java.util.jar.Attributes;
-
 import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
 import com.benine.backend.camera.Camera;
@@ -11,10 +7,13 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.DatabasePreset;
+
+import java.io.IOException;
+import java.util.Random;
+import java.util.jar.Attributes;
 import com.sun.net.httpserver.HttpExchange;
 
 /**
- * @author naomi
  * Class allows creation of a preset by tagging a camera viewpoint location.
 **/
 public class PresetCreationHandler  extends RequestHandler {
@@ -46,18 +45,9 @@ public class PresetCreationHandler  extends RequestHandler {
       
       if (camera instanceof IPCamera) {
         ipCamera = (IPCamera)camera;
-             
-        //Get everything that is needed to create a new preset.  
-        int zoom = ipCamera.getZoomPosition();
-        int pan = (int)ipCamera.getPosition().getPan();
-        int tilt = (int)ipCamera.getPosition().getTilt();
-        int focus = ipCamera.getFocusPos();
-        int iris = ipCamera.getIrisPos();
-        boolean autofocus = ipCamera.isAutoFocusOn();
-      
-        //Create new DatabasePreset.
-        DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
         
+        DatabasePreset preset = getCameraPositions(ipCamera);
+                    
         //Create a random integer for the preset number, should later be changed.
         Random randomGenerator = new Random();
         int randomInt = randomGenerator.nextInt(100);
@@ -74,5 +64,24 @@ public class PresetCreationHandler  extends RequestHandler {
     }
     
     
+  }
+  
+  /**
+   * @param ipCamera the ipCamera you want to get the position of.
+   * @return DatabasePreset preset.
+   * @throws CameraConnectionException thrown if camera isn't an IP Camera. 
+   */
+  public DatabasePreset getCameraPositions(IPCamera ipCamera) throws CameraConnectionException {
+    //Get everything that is needed to create a new preset.  
+    int zoom = ipCamera.getZoomPosition();
+    int pan = (int)ipCamera.getPosition().getPan();
+    int tilt = (int)ipCamera.getPosition().getTilt();
+    int focus = ipCamera.getFocusPos();
+    int iris = ipCamera.getIrisPos();
+    boolean autofocus = ipCamera.isAutoFocusOn();
+  
+    //Create new DatabasePreset.
+    DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+    return preset;
   }
 }
