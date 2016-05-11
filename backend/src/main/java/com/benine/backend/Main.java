@@ -1,16 +1,13 @@
 package com.benine.backend;
 
-import com.benine.backend.database.Database;
-import com.benine.backend.database.MySQLDatabase;
-
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.database.Database;
+import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
-import java.sql.SQLException;
 
 public class Main {
 

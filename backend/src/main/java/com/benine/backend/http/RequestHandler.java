@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.apache.tools.ant.taskdefs.condition.Http;
 
 import java.io.IOException;
 import java.io.OutputStream;

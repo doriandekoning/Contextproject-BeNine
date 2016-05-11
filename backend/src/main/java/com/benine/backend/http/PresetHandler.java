@@ -45,7 +45,7 @@ public class PresetHandler extends RequestHandler {
     // Used for retrieving presets from database
     ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
 
-    // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
+    // TODO GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
 
 
     JSONArray json = new JSONArray();
