@@ -5,7 +5,7 @@ import com.benine.backend.database.MySQLDatabase;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.http.httpController;
+import com.benine.backend.http.HttpController;
 import java.io.File;
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -20,7 +20,7 @@ public class Main {
 
   private static CameraController cameraController;
 
-  private static httpController httpController;
+  private static HttpController httpController;
 
   /**
    * Main method of the program.
@@ -53,7 +53,7 @@ public class Main {
     /////
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));
-    httpController = new httpController(address, logger, cameraController);
+    httpController = new HttpController(address, logger, cameraController);
     try {
       while (true) {
         Thread.sleep(100);

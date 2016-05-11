@@ -27,17 +27,7 @@ public class httpControllerTest {
 
   }
 
-  @Test
-  public void testCreateHandlersIpCamVerifyZoom() {
-    IPCamera ipCam = new IPCamera("localhost");
-    ipCam.setId(345);
-    InetSocketAddress address = new InetSocketAddress("127.0.0.34", 8888);
-    httpController controller = new httpController(address, logger, cameraController);
-    HttpServer server = mock(HttpServer.class);
 
-    controller.setServer(server);
-    controller.createHandlers(ipCam);
-    verify(cameraController).getCameras();
-    controller.destroy();
-  }
+    //TODO add test
+
 }

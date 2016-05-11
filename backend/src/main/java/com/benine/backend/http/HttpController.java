@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
@@ -12,16 +11,20 @@ import java.net.InetSocketAddress;
 /**
  * Created by dorian on 10-5-16.
  */
-public class httpController {
+public class HttpController {
 
   private HttpServer server;
   private Logger logger;
   private CameraController camController;
 
   /**
-   * Constructor, creates the handlers for
+   * Constructor, creates a new HttpController object.
+   * @param address an internetsocet adress indicating the ports for the server to listen to.
+   * @param logger the logger to use to log to.
+   * @param camController the cameracontroller that contains
+   *                      the camera's which this server interacts with.
    */
-  public httpController(InetSocketAddress address, Logger logger, CameraController camController) {
+  public HttpController(InetSocketAddress address, Logger logger, CameraController camController) {
     this.logger = logger;
     this.camController = camController;
     try {
@@ -48,7 +51,8 @@ public class httpController {
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
-    for(Camera cam : camController.getCameras()){
+    server.createContext("/camera/", new CameraInfoHandler(camController));
+    for (Camera cam : camController.getCameras()) {
       createHandlers(cam);
     }
   }
@@ -56,9 +60,8 @@ public class httpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-   public void createHandlers(Camera cam) {
+  public void createHandlers(Camera cam) {
     int camId = cam.getId();
-    server.createContext("/camera/", new CameraInfoHandler(camController));
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController));
     }
@@ -80,16 +83,18 @@ public class httpController {
   public void destroy() {
     server.stop(0);
   }
-  /**
-   * Getter for httpserver.
-   */
-  public HttpServer getServer() {
-    return server;
-  }
-  /**
-   * Setter for httpserver.
-   */
-  public void setServer(HttpServer server) {
-    this.server = server;
-  }
+//  /**
+//   * Getter for httpserver.
+//   * @return the httpserver.
+//   */
+//  public HttpServer getServer() {
+//    return server;
+//  }
+//  /**
+//   * Setter for httpserver.
+//   * @param server the server to use.
+//   */
+//  public void setServer(HttpServer server) {
+//    this.server = server;
+//  }
 }
