@@ -20,25 +20,25 @@ var Config = function() {
 
 /**
  * Validates the config file keys. If one of the default keys is missing or there is a syntax error, it returns false.
- * @param config_path   Path to config file.
- * @param callback  A callback function.
+ * @param config   Config object.
  * @returns {*}
  */
 Config.prototype.validate = function (config) {
     var default_keys = Object.keys(default_config);
     var config_keys = Object.keys(config);
+    var i, key;
 
     // Check if config contains all default keys.
-    for (var i = 0; i < default_keys.length; i++) {
-        var key = default_keys[i];
+    for (i = 0; i < default_keys.length; i++) {
+        key = default_keys[i];
         if (config_keys.indexOf(key) === -1) {
             return false;
         }
     }
 
     // Check if the config only contains default keys.
-    for (var i = 0; i < config_keys.length; i++) {
-        var key = config_keys[i];
+    for (i = 0; i < config_keys.length; i++) {
+        key = config_keys[i];
         if (default_keys.indexOf(key) === -1) {
             return false;
         }
