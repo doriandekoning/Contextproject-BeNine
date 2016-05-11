@@ -28,7 +28,7 @@ public class PresetCreationHandler  extends RequestHandler {
   }
   
   /**
-     * Handles a request
+     * Handles a request of making a new preset. 
      * @param exchange the exchange containing data about the request.
      * @throws IOException when an error occurs with responding to the request.
   */
@@ -57,8 +57,6 @@ public class PresetCreationHandler  extends RequestHandler {
     } catch (MalformedURIException e) {
       respond(exchange, response);
       return;
-    } catch (CameraConnectionException e) {
-      Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
     } catch (NullPointerException e) {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
     }
@@ -71,17 +69,22 @@ public class PresetCreationHandler  extends RequestHandler {
    * @return DatabasePreset preset.
    * @throws CameraConnectionException thrown if camera isn't an IP Camera. 
    */
-  public DatabasePreset getCameraPositions(IPCamera ipCamera) throws CameraConnectionException {
-    //Get everything that is needed to create a new preset.  
-    int zoom = ipCamera.getZoomPosition();
-    int pan = (int)ipCamera.getPosition().getPan();
-    int tilt = (int)ipCamera.getPosition().getTilt();
-    int focus = ipCamera.getFocusPos();
-    int iris = ipCamera.getIrisPos();
-    boolean autofocus = ipCamera.isAutoFocusOn();
-  
-    //Create new DatabasePreset.
-    DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
-    return preset;
+  public DatabasePreset getCameraPositions(IPCamera ipCamera) {
+    try {
+      //Get everything that is needed to create a new preset.  
+      int zoom = ipCamera.getZoomPosition();
+      int pan = (int)ipCamera.getPosition().getPan();
+      int tilt = (int)ipCamera.getPosition().getTilt();
+      int focus = ipCamera.getFocusPos();
+      int iris = ipCamera.getIrisPos();
+      boolean autofocus = ipCamera.isAutoFocusOn();
+    
+      //Create new DatabasePreset and return it.
+      DatabasePreset preset = new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+      return preset;
+    } catch (CameraConnectionException e) {
+      Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
+    }
+    return null;
   }
 }
