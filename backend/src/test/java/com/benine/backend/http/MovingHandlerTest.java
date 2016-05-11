@@ -27,7 +27,7 @@ public class MovingHandlerTest {
     URI uri = new  URI("http://localhost/camera/" +cam.getId()+ "/zoom?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    MovingHandler fHandler = new MovingHandler(camController, 0);
+    MovingHandler fHandler = new MovingHandler(camController);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

@@ -30,7 +30,7 @@ public class CameraInfoHandlerTest {
     URI uri = new  URI("http://localhost/camera/");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    CameraInfoHandler cHandler = new CameraInfoHandler(camController, -1);
+    CameraInfoHandler cHandler = new CameraInfoHandler(camController);
     try {
       cHandler.handle(exchange);
     } catch (Exception e) {

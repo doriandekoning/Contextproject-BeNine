@@ -19,8 +19,8 @@ public class IrisHandler extends RequestHandler {
    * Creates a new IrisHandler.
    * @param controller which controls the cameras.
    */
-  public IrisHandler(CameraController controller, int cameraId) {
-    super(controller, cameraId);
+  public IrisHandler(CameraController controller) {
+    super(controller);
   }
   
   /**

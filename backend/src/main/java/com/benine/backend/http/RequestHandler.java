@@ -18,15 +18,13 @@ import java.util.regex.Pattern;
 public abstract class RequestHandler implements HttpHandler {
 
   private CameraController controller;
-  private int cameraId;
 
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public RequestHandler(CameraController controller, int cameraId) {
+  public RequestHandler(CameraController controller) {
     this.controller = controller;
-    this.cameraId = cameraId;
   }
 
   /**
@@ -77,13 +75,6 @@ public abstract class RequestHandler implements HttpHandler {
   }
 
 
-  /**
-   * Getter for cameraId
-   * @return int cameraid.
-   */
-  public int getCameraId() {
-    return cameraId;
-  }
   /**
    * Fetches camera id from http exchange.
    * @param exchange the http exchange to fix the id from.

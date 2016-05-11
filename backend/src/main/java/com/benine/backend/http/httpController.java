@@ -42,7 +42,7 @@ public class httpController {
    * Creates the basic handlers for endpoints like /camera/.
    */
   private void setupBasicHandlers() {
-    server.createContext("/camera/", new CameraInfoHandler(camController, -1));
+    server.createContext("/camera/", new CameraInfoHandler(camController));
   }
   /**
    * Creates handlers for all cams in the camera controller.
@@ -58,20 +58,20 @@ public class httpController {
    */
    public void createHandlers(Camera cam) {
     int camId = cam.getId();
-    server.createContext("/camera/", new CameraInfoHandler(camController, camId));
+    server.createContext("/camera/", new CameraInfoHandler(camController));
     if (cam instanceof FocussingCamera) {
-      server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, camId));
+      server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController));
     }
     if (cam instanceof IrisCamera) {
-      server.createContext("/camera/" + camId + "/iris", new IrisHandler(camController, camId));
+      server.createContext("/camera/" + camId + "/iris", new IrisHandler(camController));
     }
     if (cam instanceof MovingCamera) {
-      server.createContext("/camera/" + camId + "/move", new MovingHandler(camController, camId));
+      server.createContext("/camera/" + camId + "/move", new MovingHandler(camController));
     }
     if (cam instanceof ZoomingCamera) {
-      server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController, camId));
+      server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController));
     }
-    server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, camId));
+    server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController));
   }
 
   /**

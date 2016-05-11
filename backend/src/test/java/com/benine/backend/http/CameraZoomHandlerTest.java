@@ -27,7 +27,7 @@ public class CameraZoomHandlerTest {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=absolute&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
+    ZoomingHandler zHandler = new ZoomingHandler(camController);
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {
@@ -46,7 +46,7 @@ public class CameraZoomHandlerTest {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=relative&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController, 0);
+    ZoomingHandler zHandler = new ZoomingHandler(camController);
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {

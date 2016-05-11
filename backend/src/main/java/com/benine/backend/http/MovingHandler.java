@@ -19,8 +19,8 @@ public class MovingHandler extends RequestHandler {
    * Creates a new MovingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public MovingHandler(CameraController controller, int cameraId) {
-    super(controller, cameraId);
+  public MovingHandler(CameraController controller) {
+    super(controller);
   }
 
   /**
