@@ -58,7 +58,7 @@ public class httpController {
    */
    public void createHandlers(Camera cam) {
     int camId = cam.getId();
-    server.createContext("/camera/" + camId + "/", new CameraInfoHandler(camController, camId));
+    server.createContext("/camera/", new CameraInfoHandler(camController, camId));
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, camId));
     }

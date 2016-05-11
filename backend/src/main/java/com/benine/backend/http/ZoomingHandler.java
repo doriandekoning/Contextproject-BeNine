@@ -35,15 +35,15 @@ public class ZoomingHandler extends RequestHandler {
     String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+
+
+      Camera cam = getCameraController().getCameraById(getCameraId(exchange));
       ZoomingCamera zoomingCam = (ZoomingCamera)cam;
       String zoomto = parsedURI.getValue("zoomType");
       String zoom = parsedURI.getValue("zoom");
       if (zoom != null && zoomto.equals("relative")) {
         zoomingCam.zoom(Integer.parseInt(zoom));
       } else if (zoom != null && zoomto.equals("absolute")) {
-        System.out.println("zoomcam:" + getCameraController()
-                            .getCameraById(Integer.parseInt(parsedURI.getValue("id"))));
         zoomingCam.zoomTo(Integer.parseInt(zoom));
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");

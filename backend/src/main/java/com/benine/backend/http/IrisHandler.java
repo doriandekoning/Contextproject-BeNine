@@ -40,12 +40,8 @@ public class IrisHandler extends RequestHandler {
       response = "{\"succes\":\"false\"}";
       return;
     }
-    // Get path
-    Pattern pattern = Pattern.compile(".*/camera/(\\d*)/.*");
-    String path = exchange.getRequestURI().getPath();
-    Matcher m = pattern.matcher(path);
-    m.matches();
-    int camId = Integer.parseInt(m.group(1));
+
+    int camId = getCameraId(exchange);
 
     Camera cam =  getCameraController().getCameraById(camId);
     IrisCamera irisCam = (IrisCamera)cam;

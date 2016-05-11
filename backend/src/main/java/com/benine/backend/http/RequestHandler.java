@@ -3,10 +3,13 @@ package com.benine.backend.http;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.apache.tools.ant.taskdefs.condition.Http;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.jar.Attributes;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dorian on 4-5-16.
@@ -81,5 +84,17 @@ public abstract class RequestHandler implements HttpHandler {
   public int getCameraId() {
     return cameraId;
   }
-
+  /**
+   * Fetches camera id from http exchange.
+   * @param exchange the http exchange to fix the id from.
+   * @return the id of the camera.
+   */
+  public int getCameraId(HttpExchange exchange) {
+    // Get path
+    Pattern pattern = Pattern.compile(".*/camera/(\\d*)/.*");
+    String path = exchange.getRequestURI().getPath();
+    Matcher m = pattern.matcher(path);
+    m.matches();
+    return Integer.parseInt(m.group(1));
+  }
 }

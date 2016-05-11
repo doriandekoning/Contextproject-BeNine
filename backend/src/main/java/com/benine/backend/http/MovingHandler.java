@@ -35,7 +35,7 @@ public class MovingHandler extends RequestHandler {
     String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+      Camera cam = getCameraController().getCameraById(getCameraId(exchange));
       MovingCamera movingCam = (MovingCamera)cam;
       String moveType = parsedURI.getValue("moveType");
       String pan = parsedURI.getValue("pan");

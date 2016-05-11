@@ -39,7 +39,7 @@ public class FocussingHandler extends RequestHandler {
       respond(exchange, response);
       return;
     }
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    Camera cam = getCameraController().getCameraById(getCameraId(exchange));
     FocussingCamera focusCam = (FocussingCamera) cam;
     String autoOn = parsedURI.getValue("autoFocusOn");
     String setPos = parsedURI.getValue("position");
