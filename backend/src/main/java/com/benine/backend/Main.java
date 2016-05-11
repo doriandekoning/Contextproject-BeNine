@@ -1,9 +1,5 @@
 package com.benine.backend;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
@@ -16,6 +12,10 @@ import com.benine.backend.http.PresetCreationHandler;
 import com.benine.backend.http.PresetHandler;
 import com.benine.backend.http.ZoomingHandler;
 import com.sun.net.httpserver.HttpServer;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class Main {
 
@@ -55,7 +55,7 @@ public class Main {
     Database database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
     //If the database does not exist yet, create a new one
-    if(!database.checkDatabase()) {
+    if (!database.checkDatabase()) {
       database.resetDatabase();
     }
     /////
