@@ -21,7 +21,7 @@ var Config = function() {
 /**
  * Validates the config file keys. If one of the default keys is missing or there is a syntax error, it returns false.
  * @param config   Config object.
- * @returns {*}
+ * @returns {boolean}
  */
 Config.prototype.validate = function (config) {
     var default_keys = Object.keys(default_config);
