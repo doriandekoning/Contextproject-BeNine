@@ -79,8 +79,10 @@ Config.prototype.load = function (config_path) {
     }
 
     if (this.validate(config) === true) {
+        logger.logMessage(logger.levels.INFO, "Config has been loaded successfully.");
         return config;
     } else {
+        logger.logMessage(logger.levels.WARNING, "The config file is invalid, loading default.");
         return default_config;
     }
 };
