@@ -74,7 +74,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-ms-tooltip {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 input[type=range].zoomslider {
@@ -83,7 +83,7 @@ input[type=range].zoomslider {
 }
 
 input[type=range].focusslider {
-    right: 400px;
+	right: 400px;
 	bottom: 100px;
 }
 
@@ -93,7 +93,7 @@ input[type=range].irisslider {
 }
 
 input[type=range]:focus {
-  outline: none;
+	outline: none;
 }
 
 #auto_focus {
@@ -111,13 +111,13 @@ input[type=range]:focus {
 }
 
 .btn:focus {
-    outline: none;
+	outline: none;
 }
 
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
-    height: 28vw;
-    overflow: hidden;
+	height: 28vw;
+	overflow: hidden;
 }
 
 #body_area {
@@ -126,7 +126,7 @@ input[type=range]:focus {
 
 /* Camera block carousel */
 #current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner * {
-    border: 0;
+	border: 0;
     padding: 0;
     margin: 0;
     height: 100%;

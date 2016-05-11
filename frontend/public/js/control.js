@@ -8,25 +8,26 @@ var currentcamera; //ID of the camera that is selected.
 * Put them into the cameras object and set the streams in the carousel.
 */
 function loadCameras() {
+	var place, camera_area, camera_div, camera_title;
 	$.get("http://localhost:3000/api/backend/getCameraInfo", function(data) {
 		var obj = JSON.parse(data);
 		// put the information of every camera in cameras.
 		for (var c in obj.cameras) {
       if ( c !== undefined) {
-				cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
+		cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
       }
 		}
 	}).done(function() { 
 		
-		var place  = 1;
-		var camera_area = $("#camera_area");
+		place  = 1;
+		camera_area = $("#camera_area");
 		
 		// show stream of every camera in the carousel.
 		for (var c in cameras) {
-			var camera_div = camera_area.find('#camera_' + place);
+			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
 			camera_div.find('img').attr("src", cameras[c].streamlink);
-			var camera_title = camera_div.find('.camera_title');
+			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
 		}
@@ -37,19 +38,24 @@ function loadCameras() {
 * Method to change the currently selected camera.
 * It changes the visible controls and displays the camera stream in the editing view.
 */
-function setCurrentCamera(id){
+function setCurrentCamera(id) {
+	var camera_div, camera_title, zoomslider, iris, focus;
 	currentcamera = id;
 	// Show the current camera in the editing view.
-	$('#current_camera').find('img').attr("src", cameras[currentcamera].streamlink);
-	var camera_title = $('#current_camera').find('.camera_title');
+	camera_div = $('#current_camera');
+	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
+	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	
 	//determine which elements of the UI to show
+	zoomslider = $('.zoomslider');
+	iris = $('.iris');
+	focus = $('.focus');
 	if (cameras[id].zoom === undefined) {
-		$('.zoomslider').hide();
+		zoomslider.hide();
 	} else {
-		$('.zoomslider').show();
-		$('.zoomslider').val(cameras[id].zoom);
+		zoomslider.show();
+		zoomslider.val(cameras[id].zoom);
 	}
 	if  (cameras[id].tilt === undefined) {
 		$('.zone').hide();
@@ -57,15 +63,15 @@ function setCurrentCamera(id){
 		$('.zone').show();
 	}
 	if  (cameras[id].iris === undefined) {
-		$('.iris').hide();
+		iris.hide();
 	} else {
-		$('.iris').show();
+		iris.show();
 		$('.irisslider').val(cameras[id].iris);
 	}
 	if  (cameras[id].focus === undefined) {
-		$('.focus').hide();
+		focus.hide();
 	} else {
-		$('.focus').show();
+		focus.show();
 		$('.focusslider').val(cameras[id].focus);
 	}
 }
@@ -106,8 +112,9 @@ joystick.on('end', function(){
 * @param angle the direction in which to move.
 */
 function sendMove(distance, angle){
-	var tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	var pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
+	var tilt, pan;
+	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
+	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 	console.log(pan + " - " + tilt); 	
 }
