@@ -40,27 +40,29 @@ public class PresetCreationHandler  extends RequestHandler {
         
       int cameraID = Integer.parseInt(parsedURI.getValue("id"));
       Camera camera =  getCameraController().getCameraById(cameraID);
-      
       IPCamera ipCamera = null;
       
       if (camera instanceof IPCamera) {
         ipCamera = (IPCamera)camera;
         
         DatabasePreset preset = getCameraPositions(ipCamera);
-                    
-        //Create a random integer for the preset number, should later be changed.
-        Random randomGenerator = new Random();
-        int randomInt = randomGenerator.nextInt(100);
-        //Adding the new preset to the database
-        Main.getDatabase().addPreset(cameraID, randomInt, preset);
+         
+        if (preset != null) {
+          //Create a random integer for the preset number, should later be changed.
+          Random randomGenerator = new Random();
+          int randomInt = randomGenerator.nextInt(100);
+          //Adding the new preset to the database
+          Main.getDatabase().addPreset(cameraID, randomInt, preset);
+          response = "{\"succes\":\"true\"}";
+          respond(exchange,response);
+        } else {
+          respond(exchange,response);
+        }
       }
     } catch (MalformedURIException e) {
       respond(exchange, response);
       return;
-    } catch (NullPointerException e) {
-      Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
-    }
-    
+    }   
     
   }
   
