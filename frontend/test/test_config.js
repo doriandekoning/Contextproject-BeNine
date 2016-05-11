@@ -45,8 +45,30 @@ suite("Config", function () {
     });
     suite("get", function () {
         test('should return the correct value of a config parameter.', function (done) {
-            config.load(config_path)
+            config.load(config_path);
             assert.equal(config.get('server_port'), 3000);
+            done();
+        });
+    });
+    suite("validate", function () {
+        test('should return true if the config is valid.', function (done) {
+            var test_config = JSON.parse('{"server_port":3000,"backend_server":"localhost","backend_port":8888}');
+            assert.equal(config.validate(test_config), true);
+            done();
+        });
+        test('should return false if the config is invalid.', function (done) {
+            var test_config = JSON.parse('{"server_port":3000,"backend_server":"localhost"}');
+            assert.equal(config.validate(test_config), false);
+            done();
+        });
+        test('should return false if the config contains invalid keys.', function (done) {
+            var test_config = JSON.parse('{"server_port":3000,"backend_server":"localhost","backend_port":8888,"invalid":8888}');
+            assert.equal(config.validate(test_config), false);
+            done();
+        });
+        test('should return false a JSON syntax error occurs.', function (done) {
+            var test_config = JSON.parse('{"server_port":3000,"backend_server","localhost"}');
+            assert.equal(config.validate(test_config), false);
             done();
         });
     })
