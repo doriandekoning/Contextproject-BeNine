@@ -2,10 +2,8 @@ package com.benine.backend;
 
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.camera.ipcameracontrol.IPCamera2;
 import com.benine.backend.http.CameraInfoHandler;
 import com.benine.backend.http.FocussingHandler;
 import com.benine.backend.http.IrisHandler;
@@ -18,7 +16,6 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.sql.SQLException;
 
 public class Main {
 
