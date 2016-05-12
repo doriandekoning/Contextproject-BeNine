@@ -11,6 +11,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.jar.Attributes;
 
 
@@ -48,7 +49,9 @@ public class RecallPresetHandler extends RequestHandler {
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-    }   
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
   
   /**

@@ -11,6 +11,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Random;
 import java.util.jar.Attributes;
 
@@ -58,8 +59,10 @@ public class PresetCreationHandler  extends RequestHandler {
       responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
       return;
-    }   
-    
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
   }
   
   /**

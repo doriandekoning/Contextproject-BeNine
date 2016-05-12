@@ -356,15 +356,14 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     String res = null;
     try {
       InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      try {
-        BufferedReader buf = new BufferedReader(new InputStreamReader(
-            com, "UTF8"));
+      BufferedReader buf = new BufferedReader(new InputStreamReader(com, "UTF8"));
+      try { 
         res = buf.readLine();
-        com.close();
       } catch (IOException excep) {
         throw 
           new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", getId());
       } finally {
+        buf.close();
         com.close();
       }
     } catch (IOException e) {
@@ -415,27 +414,31 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     return this.id;
   }
 
-  public String getIpaddress() { return ipaddress; }
+  public String getIpaddress() {
+    return ipaddress;
+  }
 
   @Override
   public Preset[] getPresets() {
-    return presetsFromCamera;
+    Preset[] copyPresets = new Preset[presetsFromCamera.length];
+    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
+    return copyPresets;
   }
 
   @Override
   public void setPresets(Preset[] presets) {
-    presetsFromCamera = presets;
+    Preset[] copyPresets = new Preset[presets.length];
+    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
+    presetsFromCamera = copyPresets;
   }
 
   @Override
   public void setPresetsFromArrayList(ArrayList<Preset> presets) {
     presetsFromCamera = new Preset[16];
     int i = 0;
-    for(Preset preset : presets) {
+    for (Preset preset : presets) {
       presetsFromCamera[i] = preset;
       i++;
     }
   }
-
-
 }

@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.jar.Attributes;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +56,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Formats the response message as a success.
    * @param exchange the HttpExchange.
    */
+
   public void responseSuccess(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"true\"}");
   }
@@ -83,8 +85,6 @@ public abstract class RequestHandler implements HttpHandler {
       getLogger().log("Error occured while writing the response to a request at URI"
                        + exchange.getRequestURI(), LogEvent.Type.WARNING);
     }
-
-
   }
 
   /**

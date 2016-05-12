@@ -52,15 +52,15 @@ public class Preset {
   public String toJSON() {
     JSONObject json = new JSONObject();
 
-    json.put("pan", new Integer(pan));
-    json.put("tilt", new Integer(tilt));
-    json.put("zoom", new Integer(zoom));
-    json.put("focus", new Integer(focus));
-    json.put("iris", new Integer(iris));
-    json.put("autofocus", new Boolean(autofocus));
-    json.put("panspeed", new Integer(panspeed));
-    json.put("tiltspeed", new Integer(tiltspeed));
-    json.put("autoiris", new Boolean(autoiris));
+    json.put("pan", pan);
+    json.put("tilt", tilt);
+    json.put("zoom", zoom);
+    json.put("focus", focus);
+    json.put("iris", iris);
+    json.put("autofocus", autofocus);
+    json.put("panspeed", panspeed);
+    json.put("tiltspeed", tiltspeed);
+    json.put("autoiris", autoiris);
 
     return json.toString();
   }
@@ -117,7 +117,7 @@ public class Preset {
     return panspeed;
   }
 
-  public void setPanspeed(int iris) {
+  public void setPanspeed(int panspeed) {
     this.panspeed = panspeed;
   }
 
@@ -135,6 +135,22 @@ public class Preset {
 
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (autofocus ? 1231 : 1237);
+    result = prime * result + (autoiris ? 1231 : 1237);
+    result = prime * result + focus;
+    result = prime * result + iris;
+    result = prime * result + pan;
+    result = prime * result + panspeed;
+    result = prime * result + tilt;
+    result = prime * result + tiltspeed;
+    result = prime * result + zoom;
+    return result;
   }
 
   /**
@@ -167,9 +183,19 @@ public class Preset {
     if (iris != preset.iris) {
       return false;
     }
+    if (tiltspeed != preset.tiltspeed) {
+      return false;
+    }
+    if (panspeed != preset.panspeed) {
+      return false;
+    }
+    if (autoiris != preset.autoiris) {
+      return false;
+    }
+    if (autofocus != preset.autofocus) {
+      return false;
+    }
     
-    return autofocus == preset.autofocus;
-    
-
+    return true;
   }
 }
