@@ -1,4 +1,4 @@
-var joysticksize = 200; //size of joystick in pixels.
+var joysticksize = 150; //size of joystick in pixels.
 var cameras = {}; //Store all available camera's
 var currentcamera; //ID of the camera that is selected.
 
@@ -79,7 +79,7 @@ function setCurrentCamera(id) {
 * Options of the displayed joystick.
 */
 var joystickoptions = {
-	zone: document.querySelector('.zone'),
+	zone: document.querySelector('.joystick_zone'),
     mode: 'static',
 	position: {
         left: '10%',
