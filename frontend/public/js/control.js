@@ -47,19 +47,19 @@ function setCurrentCamera(id) {
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 
 	//determine which elements of the UI to show
-	zoomslider = $('.zoomslider');
-	iris = $('.iris');
-	focus = $('.focus');
+	zoom = $('#zoom');
+	iris = $('#iris');
+	focus = $('#focus');
 	if (cameras[id].zoom === undefined) {
-		zoomslider.hide();
+		zoom.hide();
 	} else {
-		zoomslider.show();
-		zoomslider.val(cameras[id].zoom);
+		zoom.show();
+		zoom.val(cameras[id].zoom);
 	}
 	if  (cameras[id].tilt === undefined) {
-		$('.zone').hide();
+		$('.joystick_zone').hide();
 	} else {
-		$('.zone').show();
+		$('.joystick_zone').show();
 	}
 	if  (cameras[id].iris === undefined) {
 		iris.hide();
