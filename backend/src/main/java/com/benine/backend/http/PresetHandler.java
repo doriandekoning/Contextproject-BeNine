@@ -20,6 +20,7 @@ public class PresetHandler extends RequestHandler {
   /**
    * Creates a new PresetHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
   public PresetHandler(CameraController controller, Logger logger) {
     super(controller, logger);
@@ -32,7 +33,8 @@ public class PresetHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
+    getLogger().log("Got an http request with uri: "
+            + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response =  "";

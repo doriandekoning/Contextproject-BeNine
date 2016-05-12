@@ -24,6 +24,7 @@ public abstract class RequestHandler implements HttpHandler {
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
   public RequestHandler(CameraController controller, Logger logger) {
     this.controller = controller;

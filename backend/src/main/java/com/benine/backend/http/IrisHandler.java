@@ -18,6 +18,7 @@ public class IrisHandler extends RequestHandler {
   /**
    * Creates a new IrisHandler.
    * @param controller which controls the cameras.
+   * @param logger the logger to be used to log to
    */
   public IrisHandler(CameraController controller, Logger logger) {
     super(controller, logger);
@@ -29,7 +30,8 @@ public class IrisHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
+    getLogger().log("Got an http request with uri: "
+            + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response = "{\"succes\":\"true\"}";
