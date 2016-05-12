@@ -1,7 +1,10 @@
 package com.benine.backend.http;
 
+
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
+import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,9 +21,10 @@ public class PresetHandler extends RequestHandler {
   /**
    * Creates a new PresetHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
-  public PresetHandler(CameraController controller) {
-    super(controller);
+  public PresetHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
 
@@ -30,32 +34,31 @@ public class PresetHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: "
+            + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response =  "";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (Exception e) {
-      //TODO Log exception
+      getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       respond(exchange, "{\"succes\":\"false\"}");
       return;
     }
+
     String cameraId = parsedURI.getValue("cameraId");
     if (cameraId != null) {
       // Used for retrieving presets from database
       int id = Integer.parseInt(cameraId);
-      ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
-
-      // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
-
+      ArrayList<Preset> presets = new ArrayList<Preset>();
+      // TODO GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
 
       JSONArray json = new JSONArray();
-      for (DatabasePreset preset : presets) {
+      for (Preset preset : presets) {
         json.add(preset.toJSON());
       }
       response = new JSONObject().put("presets", json.toString()).toString();
     }
-    respond(exchange, response);
   }
 }

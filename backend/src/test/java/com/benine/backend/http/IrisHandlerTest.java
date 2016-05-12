@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
@@ -23,10 +24,10 @@ public class IrisHandlerTest {
     IrisCamera cam = mock(IrisCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&autoIrisOn=true");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -43,10 +44,10 @@ public class IrisHandlerTest {
     IrisCamera cam = mock(IrisCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -63,10 +64,10 @@ public class IrisHandlerTest {
     IrisCamera cam = mock(IrisCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3&autoIrisOn=true");
+    URI uri = new  URI("http://localhost/camera/" +cam.getId()+ "/iris?position=3&autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController);
+    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
@@ -24,10 +25,10 @@ public class MovingHandlerTest {
     MovingCamera cam = mock(MovingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+    URI uri = new  URI("http://localhost/camera/" +cam.getId()+ "/zoom?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    MovingHandler fHandler = new MovingHandler(camController);
+    MovingHandler fHandler = new MovingHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

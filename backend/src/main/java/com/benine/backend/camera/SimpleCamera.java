@@ -1,6 +1,9 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.Preset;
 import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by dorian on 5-5-16.
@@ -8,6 +11,7 @@ import org.json.simple.JSONObject;
 public class SimpleCamera implements Camera {
 
   private int id = -1;
+  private Preset[] presetsFromCamera = new Preset[16];
   private String streamLink;
 
   /**
@@ -55,5 +59,25 @@ public class SimpleCamera implements Camera {
    */
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
+  }
+
+  @Override
+  public Preset[] getPresets() {
+    return presetsFromCamera;
+  }
+
+  @Override
+  public void setPresets(Preset[] presets) {
+    presetsFromCamera = presets;
+  }
+
+  @Override
+  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
+    presetsFromCamera = new Preset[16];
+    int i = 0;
+    for(Preset preset : presets) {
+      presetsFromCamera[i] = preset;
+      i++;
+    }
   }
 }

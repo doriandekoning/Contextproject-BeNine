@@ -9,7 +9,7 @@ var currentcamera; //ID of the camera that is selected.
 */
 function loadCameras() {
 	var place, camera_area, camera_div, camera_title;
-	$.get("http://localhost:3000/api/backend/getCameraInfo", function(data) {
+	$.get("http://localhost:3000/api/backend/camera/", function(data) {
 		var obj = JSON.parse(data);
 		// put the information of every camera in cameras.
 		for (var c in obj.cameras) {
@@ -17,11 +17,11 @@ function loadCameras() {
 		cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
       }
 		}
-	}).done(function() { 
-		
+	}).done(function() {
+
 		place  = 1;
 		camera_area = $("#camera_area");
-		
+
 		// show stream of every camera in the carousel.
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
@@ -46,7 +46,7 @@ function setCurrentCamera(id) {
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
-	
+
 	//determine which elements of the UI to show
 	zoomslider = $('.zoomslider');
 	iris = $('.iris');
@@ -78,7 +78,7 @@ function setCurrentCamera(id) {
 
 /**
 * Options of the displayed joystick.
-*/ 
+*/
 var joystickoptions = {
 	zone: document.querySelector('.zone'),
     mode: 'static',
@@ -115,15 +115,15 @@ function sendMove(distance, angle){
 	var tilt, pan;
 	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	$.get("http://localhost:3000/api/backend/move?id="+ currentcamera + "&moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
-	console.log(pan + " - " + tilt); 	
+	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
+	console.log(pan + " - " + tilt);
 }
 
 /**
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
@@ -135,7 +135,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("http://localhost:3000/api/backend/focus?id="+ currentcamera + "&autoFocusOn=false&position=" + focus , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "focus?autoFocusOn=false&position=" + focus , function(data) {});
 	console.log("Focus: " + focus);
 }
 
@@ -147,7 +147,7 @@ function inputfocusslider(focus) {
 function inputirisslider(iris) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	$.get("http://localhost:3000/api/backend/iris?id="+ currentcamera + "&autoIrisOn=false&position=" + iris , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
 	console.log("Iris: "+ iris);
 }
 
@@ -155,26 +155,26 @@ function inputirisslider(iris) {
 * On click of the auto focus button change the color of the button.
 * And send the http request to change to auto focus.
 */
-$('#auto_focus').click(function() {	
+$('#auto_focus').click(function() {
 	toggleButton($(this));
 	var on = true;
 	if($(this).hasClass("btn-danger")){
 		on = false;
 	}
-	$.get("http://localhost:3000/api/backend/focus?id="+ currentcamera + "&autoFocusOn=" + on, function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
 });
 
 /**
 * On click of the auto iris button change the color of the button.
 * And send the http request to change to auto iris.
 */
-$('#auto_iris').click(function() {	
+$('#auto_iris').click(function() {
 	toggleButton($(this));
 	var on = true;
 	if($(this).hasClass("btn-danger")){
 		on = false;
 	}
-	$.get("http://localhost:3000/api/backend/iris?id="+ currentcamera + "&autoIrisOn=" + on , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
 });
 
 /**
