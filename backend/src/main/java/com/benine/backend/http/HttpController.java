@@ -2,7 +2,12 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.camera.*;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.FocussingCamera;
+import com.benine.backend.camera.IrisCamera;
+import com.benine.backend.camera.MovingCamera;
+import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -47,6 +52,7 @@ public class HttpController {
   private void setupBasicHandlers() {
     server.createContext("/camera/", new CameraInfoHandler(camController, logger));
   }
+  
   /**
    * Creates handlers for all cams in the camera controller.
    */
@@ -56,6 +62,7 @@ public class HttpController {
       createHandlers(cam);
     }
   }
+  
   /**
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
@@ -76,8 +83,10 @@ public class HttpController {
       server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController, logger));
     }
     server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, logger));
-    server.createContext("/camera/" + camId + "/createpreset", new PresetCreationHandler(camController, logger));
-    server.createContext("/camera/" + camId + "/recallPreset", new RecallPresetHandler(camController, logger));
+    server.createContext("/camera/" + camId + "/createpreset", 
+                                                 new PresetCreationHandler(camController, logger));
+    server.createContext("/camera/" + camId + "/recallPreset",
+                                                   new RecallPresetHandler(camController, logger));
 
     logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
   }

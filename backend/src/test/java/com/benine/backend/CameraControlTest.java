@@ -26,6 +26,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
 import com.benine.backend.http.CameraInfoHandler;
 import com.benine.backend.http.FocussingHandler;
+import com.benine.backend.http.HttpController;
 import com.benine.backend.http.IrisHandler;
 import com.benine.backend.http.MovingHandler;
 import com.benine.backend.http.PresetHandler;
@@ -111,10 +112,22 @@ public class CameraControlTest {
     //Add two extra camera's.
     SimpleCamera camera2 = new SimpleCamera();
     camera2.setStreamLink(mainConfig.getValue("camera1"));
-    cameraController.addCamera(camera2);
     SimpleCamera camera3 = new SimpleCamera();
-    camera3.setStreamLink(mainConfig.getValue("camera1"));
+    camera3.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
+    SimpleCamera camera4 = new SimpleCamera();
+    camera4.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&buffer=100");
+    SimpleCamera camera5 = new SimpleCamera();
+    camera5.setStreamLink(mainConfig.getValue("camera1"));
+    SimpleCamera camera6 = new SimpleCamera();
+    camera6.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
+    SimpleCamera camera7 = new SimpleCamera();
+    camera7.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&buffer=100");
+    cameraController.addCamera(camera2);
     cameraController.addCamera(camera3);
+    cameraController.addCamera(camera4);
+    cameraController.addCamera(camera5);
+    cameraController.addCamera(camera6);
+    cameraController.addCamera(camera7);
   }
   
   /**
@@ -124,17 +137,8 @@ public class CameraControlTest {
    */
   @Test
   public void ManualTestUI() throws InterruptedException, IOException{
-    
-    HttpServer server = HttpServer.create(address, 10);
-    server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController, logger));
-    server.createContext("/focus", new FocussingHandler(cameraController, logger));
-    server.createContext("/iris", new IrisHandler(cameraController, logger));
-    server.createContext("/move", new MovingHandler(cameraController, logger));
-    server.createContext("/zoom", new ZoomingHandler(cameraController, logger));
-    server.createContext("/preset", new PresetHandler(cameraController, logger));
-
-    server.start();
-    while (true) {
+    HttpController httpController = new HttpController(address, logger, cameraController);
+    while(true){
       Thread.sleep(100);
     }
   }
