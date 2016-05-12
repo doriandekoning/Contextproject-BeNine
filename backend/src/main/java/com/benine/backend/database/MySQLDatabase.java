@@ -218,6 +218,7 @@ public class MySQLDatabase implements Database {
       Reader reader = new BufferedReader(
           new FileReader("database/databasefile.sql"));
       sr.runScript(reader);
+      presetId = 0;
     } catch (Exception e) {
       e.printStackTrace();
     }
