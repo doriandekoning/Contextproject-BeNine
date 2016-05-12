@@ -6,11 +6,11 @@ import java.util.jar.Attributes;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
+import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RecallPreset extends RequestHandler {
@@ -36,19 +36,12 @@ public class RecallPreset extends RequestHandler {
       int cameraID = Integer.parseInt(parsedURI.getValue("id"));
       Random randomGenerator = new Random();
       int randomInt = randomGenerator.nextInt(100);
-      DatabasePreset preset = Main.getDatabase().getPreset(cameraID,randomInt);
-      Position position = new Position(preset.getPan(),preset.getTilt());
-     
+      Preset preset = Main.getDatabase().getPreset(cameraID,randomInt);
+      
       IPCamera ipcamera =  (IPCamera)getCameraController().getCameraById(cameraID);
+      
+      movingCamera(ipcamera,preset);
      
-      //Moving the camera in the correct direction with the correct 
-      //zoom, focus, autofocus, autoiris and speeds.
-      ipcamera.zoomTo(preset.getZoom());
-      ipcamera.moveTo(position, 15 , 1);
-      ipcamera.moveFocus(preset.getFocus());
-      ipcamera.setAutoFocusOn(preset.isAutofocus());
-      ipcamera.setIrisPos(preset.getIris());
-      ipcamera.setAutoIrisOn(true);
     } catch (MalformedURIException e) {
       responseMessage(exchange, false);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
@@ -57,6 +50,23 @@ public class RecallPreset extends RequestHandler {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }   
-      
+  }
+  
+  /**
+   * Method that moves the camera to the correct position.
+   * @param ipcamera the camera to be moved
+   * @param preset the preset used with the values for moving the camera.
+   * @throws CameraConnectionException exception thrown when camera cannot connect.
+   */
+  public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
+    Position position = new Position(preset.getPan(),preset.getTilt());
+    ipcamera.zoomTo(preset.getZoom());
+    ipcamera.moveTo(position, preset.getPanspeed() , preset.getTiltspeed());
+    ipcamera.moveFocus(preset.getFocus());
+    ipcamera.setAutoFocusOn(preset.isAutofocus());
+    ipcamera.setIrisPos(preset.getIris());
+    ipcamera.setAutoIrisOn(preset.getAutoiris());
+    
+    
   }
 }
