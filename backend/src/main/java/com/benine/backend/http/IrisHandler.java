@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.IrisCamera;
@@ -17,8 +19,8 @@ public class IrisHandler extends RequestHandler {
    * Creates a new IrisHandler.
    * @param controller which controls the cameras.
    */
-  public IrisHandler(CameraController controller) {
-    super(controller);
+  public IrisHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
   
   /**
@@ -27,18 +29,17 @@ public class IrisHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response;
+    String response = "{\"succes\":\"true\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException exception) {
-      // TODO log exception
-      response = "{\"succes\":\"false\"}";
+      getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
+      respond(exchange, "{\"succes\":\"false\"}");
       return;
     }
-
     int camId = getCameraId(exchange);
 
     Camera cam =  getCameraController().getCameraById(camId);
@@ -53,9 +54,8 @@ public class IrisHandler extends RequestHandler {
       if (setPos != null) {
         irisCam.setIrisPos(Integer.parseInt(setPos));
       }
-      response = "{\"succes\":\"true\"}";
     } catch (Exception e) {
-      //TODO Log exception
+      getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
     respond(exchange, response);

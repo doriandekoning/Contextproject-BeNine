@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,8 +21,8 @@ public class PresetHandler extends RequestHandler {
    * Creates a new PresetHandler.
    * @param controller the cameracontroller to interact with
    */
-  public PresetHandler(CameraController controller) {
-    super(controller);
+  public PresetHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
 
@@ -30,14 +32,14 @@ public class PresetHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response =  "";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (Exception e) {
-      //TODO Log exception
+      getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       respond(exchange, "{\"succes\":\"false\"}");
       return;
     }

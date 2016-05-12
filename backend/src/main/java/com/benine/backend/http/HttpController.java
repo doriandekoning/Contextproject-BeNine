@@ -45,13 +45,13 @@ public class HttpController {
    * Creates the basic handlers for endpoints like /camera/.
    */
   private void setupBasicHandlers() {
-    server.createContext("/camera/", new CameraInfoHandler(camController));
+    server.createContext("/camera/", new CameraInfoHandler(camController, logger));
   }
   /**
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
-    server.createContext("/camera/", new CameraInfoHandler(camController));
+    server.createContext("/camera/", new CameraInfoHandler(camController, logger));
     for (Camera cam : camController.getCameras()) {
       createHandlers(cam);
     }
@@ -63,18 +63,18 @@ public class HttpController {
   public void createHandlers(Camera cam) {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
-      server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController));
+      server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, logger));
     }
     if (cam instanceof IrisCamera) {
-      server.createContext("/camera/" + camId + "/iris", new IrisHandler(camController));
+      server.createContext("/camera/" + camId + "/iris", new IrisHandler(camController, logger));
     }
     if (cam instanceof MovingCamera) {
-      server.createContext("/camera/" + camId + "/move", new MovingHandler(camController));
+      server.createContext("/camera/" + camId + "/move", new MovingHandler(camController, logger));
     }
     if (cam instanceof ZoomingCamera) {
-      server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController));
+      server.createContext("/camera/" + camId + "/zoom", new ZoomingHandler(camController, logger));
     }
-    server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController));
+    server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, logger));
     logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
   }
 
@@ -84,18 +84,4 @@ public class HttpController {
   public void destroy() {
     server.stop(0);
   }
-//  /**
-//   * Getter for httpserver.
-//   * @return the httpserver.
-//   */
-//  public HttpServer getServer() {
-//    return server;
-//  }
-//  /**
-//   * Setter for httpserver.
-//   * @param server the server to use.
-//   */
-//  public void setServer(HttpServer server) {
-//    this.server = server;
-//  }
 }

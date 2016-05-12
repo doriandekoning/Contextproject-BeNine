@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -19,8 +21,8 @@ public class ZoomingHandler extends RequestHandler {
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public ZoomingHandler(CameraController controller) {
-    super(controller);
+  public ZoomingHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
   /**
@@ -29,7 +31,7 @@ public class ZoomingHandler extends RequestHandler {
    * @throws IOException When writing the response fails.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response;

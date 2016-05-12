@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -19,8 +21,8 @@ public class CameraInfoHandler extends RequestHandler {
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public CameraInfoHandler(CameraController controller) {
-    super(controller);
+  public CameraInfoHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
   /**
@@ -29,8 +31,7 @@ public class CameraInfoHandler extends RequestHandler {
    * @throws IOException When writing the response fails.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    // TODO give all camera info on /camera request
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
     JSONObject jsonObj = new JSONObject();
     ArrayList<Camera> cameras = getCameraController().getCameras();
     JSONArray camerasJSON = new JSONArray();
@@ -38,10 +39,7 @@ public class CameraInfoHandler extends RequestHandler {
       try {
         camerasJSON.add(cam.toJSON());
       } catch (CameraConnectionException e) {
-        //TODO Log here when logger supports asyncronous logging
-        //CameraController.logger
-        //.log("Cannot connect to camera with id: " + cam.getId(), LogEvent.Type.CRITICAL);
-        System.out.println(e.toString());
+        getLogger().log("Cannot connect to camera: " + cam.getId(), LogEvent.Type.CRITICAL);
       }
     }
     jsonObj.put("cameras", camerasJSON);

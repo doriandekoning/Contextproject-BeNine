@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -17,13 +19,15 @@ import java.util.regex.Pattern;
 public abstract class RequestHandler implements HttpHandler {
 
   private CameraController controller;
+  private Logger logger;
 
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
    */
-  public RequestHandler(CameraController controller) {
+  public RequestHandler(CameraController controller, Logger logger) {
     this.controller = controller;
+    this.logger = logger;
   }
 
   /**
@@ -58,8 +62,8 @@ public abstract class RequestHandler implements HttpHandler {
       out.write(response.getBytes("UTF-8"));
       out.close();
     } catch (IOException e) {
-      // TODO Log exception
-      System.out.println(e);
+      getLogger().log("Error occured while writing the response to a request at URI"
+                       + exchange.getRequestURI(), LogEvent.Type.WARNING);
     }
 
 
@@ -86,5 +90,13 @@ public abstract class RequestHandler implements HttpHandler {
     Matcher m = pattern.matcher(path);
     m.matches();
     return Integer.parseInt(m.group(1));
+  }
+
+  /**
+   * Return the logger.
+   * @return Logger.
+   */
+  public Logger getLogger() {
+    return logger;
   }
 }
