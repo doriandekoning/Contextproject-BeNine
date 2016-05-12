@@ -19,13 +19,13 @@ $(document).ready(function() {
 
     // Generate the camera block area.
     generateCameraArea();
-	
+
 	// Load the available cameras.
 	loadCameras();
 
     // Generate the presets area.
     generatePresets();
-	
+
 
     console.log('Page has loaded successfully.');
 
@@ -109,18 +109,14 @@ function addCameraRow(block) {
 
         camera_title.append(camera_icon, camera_title_text);
 
-<<<<<<< HEAD
-        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b">').get(0);
-=======
         camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
-		
-		camera_element.click(function() {
-			var camera_nr = $(this).attr('camera_number');
-			if ( camera_nr != undefined) {
-				setCurrentCamera(camera_nr);
-			}
-		});
->>>>>>> develop
+
+    		camera_element.click(function() {
+    			var camera_nr = $(this).attr('camera_number');
+    			if ( camera_nr != undefined) {
+    				setCurrentCamera(camera_nr);
+    			}
+    		});
 
         // Run the placeholder creator.
         Holder.run({
