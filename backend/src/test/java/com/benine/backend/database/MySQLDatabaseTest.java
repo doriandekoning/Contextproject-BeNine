@@ -127,7 +127,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addPreset(1,1,preset);
         ArrayList<Preset> result = database.getAllPresets();
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus");
+        verifySQLStatementExecuted("SELECT camera_id, id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -144,7 +144,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addPreset(1,1,preset);
         ArrayList<Preset> result = database.getAllPresetsCamera(1);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus");
+        verifySQLStatementExecuted("SELECT camera_id, id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
