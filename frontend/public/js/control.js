@@ -2,6 +2,7 @@
 var joysticksize = 200; //size of joystick in pixels.
 var cameras = {}; //Store all available camera's
 var currentcamera; //ID of the camera that is selected.
+var selectedPreset; //Preset that is currently selected.
 
 /**
 * Load the camera's from the backend server.
@@ -46,6 +47,7 @@ function setCurrentCamera(id) {
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	selectedPreset = undefined;
 	
 	//determine which elements of the UI to show
 	zoomslider = $('.zoomslider');
@@ -220,6 +222,7 @@ function toggleButton(btn){
 	}
 }
 
+
 /**
 * Function to handle a click on a preset.
 * @param t is the div on which is clicked.
@@ -228,11 +231,11 @@ function presetcall(t){
 	var presetID = t.attr("presetid");
 	if (presetID !== undefined) {
 		var title = t.find('h5');
-		if(title.hasClass("selected")) {
-			title.removeClass("selected");
-		} else {
-			title.addClass("selected");
+		if(selectedPreset != undefined){
+			$('#' + selectedPreset).find('h5').removeClass("selected");
 		}
+		selectedPreset = t.attr("id");
+		title.addClass("selected");
 		//todo call the right call to recall this preset on the camera.
 		console.log(t.attr("presetid"));
 	}
