@@ -49,10 +49,75 @@ nav .label {
     bottom: 50px;
 }
 
+/* slider styling */
+input[type=range] {
+    -webkit-appearance: none;
+    background-color: #848484;
+    width: 200px;
+    height:55px;
+	position: absolute;
+	margin-left: -40px;
+	border-radius: 8px;
+    -webkit-transform:rotate(90deg);       
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform:rotate(-90deg);
+    z-index: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #585858;
+    width: 35px;
+    height: 55px;
+	border-radius: 8px;
+}
+
+input[type="range"]::-ms-tooltip {
+	visibility: hidden;
+}
+
+input[type=range].zoomslider {
+    right: 300px;
+	bottom: 100px;
+}
+
+input[type=range].focusslider {
+	right: 400px;
+	bottom: 100px;
+}
+
+input[type=range].irisslider {
+    right: 500px;
+	bottom: 100px;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+#auto_focus {
+	border-radius: 8px;
+    position: absolute;
+    right: 475px;
+	bottom: 240px;
+}
+
+#auto_iris {
+	border-radius: 8px;
+    position: absolute;
+    right: 575px;
+	bottom: 240px;
+}
+
+.btn:focus {
+	outline: none;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
-    height: 28vw;
-    overflow: hidden;
+	height: 28vw;
+	overflow: hidden;
 }
 
 #body_area {
@@ -61,7 +126,7 @@ nav .label {
 
 /* Camera block carousel */
 #current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner * {
-    border: 0;
+	border: 0;
     padding: 0;
     margin: 0;
     height: 100%;

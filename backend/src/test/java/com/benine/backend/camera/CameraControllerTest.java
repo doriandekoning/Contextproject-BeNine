@@ -13,7 +13,7 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     Camera cam = new SimpleCamera();
     controller.addCamera(cam);
-    Assert.assertEquals(controller.getCameraById(0), cam);
+    Assert.assertEquals(controller.getCameraById(1), cam);
 
   }
 
