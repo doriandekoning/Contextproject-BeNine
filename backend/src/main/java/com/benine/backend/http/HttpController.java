@@ -37,7 +37,6 @@ public class HttpController {
       logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     }
 
-    // TODO Create server
     setupBasicHandlers();
   }
 

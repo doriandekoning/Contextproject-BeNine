@@ -6,6 +6,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
+import com.ibatis.common.logging.Log;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class ZoomingHandler extends RequestHandler {
       }
       response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException | CameraConnectionException e) {
-      //TODO Log exception
+      getLogger().log("Exception occured while respoinding to the request with URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
     respond(exchange, response);
