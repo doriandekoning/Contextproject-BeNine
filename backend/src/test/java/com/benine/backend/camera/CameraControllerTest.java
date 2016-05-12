@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.sql.SQLException;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -33,7 +35,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testAddPreset() {
+  public void testAddPreset() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
@@ -43,7 +45,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testAddPresetAtPosition() {
+  public void testAddPresetAtPosition() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
@@ -53,7 +55,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testGetPresetsFromDatabase() {
+  public void testGetPresetsFromDatabase() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
@@ -63,7 +65,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testResetPresetsInDatabase() {
+  public void testResetPresetsInDatabase() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new IPCamera("ip"));
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
@@ -76,7 +78,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testGetPreset() {
+  public void testGetPreset() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
@@ -85,7 +87,7 @@ public class CameraControllerTest {
   }
 
   @Test
-  public void testResetPresets() {
+  public void testResetPresets() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
