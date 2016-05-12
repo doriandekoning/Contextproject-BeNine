@@ -35,6 +35,7 @@ public class FileHandler extends RequestHandler {
   /**
    * Constructor of this request handler.
    * @param controller of the camera's.
+   * @param logger object to log to.
    */
   public FileHandler(CameraController controller, Logger logger) {
     super(controller, logger);

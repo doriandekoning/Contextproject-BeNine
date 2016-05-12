@@ -92,7 +92,8 @@ public class MySQLDatabase implements Database {
 
   @Override
   public Preset getPreset(int camera, int cameraPresetNumber) throws SQLException {
-    Preset preset = new Preset(camera + "-" + cameraPresetNumber, new Position(0, 0), 0, 0, 0, false, 0, 0, false);
+    Preset preset = new Preset(camera + "-" + cameraPresetNumber, 
+                                            new Position(0, 0), 0, 0, 0, false, 0, 0, false);
     Statement statement = connection.createStatement();
     try {
       String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed,"
@@ -120,7 +121,8 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     Statement statement = connection.createStatement();
     try {
-      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, image"
+      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus,"
+          + " iris, autofocus, panspeed, tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets JOIN camerapresets ON camerapresets.Preset_ID "
           + "= presets.ID";
       ResultSet resultset = statement.executeQuery(sql);
@@ -142,7 +144,8 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     Statement statement = connection.createStatement();
     try {
-      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, image"
+      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus, iris,"
+          + " autofocus, panspeed, tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets " + "JOIN camerapresets ON camerapresets.Preset_ID = "
           + "presets.ID WHERE camerapresets.Camera_ID = " + cameraId;
       ResultSet resultset = statement.executeQuery(sql);
@@ -224,7 +227,8 @@ public class MySQLDatabase implements Database {
   public void addCamera(int id, String ip) throws SQLException {
     Statement statement = connection.createStatement();
     try {
-      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')", id, ip);
+      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
+                                                                                  id, ip);
       statement.executeUpdate(sql);
       statement.close();
     } finally {

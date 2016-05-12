@@ -20,6 +20,7 @@ public class RecallPresetHandler extends RequestHandler {
   /**
    * Create a new handler for recalling presets.
    * @param controller the controller to interact with.
+   * @param logger to log to.
    */
   public RecallPresetHandler(CameraController controller, Logger logger) {
     super(controller, logger);

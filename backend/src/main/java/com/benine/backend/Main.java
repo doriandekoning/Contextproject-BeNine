@@ -1,20 +1,8 @@
 package com.benine.backend;
 
-
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
-
-import com.benine.backend.http.CameraInfoHandler;
-import com.benine.backend.http.FileHandler;
-import com.benine.backend.http.FocussingHandler;
-import com.benine.backend.http.IrisHandler;
-import com.benine.backend.http.MovingHandler;
-import com.benine.backend.http.PresetHandler;
-import com.benine.backend.http.ZoomingHandler;
-
-import com.sun.net.httpserver.HttpServer;
-
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
@@ -34,12 +22,13 @@ public class Main {
   
   private static Database database;
 
+  @SuppressWarnings("unused")
   private static HttpController httpController;
 
   /**
    * Main method of the program.
    * @param args command line arguments.
-   * @throws SQLException 
+   * @throws SQLException When sql statement failes.
    */
   public static void main(String[] args) throws SQLException {
     // TODO cleanup, hacked something together here

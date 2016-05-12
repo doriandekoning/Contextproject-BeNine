@@ -41,7 +41,7 @@ public class PresetHandler extends RequestHandler {
     int cameraId = getCameraId(exchange);
     String response =  "";
     
-    ArrayList<Preset> presets = new ArrayList<Preset>();
+    ArrayList<Preset> presets;
 
     try {
       presets = Main.getDatabase().getAllPresetsCamera(cameraId);

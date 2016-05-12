@@ -131,7 +131,7 @@ public class CameraControlTest {
    */
   @Test
   public void ManualTestUI() throws InterruptedException, IOException{
-    HttpController httpController = new HttpController(address, logger, cameraController);
+    new HttpController(address, logger, cameraController);
     while(true){
       Thread.sleep(100);
     }

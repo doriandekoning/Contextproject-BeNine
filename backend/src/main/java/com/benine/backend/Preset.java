@@ -1,8 +1,7 @@
 package com.benine.backend;
 
-import org.json.simple.JSONObject;
-
 import com.benine.backend.camera.Position;
+import org.json.simple.JSONObject;
 
 /**
  * A moving preset to be able to add to the database.

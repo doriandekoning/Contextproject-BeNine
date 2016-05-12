@@ -14,7 +14,6 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Random;
-import java.util.jar.Attributes;
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
@@ -25,6 +24,7 @@ public class PresetCreationHandler  extends RequestHandler {
   /**
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
+   * @param logger to log to.
    */
   public PresetCreationHandler(CameraController controller, Logger logger) {
     super(controller, logger);
@@ -36,10 +36,7 @@ public class PresetCreationHandler  extends RequestHandler {
      * @throws IOException when an error occurs with responding to the request.
   */
   public void handle(HttpExchange exchange) throws IOException {
-    Attributes parsedURI;
     try {
-      parsedURI = parseURI(exchange.getRequestURI().getQuery());
-        
       int cameraID = getCameraId(exchange);
       Camera camera =  getCameraController().getCameraById(cameraID);
             
@@ -56,10 +53,6 @@ public class PresetCreationHandler  extends RequestHandler {
         responseSuccess(exchange);
       
       }
-    } catch (MalformedURIException e) {
-      responseFailure(exchange);
-      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
-      return;
     } catch (SQLException e) {
       e.printStackTrace();
     }
