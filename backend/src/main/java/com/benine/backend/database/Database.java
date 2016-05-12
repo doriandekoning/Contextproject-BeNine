@@ -62,6 +62,7 @@ public interface Database {
    * Returns all the presets.
    *
    * @return all the presets
+   * @throws SQLException No right connection found
    */
   ArrayList<Preset> getAllPresets() throws SQLException;
 
