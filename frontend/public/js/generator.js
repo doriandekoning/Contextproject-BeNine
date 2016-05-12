@@ -93,7 +93,7 @@ function addCameraRow(block) {
 
     for (var i = 0; i < 2; i++) {
         cameracounter++;
-        camera_element = $('<div class="col-sm-6"></div>');
+        camera_element = $('<div class="col-xs-6"></div>');
         camera_element.attr("id", "camera_" + cameracounter);
         camera_element.attr("camera_number", cameracounter);
 
@@ -103,7 +103,7 @@ function addCameraRow(block) {
 
         camera_title.append(camera_icon, camera_title_text);
 
-        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b">').get(0);
 
         // Run the placeholder creator.
         Holder.run({
@@ -136,13 +136,14 @@ function addPresetRow() {
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div class="col-xs-3"></div>');
+        preset_column = $('<div></div>');
         preset_row.append(preset_column);
     }
 
     // Now for each column add the preset block.
     preset_row.children().each( function(index, elem) {
         presetcounter++;
+        $(elem).attr("class", "col-xs-3 none");
         addPreset(elem);
     });
 
@@ -157,17 +158,14 @@ function addPresetRow() {
 function addPreset(elem) {
     var preset_image, preset_caption, preset_image_div;
 
-    preset_image_div = $('<div class = "none"></div>');
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
-    preset_image_div.attr("id", "preset_" + presetcounter);
 
     // Run the placeholder creator.
     Holder.run({
         images: preset_image
     });
 
-    preset_image_div.append(preset_image, preset_caption);
-    $(elem).append(preset_image_div);
+    $(elem).append(preset_image, preset_caption);
 }

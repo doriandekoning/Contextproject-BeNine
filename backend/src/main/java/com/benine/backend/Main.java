@@ -1,23 +1,21 @@
 package com.benine.backend;
 
-import com.benine.backend.database.Database;
-import com.benine.backend.database.MySQLDatabase;
-
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.database.Database;
+import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.CameraInfoHandler;
 import com.benine.backend.http.FocussingHandler;
 import com.benine.backend.http.IrisHandler;
 import com.benine.backend.http.MovingHandler;
+import com.benine.backend.http.PresetCreationHandler;
 import com.benine.backend.http.PresetHandler;
 import com.benine.backend.http.ZoomingHandler;
-
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.sql.SQLException;
 
 public class Main {
 
@@ -26,7 +24,7 @@ public class Main {
   private static Config mainConfig;
 
   private static CameraController cameraController;
-
+  
   private static Database database;
 
   /**
@@ -56,8 +54,10 @@ public class Main {
     /////CONNECT TO DATABASE SERVER
     database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
-    if(!database.checkDatabase()) //If the database does not exist yet, create a new one
+    //If the database does not exist yet, create a new one
+    if (!database.checkDatabase()) {
       database.resetDatabase();
+    }
     /////
 
     try {
@@ -68,6 +68,7 @@ public class Main {
       server.createContext("/move", new MovingHandler(cameraController));
       server.createContext("/zoom", new ZoomingHandler(cameraController));
       server.createContext("/preset", new PresetHandler(cameraController));
+      server.createContext("/createpreset", new PresetCreationHandler(cameraController));
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();
@@ -103,12 +104,22 @@ public class Main {
   public static CameraController getCameraController() {
     return cameraController;
   }
-
+  
   /**
-   * Returns the database.
+   * Getter for the database.
    * @return the database
    */
   public static Database getDatabase() {
     return database;
   }
+
+  
+  /**
+   * Getter for the logger.
+   * @return the logger.
+   */
+  public static Logger getLogger() {
+    return logger;
+  }
+
 }

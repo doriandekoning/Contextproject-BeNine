@@ -1,6 +1,5 @@
 package com.benine.backend;
 
-import com.benine.backend.PresetsHandler;
 import org.json.simple.JSONObject;
 
 /**
@@ -28,9 +27,12 @@ public class Preset {
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
    * @param autofocus The autofocus of the preset
+   * @param autoiris  The autoiris of the preset
+   * @param tiltspeed The tiltspeed of the preset
+   * @param panspeed  The panspeed of the preset
    */
-  public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris) {
+  public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus, int panspeed, 
+      int tiltspeed, boolean autoiris) {
     this.pan = pan;
     this.tilt = tilt;
     this.zoom = zoom;
@@ -111,7 +113,9 @@ public class Preset {
     this.autofocus = autofocus;
   }
 
-  public int getPanspeed() { return panspeed; }
+  public int getPanspeed() { 
+    return panspeed;
+  }
 
   public void setPanspeed(int iris) {
     this.panspeed = panspeed;
@@ -125,24 +129,47 @@ public class Preset {
     this.tiltspeed = tiltspeed;
   }
 
-  public boolean getAutoiris() {return autoiris; }
+  public boolean isAutoiris() {
+    return autoiris; 
+  }
 
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
   }
 
+  /**
+   * Checking if two presets are equal.
+   * @param o the object to be checked with.
+   * @return true if two presets are equal, false otherwise.
+   */
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
     Preset preset = (Preset) o;
 
-    if (pan != preset.pan) return false;
-    if (tilt != preset.tilt) return false;
-    if (zoom != preset.zoom) return false;
-    if (focus != preset.focus) return false;
-    if (iris != preset.iris) return false;
+    if (pan != preset.pan) {
+      return false;
+    }
+    if (tilt != preset.tilt) {
+      return false;
+    }
+    if (zoom != preset.zoom) {
+      return false;
+    }
+    if (focus != preset.focus) { 
+      return false;
+    }
+    if (iris != preset.iris) {
+      return false;
+    }
+    
     return autofocus == preset.autofocus;
+    
 
   }
 }

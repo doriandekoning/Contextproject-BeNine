@@ -37,7 +37,7 @@ public class PresetTest {
     Assert.assertEquals(true, preset.isAutofocus());
     Assert.assertEquals(1, preset.getPanspeed());
     Assert.assertEquals(2, preset.getTiltspeed());
-    Assert.assertEquals(false, preset.getAutoiris());
+    Assert.assertEquals(false, preset.isAutoiris());
   }
 
   @Test
@@ -60,6 +60,6 @@ public class PresetTest {
     Assert.assertEquals(true, preset.isAutofocus());
     Assert.assertEquals(4, preset.getFocus());
     Assert.assertEquals(5, preset.getTiltspeed());
-    Assert.assertEquals(true, preset.getAutoiris());
+    Assert.assertEquals(true, preset.isAutoiris());
   }
 }

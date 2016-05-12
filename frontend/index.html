@@ -18,6 +18,19 @@
 </head>
 
 <body>
+<div class="body_container">
+    <div id="top_navbar">
+        <!-- Header of the webpage with an explanation of what the user is seeing. -->
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">PolyCast WebInterface</a>
+                </div>
+                <div class ="label-container hidden-xs">
+                    <span class="label label-success">Server Status</span>
+                    <span class="label label-danger">Camera Conflict</span>
+                </div>
 
 <div id="top_navbar">
     <!-- Header of the webpage with an explanation of what the user is seeing. -->
@@ -29,11 +42,10 @@
             </div>
             <div class ="labelcontainer">
                 <span id="server_status" class="label label-warning">Server Status</span>
-            </div>
 
-        </div>
-    </nav>
-</div>
+            </div>
+        </nav>
+    </div>
 
 <div id="top_area" class="row">
     <div id="camera_area" class="col-xs-6">
@@ -46,8 +58,8 @@
             <div class="carousel-inner" role="listbox"></div>
 
             <!-- Controls -->
-            <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
-            <a class="right carousel-control" href="#carousel" role="button" data-slide="next"></a>
+            <a id="carousel-left" class="left carousel-control" href="#carousel" role="button" data-slide="prev"></a>
+            <a id="carousel-right" class="right carousel-control" href="#carousel" role="button" data-slide="next"></a>
         </div>
     </div>
     <div id="current_camera" class="col-xs-6">
@@ -64,7 +76,7 @@
     <!-- Area in which the presets will be generated -->
 	<div id="preset_area"></div>
 </div>
-<div id="right_area" class= "col-xs-6">
+<div id="right_area" class= "col-xs-6 hidden-xs hidden-sm">
     <div id="control_area">
         <div class="row">
                 <div class="zone"></div>
@@ -72,7 +84,7 @@
     </div>
 </div>
 </div>
-
+</div>
 <script type="text/javascript" src="bower_components/nipplejs/dist/nipplejs.js"></script>
 <script type="text/javascript">
     var options = {
@@ -91,10 +103,14 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
+<!-- HammerJS for supporting touch actions -->
+<script src="bower_components/hammerjs/hammer.min.js"></script>
+
 <!-- Holder JS for placeholders -->
 <script src="bower_components/holderjs/holder.js"></script>
 
 <script src="public/js/generator.js"></script>
+<script src="public/js/touch.js"></script>
 
 </body>
 </html>
