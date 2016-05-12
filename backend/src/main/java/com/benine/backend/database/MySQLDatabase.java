@@ -43,7 +43,7 @@ public class MySQLDatabase implements Database {
       auto = 1;
     }
     int autoir = 0;
-    if (preset.getAutoiris()) {
+    if (preset.isAutoiris()) {
       autoir = 1;
     }
     try {
@@ -83,7 +83,7 @@ public class MySQLDatabase implements Database {
       auto = 1;
     }
     int autoir = 0;
-    if (preset.getAutoiris()) {
+    if (preset.isAutoiris()) {
       autoir = 1;
     }
     try {
@@ -246,6 +246,11 @@ public class MySQLDatabase implements Database {
     }
   }
 
+  /**
+   * Getter for the presets from the list of presets.
+   * @param list list of presets
+   * @param resultset the list with all the presets
+   */
   public void getPresetsFromResultSet(ArrayList<Preset> list, ResultSet resultset) {
     try {
       Preset preset = new Preset(0, 0, 0, 0, 0, false, 0, 0, false);
