@@ -21,3 +21,5 @@ JavaScript testing on the NodeJS side of the front-end is performed using [Mocha
 
 ### Java
 Java testing is performed using JUnit and is executed with Maven. To view a detailed report with PMD, Findbugs and Checkstyle reports, run `mvn site`. Results can be found at the `backend/target/site` folder in the index.html file.
+
+The documentation of the backend HTTP API can be found here: https://github.com/Kingdorian/Contextproject-BeNine/wiki/Backend-HTTP-API-Reference
