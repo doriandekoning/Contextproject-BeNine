@@ -1,5 +1,6 @@
 package com.benine.backend;
 
+
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
@@ -8,7 +9,6 @@ import com.benine.backend.http.HttpController;
 
 import java.io.File;
 import java.net.InetSocketAddress;
-
 
 public class Main {
 
@@ -34,10 +34,10 @@ public class Main {
 
     // Setup camerahandler
     cameraController = new CameraController();
+    
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    camera.setStreamLink(mainConfig.getValue("camera1"));
     cameraController.addCamera(camera);
-    //cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
 
     try {
       logger = new Logger();

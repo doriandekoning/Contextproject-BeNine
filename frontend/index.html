@@ -66,8 +66,9 @@
         <img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg">
         <div class="camera_title">
             <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-            <span>Editing Camera</span></div>
-        </div>
+            <span id="camera_title"></span>
+		</div>
+    </div>
 </div>
 <!-- Area in which the presets will be generated -->
 
@@ -80,28 +81,27 @@
     <div id="control_area">
         <div class="row">
                 <div class="zone"></div>
+
+				<div class="zoom">
+					<input  type="range" min="0" max="100" value="50" class="zoomslider" orient="vertical" oninput="inputzoomslider(value)">
+				</div>
+				<div class="focus">
+					<button id="auto_focus" type="button" class="btn btn-success">Auto</button>
+					<input  type="range" min="0" max="100" value="50" class="focusslider" orient="vertical" oninput="inputfocusslider(value)">
+				</div>
+				<div class="iris">
+					<button id="auto_iris" type="button" class="btn btn-success">Auto</button>
+					<input  type="range" min="0" max="100" value="50" class="irisslider" orient="vertical" oninput="inputirisslider(value)">
+				</div>
         </div>
     </div>
 </div>
 </div>
-</div>
-<script type="text/javascript" src="bower_components/nipplejs/dist/nipplejs.js"></script>
-<script type="text/javascript">
-    var options = {
-        zone: document.querySelector('.zone'),
-        mode: 'static',
-        position: {
-            left: '50%',
-            top: '50%'
-        },
-        color: 'black'
-    };
-    var manager = nipplejs.create(options);
-</script>
 
 <!-- At the end of the document so the page loads faster -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/nipplejs/dist/nipplejs.js"></script>
 
 <!-- HammerJS for supporting touch actions -->
 <script src="bower_components/hammerjs/hammer.min.js"></script>
@@ -110,7 +110,7 @@
 <script src="bower_components/holderjs/holder.js"></script>
 
 <script src="public/js/generator.js"></script>
-<script src="public/js/touch.js"></script>
+<script src="public/js/control.js"></script>
 
 </body>
 </html>

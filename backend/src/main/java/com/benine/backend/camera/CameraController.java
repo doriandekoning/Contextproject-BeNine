@@ -18,7 +18,7 @@ public class CameraController {
 
   public static final Logger logger = setupLogger();
 
-  private int highestIdInUse = 0;
+  private int highestIdInUse = 1;
 
 
 
