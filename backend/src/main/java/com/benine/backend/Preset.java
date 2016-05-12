@@ -52,15 +52,15 @@ public class Preset {
   public String toJSON() {
     JSONObject json = new JSONObject();
 
-    json.put("pan", new Integer(pan));
-    json.put("tilt", new Integer(tilt));
-    json.put("zoom", new Integer(zoom));
-    json.put("focus", new Integer(focus));
-    json.put("iris", new Integer(iris));
-    json.put("autofocus", new Boolean(autofocus));
-    json.put("panspeed", new Integer(panspeed));
-    json.put("tiltspeed", new Integer(tiltspeed));
-    json.put("autoiris", new Boolean(autoiris));
+    json.put("pan", pan);
+    json.put("tilt", tilt);
+    json.put("zoom", zoom);
+    json.put("focus", focus);
+    json.put("iris", iris);
+    json.put("autofocus", autofocus);
+    json.put("panspeed", panspeed);
+    json.put("tiltspeed", tiltspeed);
+    json.put("autoiris", autoiris);
 
     return json.toString();
   }
@@ -176,9 +176,10 @@ public class Preset {
     if (autoiris != preset.autoiris) {
       return false;
     }
+    if (autofocus != preset.autofocus) {
+      return false;
+    }
     
-    return autofocus == preset.autofocus;
-    
-
+    return true;
   }
 }
