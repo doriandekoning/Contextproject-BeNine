@@ -1,7 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Main;
-import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,33 +9,23 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 
 public class RecallPresetTest {
 
-  private CameraController controller;
   private IPCamera ipcamera;
   private Preset preset;
-  private Position position;
   private RecallPreset recallHandler;
-  private HttpExchange exchange;
-  private OutputStream out;
 
   @Before
   public void setUp() {
-    controller = mock(CameraController.class);
+    CameraController controller = mock(CameraController.class);
     ipcamera = mock(IPCamera.class);
     preset = new Preset(0, 0, 100, 33, 50, true, 15, 1, true);
-    position = new Position(preset.getPan(), preset.getTilt());
     recallHandler = new RecallPreset(controller);
-    exchange = mock(HttpExchange.class);
-    out = mock(OutputStream.class);
-    when(exchange.getResponseBody()).thenReturn(out);
   }
 
   @Test
