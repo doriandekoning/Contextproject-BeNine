@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.jar.Attributes;
 
 /**
  * Created by dorian on 4-5-16.
@@ -38,24 +37,14 @@ public class PresetHandler extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     getLogger().log("Got an http request with uri: "
             + exchange.getRequestURI(), LogEvent.Type.INFO);
-    // Extract camera id from function and amount to zoom in
-    Attributes parsedURI; 
 
     int cameraId = getCameraId(exchange);
     String response =  "";
     
     ArrayList<Preset> presets = new ArrayList<Preset>();
-    // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
+
     try {
       presets = Main.getDatabase().getAllPresetsCamera(cameraId);
-      
-      //Temporary adding a preset
-      Preset preset1 = new Preset(60, 50, 40, 30, 20, false, 30, 2, false);
-      preset1.setImage("/static/presets/preset1_1.jpg");
-      presets.add(preset1);
-      Preset preset2 = new Preset(60, 50, 40, 30, 20, false, 30, 2, false);
-      preset2.setImage("/static/presets/preset1_1.jpg");
-      presets.add(preset2);
         
       JSONArray json = new JSONArray();
       for (Preset preset : presets) {
@@ -67,6 +56,7 @@ public class PresetHandler extends RequestHandler {
       response = jsonObject.toString();
       
     } catch (SQLException e) {
+      System.out.println(e.toString());
       getLogger().log("Exception occured while respoinding to the request with URI: "
           + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";

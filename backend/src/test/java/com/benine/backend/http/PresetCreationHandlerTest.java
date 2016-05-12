@@ -35,7 +35,7 @@ public class PresetCreationHandlerTest {
     when(ipcamera.isAutoFocusOn()).thenReturn(true);
     when(ipcamera.isAutoIrisOn()).thenReturn(true);
     //Need two more rules with a when..... panspeed and tiltspeed then...
-    preset = new Preset(0,0,100,33,50,true, 15,1,true);
+    preset = new Preset("1-3", new Position(0,0), 100, 33,50,true,15,1,true);
     
   }
   @Test
@@ -48,13 +48,8 @@ public class PresetCreationHandlerTest {
   } 
   
   @Test
-  public void testGetPanPos() {
-    Assert.assertEquals(preset.getPan(), handler.createPreset(ipcamera).getPan());
-  } 
-  
-  @Test
-  public void testGetTiltPos() {
-    Assert.assertEquals(preset.getTilt(), handler.createPreset(ipcamera).getTilt());
+  public void testGetPos() {
+    Assert.assertEquals(preset.getPosition(), handler.createPreset(ipcamera).getPosition());
   } 
   
   @Test

@@ -7,6 +7,7 @@ import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -83,7 +84,9 @@ public class PresetCreationHandler  extends RequestHandler {
       boolean autofocus = ipCamera.isAutoFocusOn();
     
       //Create new Preset and return it.
-      return new Preset(pan,tilt,zoom,focus,iris,autofocus, panspeed, tiltspeed, autoiris);
+      //TODO add image of just created preset
+      return new Preset(ipCamera + "-2", new Position(pan,tilt),zoom,
+                    focus,iris,autofocus, panspeed, tiltspeed, autoiris);
       
     } catch (CameraConnectionException e) {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);

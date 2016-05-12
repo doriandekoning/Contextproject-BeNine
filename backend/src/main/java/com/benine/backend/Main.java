@@ -2,6 +2,7 @@ package com.benine.backend;
 
 
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 
 import com.benine.backend.http.CameraInfoHandler;
@@ -21,6 +22,7 @@ import com.benine.backend.http.HttpController;
 
 import java.io.File;
 import java.net.InetSocketAddress;
+import java.sql.SQLException;
 
 public class Main {
 
@@ -37,8 +39,9 @@ public class Main {
   /**
    * Main method of the program.
    * @param args command line arguments.
+   * @throws SQLException 
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SQLException {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
@@ -67,6 +70,15 @@ public class Main {
       database.resetDatabase();
     }
     /////
+    //TODO Cameras has to be in the database when created and create sample presets.
+    database.addCamera(1, "183.5.1.50:80");
+    Preset preset = new Preset("1-1", new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+    preset.setImage("/static/presets/preset1_1.jpg");
+    database.addPreset(1, 1, preset);
+    Preset preset2 = new Preset("1-1", new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+    preset2.setImage("/static/presets/preset1_1.jpg");
+    database.addPreset(1, 1, preset2);
+    
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));
     httpController = new HttpController(address, logger, cameraController);

@@ -61,7 +61,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
   public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = new Position(preset.getPan(), preset.getTilt());
+    Position position = preset.getPosition();
     ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveFocus(preset.getFocus());

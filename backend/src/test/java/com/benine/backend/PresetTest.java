@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.benine.backend.camera.Position;
+
 /**
  * Created by dorian on 3-5-16.
  */
@@ -12,11 +14,11 @@ public class PresetTest {
 
   @Test
   public void testToJSON() throws JSONException {
-    Preset preset = new Preset(10, 12, 13, 40, 56, true, 1, 2, false);
+    Preset preset = new Preset("1-1", new Position(10, 12), 13, 40, 56, true, 1, 2, false);
     String json = preset.toJSON();
     JSONObject jsonObject = new JSONObject(json);
-    Assert.assertEquals(10, jsonObject.get("pan"));
-    Assert.assertEquals(12, jsonObject.get("tilt"));
+    Assert.assertEquals(10.0, jsonObject.get("pan"));
+    Assert.assertEquals(12.0, jsonObject.get("tilt"));
     Assert.assertEquals(13, jsonObject.get("zoom"));
     Assert.assertEquals(40, jsonObject.get("focus"));
     Assert.assertEquals(56, jsonObject.get("iris"));
@@ -28,9 +30,8 @@ public class PresetTest {
 
   @Test
   public void testGetMethods() {
-    Preset preset = new Preset(1, 2, 3, 4, 5, true, 1, 2, false);
-    Assert.assertEquals(1, preset.getPan());
-    Assert.assertEquals(2, preset.getTilt());
+    Preset preset = new Preset("1-1", new Position(1, 2), 3, 4, 5, true, 1, 2, false);
+    Assert.assertEquals(new Position(1, 2), preset.getPosition());
     Assert.assertEquals(3, preset.getZoom());
     Assert.assertEquals(4, preset.getFocus());
     Assert.assertEquals(5, preset.getIris());
@@ -42,9 +43,8 @@ public class PresetTest {
 
   @Test
   public void testSetMethods() {
-    Preset preset = new Preset(0, 0, 0, 0, 0, false, 1, 2, false);
-    preset.setPan(1);
-    preset.setTilt(2);
+    Preset preset = new Preset("1-3", new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setPosition(new Position(1, 2));
     preset.setZoom(3);
     preset.setFocus(4);
     preset.setIris(5);
@@ -52,8 +52,8 @@ public class PresetTest {
     preset.setPanspeed(4);
     preset.setTiltSpeed(5);
     preset.setAutoiris(true);
-    Assert.assertEquals(1, preset.getPan());
-    Assert.assertEquals(2, preset.getTilt());
+    Position expected = new Position(1, 2);
+    Assert.assertEquals(expected, preset.getPosition());
     Assert.assertEquals(3, preset.getZoom());
     Assert.assertEquals(4, preset.getFocus());
     Assert.assertEquals(5, preset.getIris());
