@@ -51,7 +51,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testAddPreset() {
+    public final void testAddPreset() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
@@ -67,7 +67,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testDeletePreset() {
+    public final void testDeletePreset() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
@@ -83,7 +83,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testUpdatePreset() {
+    public final void testUpdatePreset() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
@@ -101,7 +101,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetPreset() {
+    public final void testGetPreset() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
@@ -117,7 +117,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetAllPreset() {
+    public final void testGetAllPreset() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
@@ -133,7 +133,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetPresetsCamera() {
+    public final void testGetPresetsCamera() throws SQLException {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
         Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
