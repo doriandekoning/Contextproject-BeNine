@@ -75,12 +75,27 @@ function setCurrentCamera(id) {
 		$('.focusslider').val(cameras[id].focus);
 	}
 	
-	//Load the preset images in the preset window.
-	$.get("http://localhost:3000/api/backend/preset?cameraId=" + id, function(data) {
-		var obj = JSON.parse(data);
-		var preset1 = JSON.parse(obj.presets[0]);
-		$('#preset_1').find('img').attr("src", "http://localhost:3000/api/backend" + preset1.image);
-		$('#preset_1').attr("presetID", "1-1");
+	loadPresets(currentcamera);
+}
+
+/**
+* Function loads the presets of this camera in the preset window.
+*/
+function loadPresets(cameraID) {
+	var preset_div, obj, presets, place, preset;
+	$.get("http://localhost:3000/api/backend/preset?cameraId=" + cameraID, function(data) {
+		obj = JSON.parse(data);
+		presets = obj.presets;
+		place = 1;
+		for (var p in presets) {
+			if ($('#preset_'+ place) !== undefined) {
+				preset = JSON.parse(presets[p]);
+				preset_div = $('#preset_' + place);
+				preset_div.find('img').attr("src", "http://localhost:3000/api/backend" + preset.image);
+				preset_div.attr("presetID", "1-1"); //TODO should be ID of the preset
+				place++;
+			}
+		}
 	});
 }
 
@@ -201,13 +216,17 @@ function toggleButton(btn){
 
 /**
 * Function to handle a click on a preset.
+* @param t is the div on which is clicked.
 */
 function presetcall(t){
-	var title = t.find('h5');
-	if(title.hasClass("selected")) {
-		title.removeClass("selected");
-	} else {
-		title.addClass("selected");
+	var presetID = t.attr("presetid");
+	if (presetID !== undefined) {
+		var title = t.find('h5');
+		if(title.hasClass("selected")) {
+			title.removeClass("selected");
+		} else {
+			title.addClass("selected");
+		}
+		console.log(t.attr("presetid"));
 	}
-	
 }

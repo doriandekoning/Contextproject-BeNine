@@ -55,6 +55,9 @@ public class PresetHandler extends RequestHandler {
       DatabasePreset preset1 = new DatabasePreset(60, 50, 40, 30, 20, false);
       preset1.setImage("/public/preset1_1.jpg");
       presets.add(preset1);
+      DatabasePreset preset2 = new DatabasePreset(60, 50, 40, 30, 20, false);
+      preset2.setImage("/public/preset1_1.jpg");
+      presets.add(preset2);
       JSONArray json = new JSONArray();
       for (DatabasePreset preset : presets) {
         json.add(preset.toJSON());
