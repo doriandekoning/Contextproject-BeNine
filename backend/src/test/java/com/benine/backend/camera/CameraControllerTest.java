@@ -62,8 +62,8 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
-    controller.addPreset(0, preset);
-    Mockito.verify(database).addPreset(0, 0, preset);
+    controller.addPreset(1, preset);
+    Mockito.verify(database).addPreset(1, 0, preset);
     Mockito.verifyZeroInteractions(database);
   }
 
@@ -72,8 +72,8 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
-    controller.addPresetAtPosition(0, preset, 0);
-    Mockito.verify(database).addPreset(0, 0, preset);
+    controller.addPresetAtPosition(1, preset, 0);
+    Mockito.verify(database).addPreset(1, 0, preset);
     Mockito.verifyZeroInteractions(database);
   }
 
@@ -83,7 +83,7 @@ public class CameraControllerTest {
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
     controller.getPresetsFromDatabase();
-    Mockito.verify(database).getAllPresetsCamera(0);
+    Mockito.verify(database).getAllPresetsCamera(1);
     Mockito.verifyZeroInteractions(database);
   }
 
@@ -92,11 +92,11 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     controller.addCamera(new IPCamera("ip"));
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
-    controller.addPreset(0, preset);
+    controller.addPreset(1, preset);
     controller.resetPresetsInDatabase();
     Mockito.verify(database).resetDatabase();
-    Mockito.verify(database).addCamera(0, "ip");
-    Mockito.verify(database, times(2)).addPreset(0, 0, preset);
+    Mockito.verify(database).addCamera(1, "ip");
+    Mockito.verify(database, times(2)).addPreset(1, 0, preset);
     Mockito.verifyZeroInteractions(database);
   }
 
@@ -105,8 +105,8 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
-    controller.addPreset(0, preset);
-    Assert.assertEquals(preset, controller.getPreset(0, 0));
+    controller.addPreset(1, preset);
+    Assert.assertEquals(preset, controller.getPreset(1, 0));
   }
 
   @Test
@@ -114,9 +114,9 @@ public class CameraControllerTest {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
     Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
-    controller.addPreset(0, preset);
+    controller.addPreset(1, preset);
     controller.resetPresets();
-    Assert.assertNull(controller.getPreset(0,0));
+    Assert.assertNull(controller.getPreset(1,0));
   }
 
 }
