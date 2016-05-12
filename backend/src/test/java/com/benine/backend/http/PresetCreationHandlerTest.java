@@ -66,6 +66,6 @@ public class PresetCreationHandlerTest {
 
   @Test
   public void testAutoIrisOn() {
-    Assert.assertEquals(preset.getAutoiris(), handler.createPreset(ipcamera).getAutoiris());    
+    Assert.assertEquals(preset.isAutoiris(), handler.createPreset(ipcamera).isAutoiris());    
   }
 }
