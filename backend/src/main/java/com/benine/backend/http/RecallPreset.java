@@ -36,16 +36,15 @@ public class RecallPreset extends RequestHandler {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
       int cameraID = Integer.parseInt(parsedURI.getValue("id"));
-      Random randomGenerator = new Random();
-      int randomInt = randomGenerator.nextInt(100);
-      Preset preset = Main.getDatabase().getPreset(cameraID,randomInt);
+      int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
+      Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
       
       IPCamera ipcamera =  (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
      
     } catch (MalformedURIException e) {
-      responseMessage(exchange, false);
+      responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
       return;
     } catch (CameraConnectionException e) {
@@ -62,8 +61,8 @@ public class RecallPreset extends RequestHandler {
    */
   public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
     Position position = new Position(preset.getPan(),preset.getTilt());
-    ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveTo(position, preset.getPanspeed() , preset.getTiltspeed());
+    ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveFocus(preset.getFocus());
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPos(preset.getIris());

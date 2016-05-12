@@ -1,0 +1,14 @@
+package com.benine.backend.http;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class RecallPresetTest {
+
+  @Test
+  public void test() {
+    fail("Not yet implemented");
+  }
+
+}

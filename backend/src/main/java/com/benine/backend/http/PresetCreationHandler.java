@@ -50,11 +50,11 @@ public class PresetCreationHandler  extends RequestHandler {
         int randomInt = randomGenerator.nextInt(100);
         //Adding the new preset to the database
         Main.getDatabase().addPreset(cameraID, randomInt, preset);
-        responseMessage(exchange, true);
+        responseSuccess(exchange);
       
       }
     } catch (MalformedURIException e) {
-      responseMessage(exchange, false);
+      responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
       return;
     }   

@@ -61,14 +61,14 @@ public class RequestHandlerTest {
   @Test
   public void testResponseMessageTrue() throws Exception {
     String response = "{\"succes\":\"true\"}"; 
-    handler.responseMessage(exchangeMock, true);
+    handler.responseSuccess(exchangeMock);
     verify(exchangeMock).sendResponseHeaders(200, response.length());
   }
   
   @Test
   public void testResponseMessageFalse() throws Exception {
     String response = "{\"succes\":\"false\"}"; 
-    handler.responseMessage(exchangeMock, false);
+    handler.responseFailure(exchangeMock);
     verify(exchangeMock).sendResponseHeaders(200, response.length());
   }
 

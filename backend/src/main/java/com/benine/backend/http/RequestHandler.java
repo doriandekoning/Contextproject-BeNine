@@ -45,14 +45,21 @@ public abstract class RequestHandler implements HttpHandler {
   }
 
   /**
-   * Formats the response message for a success or failure.
+   * Formats the response message as a success.
    * @param exchange the HttpExchange.
-   * @param correct boolean that is true if the exchange is successful. False otherwise.
    */
-  public void responseMessage(HttpExchange exchange, boolean correct) {
-    String response;
-    respond(exchange, response = "{\"succes\":\"" + correct + "\"}");
+  public void responseSuccess(HttpExchange exchange) {
+    respond(exchange, "{\"succes\":\"true\"}");
   }
+  
+  /**
+   * Formats the response message as a failure.
+   * @param exchange the HttpExchange.
+   */
+  public void responseFailure(HttpExchange exchange) {
+    respond(exchange, "{\"succes\":\"false\"}");
+  } 
+  
   
   /**
    * Responds to a request with status 200.
