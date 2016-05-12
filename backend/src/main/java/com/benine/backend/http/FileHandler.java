@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.CameraController;
-import com.google.common.collect.ImmutableMap;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -11,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,11 +21,14 @@ public class FileHandler extends RequestHandler {
   /**
    * Map of extensions to MIME types.
    */
-  static final Map<String, String> MIME_MAP = ImmutableMap.of(
-      "txt", "text/html",
-      "jpg", "image/jpeg",
-      "html", "text/html"
-  );
+  static final Map<String, String> MIME_MAP;
+  
+  static {
+    MIME_MAP = new HashMap<String, String>();
+    MIME_MAP.put("txt", "text/html");
+    MIME_MAP.put("jpg", "image/jpeg");
+    MIME_MAP.put("html", "text/html");
+  }
   
   /**
    * Constructor of this request handler.
@@ -45,6 +48,7 @@ public class FileHandler extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     URI uri = exchange.getRequestURI();
     String path = uri.getPath();
+    System.out.println(path);
     File file = new File("." + path).getCanonicalFile();
     //check if the requested file exists
     if (!file.isFile()) {

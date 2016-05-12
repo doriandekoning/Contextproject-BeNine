@@ -67,7 +67,7 @@ public class Main {
       server.createContext("/move", new MovingHandler(cameraController));
       server.createContext("/zoom", new ZoomingHandler(cameraController));
       server.createContext("/preset", new PresetHandler(cameraController));
-      server.createContext("/public", new FileHandler(cameraController));
+      server.createContext("/static", new FileHandler(cameraController));
 
       logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
       server.start();

@@ -53,10 +53,10 @@ public class PresetHandler extends RequestHandler {
       
       //Temporary adding a preset
       DatabasePreset preset1 = new DatabasePreset(60, 50, 40, 30, 20, false);
-      preset1.setImage("/public/preset1_1.jpg");
+      preset1.setImage("/static/presets/preset1_1.jpg");
       presets.add(preset1);
       DatabasePreset preset2 = new DatabasePreset(60, 50, 40, 30, 20, false);
-      preset2.setImage("/public/preset1_1.jpg");
+      preset2.setImage("/static/presets/preset1_1.jpg");
       presets.add(preset2);
       
       JSONArray json = new JSONArray();
