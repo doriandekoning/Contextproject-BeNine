@@ -37,14 +37,7 @@ public class CameraInfoHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    // Create expected json object
-    JSONObject json = new JSONObject();
-    JSONArray array = new JSONArray();
-    for(Camera camera : camController.getCameras()) {
-      array.add(camera.toJSON());
-    }
-    json.put("cameras", array);
     // Test if correct json string is written to the output
-    verify(out).write(json.toString().getBytes());
+    verify(out).write(camController.getCamerasJSON().getBytes());
   }
 }

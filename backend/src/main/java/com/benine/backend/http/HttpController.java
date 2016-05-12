@@ -35,6 +35,7 @@ public class HttpController {
       server.start();
     } catch (IOException e) {
       logger.log("Unable to start server", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
     }
 
     setupBasicHandlers();
@@ -59,7 +60,7 @@ public class HttpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-  public void createHandlers(Camera cam) {
+  private void createHandlers(Camera cam) {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId + "/focus", new FocussingHandler(camController, logger));

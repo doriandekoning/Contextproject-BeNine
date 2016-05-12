@@ -32,18 +32,11 @@ public class CameraInfoHandler extends RequestHandler {
    */
   public void handle(HttpExchange exchange) throws IOException {
     getLogger().log("Got an http request with uri: " + exchange.getRequestURI(), LogEvent.Type.INFO);
-    JSONObject jsonObj = new JSONObject();
-    ArrayList<Camera> cameras = getCameraController().getCameras();
-    JSONArray camerasJSON = new JSONArray();
-    for (Camera cam : cameras) {
-      try {
-        camerasJSON.add(cam.toJSON());
-      } catch (CameraConnectionException e) {
-        getLogger().log("Cannot connect to camera: " + cam.getId(), LogEvent.Type.CRITICAL);
-      }
+    try {
+      respond(exchange, getCameraController().getCamerasJSON());
+    } catch (CameraConnectionException e) {
+      getLogger().log("Cannot connect to one of the cameras", LogEvent.Type.CRITICAL);
     }
-    jsonObj.put("cameras", camerasJSON);
-    String response = jsonObj.toString();
-    respond(exchange, response);
+    respond(exchange, "{\"succes\":false}");
   }
 }

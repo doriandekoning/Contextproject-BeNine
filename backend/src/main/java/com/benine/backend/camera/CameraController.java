@@ -2,6 +2,8 @@ package com.benine.backend.camera;
 
 import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,5 +68,19 @@ public class CameraController {
       }
     }
     return null;
+  }
+  /**
+   * Returns a json string of all the cameras.
+   * @return json string of all the cameras.
+   */
+  public String getCamerasJSON() throws CameraConnectionException {
+    // Create expected json object
+    JSONObject json = new JSONObject();
+    JSONArray array = new JSONArray();
+    for(Camera camera : getCameras()) {
+      array.add(camera.toJSON());
+    }
+    json.put("cameras", array);
+    return json.toString();
   }
 }

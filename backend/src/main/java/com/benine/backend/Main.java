@@ -57,7 +57,8 @@ public class Main {
       }
     } catch (InterruptedException e) {
       e.printStackTrace();
-      logger.log("Exception occured", LogEvent.Type.CRITICAL);
+      logger.log("Exception occured: Interrupted while trying to start server",
+              LogEvent.Type.CRITICAL);
     }
   }
 
