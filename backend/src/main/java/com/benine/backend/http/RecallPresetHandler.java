@@ -11,13 +11,11 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.jar.Attributes;
 
 
-
 public class RecallPresetHandler extends RequestHandler {
-  
+
   /**
    * Create a new handler for recalling presets.
    * @param controller the controller to interact with.
@@ -40,14 +38,13 @@ public class RecallPresetHandler extends RequestHandler {
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
       
-      IPCamera ipcamera =  (IPCamera)getCameraController().getCameraById(cameraID);
+      IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
-     
+      responseSuccess(exchange);
     } catch (MalformedURIException e) {
       responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
-      return;
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -61,14 +58,12 @@ public class RecallPresetHandler extends RequestHandler {
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
   public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = new Position(preset.getPan(),preset.getTilt());
-    ipcamera.moveTo(position, preset.getPanspeed() , preset.getTiltspeed());
+    Position position = new Position(preset.getPan(), preset.getTilt());
+    ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveFocus(preset.getFocus());
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPos(preset.getIris());
     ipcamera.setAutoIrisOn(preset.isAutoiris());
-    
-    
   }
 }
