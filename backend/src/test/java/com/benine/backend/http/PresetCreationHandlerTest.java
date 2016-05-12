@@ -7,18 +7,18 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.database.DatabasePreset;
 
 public class PresetCreationHandlerTest {
 
   private CameraController controller;
   private PresetCreationHandler handler;
   private IPCamera ipcamera;
-  private DatabasePreset preset;
+  private Preset preset;
   
   @Before
   public void setUp() throws CameraConnectionException{
@@ -30,7 +30,9 @@ public class PresetCreationHandlerTest {
     when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
     when(ipcamera.getZoomPosition()).thenReturn(100);  
     when(ipcamera.isAutoFocusOn()).thenReturn(true);
-    preset = new DatabasePreset(0,0,100,33,50,true);
+    when(ipcamera.isAutoIrisOn()).thenReturn(true);
+    //Need two more rules with a when..... panspeed and tiltspeed then...
+    preset = new Preset(0,0,100,33,50,true, 15,1,true);
     
   }
   @Test
@@ -62,4 +64,8 @@ public class PresetCreationHandlerTest {
     Assert.assertEquals(preset.isAutofocus(), handler.createPreset(ipcamera).isAutofocus());    
   }
 
+  @Test
+  public void testAutoIrisOn() {
+    Assert.assertEquals(preset.getAutoiris(), handler.createPreset(ipcamera).getAutoiris());    
+  }
 }
