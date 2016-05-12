@@ -1,5 +1,6 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Preset;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
@@ -53,7 +54,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testAddPreset() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -69,7 +70,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testDeletePreset() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -85,8 +86,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testUpdatePreset() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
-        DatabasePreset preset2 = new DatabasePreset(1,1,1,1,1,false);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
+        Preset preset2 = new Preset(1,1,1,1,1,true,1,1,true);
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -103,14 +104,13 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testGetPreset() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
         database.connectToDatabaseServer();
         database.resetDatabase();
-        database.addCamera(1,1,"name");
-        database.addPreset(1,1,preset);
-        DatabasePreset result = database.getPreset(1,1);
+        database.addCamera(1,"test");
+        database.getPreset(1,1);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets");
+        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -120,13 +120,13 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testGetAllPreset() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
-        ArrayList<DatabasePreset> result = database.getAllPresets();
+        ArrayList<Preset> result = database.getAllPresets();
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets JOIN");
+        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -136,14 +136,14 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testGetPresetsCamera() {
         prepareEmptyResultSet();
         Database database = new MySQLDatabase();
-        DatabasePreset preset = new DatabasePreset(1,1,1,1,1,true);
+        Preset preset = new Preset(1,1,1,1,1,true,1,1,false);
         database.connectToDatabaseServer();
         database.resetDatabase();
-        database.addCamera(1,1,"name");
+        database.addCamera(1,"ip");
         database.addPreset(1,1,preset);
-        ArrayList<DatabasePreset> result = database.getAllPresetsCamera(1);
+        ArrayList<Preset> result = database.getAllPresetsCamera(1);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets");
+        verifySQLStatementExecuted("SELECT pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();

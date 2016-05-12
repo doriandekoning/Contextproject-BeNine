@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -18,9 +20,10 @@ public class MovingHandler extends RequestHandler {
   /**
    * Creates a new MovingHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
-  public MovingHandler(CameraController controller) {
-    super(controller);
+  public MovingHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
   /**
@@ -29,13 +32,14 @@ public class MovingHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: "
+            + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+      Camera cam = getCameraController().getCameraById(getCameraId(exchange));
       MovingCamera movingCam = (MovingCamera)cam;
       String moveType = parsedURI.getValue("moveType");
       String pan = parsedURI.getValue("pan");
@@ -55,11 +59,9 @@ public class MovingHandler extends RequestHandler {
       }
       response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException e) {
-      //TODO Log exception
-      System.out.println(e);
+      getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
     } catch (CameraConnectionException e) {
-      //TODO log exeption
-      System.out.println(e);
+      getLogger().log("Cannot connect to camera", LogEvent.Type.WARNING);
     }
     respond(exchange, response);
   }

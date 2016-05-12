@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -24,11 +25,10 @@ public class CameraZoomHandlerTest {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&zoomType=absolute&zoom=2");
-    System.out.println(uri.getQuery());
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=absolute&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController);
+    ZoomingHandler zHandler = new ZoomingHandler(camController, mock(Logger.class));
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {
@@ -44,11 +44,10 @@ public class CameraZoomHandlerTest {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&zoomType=relative&zoom=2");
-    System.out.println(uri.getQuery());
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=relative&zoom=2");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    ZoomingHandler zHandler = new ZoomingHandler(camController);
+    ZoomingHandler zHandler = new ZoomingHandler(camController, mock(Logger.class));
     try {
       zHandler.handle(exchange);
     } catch (Exception e) {

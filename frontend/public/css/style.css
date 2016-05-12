@@ -1,68 +1,99 @@
 body {
-    background-color: #999999;
     height: 100vh;
 }
 
-.navbar {
-    margin: 0;
-}
-/* Navigation bar labels */
-nav .labelcontainer {
-    position: absolute;
-    top: 0px;
-    right: 20px;
+
+img {
+    width: 100%;
+    height: 100%;
 }
 
-nav .label {
-    position: relative;
-    top: 15px;
-    right: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-/* These elements need their padding, margin and border reset to show properly */
-.row, .col-xs-6, .col-xs-3 {
+/* Elements requiring a reset for positioning */
+.navbar, .row, .col-xs-3, .col-xs-6{
     padding: 0;
     margin: 0;
     border: 0;
 }
 
-#control_area {
-    height: 100%;
+/* Navigation bar labels */
+nav .label-container {
+    position: relative;
+    top: 15px;
+    right: 5px;
 }
 
-#control_area .row {
-    height: 100%;
+nav .label {
+    position: relative;
+    float: right;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-#right_area, #left_area {
-    height: 100%;
+nav img {
+    position: relative;
+    bottom: 5px;
+    margin-right: 10px;
+    float: left;
+    height: 30px;
+    width: 30px;
 }
 
-.zone {
+/* Position of the JoyStick zone.*/
+.joystick_zone {
     display: block;
     position: absolute;
     width: 100px;
     height: 100px;
-    right: 50px;
-    bottom: 50px;
+    right: 0;
+    bottom: 0;
+}
+
+.control_zone {
+    position: relative;
+    width: calc(100% - 250px);
+    display: flex;
+    flex: 1;
+}
+
+.control_sliders {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Flex body container, so the page allocates the remaining viewpoint automatically*/
+.body_container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #999999;
+    overflow: hidden;
 }
 
 /* slider styling */
 input[type=range] {
+    display: block;
     -webkit-appearance: none;
     background-color: #848484;
     width: 200px;
-    height:55px;
-	position: absolute;
-	margin-left: -40px;
-	border-radius: 8px;
-    -webkit-transform:rotate(90deg);       
-    -moz-transform:rotate(90deg);
-    -o-transform:rotate(90deg);
-    -ms-transform:rotate(90deg);
-    transform:rotate(-90deg);
+    height: 55px;
+    position: absolute;
+    bottom: 240px;
+
+    -webkit-transform:rotate(-90deg);
+    -webkit-transform-origin: 0 100%;
+    -moz-transform:rotate(-90deg);
+    -moz-transform-origin: 0 100%;
+    -o-transform:rotate(-90deg);
+    -o-transform-origin: 0 100%;
+    -ms-transform:rotate(-90deg);
+    -ms-transform-origin: 0 100%;
+
+    transform:rotate(90deg);
+    transform-origin: 0 100%;
+
+    border-radius: 8px;
     z-index: 0;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -77,37 +108,31 @@ input[type="range"]::-ms-tooltip {
 	visibility: hidden;
 }
 
-input[type=range].zoomslider {
-    right: 300px;
-	bottom: 100px;
-}
-
-input[type=range].focusslider {
-	right: 400px;
-	bottom: 100px;
-}
-
-input[type=range].irisslider {
-    right: 500px;
-	bottom: 100px;
+.slider {
+    width: 55px;
+    height: 290px;
+    margin-left: 20px;
+    float:left;
+    position: relative;
 }
 
 input[type=range]:focus {
 	outline: none;
 }
 
-#auto_focus {
-	border-radius: 8px;
-    position: absolute;
-    right: 475px;
-	bottom: 240px;
+.slider button {
+    height: 40px;
+    top: 0;
+    position: relative;
+    border-radius: 8px;
 }
 
-#auto_iris {
-	border-radius: 8px;
+.slider span {
+    height: 20px;
+    width: 100%;
     position: absolute;
-    right: 575px;
-	bottom: 240px;
+    bottom: 10px;
+    text-align: center;
 }
 
 .btn:focus {
@@ -120,8 +145,32 @@ input[type=range]:focus {
 	overflow: hidden;
 }
 
+/* Flex area to make the body area scale to the remaining viewpoint. */
 #body_area {
-    height: 400px;
+    display: flex;
+    flex: 1;
+}
+
+#left_area {
+    overflow: hidden;
+    display: flex;
+    flex: 1;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+#control_area, .control_wrapper, #right_area .row {
+    width: 100%;
+    display: flex;
+    flex: 1;
+}
+
+/* Overflow in right area is hidden because of the joystick */
+#right_area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
 /* Camera block carousel */
@@ -131,6 +180,7 @@ input[type=range]:focus {
     margin: 0;
     height: 100%;
 }
+
 .camera_title {
     top: 10px;
     left: 10px;
@@ -145,44 +195,34 @@ input[type=range]:focus {
 
     margin-left: 5px;
 
-    letter-spacing: 0px;
-    text-shadow: 0px 0px 4px #000000;
+    letter-spacing: 0;
+    text-shadow: 0 0 4px #000000;
 }
 
+/* Position the camera icon */
 .camera_title .glyphicon {
     top: 3px;
     margin-left: 10px;
     height: 20px;
 }
 
-
 #camera_area .row {
     height: 50%;
 }
 
-#current_camera img, #camera_area img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
 /* Preset area configuration. */
 #preset_area {
-    height: 100%;
-    overflow: scroll;
-
-}
-
-#preset_area img {
+    background-color: #1A1A1A;
+    flex-direction: column;
     width: 100%;
-    height: 80px;
-    border: 0;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    overflow: scroll;
 }
 
 #preset_area h5 {
     width: 100%;
+    height: 20px;
     padding: 2px;
     margin: 0;
     text-align: center;
@@ -201,6 +241,6 @@ input[type=range]:focus {
     background-color: #d9534f;
 }
 
-#preset_area .col-xs-3 .none {
+#preset_area .none {
     background-color: #666666;
 }
