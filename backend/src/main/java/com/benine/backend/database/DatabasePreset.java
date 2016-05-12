@@ -14,6 +14,7 @@ public class DatabasePreset {
   private int focus;
   private int iris;
   private boolean autofocus;
+  private String image;
 
   /**
    * Constructs a preset.
@@ -48,6 +49,7 @@ public class DatabasePreset {
     json.put("focus", new Integer(focus));
     json.put("iris", new Integer(iris));
     json.put("autofocus", new Boolean(autofocus));
+    json.put("image", String.valueOf(getImage()));
 
     return json.toString();
   }
@@ -98,6 +100,14 @@ public class DatabasePreset {
 
   public void setAutofocus(boolean autofocus) {
     this.autofocus = autofocus;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 
 }

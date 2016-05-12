@@ -45,7 +45,7 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
 	
 	//determine which elements of the UI to show
 	zoomslider = $('.zoomslider');
@@ -74,6 +74,14 @@ function setCurrentCamera(id) {
 		focus.show();
 		$('.focusslider').val(cameras[id].focus);
 	}
+	
+	//Load the preset images in the preset window.
+	$.get("http://localhost:3000/api/backend/preset?cameraId=" + id, function(data) {
+		var obj = JSON.parse(data);
+		var preset1 = JSON.parse(obj.presets[0]);
+		$('#preset_1').find('img').attr("src", "http://localhost:3000/api/backend" + preset1.image);
+		$('#preset_1').attr("presetID", "1-1");
+	});
 }
 
 /**
@@ -123,7 +131,7 @@ function sendMove(distance, angle){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("http://localhost:3000/api/backend/zoom?id="+ currentcamera + "&zoomType=absolute&zoom=" + zoom , function(data) {console.log(data)});
 	console.log("Zoom: " + zoom);
 }
 
@@ -189,4 +197,17 @@ function toggleButton(btn){
 		btn.addClass("btn-success");
 		btn.removeClass("btn-danger");
 	}
+}
+
+/**
+* Function to handle a click on a preset.
+*/
+function presetcall(t){
+	var title = t.find('h5');
+	if(title.hasClass("selected")) {
+		title.removeClass("selected");
+	} else {
+		title.addClass("selected");
+	}
+	
 }

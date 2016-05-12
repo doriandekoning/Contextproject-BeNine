@@ -34,6 +34,7 @@ public class PresetHandler extends RequestHandler {
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response =  "";
+
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (Exception e) {
@@ -42,19 +43,25 @@ public class PresetHandler extends RequestHandler {
       return;
     }
     String cameraId = parsedURI.getValue("cameraId");
+
     if (cameraId != null) {
       // Used for retrieving presets from database
       int id = Integer.parseInt(cameraId);
       ArrayList<DatabasePreset> presets = new ArrayList<DatabasePreset>();
 
       // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
-
-
+      
+      //Temporary adding a preset
+      DatabasePreset preset1 = new DatabasePreset(60, 50, 40, 30, 20, false);
+      preset1.setImage("/public/preset1_1.jpg");
+      presets.add(preset1);
       JSONArray json = new JSONArray();
       for (DatabasePreset preset : presets) {
         json.add(preset.toJSON());
       }
-      response = new JSONObject().put("presets", json.toString()).toString();
+     JSONObject jsonObject = new JSONObject();
+     jsonObject.put("presets", json);
+     response = jsonObject.toString();
     }
     respond(exchange, response);
   }
