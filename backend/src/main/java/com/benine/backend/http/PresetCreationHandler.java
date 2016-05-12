@@ -2,11 +2,11 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
+import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.database.DatabasePreset;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -43,9 +43,9 @@ public class PresetCreationHandler  extends RequestHandler {
       if (camera instanceof IPCamera) {
         IPCamera ipCamera = (IPCamera)camera;
         
-        DatabasePreset preset = createPreset(ipCamera);
+        Preset preset = createPreset(ipCamera);
                 
-        //Create a random integer for the preset number, should later be changed.
+        //Create a random integer for the preset number.
         Random randomGenerator = new Random();
         int randomInt = randomGenerator.nextInt(100);
         //Adding the new preset to the database
@@ -65,7 +65,7 @@ public class PresetCreationHandler  extends RequestHandler {
    * @param ipCamera the ipCamera you want to get the position of.
    * @return DatabasePreset preset.
    */
-  public DatabasePreset createPreset(IPCamera ipCamera) {
+  public Preset createPreset(IPCamera ipCamera) {
     try {
       //Get everything that is needed to create a new preset.  
       int zoom = ipCamera.getZoomPosition();
@@ -73,10 +73,13 @@ public class PresetCreationHandler  extends RequestHandler {
       int tilt = (int)ipCamera.getPosition().getTilt();
       int focus = ipCamera.getFocusPos();
       int iris = ipCamera.getIrisPos();
+      int panspeed = 15;
+      int tiltspeed = 1 ;
+      boolean autoiris = ipCamera.isAutoIrisOn();
       boolean autofocus = ipCamera.isAutoFocusOn();
     
-      //Create new DatabasePreset and return it.
-      return new DatabasePreset(pan,tilt,zoom,focus,iris,autofocus);
+      //Create new Preset and return it.
+      return new Preset(pan,tilt,zoom,focus,iris,autofocus, panspeed, tiltspeed, autoiris);
       
     } catch (CameraConnectionException e) {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
