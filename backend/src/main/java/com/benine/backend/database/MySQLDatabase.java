@@ -71,6 +71,7 @@ public class MySQLDatabase implements Database {
       String sql = "DELETE FROM presetsdatabase.camerapresets WHERE Camera_ID = " + camera
           + " AND CameraPresetID = " + cameraPresetNumber;
       statement.executeUpdate(sql);
+      statement.close();
     } catch (SQLException e) {
       e.printStackTrace();
     }

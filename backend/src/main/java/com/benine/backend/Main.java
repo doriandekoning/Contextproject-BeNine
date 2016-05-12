@@ -117,7 +117,9 @@ public class Main {
    * Setter for the database.
    * @param newDatabase the new database
    */
-  public static void setDatabase(Database newDatabase) {database = newDatabase;}
+  public static void setDatabase(Database newDatabase) {
+    database = newDatabase;
+  }
 
   
   /**

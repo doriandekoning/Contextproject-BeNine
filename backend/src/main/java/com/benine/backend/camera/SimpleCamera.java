@@ -63,19 +63,25 @@ public class SimpleCamera implements Camera {
 
   @Override
   public Preset[] getPresets() {
-    return presetsFromCamera;
+    Preset[] result = new Preset[16];
+    for (int i = 0; i < presetsFromCamera.length; i++) {
+      result[i] = presetsFromCamera[i];
+    }
+    return result;
   }
 
   @Override
   public void setPresets(Preset[] presets) {
-    presetsFromCamera = presets;
+    for (int i = 0; i < presets.length; i++) {
+      presetsFromCamera[i] = presets[i];
+    }
   }
 
   @Override
   public void setPresetsFromArrayList(ArrayList<Preset> presets) {
     presetsFromCamera = new Preset[16];
     int i = 0;
-    for(Preset preset : presets) {
+    for (Preset preset : presets) {
       presetsFromCamera[i] = preset;
       i++;
     }

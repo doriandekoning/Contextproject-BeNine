@@ -117,7 +117,7 @@ public class Preset {
     return panspeed;
   }
 
-  public void setPanspeed(int iris) {
+  public void setPanspeed(int panspeed) {
     this.panspeed = panspeed;
   }
 

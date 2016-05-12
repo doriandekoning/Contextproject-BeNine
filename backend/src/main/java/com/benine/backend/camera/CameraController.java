@@ -75,7 +75,7 @@ public class CameraController {
    * Get all the presets from the database and set them to the right camera.
    */
   public void getPresetsFromDatabase() {
-    for(Camera camera : this.getCameras()) {
+    for (Camera camera : this.getCameras()) {
       camera.setPresetsFromArrayList(Main.getDatabase().getAllPresetsCamera(camera.getId()));
     }
   }
@@ -85,12 +85,12 @@ public class CameraController {
    */
   public void resetPresetsInDatabase() {
     Main.getDatabase().resetDatabase();
-    for(Camera camera : this.getCameras()) {
-      if(camera instanceof IPCamera){
+    for (Camera camera : this.getCameras()) {
+      if (camera instanceof IPCamera) {
         IPCamera ipcamera = (IPCamera) camera;
         Main.getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
-        for(int i = 0; i < camera.getPresets().length; i++) {
-          if(camera.getPresets()[i] != null) {
+        for (int i = 0; i < camera.getPresets().length; i++) {
+          if (camera.getPresets()[i] != null) {
             Main.getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
           }
         }
@@ -107,7 +107,7 @@ public class CameraController {
   public int addPreset(int cameraId, Preset preset) {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
     for (int i = 0; i < cameraPresets.length; i++) {
-      if(cameraPresets[i] == null) {
+      if (cameraPresets[i] == null) {
         cameraPresets[i] = preset;
         Main.getDatabase().addPreset(cameraId, i, preset);
         return i;
@@ -124,10 +124,9 @@ public class CameraController {
    */
   public void addPresetAtPosition(int cameraId, Preset preset, int position) {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
-    if(cameraPresets[position] != null) {
+    if (cameraPresets[position] != null) {
       Main.getDatabase().updatePreset(cameraId, position, preset);
-    }
-    else {
+    } else {
       Main.getDatabase().addPreset(cameraId, position, preset);
     }
     cameraPresets[position] = preset;
@@ -147,7 +146,7 @@ public class CameraController {
    * Deletes all presets from the cameras.
    */
   public void resetPresets() {
-    for(Camera camera : this.getCameras()) {
+    for (Camera camera : this.getCameras()) {
       camera.setPresets(new Preset[16]);
     }
   }
