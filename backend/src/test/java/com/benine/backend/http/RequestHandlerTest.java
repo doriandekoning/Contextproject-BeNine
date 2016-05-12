@@ -4,18 +4,36 @@ import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
-
 
 import java.io.OutputStream;
 import java.util.jar.Attributes;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 
 /**
  * Created by dorian on 4-5-16.
  */
 public class RequestHandlerTest {
+  
+  private CameraController camera;
+  private PresetCreationHandler handler;
+  private HttpExchange exchangeMock;
+  private OutputStream out;
+  private Logger logger;
+  
+  @Before
+  public void initialize(){
+    camera = mock(CameraController.class);
+    logger = mock(Logger.class);
+    handler = new PresetCreationHandler(camera, logger);
+    exchangeMock = mock(HttpExchange.class);
+    out = mock(OutputStream.class);
+    when(exchangeMock.getResponseBody()).thenReturn(out);
+  }
 
   @Test
   public final void testDecodeCorrectURI() throws MalformedURIException {
@@ -32,17 +50,27 @@ public class RequestHandlerTest {
 
   @Test
   public final void testRespond() throws Exception {
-    HttpExchange mock = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    when(mock.getResponseBody()).thenReturn(out);
-    RequestHandler handler = new testRequestHandler(null, null);
+    RequestHandler handler = new testRequestHandler(null, logger);
     String response = "response";
-    handler.respond(mock, response);
-    verify(mock).sendResponseHeaders(200, response.length());
+    handler.respond(exchangeMock, response);
+    verify(exchangeMock).sendResponseHeaders(200, response.length());
     verify(out).write(any());
     verify(out).close();
   }
 
+  @Test
+  public void testResponseMessageTrue() throws Exception {
+    String response = "{\"succes\":\"true\"}"; 
+    handler.responseSuccess(exchangeMock);
+    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  }
+  
+  @Test
+  public void testResponseMessageFalse() throws Exception {
+    String response = "{\"succes\":\"false\"}"; 
+    handler.responseFailure(exchangeMock);
+    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  }
 
 
   // Test used to be able to instantiate RequestHandler

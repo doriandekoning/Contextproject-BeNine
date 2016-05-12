@@ -28,7 +28,6 @@ DROP TABLE IF EXISTS `camera`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `camera` (
   `ID` int(11) NOT NULL,
-  `Name` varchar(45) DEFAULT NULL,
   `IPadress` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -138,6 +137,9 @@ CREATE TABLE `presets` (
   `Focus` int(11) DEFAULT NULL,
   `Iris` int(11) DEFAULT NULL,
   `Autofocus` int(11) DEFAULT NULL,
+  `Panspeed` int(11) DEFAULT NULL,
+  `Tiltspeed` int(11) DEFAULT NULL,
+  `Autoiris` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

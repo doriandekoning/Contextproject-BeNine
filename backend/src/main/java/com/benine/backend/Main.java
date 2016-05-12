@@ -9,6 +9,7 @@ import com.benine.backend.http.HttpController;
 import java.io.File;
 import java.net.InetSocketAddress;
 
+
 public class Main {
 
   private static Logger logger;
@@ -16,6 +17,8 @@ public class Main {
   private static Config mainConfig;
 
   private static CameraController cameraController;
+  
+  private static Database database;
 
   private static HttpController httpController;
 
@@ -43,15 +46,18 @@ public class Main {
     }
 
     /////CONNECT TO DATABASE SERVER
-    Database database = new MySQLDatabase();
+    database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
-    if(!database.checkDatabase()) //If the database does not exist yet, create a new one
+    //If the database does not exist yet, create a new one
+    if (!database.checkDatabase()) {
       database.resetDatabase();
+    }
     /////
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));
     httpController = new HttpController(address, logger, cameraController);
     try {
+
       while (true) {
         Thread.sleep(100);
       }
@@ -83,4 +89,22 @@ public class Main {
   public static CameraController getCameraController() {
     return cameraController;
   }
+  
+  /**
+   * Getter for the database.
+   * @return the database
+   */
+  public static Database getDatabase() {
+    return database;
+  }
+
+  
+  /**
+   * Getter for the logger.
+   * @return the logger.
+   */
+  public static Logger getLogger() {
+    return logger;
+  }
+
 }
