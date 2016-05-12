@@ -1,6 +1,5 @@
 package com.benine.backend;
 
-import com.benine.backend.PresetsHandler;
 import org.json.simple.JSONObject;
 
 /**
@@ -28,9 +27,12 @@ public class Preset {
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
    * @param autofocus The autofocus of the preset
+   * @param autoiris  The autoiris of the preset
+   * @param tiltspeed The tiltspeed of the preset
+   * @param panspeed  The panspeed of the preset
    */
-  public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris) {
+  public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus, int panspeed, 
+      int tiltspeed, boolean autoiris) {
     this.pan = pan;
     this.tilt = tilt;
     this.zoom = zoom;
