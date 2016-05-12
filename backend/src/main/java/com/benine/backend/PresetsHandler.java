@@ -48,6 +48,7 @@ public class PresetsHandler {
     for (int i = 0; i < cameraPresets.length; i++) {
       if(cameraPresets[i] == null) {
         cameraPresets[i] = preset;
+        Main.getDatabase().addPreset(cameraId, i, preset);
         return i;
       }
     }
@@ -62,6 +63,12 @@ public class PresetsHandler {
    */
   public void addPresetAtPosition(int cameraId, Preset preset, int position) {
     Preset[] cameraPresets = Main.getCameraController().getCameraById(cameraId).getPresets();
+    if(cameraPresets[position] != null) {
+      Main.getDatabase().updatePreset(cameraId, position, preset);
+    }
+    else {
+      Main.getDatabase().addPreset(cameraId, position, preset);
+    }
     cameraPresets[position] = preset;
   }
 
