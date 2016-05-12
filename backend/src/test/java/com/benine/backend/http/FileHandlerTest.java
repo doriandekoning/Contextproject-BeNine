@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -65,6 +66,28 @@ public class FileHandlerTest {
     verify(header).set("Content-Type",  "text/html");
   }
   
+  @Test
+  public void defaultMimeTypeTest() {
+    String res = FileHandler.getMime("asdf/daf");
+    assertEquals(res, "application/octet-stream");
+  }
   
+  @Test
+  public void nonExcistingMimeTypeTest() {
+    String res = FileHandler.getMime("asdf/daf.blabla.blabla");
+    assertEquals(res, "application/octet-stream");
+  }
+  
+  @Test
+  public void htmlMimeTypeTest() {
+    String res = FileHandler.getMime("asdf/daf.text.html");
+    assertEquals(res, "text/html");
+  }
+  
+  @Test
+  public void jpgMimeTypeTest() {
+    String res = FileHandler.getMime("asdf/daf.jpg");
+    assertEquals(res, "image/jpeg");
+  }
 
 }
