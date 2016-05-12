@@ -52,12 +52,14 @@ public class PresetHandler extends RequestHandler {
       // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list
       
       //Temporary adding a preset
+      if(id == 1){
       DatabasePreset preset1 = new DatabasePreset(60, 50, 40, 30, 20, false);
       preset1.setImage("/public/preset1_1.jpg");
       presets.add(preset1);
       DatabasePreset preset2 = new DatabasePreset(60, 50, 40, 30, 20, false);
       preset2.setImage("/public/preset1_1.jpg");
       presets.add(preset2);
+      }
       JSONArray json = new JSONArray();
       for (DatabasePreset preset : presets) {
         json.add(preset.toJSON());

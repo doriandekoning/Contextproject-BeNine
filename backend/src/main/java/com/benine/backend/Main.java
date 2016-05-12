@@ -42,8 +42,10 @@ public class Main {
     
     SimpleCamera camera = new SimpleCamera();
     camera.setStreamLink(mainConfig.getValue("camera1"));
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink(mainConfig.getValue("camera1"));
     cameraController.addCamera(camera);
-
+    cameraController.addCamera(camera2);
     try {
       logger = new Logger();
     } catch (Exception e) {

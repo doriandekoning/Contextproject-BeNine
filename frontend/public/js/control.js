@@ -83,6 +83,10 @@ function setCurrentCamera(id) {
 */
 function loadPresets(cameraID) {
 	var preset_div, obj, presets, place, preset;
+	$('#preset_area').find('div').removeAttr("presetID");
+	$('#preset_area').find('img').removeAttr("src");
+	$('#preset_area').find('h5').removeClass("selected");
+	Holder.run({images:"#preset_area img"})
 	$.get("http://localhost:3000/api/backend/preset?cameraId=" + cameraID, function(data) {
 		obj = JSON.parse(data);
 		presets = obj.presets;
