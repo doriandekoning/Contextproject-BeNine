@@ -80,12 +80,14 @@ function setCurrentCamera(id) {
 
 /**
 * Function loads the presets of this camera in the preset window.
+* @param cameraID the presets of this camera are loaded.
 */
 function loadPresets(cameraID) {
-	var preset_div, obj, presets, place, preset;
-	$('#preset_area').find('div').removeAttr("presetID");
-	$('#preset_area').find('img').removeAttr("src");
-	$('#preset_area').find('h5').removeClass("selected");
+	var preset_div, obj, presets, place, preset, preset_area;
+	preset_area = $('#preset_area');
+	preset_area.find('div').removeAttr("presetID");
+	preset_area.find('img').removeAttr("src");
+	preset_area.find('h5').removeClass();
 	Holder.run({images:"#preset_area img"})
 	$.get("http://localhost:3000/api/backend/preset?cameraId=" + cameraID, function(data) {
 		obj = JSON.parse(data);
@@ -96,7 +98,7 @@ function loadPresets(cameraID) {
 				preset = JSON.parse(presets[p]);
 				preset_div = $('#preset_' + place);
 				preset_div.find('img').attr("src", "http://localhost:3000/api/backend" + preset.image);
-				preset_div.attr("presetID", "1-1"); //TODO should be ID of the preset
+				preset_div.attr("presetID", "1-1"); //TODO should be the real ID of the preset
 				place++;
 			}
 		}
@@ -231,6 +233,7 @@ function presetcall(t){
 		} else {
 			title.addClass("selected");
 		}
+		//todo call the right call to recall this preset on the camera.
 		console.log(t.attr("presetid"));
 	}
 }

@@ -34,7 +34,6 @@ public class FileHandler extends RequestHandler {
     URI uri = exchange.getRequestURI();
     String path = uri.getPath();
     File file = new File("." + path).getCanonicalFile();
-    System.out.println(path);
     //check if the requested file exists
     if (!file.isFile()) {
       respond(exchange, "{\"succes\":\"false\"}");
