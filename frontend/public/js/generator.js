@@ -3,14 +3,6 @@ var cameracounter = 0;
 var blockcounter = 0;
 var presetcounter = 0;
 
-// The document ready can be hold as follows, might additional data from the server be needed.
-// $.holdReady(true);
-//
-// $.get('http://localhost:3000/api/getserver', function(data) {
-//     address = 'http://' + data.address + ':' + data.port;
-//     $.holdReady(false);
-// });
-
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 
@@ -34,16 +26,21 @@ $(document).ready(function() {
  * Sets the backend server status.
  */
 function setServerStatus() {
-    $.get("http://localhost:3000/api/getinfo", function (data) {
+    var statuslabel = $('#server_status')
+
+    $.get("/api/getinfo", function (data) {
         if (data.backend.status === "online") {
-			if(!$('#server_status').hasClass("label-success")){
+			if(!statuslabel.hasClass("label-success")){
 				loadCameras();
 			}
-            $('#server_status').attr('class', 'label label-success');
+            statuslabel.attr('class', 'label label-success');
         } else {
-            $('#server_status').attr('class', 'label label-danger');
+            statuslabel.attr('class', 'label label-danger');
         }
+    }).fail(function () {
+        statuslabel.attr('class', 'label label-danger');
     })
+
 }
 
 /**
