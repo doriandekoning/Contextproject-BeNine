@@ -4,6 +4,7 @@ import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,13 +49,11 @@ public class FileHandler extends RequestHandler {
       exchange.sendResponseHeaders(200, 0);              
 
       OutputStream os = exchange.getResponseBody();
-      FileInputStream fs = new FileInputStream(file);
-      final byte[] buffer = new byte[0x10000];
-      int count = 0;
-      while ((count = fs.read(buffer)) >= 0) {
-        os.write(buffer,0,count);
+      BufferedInputStream bs = new BufferedInputStream(new FileInputStream(file));
+      while (bs.available() > 0) {
+        os.write(bs.read());
       }
-      fs.close();
+      bs.close();
       os.close();
     }  
   }
