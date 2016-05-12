@@ -3,6 +3,7 @@ package com.benine.backend.http;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.benine.backend.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,11 +20,13 @@ public class PresetCreationHandlerTest {
   private PresetCreationHandler handler;
   private IPCamera ipcamera;
   private Preset preset;
+  private Logger logger;
   
   @Before
   public void setUp() throws CameraConnectionException{
     controller = mock(CameraController.class);
-    handler = new PresetCreationHandler(controller);
+    logger = mock(Logger.class);
+    handler = new PresetCreationHandler(controller, logger);
     ipcamera = mock(IPCamera.class);
     when(ipcamera.getFocusPos()).thenReturn(33);
     when(ipcamera.getIrisPos()).thenReturn(50);

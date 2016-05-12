@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
@@ -23,8 +24,8 @@ public class PresetCreationHandler  extends RequestHandler {
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
    */
-  public PresetCreationHandler(CameraController controller) {
-    super(controller);
+  public PresetCreationHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
   
   /**
@@ -37,7 +38,7 @@ public class PresetCreationHandler  extends RequestHandler {
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
-      int cameraID = Integer.parseInt(parsedURI.getValue("id"));
+      int cameraID = getCameraId(exchange);
       Camera camera =  getCameraController().getCameraById(cameraID);
             
       if (camera instanceof IPCamera) {

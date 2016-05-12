@@ -90,7 +90,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return new Position(convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7)));
     } else {
-      throw new IpcameraConnectionException("Getting the position of the camera failed.");
+      throw new IpcameraConnectionException("Getting the position of the camera failed.", getId());
     }
   }
   
@@ -172,7 +172,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return Integer.valueOf(res.substring(2), 16);
     } else {
       CameraController.logger.log("Getting the focus position failed", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Sending command to get focus position failed");
+      throw new IpcameraConnectionException("Sending command to get focus position failed", getId());
     }
   }
 
@@ -233,7 +233,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       }
     } else {
       CameraController.logger.log("Changing auto focus failed.", LogEvent.Type.CRITICAL);
-      throw new CameraConnectionException("Sending command to test autofocus failed");
+      throw new CameraConnectionException("Sending command to test autofocus failed", getId());
     }
   }
   
@@ -266,7 +266,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     } else {
       CameraController.logger.log("Changing auto iris.", LogEvent.Type.CRITICAL);
       throw new IpcameraConnectionException(
-          "Sending the message to test if auto iris is on to camera failed");
+          "Sending the message to test if auto iris is on to camera failed", getId());
     }
     return false;
   }
@@ -308,7 +308,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return Integer.valueOf(res.substring(2), 16);
     } else {
       CameraController.logger.log("Changing zoom position failed.", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.");
+      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.", getId());
     }
   }
   
@@ -363,12 +363,12 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
         com.close();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
+          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", getId());
       } finally {
         com.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", getId());
     }
     
     return res;

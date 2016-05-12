@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
@@ -12,14 +13,15 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.util.jar.Attributes;
 
-public class RecallPreset extends RequestHandler {
-  
+
+public class RecallPresetHandler extends RequestHandler {
+
   /**
    * Create a new handler for recalling presets.
    * @param controller the controller to interact with.
    */
-  public RecallPreset(CameraController controller) {
-    super(controller);
+  public RecallPresetHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
   
   /**
@@ -32,7 +34,7 @@ public class RecallPreset extends RequestHandler {
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
-      int cameraID = Integer.parseInt(parsedURI.getValue("id"));
+      int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
       

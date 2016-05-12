@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,14 +19,16 @@ public class RecallPresetTest {
 
   private IPCamera ipcamera;
   private Preset preset;
-  private RecallPreset recallHandler;
+  private RecallPresetHandler recallHandler;
+  private Logger logger;
 
   @Before
   public void setUp() {
     CameraController controller = mock(CameraController.class);
     ipcamera = mock(IPCamera.class);
+    logger = mock(Logger.class);
     preset = new Preset(0, 0, 100, 33, 50, true, 15, 1, true);
-    recallHandler = new RecallPreset(controller);
+    recallHandler = new RecallPresetHandler(controller, logger);
   }
 
   @Test

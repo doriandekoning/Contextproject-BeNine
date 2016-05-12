@@ -20,8 +20,12 @@ $(document).ready(function() {
     // Generate the camera block area.
     generateCameraArea();
 
+	// Load the available cameras.
+	loadCameras();
+
     // Generate the presets area.
     generatePresets();
+
 
     console.log('Page has loaded successfully.');
 
@@ -33,6 +37,9 @@ $(document).ready(function() {
 function setServerStatus() {
     $.get("http://localhost:3000/api/getinfo", function (data) {
         if (data.backend.status === "online") {
+			if(!$('#server_status').hasClass("label-success")){
+				loadCameras();
+			}
             $('#server_status').attr('class', 'label label-success');
         } else {
             $('#server_status').attr('class', 'label label-danger');
@@ -95,15 +102,21 @@ function addCameraRow(block) {
         cameracounter++;
         camera_element = $('<div class="col-xs-6"></div>');
         camera_element.attr("id", "camera_" + cameracounter);
-        camera_element.attr("camera_number", cameracounter);
 
         camera_title = $('<div class="camera_title"></div>');
         camera_icon = $('<span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>');
-        camera_title_text = $('<span>' + cameracounter + '</span>');
+        camera_title_text = $('<span id="camera_title">' + cameracounter + '</span>');
 
         camera_title.append(camera_icon, camera_title_text);
 
-        camera_image = $('<img src="http://tuincam.bt.tudelft.nl/mjpg/video.mjpg" data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b">').get(0);
+        camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
+
+    		camera_element.click(function() {
+    			var camera_nr = $(this).attr('camera_number');
+    			if ( camera_nr != undefined) {
+    				setCurrentCamera(camera_nr);
+    			}
+    		});
 
         // Run the placeholder creator.
         Holder.run({
