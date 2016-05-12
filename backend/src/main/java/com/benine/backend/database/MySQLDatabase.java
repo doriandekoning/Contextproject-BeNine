@@ -2,10 +2,12 @@ package com.benine.backend.database;
 
 import com.benine.backend.Config;
 import com.benine.backend.Main;
+import com.benine.backend.Preset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 import java.sql.Connection;
@@ -36,124 +38,121 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void addPreset(int camera, int cameraPresetNumber, DatabasePreset preset) {
-    int auto = 0;
-    if (preset.isAutofocus()) {
-      auto = 1;
-    }
+  public void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "INSERT INTO presetsdatabase.presets VALUES(" + presetId + ","
-          + preset.getPan() + "," + preset.getTilt() + "," + preset.getZoom()
-          + "," + preset.getFocus() + "," + preset.getIris() + "," + auto + ")";
+      String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + "," + camera
-          + "," + presetId + ")";
+      sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + ","
+          + camera + "," + presetId + ")";
       statement.executeUpdate(sql);
       statement.close();
       presetId++;
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
 
   }
 
   @Override
-  public void deletePreset(int camera, int cameraPresetNumber) {
+  public void deletePreset(int camera, int cameraPresetNumber) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "DELETE FROM presetsdatabase.camerapresets WHERE Camera_ID = " + camera
           + " AND CameraPresetID = " + cameraPresetNumber;
       statement.executeUpdate(sql);
-    } catch (SQLException e) {
-      e.printStackTrace();
+      statement.close();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
   @Override
-  public void updatePreset(int camera, int cameraPresetNumber, DatabasePreset preset) {
-    int auto = 0;
-    if (preset.isAutofocus()) {
-      auto = 1;
-    }
+  public void updatePreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan()
-          + "," + preset.getTilt() + "," + preset.getZoom() + "," + preset.getFocus()
-          + "," + preset.getIris() + "," + auto + ")";
+      String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
       sql = "UPDATE presetsdatabase.camerapresets SET Presets_ID = " + presetId
           + "WHERE Camera_ID = " + camera + "AND CameraPresetID = " + cameraPresetNumber;
       statement.executeUpdate(sql);
       presetId++;
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
   @Override
-  public DatabasePreset getPreset(int camera, int cameraPresetNumber) {
-    DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
+  public Preset getPreset(int camera, int cameraPresetNumber) throws SQLException {
+    Preset preset = new Preset(0, 0, 0, 0, 0, false, 0, 0, false);
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets "
+      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
+          + " FROM presetsDatabase.presets "
           + "JOIN presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = "
           + "presetsDatabase.presets.ID " + "WHERE presetsDatabase.camerapresets.Camera_ID = "
           + camera + " AND presetsDatabase.camerapresets.CameraPresetID = " + cameraPresetNumber;
       ResultSet resultset = statement.executeQuery(sql);
       if (resultset.next()) {
-        preset.setPan(resultset.getInt("pan"));
-        preset.setTilt(resultset.getInt("tilt"));
-        preset.setZoom(resultset.getInt("zoom"));
-        preset.setFocus(resultset.getInt("focus"));
-        preset.setIris(resultset.getInt("iris"));
-        preset.setAutofocus(resultset.getInt("autofocus") == 1);
+        preset = getPresetsFromResultSet(resultset);
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return preset;
   }
 
   @Override
-  public ArrayList<DatabasePreset> getAllPresets() {
-    ArrayList<DatabasePreset> list = new ArrayList<DatabasePreset>();
+  public ArrayList<Preset> getAllPresets() throws SQLException {
+    ArrayList<Preset> list = new ArrayList<Preset>();
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets "
-          + "JOIN camerapresets ON camerapresets.Preset_ID = presets.ID";
+      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
+          + " FROM presetsDatabase.presets JOIN camerapresets ON camerapresets.Preset_ID "
+          + "= presets.ID";
       ResultSet resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        getPresetsFromResultSet(list, resultset);
+        list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return list;
   }
 
   @Override
-  public ArrayList<DatabasePreset> getAllPresetsCamera(int cameraId) {
-    ArrayList<DatabasePreset> list = new ArrayList<DatabasePreset>();
+  public ArrayList<Preset> getAllPresetsCamera(int cameraId) throws SQLException {
+    ArrayList<Preset> list = new ArrayList<Preset>();
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus FROM presetsDatabase.presets "
-          + "JOIN camerapresets ON camerapresets.Preset_ID = presets.ID "
-          + "WHERE camerapresets.Camera_ID = "
-          + cameraId;
+      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
+          + " FROM presetsDatabase.presets " + "JOIN camerapresets ON camerapresets.Preset_ID = "
+          + "presets.ID WHERE camerapresets.Camera_ID = " + cameraId;
       ResultSet resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        getPresetsFromResultSet(list, resultset);
+        list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return list;
   }
@@ -163,15 +162,16 @@ public class MySQLDatabase implements Database {
     Config config = Main.getConfig();
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
-      String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+      String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
+          + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
       connection = DriverManager.getConnection(connect, config.getValue("sqluser"),
           config.getValue("sqlpassword"));
-    } catch (SQLException | ClassNotFoundException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     try {
       return !connection.isClosed();
-    } catch (SQLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
@@ -181,9 +181,6 @@ public class MySQLDatabase implements Database {
   public boolean checkDatabase() {
     try {
       ResultSet databaseNames = connection.getMetaData().getCatalogs();
-      if (databaseNames == null) {
-        return false;
-      }
       while (databaseNames.next()) {
         String databaseName = databaseNames.getString(1);
         if (databaseName.equals("presetsDatabase")) {
@@ -202,8 +199,9 @@ public class MySQLDatabase implements Database {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
       Reader reader = new BufferedReader(
-          new FileReader("database/databasefile.sql"));
+          new InputStreamReader( new FileInputStream("database/databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
+      presetId = 0;
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -214,36 +212,67 @@ public class MySQLDatabase implements Database {
     if (connection != null) {
       try {
         connection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
   }
 
   @Override
-  public void addCamera(int id, int ip, String name) {
+  public void addCamera(int id, String ip) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
-      String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + name + "," + ip + ")";
+      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,%s)", id, ip);
       statement.executeUpdate(sql);
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
-  public void getPresetsFromResultSet(ArrayList<DatabasePreset> list, ResultSet resultset) {
+  /**
+   * Getter for the presets from the list of presets.
+   * @param resultset the list with all the presets
+   * @return The preset from the resultset
+   */
+  public Preset getPresetsFromResultSet(ResultSet resultset) {
     try {
-      DatabasePreset preset = new DatabasePreset(0, 0, 0, 0, 0, false);
+      Preset preset = new Preset(0, 0, 0, 0, 0, false, 0, 0, false);
       preset.setPan(resultset.getInt("pan"));
       preset.setTilt(resultset.getInt("tilt"));
       preset.setZoom(resultset.getInt("zoom"));
       preset.setFocus(resultset.getInt("focus"));
       preset.setIris(resultset.getInt("iris"));
       preset.setAutofocus(resultset.getInt("autofocus") == 1);
-      list.add(preset);
-    } catch (SQLException e) {
+      preset.setPanspeed(resultset.getInt("panspeed"));
+      preset.setTiltSpeed(resultset.getInt("tiltspeed"));
+      preset.setAutoiris(resultset.getInt("autoiris") == 1);
+      return preset;
+    } catch (Exception e) {
       e.printStackTrace();
+      return null;
     }
+  }
+
+  /**
+   * Creates a sql query to insert a preset in the database.
+   * @param preset The preset to insert
+   * @return The query
+   */
+  public String createAddSqlQuery(Preset preset) {
+    int auto = 0;
+    if (preset.isAutofocus()) {
+      auto = 1;
+    }
+    int autoir = 0;
+    if (preset.isAutoiris()) {
+      autoir = 1;
+    }
+    return "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan()
+        + "," + preset.getTilt() + "," + preset.getZoom() + "," + preset.getFocus()
+        + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
+        + preset.getTiltspeed() + "," + autoir + ")";
   }
 }

@@ -3,14 +3,6 @@ var cameracounter = 0;
 var blockcounter = 0;
 var presetcounter = 0;
 
-// The document ready can be hold as follows, might additional data from the server be needed.
-// $.holdReady(true);
-//
-// $.get('http://localhost:3000/api/getserver', function(data) {
-//     address = 'http://' + data.address + ':' + data.port;
-//     $.holdReady(false);
-// });
-
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 
@@ -19,32 +11,36 @@ $(document).ready(function() {
 
     // Generate the camera block area.
     generateCameraArea();
-	
+
 	// Load the available cameras.
 	loadCameras();
 
     // Generate the presets area.
     generatePresets();
-	
+
 
     console.log('Page has loaded successfully.');
-
 });
 
 /**
  * Sets the backend server status.
  */
 function setServerStatus() {
-    $.get("http://localhost:3000/api/getinfo", function (data) {
+    var statuslabel = $('#server_status')
+
+    $.get("/api/getinfo", function (data) {
         if (data.backend.status === "online") {
-			if(!$('#server_status').hasClass("label-success")){
+			if(!statuslabel.hasClass("label-success")){
 				loadCameras();
 			}
-            $('#server_status').attr('class', 'label label-success');
+            statuslabel.attr('class', 'label label-success');
         } else {
-            $('#server_status').attr('class', 'label label-danger');
+            statuslabel.attr('class', 'label label-danger');
         }
+    }).fail(function () {
+        statuslabel.attr('class', 'label label-danger');
     })
+
 }
 
 /**
@@ -65,7 +61,6 @@ function generateCameraArea() {
     carousel.find(".carousel-indicators").children().eq(0).attr('class', 'active');
     // Set first camera block active.
     carousel.find(".carousel-inner").children().eq(0).attr('class', 'item active');
-
 }
 
 /**
@@ -100,7 +95,7 @@ function addCameraRow(block) {
 
     for (var i = 0; i < 2; i++) {
         cameracounter++;
-        camera_element = $('<div class="col-sm-6"></div>');
+        camera_element = $('<div class="col-xs-6"></div>');
         camera_element.attr("id", "camera_" + cameracounter);
 
         camera_title = $('<div class="camera_title"></div>');
@@ -110,13 +105,13 @@ function addCameraRow(block) {
         camera_title.append(camera_icon, camera_title_text);
 
         camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
-		
-		camera_element.click(function() {
-			var camera_nr = $(this).attr('camera_number');
-			if ( camera_nr != undefined) {
-				setCurrentCamera(camera_nr);
-			}
-		});
+
+    		camera_element.click(function() {
+    			var camera_nr = $(this).attr('camera_number');
+    			if ( camera_nr != undefined) {
+    				setCurrentCamera(camera_nr);
+    			}
+    		});
 
         // Run the placeholder creator.
         Holder.run({
@@ -143,19 +138,21 @@ function generatePresets() {
  * Adds a row to the presets area of the app.
  */
 function addPresetRow() {
-    var preset_row, preset_column, row_container;
+    var preset_row, preset_column;
 
     preset_row = $('<div class="row"></div>');
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div class="col-xs-3"></div>');
+        preset_column = $('<div onclick="presetcall($(this))"></div>');
         preset_row.append(preset_column);
     }
 
     // Now for each column add the preset block.
     preset_row.children().each( function(index, elem) {
         presetcounter++;
+        $(elem).attr("class", "col-xs-3 none");
+		$(elem).attr("id", "preset_" + presetcounter);
         addPreset(elem);
     });
 
@@ -168,19 +165,16 @@ function addPresetRow() {
  * @param elem  A preset_row element.
  */
 function addPreset(elem) {
-    var preset_image, preset_caption, preset_image_div;
+    var preset_image, preset_caption;
 
-    preset_image_div = $('<div class = "none" onclick="presetcall($(this))"></div>');
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b" >').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
+
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
-
-    preset_image_div.attr("id", "preset_" + presetcounter);
 
     // Run the placeholder creator.
     Holder.run({
         images: preset_image
     });
 
-    preset_image_div.append(preset_image, preset_caption);
-    $(elem).append(preset_image_div);
+    $(elem).append(preset_image, preset_caption);
 }

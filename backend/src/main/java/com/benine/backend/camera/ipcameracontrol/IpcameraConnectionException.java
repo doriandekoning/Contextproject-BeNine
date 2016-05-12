@@ -13,8 +13,8 @@ public class IpcameraConnectionException extends CameraConnectionException {
    * Create Ip connection exception.
    * @param message to give extra information with exception.
    */
-  public IpcameraConnectionException(String message) {
-    super(message);
+  public IpcameraConnectionException(String message, int camId) {
+    super(message, camId);
   }
 
   /**

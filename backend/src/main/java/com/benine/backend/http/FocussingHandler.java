@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -17,9 +19,10 @@ public class FocussingHandler extends RequestHandler {
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
-  public FocussingHandler(CameraController controller) {
-    super(controller);
+  public FocussingHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
 
   /**
@@ -28,18 +31,19 @@ public class FocussingHandler extends RequestHandler {
    * @throws IOException when an error occurs with responding to the request.
    */
   public void handle(HttpExchange exchange) throws IOException {
-    //TODO add logging stuff
+    getLogger().log("Got an http request with uri: "
+                      + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
     String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException e) {
-      //TODO Log exception
+      getLogger().log("Mallformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       respond(exchange, response);
       return;
     }
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(parsedURI.getValue("id")));
+    Camera cam = getCameraController().getCameraById(getCameraId(exchange));
     FocussingCamera focusCam = (FocussingCamera) cam;
     String autoOn = parsedURI.getValue("autoFocusOn");
     String setPos = parsedURI.getValue("position");

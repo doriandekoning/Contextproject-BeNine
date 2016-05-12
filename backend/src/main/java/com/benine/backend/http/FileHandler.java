@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
+
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -34,8 +36,8 @@ public class FileHandler extends RequestHandler {
    * Constructor of this request handler.
    * @param controller of the camera's.
    */
-  public FileHandler(CameraController controller) {
-    super(controller);
+  public FileHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
 
   }
 

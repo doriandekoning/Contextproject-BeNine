@@ -10,6 +10,7 @@ import java.net.URI;
 
 import org.junit.Test;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -29,7 +30,7 @@ public class FileHandlerTest {
     URI uri = new  URI("http://localhost/public/test.jpg");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FileHandler handler = new FileHandler(camController);
+    FileHandler handler = new FileHandler(camController, mock(Logger.class));
     handler.handle(exchange);
     verify(out).write("{\"succes\":\"false\"}".getBytes());
   }
@@ -44,7 +45,7 @@ public class FileHandlerTest {
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     when(exchange.getResponseHeaders()).thenReturn(header);
-    FileHandler handler = new FileHandler(camController);
+    FileHandler handler = new FileHandler(camController, mock(Logger.class));
     handler.handle(exchange);
     verify(exchange).sendResponseHeaders(200, 0);
     verify(header).set("Content-Type",  "image/jpeg");
@@ -60,7 +61,7 @@ public class FileHandlerTest {
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     when(exchange.getResponseHeaders()).thenReturn(header);
-    FileHandler handler = new FileHandler(camController);
+    FileHandler handler = new FileHandler(camController, mock(Logger.class));
     handler.handle(exchange);
     verify(exchange).sendResponseHeaders(200, 0);
     verify(header).set("Content-Type",  "text/html");
