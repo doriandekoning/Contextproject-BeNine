@@ -37,9 +37,9 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void addPreset(int camera, int cameraPresetNumber, Preset preset) {
+  public void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
       sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + ","
@@ -47,29 +47,33 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       statement.close();
       presetId++;
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
 
   }
 
   @Override
-  public void deletePreset(int camera, int cameraPresetNumber) {
+  public void deletePreset(int camera, int cameraPresetNumber) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "DELETE FROM presetsdatabase.camerapresets WHERE Camera_ID = " + camera
           + " AND CameraPresetID = " + cameraPresetNumber;
       statement.executeUpdate(sql);
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
   @Override
-  public void updatePreset(int camera, int cameraPresetNumber, Preset preset) {
+  public void updatePreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
       sql = "UPDATE presetsdatabase.camerapresets SET Presets_ID = " + presetId
@@ -77,16 +81,18 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       presetId++;
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
   @Override
-  public Preset getPreset(int camera, int cameraPresetNumber) {
+  public Preset getPreset(int camera, int cameraPresetNumber) throws SQLException {
     Preset preset = new Preset(0, 0, 0, 0, 0, false, 0, 0, false);
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
           + " FROM presetsDatabase.presets "
           + "JOIN presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = "
@@ -98,17 +104,19 @@ public class MySQLDatabase implements Database {
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return preset;
   }
 
   @Override
-  public ArrayList<Preset> getAllPresets() {
+  public ArrayList<Preset> getAllPresets() throws SQLException {
     ArrayList<Preset> list = new ArrayList<Preset>();
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
           + " FROM presetsDatabase.presets JOIN camerapresets ON camerapresets.Preset_ID "
           + "= presets.ID";
@@ -118,17 +126,19 @@ public class MySQLDatabase implements Database {
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return list;
   }
 
   @Override
-  public ArrayList<Preset> getAllPresetsCamera(int cameraId) {
+  public ArrayList<Preset> getAllPresetsCamera(int cameraId) throws SQLException {
     ArrayList<Preset> list = new ArrayList<Preset>();
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris"
           + " FROM presetsDatabase.presets " + "JOIN camerapresets ON camerapresets.Preset_ID = "
           + "presets.ID WHERE camerapresets.Camera_ID = " + cameraId;
@@ -138,8 +148,10 @@ public class MySQLDatabase implements Database {
       }
       resultset.close();
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
     return list;
   }
@@ -149,15 +161,16 @@ public class MySQLDatabase implements Database {
     Config config = Main.getConfig();
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
-      String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+      String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
+          + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
       connection = DriverManager.getConnection(connect, config.getValue("sqluser"),
           config.getValue("sqlpassword"));
-    } catch (SQLException | ClassNotFoundException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     try {
       return !connection.isClosed();
-    } catch (SQLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
@@ -167,9 +180,6 @@ public class MySQLDatabase implements Database {
   public boolean checkDatabase() {
     try {
       ResultSet databaseNames = connection.getMetaData().getCatalogs();
-      if (databaseNames == null) {
-        return false;
-      }
       while (databaseNames.next()) {
         String databaseName = databaseNames.getString(1);
         if (databaseName.equals("presetsDatabase")) {
@@ -201,27 +211,30 @@ public class MySQLDatabase implements Database {
     if (connection != null) {
       try {
         connection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
   }
 
   @Override
-  public void addCamera(int id, String ip) {
+  public void addCamera(int id, String ip) throws SQLException {
+    Statement statement = connection.createStatement();
     try {
-      Statement statement = connection.createStatement();
       String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + ip + ")";
       statement.executeUpdate(sql);
       statement.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
     }
   }
 
   /**
    * Getter for the presets from the list of presets.
    * @param resultset the list with all the presets
+   * @return The preset from the resultset
    */
   public Preset getPresetsFromResultSet(ResultSet resultset) {
     try {
@@ -236,12 +249,17 @@ public class MySQLDatabase implements Database {
       preset.setTiltSpeed(resultset.getInt("tiltspeed"));
       preset.setAutoiris(resultset.getInt("autoiris") == 1);
       return preset;
-    } catch (SQLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
   }
 
+  /**
+   * Creates a sql query to insert a preset in the database.
+   * @param preset The preset to insert
+   * @return The query
+   */
   public String createAddSqlQuery(Preset preset) {
     int auto = 0;
     if (preset.isAutofocus()) {
@@ -253,7 +271,7 @@ public class MySQLDatabase implements Database {
     }
     return "INSERT INTO presetsdatabase.presets VALUES(" + presetId + "," + preset.getPan()
         + "," + preset.getTilt() + "," + preset.getZoom() + "," + preset.getFocus()
-        + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + "," + preset.getTiltspeed()
-        + "," + autoir + ")";
+        + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
+        + preset.getTiltspeed() + "," + autoir + ")";
   }
 }

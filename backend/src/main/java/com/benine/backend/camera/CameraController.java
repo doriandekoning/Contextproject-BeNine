@@ -8,6 +8,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -73,8 +74,9 @@ public class CameraController {
 
   /**
    * Get all the presets from the database and set them to the right camera.
+   * @throws SQLException No right connection found
    */
-  public void getPresetsFromDatabase() {
+  public void getPresetsFromDatabase() throws SQLException {
     for (Camera camera : this.getCameras()) {
       camera.setPresetsFromArrayList(Main.getDatabase().getAllPresetsCamera(camera.getId()));
     }
@@ -82,8 +84,9 @@ public class CameraController {
 
   /**
    * Reset the database with the new presets.
+   * @throws SQLException No right connection found
    */
-  public void resetPresetsInDatabase() {
+  public void resetPresetsInDatabase() throws SQLException {
     Main.getDatabase().resetDatabase();
     for (Camera camera : this.getCameras()) {
       if (camera instanceof IPCamera) {
@@ -103,8 +106,9 @@ public class CameraController {
    * @param cameraId The id of the camera
    * @param preset The preset
    * @return The position the preset is added
+   * @throws SQLException No right connection found
    */
-  public int addPreset(int cameraId, Preset preset) {
+  public int addPreset(int cameraId, Preset preset) throws SQLException {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
     for (int i = 0; i < cameraPresets.length; i++) {
       if (cameraPresets[i] == null) {
@@ -121,8 +125,9 @@ public class CameraController {
    * @param cameraId The id of the camera
    * @param preset The preset
    * @param position The position to add the preset
+   * @throws SQLException No right connection found
    */
-  public void addPresetAtPosition(int cameraId, Preset preset, int position) {
+  public void addPresetAtPosition(int cameraId, Preset preset, int position) throws SQLException {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
     if (cameraPresets[position] != null) {
       Main.getDatabase().updatePreset(cameraId, position, preset);

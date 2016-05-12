@@ -75,7 +75,7 @@ public class SimpleCamera implements Camera {
   public void setPresetsFromArrayList(ArrayList<Preset> presets) {
     presetsFromCamera = new Preset[16];
     int i = 0;
-    for(Preset preset : presets) {
+    for (Preset preset : presets) {
       presetsFromCamera[i] = preset;
       i++;
     }
