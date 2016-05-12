@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.jar.Attributes;
 
 /**
@@ -49,6 +50,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @param exchange the HttpExchange.
    * @param correct boolean that is true if the exchange is successful. False otherwise.
    */
+  @SuppressWarnings("unused")
   public void responseMessage(HttpExchange exchange, boolean correct) {
     String response;
     respond(exchange, response = "{\"succes\":\"" + correct + "\"}");
@@ -63,7 +65,7 @@ public abstract class RequestHandler implements HttpHandler {
     try {
       exchange.sendResponseHeaders(200, response.length());
       OutputStream out = exchange.getResponseBody();
-      out.write(response.getBytes());
+      out.write(response.getBytes(Charset.forName("UTF-8")));
       out.close();
     } catch (IOException e) {
       // TODO Log exception

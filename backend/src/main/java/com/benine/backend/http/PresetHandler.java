@@ -44,7 +44,7 @@ public class PresetHandler extends RequestHandler {
     String cameraId = parsedURI.getValue("cameraId");
     if (cameraId != null) {
       // Used for retrieving presets from database
-      int id = Integer.parseInt(cameraId);
+      // int id = Integer.parseInt(cameraId);
       ArrayList<Preset> presets = new ArrayList<Preset>();
 
       // GET THE PRESETS FROM THE DATABASE HERE and put them in the preset list

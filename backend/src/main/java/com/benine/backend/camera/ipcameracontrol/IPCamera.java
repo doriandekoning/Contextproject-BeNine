@@ -356,15 +356,14 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     String res = null;
     try {
       InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      try {
-        BufferedReader buf = new BufferedReader(new InputStreamReader(
-            com, "UTF8"));
+      BufferedReader buf = new BufferedReader(new InputStreamReader(com, "UTF8"));
+      try { 
         res = buf.readLine();
-        com.close();
       } catch (IOException excep) {
         throw 
           new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
       } finally {
+        buf.close();
         com.close();
       }
     } catch (IOException e) {
@@ -421,12 +420,12 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   @Override
   public Preset[] getPresets() {
-    return presetsFromCamera;
+    return presetsFromCamera.clone();
   }
 
   @Override
   public void setPresets(Preset[] presets) {
-    presetsFromCamera = presets;
+    presetsFromCamera = presets.clone();
   }
 
   @Override
@@ -438,6 +437,4 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       i++;
     }
   }
-
-
 }

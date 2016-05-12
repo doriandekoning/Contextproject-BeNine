@@ -6,7 +6,8 @@ import com.benine.backend.Preset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 import java.sql.Connection;
@@ -198,7 +199,7 @@ public class MySQLDatabase implements Database {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
       Reader reader = new BufferedReader(
-          new FileReader("database/databasefile.sql"));
+          new InputStreamReader( new FileInputStream("database/databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
       presetId = 0;
     } catch (Exception e) {
@@ -221,7 +222,7 @@ public class MySQLDatabase implements Database {
   public void addCamera(int id, String ip) throws SQLException {
     Statement statement = connection.createStatement();
     try {
-      String sql = "INSERT INTO presetsdatabase.camera VALUES(" + id + "," + ip + ")";
+      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,%s)", id, ip);
       statement.executeUpdate(sql);
       statement.close();
     } finally {

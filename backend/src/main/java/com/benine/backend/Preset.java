@@ -137,6 +137,22 @@ public class Preset {
     this.autoiris = autoiris;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (autofocus ? 1231 : 1237);
+    result = prime * result + (autoiris ? 1231 : 1237);
+    result = prime * result + focus;
+    result = prime * result + iris;
+    result = prime * result + pan;
+    result = prime * result + panspeed;
+    result = prime * result + tilt;
+    result = prime * result + tiltspeed;
+    result = prime * result + zoom;
+    return result;
+  }
+
   /**
    * Checking if two presets are equal.
    * @param o the object to be checked with.
