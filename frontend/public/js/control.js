@@ -1,5 +1,4 @@
-
-var joysticksize = 200; //size of joystick in pixels.
+var joysticksize = 150; //size of joystick in pixels.
 var cameras = {}; //Store all available camera's
 var currentcamera; //ID of the camera that is selected.
 
@@ -9,7 +8,7 @@ var currentcamera; //ID of the camera that is selected.
 */
 function loadCameras() {
 	var place, camera_area, camera_div, camera_title;
-	$.get("http://localhost:3000/api/backend/camera/", function(data) {
+	$.get("/api/backend/camera/", function(data) {
 		var obj = JSON.parse(data);
 		// put the information of every camera in cameras.
 		for (var c in obj.cameras) {
@@ -48,19 +47,19 @@ function setCurrentCamera(id) {
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 
 	//determine which elements of the UI to show
-	zoomslider = $('.zoomslider');
-	iris = $('.iris');
-	focus = $('.focus');
+	zoom = $('#zoom');
+	iris = $('#iris');
+	focus = $('#focus');
 	if (cameras[id].zoom === undefined) {
-		zoomslider.hide();
+		zoom.hide();
 	} else {
-		zoomslider.show();
-		zoomslider.val(cameras[id].zoom);
+		zoom.show();
+		zoom.val(cameras[id].zoom);
 	}
 	if  (cameras[id].tilt === undefined) {
-		$('.zone').hide();
+		$('.joystick_zone').hide();
 	} else {
-		$('.zone').show();
+		$('.joystick_zone').show();
 	}
 	if  (cameras[id].iris === undefined) {
 		iris.hide();
@@ -80,7 +79,7 @@ function setCurrentCamera(id) {
 * Options of the displayed joystick.
 */
 var joystickoptions = {
-	zone: document.querySelector('.zone'),
+	zone: document.querySelector('.joystick_zone'),
     mode: 'static',
 	position: {
         left: '10%',
@@ -115,7 +114,7 @@ function sendMove(distance, angle){
 	var tilt, pan;
 	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 	console.log(pan + " - " + tilt);
 }
 
@@ -123,7 +122,7 @@ function sendMove(distance, angle){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
@@ -135,7 +134,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "focus?autoFocusOn=false&position=" + focus , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + focus , function(data) {});
 	console.log("Focus: " + focus);
 }
 
@@ -147,7 +146,7 @@ function inputfocusslider(focus) {
 function inputirisslider(iris) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
 	console.log("Iris: "+ iris);
 }
 
@@ -161,7 +160,7 @@ $('#auto_focus').click(function() {
 	if($(this).hasClass("btn-danger")){
 		on = false;
 	}
-	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
 });
 
 /**
@@ -174,7 +173,7 @@ $('#auto_iris').click(function() {
 	if($(this).hasClass("btn-danger")){
 		on = false;
 	}
-	$.get("http://localhost:3000/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
 });
 
 /**

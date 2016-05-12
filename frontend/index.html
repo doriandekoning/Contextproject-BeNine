@@ -42,36 +42,24 @@
 
 <body>
 <div class="body_container">
-    <div id="top_navbar">
-        <!-- Header of the webpage with an explanation of what the user is seeing. -->
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container">
-
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
-                        <img src="public/icons/apple-touch-icon-precomposed.png" alt="">
-                        PolyCast WebInterface
-                    </a>
-                </div>
-                <div class ="label-container hidden-xs">
-                    <span class="label label-success">Server Status</span>
-                    <span class="label label-danger">Camera Conflict</span>
-                </div>
-
 <div id="top_navbar">
     <!-- Header of the webpage with an explanation of what the user is seeing. -->
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container">
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">PolyCast WebInterface</a>
+                <a class="navbar-brand" href="#">
+                    <img src="public/icons/apple-touch-icon-precomposed.png" alt="">
+                    PolyCast WebInterface
+                </a>
             </div>
-            <div class ="labelcontainer">
+            <div class ="label-container hidden-xs">
                 <span id="server_status" class="label label-warning">Server Status</span>
 
             </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
+</div>
 
 <div id="top_area" class="row">
     <div id="camera_area" class="col-xs-6">
@@ -106,19 +94,31 @@
 <div id="right_area" class= "col-xs-6 hidden-xs hidden-sm">
     <div id="control_area">
         <div class="row">
-                <div class="zone"></div>
+            <div class="control_wrapper">
+                <div class="joystick_zone"></div>
 
-				<div class="zoom">
-					<input  type="range" min="0" max="100" value="50" class="zoomslider" orient="vertical" oninput="inputzoomslider(value)">
-				</div>
-				<div class="focus">
-					<button id="auto_focus" type="button" class="btn btn-success">Auto</button>
-					<input  type="range" min="0" max="100" value="50" class="focusslider" orient="vertical" oninput="inputfocusslider(value)">
-				</div>
-				<div class="iris">
-					<button id="auto_iris" type="button" class="btn btn-success">Auto</button>
-					<input  type="range" min="0" max="100" value="50" class="irisslider" orient="vertical" oninput="inputirisslider(value)">
-				</div>
+                <div class="control_zone">
+
+                    <div class="control_sliders">
+                        <div class="slider" id="focus">
+                            <button id="auto_focus" type="button" class="btn btn-success">Auto</button>
+                            <input type="range" min="0" max="100" value="50" class="focusslider" orient="vertical" oninput="inputfocusslider(value)">
+                            <span>Focus</span>
+                        </div>
+                        <div class="slider" id="iris">
+                            <button id="auto_iris" type="button" class="btn btn-success">Auto</button>
+                            <input type="range" min="0" max="100" value="50" class="irisslider" orient="vertical" oninput="inputirisslider(value)">
+                            <span>Iris</span>
+                        </div>
+                        <div class="slider" id="zoom">
+                            <input type="range" min="0" max="100" value="50" class="zoomslider" orient="vertical" oninput="inputzoomslider(value)">
+                            <span>Zoom</span>
+                        </div>
+                    </div>
+
+                </div>
+
+             </div>
         </div>
     </div>
 </div>
