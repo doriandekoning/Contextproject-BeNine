@@ -1,9 +1,5 @@
 package com.benine.backend.http;
 
-import java.io.IOException;
-import java.util.Random;
-import java.util.jar.Attributes;
-
 import com.benine.backend.LogEvent;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
@@ -12,6 +8,12 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
+
+import java.io.IOException;
+import java.util.Random;
+import java.util.jar.Attributes;
+
+
 
 public class RecallPreset extends RequestHandler {
   
@@ -65,7 +67,7 @@ public class RecallPreset extends RequestHandler {
     ipcamera.moveFocus(preset.getFocus());
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPos(preset.getIris());
-    ipcamera.setAutoIrisOn(preset.getAutoiris());
+    ipcamera.setAutoIrisOn(preset.isAutoiris());
     
     
   }
