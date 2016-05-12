@@ -29,6 +29,15 @@ nav .label {
     margin-right: 5px;
 }
 
+nav img {
+    position: relative;
+    bottom: 5px;
+    margin-right: 10px;
+    float: left;
+    height: 30px;
+    width: 30px;
+}
+
 /* Position of the JoyStick zone.*/
 .zone {
     display: block;
