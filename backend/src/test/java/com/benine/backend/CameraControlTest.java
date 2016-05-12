@@ -41,7 +41,8 @@ public class CameraControlTest {
   private Config mainConfig;
   private CameraController cameraController;
   private InetSocketAddress address;
-  
+  private Logger logger;
+
   /**
    * Set up the mocked camera and add it to the camera controller.
    * @throws CameraConnectionException when the camera can not be created.
@@ -49,6 +50,8 @@ public class CameraControlTest {
   @Before
   public void setup() throws CameraConnectionException{
     mainConfig = Main.getConfig();
+
+    logger = mock(Logger.class);
     
     address = new InetSocketAddress(mainConfig.getValue("serverip"), 
                                             Integer.parseInt(mainConfig.getValue("serverport")));
@@ -123,12 +126,12 @@ public class CameraControlTest {
   public void ManualTestUI() throws InterruptedException, IOException{
     
     HttpServer server = HttpServer.create(address, 10);
-    server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController));
-    server.createContext("/focus", new FocussingHandler(cameraController));
-    server.createContext("/iris", new IrisHandler(cameraController));
-    server.createContext("/move", new MovingHandler(cameraController));
-    server.createContext("/zoom", new ZoomingHandler(cameraController));
-    server.createContext("/preset", new PresetHandler(cameraController));
+    server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController, logger));
+    server.createContext("/focus", new FocussingHandler(cameraController, logger));
+    server.createContext("/iris", new IrisHandler(cameraController, logger));
+    server.createContext("/move", new MovingHandler(cameraController, logger));
+    server.createContext("/zoom", new ZoomingHandler(cameraController, logger));
+    server.createContext("/preset", new PresetHandler(cameraController, logger));
 
     server.start();
     while (true) {
@@ -175,12 +178,12 @@ public class CameraControlTest {
         com.close();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
+          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", 0);
       } finally {
         com.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed");
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", 0);
     }
     
     return res;
