@@ -1,7 +1,7 @@
 package com.benine.backend.camera;
 
 
-import com.benine.backend.database.DatabasePreset;
+import com.benine.backend.Preset;
 
 import java.util.ArrayList;
 
@@ -34,17 +34,17 @@ public interface Camera {
    * Get the list of presets from this camera.
    * @return The preset array
    */
-  DatabasePreset[] getPresets();
+  Preset[] getPresets();
 
   /**
    * Set the list of presets from this camera.
    * @param presets The preset array
    */
-  void setPresets(DatabasePreset[] presets);
+  void setPresets(Preset[] presets);
 
   /**
    * Set the list of presets from this camera of an arraylist.
    * @param presets The ArrayList of presets
    */
-  void setPresetsFromArrayList(ArrayList<DatabasePreset> presets);
+  void setPresetsFromArrayList(ArrayList<Preset> presets);
 }

@@ -1,6 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -10,7 +11,6 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
 
-import com.benine.backend.database.DatabasePreset;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -33,7 +33,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   private int id = -1;
 
-  DatabasePreset[] presetsFromCamera;
+  private Preset[] presetsFromCamera;
 
   /**
    *  Create a new IP Camera object.
@@ -41,7 +41,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public IPCamera(String ip) {
     ipaddress = ip;
-    presetsFromCamera = new DatabasePreset[16];
+    presetsFromCamera = new Preset[16];
   }
   
   /**
@@ -415,21 +415,23 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     return this.id;
   }
 
+  public String getIpaddress() { return ipaddress; }
+
   @Override
-  public DatabasePreset[] getPresets() {
+  public Preset[] getPresets() {
     return presetsFromCamera;
   }
 
   @Override
-  public void setPresets(DatabasePreset[] presets) {
+  public void setPresets(Preset[] presets) {
     presetsFromCamera = presets;
   }
 
   @Override
-  public void setPresetsFromArrayList(ArrayList<DatabasePreset> presets) {
-    presetsFromCamera = new DatabasePreset[16];
+  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
+    presetsFromCamera = new Preset[16];
     int i = 0;
-    for(DatabasePreset preset : presets) {
+    for(Preset preset : presets) {
       presetsFromCamera[i] = preset;
       i++;
     }
