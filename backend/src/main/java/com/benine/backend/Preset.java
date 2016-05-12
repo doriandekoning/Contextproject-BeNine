@@ -113,7 +113,9 @@ public class Preset {
     this.autofocus = autofocus;
   }
 
-  public int getPanspeed() { return panspeed; }
+  public int getPanspeed() { 
+    return panspeed;
+  }
 
   public void setPanspeed(int iris) {
     this.panspeed = panspeed;
@@ -127,24 +129,47 @@ public class Preset {
     this.tiltspeed = tiltspeed;
   }
 
-  public boolean getAutoiris() {return autoiris; }
+  public boolean isAutoiris() {
+    return autoiris; 
+  }
 
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
   }
 
+  /**
+   * Checking if two presets are equal.
+   * @param o the object to be checked with.
+   * @return true if two presets are equal, false otherwise.
+   */
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
     Preset preset = (Preset) o;
 
-    if (pan != preset.pan) return false;
-    if (tilt != preset.tilt) return false;
-    if (zoom != preset.zoom) return false;
-    if (focus != preset.focus) return false;
-    if (iris != preset.iris) return false;
+    if (pan != preset.pan) {
+      return false;
+    }
+    if (tilt != preset.tilt) {
+      return false;
+    }
+    if (zoom != preset.zoom) {
+      return false;
+    }
+    if (focus != preset.focus) { 
+      return false;
+    }
+    if (iris != preset.iris) {
+      return false;
+    }
+    
     return autofocus == preset.autofocus;
+    
 
   }
 }
