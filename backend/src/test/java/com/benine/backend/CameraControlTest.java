@@ -57,7 +57,7 @@ public class CameraControlTest {
       
     IPCamera mockcamera = mock(IPCamera.class);
     when(mockcamera.getStreamLink()).thenReturn("http://83.128.144.84:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture&usr=user&pwd=geheim");
-    when(mockcamera.getId()).thenReturn(0);
+    when(mockcamera.getId()).thenReturn(1);
     when(mockcamera.getFocusPos()).thenReturn(40);
     when(mockcamera.getIrisPos()).thenReturn(60);
     when(mockcamera.getPosition()).thenReturn(new Position(10, 20));
@@ -142,7 +142,7 @@ public class CameraControlTest {
    */
   public String createJSON(){
     JSONObject json = new JSONObject();
-    json.put("id", Integer.valueOf(0));
+    json.put("id", 1);
     try {
       json.put("pan", 10);
       json.put("tilt", 20);
