@@ -74,7 +74,7 @@ public class CameraController {
   /**
    * Get all the presets from the database and set them to the right camera.
    */
-  public void getPresetsFromCamera() {
+  public void getPresetsFromDatabase() {
     for(Camera camera : this.getCameras()) {
       camera.setPresetsFromArrayList(Main.getDatabase().getAllPresetsCamera(camera.getId()));
     }
@@ -136,11 +136,11 @@ public class CameraController {
   /**
    * Get a preset from a camera with the presetId.
    * @param cameraId The id of the camera
-   * @param presetId The preset id of the camera
+   * @param presetPosition The preset id of the camera
    * @return The preset
    */
-  public Preset getPreset(int cameraId, int presetId) {
-    return getCameraById(cameraId).getPresets()[presetId];
+  public Preset getPreset(int cameraId, int presetPosition) {
+    return getCameraById(cameraId).getPresets()[presetPosition];
   }
 
   /**

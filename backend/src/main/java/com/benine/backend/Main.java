@@ -113,6 +113,12 @@ public class Main {
     return database;
   }
 
+  /**
+   * Setter for the database.
+   * @param newDatabase the new database
+   */
+  public static void setDatabase(Database newDatabase) {database = newDatabase;}
+
   
   /**
    * Getter for the logger.
