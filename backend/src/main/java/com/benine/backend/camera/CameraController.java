@@ -5,6 +5,8 @@ import com.benine.backend.Logger;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class CameraController {
 
   public static final Logger logger = setupLogger();
 
-  private int highestIdInUse = 0;
+  private int highestIdInUse = 1;
 
 
 
@@ -155,5 +157,21 @@ public class CameraController {
     for (Camera camera : this.getCameras()) {
       camera.setPresets(new Preset[16]);
     }
+  }
+
+  /**
+   * Returns a json string of all the cameras.
+   * @return json string of all the cameras.
+   * @throws CameraConnectionException if a connection to a camera cannot be made.
+   */
+  public String getCamerasJSON() throws CameraConnectionException {
+    // Create expected json object
+    JSONObject json = new JSONObject();
+    JSONArray array = new JSONArray();
+    for (Camera camera : getCameras()) {
+      array.add(camera.toJSON());
+    }
+    json.put("cameras", array);
+    return json.toString();
   }
 }

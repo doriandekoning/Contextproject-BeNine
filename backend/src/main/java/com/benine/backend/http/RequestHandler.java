@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -8,6 +10,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.jar.Attributes;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dorian on 4-5-16.
@@ -16,13 +20,16 @@ import java.util.jar.Attributes;
 public abstract class RequestHandler implements HttpHandler {
 
   private CameraController controller;
+  private Logger logger;
 
   /**
    * Creates a new FocussingHandler.
    * @param controller the cameracontroller to interact with
+   * @param logger the logger to be used to log to
    */
-  public RequestHandler(CameraController controller) {
+  public RequestHandler(CameraController controller, Logger logger) {
     this.controller = controller;
+    this.logger = logger;
   }
 
   /**
@@ -46,15 +53,22 @@ public abstract class RequestHandler implements HttpHandler {
   }
 
   /**
-   * Formats the response message for a success or failure.
+   * Formats the response message as a success.
    * @param exchange the HttpExchange.
-   * @param correct boolean that is true if the exchange is successful. False otherwise.
    */
-  @SuppressWarnings("unused")
-  public void responseMessage(HttpExchange exchange, boolean correct) {
-    String response;
-    respond(exchange, response = "{\"succes\":\"" + correct + "\"}");
+
+  public void responseSuccess(HttpExchange exchange) {
+    respond(exchange, "{\"succes\":\"true\"}");
   }
+  
+  /**
+   * Formats the response message as a failure.
+   * @param exchange the HttpExchange.
+   */
+  public void responseFailure(HttpExchange exchange) {
+    respond(exchange, "{\"succes\":\"false\"}");
+  } 
+  
   
   /**
    * Responds to a request with status 200.
@@ -65,14 +79,12 @@ public abstract class RequestHandler implements HttpHandler {
     try {
       exchange.sendResponseHeaders(200, response.length());
       OutputStream out = exchange.getResponseBody();
-      out.write(response.getBytes(Charset.forName("UTF-8")));
+      out.write(response.getBytes("UTF-8"));
       out.close();
     } catch (IOException e) {
-      // TODO Log exception
-      System.out.println(e);
+      getLogger().log("Error occured while writing the response to a request at URI"
+                       + exchange.getRequestURI(), LogEvent.Type.WARNING);
     }
-
-
   }
 
   /**
@@ -84,4 +96,25 @@ public abstract class RequestHandler implements HttpHandler {
   }
 
 
+  /**
+   * Fetches camera id from http exchange.
+   * @param exchange the http exchange to fix the id from.
+   * @return the id of the camera.
+   */
+  public int getCameraId(HttpExchange exchange) {
+    // Get path
+    Pattern pattern = Pattern.compile(".*/camera/(\\d*)/.*");
+    String path = exchange.getRequestURI().getPath();
+    Matcher m = pattern.matcher(path);
+    m.matches();
+    return Integer.parseInt(m.group(1));
+  }
+
+  /**
+   * Return the logger.
+   * @return Logger.
+   */
+  public Logger getLogger() {
+    return logger;
+  }
 }

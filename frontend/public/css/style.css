@@ -29,14 +29,37 @@ nav .label {
     margin-right: 5px;
 }
 
+nav img {
+    position: relative;
+    bottom: 5px;
+    margin-right: 10px;
+    float: left;
+    height: 30px;
+    width: 30px;
+}
+
 /* Position of the JoyStick zone.*/
-.zone {
+.joystick_zone {
     display: block;
     position: absolute;
     width: 100px;
     height: 100px;
-    right: 25px;
-    bottom: 25px;
+    right: 0;
+    bottom: 0;
+}
+
+.control_zone {
+    position: relative;
+    width: calc(100% - 250px);
+    display: flex;
+    flex: 1;
+}
+
+.control_sliders {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    bottom: 0;
 }
 
 /* Flex body container, so the page allocates the remaining viewpoint automatically*/
@@ -48,15 +71,84 @@ nav .label {
     overflow: hidden;
 }
 
+/* slider styling */
+input[type=range] {
+    display: block;
+    -webkit-appearance: none;
+    background-color: #848484;
+    width: 200px;
+    height: 55px;
+    position: absolute;
+    bottom: 240px;
+
+    -webkit-transform:rotate(-90deg);
+    -webkit-transform-origin: 0 100%;
+    -moz-transform:rotate(-90deg);
+    -moz-transform-origin: 0 100%;
+    -o-transform:rotate(-90deg);
+    -o-transform-origin: 0 100%;
+    -ms-transform:rotate(-90deg);
+    -ms-transform-origin: 0 100%;
+
+    transform:rotate(90deg);
+    transform-origin: 0 100%;
+
+    border-radius: 8px;
+    z-index: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #585858;
+    width: 35px;
+    height: 55px;
+	border-radius: 8px;
+}
+
+input[type="range"]::-ms-tooltip {
+	visibility: hidden;
+}
+
+.slider {
+    width: 55px;
+    height: 290px;
+    margin-left: 20px;
+    float:left;
+    position: relative;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+.slider button {
+    height: 40px;
+    top: 0;
+    position: relative;
+    border-radius: 8px;
+}
+
+.slider span {
+    height: 20px;
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+}
+
+.btn:focus {
+	outline: none;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
-    height: 28vw;
+	height: 28vw;
+	overflow: hidden;
 }
 
 /* Flex area to make the body area scale to the remaining viewpoint. */
 #body_area {
-    flex: 1;
     display: flex;
+    flex: 1;
 }
 
 #left_area {
@@ -68,14 +160,22 @@ nav .label {
     border: 0;
 }
 
+#control_area, .control_wrapper, #right_area .row {
+    width: 100%;
+    display: flex;
+    flex: 1;
+}
+
 /* Overflow in right area is hidden because of the joystick */
 #right_area {
+    display: flex;
+    flex: 1;
     overflow: hidden;
 }
 
 /* Camera block carousel */
 #current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner * {
-    border: 0;
+	border: 0;
     padding: 0;
     margin: 0;
     height: 100%;

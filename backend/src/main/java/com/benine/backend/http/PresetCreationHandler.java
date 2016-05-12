@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
@@ -24,8 +25,8 @@ public class PresetCreationHandler  extends RequestHandler {
    * Create a new handler for creating new presets.
    * @param controller the controller to interact with.
    */
-  public PresetCreationHandler(CameraController controller) {
-    super(controller);
+  public PresetCreationHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
   
   /**
@@ -38,7 +39,7 @@ public class PresetCreationHandler  extends RequestHandler {
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
-      int cameraID = Integer.parseInt(parsedURI.getValue("id"));
+      int cameraID = getCameraId(exchange);
       Camera camera =  getCameraController().getCameraById(cameraID);
             
       if (camera instanceof IPCamera) {
@@ -51,11 +52,11 @@ public class PresetCreationHandler  extends RequestHandler {
         int randomInt = randomGenerator.nextInt(100);
         //Adding the new preset to the database
         Main.getDatabase().addPreset(cameraID, randomInt, preset);
-        responseMessage(exchange, true);
+        responseSuccess(exchange);
       
       }
     } catch (MalformedURIException e) {
-      responseMessage(exchange, false);
+      responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
       return;
     } catch (SQLException e) {

@@ -101,6 +101,9 @@
             	<systemPropertyVariables>
     					<logback.configurationFile>${basedir}/logback.xml</logback.configurationFile>
 				</systemPropertyVariables>
+				 <excludes>
+            		<exclude>**/CameraControlTest.java</exclude>
+          		</excludes>
 			</configuration>
          </plugin>
          <plugin>

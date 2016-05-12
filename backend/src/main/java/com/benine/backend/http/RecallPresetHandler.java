@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
@@ -11,19 +12,17 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Random;
 import java.util.jar.Attributes;
 
 
+public class RecallPresetHandler extends RequestHandler {
 
-public class RecallPreset extends RequestHandler {
-  
   /**
    * Create a new handler for recalling presets.
    * @param controller the controller to interact with.
    */
-  public RecallPreset(CameraController controller) {
-    super(controller);
+  public RecallPresetHandler(CameraController controller, Logger logger) {
+    super(controller, logger);
   }
   
   /**
@@ -36,19 +35,17 @@ public class RecallPreset extends RequestHandler {
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
-      int cameraID = Integer.parseInt(parsedURI.getValue("id"));
-      Random randomGenerator = new Random();
-      int randomInt = randomGenerator.nextInt(100);
-      Preset preset = Main.getDatabase().getPreset(cameraID,randomInt);
+      int cameraID = getCameraId(exchange);
+      int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
+      Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
       
-      IPCamera ipcamera =  (IPCamera)getCameraController().getCameraById(cameraID);
+      IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
-     
+      responseSuccess(exchange);
     } catch (MalformedURIException e) {
-      responseMessage(exchange, false);
+      responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
-      return;
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -64,14 +61,12 @@ public class RecallPreset extends RequestHandler {
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
   public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = new Position(preset.getPan(),preset.getTilt());
+    Position position = new Position(preset.getPan(), preset.getTilt());
+    ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());
-    ipcamera.moveTo(position, preset.getPanspeed() , preset.getTiltspeed());
     ipcamera.moveFocus(preset.getFocus());
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPos(preset.getIris());
     ipcamera.setAutoIrisOn(preset.isAutoiris());
-    
-    
   }
 }
