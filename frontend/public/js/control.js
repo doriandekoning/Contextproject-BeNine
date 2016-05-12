@@ -123,7 +123,7 @@ function sendMove(distance, angle){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
@@ -135,7 +135,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "focus?autoFocusOn=false&position=" + focus , function(data) {});
+	$.get("http://localhost:3000/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + focus , function(data) {});
 	console.log("Focus: " + focus);
 }
 
