@@ -167,6 +167,15 @@ public class Preset {
     if (iris != preset.iris) {
       return false;
     }
+    if (tiltspeed != preset.tiltspeed) {
+      return false;
+    }
+    if (panspeed != preset.panspeed) {
+      return false;
+    }
+    if (autoiris != preset.autoiris) {
+      return false;
+    }
     
     return autofocus == preset.autofocus;
     
