@@ -63,12 +63,16 @@ public class SimpleCamera implements Camera {
 
   @Override
   public Preset[] getPresets() {
-    return presetsFromCamera.clone();
+    Preset[] copyPresets = new Preset[presetsFromCamera.length];
+    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
+    return copyPresets;
   }
 
   @Override
   public void setPresets(Preset[] presets) {
-    presetsFromCamera = presets.clone();
+    Preset[] newPresets = new Preset[presets.length];
+    System.arraycopy(presets, 0, newPresets, 0, presets.length);
+    presetsFromCamera = newPresets;
   }
 
   @Override
