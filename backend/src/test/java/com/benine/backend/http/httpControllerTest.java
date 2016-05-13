@@ -60,6 +60,15 @@ public class HttpControllerTest {
   }
 
   @Test
+  public void testCreateMovingHandler() {
+    MovingCamera cam =  mock(MovingCamera.class);
+    controller.createHandlers(cam);
+    int camId = cam.getId();
+
+    Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/move"), any());
+  }
+
+  @Test
   public void testCreateZoomHandler() {
     ZoomingCamera cam = mock(ZoomingCamera.class);
     controller.createHandlers(cam);
