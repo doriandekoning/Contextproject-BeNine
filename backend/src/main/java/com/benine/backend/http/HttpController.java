@@ -24,33 +24,46 @@ public class HttpController {
 
   /**
    * Constructor, creates a new HttpController object.
-   * @param address an internetsocet adress indicating the ports for the server to listen to.
+   * @param address an internetsocet address indicating the ports for the server to listen to.
    * @param logger the logger to use to log to.
    * @param camController the cameracontroller that contains
    *                      the camera's which this server interacts with.
    */
   public HttpController(InetSocketAddress address, Logger logger, CameraController camController) {
-    this.logger = logger;
-    this.camController = camController;
-    try {
-      server = HttpServer.create(address, 20);
-
-      createHandlers();
-      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
-      server.start();
-    } catch (IOException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
-      e.printStackTrace();
-    }
-
-    setupBasicHandlers();
+    this(createServer(address, logger), logger, camController);
   }
 
   /**
-   * Creates the basic handlers for endpoints like /camera/.
+   * Constructor, creates a new HttpController object.
+   * @param httpserver a server object.
+   * @param logger the logger to use to log to.
+   * @param camController the cameracontroller that contains
+   *                      the camera's which this server interacts with.
    */
-  public void setupBasicHandlers() {
-    server.createContext("/camera/", new CameraInfoHandler(camController, logger));
+  public HttpController(HttpServer httpserver, Logger logger, CameraController camController) {
+    this.logger = logger;
+    this.camController = camController;
+    this.server = httpserver;
+
+    createHandlers();
+    server.start();
+    logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
+  }
+
+  /**
+   * Creates a server object.
+   * @param address Socket address
+   * @param logger  Logger
+   * @return  An HttpServer.
+     */
+  private static HttpServer createServer(InetSocketAddress address, Logger logger) {
+    try {
+      return HttpServer.create(address, 20);
+    } catch (IOException e) {
+      logger.log("Unable to create server", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
+      return null;
+    }
   }
   
   /**
@@ -67,7 +80,7 @@ public class HttpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-  public void createHandlers(Camera cam) {
+  private void createHandlers(Camera cam) {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId
@@ -96,13 +109,5 @@ public class HttpController {
    */
   public void destroy() {
     server.stop(0);
-  }
-
-  /**
-   * Replaces the server.
-   * @param newServer a new HttpServer.
-   */
-  public void setServer(HttpServer newServer) {
-    this.server = newServer;
   }
 }

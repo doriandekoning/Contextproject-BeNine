@@ -4,101 +4,99 @@ import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpServer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class HttpControllerTest {
 
   private Logger logger = mock(Logger.class);
-  private CameraController cameraController = mock(CameraController.class);
+  private CameraController cameraController = new CameraController();
   private HttpController controller;
   private HttpServer mockserver;
 
   @Before
   public void setUp() throws IOException {
-    InetSocketAddress address = new InetSocketAddress("localhost", 3000);
-    controller = new HttpController(address, logger, cameraController);
-
     mockserver = mock(HttpServer.class);
-    // Close the created server, replace it with a mock.
+    controller = new HttpController(mockserver, logger, cameraController);
+  }
+
+  private void setUpCamera(Camera cam) throws IOException {
+    cameraController.addCamera(cam);
+    controller = new HttpController(mockserver, logger, cameraController);
+
+  }
+
+  @After
+  public void tearDown() throws IOException {
     controller.destroy();
-    controller.setServer(mockserver);
-  }
-
-
-  @Test
-  public void testSetupBasicHandlers() {
-    controller.setupBasicHandlers();
-    Mockito.verify(mockserver).createContext(eq("/camera/"), any(CameraInfoHandler.class));
   }
 
   @Test
-  public void testCreateFocusHandler() {
+  public void testCreateFocusHandler() throws IOException {
     FocussingCamera cam = mock(FocussingCamera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/focus"), any());
   }
 
   @Test
-  public void testCreateIrisHandler() {
+  public void testCreateIrisHandler() throws IOException {
     IrisCamera cam =  mock(IrisCamera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/iris"), any());
   }
 
   @Test
-  public void testCreateMovingHandler() {
+  public void testCreateMovingHandler() throws IOException {
     MovingCamera cam =  mock(MovingCamera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/move"), any());
   }
 
   @Test
-  public void testCreateZoomHandler() {
+  public void testCreateZoomHandler() throws IOException {
     ZoomingCamera cam = mock(ZoomingCamera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/zoom"), any());
   }
 
   @Test
-  public void testCreatePresetHandler() {
+  public void testCreatePresetHandler() throws IOException {
     Camera cam = mock(Camera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/preset"), any());
   }
 
   @Test
-  public void testCreateRecallPresetHandler() {
+  public void testCreateRecallPresetHandler() throws IOException  {
     Camera cam = mock(Camera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/recallpreset"), any());
   }
 
   @Test
-  public void testCreateCreatePresetHandler() {
+  public void testCreateCreatePresetHandler() throws IOException {
     Camera cam = mock(Camera.class);
-    controller.createHandlers(cam);
+    setUpCamera(cam);
     int camId = cam.getId();
 
     Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/createpreset"), any());
@@ -106,6 +104,9 @@ public class HttpControllerTest {
 
   @Test
   public void testDestroy() {
+    mockserver = mock(HttpServer.class);
+    controller = new HttpController(mockserver, logger, cameraController);
+
     controller.destroy();
     Mockito.verify(mockserver).stop(0);
   }
