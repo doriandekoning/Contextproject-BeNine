@@ -27,7 +27,7 @@ public class RecallPresetTest {
     CameraController controller = mock(CameraController.class);
     ipcamera = mock(IPCamera.class);
     logger = mock(Logger.class);
-    preset = new Preset(0, 0, 100, 33, 50, true, 15, 1, true);
+    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);;
     recallHandler = new RecallPresetHandler(controller, logger);
   }
 

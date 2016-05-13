@@ -78,12 +78,12 @@ DROP TABLE IF EXISTS `camerapresets`;
 CREATE TABLE `camerapresets` (
   `CameraPresetID` int(11) NOT NULL,
   `Camera_ID` int(11) NOT NULL,
-  `Presets_ID` int(11) NOT NULL,
-  PRIMARY KEY (`CameraPresetID`,`Camera_ID`,`Presets_ID`),
+  `Preset_ID` int(11) NOT NULL,
+  PRIMARY KEY (`CameraPresetID`,`Camera_ID`,`Preset_ID`),
   KEY `fk_CameraPresets_Camera_idx` (`Camera_ID`),
-  KEY `fk_CameraPresets_Presets1_idx` (`Presets_ID`),
+  KEY `fk_CameraPresets_Presets1_idx` (`Preset_ID`),
   CONSTRAINT `fk_CameraPresets_Camera` FOREIGN KEY (`Camera_ID`) REFERENCES `camera` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_CameraPresets_Presets1` FOREIGN KEY (`Presets_ID`) REFERENCES `presets` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_CameraPresets_Presets1` FOREIGN KEY (`Preset_ID`) REFERENCES `presets` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,6 +140,7 @@ CREATE TABLE `presets` (
   `Panspeed` int(11) DEFAULT NULL,
   `Tiltspeed` int(11) DEFAULT NULL,
   `Autoiris` int(11) DEFAULT NULL,
+  `Image` char(50) DEFAULT '',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

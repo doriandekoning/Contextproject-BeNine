@@ -51,6 +51,7 @@ public class HttpController {
    */
   private void setupBasicHandlers() {
     server.createContext("/camera/", new CameraInfoHandler(camController, logger));
+    server.createContext("/static", new FileHandler(camController, logger));
   }
   
   /**

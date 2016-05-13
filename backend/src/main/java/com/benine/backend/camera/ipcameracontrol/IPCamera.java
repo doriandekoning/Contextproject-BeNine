@@ -172,7 +172,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return Integer.valueOf(res.substring(2), 16);
     } else {
       CameraController.logger.log("Getting the focus position failed", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Sending command to get focus position failed", getId());
+      throw new IpcameraConnectionException("Sending command to get focus position failed",
+                                                                                      getId());
     }
   }
 
@@ -308,7 +309,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return Integer.valueOf(res.substring(2), 16);
     } else {
       CameraController.logger.log("Changing zoom position failed.", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.", getId());
+      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.",
+                                                                                        getId());
     }
   }
   
@@ -361,13 +363,15 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
         res = buf.readLine();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", getId());
+          new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+                                                                      + " failed", getId());
       } finally {
         buf.close();
         com.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress + " failed", getId());
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+                                                                      + " failed", getId());
     }
     
     return res;

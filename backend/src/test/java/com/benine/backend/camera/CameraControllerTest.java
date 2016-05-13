@@ -61,7 +61,7 @@ public class CameraControllerTest {
   public void testAddPreset() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.addPreset(1, preset);
     Mockito.verify(database).addPreset(1, 0, preset);
     Mockito.verifyZeroInteractions(database);
@@ -71,7 +71,7 @@ public class CameraControllerTest {
   public void testAddPresetAtPosition() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.addPresetAtPosition(1, preset, 0);
     Mockito.verify(database).addPreset(1, 0, preset);
     Mockito.verifyZeroInteractions(database);
@@ -81,7 +81,7 @@ public class CameraControllerTest {
   public void testGetPresetsFromDatabase() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.getPresetsFromDatabase();
     Mockito.verify(database).getAllPresetsCamera(1);
     Mockito.verifyZeroInteractions(database);
@@ -91,7 +91,7 @@ public class CameraControllerTest {
   public void testResetPresetsInDatabase() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new IPCamera("ip"));
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.addPreset(1, preset);
     controller.resetPresetsInDatabase();
     Mockito.verify(database).resetDatabase();
@@ -104,7 +104,7 @@ public class CameraControllerTest {
   public void testGetPreset() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.addPreset(1, preset);
     Assert.assertEquals(preset, controller.getPreset(1, 0));
   }
@@ -113,7 +113,7 @@ public class CameraControllerTest {
   public void testResetPresets() throws SQLException {
     CameraController controller = new CameraController();
     controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(0,0,0,0,0,false,0,0,false);
+    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     controller.addPreset(1, preset);
     controller.resetPresets();
     Assert.assertNull(controller.getPreset(1,0));
