@@ -9,7 +9,6 @@ import com.benine.backend.http.HttpController;
 
 
 import java.io.File;
-import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
 public class Main {
@@ -55,10 +54,11 @@ public class Main {
     database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
     //If the database does not exist yet, create a new one
-    if (!database.checkDatabase()) {
-      database.resetDatabase();
-    }
-    /////
+    //    if (!database.checkDatabase()) {
+    database.resetDatabase();
+    //}
+
+
     //TODO Cameras has to be in the database when created and create sample presets.
     try {
       database.addCamera(1, "183.5.1.50:80");
@@ -71,11 +71,10 @@ public class Main {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-   
-    
-    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
-            Integer.parseInt(mainConfig.getValue("serverport")));
-    httpController = new HttpController(address, logger, cameraController);
+
+    httpController = new HttpController(mainConfig.getValue("serverip"),
+        Integer.parseInt(mainConfig.getValue("serverport")), logger, cameraController);
+
     try {
       while (true) {
         Thread.sleep(100);

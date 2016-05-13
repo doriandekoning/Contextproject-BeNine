@@ -35,7 +35,8 @@ public class CameraControlTest {
   
   private Config mainConfig;
   private CameraController cameraController;
-  private InetSocketAddress address;
+  private String address;
+  private int port;
   private Logger logger;
 
   /**
@@ -48,8 +49,8 @@ public class CameraControlTest {
 
     logger = mock(Logger.class);
     
-    address = new InetSocketAddress(mainConfig.getValue("serverip"), 
-                                            Integer.parseInt(mainConfig.getValue("serverport")));
+    address = mainConfig.getValue("serverip");
+    port = Integer.parseInt(mainConfig.getValue("serverport"));
     // Setup camerahandler
     cameraController = new CameraController();
       
@@ -131,7 +132,8 @@ public class CameraControlTest {
    */
   @Test
   public void ManualTestUI() throws InterruptedException, IOException{
-    new HttpController(address, logger, cameraController);
+    HttpController httpController = new HttpController(address, port, logger, cameraController);
+
     while(true){
       Thread.sleep(100);
     }

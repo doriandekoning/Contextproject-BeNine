@@ -24,40 +24,56 @@ public class HttpController {
 
   /**
    * Constructor, creates a new HttpController object.
-   * @param address an internetsocet adress indicating the ports for the server to listen to.
+   * @param address an internetsocet address indicating the ports for the server to listen to.
+   * @param logger the logger to use to log to.
+   * @param camController the cameracontroller that contains
+   *                      the camera's which this server interacts with.
+   * @param port number to connect to.
+   */
+  public HttpController(String address, int port, Logger logger, CameraController camController) {
+    this(createServer(address, port, logger), logger, camController);
+  }
+
+  /**
+   * Constructor, creates a new HttpController object.
+   * @param httpserver a server object.
    * @param logger the logger to use to log to.
    * @param camController the cameracontroller that contains
    *                      the camera's which this server interacts with.
    */
-  public HttpController(InetSocketAddress address, Logger logger, CameraController camController) {
+  public HttpController(HttpServer httpserver, Logger logger, CameraController camController) {
     this.logger = logger;
     this.camController = camController;
-    try {
-      server = HttpServer.create(address, 20);
+    this.server = httpserver;
 
-      createHandlers();
-      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
-      server.start();
-    } catch (IOException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
-      e.printStackTrace();
-    }
-
-    setupBasicHandlers();
+    createHandlers();
+    server.start();
+    logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
   }
 
   /**
-   * Creates the basic handlers for endpoints like /camera/.
-   */
-  private void setupBasicHandlers() {
-    server.createContext("/camera/", new CameraInfoHandler(camController, logger));
-    server.createContext("/static", new FileHandler(camController, logger));
+   * Creates a server object.
+   * @param address Socket address
+   * @param logger  Logger
+   * @param port port number to connect to
+   * @return  An HttpServer.
+     */
+  private static HttpServer createServer(String address, int port, Logger logger) {
+    try {
+      InetSocketAddress socket = new InetSocketAddress(address, port);
+      return HttpServer.create(socket, 20);
+    } catch (IOException e) {
+      logger.log("Unable to create server", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
+      return null;
+    }
   }
   
   /**
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
+    server.createContext("/static", new FileHandler(camController, logger));
     server.createContext("/camera/", new CameraInfoHandler(camController, logger));
     for (Camera cam : camController.getCameras()) {
       createHandlers(cam);
@@ -86,7 +102,7 @@ public class HttpController {
     server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, logger));
     server.createContext("/camera/" + camId + "/createpreset", 
                                                  new PresetCreationHandler(camController, logger));
-    server.createContext("/camera/" + camId + "/recallPreset",
+    server.createContext("/camera/" + camId + "/recallpreset",
                                                    new RecallPresetHandler(camController, logger));
 
     logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
