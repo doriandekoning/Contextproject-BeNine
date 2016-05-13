@@ -1,5 +1,6 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.Position;
 import org.json.simple.JSONObject;
 
 /**
@@ -8,8 +9,7 @@ import org.json.simple.JSONObject;
  */
 public class Preset {
 
-  private int pan;
-  private int tilt;
+  private Position position;
   private int zoom;
   private int focus;
   private int iris;
@@ -17,12 +17,13 @@ public class Preset {
   private int panspeed;
   private int tiltspeed;
   private boolean autoiris;
+  private String image;
+  private int presetid;
 
   /**
    * Constructs a preset.
    *
-   * @param pan       The pan of the preset
-   * @param tilt      The tilt of the preset
+   * @param pos       The position of this preset.
    * @param zoom      The zoom of the preset
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
@@ -31,10 +32,9 @@ public class Preset {
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
    */
-  public Preset(int pan, int tilt, int zoom, int focus, int iris, boolean autofocus, int panspeed, 
-      int tiltspeed, boolean autoiris) {
-    this.pan = pan;
-    this.tilt = tilt;
+  public Preset(Position pos, int zoom, int focus,int iris,
+               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris) {
+    this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
     this.iris = iris;
@@ -52,8 +52,8 @@ public class Preset {
   public String toJSON() {
     JSONObject json = new JSONObject();
 
-    json.put("pan", pan);
-    json.put("tilt", tilt);
+    json.put("pan", position.getPan());
+    json.put("tilt", position.getTilt());
     json.put("zoom", zoom);
     json.put("focus", focus);
     json.put("iris", iris);
@@ -61,24 +61,18 @@ public class Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
+    json.put("image", image);
+    json.put("id", presetid);
 
     return json.toString();
   }
 
-  public int getPan() {
-    return pan;
+  public Position getPosition() {
+    return position;
   }
 
-  public void setPan(int pan) {
-    this.pan = pan;
-  }
-
-  public int getTilt() {
-    return tilt;
-  }
-
-  public void setTilt(int tilt) {
-    this.tilt = tilt;
+  public void setPosition(Position pos) {
+    this.position = pos;
   }
 
   public int getZoom() {
@@ -125,7 +119,7 @@ public class Preset {
     return tiltspeed;
   }
 
-  public void setTiltSpeed(int tiltspeed) {
+  public void setTiltspeed(int tiltspeed) {
     this.tiltspeed = tiltspeed;
   }
 
@@ -145,9 +139,7 @@ public class Preset {
     result = prime * result + (autoiris ? 1231 : 1237);
     result = prime * result + focus;
     result = prime * result + iris;
-    result = prime * result + pan;
     result = prime * result + panspeed;
-    result = prime * result + tilt;
     result = prime * result + tiltspeed;
     result = prime * result + zoom;
     return result;
@@ -167,11 +159,12 @@ public class Preset {
     }
 
     Preset preset = (Preset) o;
-
-    if (pan != preset.pan) {
+    
+    if (presetid != preset.presetid) {
       return false;
     }
-    if (tilt != preset.tilt) {
+
+    if (!position.equals(preset.position)) {
       return false;
     }
     if (zoom != preset.zoom) {
@@ -197,5 +190,21 @@ public class Preset {
     }
     
     return true;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public void setId(int id) {
+    this.presetid = id;
+  }
+  
+  public int getId() {
+    return presetid;
   }
 }

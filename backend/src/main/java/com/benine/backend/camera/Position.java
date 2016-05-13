@@ -51,5 +51,29 @@ public class Position {
   public double getTilt() {
     return tilt;
   }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(pan);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(tilt);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Position) {
+      Position that = (Position) o;
+      if (Double.compare(this.pan, that.pan) < 0.0001 
+                && Double.compare(this.tilt, that.tilt) < 0.0001 ) {
+        return true;
+      }
+    }
+    return false;
+  }
 
 }

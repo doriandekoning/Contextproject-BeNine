@@ -144,7 +144,7 @@ function addPresetRow() {
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div></div>');
+        preset_column = $('<div onclick="presetcall($(this))"></div>');
         preset_row.append(preset_column);
     }
 
@@ -152,6 +152,7 @@ function addPresetRow() {
     preset_row.children().each( function(index, elem) {
         presetcounter++;
         $(elem).attr("class", "col-xs-3 none");
+		$(elem).attr("id", "preset_" + presetcounter);
         addPreset(elem);
     });
 
@@ -167,6 +168,7 @@ function addPreset(elem) {
     var preset_image, preset_caption;
 
     preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
+
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
 
     // Run the placeholder creator.

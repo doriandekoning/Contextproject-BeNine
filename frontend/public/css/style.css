@@ -79,19 +79,19 @@ input[type=range] {
     width: 200px;
     height: 55px;
     position: absolute;
-    bottom: 240px;
+    top:250px;
 
-    -webkit-transform:rotate(-90deg);
-    -webkit-transform-origin: 0 100%;
-    -moz-transform:rotate(-90deg);
-    -moz-transform-origin: 0 100%;
-    -o-transform:rotate(-90deg);
-    -o-transform-origin: 0 100%;
-    -ms-transform:rotate(-90deg);
-    -ms-transform-origin: 0 100%;
+    -webkit-transform:rotate(90deg);
+    -webkit-transform-origin: 0 0;
+    -moz-transform:rotate(90deg);
+    -moz-transform-origin: 0 0;
+    -o-transform:rotate(90deg);
+    -o-transform-origin: 0 0;
+    -ms-transform:rotate(90deg);
+    -ms-transform-origin: 0 0;
 
-    transform:rotate(90deg);
-    transform-origin: 0 100%;
+    transform:rotate(-90deg);
+    transform-origin: 0 0;
 
     border-radius: 8px;
     z-index: 0;
@@ -208,6 +208,10 @@ input[type=range]:focus {
 
 #camera_area .row {
     height: 50%;
+}
+
+#preset_area img {
+    height: 80px;
 }
 
 /* Preset area configuration. */

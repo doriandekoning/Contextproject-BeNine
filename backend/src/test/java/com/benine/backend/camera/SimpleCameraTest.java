@@ -30,7 +30,8 @@ public class SimpleCameraTest {
     Camera simpleCamera = new SimpleCamera();
 
     Preset[] presets = new Preset[16];
-    presets[14] = new Preset(0,0,0,0,0,false,0,0,false);
+    presets[14] = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
+
 
     simpleCamera.setPresets(presets);
     Assert.assertTrue(Arrays.equals(presets, simpleCamera.getPresets()));
@@ -41,7 +42,7 @@ public class SimpleCameraTest {
     Camera simpleCamera = new SimpleCamera();
 
     Preset[] presets = new Preset[16];
-    presets[14] = new Preset(0,0,0,0,0,false,0,0,false);
+    presets[14] = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
     ArrayList<Preset> presetarrayList = new ArrayList(Arrays.asList(presets));
 
     simpleCamera.setPresetsFromArrayList(presetarrayList);
