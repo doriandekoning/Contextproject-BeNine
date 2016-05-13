@@ -49,7 +49,7 @@ public class HttpController {
   /**
    * Creates the basic handlers for endpoints like /camera/.
    */
-  private void setupBasicHandlers() {
+  public void setupBasicHandlers() {
     server.createContext("/camera/", new CameraInfoHandler(camController, logger));
   }
   
@@ -96,5 +96,13 @@ public class HttpController {
    */
   public void destroy() {
     server.stop(0);
+  }
+
+  /**
+   * Replaces the server.
+   * @param newServer a new HttpServer.
+   */
+  public void setServer(HttpServer newServer) {
+    this.server = newServer;
   }
 }
