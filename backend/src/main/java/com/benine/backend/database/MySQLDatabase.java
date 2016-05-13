@@ -78,7 +78,7 @@ public class MySQLDatabase implements Database {
     try {
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      sql = "UPDATE presetsdatabase.camerapresets SET Presets_ID = " + presetId
+      sql = "UPDATE presetsdatabase.camerapresets SET Preset_ID = " + presetId
           + "WHERE Camera_ID = " + camera + "AND CameraPresetID = " + cameraPresetNumber;
       statement.executeUpdate(sql);
       presetId++;
@@ -98,7 +98,7 @@ public class MySQLDatabase implements Database {
       String sql = "SELECT id, pan, tilt, zoom, focus, iris, autofocus, panspeed,"
           + " tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets "
-          + "JOIN presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = "
+          + "JOIN presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Preset_ID = "
           + "presetsDatabase.presets.ID " + "WHERE presetsDatabase.camerapresets.Camera_ID = "
           + camera + " AND presetsDatabase.camerapresets.CameraPresetID = " + cameraPresetNumber;
       ResultSet resultset = statement.executeQuery(sql);

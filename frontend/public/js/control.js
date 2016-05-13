@@ -235,7 +235,7 @@ function presetcall(t){
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
-		//todo call the right call to recall this preset on the camera.
+		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {});
 		console.log(t.attr("presetid"));
 	}
 }
