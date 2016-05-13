@@ -53,9 +53,8 @@ public class Main {
       database.resetDatabase();
     }
     /////
-    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
-            Integer.parseInt(mainConfig.getValue("serverport")));
-    httpController = new HttpController(address, logger, cameraController);
+
+    httpController = new HttpController(mainConfig.getValue("serverip"), Integer.parseInt(mainConfig.getValue("serverport")), logger, cameraController);
     try {
 
       while (true) {

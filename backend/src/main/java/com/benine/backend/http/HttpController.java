@@ -29,8 +29,8 @@ public class HttpController {
    * @param camController the cameracontroller that contains
    *                      the camera's which this server interacts with.
    */
-  public HttpController(InetSocketAddress address, Logger logger, CameraController camController) {
-    this(createServer(address, logger), logger, camController);
+  public HttpController(String address, int port, Logger logger, CameraController camController) {
+    this(createServer(address, port, logger), logger, camController);
   }
 
   /**
@@ -56,9 +56,10 @@ public class HttpController {
    * @param logger  Logger
    * @return  An HttpServer.
      */
-  private static HttpServer createServer(InetSocketAddress address, Logger logger) {
+  private static HttpServer createServer(String address, int port, Logger logger) {
     try {
-      return HttpServer.create(address, 20);
+      InetSocketAddress socket = new InetSocketAddress(address, port);
+      return HttpServer.create(socket, 20);
     } catch (IOException e) {
       logger.log("Unable to create server", LogEvent.Type.CRITICAL);
       e.printStackTrace();
