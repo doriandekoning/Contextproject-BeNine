@@ -6,10 +6,7 @@ import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -202,6 +199,7 @@ public class MySQLDatabase implements Database {
   public void resetDatabase() {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
+      sr.setLogWriter(new PrintWriter("logs/databaselog.txt"));
       Reader reader = new BufferedReader(
           new InputStreamReader( new FileInputStream("database/databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
