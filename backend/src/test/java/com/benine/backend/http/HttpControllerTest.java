@@ -25,7 +25,6 @@ public class HttpControllerTest {
   @Before
   public void setUp() throws IOException {
     mockserver = mock(HttpServer.class);
-    controller = new HttpController(mockserver, logger, cameraController);
   }
 
   private void setUpCamera(Camera cam) throws IOException {
