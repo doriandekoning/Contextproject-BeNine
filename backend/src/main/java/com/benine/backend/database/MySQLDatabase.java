@@ -183,7 +183,7 @@ public class MySQLDatabase implements Database {
       ResultSet databaseNames = connection.getMetaData().getCatalogs();
       while (databaseNames.next()) {
         String databaseName = databaseNames.getString(1);
-        if (databaseName.equals("presetsDatabase")) {
+        if (databaseName.equals("presetsdatabase")) {
           return true;
         }
       }
