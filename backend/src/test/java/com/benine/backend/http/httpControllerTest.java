@@ -11,11 +11,9 @@ import org.mockito.Mockito;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import static org.mockito.Mockito.*;
-
-/**
- * Created by dorian on 10-5-16.
- */
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 
 public class HttpControllerTest {
 
@@ -26,7 +24,7 @@ public class HttpControllerTest {
 
   @Before
   public void setUp() throws IOException {
-    InetSocketAddress address = new InetSocketAddress("localhost", 4500);
+    InetSocketAddress address = new InetSocketAddress("localhost", 3001);
     controller = new HttpController(address, logger, cameraController);
 
     mockserver = mock(HttpServer.class);
@@ -43,16 +41,6 @@ public class HttpControllerTest {
   public void testSetupBasicHandlers() {
     controller.setupBasicHandlers();
     Mockito.verify(mockserver).createContext(eq("/camera/"), any(CameraInfoHandler.class));
-  }
-
-  @Test
-  public void testDestroy() {
-    HttpServer server = mock(HttpServer.class);
-    controller.setServer(server);
-
-    controller.destroy();
-
-    Mockito.verify(server).stop(0);
   }
 
 }
