@@ -251,7 +251,7 @@ public class MySQLDatabase implements Database {
       preset.setIris(resultset.getInt("iris"));
       preset.setAutofocus(resultset.getInt("autofocus") == 1);
       preset.setPanspeed(resultset.getInt("panspeed"));
-      preset.setTiltSpeed(resultset.getInt("tiltspeed"));
+      preset.setTiltspeed(resultset.getInt("tiltspeed"));
       preset.setAutoiris(resultset.getInt("autoiris") == 1);
       preset.setImage(resultset.getString("image"));
       preset.setId(resultset.getInt("id"));

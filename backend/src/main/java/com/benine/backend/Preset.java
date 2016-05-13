@@ -119,7 +119,7 @@ public class Preset {
     return tiltspeed;
   }
 
-  public void setTiltSpeed(int tiltspeed) {
+  public void setTiltspeed(int tiltspeed) {
     this.tiltspeed = tiltspeed;
   }
 

@@ -42,24 +42,176 @@ public class PresetTest {
   }
 
   @Test
-  public void testSetMethods() {
+  public void testSetPosition() {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset.setPosition(new Position(1, 2));
-    preset.setZoom(3);
-    preset.setFocus(4);
-    preset.setIris(5);
-    preset.setAutofocus(true);
-    preset.setPanspeed(4);
-    preset.setTiltSpeed(5);
-    preset.setAutoiris(true);
+    preset.setPosition(new Position(1, 2));   
     Position expected = new Position(1, 2);
     Assert.assertEquals(expected, preset.getPosition());
-    Assert.assertEquals(3, preset.getZoom());
-    Assert.assertEquals(4, preset.getFocus());
-    Assert.assertEquals(5, preset.getIris());
+  }
+  
+  @Test
+  public void testSetPanSpeed() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setPanspeed(20);
+    Assert.assertEquals(20, preset.getPanspeed());
+  }
+  
+  @Test
+  public void testSetTiltSpeed() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setTiltspeed(20);
+    Assert.assertEquals(20, preset.getTiltspeed());
+  }
+  
+  @Test
+  public void testSetAutoFocus() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setAutofocus(true);
     Assert.assertEquals(true, preset.isAutofocus());
-    Assert.assertEquals(4, preset.getFocus());
-    Assert.assertEquals(5, preset.getTiltspeed());
+  }
+  
+  @Test
+  public void testSetAutoIris() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setAutoiris(true);
     Assert.assertEquals(true, preset.isAutoiris());
+  }
+  
+  @Test
+  public void testSetIris() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setIris(60);
+    Assert.assertEquals(60, preset.getIris());
+  }
+  
+  @Test
+  public void testSetFocus() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setFocus(55);
+    Assert.assertEquals(55, preset.getFocus());
+  }
+  
+  @Test
+  public void testSetZoom() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setZoom(50);
+    Assert.assertEquals(50, preset.getZoom());
+  }
+  
+  @Test
+  public void testSetId() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setId(1);
+    Assert.assertEquals(1, preset.getId());
+  }
+  
+  @Test
+  public void testSetImage() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.setImage("static/test");
+    Assert.assertEquals("static/test", preset.getImage());
+  }
+  
+  @Test
+  public void testHashCodefalse() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Assert.assertEquals(preset.hashCode(), preset2.hashCode());
+  }
+  
+  @Test
+  public void testHashCodetrue() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Assert.assertNotEquals(preset.hashCode(), preset2.hashCode());
+  }
+  
+  @Test
+  public void testEqualsSameObject() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertEquals(preset, preset);
+  }
+  
+  @Test
+  public void testEqualsNull() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, null);
+  }
+  
+  @Test
+  public void testEqualsOtherObject() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, 1);
+  }
+  
+  @Test
+  public void testEqualsOtherPresetID() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    preset2.setId(5);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherPosition() {
+    Preset preset = new Preset(new Position(1, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherZoom() {
+    Preset preset = new Preset(new Position(0, 0), 1, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherFocus() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 6, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherIris() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 8, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherPanspeed() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 4, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherTiltspeed() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 9, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherAutoFocus() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, true, 1, 2, true);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsOtherAutoIris() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, true);
+    Assert.assertNotEquals(preset, preset2);
+  }
+  
+  @Test
+  public void testEqualsSamePreset() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Assert.assertEquals(preset, preset2);
   }
 }
