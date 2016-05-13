@@ -1,5 +1,7 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Preset;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -24,15 +26,17 @@ public interface Database {
    * @param camera             ID of the camera
    * @param cameraPresetNumber ID of the preset for the camera
    * @param preset             The preset to be added
+   * @throws SQLException No right connection found
    */
-  void addPreset(int camera, int cameraPresetNumber, DatabasePreset preset);
+  void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
 
   /**
    * Delete a preset from the database.
    * @param camera ID of the camera
    * @param cameraPresetNumber ID of the preset for the camera
+   * @throws SQLException No right connection found
    */
-  void deletePreset(int camera, int cameraPresetNumber);
+  void deletePreset(int camera, int cameraPresetNumber) throws SQLException;
 
   /**
    * Update a preset to the database.
@@ -40,8 +44,9 @@ public interface Database {
    * @param camera             ID of the camera
    * @param cameraPresetNumber ID of the preset for the camera
    * @param preset             The preset to be updated
+   * @throws SQLException No right connection found
    */
-  void updatePreset(int camera, int cameraPresetNumber, DatabasePreset preset);
+  void updatePreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
 
   /**
    * Returns a preset of the camera.
@@ -49,23 +54,26 @@ public interface Database {
    * @param camera             ID of the camera
    * @param cameraPresetNumber ID of the preset of the camera
    * @return A preset
+   * @throws SQLException No right connection found
    */
-  DatabasePreset getPreset(int camera, int cameraPresetNumber);
+  Preset getPreset(int camera, int cameraPresetNumber) throws SQLException;
 
   /**
    * Returns all the presets.
    *
    * @return all the presets
+   * @throws SQLException No right connection found
    */
-  ArrayList<DatabasePreset> getAllPresets();
+  ArrayList<Preset> getAllPresets() throws SQLException;
 
   /**
    * Returns all the presets of the camera.
    *
    * @param cameraId ID of the camera
    * @return the presets of the given camera
+   * @throws SQLException No right connection found
    */
-  ArrayList<DatabasePreset> getAllPresetsCamera(int cameraId);
+  ArrayList<Preset> getAllPresetsCamera(int cameraId) throws SQLException;
 
   /**
    * Tries to connect to database server.
@@ -96,6 +104,7 @@ public interface Database {
    *
    * @param id The ID of the camera
    * @param ip The IP of the camera
+   * @throws SQLException No right connection found
    */
-  void addCamera(int id, int ip, String name);
+  void addCamera(int id, String ip) throws SQLException;
 }

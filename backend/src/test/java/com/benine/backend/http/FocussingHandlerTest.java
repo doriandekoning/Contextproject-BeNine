@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -24,10 +25,10 @@ public class FocussingHandlerTest {
     FocussingCamera cam = mock(FocussingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&autoFocusOn=true");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoFocusOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController,  mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -43,10 +44,10 @@ public class FocussingHandlerTest {
     FocussingCamera cam = mock(FocussingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -63,10 +64,10 @@ public class FocussingHandlerTest {
     FocussingCamera cam = mock(FocussingCamera.class);
     CameraController camController = new CameraController();
     camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/zoom?id=0&position=3&autoFocusOn=false");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController);
+    FocussingHandler fHandler = new FocussingHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

@@ -1,22 +1,14 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
+import com.benine.backend.http.HttpController;
 
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.http.CameraInfoHandler;
-import com.benine.backend.http.FocussingHandler;
-import com.benine.backend.http.IrisHandler;
-import com.benine.backend.http.MovingHandler;
-import com.benine.backend.http.PresetHandler;
-import com.benine.backend.http.ZoomingHandler;
-
-import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
 public class Main {
@@ -26,25 +18,32 @@ public class Main {
   private static Config mainConfig;
 
   private static CameraController cameraController;
+  
+  private static Database database;
+
+  @SuppressWarnings("unused")
+  private static HttpController httpController;
 
   /**
    * Main method of the program.
    * @param args command line arguments.
+   * @throws SQLException When sql statement failes.
    */
   public static void main(String[] args) {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
-    InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"), 
-                                          Integer.parseInt(mainConfig.getValue("serverport")));
+
 
     // Setup camerahandler
     cameraController = new CameraController();
+    
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    camera.setStreamLink(mainConfig.getValue("camera1"));
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink(mainConfig.getValue("camera1"));
     cameraController.addCamera(camera);
-    //cameraController.addCamera(new IPCamera(mainConfig.getValue("camera2IP")));
-
+    cameraController.addCamera(camera2);
     try {
       logger = new Logger();
     } catch (Exception e) {
@@ -52,32 +51,39 @@ public class Main {
     }
 
     /////CONNECT TO DATABASE SERVER
-    Database database = new MySQLDatabase();
+    database = new MySQLDatabase();
     database.connectToDatabaseServer(); //Connect to the server
-    if(!database.checkDatabase()) //If the database does not exist yet, create a new one
-      database.resetDatabase();
-    /////
+    //If the database does not exist yet, create a new one
+    //    if (!database.checkDatabase()) {
+    database.resetDatabase();
+    //}
+
+
+    //TODO Cameras has to be in the database when created and create sample presets.
+    try {
+      database.addCamera(1, "183.5.1.50:80");
+      Preset preset = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+      preset.setImage("/static/presets/preset1_1.jpg");
+      getCameraController().addPreset(1, preset);
+      Preset preset2 = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+      preset2.setImage("/static/presets/preset1_1.jpg");
+      getCameraController().addPreset(1, preset2);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    httpController = new HttpController(mainConfig.getValue("serverip"),
+        Integer.parseInt(mainConfig.getValue("serverport")), logger, cameraController);
 
     try {
-      HttpServer server = HttpServer.create(address, 10);
-      server.createContext("/getCameraInfo", new CameraInfoHandler(cameraController));
-      server.createContext("/focus", new FocussingHandler(cameraController));
-      server.createContext("/iris", new IrisHandler(cameraController));
-      server.createContext("/move", new MovingHandler(cameraController));
-      server.createContext("/zoom", new ZoomingHandler(cameraController));
-      server.createContext("/preset", new PresetHandler(cameraController));
-
-      logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
-      server.start();
       while (true) {
         Thread.sleep(100);
       }
-    } catch (IOException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
     } catch (InterruptedException e) {
-      logger.log("Unable to start server", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
+      logger.log("Exception occured: Interrupted while trying to start server",
+              LogEvent.Type.CRITICAL);
     }
-
   }
 
   /**
@@ -101,4 +107,30 @@ public class Main {
   public static CameraController getCameraController() {
     return cameraController;
   }
+  
+  /**
+   * Getter for the database.
+   * @return the database
+   */
+  public static Database getDatabase() {
+    return database;
+  }
+
+  /**
+   * Setter for the database.
+   * @param newDatabase the new database
+   */
+  public static void setDatabase(Database newDatabase) {
+    database = newDatabase;
+  }
+
+  
+  /**
+   * Getter for the logger.
+   * @return the logger.
+   */
+  public static Logger getLogger() {
+    return logger;
+  }
+
 }
