@@ -67,7 +67,7 @@ public class HttpController {
    * Creates the handlers for a certain camera.
    * @param cam camera to create handlers for.
    */
-  private void createHandlers(Camera cam) {
+  public void createHandlers(Camera cam) {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId
@@ -85,7 +85,7 @@ public class HttpController {
     server.createContext("/camera/" + camId + "/preset", new PresetHandler(camController, logger));
     server.createContext("/camera/" + camId + "/createpreset", 
                                                  new PresetCreationHandler(camController, logger));
-    server.createContext("/camera/" + camId + "/recallPreset",
+    server.createContext("/camera/" + camId + "/recallpreset",
                                                    new RecallPresetHandler(camController, logger));
 
     logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
