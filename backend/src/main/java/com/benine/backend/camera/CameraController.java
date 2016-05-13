@@ -115,6 +115,7 @@ public class CameraController {
     for (int i = 0; i < cameraPresets.length; i++) {
       if (cameraPresets[i] == null) {
         cameraPresets[i] = preset;
+        cameraPresets[i].setId(i);
         Main.getDatabase().addPreset(cameraId, i, preset);
         this.getCameraById(cameraId).setPresets(cameraPresets);
         return i;

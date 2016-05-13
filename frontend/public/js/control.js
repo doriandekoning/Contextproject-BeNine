@@ -1,6 +1,7 @@
 var joysticksize = 150; //size of joystick in pixels.
 var cameras = {}; //Store all available camera's
 var currentcamera; //ID of the camera that is selected.
+var selectedPreset; //Preset that is currently selected.
 
 /**
 * Load the camera's from the backend server.
@@ -44,8 +45,9 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);
-
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	selectedPreset = undefined;
+	
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
@@ -73,6 +75,36 @@ function setCurrentCamera(id) {
 		focus.show();
 		$('.focusslider').val(cameras[id].focus);
 	}
+	
+	loadPresets(currentcamera);
+}
+
+/**
+* Function loads the presets of this camera in the preset window.
+* @param cameraID the presets of this camera are loaded.
+*/
+function loadPresets(cameraID) {
+	var preset_div, obj, presets, place, preset, preset_area;
+	preset_area = $('#preset_area');
+	preset_area.find('div').removeAttr("presetID");
+	preset_area.find('img').removeAttr("src");
+	preset_area.find('h5').removeClass();
+	Holder.run({images:"#preset_area img"})
+	$.get("/api/backend/camera/" + cameraID + "/preset", function(data) {
+		obj = JSON.parse(data);
+		console.log(obj);
+		presets = obj.presets;
+		place = 1;
+		for (var p in presets) {
+			if ($('#preset_'+ place) !== undefined) {
+				preset = JSON.parse(presets[p]);
+				preset_div = $('#preset_' + place);
+				preset_div.find('img').attr("src", "/api/backend" + preset.image);
+				preset_div.attr("presetID", preset.id);
+				place++;
+			}
+		}
+	});
 }
 
 /**
@@ -187,5 +219,23 @@ function toggleButton(btn){
 	} else {
 		btn.addClass("btn-success");
 		btn.removeClass("btn-danger");
+	}
+}
+
+/**
+* Function to handle a click on a preset.
+* @param t is the div on which is clicked.
+*/
+function presetcall(t){
+	var presetID = t.attr("presetid");
+	if (presetID !== undefined) {
+		var title = t.find('h5');
+		if(selectedPreset != undefined){
+			$('#' + selectedPreset).find('h5').removeClass("selected");
+		}
+		selectedPreset = t.attr("id");
+		title.addClass("selected");
+		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {});
+		console.log(t.attr("presetid"));
 	}
 }

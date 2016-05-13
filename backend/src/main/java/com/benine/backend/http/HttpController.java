@@ -71,6 +71,7 @@ public class HttpController {
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
+    server.createContext("/static", new FileHandler(camController, logger));
     server.createContext("/camera/", new CameraInfoHandler(camController, logger));
     for (Camera cam : camController.getCameras()) {
       createHandlers(cam);

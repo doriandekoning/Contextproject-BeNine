@@ -210,6 +210,10 @@ input[type=range]:focus {
     height: 50%;
 }
 
+#preset_area img {
+    height: 80px;
+}
+
 /* Preset area configuration. */
 #preset_area {
     background-color: #1A1A1A;

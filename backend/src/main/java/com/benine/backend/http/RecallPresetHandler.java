@@ -20,6 +20,7 @@ public class RecallPresetHandler extends RequestHandler {
   /**
    * Create a new handler for recalling presets.
    * @param controller the controller to interact with.
+   * @param logger to log to.
    */
   public RecallPresetHandler(CameraController controller, Logger logger) {
     super(controller, logger);
@@ -38,7 +39,6 @@ public class RecallPresetHandler extends RequestHandler {
       int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
-      
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
@@ -61,7 +61,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
   public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = new Position(preset.getPan(), preset.getTilt());
+    Position position = preset.getPosition();
     ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveFocus(preset.getFocus());

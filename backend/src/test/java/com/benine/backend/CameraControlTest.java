@@ -24,14 +24,8 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
-import com.benine.backend.http.CameraInfoHandler;
-import com.benine.backend.http.FocussingHandler;
 import com.benine.backend.http.HttpController;
-import com.benine.backend.http.IrisHandler;
-import com.benine.backend.http.MovingHandler;
-import com.benine.backend.http.PresetHandler;
-import com.benine.backend.http.ZoomingHandler;
-import com.sun.net.httpserver.HttpServer;
+
 
 /**
  * Test class to test the interaction with a camera using the user interface.
@@ -139,6 +133,7 @@ public class CameraControlTest {
   @Test
   public void ManualTestUI() throws InterruptedException, IOException{
     HttpController httpController = new HttpController(address, port, logger, cameraController);
+
     while(true){
       Thread.sleep(100);
     }
