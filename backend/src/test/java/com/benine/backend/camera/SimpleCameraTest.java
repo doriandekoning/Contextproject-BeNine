@@ -1,8 +1,12 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.Preset;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by dorian on 5-5-16.
@@ -21,6 +25,28 @@ public class SimpleCameraTest {
     Assert.assertEquals(-1, new SimpleCamera().getId());
   }
 
+  @Test
+  public void testSetPresets() {
+    Camera simpleCamera = new SimpleCamera();
+
+    Preset[] presets = new Preset[16];
+    presets[14] = new Preset(0,0,0,0,0,false,0,0,false);
+
+    simpleCamera.setPresets(presets);
+    Assert.assertTrue(Arrays.equals(presets, simpleCamera.getPresets()));
+  }
+
+  @Test
+  public void testSetPresetsFromArrayList() {
+    Camera simpleCamera = new SimpleCamera();
+
+    Preset[] presets = new Preset[16];
+    presets[14] = new Preset(0,0,0,0,0,false,0,0,false);
+    ArrayList<Preset> presetarrayList = new ArrayList(Arrays.asList(presets));
+
+    simpleCamera.setPresetsFromArrayList(presetarrayList);
+    Assert.assertTrue(Arrays.equals(presets, simpleCamera.getPresets()));
+  }
 
   @Test
   public void testGetSetStreamLink() {
