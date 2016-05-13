@@ -28,6 +28,7 @@ public class HttpController {
    * @param logger the logger to use to log to.
    * @param camController the cameracontroller that contains
    *                      the camera's which this server interacts with.
+   * @param port number to connect to.
    */
   public HttpController(String address, int port, Logger logger, CameraController camController) {
     this(createServer(address, port, logger), logger, camController);
@@ -54,6 +55,7 @@ public class HttpController {
    * Creates a server object.
    * @param address Socket address
    * @param logger  Logger
+   * @param port port number to connect to
    * @return  An HttpServer.
      */
   private static HttpServer createServer(String address, int port, Logger logger) {
