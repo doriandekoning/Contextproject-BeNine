@@ -30,7 +30,7 @@ public class Main {
    * @param args command line arguments.
    * @throws SQLException When sql statement failes.
    */
-  public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) {
     // TODO cleanup, hacked something together here
     mainConfig = getConfig();
 
@@ -60,13 +60,18 @@ public class Main {
     }
     /////
     //TODO Cameras has to be in the database when created and create sample presets.
-    database.addCamera(1, "183.5.1.50:80");
-    Preset preset = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
-    preset.setImage("/static/presets/preset1_1.jpg");
-    getCameraController().addPreset(1, preset);
-    Preset preset2 = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
-    preset2.setImage("/static/presets/preset1_1.jpg");
-    getCameraController().addPreset(1, preset2);
+    try {
+      database.addCamera(1, "183.5.1.50:80");
+      Preset preset = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+      preset.setImage("/static/presets/preset1_1.jpg");
+      getCameraController().addPreset(1, preset);
+      Preset preset2 = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+      preset2.setImage("/static/presets/preset1_1.jpg");
+      getCameraController().addPreset(1, preset2);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+   
     
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));

@@ -80,7 +80,6 @@ public class PresetCreationHandler  extends RequestHandler {
       //TODO add image of just created preset
       Preset preset = new Preset(new Position(pan,tilt),zoom,
           focus,iris,autofocus, panspeed, tiltspeed, autoiris);
-      System.out.println(Main.getCameraController());
       getCameraController().addPreset(ipCamera.getId(), preset);
       return preset; 
 

@@ -51,7 +51,6 @@ public class FileHandler extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     URI uri = exchange.getRequestURI();
     String path = uri.getPath();
-    System.out.println(path);
     File file = new File("." + path).getCanonicalFile();
     //check if the requested file exists
     if (!file.isFile()) {
