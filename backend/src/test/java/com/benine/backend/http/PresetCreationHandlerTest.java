@@ -35,7 +35,7 @@ public class PresetCreationHandlerTest {
     when(ipcamera.isAutoFocusOn()).thenReturn(true);
     when(ipcamera.isAutoIrisOn()).thenReturn(true);
     //Need two more rules with a when..... panspeed and tiltspeed then...
-    preset = new Preset("1-3", new Position(0,0), 100, 33,50,true,15,1,true);
+    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);
     
   }
   @Test

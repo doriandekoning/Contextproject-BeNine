@@ -14,7 +14,7 @@ public class PresetTest {
 
   @Test
   public void testToJSON() throws JSONException {
-    Preset preset = new Preset("1-1", new Position(10, 12), 13, 40, 56, true, 1, 2, false);
+    Preset preset = new Preset(new Position(10, 12), 13, 40, 56, true, 1, 2, false);
     String json = preset.toJSON();
     JSONObject jsonObject = new JSONObject(json);
     Assert.assertEquals(10.0, jsonObject.get("pan"));
@@ -30,7 +30,7 @@ public class PresetTest {
 
   @Test
   public void testGetMethods() {
-    Preset preset = new Preset("1-1", new Position(1, 2), 3, 4, 5, true, 1, 2, false);
+    Preset preset = new Preset(new Position(1, 2), 3, 4, 5, true, 1, 2, false);
     Assert.assertEquals(new Position(1, 2), preset.getPosition());
     Assert.assertEquals(3, preset.getZoom());
     Assert.assertEquals(4, preset.getFocus());
@@ -43,7 +43,7 @@ public class PresetTest {
 
   @Test
   public void testSetMethods() {
-    Preset preset = new Preset("1-3", new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     preset.setPosition(new Position(1, 2));
     preset.setZoom(3);
     preset.setFocus(4);

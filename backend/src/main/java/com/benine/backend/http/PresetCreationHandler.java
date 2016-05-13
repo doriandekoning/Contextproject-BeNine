@@ -78,11 +78,18 @@ public class PresetCreationHandler  extends RequestHandler {
     
       //Create new Preset and return it.
       //TODO add image of just created preset
-      return new Preset(ipCamera + "-2", new Position(pan,tilt),zoom,
-                    focus,iris,autofocus, panspeed, tiltspeed, autoiris);
+      Preset preset = new Preset(new Position(pan,tilt),zoom,
+          focus,iris,autofocus, panspeed, tiltspeed, autoiris);
+      System.out.println(Main.getCameraController());
+      getCameraController().addPreset(ipCamera.getId(), preset);
+      return preset; 
+
       
     } catch (CameraConnectionException e) {
       Main.getLogger().log("Camera is not an IPCamera", LogEvent.Type.CRITICAL);
+    } catch (SQLException e) {
+      System.out.println(e.toString());
+      Main.getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     }
     return null;
   }

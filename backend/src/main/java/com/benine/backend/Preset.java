@@ -18,12 +18,11 @@ public class Preset {
   private int tiltspeed;
   private boolean autoiris;
   private String image;
-  private String presetid;
+  private int presetid;
 
   /**
    * Constructs a preset.
    *
-   * @param presetid  The id of this preset.
    * @param pos       The position of this preset.
    * @param zoom      The zoom of the preset
    * @param focus     The focus of the prest
@@ -33,7 +32,7 @@ public class Preset {
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
    */
-  public Preset(String presetid, Position pos, int zoom, int focus,int iris,
+  public Preset(Position pos, int zoom, int focus,int iris,
                boolean autofocus, int panspeed, int tiltspeed, boolean autoiris) {
     this.position = pos;
     this.zoom = zoom;
@@ -43,7 +42,6 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
-    this.presetid = presetid;
   }
 
   /**
@@ -161,8 +159,12 @@ public class Preset {
     }
 
     Preset preset = (Preset) o;
+    
+    if (presetid != preset.presetid) {
+      return false;
+    }
 
-    if (position.equals(preset.position)) {
+    if (!position.equals(preset.position)) {
       return false;
     }
     if (zoom != preset.zoom) {
@@ -196,5 +198,13 @@ public class Preset {
 
   public void setImage(String image) {
     this.image = image;
+  }
+
+  public void setId(int id) {
+    this.presetid = id;
+  }
+  
+  public int getId() {
+    return presetid;
   }
 }

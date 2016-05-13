@@ -61,12 +61,12 @@ public class Main {
     /////
     //TODO Cameras has to be in the database when created and create sample presets.
     database.addCamera(1, "183.5.1.50:80");
-    Preset preset = new Preset("1-1", new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+    Preset preset = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
     preset.setImage("/static/presets/preset1_1.jpg");
-    database.addPreset(1, 1, preset);
-    Preset preset2 = new Preset("1-1", new Position(60, 50), 40, 30, 20, false, 30, 2, false);
+    getCameraController().addPreset(1, preset);
+    Preset preset2 = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
     preset2.setImage("/static/presets/preset1_1.jpg");
-    database.addPreset(1, 1, preset2);
+    getCameraController().addPreset(1, preset2);
     
     InetSocketAddress address = new InetSocketAddress(mainConfig.getValue("serverip"),
             Integer.parseInt(mainConfig.getValue("serverport")));

@@ -92,11 +92,10 @@ public class MySQLDatabase implements Database {
 
   @Override
   public Preset getPreset(int camera, int cameraPresetNumber) throws SQLException {
-    Preset preset = new Preset(camera + "-" + cameraPresetNumber, 
-                                            new Position(0, 0), 0, 0, 0, false, 0, 0, false);
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 0, 0, false);
     Statement statement = connection.createStatement();
     try {
-      String sql = "SELECT pan, tilt, zoom, focus, iris, autofocus, panspeed,"
+      String sql = "SELECT id, pan, tilt, zoom, focus, iris, autofocus, panspeed,"
           + " tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets "
           + "JOIN presetsDatabase.camerapresets ON presetsDatabase.camerapresets.Presets_ID = "
@@ -121,7 +120,7 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     Statement statement = connection.createStatement();
     try {
-      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus,"
+      String sql = "SELECT id, pan, tilt, zoom, focus,"
           + " iris, autofocus, panspeed, tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets JOIN camerapresets ON camerapresets.Preset_ID "
           + "= presets.ID";
@@ -144,7 +143,7 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     Statement statement = connection.createStatement();
     try {
-      String sql = "SELECT camera_id, id, pan, tilt, zoom, focus, iris,"
+      String sql = "SELECT id, pan, tilt, zoom, focus, iris,"
           + " autofocus, panspeed, tiltspeed, autoiris, image"
           + " FROM presetsDatabase.presets " + "JOIN camerapresets ON camerapresets.Preset_ID = "
           + "presets.ID WHERE camerapresets.Camera_ID = " + cameraId;
@@ -245,8 +244,7 @@ public class MySQLDatabase implements Database {
    */
   public Preset getPresetsFromResultSet(ResultSet resultset) {
     try {
-      Preset preset = new Preset(resultset.getInt("camera_id") + "-" + resultset.getInt("id"),
-                                          new Position(0, 0), 0, 0, 0, false, 0, 0, false);
+      Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 0, 0, false);
       preset.setPosition(new Position(resultset.getInt("pan"), resultset.getInt("tilt")));
       preset.setZoom(resultset.getInt("zoom"));
       preset.setFocus(resultset.getInt("focus"));
@@ -256,6 +254,7 @@ public class MySQLDatabase implements Database {
       preset.setTiltSpeed(resultset.getInt("tiltspeed"));
       preset.setAutoiris(resultset.getInt("autoiris") == 1);
       preset.setImage(resultset.getString("image"));
+      preset.setId(resultset.getInt("id"));
       return preset;
     } catch (Exception e) {
       e.printStackTrace();

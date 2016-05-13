@@ -100,7 +100,7 @@ function loadPresets(cameraID) {
 				preset = JSON.parse(presets[p]);
 				preset_div = $('#preset_' + place);
 				preset_div.find('img').attr("src", "/api/backend" + preset.image);
-				preset_div.attr("presetID", preset.id); //TODO should be the real ID of the preset
+				preset_div.attr("presetID", preset.id);
 				place++;
 			}
 		}

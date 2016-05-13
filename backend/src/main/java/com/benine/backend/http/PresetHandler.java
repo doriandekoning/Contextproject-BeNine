@@ -56,7 +56,6 @@ public class PresetHandler extends RequestHandler {
       response = jsonObject.toString();
       
     } catch (SQLException e) {
-      System.out.println(e.toString());
       getLogger().log("Exception occured while respoinding to the request with URI: "
           + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
