@@ -123,7 +123,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
 
-    camera.setIrisPos(80);
+    camera.setIrisPosition(80);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -138,7 +138,7 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("giD421"));
 
-    int res = camera.getIrisPos();
+    int res = camera.getIrisPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
     

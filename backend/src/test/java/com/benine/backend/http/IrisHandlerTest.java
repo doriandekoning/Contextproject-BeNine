@@ -53,7 +53,7 @@ public class IrisHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setIrisPos(3);
+    verify(cam).setIrisPosition(3);
   }
 
 
@@ -73,7 +73,7 @@ public class IrisHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setIrisPos(3);
+    verify(cam).setIrisPosition(3);
     verify(cam).setAutoIrisOn(true);
   }
 }

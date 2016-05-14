@@ -66,7 +66,7 @@ public class RecallPresetHandler extends RequestHandler {
     ipcamera.zoomTo(preset.getZoom());
     ipcamera.moveFocus(preset.getFocus());
     ipcamera.setAutoFocusOn(preset.isAutofocus());
-    ipcamera.setIrisPos(preset.getIris());
+    ipcamera.setIrisPosition(preset.getIris());
     ipcamera.setAutoIrisOn(preset.isAutoiris());
   }
 }

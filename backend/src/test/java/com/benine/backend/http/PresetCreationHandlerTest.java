@@ -28,8 +28,8 @@ public class PresetCreationHandlerTest {
     logger = mock(Logger.class);
     handler = new PresetCreationHandler(controller, logger);
     ipcamera = mock(IPCamera.class);
-    when(ipcamera.getFocusPos()).thenReturn(33);
-    when(ipcamera.getIrisPos()).thenReturn(50);
+    when(ipcamera.getFocusPosition()).thenReturn(33);
+    when(ipcamera.getIrisPosition()).thenReturn(50);
     when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
     when(ipcamera.getZoomPosition()).thenReturn(100);  
     when(ipcamera.isAutoFocusOn()).thenReturn(true);

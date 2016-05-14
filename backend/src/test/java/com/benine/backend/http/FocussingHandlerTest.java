@@ -53,7 +53,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
   }
 
 
@@ -73,7 +73,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
     verify(cam).setAutoFocusOn(false);
   }
 
