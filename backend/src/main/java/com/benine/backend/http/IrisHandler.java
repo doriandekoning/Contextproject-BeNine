@@ -34,12 +34,11 @@ public class IrisHandler extends RequestHandler {
             + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response = "{\"succes\":\"true\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException exception) {
       getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      respond(exchange, "{\"succes\":\"false\"}");
+      responseFailure(exchange);
       return;
     }
     int camId = getCameraId(exchange);
@@ -58,8 +57,8 @@ public class IrisHandler extends RequestHandler {
       }
     } catch (Exception e) {
       getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
-      response = "{\"succes\":\"false\"}";
+      responseFailure(exchange);
     }
-    respond(exchange, response);
+    responseSuccess(exchange);
   }
 }
