@@ -39,31 +39,31 @@ public class PresetCreationHandlerTest {
     
   }
   @Test
-  public void testGetFocusPos() {
+  public void testGetFocusPos() throws Exception{
     Assert.assertEquals(preset.getFocus(), handler.createPreset(ipcamera).getFocus());
   }
   @Test
-  public void testGetIrisPos() {
+  public void testGetIrisPos() throws Exception{
     Assert.assertEquals(preset.getIris(), handler.createPreset(ipcamera).getIris());
   } 
   
   @Test
-  public void testGetPos() {
+  public void testGetPos() throws Exception {
     Assert.assertEquals(preset.getPosition(), handler.createPreset(ipcamera).getPosition());
   } 
   
   @Test
-  public void testGetZoomPos() {
+  public void testGetZoomPos() throws Exception {
     Assert.assertEquals(preset.getZoom(), handler.createPreset(ipcamera).getZoom());
   } 
   
   @Test
-  public void testAutofocusOn() {
+  public void testAutofocusOn() throws Exception {
     Assert.assertEquals(preset.isAutofocus(), handler.createPreset(ipcamera).isAutofocus());    
   }
 
   @Test
-  public void testAutoIrisOn() {
+  public void testAutoIrisOn()throws Exception {
     Assert.assertEquals(preset.isAutoiris(), handler.createPreset(ipcamera).isAutoiris());    
   }
 }
