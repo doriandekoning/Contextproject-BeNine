@@ -35,12 +35,11 @@ public class FocussingHandler extends RequestHandler {
                       + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException e) {
       getLogger().log("Mallformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      respond(exchange, response);
+      responseFailure(exchange);
       return;
     }
     Camera cam = getCameraController().getCameraById(getCameraId(exchange));
@@ -55,12 +54,11 @@ public class FocussingHandler extends RequestHandler {
       if (setPos != null) {
         focusCam.setFocusPos(Integer.parseInt(setPos));
       }
-      response = "{\"succes\":\"true\"}";
     } catch (CameraConnectionException e) {
-      respond(exchange, response);
+      responseFailure(exchange);
       return;
     }
-    respond(exchange, response);
+    responseSuccess(exchange);
 
   }
 }
