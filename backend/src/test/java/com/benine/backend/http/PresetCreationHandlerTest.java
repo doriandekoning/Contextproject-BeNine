@@ -3,11 +3,13 @@ package com.benine.backend.http;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.benine.backend.Logger;
+import java.sql.SQLException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -23,7 +25,7 @@ public class PresetCreationHandlerTest {
   private Logger logger;
   
   @Before
-  public void setUp() throws CameraConnectionException{
+  public void setUp() throws CameraConnectionException, SQLException{
     controller = mock(CameraController.class);
     logger = mock(Logger.class);
     handler = new PresetCreationHandler(controller, logger);
