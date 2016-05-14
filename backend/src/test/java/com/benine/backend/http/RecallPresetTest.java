@@ -13,7 +13,6 @@ import com.sun.net.httpserver.HttpExchange;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.io.OutputStream;
 
 import static org.mockito.Mockito.any;
