@@ -47,10 +47,11 @@ public class RecallPresetHandler extends RequestHandler {
       responseFailure(exchange);
       Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
     } catch (CameraConnectionException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      responseFailure(exchange);
     } catch (SQLException e) {
       e.printStackTrace();
+      responseFailure(exchange);
     }
   }
   
