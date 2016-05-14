@@ -25,7 +25,7 @@ public class RecallPresetTest {
   private HttpExchange exchange;
 
   @Before
-  public void setUp() {
+  public void setUp() throws CameraConnectionException{
     exchange = mock(HttpExchange.class);
     CameraController controller = mock(CameraController.class);
     ipcamera = mock(IPCamera.class);
@@ -40,38 +40,68 @@ public class RecallPresetTest {
   }
 
   @Test
-  public void testMovingCameraZoomPosition() throws CameraConnectionException {
+  public void testMovingCameraZoomPosition() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).zoomTo(preset.getZoom());
   }
 
   @Test
-  public void testMovingCameraFocusPosition() throws CameraConnectionException {
+  public void testMovingCameraFocusPosition() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).moveFocus(preset.getFocus());
   }
 
   @Test
-  public void testMovingCameraIrisPosition() throws CameraConnectionException {
+  public void testMovingCameraIrisPosition() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setIrisPos(preset.getIris());
   }
 
   @Test
-  public void testMovingCameraAutofocus() throws CameraConnectionException {
+  public void testMovingCameraAutofocus() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setAutoFocusOn(preset.isAutofocus());
   }
 
   @Test
-  public void testMovingCameraZoomAutoiris() throws CameraConnectionException {
+  public void testMovingCameraZoomAutoiris() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setAutoIrisOn(preset.isAutoiris());
   }
 
   @Test
-  public void testMovingCamera() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+  public void testMovingCamera() throws Exception {
+    try {
+      recallHandler.handle(exchange);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }recallHandler.movingCamera(ipcamera, preset, exchange);
+    
     verify(ipcamera).moveTo(any(Position.class), eq(preset.getPanspeed()), eq(preset.getTiltspeed()));
   }
 }

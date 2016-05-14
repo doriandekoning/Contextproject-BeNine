@@ -35,24 +35,21 @@ public class RecallPresetHandler extends RequestHandler {
     Attributes parsedURI;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-        
+      
       int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
-      movingCamera(ipcamera,preset);
+      movingCamera(ipcamera,preset, exchange);
       responseSuccess(exchange);
     } catch (MalformedURIException e) {
       responseFailure(exchange);
-      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
-    } catch (CameraConnectionException e) {
-      e.printStackTrace();
-      responseFailure(exchange);
+      getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
     } catch (SQLException e) {
       e.printStackTrace();
       responseFailure(exchange);
-    }
+    } 
   }
   
   /**
@@ -61,13 +58,17 @@ public class RecallPresetHandler extends RequestHandler {
    * @param preset the preset used with the values for moving the camera.
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
-  public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = preset.getPosition();
-    ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
-    ipcamera.zoomTo(preset.getZoom());
-    ipcamera.moveFocus(preset.getFocus());
-    ipcamera.setAutoFocusOn(preset.isAutofocus());
-    ipcamera.setIrisPos(preset.getIris());
-    ipcamera.setAutoIrisOn(preset.isAutoiris());
+  public void movingCamera(IPCamera ipcamera, Preset preset, HttpExchange exchange) {
+    try {
+      Position position = preset.getPosition();
+      ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
+      ipcamera.zoomTo(preset.getZoom());
+      ipcamera.moveFocus(preset.getFocus());
+      ipcamera.setAutoFocusOn(preset.isAutofocus());
+      ipcamera.setIrisPos(preset.getIris());
+      ipcamera.setAutoIrisOn(preset.isAutoiris());
+    } catch (CameraConnectionException e) {
+      responseFailure(exchange);
+    } 
   }
 }
