@@ -33,8 +33,9 @@ public class CameraInfoHandler extends RequestHandler {
     try {
       respond(exchange, getCameraController().getCamerasJSON());
     } catch (CameraConnectionException e) {
+      responseFailure(exchange);
       getLogger().log("Cannot connect to camera with id: " + e.getCamId(), LogEvent.Type.CRITICAL);
     }
-    respond(exchange, "{\"succes\":false}");
+    responseFailure(exchange);
   }
 }
