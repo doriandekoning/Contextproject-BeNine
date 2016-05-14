@@ -12,6 +12,10 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.OutputStream;
+
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -23,6 +27,7 @@ public class RecallPresetTest {
   private RecallPresetHandler recallHandler;
   private Logger logger;
   private HttpExchange exchange;
+  private OutputStream out;
 
   @Before
   public void setUp() throws CameraConnectionException{
@@ -32,6 +37,8 @@ public class RecallPresetTest {
     logger = mock(Logger.class);
     preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);;
     recallHandler = new RecallPresetHandler(controller, logger);
+    out = mock(OutputStream.class);
+    when(exchange.getResponseBody()).thenReturn(out);
     try {
       recallHandler.handle(exchange);
     } catch (Exception e) {
@@ -41,67 +48,37 @@ public class RecallPresetTest {
 
   @Test
   public void testMovingCameraZoomPosition() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).zoomTo(preset.getZoom());
   }
 
   @Test
   public void testMovingCameraFocusPosition() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+   recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).moveFocus(preset.getFocus());
   }
 
   @Test
   public void testMovingCameraIrisPosition() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+   recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setIrisPos(preset.getIris());
   }
 
   @Test
   public void testMovingCameraAutofocus() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setAutoFocusOn(preset.isAutofocus());
   }
 
   @Test
   public void testMovingCameraZoomAutoiris() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
     recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).setAutoIrisOn(preset.isAutoiris());
   }
 
   @Test
   public void testMovingCamera() throws Exception {
-    try {
-      recallHandler.handle(exchange);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }recallHandler.movingCamera(ipcamera, preset, exchange);
-    
+    recallHandler.movingCamera(ipcamera, preset, exchange);
     verify(ipcamera).moveTo(any(Position.class), eq(preset.getPanspeed()), eq(preset.getTiltspeed()));
   }
 }
