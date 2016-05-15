@@ -1,15 +1,12 @@
 package com.benine.backend.http;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 import com.benine.backend.Logger;
 import org.junit.Assert;
@@ -26,7 +23,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class PresetCreationHandlerTest {
 
-  private ServerController serverController = mock(ServerController.class);
+  private ServerController serverController;
   private CameraController camController;
   private PresetCreationHandler handler;
   OutputStream out = mock(OutputStream.class);
@@ -37,12 +34,15 @@ public class PresetCreationHandlerTest {
   
   @Before
   public void setUp() throws CameraConnectionException{
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
     logger = mock(Logger.class);
     camController = mock(CameraController.class);
-    when(serverController.getCameraController()).thenReturn(camController);
     when(camController.getCameraById(1)).thenReturn(ipcamera);
+    serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    handler = new PresetCreationHandler(serverController, logger);
+    handler = new PresetCreationHandler(logger);
     when(ipcamera.getFocusPos()).thenReturn(33);
     when(ipcamera.getIrisPos()).thenReturn(50);
     when(ipcamera.getPosition()).thenReturn(new Position(0, 0));

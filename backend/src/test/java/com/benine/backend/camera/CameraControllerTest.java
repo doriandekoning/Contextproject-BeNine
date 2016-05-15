@@ -29,7 +29,7 @@ public class CameraControllerTest {
   @Before
   public void setUp() {
     when(serverController.getDatabase()).thenReturn(database);
-    controller = new CameraController(serverController);
+    controller = new CameraController();
   }
 
   @Test

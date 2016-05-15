@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.mockito.Matchers.any;
@@ -26,14 +27,17 @@ public class HttpControllerTest {
 
   @Before
   public void setUp() throws IOException {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController serverController = ServerController.getInstance();
+    
     mockserver = mock(HttpServer.class);
-    cameraController = new CameraController(serverController);
-    when(serverController.getCameraController()).thenReturn(cameraController);
+    cameraController = new CameraController();
+    serverController.setCameraController(cameraController);
   }
 
   private void setUpCamera(Camera cam) throws IOException {
     cameraController.addCamera(cam);
-    controller = new HttpController(mockserver, logger, serverController);
+    controller = new HttpController(mockserver, logger);
 
   }
 
@@ -108,7 +112,7 @@ public class HttpControllerTest {
   @Test
   public void testDestroy() {
     mockserver = mock(HttpServer.class);
-    controller = new HttpController(mockserver, logger, serverController);
+    controller = new HttpController(mockserver, logger);
 
     controller.destroy();
     Mockito.verify(mockserver).stop(0);

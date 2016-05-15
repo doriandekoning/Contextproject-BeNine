@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.sql.SQLException;
@@ -23,19 +24,21 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class PresetHandlerTest {
   
-  private CameraController controller;
-  private ServerController serverController = mock(ServerController.class);
+  private ServerController serverController;
   private PresetHandler handler;
   private OutputStream out;
   private Logger logger;
-  HttpExchange exchange;
+  private Database database = mock(Database.class);
+  HttpExchange exchange = mock(HttpExchange.class);
   
   @Before
   public void setUp() throws CameraConnectionException{
-    controller = mock(CameraController.class);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    serverController.setDatabase(database);
     logger = mock(Logger.class);
-    handler = new PresetHandler(serverController, logger);  
-    exchange = mock(HttpExchange.class);
+    handler = new PresetHandler(logger);  
+    
     out = mock(OutputStream.class);
   }
   
@@ -57,8 +60,9 @@ public class PresetHandlerTest {
     Database database = mock(Database.class);
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    when(serverController.getDatabase()).thenReturn(database);
+
     doThrow(new SQLException("test exception")).when(database).getAllPresetsCamera(1);
+    serverController.setDatabase(database);
     handler.handle(exchange);
 
     String expected = "{\"succes\":\"false\"}";

@@ -8,9 +8,13 @@ import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,11 +33,14 @@ public class IrisHandlerTest {
   
   @Before
   public void setUp() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController serverController = ServerController.getInstance();
+    
     when(cam.getId()).thenReturn(1);
     when(camController.getCameraById(1)).thenReturn(cam);
     camController.addCamera(cam);
-    when(serverController.getCameraController()).thenReturn(camController);
-    iHandler = new IrisHandler(serverController, mock(Logger.class));
+    serverController.setCameraController(camController);
+    iHandler = new IrisHandler(mock(Logger.class));
 
     when(exchange.getResponseBody()).thenReturn(out);
   }
@@ -75,5 +82,33 @@ public class IrisHandlerTest {
     }
     verify(cam).setIrisPos(3);
     verify(cam).setAutoIrisOn(true);
+  }
+  
+  @Test
+  public void testMalformedURI() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+ "/iris?position=3&position=true");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      iHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    String response = "{\"succes\":\"false\"}"; 
+    verify(out).write(response.getBytes());
+  }
+
+  
+  @Test
+  public void testCameraConnectionException() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?position=3");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setIrisPos(eq(3));
+    try {
+      iHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    String response = "{\"succes\":\"false\"}"; 
+    verify(out).write(response.getBytes());
   }
 }

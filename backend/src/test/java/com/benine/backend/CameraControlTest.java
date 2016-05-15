@@ -23,7 +23,6 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
-import com.benine.backend.http.HttpController;
 
 
 /**

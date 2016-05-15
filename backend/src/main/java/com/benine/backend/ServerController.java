@@ -39,7 +39,7 @@ public class ServerController {
     running = false;
     setupLogger();
 
-    cameraController = new CameraController(this);
+    cameraController = new CameraController();
     
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
@@ -133,6 +133,14 @@ public class ServerController {
    */
   public CameraController getCameraController() {
     return cameraController;
+  }
+  
+  /**
+   * Sets the cameraController.
+   * @param cameraController the cameracontroller
+   */
+  public void setCameraController(CameraController cameraController) {
+    this.cameraController = cameraController;
   }
   
   /**

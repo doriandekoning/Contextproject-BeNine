@@ -20,6 +20,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.sql.SQLException;
@@ -30,20 +31,23 @@ public class RecallPresetTest {
   private Preset preset;
   private RecallPresetHandler recallHandler;
   private Logger logger;
-  private ServerController serverController = mock(ServerController.class);
+  private ServerController serverController;
   private CameraController camController = mock(CameraController.class);
   private HttpExchange exchange = mock(HttpExchange.class);
   private OutputStream out = mock(OutputStream.class);
 
   @Before
   public void setUp() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
     ipcamera = mock(IPCamera.class);
     when(camController.getCameraById(1)).thenReturn(ipcamera);
-    when(serverController.getCameraController()).thenReturn(camController);
+    serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
     logger = mock(Logger.class);
     preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);;
-    recallHandler = new RecallPresetHandler(serverController, logger);
+    recallHandler = new RecallPresetHandler(logger);
   }
   
   @Test
@@ -53,7 +57,7 @@ public class RecallPresetTest {
     when(database.getPreset(1, 1)).thenReturn(new Preset(new Position(1, 2), 1, 0, 0, false, 0, 0, false));
     when(exchange.getRequestURI()).thenReturn(uri);
 
-    when(serverController.getDatabase()).thenReturn(database);
+    serverController.setDatabase(database);
     doThrow(new SQLException("test exception")).when(database).getAllPresetsCamera(1);
     recallHandler.handle(exchange);
 

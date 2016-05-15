@@ -16,7 +16,6 @@ public class IrisHandler extends RequestHandler {
 
   /**
    * Creates a new IrisHandler.
-   * @param serverController to interact with the server.
    * @param logger the logger to be used to log to
    */
   public IrisHandler(Logger logger) {

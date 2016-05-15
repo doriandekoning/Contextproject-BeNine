@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
@@ -25,17 +26,20 @@ public class MovingHandlerTest {
   HttpExchange exchange = mock(HttpExchange.class);
   OutputStream out = mock(OutputStream.class);
   MovingCamera cam = mock(MovingCamera.class);
-  ServerController serverController = mock(ServerController.class);
+  ServerController serverController;
   CameraController camController;
-  MovingHandler mHandler = new MovingHandler(serverController, mock(Logger.class));
+  MovingHandler mHandler = new MovingHandler(mock(Logger.class));
   
   @Before
   public void setup() {
-    camController = new CameraController(serverController);
-    when(serverController.getCameraController()).thenReturn(camController);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
+    camController = new CameraController();
     camController.addCamera(cam);
+    serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    mHandler = new MovingHandler(serverController, mock(Logger.class));
+    mHandler = new MovingHandler(mock(Logger.class));
   }
 
   @Test

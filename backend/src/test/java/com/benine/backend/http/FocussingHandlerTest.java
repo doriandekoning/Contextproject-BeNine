@@ -10,6 +10,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
@@ -31,10 +32,13 @@ public class FocussingHandlerTest {
   
   @Before
   public void setUp() {
-    CameraController camController = new CameraController(serverController);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController serverController = ServerController.getInstance();
+    
+    CameraController camController = new CameraController();
     camController.addCamera(cam);
-    when(serverController.getCameraController()).thenReturn(camController);
-    fHandler = new FocussingHandler(serverController,  mock(Logger.class));
+    serverController.setCameraController(camController);
+    fHandler = new FocussingHandler(mock(Logger.class));
     when(exchange.getResponseBody()).thenReturn(out);
   }
 

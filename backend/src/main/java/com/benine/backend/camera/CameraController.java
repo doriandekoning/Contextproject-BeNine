@@ -5,6 +5,8 @@ import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.database.Database;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -24,14 +26,10 @@ public class CameraController {
 
   private int highestIdInUse = 1;
 
-  private ServerController serverController;
-
   /**
    * Create a new CameraController.
-   * @param serverController to interact with the server.
    */
-  public CameraController(ServerController serverController) {
-    this.serverController = serverController;
+  public CameraController() {
   }
 
 
@@ -43,6 +41,22 @@ public class CameraController {
     camera.setId(highestIdInUse);
     highestIdInUse++;
     cameras.add(camera);
+  }
+  
+  /**
+   * Returns cameracontroller
+   * @return cameracontroller interacting with.
+   */
+  public CameraController getCameraController() {
+    return ServerController.getInstance().getCameraController();
+  }
+  
+  /**
+   * Returns the database
+   * @return database to retrieve information from.
+   */
+  public Database getDatabase() {
+    return ServerController.getInstance().getDatabase();
   }
 
 
@@ -89,7 +103,7 @@ public class CameraController {
    */
   public void getPresetsFromDatabase() throws SQLException {
     for (Camera camera : this.getCameras()) {
-      camera.setPresetsFromArrayList(serverController.getDatabase()
+      camera.setPresetsFromArrayList(getDatabase()
                                       .getAllPresetsCamera(camera.getId()));
     }
   }
@@ -99,14 +113,14 @@ public class CameraController {
    * @throws SQLException No right connection found
    */
   public void resetPresetsInDatabase() throws SQLException {
-    serverController.getDatabase().resetDatabase();
+    getDatabase().resetDatabase();
     for (Camera camera : this.getCameras()) {
       if (camera instanceof IPCamera) {
         IPCamera ipcamera = (IPCamera) camera;
-        serverController.getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
+        getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
         for (int i = 0; i < camera.getPresets().length; i++) {
           if (camera.getPresets()[i] != null) {
-            serverController.getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
+            getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
           }
         }
       }
@@ -126,7 +140,7 @@ public class CameraController {
       if (cameraPresets[i] == null) {
         cameraPresets[i] = preset;
         cameraPresets[i].setId(i);
-        serverController.getDatabase().addPreset(cameraId, i, preset);
+        getDatabase().addPreset(cameraId, i, preset);
         this.getCameraById(cameraId).setPresets(cameraPresets);
         return i;
       }
@@ -144,9 +158,9 @@ public class CameraController {
   public void addPresetAtPosition(int cameraId, Preset preset, int position) throws SQLException {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
     if (cameraPresets[position] != null) {
-      serverController.getDatabase().updatePreset(cameraId, position, preset);
+      getDatabase().updatePreset(cameraId, position, preset);
     } else {
-      serverController.getDatabase().addPreset(cameraId, position, preset);
+      getDatabase().addPreset(cameraId, position, preset);
     }
     cameraPresets[position] = preset;
   }

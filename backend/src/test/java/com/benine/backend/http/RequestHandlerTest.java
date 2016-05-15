@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,9 +32,11 @@ public class RequestHandlerTest {
   
   @Before
   public void initialize(){
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
     logger = mock(Logger.class);
-    serverController = mock(ServerController.class);
-    handler = new PresetCreationHandler(serverController, logger);
+    handler = new PresetCreationHandler(logger);
     exchangeMock = mock(HttpExchange.class);
     out = mock(OutputStream.class);
     when(exchangeMock.getResponseBody()).thenReturn(out);
@@ -44,18 +47,18 @@ public class RequestHandlerTest {
     Attributes expected = new Attributes();
     expected.putValue("id", "4");
     expected.putValue("Hello", "World!");
-    Attributes actual = new testRequestHandler(null, null).parseURI("id=4&Hello=World!");
+    Attributes actual = new testRequestHandler(null).parseURI("id=4&Hello=World!");
     Assert.assertEquals(expected, actual);
   }
   
   @Test(expected=MalformedURIException.class)
   public final void testDecodeMalformedURI() throws MalformedURIException {
-    new testRequestHandler(null, null).parseURI("id=3&id=4");
+    new testRequestHandler(null).parseURI("id=3&id=4");
   }
 
   @Test
   public final void testRespond() throws Exception {
-    RequestHandler handler = new testRequestHandler(null, logger);
+    RequestHandler handler = new testRequestHandler(logger);
     String response = "response";
     handler.respond(exchangeMock, response);
     verify(exchangeMock).sendResponseHeaders(200, response.length());
@@ -82,10 +85,6 @@ public class RequestHandlerTest {
     assertEquals(logger, handler.getLogger());
   }
   
-  @Test
-  public void testGetServer(){
-    assertEquals(serverController, handler.getServerController());
-  }
   
   @Test
   public void testGetCameraByID() throws URISyntaxException {
@@ -97,8 +96,8 @@ public class RequestHandlerTest {
   // Test used to be able to instantiate RequestHandler
   private class testRequestHandler extends RequestHandler {
 
-    public testRequestHandler(ServerController controller, Logger logger) {
-      super(controller, logger);
+    public testRequestHandler(Logger logger) {
+      super(logger);
     }
     public void handle(HttpExchange e) {
       // Do nothing
