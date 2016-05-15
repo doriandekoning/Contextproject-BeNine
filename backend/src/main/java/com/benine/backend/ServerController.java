@@ -1,5 +1,7 @@
 package com.benine.backend;
 
+import java.io.File;
+
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
@@ -11,6 +13,10 @@ import com.benine.backend.http.HttpController;
  * Class containing the elements to make the server work.
  */
 public class ServerController {
+  
+  private static ServerController serverController;
+  
+  private static String mainConfigPath = "configs" + File.separator + "main.conf";
   
   private Logger logger;
 
@@ -29,7 +35,7 @@ public class ServerController {
    * Sets up everything needed to run the server.
    * @param configPath path to the main config file.
    */
-  public ServerController(String configPath) {
+  private ServerController(String configPath) {
     config = setUpConfig(configPath);
     running = false;
     setupLogger();
@@ -47,6 +53,18 @@ public class ServerController {
     camera2.setStreamLink(config.getValue("camera1"));
     cameraController.addCamera(camera);
     cameraController.addCamera(camera2);  
+  }
+  
+  /**
+   * Get the unique instance of the servercontroller.
+   * If it does not yet exists create one.
+   * @return unique instance of the servercontroller.
+   */
+  public static synchronized ServerController getInstance() {
+    if (serverController == null) {
+      serverController = new ServerController(mainConfigPath);
+    }
+    return serverController;
   }
   
   
@@ -164,5 +182,13 @@ public class ServerController {
    */
   public Config getConfig() {
     return config;
+  }
+  
+  /**
+   * Sets the main config path used on creation of the server controller.
+   * @param configPath to the main config file.
+   */
+  public static void setConfigPath(String configPath) {
+    mainConfigPath = configPath;
   }
 }

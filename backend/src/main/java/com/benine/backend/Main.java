@@ -1,7 +1,5 @@
 package com.benine.backend;
 
-import java.io.File;
-
 public class Main {
   
   /**
@@ -9,7 +7,7 @@ public class Main {
    * @param args command line arguments.
    */
   public static void main(String[] args) {
-    ServerController server = new ServerController("configs" + File.separator + "main.conf");
+    ServerController server = ServerController.getInstance();
     server.start();
     try {
       Thread.sleep(100);
