@@ -24,7 +24,7 @@ public class ServerControllerTest {
   
   @Before
   public void setUp() {
-    serverController = new ServerController();
+    serverController = new ServerController("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
   }
   
   @Test
@@ -36,6 +36,7 @@ public class ServerControllerTest {
   
   @Test
   public void testStartServer() {
+    serverController.setDatabase(mock(Database.class));
     serverController.start();  
     assertTrue(serverController.isServerRunning());
     serverController.stop();
@@ -56,7 +57,7 @@ public class ServerControllerTest {
   
   @Test
   public void testGetConfig() throws Exception {
-    assertEquals(ConfigReader.readConfig("configs" + File.separator + "main.conf"), serverController.getConfig());
+    assertEquals(ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf"), serverController.getConfig());
   }
 
 }

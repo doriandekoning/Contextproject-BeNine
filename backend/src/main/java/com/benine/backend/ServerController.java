@@ -1,14 +1,10 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
-
-import java.io.File;
-import java.sql.SQLException;
 
 
 /**
@@ -31,35 +27,26 @@ public class ServerController {
   /**
    * Constructor of the server controller.
    * Sets up everything needed to run the server.
+   * @param configPath path to the main config file.
    */
-  public ServerController() {
-    config = getConfig();
+  public ServerController(String configPath) {
+    config = setUpConfig(configPath);
     running = false;
     setupLogger();
-    // Setup camerahandler
+
     cameraController = new CameraController(this);
     
-    startupDatabase();
+    String user = config.getValue("sqluser");
+    String password = config.getValue("sqlpassword");
+    database = new MySQLDatabase(user, password, logger);
     
+    //TODO camera's should be added from the config.
     SimpleCamera camera = new SimpleCamera();
     camera.setStreamLink(config.getValue("camera1"));
     SimpleCamera camera2 = new SimpleCamera();
     camera2.setStreamLink(config.getValue("camera1"));
     cameraController.addCamera(camera);
-    cameraController.addCamera(camera2);
- 
-    //TODO Cameras has to be in the database when created and create sample presets.
-    try {
-      database.addCamera(1, "183.5.1.50:80");
-      Preset preset = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
-      preset.setImage("/static/presets/preset1_1.jpg");
-      getCameraController().addPreset(1, preset);
-      Preset preset2 = new Preset(new Position(60, 50), 40, 30, 20, false, 30, 2, false);
-      preset2.setImage("/static/presets/preset1_1.jpg");
-      getCameraController().addPreset(1, preset2);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }   
+    cameraController.addCamera(camera2);  
   }
   
   
@@ -68,7 +55,8 @@ public class ServerController {
    */
   public void start() {
     httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger, this);   
+        Integer.parseInt(config.getValue("serverport")), logger, this); 
+    startupDatabase();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -78,8 +66,10 @@ public class ServerController {
    */
   public void stop() {
     if (running) {
-      running = false;
       httpController.destroy();
+      database.closeConnection();
+      running = false;
+      getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
   }
   
@@ -87,9 +77,6 @@ public class ServerController {
    * Create database if non exists and make the connection.
    */
   private void startupDatabase() {
-    String user = config.getValue("sqluser");
-    String password = config.getValue("sqlpassword");
-    database = new MySQLDatabase(user, password, logger);
     database.connectToDatabaseServer();
     //If the database does not exist yet, create a new one
     //    if (!database.checkDatabase()) {
@@ -102,7 +89,7 @@ public class ServerController {
    */
   private void setupLogger() {
     try {
-      logger = new Logger(getConfig().getValue("standardloglocation"));
+      logger = new Logger(config.getValue("standardloglocation"));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -110,11 +97,12 @@ public class ServerController {
   
   /**
    * Read the main config file.
+   * @param configPath to the main config file.
    * @return config object.
    */
-  public Config getConfig() {
+  public Config setUpConfig(String configPath) {
     try {
-      return ConfigReader.readConfig("configs" + File.separator + "main.conf");
+      return ConfigReader.readConfig(configPath);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -167,5 +155,14 @@ public class ServerController {
    */
   public Boolean isServerRunning() {
     return running;
+  }
+
+  
+  /**
+   * Get the main config file.
+   * @return the config file.
+   */
+  public Config getConfig() {
+    return config;
   }
 }

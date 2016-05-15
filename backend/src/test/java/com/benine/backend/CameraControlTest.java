@@ -1,6 +1,7 @@
 package com.benine.backend;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,7 +42,7 @@ public class CameraControlTest {
    */
   @Before
   public void setup() throws CameraConnectionException{
-    server = new ServerController();
+    server = new ServerController("configs" + File.separator + "main.conf");
       
     IPCamera mockcamera = mock(IPCamera.class);
     when(mockcamera.getStreamLink()).thenReturn("http://83.128.144.84:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture&usr=user&pwd=geheim");
