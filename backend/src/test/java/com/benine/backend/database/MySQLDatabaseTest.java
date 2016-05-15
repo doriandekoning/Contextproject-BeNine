@@ -1,11 +1,13 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +32,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
                 connection.getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
-        database = new MySQLDatabase("root", "root");
+        database = new MySQLDatabase("root", "root", mock(Logger.class));
     }
 
     @Test

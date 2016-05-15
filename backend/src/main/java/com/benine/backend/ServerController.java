@@ -87,7 +87,9 @@ public class ServerController {
    * Create database if non exists and make the connection.
    */
   private void startupDatabase() {
-    database = new MySQLDatabase(config.getValue("sqluser"), config.getValue("sqlpassword"));
+    String user = config.getValue("sqluser");
+    String password = config.getValue("sqlpassword");
+    database = new MySQLDatabase(user, password, logger);
     database.connectToDatabaseServer();
     //If the database does not exist yet, create a new one
     //    if (!database.checkDatabase()) {
