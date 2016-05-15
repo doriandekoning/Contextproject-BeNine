@@ -24,7 +24,8 @@ public class ServerControllerTest {
   
   @Before
   public void setUp() {
-    serverController = new ServerController("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
   }
   
   @Test

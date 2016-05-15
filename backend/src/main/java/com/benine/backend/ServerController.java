@@ -1,13 +1,12 @@
 package com.benine.backend;
 
-import java.io.File;
-
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
 
+import java.io.File;
 
 /**
  * Class containing the elements to make the server work.
@@ -74,6 +73,7 @@ public class ServerController {
   public void start() {
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger); 
+    
     startupDatabase();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
