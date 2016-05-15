@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.sql.SQLException;
 
 import static org.mockito.Mockito.mock;
@@ -24,11 +25,14 @@ public class CameraControllerTest {
 
   private final Database database = mock(Database.class);
   private CameraController controller;
-  private ServerController serverController = mock(ServerController.class);
+  private ServerController serverController;
 
   @Before
   public void setUp() {
-    when(serverController.getDatabase()).thenReturn(database);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
+    serverController.setDatabase(database);
     controller = new CameraController();
   }
 
