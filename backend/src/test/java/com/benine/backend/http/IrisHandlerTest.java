@@ -1,8 +1,11 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
 import com.sun.net.httpserver.HttpExchange;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.OutputStream;
@@ -11,25 +14,37 @@ import java.net.URI;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
 
 /**
  * Created by dorian on 4-5-16.
  */
 public class IrisHandlerTest {
+  
+  HttpExchange exchange = mock(HttpExchange.class);
+  OutputStream out = mock(OutputStream.class);
+  IrisCamera cam = mock(IrisCamera.class);
+  CameraController camController = mock(CameraController.class);
+  ServerController serverController = mock(ServerController.class);
+  IrisHandler iHandler;
+  
+  @Before
+  public void setUp() {
+    when(cam.getId()).thenReturn(1);
+    when(camController.getCameraById(1)).thenReturn(cam);
+    camController.addCamera(cam);
+    when(serverController.getCameraController()).thenReturn(camController);
+    iHandler = new IrisHandler(serverController, mock(Logger.class));
+
+    when(exchange.getResponseBody()).thenReturn(out);
+  }
 
   @Test
-  public void testOnlyAutoIris() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    IrisCamera cam = mock(IrisCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
+  public void testOnlyAutoIris() throws Exception { 
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
-      fHandler.handle(exchange);
+      iHandler.handle(exchange);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -39,17 +54,10 @@ public class IrisHandlerTest {
 
   @Test
   public void testOnlyIrisPosIris() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    IrisCamera cam = mock(IrisCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
-      fHandler.handle(exchange);
+      iHandler.handle(exchange);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -59,17 +67,10 @@ public class IrisHandlerTest {
 
   @Test
   public void testAutoIrisOnAndIrisPosIris() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    IrisCamera cam = mock(IrisCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
     URI uri = new  URI("http://localhost/camera/" +cam.getId()+ "/iris?position=3&autoIrisOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    IrisHandler fHandler = new IrisHandler(camController, mock(Logger.class));
     try {
-      fHandler.handle(exchange);
+      iHandler.handle(exchange);
     } catch (Exception e) {
       e.printStackTrace();
     }
