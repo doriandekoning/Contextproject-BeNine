@@ -18,16 +18,16 @@ import java.util.regex.Pattern;
 
 public abstract class RequestHandler implements HttpHandler {
 
-  private ServerController server;
+  private ServerController serverController;
   private Logger logger;
 
   /**
    * Creates a new FocussingHandler.
-   * @param server the server controller to interact with
+   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public RequestHandler(ServerController server, Logger logger) {
-    this.server = server;
+  public RequestHandler(ServerController serverController, Logger logger) {
+    this.serverController = serverController;
     this.logger = logger;
   }
 
@@ -91,7 +91,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @return cameracontroller interacting with.
    */
   public ServerController getServerController() {
-    return server;
+    return serverController;
   }
 
 

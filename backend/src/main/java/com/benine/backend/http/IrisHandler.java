@@ -2,8 +2,8 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.IrisCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -17,11 +17,11 @@ public class IrisHandler extends RequestHandler {
 
   /**
    * Creates a new IrisHandler.
-   * @param controller which controls the cameras.
+   * @param serverController to interact with the server.
    * @param logger the logger to be used to log to
    */
-  public IrisHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public IrisHandler(ServerController serverController, Logger logger) {
+    super(serverController, logger);
   }
   
   /**
@@ -44,7 +44,7 @@ public class IrisHandler extends RequestHandler {
     }
     int camId = getCameraId(exchange);
 
-    Camera cam =  getCameraController().getCameraById(camId);
+    Camera cam =  getServerController().getCameraController().getCameraById(camId);
     IrisCamera irisCam = (IrisCamera)cam;
     String autoOn = parsedURI.getValue("autoIrisOn");
     String setPos = parsedURI.getValue("position");

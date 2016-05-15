@@ -18,11 +18,11 @@ public class RecallPresetHandler extends RequestHandler {
 
   /**
    * Create a new handler for recalling presets.
-   * @param server the controller to interact with.
+   * @param serverController the controller to interact with.
    * @param logger to log to.
    */
-  public RecallPresetHandler(ServerController server, Logger logger) {
-    super(server, logger);
+  public RecallPresetHandler(ServerController serverController, Logger logger) {
+    super(serverController, logger);
   }
   
   /**

@@ -4,7 +4,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;

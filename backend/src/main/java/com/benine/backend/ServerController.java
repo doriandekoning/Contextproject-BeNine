@@ -29,9 +29,9 @@ public class ServerController {
    * Sets up everything needed to run the server.
    */
   public ServerController() {
-    setupLogger();
     config = getConfig();
     
+    setupLogger();
     // Setup camerahandler
     cameraController = new CameraController(this);
     
@@ -66,7 +66,7 @@ public class ServerController {
    */
   public void start() {
     httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger, cameraController);
+        Integer.parseInt(config.getValue("serverport")), logger, this);
     
     running = true;
     
@@ -106,7 +106,7 @@ public class ServerController {
    */
   private void setupLogger() {
     try {
-      logger = new Logger();
+      logger = new Logger(getConfig().getValue("standardloglocation"));
     } catch (Exception e) {
       e.printStackTrace();
     }

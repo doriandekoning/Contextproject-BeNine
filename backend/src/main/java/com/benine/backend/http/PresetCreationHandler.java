@@ -22,11 +22,11 @@ public class PresetCreationHandler  extends RequestHandler {
  
   /**
    * Create a new handler for creating new presets.
-   * @param server the server controller to interact with.
+   * @param serverController the server controller to interact with.
    * @param logger to log to.
    */
-  public PresetCreationHandler(ServerController server, Logger logger) {
-    super(server, logger);
+  public PresetCreationHandler(ServerController serverController, Logger logger) {
+    super(serverController, logger);
   }
   
   /**

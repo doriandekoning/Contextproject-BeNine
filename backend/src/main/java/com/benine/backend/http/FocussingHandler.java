@@ -2,9 +2,9 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -18,11 +18,11 @@ public class FocussingHandler extends RequestHandler {
 
   /**
    * Creates a new FocussingHandler.
-   * @param controller the cameracontroller to interact with
+   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public FocussingHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public FocussingHandler(ServerController serverController, Logger logger) {
+    super(serverController, logger);
   }
 
   /**
@@ -43,7 +43,7 @@ public class FocussingHandler extends RequestHandler {
       respond(exchange, response);
       return;
     }
-    Camera cam = getCameraController().getCameraById(getCameraId(exchange));
+    Camera cam = getServerController().getCameraController().getCameraById(getCameraId(exchange));
     FocussingCamera focusCam = (FocussingCamera) cam;
     String autoOn = parsedURI.getValue("autoFocusOn");
     String setPos = parsedURI.getValue("position");
