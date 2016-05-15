@@ -20,11 +20,10 @@ public class PresetHandler extends RequestHandler {
 
   /**
    * Creates a new PresetHandler.
-   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public PresetHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public PresetHandler(Logger logger) {
+    super(logger);
   }
 
 
@@ -43,8 +42,8 @@ public class PresetHandler extends RequestHandler {
     ArrayList<Preset> presets = new ArrayList<Preset>();
 
     try {
-      if (getServerController().getDatabase() != null) {
-        presets = getServerController().getDatabase().getAllPresetsCamera(cameraId);
+      if (getDatabase() != null) {
+        presets = getDatabase().getAllPresetsCamera(cameraId);
       }
         
       JSONArray json = new JSONArray();

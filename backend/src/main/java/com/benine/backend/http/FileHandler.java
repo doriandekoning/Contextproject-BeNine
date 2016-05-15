@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -33,11 +32,10 @@ public class FileHandler extends RequestHandler {
   
   /**
    * Constructor of this request handler.
-   * @param serverController of the server.
    * @param logger object to log to.
    */
-  public FileHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public FileHandler(Logger logger) {
+    super(logger);
 
   }
 

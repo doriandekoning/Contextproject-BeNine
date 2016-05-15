@@ -18,11 +18,10 @@ public class FocussingHandler extends RequestHandler {
 
   /**
    * Creates a new FocussingHandler.
-   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public FocussingHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public FocussingHandler(Logger logger) {
+    super(logger);
   }
 
   /**
@@ -43,7 +42,7 @@ public class FocussingHandler extends RequestHandler {
       respond(exchange, response);
       return;
     }
-    Camera cam = getServerController().getCameraController().getCameraById(getCameraId(exchange));
+    Camera cam = getCameraController().getCameraById(getCameraId(exchange));
     FocussingCamera focusCam = (FocussingCamera) cam;
     String autoOn = parsedURI.getValue("autoFocusOn");
     String setPos = parsedURI.getValue("position");

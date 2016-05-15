@@ -73,7 +73,7 @@ public class ServerController {
    */
   public void start() {
     httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger, this); 
+        Integer.parseInt(config.getValue("serverport")), logger); 
     startupDatabase();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);

@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -21,11 +20,10 @@ public class PresetCreationHandler  extends RequestHandler {
  
   /**
    * Create a new handler for creating new presets.
-   * @param serverController the server controller to interact with.
    * @param logger to log to.
    */
-  public PresetCreationHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public PresetCreationHandler(Logger logger) {
+    super(logger);
   }
   
   /**
@@ -36,7 +34,7 @@ public class PresetCreationHandler  extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     try {
       int cameraID = getCameraId(exchange);
-      Camera camera =  getServerController().getCameraController().getCameraById(cameraID);
+      Camera camera = getCameraController().getCameraById(cameraID);
             
       if (camera instanceof IPCamera) {
         IPCamera ipCamera = (IPCamera)camera;
@@ -44,7 +42,7 @@ public class PresetCreationHandler  extends RequestHandler {
         Preset preset = createPreset(ipCamera);
         
         //Adding the new preset to the database
-        getServerController().getCameraController().addPreset(cameraID, preset);
+        getCameraController().addPreset(cameraID, preset);
         responseSuccess(exchange);
       
       }

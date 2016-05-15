@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -18,11 +17,10 @@ public class RecallPresetHandler extends RequestHandler {
 
   /**
    * Create a new handler for recalling presets.
-   * @param serverController the controller to interact with.
    * @param logger to log to.
    */
-  public RecallPresetHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public RecallPresetHandler(Logger logger) {
+    super(logger);
   }
   
   /**
@@ -37,9 +35,8 @@ public class RecallPresetHandler extends RequestHandler {
         
       int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
-      Preset preset = getServerController().getDatabase().getPreset(cameraID,presetID);
-      IPCamera ipcamera = (IPCamera)getServerController().getCameraController()
-                                                                    .getCameraById(cameraID);
+      Preset preset = getDatabase().getPreset(cameraID,presetID);
+      IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
       responseSuccess(exchange);

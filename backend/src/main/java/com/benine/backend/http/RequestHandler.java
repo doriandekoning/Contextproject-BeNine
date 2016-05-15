@@ -3,6 +3,8 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.database.Database;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -18,16 +20,13 @@ import java.util.regex.Pattern;
 
 public abstract class RequestHandler implements HttpHandler {
 
-  private ServerController serverController;
   private Logger logger;
 
   /**
    * Creates a new FocussingHandler.
-   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public RequestHandler(ServerController serverController, Logger logger) {
-    this.serverController = serverController;
+  public RequestHandler(Logger logger) {
     this.logger = logger;
   }
 
@@ -90,8 +89,16 @@ public abstract class RequestHandler implements HttpHandler {
    * Returns cameracontroller
    * @return cameracontroller interacting with.
    */
-  public ServerController getServerController() {
-    return serverController;
+  public CameraController getCameraController() {
+    return ServerController.getInstance().getCameraController();
+  }
+  
+  /**
+   * Returns the database
+   * @return database to retrieve information from.
+   */
+  public Database getDatabase() {
+    return ServerController.getInstance().getDatabase();
   }
 
 

@@ -2,7 +2,6 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
@@ -19,11 +18,10 @@ public class ZoomingHandler extends RequestHandler {
 
   /**
    * Creates a new FocussingHandler.
-   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public ZoomingHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public ZoomingHandler(Logger logger) {
+    super(logger);
   }
 
   /**
@@ -41,7 +39,7 @@ public class ZoomingHandler extends RequestHandler {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
 
 
-      Camera cam = getServerController().getCameraController().getCameraById(getCameraId(exchange));
+      Camera cam = getCameraController().getCameraById(getCameraId(exchange));
       ZoomingCamera zoomingCam = (ZoomingCamera)cam;
       String zoomto = parsedURI.getValue("zoomType");
       String zoom = parsedURI.getValue("zoom");

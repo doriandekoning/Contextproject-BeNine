@@ -26,27 +26,21 @@ public class HttpController {
    * Constructor, creates a new HttpController object.
    * @param address an internetsocet address indicating the ports for the server to listen to.
    * @param logger the logger to use to log to.
-   * @param serverController the server controller that contains
-   *                      the camera's which this server interacts with.
    * @param port number to connect to.
    */
-  public HttpController(String address, int port, Logger logger,
-                                                        ServerController serverController) {
-    this(createServer(address, port, logger), logger, serverController);
+  public HttpController(String address, int port, Logger logger) {
+    this(createServer(address, port, logger), logger);
   }
 
   /**
    * Constructor, creates a new HttpController object.
    * @param httpserver a server object.
    * @param logger the logger to use to log to.
-   * @param serverController the server controller that contains
-   *                      the camera's which this server interacts with.
    */
-  public HttpController(HttpServer httpserver, Logger logger, ServerController serverController) {
+  public HttpController(HttpServer httpserver, Logger logger) {
     this.logger = logger;
-    this.serverController = serverController;
     this.server = httpserver;
-
+    serverController = ServerController.getInstance();
     createHandlers();
     server.start();
     logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
@@ -74,8 +68,8 @@ public class HttpController {
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
-    server.createContext("/static", new FileHandler(serverController, logger));
-    server.createContext("/camera/", new CameraInfoHandler(serverController, logger));
+    server.createContext("/static", new FileHandler(logger));
+    server.createContext("/camera/", new CameraInfoHandler(logger));
     for (Camera cam : serverController.getCameraController().getCameras()) {
       createHandlers(cam);
     }
@@ -89,26 +83,26 @@ public class HttpController {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId
-              + "/focus", new FocussingHandler(serverController, logger));
+              + "/focus", new FocussingHandler(logger));
     }
     if (cam instanceof IrisCamera) {
       server.createContext("/camera/" + camId + "/iris",
-                                              new IrisHandler(serverController, logger));
+                                              new IrisHandler(logger));
     }
     if (cam instanceof MovingCamera) {
       server.createContext("/camera/" + camId + "/move", 
-                                              new MovingHandler(serverController, logger));
+                                              new MovingHandler(logger));
     }
     if (cam instanceof ZoomingCamera) {
       server.createContext("/camera/" + camId + "/zoom",
-                                              new ZoomingHandler(serverController, logger));
+                                              new ZoomingHandler(logger));
     }
     server.createContext("/camera/" + camId + "/preset", 
-                                              new PresetHandler(serverController, logger));
+                                              new PresetHandler(logger));
     server.createContext("/camera/" + camId + "/createpreset", 
-                                              new PresetCreationHandler(serverController, logger));
+                                              new PresetCreationHandler(logger));
     server.createContext("/camera/" + camId + "/recallpreset",
-                                               new RecallPresetHandler(serverController, logger));
+                                               new RecallPresetHandler(logger));
 
     logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
   }

@@ -2,7 +2,6 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
@@ -19,11 +18,10 @@ public class MovingHandler extends RequestHandler {
 
   /**
    * Creates a new MovingHandler.
-   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
-  public MovingHandler(ServerController serverController, Logger logger) {
-    super(serverController, logger);
+  public MovingHandler(Logger logger) {
+    super(logger);
   }
 
   /**
@@ -39,7 +37,7 @@ public class MovingHandler extends RequestHandler {
     String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      Camera cam = getServerController().getCameraController().getCameraById(getCameraId(exchange));
+      Camera cam = getCameraController().getCameraById(getCameraId(exchange));
       MovingCamera movingCam = (MovingCamera)cam;
       String moveType = parsedURI.getValue("moveType");
       String pan = parsedURI.getValue("pan");
