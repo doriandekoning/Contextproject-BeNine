@@ -26,9 +26,9 @@ public class RecallPresetHandler extends RequestHandler {
   }
   
   /**
-     * Handles a request of making a new preset. 
-     * @param exchange the exchange containing data about the request.
-     * @throws IOException when an error occurs with responding to the request.
+  * Handles a request of making a new preset. 
+  * @param exchange the exchange containing data about the request.
+  * @throws IOException when an error occurs with responding to the request.
   */
   public void handle(HttpExchange exchange) throws IOException {
     Attributes parsedURI;

@@ -14,7 +14,6 @@ import java.net.URI;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.any;
 
 /**
  * Created by dorian on 4-5-16.
