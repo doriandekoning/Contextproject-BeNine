@@ -1,9 +1,12 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.sun.net.httpserver.HttpExchange;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.OutputStream;
@@ -17,18 +20,26 @@ import static org.mockito.Mockito.when;
  * Created by dorian on 4-5-16.
  */
 public class FocussingHandlerTest {
+  
+  HttpExchange exchange = mock(HttpExchange.class);
+  OutputStream out = mock(OutputStream.class);
+  FocussingCamera cam = mock(FocussingCamera.class);
+  ServerController serverController = mock(ServerController.class);
+  FocussingHandler fHandler;
+  
+  @Before
+  public void setUp() {
+    CameraController camController = new CameraController(serverController);
+    camController.addCamera(cam);
+    when(serverController.getCameraController()).thenReturn(camController);
+    fHandler = new FocussingHandler(serverController,  mock(Logger.class));
+    when(exchange.getResponseBody()).thenReturn(out);
+  }
 
   @Test
-  public void testOnlyAutoFocus() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    FocussingCamera cam = mock(FocussingCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoFocusOn=true");
+  public void testOnlyAutoFocus() throws Exception {  
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoFocusOn=true");  
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController,  mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -39,15 +50,8 @@ public class FocussingHandlerTest {
 
   @Test
   public void testOnlyPosition() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    FocussingCamera cam = mock(FocussingCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
@@ -59,15 +63,8 @@ public class FocussingHandlerTest {
 
   @Test
   public void testPositionAndAutoFocus() throws Exception {
-    HttpExchange exchange = mock(HttpExchange.class);
-    OutputStream out = mock(OutputStream.class);
-    FocussingCamera cam = mock(FocussingCamera.class);
-    CameraController camController = new CameraController();
-    camController.addCamera(cam);
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    FocussingHandler fHandler = new FocussingHandler(camController, mock(Logger.class));
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
