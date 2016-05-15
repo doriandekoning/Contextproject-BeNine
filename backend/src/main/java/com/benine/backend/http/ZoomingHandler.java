@@ -19,7 +19,7 @@ public class ZoomingHandler extends RequestHandler {
 
   /**
    * Creates a new FocussingHandler.
-   * @param server the server controller to interact with
+   * @param serverController the server controller to interact with
    * @param logger the logger to be used to log to
    */
   public ZoomingHandler(ServerController serverController, Logger logger) {

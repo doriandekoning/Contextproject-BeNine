@@ -12,7 +12,6 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Random;
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
