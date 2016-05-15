@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
 import java.net.URL;
 
 import org.json.simple.JSONObject;
@@ -33,11 +32,8 @@ import com.benine.backend.http.HttpController;
  */
 public class CameraControlTest {
   
-  private Config mainConfig;
   private CameraController cameraController;
-  private String address;
-  private int port;
-  private Logger logger;
+  private ServerController server;
 
   /**
    * Set up the mocked camera and add it to the camera controller.
@@ -45,14 +41,7 @@ public class CameraControlTest {
    */
   @Before
   public void setup() throws CameraConnectionException{
-    mainConfig = Main.getConfig();
-
-    logger = mock(Logger.class);
-    
-    address = mainConfig.getValue("serverip");
-    port = Integer.parseInt(mainConfig.getValue("serverport"));
-    // Setup camerahandler
-    cameraController = new CameraController();
+    server = new ServerController();
       
     IPCamera mockcamera = mock(IPCamera.class);
     when(mockcamera.getStreamLink()).thenReturn("http://83.128.144.84:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture&usr=user&pwd=geheim");
@@ -106,23 +95,23 @@ public class CameraControlTest {
     
     //Add two extra camera's.
     SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(mainConfig.getValue("camera1"));
+    camera2.setStreamLink("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg");
     SimpleCamera camera3 = new SimpleCamera();
     camera3.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     SimpleCamera camera4 = new SimpleCamera();
     camera4.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&buffer=100");
     SimpleCamera camera5 = new SimpleCamera();
-    camera5.setStreamLink(mainConfig.getValue("camera1"));
+    camera5.setStreamLink("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg");
     SimpleCamera camera6 = new SimpleCamera();
     camera6.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     SimpleCamera camera7 = new SimpleCamera();
     camera7.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&buffer=100");
-    cameraController.addCamera(camera2);
-    cameraController.addCamera(camera3);
-    cameraController.addCamera(camera4);
-    cameraController.addCamera(camera5);
-    cameraController.addCamera(camera6);
-    cameraController.addCamera(camera7);
+    server.getCameraController().addCamera(camera2);
+    server.getCameraController().addCamera(camera3);
+    server.getCameraController().addCamera(camera4);
+    server.getCameraController().addCamera(camera5);
+    server.getCameraController().addCamera(camera6);
+    server.getCameraController().addCamera(camera7);
   }
   
   /**
@@ -132,11 +121,7 @@ public class CameraControlTest {
    */
   @Test
   public void ManualTestUI() throws InterruptedException, IOException{
-    HttpController httpController = new HttpController(address, port, logger, cameraController);
-
-    while(true){
-      Thread.sleep(100);
-    }
+    server.start();
   }
   
   /**

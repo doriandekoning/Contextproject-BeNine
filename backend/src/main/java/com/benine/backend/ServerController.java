@@ -14,7 +14,7 @@ public class ServerController {
   
   private Logger logger;
 
-  private Config mainConfig;
+  private Config config;
 
   private CameraController cameraController;
   
@@ -30,17 +30,17 @@ public class ServerController {
    */
   public ServerController() {
     setupLogger();
-    mainConfig = getConfig();
+    config = getConfig();
     
     // Setup camerahandler
-    cameraController = new CameraController();
+    cameraController = new CameraController(this);
     
     startupDatabase();
     
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink(mainConfig.getValue("camera1"));
+    camera.setStreamLink(config.getValue("camera1"));
     SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(mainConfig.getValue("camera1"));
+    camera2.setStreamLink(config.getValue("camera1"));
     cameraController.addCamera(camera);
     cameraController.addCamera(camera2);
     
@@ -65,8 +65,8 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
-    httpController = new HttpController(mainConfig.getValue("serverip"),
-        Integer.parseInt(mainConfig.getValue("serverport")), logger, cameraController);
+    httpController = new HttpController(config.getValue("serverip"),
+        Integer.parseInt(config.getValue("serverport")), logger, cameraController);
     
     running = true;
     
@@ -93,7 +93,7 @@ public class ServerController {
    * Create database if non exists and make the connection.
    */
   private void startupDatabase() {
-    database = new MySQLDatabase();
+    database = new MySQLDatabase(config.getValue("sqluser"), config.getValue("sqlpassword"));
     database.connectToDatabaseServer();
     //If the database does not exist yet, create a new one
     //    if (!database.checkDatabase()) {

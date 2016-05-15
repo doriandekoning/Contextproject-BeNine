@@ -2,10 +2,9 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.Main;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,11 +18,11 @@ public class RecallPresetHandler extends RequestHandler {
 
   /**
    * Create a new handler for recalling presets.
-   * @param controller the controller to interact with.
+   * @param server the controller to interact with.
    * @param logger to log to.
    */
-  public RecallPresetHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public RecallPresetHandler(ServerController server, Logger logger) {
+    super(server, logger);
   }
   
   /**
@@ -38,14 +37,15 @@ public class RecallPresetHandler extends RequestHandler {
         
       int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
-      Preset preset = Main.getDatabase().getPreset(cameraID,presetID);
-      IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
+      Preset preset = getServerController().getDatabase().getPreset(cameraID,presetID);
+      IPCamera ipcamera = (IPCamera)getServerController().getCameraController()
+                                                                    .getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
       responseSuccess(exchange);
     } catch (MalformedURIException e) {
       responseFailure(exchange);
-      Main.getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
+      getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

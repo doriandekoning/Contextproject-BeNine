@@ -1,7 +1,5 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Config;
-import com.benine.backend.Main;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
@@ -24,13 +22,19 @@ import java.util.ArrayList;
 public class MySQLDatabase implements Database {
   private Connection connection;
   private int presetId;
+  private String user;
+  private String password;
 
   /**
    * Constructor of a MySQL Database.
+   * @param user username used to connect to the database.
+   * @param password used to connect to the databse.
    */
-  public MySQLDatabase() {
+  public MySQLDatabase(String user, String password) {
     connection = null;
     presetId = 0;
+    this.user = user;
+    this.password = password;
   }
 
   @Override
@@ -163,13 +167,11 @@ public class MySQLDatabase implements Database {
 
   @Override
   public boolean connectToDatabaseServer() {
-    Config config = Main.getConfig();
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
           + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-      connection = DriverManager.getConnection(connect, config.getValue("sqluser"),
-          config.getValue("sqlpassword"));
+      connection = DriverManager.getConnection(connect, user, password);
     } catch (Exception e) {
       e.printStackTrace();
     }
