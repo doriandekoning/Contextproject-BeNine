@@ -1,15 +1,19 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
-import com.benine.backend.camera.CameraController;
+import com.benine.backend.ServerController;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.jar.Attributes;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -19,17 +23,17 @@ import static org.mockito.Mockito.*;
  */
 public class RequestHandlerTest {
   
-  private CameraController camera;
   private PresetCreationHandler handler;
   private HttpExchange exchangeMock;
   private OutputStream out;
   private Logger logger;
+  private ServerController serverController;
   
   @Before
   public void initialize(){
-    camera = mock(CameraController.class);
     logger = mock(Logger.class);
-    handler = new PresetCreationHandler(camera, logger);
+    serverController = mock(ServerController.class);
+    handler = new PresetCreationHandler(serverController, logger);
     exchangeMock = mock(HttpExchange.class);
     out = mock(OutputStream.class);
     when(exchangeMock.getResponseBody()).thenReturn(out);
@@ -43,6 +47,7 @@ public class RequestHandlerTest {
     Attributes actual = new testRequestHandler(null, null).parseURI("id=4&Hello=World!");
     Assert.assertEquals(expected, actual);
   }
+  
   @Test(expected=MalformedURIException.class)
   public final void testDecodeMalformedURI() throws MalformedURIException {
     new testRequestHandler(null, null).parseURI("id=3&id=4");
@@ -71,12 +76,28 @@ public class RequestHandlerTest {
     handler.responseFailure(exchangeMock);
     verify(exchangeMock).sendResponseHeaders(200, response.length());
   }
+  
+  @Test
+  public void testGetLogger(){
+    assertEquals(logger, handler.getLogger());
+  }
+  
+  @Test
+  public void testGetServer(){
+    assertEquals(serverController, handler.getServerController());
+  }
+  
+  @Test
+  public void testGetCameraByID() throws URISyntaxException {
+    when(exchangeMock.getRequestURI()).thenReturn(new URI("http://localhost/camera/1/zoom?position=4"));
+    assertTrue(handler.getCameraId(exchangeMock) == 1);
+  }
 
 
   // Test used to be able to instantiate RequestHandler
   private class testRequestHandler extends RequestHandler {
 
-    public testRequestHandler(CameraController controller, Logger logger) {
+    public testRequestHandler(ServerController controller, Logger logger) {
       super(controller, logger);
     }
     public void handle(HttpExchange e) {

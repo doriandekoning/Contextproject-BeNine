@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -15,6 +16,7 @@ import java.net.URI;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
 /**
  * Created by dorian on 4-5-16.
@@ -50,7 +52,7 @@ public class FocussingHandlerTest {
 
   @Test
   public void testOnlyPosition() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
     try {
       fHandler.handle(exchange);
@@ -63,7 +65,7 @@ public class FocussingHandlerTest {
 
   @Test
   public void testPositionAndAutoFocus() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?position=3&autoFocusOn=false");
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
     try {
       fHandler.handle(exchange);
@@ -72,6 +74,33 @@ public class FocussingHandlerTest {
     }
     verify(cam).setFocusPos(3);
     verify(cam).setAutoFocusOn(false);
+  }
+  
+  @Test
+  public void testMalformedURI() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=4&position=3&autoFocusOn=false");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      fHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    String response = "{\"succes\":\"false\"}"; 
+    verify(out).write(response.getBytes());
+  }
+  
+  @Test
+  public void testCameraConnectionException() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=4&autoFocusOn=false");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setFocusPos(4);
+    try {
+      fHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    String response = "{\"succes\":\"false\"}"; 
+    verify(out).write(response.getBytes());
   }
 
 }
