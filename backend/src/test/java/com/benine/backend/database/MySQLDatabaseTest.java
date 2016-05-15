@@ -6,6 +6,8 @@ import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockResultSet;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -17,21 +19,22 @@ import static org.junit.Assert.*;
  * Created by Ege on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
-
-    private void prepareEmptyResultSet()
-    {
+  
+    private Database database;
+  
+    @Before
+    public void prepareEmptyResultSet() {
         MockConnection connection =
                 getJDBCMockObjectFactory().getMockConnection();
         StatementResultSetHandler statementHandler =
                 connection.getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
+        database = new MySQLDatabase("root", "root");
     }
 
     @Test
     public final void testConnection() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         database.connectToDatabaseServer();
         assertTrue(database.isConnected());
         database.closeConnection();
@@ -40,8 +43,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testResetDatabase() {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.closeConnection();
@@ -53,8 +54,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddPreset() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
         database.resetDatabase();
@@ -69,8 +68,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeletePreset() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
         database.resetDatabase();
@@ -85,8 +82,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testUpdatePreset() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         Preset preset2 = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
@@ -103,8 +98,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetPreset() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
         database.resetDatabase();
@@ -119,8 +112,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetAllPreset() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
         database.resetDatabase();
@@ -135,8 +126,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetPresetsCamera() throws SQLException {
-        prepareEmptyResultSet();
-        Database database = new MySQLDatabase();
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
         database.connectToDatabaseServer();
         database.resetDatabase();
