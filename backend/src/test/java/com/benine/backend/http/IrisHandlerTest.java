@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -34,7 +33,7 @@ public class IrisHandlerTest {
   @Before
   public void setUp() {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
-    ServerController serverController = ServerController.getInstance();
+    serverController = ServerController.getInstance();
     
     when(cam.getId()).thenReturn(1);
     when(camController.getCameraById(1)).thenReturn(cam);

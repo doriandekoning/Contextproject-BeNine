@@ -89,7 +89,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Returns cameracontroller
    * @return cameracontroller interacting with.
    */
-  public CameraController getCameraController() {
+  protected CameraController getCameraController() {
     return ServerController.getInstance().getCameraController();
   }
   
@@ -97,7 +97,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Returns the database
    * @return database to retrieve information from.
    */
-  public Database getDatabase() {
+  protected Database getDatabase() {
     return ServerController.getInstance().getDatabase();
   }
 

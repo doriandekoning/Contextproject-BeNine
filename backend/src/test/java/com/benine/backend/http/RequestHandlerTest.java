@@ -1,13 +1,11 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,13 +26,9 @@ public class RequestHandlerTest {
   private HttpExchange exchangeMock;
   private OutputStream out;
   private Logger logger;
-  private ServerController serverController;
   
   @Before
   public void initialize(){
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
-    serverController = ServerController.getInstance();
-    
     logger = mock(Logger.class);
     handler = new PresetCreationHandler(logger);
     exchangeMock = mock(HttpExchange.class);

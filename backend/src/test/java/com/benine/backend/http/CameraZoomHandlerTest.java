@@ -2,7 +2,6 @@ package com.benine.backend.http;
 
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -14,8 +13,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

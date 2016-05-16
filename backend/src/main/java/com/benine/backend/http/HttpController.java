@@ -20,7 +20,6 @@ public class HttpController {
 
   private HttpServer server;
   private Logger logger;
-  private ServerController serverController;
 
   /**
    * Constructor, creates a new HttpController object.
@@ -40,7 +39,6 @@ public class HttpController {
   public HttpController(HttpServer httpserver, Logger logger) {
     this.logger = logger;
     this.server = httpserver;
-    serverController = ServerController.getInstance();
     createHandlers();
     server.start();
     logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
@@ -70,7 +68,7 @@ public class HttpController {
   private void createHandlers() {
     server.createContext("/static", new FileHandler(logger));
     server.createContext("/camera/", new CameraInfoHandler(logger));
-    for (Camera cam : serverController.getCameraController().getCameras()) {
+    for (Camera cam : ServerController.getInstance().getCameraController().getCameras()) {
       createHandlers(cam);
     }
   }

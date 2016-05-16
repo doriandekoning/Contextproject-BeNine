@@ -27,13 +27,6 @@ public class CameraController {
   private int highestIdInUse = 1;
 
   /**
-   * Create a new CameraController.
-   */
-  public CameraController() {
-  }
-
-
-  /**
    * Adds a new camera to control.
    * @param camera the camera to add to this controller.
    */
@@ -44,18 +37,10 @@ public class CameraController {
   }
   
   /**
-   * Returns cameracontroller
-   * @return cameracontroller interacting with.
-   */
-  public CameraController getCameraController() {
-    return ServerController.getInstance().getCameraController();
-  }
-  
-  /**
    * Returns the database
    * @return database to retrieve information from.
    */
-  public Database getDatabase() {
+  private Database getDatabase() {
     return ServerController.getInstance().getDatabase();
   }
 

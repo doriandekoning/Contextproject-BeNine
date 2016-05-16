@@ -18,7 +18,6 @@ import org.junit.Test;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.sun.net.httpserver.HttpExchange;
 

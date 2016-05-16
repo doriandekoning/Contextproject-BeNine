@@ -15,7 +15,6 @@ import java.io.IOException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class HttpControllerTest {
 
@@ -28,7 +27,7 @@ public class HttpControllerTest {
   @Before
   public void setUp() throws IOException {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
-    ServerController serverController = ServerController.getInstance();
+    serverController = ServerController.getInstance();
     
     mockserver = mock(HttpServer.class);
     cameraController = new CameraController();
