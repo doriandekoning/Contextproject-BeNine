@@ -3,9 +3,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.Main;
 import com.benine.backend.Preset;
-import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,11 +19,10 @@ public class PresetHandler extends RequestHandler {
 
   /**
    * Creates a new PresetHandler.
-   * @param controller the cameracontroller to interact with
    * @param logger the logger to be used to log to
    */
-  public PresetHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public PresetHandler(Logger logger) {
+    super(logger);
   }
 
 
@@ -44,8 +41,8 @@ public class PresetHandler extends RequestHandler {
     ArrayList<Preset> presets = new ArrayList<Preset>();
 
     try {
-      if (Main.getDatabase() != null) {
-        presets = Main.getDatabase().getAllPresetsCamera(cameraId);
+      if (getDatabase() != null) {
+        presets = getDatabase().getAllPresetsCamera(cameraId);
       }
         
       JSONArray json = new JSONArray();
