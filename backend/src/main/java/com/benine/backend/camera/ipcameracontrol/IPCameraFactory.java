@@ -13,14 +13,6 @@ public class IPCameraFactory extends CameraFactory {
 
 
   /**
-   * Constructor of the camera handler.
-   */
-  public IPCameraFactory(){
-
-  }
-
-
-  /**
    * Creates a camera object as specified in camSpec.
    * @param camSpec specification of the camera 0: type, 1: additional info.
    * @return Camera object.

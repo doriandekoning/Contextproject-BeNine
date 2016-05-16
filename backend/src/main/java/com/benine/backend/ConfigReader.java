@@ -55,7 +55,7 @@ public class ConfigReader {
       // Check if line is a valid config line
     } else if (wellFormed.matcher(whiteSpaceRemoved).matches()) {
       // Check if the line contains data or is just a comment
-      return whiteSpaceRemoved.split("=");
+      return whiteSpaceRemoved.split("=", 2);
     } else {
       throw new InvalidConfigFileException("Malformed  line: " + whiteSpaceRemoved);
     }
