@@ -9,6 +9,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 
 import static org.mockito.Mockito.mock;
@@ -47,6 +48,13 @@ public class ServerControllerTest {
   public void testStopServer() {
     serverController.stop();
     assertFalse(serverController.isServerRunning());
+  }
+  
+  @Test
+  public void testSetcameraController() {
+    CameraController camController = mock(CameraController.class);
+    serverController.setCameraController(camController);
+    assertEquals(camController, serverController.getCameraController());
   }
   
   @Test

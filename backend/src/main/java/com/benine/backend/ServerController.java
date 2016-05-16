@@ -38,20 +38,12 @@ public class ServerController {
     config = setUpConfig(configPath);
     running = false;
     setupLogger();
-
+    
+    database = loadDatabase();
+    
     cameraController = new CameraController();
-    
-    String user = config.getValue("sqluser");
-    String password = config.getValue("sqlpassword");
-    database = new MySQLDatabase(user, password, logger);
-    
-    //TODO camera's should be added from the config.
-    SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink(config.getValue("camera1"));
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(config.getValue("camera1"));
-    cameraController.addCamera(camera);
-    cameraController.addCamera(camera2);  
+
+    loadCameras();
   }
   
   /**
@@ -89,6 +81,29 @@ public class ServerController {
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
+  }
+  
+  /**
+   * Load camera's in camera controller.
+   * For now it just adds 2 simple camera's.
+   */
+  private void loadCameras() {
+    SimpleCamera camera = new SimpleCamera();
+    camera.setStreamLink(config.getValue("camera1"));
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink(config.getValue("camera1"));
+    cameraController.addCamera(camera);
+    cameraController.addCamera(camera2);  
+  }
+  
+  /**
+   * Read the login information from the database and create database object..
+   * @return database object
+   */
+  private Database loadDatabase() {
+    String user = config.getValue("sqluser");
+    String password = config.getValue("sqlpassword");
+    return new MySQLDatabase(user, password, logger);
   }
   
   /**
