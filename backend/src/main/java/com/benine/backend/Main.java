@@ -58,6 +58,13 @@ public class Main {
     if (!database.checkDatabase()) {
       database.resetDatabase();
     }
+    else {
+      try {
+        database.useDatabase();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
     /////
     //TODO Cameras has to be in the database when created and create sample presets.
     try {

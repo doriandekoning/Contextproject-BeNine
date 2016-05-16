@@ -107,4 +107,9 @@ public interface Database {
    * @throws SQLException No right connection found
    */
   void addCamera(int id, String ip) throws SQLException;
+
+  /**
+   * Makes sure the right database is used.
+   */
+  void useDatabase() throws SQLException;
 }

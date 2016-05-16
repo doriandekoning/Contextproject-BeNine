@@ -199,9 +199,9 @@ public class MySQLDatabase implements Database {
   public void resetDatabase() {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
-      sr.setLogWriter(new PrintWriter("logs/databaselog.txt"));
+      sr.setLogWriter(new PrintWriter("logs" + File.separator + "databaselog.txt"));
       Reader reader = new BufferedReader(
-          new InputStreamReader( new FileInputStream("database/databasefile.sql"), "UTF-8"));
+          new InputStreamReader( new FileInputStream("database" + File.separator + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
       presetId = 0;
     } catch (Exception e) {
@@ -226,6 +226,20 @@ public class MySQLDatabase implements Database {
     try {
       final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
                                                                                   id, ip);
+      statement.executeUpdate(sql);
+      statement.close();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
+    }
+  }
+
+  @Override
+  public void useDatabase() throws SQLException {
+    Statement statement = connection.createStatement();
+    try {
+      String sql = "USE presetsdatabase";
       statement.executeUpdate(sql);
       statement.close();
     } finally {
