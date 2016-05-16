@@ -95,6 +95,12 @@
             <div id="preset_area"></div>
         </div>
         <div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
+            <div class="control_buttons">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target=".preset-create-modal"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target=".preset-edit-modal"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</button>
+                </div>
+            </div>
             <div id="control_area">
                 <div class="row">
                     <div class="control_wrapper">
@@ -125,6 +131,44 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Defines the modal used for preset creation -->
+    <div class="modal fade preset-create-modal" tabindex="-1" role="dialog" aria-labelledby="preset-create-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Defines the modal used for preset editing -->
+    <div class="modal fade preset-edit-modal" tabindex="-1" role="dialog" aria-labelledby="preset-edit-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>
