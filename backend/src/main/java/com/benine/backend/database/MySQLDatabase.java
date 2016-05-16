@@ -199,7 +199,7 @@ public class MySQLDatabase implements Database {
   public void resetDatabase() {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
-      sr.setLogWriter(new PrintWriter("logs" + File.separator + "databaselog.txt"));
+      sr.setLogWriter(new PrintWriter("logs" + File.separator + "database-presetsdatabase.log"));
       Reader reader = new BufferedReader(
           new InputStreamReader( new FileInputStream("database" + File.separator + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
