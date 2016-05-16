@@ -110,6 +110,7 @@ public interface Database {
 
   /**
    * Makes sure the right database is used.
+   * @throws SQLException No right connection found
    */
   void useDatabase() throws SQLException;
 }

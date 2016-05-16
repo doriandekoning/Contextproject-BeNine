@@ -57,8 +57,7 @@ public class Main {
     //If the database does not exist yet, create a new one
     if (!database.checkDatabase()) {
       database.resetDatabase();
-    }
-    else {
+    } else {
       try {
         database.useDatabase();
       } catch (SQLException e) {
