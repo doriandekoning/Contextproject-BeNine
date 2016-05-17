@@ -233,7 +233,7 @@ public class PresetTest {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     preset1.addKeyWord("Violin");
-    preset1.addKeyWord("Violin");
+    preset2.addKeyWord("Violin");
     Assert.assertEquals(preset1, preset2);
   }
   @Test
@@ -252,7 +252,7 @@ public class PresetTest {
     keyWords.add("Violin");
     keyWords.add("Piano");
     preset1.addKeyWords(keyWords);
-    keyWords.addKeyWord("Overview");
+    keyWords.add(0, "Overview");
     Assert.assertEquals(keyWords, preset1.getKeyWords());
   }
   @Test
@@ -262,7 +262,7 @@ public class PresetTest {
     keyWords.add("Piano");
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, keyWords);
     keyWords.add("Overview");
-    preset1.addKeyWord(overview);
+    preset1.addKeyWord("Overview");
     Assert.assertEquals(keyWords, preset1.getKeyWords());
   }
 }

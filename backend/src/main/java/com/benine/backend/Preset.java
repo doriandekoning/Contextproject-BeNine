@@ -22,7 +22,8 @@ public class Preset {
   private boolean autoiris;
   private String image;
   private int presetid;
-  private ArrayList<String> keyWords;
+  //TODO change to set
+  private ArrayList<String> keyWords = new ArrayList<String>();
 
   /**
    * Constructs a preset.
@@ -151,7 +152,7 @@ public class Preset {
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
   }
-  
+
   public String getImage() {
     return image;
   }
@@ -169,6 +170,23 @@ public class Preset {
   }
 
   public List<String> getKeyWords() { return keyWords; }
+
+  /**
+   * Adds a new keyword to this class.
+   * @param keyWord the keyword to add.
+   */
+  public void addKeyWord(String keyWord) {
+    keyWords.add(keyWord);
+  }
+
+  /**
+   * Adds a list of keywords to this class.
+   * @return keyWords a list of keywords
+   */
+  public void addKeyWords(List<String> keyWords) {
+    keyWords.forEach((s) -> this.keyWords.add(s));
+  }
+  //TODO remove keyword method
 
   @Override
   public int hashCode() {
