@@ -1,5 +1,10 @@
 package com.benine.backend;
 
+import com.benine.backend.video.MJPEGStreamReader;
+
+import java.io.IOException;
+import java.net.URL;
+
 public class Main {
   
   /**
@@ -10,6 +15,13 @@ public class Main {
     ServerController server = ServerController.getInstance();
 
     server.start();
+
+    try {
+      new MJPEGStreamReader(new URL("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     try {
       while (true) {
         Thread.sleep(100);
