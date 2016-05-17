@@ -110,6 +110,7 @@ public class ServerController {
    * Create database if non exists and make the connection.
    */
   private void startupDatabase() {
+    database.connectToDatabaseServer();
     //If the database does not exist yet, create a new one
     if (!database.checkDatabase()) {
       database.resetDatabase();
