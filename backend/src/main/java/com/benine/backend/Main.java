@@ -17,7 +17,9 @@ public class Main {
     server.start();
 
     try {
-      new MJPEGStreamReader(new URL("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg"));
+      new Thread(new MJPEGStreamReader(new URL("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100"))).start();
+      new Thread(new MJPEGStreamReader(new URL("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg"))).start();
+
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -12,10 +12,10 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MJPEGStreamReader {
+public class MJPEGStreamReader implements Runnable {
 
     private Stream stream;
-    private BufferedInputStream streamdata;
+    private BufferedInputStream bufferedStream;
 
     /**
      * Creates a new MJPEGStreamReader.
@@ -23,41 +23,58 @@ public class MJPEGStreamReader {
      */
     public MJPEGStreamReader(URL url) throws IOException{
         this.stream = new Stream(url);
-        this.streamdata = new BufferedInputStream(stream.getInputStream());
+        this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+    }
 
-        try {
-            JFrame frame=new JFrame();
-            frame.setVisible(true);
+    @Override
+    public void run() {
+//        try {
+//            JFrame frame= new JFrame();
+//
+//            frame.setLayout(new FlowLayout());
+//            frame.setSize(800,800);
+//            JPanel panel = new JPanel(new BorderLayout());
+//            frame.add(panel);
+//
+//            ImageIcon icon = new ImageIcon();
+//            JLabel picture = new JLabel(icon);
+//            panel.add(picture);
+//            frame.setVisible(true);
+//
+//            while (true) {
+//                ByteArrayInputStream bais = new ByteArrayInputStream(getImage());
+//                BufferedImage bi = ImageIO.read(bais);
+//                icon.setImage(bi);
+//                panel.repaint();
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            frame.setLayout(new FlowLayout());
-            frame.setSize(200,300);
-            JPanel panel = new JPanel(new BorderLayout());
-            frame.add(panel);
-
-            ImageIcon icon = new ImageIcon();
-            JLabel picture = new JLabel(icon);
-            panel.add(picture);
-
-            while (true) {
-                ByteArrayInputStream bais = new ByteArrayInputStream(getImage());
-                BufferedImage bi = ImageIO.read(bais);
-                icon.setImage(bi);
-                panel.repaint();
+        while (true) {
+            try {
+                getImage();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
+    /**
+     * Peeks into the next amount of bytes and returns them.
+     * @param amount    The amount of bytes to check.
+     * @return          An int[] array containing the checked bytes in order.
+     * @throws IOException
+     */
     private int[] checkNextBytes(int amount) throws IOException {
         int[] byteArray = new int[amount];
 
-        streamdata.mark(amount);
+        bufferedStream.mark(amount);
         for (int i = 0; i < amount; i++) {
-            byteArray[i] = streamdata.read();
+            byteArray[i] = bufferedStream.read();
         }
-        streamdata.reset();
+        bufferedStream.reset();
 
         return byteArray;
     }
@@ -76,8 +93,10 @@ public class MJPEGStreamReader {
         StringWriter header = new StringWriter(128);
 
         while (!checkJPEGHeader()) {
-            header.write(streamdata.read());
+            header.write(bufferedStream.read());
         }
+
+        System.out.println(header.toString());
 
         int contentLength = getContentLength(header.toString());
         byte[] image = new byte[contentLength];
@@ -86,13 +105,18 @@ public class MJPEGStreamReader {
         int readByte;
 
         for (int i = 0; i < contentLength; i++) {
-            readByte = streamdata.read(image, offset, contentLength - offset);
+            readByte = bufferedStream.read(image, offset, contentLength - offset);
             offset += readByte;
         }
 
         return image;
     }
 
+    /**
+     * Looks for the Content-Length: tag in the header, and extracts the value.
+     * @param header    A header string.
+     * @return          -1 if content-length not found, else content length.
+     */
     private int getContentLength(String header) {
         Pattern content_length = Pattern.compile("Content-Length: \\d+");
         Matcher matcher = content_length.matcher(header);
@@ -103,5 +127,4 @@ public class MJPEGStreamReader {
             return -1;
         }
     }
-
 }
