@@ -126,7 +126,9 @@ public class SimpleCameraTest {
   @Test
   public void testEqual() {
     SimpleCamera camera1 = new SimpleCamera();
+    camera1.setStreamLink("test");
     SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink("test");
     assertEquals(camera1, camera2);
   }
   
