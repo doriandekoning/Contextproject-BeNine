@@ -102,8 +102,8 @@ public class SimpleCamera implements Camera {
       SimpleCamera that = (SimpleCamera) obj;
       if (Arrays.equals(presetsFromCamera, that.presetsFromCamera) 
           && this.id == that.id
-          && this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
-              || this.getStreamLink() == null && that.getStreamLink() == null
+          && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
+              || this.getStreamLink() == null && that.getStreamLink() == null)
           ) {
         return true;
       }
