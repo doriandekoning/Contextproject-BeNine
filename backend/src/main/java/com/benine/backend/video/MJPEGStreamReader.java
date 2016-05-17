@@ -1,6 +1,11 @@
 package com.benine.backend.video;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
@@ -21,48 +26,71 @@ public class MJPEGStreamReader {
         this.streamdata = new BufferedInputStream(stream.getInputStream());
 
         try {
-            getImage();
+            JFrame frame=new JFrame();
+            frame.setVisible(true);
+
+            frame.setLayout(new FlowLayout());
+            frame.setSize(200,300);
+            JPanel panel = new JPanel(new BorderLayout());
+            frame.add(panel);
+
+            ImageIcon icon = new ImageIcon();
+            JLabel picture = new JLabel(icon);
+            panel.add(picture);
+
+            while (true) {
+                ByteArrayInputStream bais = new ByteArrayInputStream(getImage());
+                BufferedImage bi = ImageIO.read(bais);
+                icon.setImage(bi);
+                panel.repaint();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean checkJPEGBegin() throws IOException {
-        // Check next 2 bytes.
-        streamdata.mark(2);
-        int b1 = streamdata.read();
-        int b2 = streamdata.read();
+    private int[] checkNextBytes(int amount) throws IOException {
+        int[] byteArray = new int[amount];
+
+        streamdata.mark(amount);
+        for (int i = 0; i < amount; i++) {
+            byteArray[i] = streamdata.read();
+        }
         streamdata.reset();
 
-        // Check if JPEG Begin flag is found,
-        // this is FF D8, 255 216 in integers.
-        return (b1 == 255 && b2 == 216);
+        return byteArray;
     }
 
-    private boolean checkJPEGEnd() throws IOException {
-        // Check next 2 bytes.
-        streamdata.mark(2);
-        int b1 = streamdata.read();
-        int b2 = streamdata.read();
-        streamdata.reset();
-
-        // Check if JPEG Begin flag is found,
-        // this is FF D8, 255 216 in integers.
-        return (b1 == 255 && b2 == 217);
+    /**
+     * Checks the next 2 bytes and checks if they are the JPEG header (FF D8).
+     * @return true if header, false if not header.
+     * @throws IOException
+     */
+    private boolean checkJPEGHeader() throws IOException {
+        int[] byteArray = checkNextBytes(2);
+        return (byteArray[0] == 255 && byteArray[1] == 216);
     }
 
-    private Byte[] getImage() throws IOException {
-        // We store the header in here.
+    private byte[] getImage() throws IOException {
         StringWriter header = new StringWriter(128);
 
-        while (!checkJPEGBegin()) {
+        while (!checkJPEGHeader()) {
             header.write(streamdata.read());
         }
 
-        System.out.println(getContentLength(header.toString()));
-        System.out.println(header.toString());
+        int contentLength = getContentLength(header.toString());
+        byte[] image = new byte[contentLength];
 
-        return null;
+        int offset = 0;
+        int readByte;
+
+        for (int i = 0; i < contentLength; i++) {
+            readByte = streamdata.read(image, offset, contentLength - offset);
+            offset += readByte;
+        }
+
+        return image;
     }
 
     private int getContentLength(String header) {
