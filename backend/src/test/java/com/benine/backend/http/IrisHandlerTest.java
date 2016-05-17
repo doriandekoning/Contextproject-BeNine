@@ -32,7 +32,7 @@ public class IrisHandlerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     when(cam.getId()).thenReturn(1);
