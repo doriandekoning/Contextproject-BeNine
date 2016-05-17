@@ -244,13 +244,13 @@ function presetcall(t) {
 * Load everyting to create a preset.
 */
 function loadCreatePreset() {
-	if (currentcamera != 0) {
+	if (currentcamera !== undefined) {
 		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
 	}
 }
 
-function createPreset() 
-	if (currentcamera != 0) {
+function createPreset() {
+	if (currentcamera !== undefined) {
 		$.get("/api/backend/camera/"+ currentcamera + "/createpreset" , function(data) {});
 	}
 }

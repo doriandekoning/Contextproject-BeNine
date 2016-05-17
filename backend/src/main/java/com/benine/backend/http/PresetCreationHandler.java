@@ -47,7 +47,7 @@ public class PresetCreationHandler  extends RequestHandler {
       
       }
     } catch (SQLException e) {
-      System.out.println(e.toString());
+      responseFailure(exchange);
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     }
 
