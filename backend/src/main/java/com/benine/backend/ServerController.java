@@ -2,7 +2,6 @@ package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraCreator;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
@@ -43,8 +42,6 @@ public class ServerController {
     database = loadDatabase();
     
     cameraController = new CameraController();
-
-    loadCameras();
   }
   
   /**
@@ -68,6 +65,7 @@ public class ServerController {
         Integer.parseInt(config.getValue("serverport")), logger); 
     
     startupDatabase();
+    CameraCreator.getInstance().loadCameras();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -82,43 +80,6 @@ public class ServerController {
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
-  }
-  
-  /**
-   * Load camera's in camera controller.
-   * Using the cameraCreator and the camera's specified in the main config.
-   */
-  private void loadCameras() {
-    int i = 1;
-    String cameraInfo = config.getValue("camera_" + i);
-    while (cameraInfo != null) {
-      try {
-        cameraController.addCamera(CameraCreator.getInstance()
-                                            .createCamera(parseCameraInfo(cameraInfo)));
-      } catch (InvalidCameraTypeException e) {
-        getLogger().log("Camera info not right specified type not specified",
-                                                                          LogEvent.Type.CRITICAL);
-        e.printStackTrace();
-      }
-      i++;
-      cameraInfo = config.getValue("camera_" + i);
-    } 
-  }
-  
-  /**
-   * Splits the camera info from the config in a type and the rest.
-   * @param cameraInfo String representing all info to create a caemra.
-   * @return Array with firs element the type and second the rest of the info.
-   */
-  private String[] parseCameraInfo(String cameraInfo) {
-    String[] split = cameraInfo.split(",");
-    if (split.length > 1) {
-      return split;
-    } else {
-      getLogger().log("Camera info not right specified expected at least 2 parts",
-                                                                          LogEvent.Type.CRITICAL);
-    }
-    return null;
   }
 
   /**
@@ -158,7 +119,7 @@ public class ServerController {
    * @param configPath to the main config file.
    * @return config object.
    */
-  public Config setUpConfig(String configPath) {
+  private Config setUpConfig(String configPath) {
     try {
       return ConfigReader.readConfig(configPath);
     } catch (Exception e) {

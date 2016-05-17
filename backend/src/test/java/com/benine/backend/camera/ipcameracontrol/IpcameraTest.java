@@ -36,9 +36,7 @@ public class IpcameraTest {
   
   @Before
   public final void setUp() throws InvalidCameraTypeException{
-	  IPCameraFactory factory = new IPCameraFactory();
-	  String[] camSpec = {"127.0.0.1:9002"};
-	  camera = factory.createCamera(camSpec);
+	  camera = new IPCamera("127.0.0.1:9002");
 	  mockServerClient.reset();
   }
 

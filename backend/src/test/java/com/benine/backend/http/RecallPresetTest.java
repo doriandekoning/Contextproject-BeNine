@@ -38,7 +38,7 @@ public class RecallPresetTest {
 
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     ipcamera = mock(IPCamera.class);

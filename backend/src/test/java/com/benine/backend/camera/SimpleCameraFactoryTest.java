@@ -1,41 +1,43 @@
 package com.benine.backend.camera;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.io.File;
+
+import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 
 public class SimpleCameraFactoryTest {
   
+  ServerController serverController;
+  
+  @Before
+  public void setUp() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    serverController = ServerController.getInstance();
+    
+    CameraController camController = new CameraController();
+    serverController.setCameraController(camController);
+  }
+
+  
   @Test(expected=InvalidCameraTypeException.class)
   public void createCameraNoInfo() throws InvalidCameraTypeException {
     SimpleCameraFactory factory = new SimpleCameraFactory();
-    String[] camSpec = new String[0];
-    factory.createCamera(camSpec);
-  }
-  
-  @Test(expected=InvalidCameraTypeException.class)
-  public void createCameraEmptyArray() throws InvalidCameraTypeException {
-    SimpleCameraFactory factory = new SimpleCameraFactory();
-    String[] camSpec = null;
-    factory.createCamera(camSpec);
-  }
-  
-  @Test(expected=InvalidCameraTypeException.class)
-  public void createCameraEmptyFirsElement() throws InvalidCameraTypeException {
-    SimpleCameraFactory factory = new SimpleCameraFactory();
-    String[] camSpec = new String [1];
-    factory.createCamera(camSpec);
+    factory.createCamera(3);
   }
   
   @Test
   public void createCamera() throws InvalidCameraTypeException {
     SimpleCameraFactory factory = new SimpleCameraFactory();
-    String[] camSpec = {"test.test/camera"};
-    Camera result = factory.createCamera(camSpec);
+    Camera result = factory.createCamera(2);
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("test.test/camera");
+    camera.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     assertEquals(camera, result);
   }
 

@@ -1,6 +1,8 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
 
@@ -41,23 +43,44 @@ public class CameraCreator {
   }
 
   /**
-  * Creates a camera object as specified in camSpec.
-  * @param camSpec specification of the camera 0: type, 1: additional info.
-  * @return Camera object.
-  * @throws InvalidCameraTypeException when specified camera type can not be created.
+  * Loads the camera's specified in the config in the camera controller.
   */
-  public Camera createCamera(String[] camSpec) throws InvalidCameraTypeException {
-    CameraFactory factory = CAMERA_TYPES.get(camSpec[0]);
+  public void loadCameras() {
+    Config config = ServerController.getInstance().getConfig();
+    int i = 1;
+    String type =  config.getValue("camera_" + i + "_type");   
+    while (type != null) {
+      try {
+        ServerController.getInstance().getCameraController().addCamera(createCamera(i, type));
+      } catch (InvalidCameraTypeException e) {
+        CameraController.logger.log("Camera " + i + " in the config file can not be created",
+            LogEvent.Type.CRITICAL);
+      }
+      i++;
+      type = config.getValue("camera_" + i + "_type");
+    }  
+  }
+  
+  /**
+   * Creates a camera object with the right camera factory.
+   * @param index in the config file of the camera.
+   * @param type of this camera to create.
+   * @return Camera object
+   * @throws InvalidCameraTypeException When camera object can't be created.
+   */
+  private Camera createCamera(int index, String type) throws InvalidCameraTypeException {
+    System.out.println(type);
+    CameraFactory factory = CAMERA_TYPES.get(type);
     if (factory == null) {
-      CameraController.logger.log("The following camera type is not specified: " + camSpec[0],
+      CameraController.logger.log("The type of camera" + index + "is not specified: " + type,
           LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Camera type is not regonized");
     }
-    String[] spec = new String[camSpec.length - 1];
-    System.arraycopy(camSpec, 1, spec, 0, camSpec.length - 1);
     CameraController.logger.log("New Camera object is created.",
         LogEvent.Type.INFO);
-    return factory.createCamera(spec);
+    return factory.createCamera(index);
   }
+  
+  
 }
 
