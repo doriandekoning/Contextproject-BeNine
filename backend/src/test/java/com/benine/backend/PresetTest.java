@@ -1,5 +1,6 @@
 package com.benine.backend;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -18,7 +19,9 @@ public class PresetTest {
 
   @Test
   public void testToJSON() throws JSONException {
-    Preset preset = new Preset(new Position(10, 12), 13, 40, 56, true, 1, 2, false);
+    ArrayList<String> keywords = new ArrayList<String>();
+    keywords.add("foo");
+    Preset preset = new Preset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, keywords);
     String json = preset.toJSON();
     JSONObject jsonObject = new JSONObject(json);
     Assert.assertEquals(10.0, jsonObject.get("pan"));
@@ -30,6 +33,7 @@ public class PresetTest {
     Assert.assertEquals(1, jsonObject.get("panspeed"));
     Assert.assertEquals(2, jsonObject.get("tiltspeed"));
     Assert.assertEquals(false, jsonObject.get("autoiris"));
+    Assert.assertEquals("foo", jsonObject.getJSONArray("keywords").get(0));
   }
 
   @Test

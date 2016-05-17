@@ -87,6 +87,7 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
+    json.put("keywords", keyWords);
 
     return json.toString();
   }
