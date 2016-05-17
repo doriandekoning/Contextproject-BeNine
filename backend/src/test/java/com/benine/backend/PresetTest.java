@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import com.benine.backend.camera.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by dorian on 3-5-16.
  */
@@ -213,5 +216,53 @@ public class PresetTest {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Assert.assertEquals(preset, preset2);
+  }
+
+  @Test
+  public void testAddKeyWord() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.addKeyWord("Violin");
+    preset.addKeyWord("Piano");
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    Assert.assertEquals(keyWords, preset.getKeyWords());
+  }
+  @Test
+  public void testEqualsEqualKeywords() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addKeyWord("Violin");
+    preset1.addKeyWord("Violin");
+    Assert.assertEquals(preset1, preset2);
+  }
+  @Test
+  public void testEqualsNotEqualKeywords() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addKeyWord("Violin");
+    preset1.addKeyWord("Piano");
+    Assert.assertNotEquals(preset1, preset2);
+  }
+  @Test
+  public void testAddKeyWordList() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addKeyWord("Overview");
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    preset1.addKeyWords(keyWords);
+    keyWords.addKeyWord("Overview");
+    Assert.assertEquals(keyWords, preset1.getKeyWords());
+  }
+  @Test
+  public void testKeyWordsConstructor() {
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, keyWords);
+    keyWords.add("Overview");
+    preset1.addKeyWord(overview);
+    Assert.assertEquals(keyWords, preset1.getKeyWords());
   }
 }
