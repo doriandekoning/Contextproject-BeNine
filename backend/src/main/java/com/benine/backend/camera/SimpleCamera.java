@@ -4,6 +4,7 @@ import com.benine.backend.Preset;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by dorian on 5-5-16.
@@ -84,4 +85,36 @@ public class SimpleCamera implements Camera {
       i++;
     }
   }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + id;
+    result = prime * result + Arrays.hashCode(presetsFromCamera);
+    result = prime * result + ((streamLink == null) ? 0 : streamLink.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    SimpleCamera other = (SimpleCamera) obj;
+    if (id != other.id)
+      return false;
+    if (!Arrays.equals(presetsFromCamera, other.presetsFromCamera))
+      return false;
+    if (streamLink == null) {
+      if (other.streamLink != null)
+        return false;
+    } else if (!streamLink.equals(other.streamLink))
+      return false;
+    return true;
+  }
+
 }

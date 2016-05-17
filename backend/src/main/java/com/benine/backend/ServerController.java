@@ -7,10 +7,7 @@ import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
 
-
 import java.io.File;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Class containing the elements to make the server work.
@@ -92,31 +89,39 @@ public class ServerController {
    * For now it just adds 2 simple camera's.
    */
   private void loadCameras() {
-	int i = 1;
-	String cameraInfo = config.getValue("camera_" + i);
-	while(cameraInfo != null) {
-		try {
-			cameraController.addCamera(CameraCreator.getInstance().createCamera(parseCameraInfo(cameraInfo)));
-		} catch (InvalidCameraTypeException e) {
-			getLogger().log("Camera info not right specified type not specified", LogEvent.Type.CRITICAL);
-			e.printStackTrace();
-		}
-		i++;
-		cameraInfo = config.getValue("camera_" + i);
-	} 
+    int i = 1;
+    String cameraInfo = config.getValue("camera_" + i);
+    while (cameraInfo != null) {
+      try {
+        cameraController.addCamera(CameraCreator.getInstance()
+                                            .createCamera(parseCameraInfo(cameraInfo)));
+      } catch (InvalidCameraTypeException e) {
+        getLogger().log("Camera info not right specified type not specified",
+                                                                          LogEvent.Type.CRITICAL);
+        e.printStackTrace();
+      }
+      i++;
+      cameraInfo = config.getValue("camera_" + i);
+    } 
   }
   
+  /**
+   * Splits the camera info from the config in a type and the rest.
+   * @param cameraInfo String representing all info to create a caemra.
+   * @return Array with firs element the type and second the rest of the info.
+   */
   private String[] parseCameraInfo(String cameraInfo) {
-	String[] split = cameraInfo.split(",");
-	if (split.length > 1){
-		return split;
-	} else {
-		getLogger().log("Camera info not right specified expected at least 2 parts", LogEvent.Type.CRITICAL);
-	}
-	return null;
-}
+    String[] split = cameraInfo.split(",");
+    if (split.length > 1) {
+      return split;
+    } else {
+      getLogger().log("Camera info not right specified expected at least 2 parts",
+                                                                          LogEvent.Type.CRITICAL);
+    }
+    return null;
+  }
 
-/**
+  /**
    * Read the login information from the database and create database object..
    * @return database object
    */

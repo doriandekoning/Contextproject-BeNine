@@ -1,13 +1,13 @@
 package com.benine.backend.camera;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CameraCreator {
-	
+
   static CameraCreator cameraCreator;
   
   /**
@@ -16,20 +16,27 @@ public class CameraCreator {
   static final Map<String, CameraFactory> CAMERA_TYPES;
   
   static {
-	CAMERA_TYPES = new HashMap<String, CameraFactory>();
-	CAMERA_TYPES.put("simplecamera", new SimpleCameraFactory());
-	CAMERA_TYPES.put("ipcamera", new IPCameraFactory());
+    CAMERA_TYPES = new HashMap<String, CameraFactory>();
+    CAMERA_TYPES.put("simplecamera", new SimpleCameraFactory());
+    CAMERA_TYPES.put("ipcamera", new IPCameraFactory());
   }
-	
-  private CameraCreator () {
-	  
+
+  /**
+   * Private contstructor so there can only be one instance of the cameracreator.
+   */
+  private CameraCreator() {
+
   }
   
+  /**
+   * Returnes the unique instance of the camera creator.
+   * @return CameraCreator
+   */
   public static synchronized CameraCreator getInstance() {
-	  if (cameraCreator == null) {
-		  cameraCreator = new CameraCreator();
-	  }
-	  return cameraCreator;
+    if (cameraCreator == null) {
+      cameraCreator = new CameraCreator();
+    }
+    return cameraCreator;
   }
 
   /**
@@ -39,13 +46,13 @@ public class CameraCreator {
   * @throws InvalidCameraTypeException when specified camera type can not be created.
   */
   public Camera createCamera(String[] camSpec) throws InvalidCameraTypeException {
-	  CameraFactory factory = CAMERA_TYPES.get(camSpec[0]);
-	  if (factory == null) {
-		  throw new InvalidCameraTypeException("Camera type is not regonized");
-	  }
-	  String[] spec = new String[camSpec.length - 1];
-	  System.arraycopy(camSpec, 1, spec, 0, camSpec.length - 1);
-	  return factory.createCamera(spec);
+    CameraFactory factory = CAMERA_TYPES.get(camSpec[0]);
+    if (factory == null) {
+      throw new InvalidCameraTypeException("Camera type is not regonized");
+    }
+    String[] spec = new String[camSpec.length - 1];
+    System.arraycopy(camSpec, 1, spec, 0, camSpec.length - 1);
+    return factory.createCamera(spec);
   }
 }
 

@@ -1,4 +1,4 @@
-package com.benine.backend.camera;
+package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertTrue;
 
