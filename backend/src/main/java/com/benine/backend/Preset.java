@@ -3,7 +3,6 @@ package com.benine.backend;
 import com.benine.backend.camera.Position;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,10 +59,12 @@ public class Preset {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param keyWords  The keywords of this preset
    */
   public Preset(Position pos, int zoom, int focus, int iris,
-                boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, List<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autofocus);
+                boolean autofocus, int panspeed, int tiltspeed,
+                boolean autoiris, List<String> keyWords) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris);
     this.keyWords.addAll(keyWords);
   }
 
@@ -170,7 +171,9 @@ public class Preset {
     return presetid;
   }
 
-  public Set<String> getKeywords() { return keyWords; }
+  public Set<String> getKeywords() {
+    return keyWords;
+  }
 
   /**
    * Adds a new keyword to this class.
@@ -182,7 +185,7 @@ public class Preset {
 
   /**
    * Adds a list of keywords to this class.
-   * @return keyWords a list of keywords
+   * @param keyWords a list of keywords
    */
   public void addKeywords(List<String> keyWords) {
     this.keyWords.addAll(keyWords);
