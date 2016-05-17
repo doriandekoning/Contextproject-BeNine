@@ -30,7 +30,7 @@ public class SimpleCameraFactoryTest {
   }
   
   @Test
-  public void createCamer() throws InvalidCameraTypeException {
+  public void createCamera() throws InvalidCameraTypeException {
     SimpleCameraFactory factory = new SimpleCameraFactory();
     String[] camSpec = {"test.test/camera"};
     Camera result = factory.createCamera(camSpec);

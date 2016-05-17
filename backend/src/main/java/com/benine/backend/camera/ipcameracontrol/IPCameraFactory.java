@@ -14,17 +14,18 @@ public class IPCameraFactory extends CameraFactory {
 
   /**
    * Creates a camera object as specified in camSpec.
-   * @param camSpec specification of the camera 0: type, 1: additional info.
+   * @param camSpec specification of the ipcamera.
    * @return Camera object.
    * @throws InvalidCameraTypeException when specified camera type can not be created.
    */
   public IPCamera createCamera(String[] camSpec) throws InvalidCameraTypeException {
-    switch (camSpec[0]) {
-      case "ipcamera" : CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
-      return createIpcamera(camSpec[1]);
-      default: CameraController.logger.log("Create IP camera object", LogEvent.Type.WARNING);
+    if ( camSpec == null || camSpec.length < 1 || camSpec[0] == null) {
+      CameraController.logger.log("Can't create Ipcamera object with specified info.",
+                                                                  LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
+    CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
+    return createIpcamera(camSpec[0]);
   }
   
   /**

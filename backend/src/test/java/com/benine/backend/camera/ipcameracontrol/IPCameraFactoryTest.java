@@ -24,14 +24,26 @@ public class IPCameraFactoryTest {
   
   @Test
   public void testIpcameraCreation() throws InvalidCameraTypeException{
-    String[] spec = {"ipcamera", "127.0.0.1:3000"};
+    String[] spec = {"127.0.0.1:3000"};
     Camera camera = handler.createCamera(spec);
     assertTrue(camera instanceof Camera);
   }
   
   @Test(expected = InvalidCameraTypeException.class)
   public void testCameraCreationException() throws InvalidCameraTypeException{
-    String[] spec = {"ip2camera", "127.0.0.1:3000"};
+    String[] spec = {};
+    handler.createCamera(spec);
+  }
+  
+  @Test(expected = InvalidCameraTypeException.class)
+  public void testCameraCreationExceptionNULLSpec() throws InvalidCameraTypeException{
+    String[] spec = null;
+    handler.createCamera(spec);
+  }
+  
+  @Test(expected = InvalidCameraTypeException.class)
+  public void testCameraCreationExceptionNULLString() throws InvalidCameraTypeException{
+    String[] spec = {null};
     handler.createCamera(spec);
   }
 
