@@ -265,4 +265,24 @@ public class PresetTest {
     preset1.addKeyWord("Overview");
     Assert.assertEquals(keyWords, preset1.getKeyWords());
   }
+  @Test
+  public void testRemoveKeyword() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addKeyWord("Violin");
+    preset1.addKeyWord(("Piano"));
+    preset1.removeKeyWord("Violin");
+    ArrayList<String>  keyWords = new ArrayList<>();
+    keyWords.add("Piano");
+    Assert.assertEquals(keyWords, preset1.getKeyWords());
+  }
+  @Test
+  public void testDuplicateKeyWords() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addKeyWord("Violin");
+    preset1.addKeyWord(("Violin"));
+    ArrayList<String>  keyWords = new ArrayList<>();
+    keyWords.add("Violin");
+    Assert.assertEquals(keyWords, preset1.getKeyWords());
+  }
+}
 }
