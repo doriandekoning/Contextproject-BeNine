@@ -103,8 +103,8 @@ public class LogEvent {
       StackTraceElement[] stacktrace = exception.getStackTrace();
       for (StackTraceElement e : stacktrace) {
         builder.append(e.toString());
-        builder.append("%n");
-        builder.append("%t");
+        builder.append(System.getProperty("line.separator"));
+        builder.append("     ");
       }
       builder.append(exception.getStackTrace().toString());
     }
