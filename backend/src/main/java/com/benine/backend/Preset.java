@@ -3,6 +3,9 @@ package com.benine.backend;
 import com.benine.backend.camera.Position;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A moving preset to be able to add to the database.
  * @author Ege
@@ -19,6 +22,7 @@ public class Preset {
   private boolean autoiris;
   private String image;
   private int presetid;
+  private ArrayList<String> keyWords;
 
   /**
    * Constructs a preset.
@@ -42,6 +46,23 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
+  }
+  /**
+   * Constructs a preset.
+   *
+   * @param pos       The position of this preset.
+   * @param zoom      The zoom of the preset
+   * @param focus     The focus of the prest
+   * @param iris      The iris of the preset
+   * @param autofocus The autofocus of the preset
+   * @param autoiris  The autoiris of the preset
+   * @param tiltspeed The tiltspeed of the preset
+   * @param panspeed  The panspeed of the preset
+   */
+  public Preset(Position pos, int zoom, int focus, int iris,
+                boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, List<String> keyWords) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autofocus);
+    this.keyWords = new ArrayList<String>(keyWords);
   }
 
   /**
@@ -130,6 +151,24 @@ public class Preset {
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
   }
+  
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public void setId(int id) {
+    this.presetid = id;
+  }
+
+  public int getId() {
+    return presetid;
+  }
+
+  public List<String> getKeyWords() { return keyWords; }
 
   @Override
   public int hashCode() {
@@ -188,23 +227,11 @@ public class Preset {
     if (autofocus != preset.autofocus) {
       return false;
     }
-    
+    if (!keyWords.equals(preset.getKeyWords())) {
+      return false;
+    }
     return true;
   }
 
-  public String getImage() {
-    return image;
-  }
 
-  public void setImage(String image) {
-    this.image = image;
-  }
-
-  public void setId(int id) {
-    this.presetid = id;
-  }
-  
-  public int getId() {
-    return presetid;
-  }
 }
