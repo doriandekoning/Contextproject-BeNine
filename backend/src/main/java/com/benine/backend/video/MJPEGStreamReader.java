@@ -27,21 +27,35 @@ public class MJPEGStreamReader {
         }
     }
 
-    private int checkNextByte() throws IOException {
-        int b = 0;
-
-        streamdata.mark(1);
-        b = streamdata.read();
+    private boolean checkJPEGBegin() throws IOException {
+        // Check next 2 bytes.
+        streamdata.mark(2);
+        int b1 = streamdata.read();
+        int b2 = streamdata.read();
         streamdata.reset();
 
-        return b;
+        // Check if JPEG Begin flag is found,
+        // this is FF D8, 255 216 in integers.
+        return (b1 == 255 && b2 == 216);
+    }
+
+    private boolean checkJPEGEnd() throws IOException {
+        // Check next 2 bytes.
+        streamdata.mark(2);
+        int b1 = streamdata.read();
+        int b2 = streamdata.read();
+        streamdata.reset();
+
+        // Check if JPEG Begin flag is found,
+        // this is FF D8, 255 216 in integers.
+        return (b1 == 255 && b2 == 217);
     }
 
     private Byte[] getImage() throws IOException {
         // We store the header in here.
         StringWriter header = new StringWriter(128);
 
-        while (checkNextByte() != 255) {
+        while (!checkJPEGBegin()) {
             header.write(streamdata.read());
         }
 
@@ -52,11 +66,11 @@ public class MJPEGStreamReader {
     }
 
     private int getContentLength(String header) {
-        Pattern number = Pattern.compile("-?\\d+");
-        Matcher matcher = number.matcher(header);
+        Pattern content_length = Pattern.compile("Content-Length: \\d+");
+        Matcher matcher = content_length.matcher(header);
 
         if (matcher.find()) {
-            return Integer.parseInt(matcher.group());
+            return Integer.parseInt(matcher.group().replaceAll("[^0-9]", ""));
         } else {
             return -1;
         }
