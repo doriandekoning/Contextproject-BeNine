@@ -169,13 +169,13 @@ public class Preset {
     return presetid;
   }
 
-  public List<String> getKeyWords() { return keyWords; }
+  public List<String> getKeywords() { return keyWords; }
 
   /**
    * Adds a new keyword to this class.
    * @param keyWord the keyword to add.
    */
-  public void addKeyWord(String keyWord) {
+  public void addKeyword(String keyWord) {
     keyWords.add(keyWord);
   }
 
@@ -183,10 +183,17 @@ public class Preset {
    * Adds a list of keywords to this class.
    * @return keyWords a list of keywords
    */
-  public void addKeyWords(List<String> keyWords) {
+  public void addKeywords(List<String> keyWords) {
     keyWords.forEach((s) -> this.keyWords.add(s));
   }
-  //TODO remove keyword method
+
+  /**
+   * Removes a keyword from this preset.
+   * @param keyWord the keyword to remove
+   */
+  public void removeKeyword(String keyWord) {
+    keyWords.remove(keyWord);
+  }
 
   @Override
   public int hashCode() {
@@ -245,7 +252,7 @@ public class Preset {
     if (autofocus != preset.autofocus) {
       return false;
     }
-    if (!keyWords.equals(preset.getKeyWords())) {
+    if (!keyWords.equals(preset.getKeywords())) {
       return false;
     }
     return true;

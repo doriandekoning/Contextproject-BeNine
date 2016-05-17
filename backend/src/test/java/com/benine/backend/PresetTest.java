@@ -221,39 +221,39 @@ public class PresetTest {
   @Test
   public void testAddKeyWord() {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset.addKeyWord("Violin");
-    preset.addKeyWord("Piano");
+    preset.addKeyword("Violin");
+    preset.addKeyword("Piano");
     List<String> keyWords = new ArrayList<String>();
     keyWords.add("Violin");
     keyWords.add("Piano");
-    Assert.assertEquals(keyWords, preset.getKeyWords());
+    Assert.assertEquals(keyWords, preset.getKeywords());
   }
   @Test
   public void testEqualsEqualKeywords() {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset1.addKeyWord("Violin");
-    preset2.addKeyWord("Violin");
+    preset1.addKeyword("Violin");
+    preset2.addKeyword("Violin");
     Assert.assertEquals(preset1, preset2);
   }
   @Test
   public void testEqualsNotEqualKeywords() {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset1.addKeyWord("Violin");
-    preset1.addKeyWord("Piano");
+    preset1.addKeyword("Violin");
+    preset1.addKeyword("Piano");
     Assert.assertNotEquals(preset1, preset2);
   }
   @Test
   public void testAddKeyWordList() {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset1.addKeyWord("Overview");
+    preset1.addKeyword("Overview");
     List<String> keyWords = new ArrayList<String>();
     keyWords.add("Violin");
     keyWords.add("Piano");
-    preset1.addKeyWords(keyWords);
+    preset1.addKeywords(keyWords);
     keyWords.add(0, "Overview");
-    Assert.assertEquals(keyWords, preset1.getKeyWords());
+    Assert.assertEquals(keyWords, preset1.getKeywords());
   }
   @Test
   public void testKeyWordsConstructor() {
@@ -262,27 +262,26 @@ public class PresetTest {
     keyWords.add("Piano");
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, keyWords);
     keyWords.add("Overview");
-    preset1.addKeyWord("Overview");
-    Assert.assertEquals(keyWords, preset1.getKeyWords());
+    preset1.addKeyword("Overview");
+    Assert.assertEquals(keyWords, preset1.getKeywords());
   }
   @Test
   public void testRemoveKeyword() {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset1.addKeyWord("Violin");
-    preset1.addKeyWord(("Piano"));
-    preset1.removeKeyWord("Violin");
+    preset1.addKeyword("Violin");
+    preset1.addKeyword(("Piano"));
+    preset1.removeKeyword("Violin");
     ArrayList<String>  keyWords = new ArrayList<>();
     keyWords.add("Piano");
-    Assert.assertEquals(keyWords, preset1.getKeyWords());
+    Assert.assertEquals(keyWords, preset1.getKeywords());
   }
   @Test
   public void testDuplicateKeyWords() {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
-    preset1.addKeyWord("Violin");
-    preset1.addKeyWord(("Violin"));
+    preset1.addKeyword("Violin");
+    preset1.addKeyword(("Violin"));
     ArrayList<String>  keyWords = new ArrayList<>();
     keyWords.add("Violin");
-    Assert.assertEquals(keyWords, preset1.getKeyWords());
+    Assert.assertEquals(keyWords, preset1.getKeywords());
   }
-}
 }
