@@ -86,7 +86,7 @@ public class ServerController {
   
   /**
    * Load camera's in camera controller.
-   * For now it just adds 2 simple camera's.
+   * Using the cameraCreator and the camera's specified in the main config.
    */
   private void loadCameras() {
     int i = 1;
