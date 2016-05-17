@@ -22,7 +22,7 @@ public class CameraCreator {
   }
 
   /**
-   * Private contstructor so there can only be one instance of the cameracreator.
+   * Private constructor so there can only be one instance of the cameracreator.
    */
   private CameraCreator() {
 

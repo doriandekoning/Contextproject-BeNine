@@ -98,23 +98,15 @@ public class SimpleCamera implements Camera {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    SimpleCamera other = (SimpleCamera) obj;
-    if (id != other.id)
-      return false;
-    if (!Arrays.equals(presetsFromCamera, other.presetsFromCamera))
-      return false;
-    if (streamLink == null) {
-      if (other.streamLink != null)
-        return false;
-    } else if (!streamLink.equals(other.streamLink))
-      return false;
-    return true;
+    if (obj instanceof SimpleCamera) {
+      SimpleCamera that = (SimpleCamera) obj;
+      if (Arrays.equals(presetsFromCamera, that.presetsFromCamera) 
+          && this.id == that.id
+          && this.getStreamLink().equals(that.getStreamLink())) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
