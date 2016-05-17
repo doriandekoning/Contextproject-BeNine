@@ -8,6 +8,7 @@ import org.junit.Test;
 import com.benine.backend.camera.Position;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -226,7 +227,7 @@ public class PresetTest {
     List<String> keyWords = new ArrayList<String>();
     keyWords.add("Violin");
     keyWords.add("Piano");
-    Assert.assertEquals(keyWords, preset.getKeywords());
+    Assert.assertEquals(new HashSet<String>(keyWords), preset.getKeywords());
   }
   @Test
   public void testEqualsEqualKeywords() {
@@ -252,8 +253,8 @@ public class PresetTest {
     keyWords.add("Violin");
     keyWords.add("Piano");
     preset1.addKeywords(keyWords);
-    keyWords.add(0, "Overview");
-    Assert.assertEquals(keyWords, preset1.getKeywords());
+    keyWords.add("Overview");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getKeywords());
   }
   @Test
   public void testKeyWordsConstructor() {
@@ -263,7 +264,7 @@ public class PresetTest {
     Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, keyWords);
     keyWords.add("Overview");
     preset1.addKeyword("Overview");
-    Assert.assertEquals(keyWords, preset1.getKeywords());
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getKeywords());
   }
   @Test
   public void testRemoveKeyword() {
@@ -273,7 +274,7 @@ public class PresetTest {
     preset1.removeKeyword("Violin");
     ArrayList<String>  keyWords = new ArrayList<>();
     keyWords.add("Piano");
-    Assert.assertEquals(keyWords, preset1.getKeywords());
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getKeywords());
   }
   @Test
   public void testDuplicateKeyWords() {
@@ -282,6 +283,6 @@ public class PresetTest {
     preset1.addKeyword(("Violin"));
     ArrayList<String>  keyWords = new ArrayList<>();
     keyWords.add("Violin");
-    Assert.assertEquals(keyWords, preset1.getKeywords());
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getKeywords());
   }
 }
