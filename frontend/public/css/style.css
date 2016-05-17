@@ -139,6 +139,14 @@ input[type=range]:focus {
 	outline: none;
 }
 
+/* modals */
+.modal img {
+    position: relative;
+	left: 500px;
+    height: 250px;
+    width: 350px;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
 	height: 28vw;

@@ -226,7 +226,7 @@ function toggleButton(btn){
 * Function to handle a click on a preset.
 * @param t is the div on which is clicked.
 */
-function presetcall(t){
+function presetcall(t) {
 	var presetID = t.attr("presetid");
 	if (presetID !== undefined) {
 		var title = t.find('h5');
@@ -237,5 +237,20 @@ function presetcall(t){
 		title.addClass("selected");
 		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {});
 		console.log(t.attr("presetid"));
+	}
+}
+
+/**
+* Load everyting to create a preset.
+*/
+function loadCreatePreset() {
+	if (currentcamera != 0) {
+		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
+	}
+}
+
+function createPreset() 
+	if (currentcamera != 0) {
+		$.get("/api/backend/camera/"+ currentcamera + "/createpreset" , function(data) {});
 	}
 }
