@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * A moving preset to be able to add to the database.
@@ -23,7 +24,8 @@ public class Preset {
   private boolean autoiris;
   private String image;
   private int presetid;
-  private Set<String> keyWords = new HashSet<String>();
+  private Set<String> tags = new HashSet<String>();
+  private static Set<String> keywords = new HashSet<String>();
 
   /**
    * Constructs a preset.
@@ -65,7 +67,7 @@ public class Preset {
                 boolean autofocus, int panspeed, int tiltspeed,
                 boolean autoiris, List<String> keyWords) {
     this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris);
-    this.keyWords.addAll(keyWords);
+    this.tags.addAll(keyWords);
   }
 
   /**
@@ -87,7 +89,7 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
-    json.put("keywords", keyWords);
+    json.put("keywords", tags);
 
     return json.toString();
   }
@@ -172,32 +174,54 @@ public class Preset {
     return presetid;
   }
 
-  public Set<String> getKeywords() {
-    return keyWords;
+  public Set<String> getTags() {
+    return tags;
+  }
+
+  public static Set<String> getKeywords() {
+    return keywords;
   }
 
   /**
-   * Adds a new keyword to this class.
-   * @param keyWord the keyword to add.
+   * Adds a new tag to this object.
+   * @param tag the tag to add.
    */
-  public void addKeyword(String keyWord) {
-    keyWords.add(keyWord);
+  public void addTag(String tag) {
+    tags.add(tag);
   }
+
 
   /**
    * Adds a list of keywords to this class.
-   * @param keyWords a list of keywords
+   * @param tags a list of keywords
    */
-  public void addKeywords(List<String> keyWords) {
-    this.keyWords.addAll(keyWords);
+  public void addTags(List<String> tags) {
+    this.tags.addAll(tags);
   }
 
   /**
    * Removes a keyword from this preset.
-   * @param keyWord the keyword to remove
+   * @param tag the keyword to remove
    */
-  public void removeKeyword(String keyWord) {
-    keyWords.remove(keyWord);
+  public void removeTag(String tag) {
+    tags.remove(tag);
+  }
+
+
+  /**
+   * Removes a keyword.
+   * @param keyword the keyword to remove
+   */
+  public static void removeKeyword(String keyword) {
+    keywords.remove(keyword);
+  }
+
+  /**
+   * Adds a new keyword.
+   * @param keyword keyword to add
+   */
+  public static void addKeyword(String keyword) {
+    keywords.add(keyword);
   }
 
   @Override
@@ -211,7 +235,7 @@ public class Preset {
     result = prime * result + panspeed;
     result = prime * result + tiltspeed;
     result = prime * result + zoom;
-    result = prime * result + keyWords.hashCode();
+    result = prime * result + tags.hashCode();
     return result;
   }
 
@@ -258,7 +282,7 @@ public class Preset {
     if (autofocus != preset.autofocus) {
       return false;
     }
-    if (!keyWords.equals(preset.getKeywords())) {
+    if (!tags.equals(preset.getTags())) {
       return false;
     }
     return true;
