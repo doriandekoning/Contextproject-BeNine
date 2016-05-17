@@ -1,7 +1,7 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Config;
-import com.benine.backend.Main;
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
@@ -29,13 +29,22 @@ import java.util.ArrayList;
 public class MySQLDatabase implements Database {
   private Connection connection;
   private int presetId;
+  private String user;
+  private String password;
+  private Logger logger;
 
   /**
    * Constructor of a MySQL Database.
+   * @param user username used to connect to the database.
+   * @param password used to connect to the databse.
+   * @param logger used to log important info. 
    */
-  public MySQLDatabase() {
+  public MySQLDatabase(String user, String password, Logger logger) {
     connection = null;
     presetId = 0;
+    this.user = user;
+    this.password = password;
+    this.logger = logger;
   }
 
   @Override
@@ -168,19 +177,18 @@ public class MySQLDatabase implements Database {
 
   @Override
   public boolean connectToDatabaseServer() {
-    Config config = Main.getConfig();
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
           + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-      connection = DriverManager.getConnection(connect, config.getValue("sqluser"),
-          config.getValue("sqlpassword"));
+      connection = DriverManager.getConnection(connect, user, password);
     } catch (Exception e) {
       e.printStackTrace();
     }
     try {
       return !connection.isClosed();
     } catch (Exception e) {
+      logger.log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
     }
@@ -198,6 +206,7 @@ public class MySQLDatabase implements Database {
       }
       databaseNames.close();
     } catch (Exception e) {
+      logger.log("Database check failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
     return false;
@@ -216,6 +225,7 @@ public class MySQLDatabase implements Database {
       sr.runScript(reader);
       presetId = 0;
     } catch (Exception e) {
+      logger.log("Database is not reseted.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
   }
@@ -226,22 +236,31 @@ public class MySQLDatabase implements Database {
       try {
         connection.close();
       } catch (Exception e) {
+        logger.log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
         e.printStackTrace();
       }
     }
   }
 
   @Override
-  public void addCamera(int id, String ip) throws SQLException {
-    Statement statement = connection.createStatement();
+  public void addCamera(int id, String ip) {
+    Statement statement = null;
     try {
+      statement = connection.createStatement();
       final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
                                                                                   id, ip);
       statement.executeUpdate(sql);
       statement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      logger.log("Camera couldn't be added", LogEvent.Type.CRITICAL);
     } finally {
       if (statement != null) {
-        statement.close();
+        try {
+          statement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
       }
     }
   }
@@ -281,6 +300,7 @@ public class MySQLDatabase implements Database {
       return preset;
     } catch (Exception e) {
       e.printStackTrace();
+      logger.log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
