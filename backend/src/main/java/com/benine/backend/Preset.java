@@ -210,6 +210,7 @@ public class Preset {
     result = prime * result + panspeed;
     result = prime * result + tiltspeed;
     result = prime * result + zoom;
+    result = prime * result + keyWords.hashCode();
     return result;
   }
 
