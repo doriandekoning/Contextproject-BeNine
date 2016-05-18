@@ -46,8 +46,8 @@ public class CameraControlTest {
     IPCamera mockcamera = mock(IPCamera.class);
     when(mockcamera.getStreamLink()).thenReturn("http://83.128.144.84:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture&usr=user&pwd=geheim");
     when(mockcamera.getId()).thenReturn(1);
-    when(mockcamera.getFocusPos()).thenReturn(40);
-    when(mockcamera.getIrisPos()).thenReturn(60);
+    when(mockcamera.getFocusPosition()).thenReturn(40);
+    when(mockcamera.getIrisPosition()).thenReturn(60);
     when(mockcamera.getPosition()).thenReturn(new Position(10, 20));
     when(mockcamera.getZoomPosition()).thenReturn(30);
     

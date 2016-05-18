@@ -92,7 +92,7 @@ public class RecallPresetTest {
   @Test
   public void testMovingCameraIrisPosition() throws CameraConnectionException {
     recallHandler.movingCamera(ipcamera, preset);
-    verify(ipcamera).setIrisPos(preset.getIris());
+    verify(ipcamera).setIrisPosition(preset.getIris());
   }
 
   @Test

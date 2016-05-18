@@ -52,7 +52,7 @@ public class IrisHandler extends RequestHandler {
         irisCam.setAutoIrisOn(autoOnBool);
       }
       if (setPos != null) {
-        irisCam.setIrisPos(Integer.parseInt(setPos));
+        irisCam.setIrisPosition(Integer.parseInt(setPos));
       }
     } catch (Exception e) {
       getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
