@@ -67,13 +67,11 @@ function setCurrentCamera(id) {
 		iris.hide();
 	} else {
 		iris.show();
-		$('.irisslider').val(cameras[id].iris);
 	}
 	if  (cameras[id].focus === undefined) {
 		focus.hide();
 	} else {
 		focus.show();
-		$('.focusslider').val(cameras[id].focus);
 	}
 
 	loadPresets(currentcamera);
