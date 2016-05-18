@@ -47,11 +47,10 @@ public class PresetHandler extends RequestHandler {
       Attributes parsedURI = parseURI(exchange.getRequestURI().getQuery());
       JSONArray json = new JSONArray();
       String tag = parsedURI.getValue("tag");
-      ServerController.getInstance().getPresets();
-      for (Preset preset : ServerController.getInstance().getPresets()) {
-        if(tag == null || preset.getTags().contains(tag)) {
-          json.add(preset.toJSON());
-        }
+      ArrayList<Preset> presets = ServerController.getInstance()
+              .getPresetController().getPresetsByTag(tag);
+      for (Preset preset : presets) {
+        json.add(preset.toJSON());
       }
 
       

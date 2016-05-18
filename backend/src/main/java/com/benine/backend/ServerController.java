@@ -32,7 +32,7 @@ public class ServerController {
 
   private HttpController httpController;
 
-  private ArrayList<Preset> presets;
+  private PresetController presetController;
   
   /**
    * Constructor of the server controller.
@@ -47,6 +47,8 @@ public class ServerController {
     database = loadDatabase();
 
     cameraController = new CameraController();
+
+    presetController = new PresetController();
 
     loadCameras();
   }
@@ -107,7 +109,7 @@ public class ServerController {
    */
   private void loadPresets() {
     try {
-      presets = database.getAllPresets();
+       presetController.addPresets(database.getAllPresets());
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }
@@ -225,11 +227,11 @@ public class ServerController {
   }
 
   /**
-   * Getter for presets
-   * @return Returns the presets.
+   * Getter for presetController
+   * @return Returns the presetController.
    */
-  public ArrayList<Preset> getPresets() {
-    return presets;
+  public PresetController getPresetController() {
+    return presetController;
   }
 
   /**
