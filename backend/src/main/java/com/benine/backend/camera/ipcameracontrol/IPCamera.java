@@ -393,7 +393,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
       json.put("iris", new Double(getIrisPos()));
       json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
-      json.put("videostream", Boolean.valueOf(getStreamLink()));
+      json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
       System.out.println(e.toString());
