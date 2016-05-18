@@ -79,6 +79,8 @@ function setCurrentCamera(id) {
 	loadPresets(currentcamera);
 }
 
+
+
 /**
 * Function loads the presets of this camera in the preset window.
 * @param cameraID the presets of this camera are loaded.
@@ -90,7 +92,7 @@ function loadPresets(cameraID) {
 	preset_area.find('img').removeAttr("src");
 	preset_area.find('h5').removeClass();
 	Holder.run({images:"#preset_area img"})
-	$.get("/api/backend/camera/" + cameraID + "/preset", function(data) {
+	$.get("/api/backend/camera/" + cameraID + "/preset?bla=5", function(data) {
 		obj = JSON.parse(data);
 		console.log(obj);
 		presets = obj.presets;
@@ -226,7 +228,39 @@ function toggleButton(btn){
 * Handles input on the tag search field.
 */
 function tagSearchInput(t) {
-	console.log(t.val());
+	if(currentcamera !== undefined) {
+		if (!t.val()) {
+			$.get("/api/backend/camera/"+ currentcamera + "/preset?bla=5" , function(data) {loadPresetsOnTag(JSON.parse(data));});
+		} else {
+			$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
+			
+		}
+		//console.log(t.val());
+	}
+}
+
+/**
+* Function loads the presets of this camera in the preset window.
+* @param presets object
+*/
+function loadPresetsOnTag(obj) {
+	var preset_div, obj, presets, place, preset, preset_area;
+	preset_area = $('#preset_area');
+	preset_area.find('div').removeAttr("presetID");
+	preset_area.find('img').removeAttr("src");
+	preset_area.find('h5').removeClass();
+	Holder.run({images:"#preset_area img"})
+	presets = obj.presets;
+	place = 1;
+	for (var p in presets) {
+		if ($('#preset_'+ place) !== undefined) {
+			preset = JSON.parse(presets[p]);
+			preset_div = $('#preset_' + place);
+			preset_div.find('img').attr("src", "/api/backend" + preset.image);
+			preset_div.attr("presetID", preset.id);
+			place++;
+		}
+	}
 }
 
 /**

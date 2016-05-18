@@ -109,7 +109,11 @@ public class ServerController {
    */
   private void loadPresets() {
     try {
-       presetController.addPresets(database.getAllPresets());
+      presetController.addPresets(database.getAllPresets());
+      //Should be removed
+      presetController.getPresetById(1).addTag("test");
+      presetController.getPresetById(2).addTag("test");
+      presetController.getPresetById(3).addTag("test");
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }

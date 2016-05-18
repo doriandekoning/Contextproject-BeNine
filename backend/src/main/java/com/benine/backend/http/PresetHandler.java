@@ -42,13 +42,17 @@ public class PresetHandler extends RequestHandler {
     int cameraId = getCameraId(exchange);
     String response =  "";
 
-
     try {
       Attributes parsedURI = parseURI(exchange.getRequestURI().getQuery());
       JSONArray json = new JSONArray();
       String tag = parsedURI.getValue("tag");
-      ArrayList<Preset> presets = ServerController.getInstance()
+      ArrayList<Preset> presets = new ArrayList<Preset>();
+      if (tag == null) {
+        presets = ServerController.getInstance().getDatabase().getAllPresets();
+      } else {
+        presets = ServerController.getInstance()
               .getPresetController().getPresetsByTag(tag);
+      }
       for (Preset preset : presets) {
         json.add(preset.toJSON());
       }
@@ -58,7 +62,7 @@ public class PresetHandler extends RequestHandler {
       jsonObject.put("presets", json);
       response = jsonObject.toString();
       
-    } catch (MalformedURIException e) {
+    } catch (MalformedURIException | SQLException e) {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
