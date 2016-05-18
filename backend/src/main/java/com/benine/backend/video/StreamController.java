@@ -4,6 +4,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class StreamController {
   }
 
   /**
-   * Adds a camera to the HashMap containing all streams.
+   * Adds a camera to the HashMap containing all streams if there is a stream available.
    * @param cam a Camera object.
    */
   public void addCamera(Camera cam) {
@@ -64,9 +65,14 @@ public class StreamController {
     String streamLink = getStreamLink(cam);
     StreamType type = verifyType(cam);
 
-    switch (type) {
-      case MJPEG: return new MJPEGStreamReader(new Stream(streamLink));
-      default: return null;
+    try {
+      switch (type) {
+        case MJPEG: return new MJPEGStreamReader(new Stream(streamLink));
+        default: return null;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
 
   }

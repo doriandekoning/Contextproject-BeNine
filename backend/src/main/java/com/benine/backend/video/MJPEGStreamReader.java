@@ -24,8 +24,8 @@ public class MJPEGStreamReader extends StreamReader {
    * @param url The url fo the stream.
    * @throws IOException if the inputstream cannot be read.
    */
-  public MJPEGStreamReader(String url) {
-    this(new Stream(url));
+  public MJPEGStreamReader(String url) throws IOException {
+      this(new Stream(url));
   }
 
   /**

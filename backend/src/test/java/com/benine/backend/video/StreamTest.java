@@ -5,8 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class StreamTest {
@@ -14,7 +15,7 @@ public class StreamTest {
   private Stream stream;
 
   @Before
-  public void init() throws MalformedURLException {
+  public void init() throws IOException {
     stream = new Stream(new File("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg").toURI().toURL().toString());
   }
 
@@ -34,10 +35,8 @@ public class StreamTest {
     Assert.assertFalse(Arrays.equals(expected, actual));
   }
 
-  @Test
-  public void testStreamIncorrectStream() throws MalformedURLException {
+  @Test (expected = IOException.class)
+  public void testStreamIncorrectStream() throws IOException {
     Stream testStream = new Stream(new File("nonexistent").toURI().toURL().toString());
-
-    Assert.assertNull(testStream.getInputStream());
   }
 }
