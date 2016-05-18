@@ -25,7 +25,7 @@ public class ServerController {
   private CameraController cameraController;
 
   private StreamController streamController;
-  
+
   private Database database;
   
   private boolean running;
@@ -153,7 +153,16 @@ public class ServerController {
   public CameraController getCameraController() {
     return cameraController;
   }
-  
+
+  /**
+   * Returns the streamController.
+   * @return the streamController
+   */
+  public StreamController getStreamController() {
+    return streamController;
+  }
+
+
   /**
    * Sets the cameraController.
    * @param cameraController the cameracontroller
