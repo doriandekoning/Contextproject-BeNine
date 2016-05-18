@@ -3,7 +3,9 @@ package com.benine.backend.database;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
@@ -263,6 +265,36 @@ public class MySQLDatabase implements Database {
         }
       }
     }
+  }
+
+  @Override
+  public ArrayList<Camera> getAllCameras() throws SQLException {
+    ArrayList<Camera> list = new ArrayList<Camera>();
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT ID, IPadress FROM camera";
+      ResultSet resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        IPCamera camera = new IPCamera(resultset.getString("IPadress"));
+        camera.setId(resultset.getInt("ID"));
+        list.add(camera);
+      }
+      statement.close();
+      resultset.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      logger.log("Cameras could not be get from database.", LogEvent.Type.CRITICAL);
+    } finally {
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return list;
   }
 
   @Override

@@ -94,6 +94,14 @@ public class CameraController {
   }
 
   /**
+   * Get all the cameras from the database.
+   * @throws SQLException
+   */
+  public void getCamerasFromDatabase() throws SQLException {
+    cameras = getDatabase().getAllCameras();
+  }
+
+  /**
    * Reset the database with the new presets.
    * @throws SQLException No right connection found
    */

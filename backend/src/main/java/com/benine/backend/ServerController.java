@@ -68,6 +68,7 @@ public class ServerController {
         Integer.parseInt(config.getValue("serverport")), logger);
     startupDatabase();
     try {
+      cameraController.getCamerasFromDatabase();
       cameraController.getPresetsFromDatabase();
     } catch (SQLException e) {
       e.printStackTrace();
