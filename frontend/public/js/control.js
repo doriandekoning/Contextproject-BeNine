@@ -164,7 +164,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + (49.5  + (4.95*focus)) , function(data) {});
 	console.log("Focus: " + focus);
 }
 
@@ -176,7 +176,7 @@ function inputfocusslider(focus) {
 function inputirisslider(iris) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + (49.5 + (4.95*iris)) , function(data) {});
 	console.log("Iris: "+ iris);
 }
 

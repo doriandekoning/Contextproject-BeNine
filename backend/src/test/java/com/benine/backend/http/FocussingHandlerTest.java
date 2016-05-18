@@ -63,7 +63,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).moveFocus(72);
+    verify(cam).moveFocus(5);
   }
 
 

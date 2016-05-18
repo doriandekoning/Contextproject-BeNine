@@ -120,6 +120,6 @@ public class IrisHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).moveIris(72);
+    verify(cam).moveIris(5);
   }
 }
