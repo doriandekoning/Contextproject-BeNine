@@ -60,8 +60,10 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
     CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
-    sendCommand("%23APS" + convertPanToHex(pos.getPan()) + convertTiltToHex(pos.getTilt()) 
-                    + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
+    sendCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
+                    + convertTiltToHex(pos.getTilt()).toUpperCase()
+                    + convertPanSpeedtoHex(panSpeed).toUpperCase()
+                    + convertTiltSpeed(tiltSpeed));
   }
   
   /**
@@ -187,7 +189,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
-    sendCommand("%23AXF" + Integer.toHexString(pos + 1365));
+    sendCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
   }
 
   /**
@@ -321,10 +323,11 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws CameraConnectionException {
-    CameraController.logger.log("Zoom to zoom position.", LogEvent.Type.INFO);
+    CameraController.logger.log("Zoom to " + zpos + " position.", LogEvent.Type.INFO);
+    zpos = (int) ((zpos / 100.0) * 2730.0);
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
-    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
+    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
   }
 
   /**
@@ -357,6 +360,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
+    CameraController.logger.log("Send command: " + cmd + " to camera: " + id, LogEvent.Type.INFO);
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1");
       URLConnection con = url.openConnection();
