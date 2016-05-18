@@ -7,6 +7,11 @@ import org.junit.Test;
 
 import com.benine.backend.camera.Position;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by dorian on 3-5-16.
  */
@@ -14,7 +19,9 @@ public class PresetTest {
 
   @Test
   public void testToJSON() throws JSONException {
-    Preset preset = new Preset(new Position(10, 12), 13, 40, 56, true, 1, 2, false);
+    ArrayList<String> keywords = new ArrayList<String>();
+    keywords.add("foo");
+    Preset preset = new Preset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, keywords);
     String json = preset.toJSON();
     JSONObject jsonObject = new JSONObject(json);
     Assert.assertEquals(10.0, jsonObject.get("pan"));
@@ -26,6 +33,7 @@ public class PresetTest {
     Assert.assertEquals(1, jsonObject.get("panspeed"));
     Assert.assertEquals(2, jsonObject.get("tiltspeed"));
     Assert.assertEquals(false, jsonObject.get("autoiris"));
+    Assert.assertEquals("foo", jsonObject.getJSONArray("keywords").get(0));
   }
 
   @Test
@@ -213,5 +221,87 @@ public class PresetTest {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
     Assert.assertEquals(preset, preset2);
+  }
+
+  @Test
+  public void testAddTag() {
+    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset.addTag("Violin");
+    preset.addTag("Piano");
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset.getTags());
+  }
+  @Test
+  public void testEqualsEqualTags() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addTag("Violin");
+    preset2.addTag("Violin");
+    Assert.assertEquals(preset1, preset2);
+  }
+  @Test
+  public void testEqualsNotEqualTags() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    Preset preset2 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addTag("Violin");
+    preset1.addTag("Piano");
+    Assert.assertNotEquals(preset1, preset2);
+  }
+  @Test
+  public void testAddTagList() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addTag("Overview");
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    preset1.addTags(keyWords);
+    keyWords.add("Overview");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
+  }
+  @Test
+  public void testTagsConstructor() {
+    List<String> keyWords = new ArrayList<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, keyWords);
+    keyWords.add("Overview");
+    preset1.addTag("Overview");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
+  }
+  @Test
+  public void testRemoveTag() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addTag("Violin");
+    preset1.addTag(("Piano"));
+    preset1.removeTag("Violin");
+    ArrayList<String>  keyWords = new ArrayList<>();
+    keyWords.add("Piano");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
+  }
+  @Test
+  public void testDuplicateKeyWords() {
+    Preset preset1 = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false);
+    preset1.addTag("Violin");
+    preset1.addTag(("Violin"));
+    ArrayList<String>  keyWords = new ArrayList<>();
+    keyWords.add("Violin");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
+  }
+
+  @Test
+  public void testAddKeyWord() {
+    Preset.addKeyword("foo");
+    // Since this is static and we don't know what other test cases will do
+    // we'll just check if it contains foo instead of comparing it to an expected set
+    Assert.assertTrue(Preset.getKeywords().contains("foo"));
+  }
+
+  @Test
+  public void testRemoveKeyWord() {
+    Preset.addKeyword("bar");
+    Preset.removeKeyword("bar");
+    Assert.assertFalse(Preset.getKeywords().contains("bar"));
   }
 }
