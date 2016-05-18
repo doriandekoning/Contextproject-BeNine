@@ -10,6 +10,14 @@ public class PresetController {
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
   /**
+   * Removes a preset from this presetcontroller.
+   * @param preset the preset to remove.
+   */
+  public void removePreset(Preset preset) {
+    presets.remove(preset);
+  }
+
+  /**
    * Add a preset to be controlled by this presetcontroller.
    * @param preset the preset to add.
    */
