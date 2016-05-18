@@ -23,10 +23,12 @@ public class Main {
 
     try {
       MJPEGStreamReader stream1 = new MJPEGStreamReader(new URL("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100"));
-      new Thread(stream1).start();
+      Thread t1 = new Thread(stream1);
+      t1.start();
 
       MJPEGStreamReader stream2 = new MJPEGStreamReader(new URL("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg"));
       new Thread(stream2).start();
+
 
     } catch (IOException e) {
       e.printStackTrace();

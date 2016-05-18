@@ -30,19 +30,22 @@ public class MJPEGStreamReader implements Runnable {
 
     @Override
     public void run() {
-        processStream();
+        while (!Thread.interrupted()) {
+            processStream();
+        }
     }
 
+    /**
+     * Processes a stream by fetching an image
+     * from the stream and updating the lates snapshot.
+     */
     public void processStream() {
-        while (true) {
-            try {
-                // Get an image, processing the stream.
-                byte[] image = getImage();
-                snapShot = image;
+        try {
+            byte[] image = getImage();
+            snapShot = image;
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
