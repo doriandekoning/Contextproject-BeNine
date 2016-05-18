@@ -45,9 +45,9 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
-	
+
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
@@ -75,7 +75,7 @@ function setCurrentCamera(id) {
 		focus.show();
 		$('.focusslider').val(cameras[id].focus);
 	}
-	
+
 	loadPresets(currentcamera);
 }
 
@@ -154,7 +154,7 @@ function sendMove(distance, angle){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom , function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
