@@ -15,7 +15,6 @@ public class MJPEGStreamReaderTest {
 
   private Stream stream = mock(Stream.class);
   private MJPEGStreamReader mjpegstream;
-  private Thread thread;
   private byte[] firstframe;
   private byte[] secondframe;
 
@@ -25,9 +24,8 @@ public class MJPEGStreamReaderTest {
       when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
       mjpegstream = new MJPEGStreamReader(stream);
 
-      firstframe = IOUtils.toByteArray(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "firstframe.jpg")));
-      secondframe = IOUtils.toByteArray(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "secondframe.jpg")));
-      thread = new Thread(mjpegstream);
+      firstframe = IOUtils.toByteArray(new FileInputStream("resources" + File.separator + "test" + File.separator + "firstframe.jpg"));
+      secondframe = IOUtils.toByteArray(new FileInputStream("resources" + File.separator + "test" + File.separator + "secondframe.jpg"));
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -61,6 +59,48 @@ public class MJPEGStreamReaderTest {
 
     // Check if second frame is correct.
     // First frame is read on construction.
+    mjpegstream.processStream();
+
+    baos = new ByteArrayOutputStream();
+    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    baos.flush();
+    byte[] actual = baos.toByteArray();
+    baos.close();
+
+    Assert.assertArrayEquals(expected, actual);
+  }
+
+  @Test
+  public void testFirstIncorrectHeader() throws IOException {
+    when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg_incorrect.mjpg")));
+    mjpegstream = new MJPEGStreamReader(stream);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(firstframe)), "jpg", baos);
+    baos.flush();
+    byte[] expected = baos.toByteArray();
+    baos.close();
+
+    baos = new ByteArrayOutputStream();
+    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    baos.flush();
+    byte[] actual = baos.toByteArray();
+    baos.close();
+
+    Assert.assertArrayEquals(expected, actual);
+  }
+
+  @Test
+  public void testFirstNoHeaderNextImage() throws IOException {
+    when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg_incorrect.mjpg")));
+    mjpegstream = new MJPEGStreamReader(stream);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(secondframe)), "jpg", baos);
+    baos.flush();
+    byte[] expected = baos.toByteArray();
+    baos.close();
+
     mjpegstream.processStream();
 
     baos = new ByteArrayOutputStream();

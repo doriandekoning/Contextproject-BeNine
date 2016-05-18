@@ -1,10 +1,7 @@
 package com.benine.backend.video;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,11 +42,15 @@ public class MJPEGStreamReader implements Runnable {
 
   /**
    * Processes a stream by fetching an image
-   * from the stream and updating the latest snapshot.
+   * from the stream and updating the snapshot if possible.
    */
   public void processStream() {
     try {
-      snapShot = getImage();
+      byte[] image = getImage();
+
+      if (image != null) {
+        snapShot = image;
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -81,9 +82,14 @@ public class MJPEGStreamReader implements Runnable {
    * @return true if header, false if not header.
    * @throws IOException when the next bytes cannot be read from the stream.
    */
-  private boolean checkJPEGHeader() throws IOException {
+  private boolean isJPEGHeader() throws IOException {
     int[] byteArray = checkNextBytes(2);
     return (byteArray[0] == 255 && byteArray[1] == 216);
+  }
+
+  private boolean isJPEGTrailer() throws IOException {
+    int[] byteArray = checkNextBytes(2);
+    return (byteArray[0] == 255 && byteArray[1] == 217);
   }
 
   /**
@@ -96,7 +102,16 @@ public class MJPEGStreamReader implements Runnable {
     String header = getHeader();
     int contentLength = getContentLength(header);
 
-    // Now use the content length to extract the jpeg.
+    if (contentLength != -1) {
+      // We know a content length, use the efficient way.
+      return readJPEG(contentLength);
+    } else {
+      // We don't know a content length, look for the jpeg trailer manually.
+      return readJPEG();
+    }
+  }
+
+  public byte[] readJPEG(int contentLength) throws IOException {
     byte[] image = new byte[contentLength];
 
     int offset = 0;
@@ -110,6 +125,16 @@ public class MJPEGStreamReader implements Runnable {
     return image;
   }
 
+  public byte[] readJPEG() throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    while(!isJPEGTrailer()) {
+      baos.write(bufferedStream.read());
+    }
+
+    return baos.toByteArray();
+  }
+
   /**
    * Returns a string representation of the header.
    *
@@ -119,10 +144,11 @@ public class MJPEGStreamReader implements Runnable {
   private String getHeader() throws IOException {
     StringWriter header = new StringWriter(128);
 
-    while (!checkJPEGHeader()) {
+    while (!isJPEGHeader()) {
       header.write(bufferedStream.read());
     }
 
+    System.out.println(header.toString());
     return header.toString();
   }
 
@@ -130,7 +156,7 @@ public class MJPEGStreamReader implements Runnable {
    * Looks for the Content-Length: tag in the header, and extracts the value.
    *
    * @param header A header string.
-   * @return -1 if content-length not found, else content length.
+   * @return 0 if content-length not found, else content length.
    */
   private int getContentLength(String header) {
     Pattern contentLength = Pattern.compile("Content-Length: \\d+");

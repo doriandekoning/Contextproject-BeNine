@@ -7,7 +7,6 @@ import java.net.URLConnection;
 
 public class Stream {
 
-  private URL streamURL;
   private URLConnection connection;
   private InputStream inputstream;
 
@@ -16,21 +15,21 @@ public class Stream {
    * @param url The url to get the stream from.
    */
   public Stream(URL url) {
-    this.streamURL = url;
-    this.connection = openConnection();
+    openConnection(url);
     this.inputstream = fetchInputStream();
   }
 
   /**
    * Opens a connection to the stream.
-   * @return  The connection.
    */
-  private URLConnection openConnection() {
+  private void openConnection(URL streamURL) {
     try {
-      return streamURL.openConnection();
+      URLConnection conn = streamURL.openConnection();
+      conn.setConnectTimeout(1000);
+
+      this.connection = conn;
     } catch (IOException e) {
       e.printStackTrace();
-      return null;
     }
   }
 
@@ -48,11 +47,10 @@ public class Stream {
   }
 
   /**
-   * Returns the inputstream.
-   * @return  The inputstream.
+   * Returns the inputstream of this Stream.
+   * @return  An inputstream which can be read.
    */
   public InputStream getInputStream() {
     return this.inputstream;
   }
-
 }
