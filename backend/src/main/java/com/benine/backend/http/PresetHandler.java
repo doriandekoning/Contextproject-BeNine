@@ -4,7 +4,9 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
+import com.sun.corba.se.spi.activation.Server;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,24 +42,21 @@ public class PresetHandler extends RequestHandler {
     int cameraId = getCameraId(exchange);
     String response =  "";
 
-    
-    ArrayList<Preset> presets = new ArrayList<Preset>();
 
     try {
       Attributes parsedURI = parseURI(exchange.getRequestURI().getQuery());
       JSONArray json = new JSONArray();
       String tag = parsedURI.getValue("tag");
-      for (Camera cam : getCameraController().getCameras()) {
-        for (Preset preset : cam.getPresets()) {
-          if(tag == null || preset.equals(tag)) {
-            json.add(preset.toJSON());
-          }
+      ServerController.getInstance().getPresets();
+      for (Preset preset : ServerController.getInstance().getPresets()) {
+        if(tag == null || preset.getTags().contains(tag)) {
+          json.add(preset.toJSON());
         }
       }
 
       
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("presets", json.toString());
+      jsonObject.put("presets", json);
       response = jsonObject.toString();
       
     } catch (MalformedURIException e) {

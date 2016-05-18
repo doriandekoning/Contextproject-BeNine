@@ -43,9 +43,10 @@ public class PresetHandlerTest {
     serverController = ServerController.getInstance();
     serverController.setDatabase(database);
     serverController.setCameraController(camController);
+    serverController.start();
     logger = mock(Logger.class);
     handler = new PresetHandler(logger);  
-    
+
     out = mock(OutputStream.class);
   }
 
@@ -56,18 +57,21 @@ public class PresetHandlerTest {
     when(exchange.getResponseBody()).thenReturn(out);
     Camera cam = mock(Camera.class);
     camController.addCamera(cam);
-    Preset[] presets = {new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true),
-                      new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true)};
-    presets[0].addTag("Piano");
-    presets[1].addTag("Violin");
-    when(cam.getPresets()).thenReturn(presets);
+    ArrayList<Preset> presets = new ArrayList<Preset>();
+    presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true));
+    presets.add(new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true));
+    presets.get(0).addTag("Piano");
+    presets.get(1).addTag("Violin");
+    when(database.getAllPresets()).thenReturn(presets);
+    serverController.setDatabase(database);
     handler.handle(exchange);
     JSONObject obj = new JSONObject();
     JSONArray ar = new JSONArray();
-    ar.add(presets[0].toJSON());
+    ar.add(presets.get(0).toJSON());
     obj.put("presets", ar);
     String expected = obj.toString();
     verify(out).write(expected.getBytes());
+    //System.out.println(out.toString());
   }
 
 }
