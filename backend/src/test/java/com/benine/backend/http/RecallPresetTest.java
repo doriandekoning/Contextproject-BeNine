@@ -85,37 +85,37 @@ public class RecallPresetTest {
 
   @Test
   public void testMovingCameraZoomPosition() throws Exception {
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+    recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).zoomTo(preset.getZoom());
   }
 
   @Test
   public void testMovingCameraFocusPosition() throws Exception {
-   recallHandler.movingCamera(ipcamera, preset, exchange);
+   recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).moveFocus(preset.getFocus());
   }
 
   @Test
   public void testMovingCameraIrisPosition() throws Exception {
-   recallHandler.movingCamera(ipcamera, preset, exchange);
+   recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).setIrisPos(preset.getIris());
   }
 
   @Test
   public void testMovingCameraAutofocus() throws Exception {
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+    recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).setAutoFocusOn(preset.isAutofocus());
   }
 
   @Test
   public void testMovingCameraZoomAutoiris() throws Exception {
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+    recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).setAutoIrisOn(preset.isAutoiris());
   }
 
   @Test
   public void testMovingCamera() throws Exception {
-    recallHandler.movingCamera(ipcamera, preset, exchange);
+    recallHandler.movingCamera(ipcamera, preset);
     verify(ipcamera).moveTo(any(Position.class), eq(preset.getPanspeed()), eq(preset.getTiltspeed()));
   }
 }
