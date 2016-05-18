@@ -61,11 +61,12 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
+    startupDatabase();
+    CameraCreator.getInstance().loadCameras();
+    
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger); 
     
-    startupDatabase();
-    CameraCreator.getInstance().loadCameras();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
