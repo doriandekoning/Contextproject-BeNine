@@ -47,7 +47,7 @@ function setCurrentCamera(id) {
 	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
 	selectedPreset = undefined;
-	
+	$('#createPreset').prop('disabled', false);
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');

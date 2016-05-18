@@ -100,7 +100,7 @@
         <div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
             <div class="control_buttons">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
+                    <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target=".preset-edit-modal"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</button>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                 </div>
                 <div class="modal-body">
 					<div>
-						Preset name:<br>
+						Tag:<br>
 						<input type="text">
 					</div>
 					
