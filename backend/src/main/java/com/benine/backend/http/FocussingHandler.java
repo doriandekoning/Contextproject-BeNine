@@ -54,7 +54,7 @@ public class FocussingHandler extends RequestHandler {
       if (setPos != null) {
         focusCam.setFocusPos(Integer.parseInt(setPos));
       } if(speed != null) {
-        focusCam.moveFocus(Integer.parseInt(setPos));
+        focusCam.moveFocus((int)(50 + (9.9*Integer.parseInt(speed))));
       }
         response = "{\"succes\":\"true\"}";
     } catch (CameraConnectionException e) {

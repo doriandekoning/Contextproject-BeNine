@@ -55,7 +55,7 @@ public class IrisHandler extends RequestHandler {
       if (setPos != null) {
         irisCam.setIrisPos(Integer.parseInt(setPos));
       } else if (speed != null) {
-        irisCam.moveIris(Integer.parseInt(speed));
+        irisCam.moveIris((int)(50 + (9.9*Integer.parseInt(speed))));
       }
     } catch (Exception e) {
       getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
