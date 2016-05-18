@@ -1,5 +1,6 @@
 package com.benine.backend;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 /**
@@ -8,6 +9,24 @@ import java.util.ArrayList;
 public class PresetController {
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
+
+
+  //TODO getPresetsByCamId
+
+  /**
+   * Returns an list of all the presets that are tagged with the specified tag.
+   * @param tag the tag with which the presets have to be tagged.
+   * @return presets an arraylist with all presets tagged with the tag.
+   */
+  public ArrayList<Preset> getPresetsByTag(String tag) {
+    ArrayList<Preset> returnList = new ArrayList<>();
+    presets.forEach(p -> {
+      if (p.getTags().contains(tag)) {
+        returnList.add(p);
+      }
+    });
+    return returnList;
+  }
 
   /**
    * Removes a preset from this presetcontroller.

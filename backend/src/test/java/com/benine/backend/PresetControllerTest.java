@@ -4,8 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by dorian on 18-5-16.
@@ -57,12 +59,17 @@ public class PresetControllerTest {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
-    preset1.addTag("Piano");
-    preset2.addTag("Violin");
+    HashSet<String> preset1Tags = new HashSet<>();
+    preset1Tags.add("Piano");
+    HashSet<String> preset2Tags = new HashSet<>();
+    preset2Tags.add("Violin");
+    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset2.getTags()).thenReturn(preset2Tags);
+    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
+
+
     controller.addPreset(preset1);
     controller.addPreset(preset2);
-
-    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(preset1);
 
     Assert.assertEquals(expectedPresets, controller.getPresetsByTag("Piano"));
@@ -73,8 +80,13 @@ public class PresetControllerTest {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
-    preset1.addTag("Piano");
-    preset2.addTag("Violin");
+    HashSet<String> preset1Tags = new HashSet<>();
+    preset1Tags.add("Piano");
+    HashSet<String> preset2Tags = new HashSet<>();
+    preset2Tags.add("Violin");
+    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset2.getTags()).thenReturn(preset2Tags);
+
     controller.addPreset(preset1);
     controller.addPreset(preset2);
 
@@ -82,17 +94,18 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsByTagNoMatch() {
+  public void testGetPresetsByTagMultiple() {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
-    preset1.addTag("Piano");
-    preset2.addTag("Piano");
-    preset2.addTag("Violin");
-    controller.addPreset(preset1);
-    controller.addPreset(preset2);
-
+    HashSet<String> preset1Tags = new HashSet<>();
+    preset1Tags.add("Piano");
+    preset1Tags.add("Violin");
+    HashSet<String> preset2Tags = new HashSet<>();
+    preset2Tags.add("Violin");
+    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset2.getTags()).thenReturn(preset2Tags);
     Assert.assertEquals(controller.getPresets(), controller.getPresetsByTag("Piano"));
   }
-  
+
 }
