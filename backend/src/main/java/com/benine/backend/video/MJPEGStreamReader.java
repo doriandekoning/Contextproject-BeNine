@@ -48,9 +48,7 @@ public class MJPEGStreamReader implements Runnable {
     try {
       byte[] image = getImage();
 
-      if (image != null) {
-        snapShot = image;
-      }
+      snapShot = image;
 
     } catch (IOException e) {
       e.printStackTrace();
