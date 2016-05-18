@@ -1,7 +1,6 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.CameraCreator;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
@@ -62,7 +61,7 @@ public class ServerController {
    */
   public void start() {
     startupDatabase();
-    CameraCreator.getInstance().loadCameras();
+    cameraController.loadConfigCameras();
     
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger); 
