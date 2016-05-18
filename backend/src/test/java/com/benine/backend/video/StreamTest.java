@@ -15,7 +15,7 @@ public class StreamTest {
 
   @Before
   public void init() throws MalformedURLException {
-    stream = new Stream(new File("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg").toURI().toURL());
+    stream = new Stream(new File("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg").toURI().toURL().toString());
   }
 
   @Test
@@ -36,7 +36,7 @@ public class StreamTest {
 
   @Test
   public void testStreamIncorrectStream() throws MalformedURLException {
-    Stream testStream = new Stream(new File("nonexistent").toURI().toURL());
+    Stream testStream = new Stream(new File("nonexistent").toURI().toURL().toString());
 
     Assert.assertNull(testStream.getInputStream());
   }
