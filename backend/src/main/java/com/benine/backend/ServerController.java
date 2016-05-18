@@ -5,6 +5,7 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
+import com.benine.backend.video.StreamController;
 
 import java.io.File;
 
@@ -22,6 +23,8 @@ public class ServerController {
   private Config config;
 
   private CameraController cameraController;
+
+  private StreamController streamController;
   
   private Database database;
   
@@ -42,6 +45,7 @@ public class ServerController {
     database = loadDatabase();
     
     cameraController = new CameraController();
+    streamController = new StreamController();
 
     loadCameras();
   }

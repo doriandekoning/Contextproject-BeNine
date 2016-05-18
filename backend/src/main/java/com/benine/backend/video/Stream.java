@@ -2,6 +2,7 @@ package com.benine.backend.video;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -12,10 +13,16 @@ public class Stream {
 
   /**
    * Constructor for a new stream object.
-   * @param url The url to get the stream from.
+   * @param streamurl The url to get the stream from.
    */
-  public Stream(URL url) {
-    openConnection(url);
+  public Stream(String streamurl) {
+    try {
+      URL url = new URL(streamurl);
+      openConnection(url);
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    }
+
     this.inputstream = fetchInputStream();
   }
 

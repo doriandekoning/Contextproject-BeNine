@@ -6,12 +6,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
-public class MJPEGStreamReader implements Runnable {
+public class MJPEGStreamReader extends StreamReader {
 
   private BufferedInputStream bufferedStream;
   private byte[] snapShot;
@@ -22,7 +21,7 @@ public class MJPEGStreamReader implements Runnable {
    * @param url The url fo the stream.
    * @throws IOException if the inputstream cannot be read.
    */
-  public MJPEGStreamReader(URL url) throws IOException {
+  public MJPEGStreamReader(String url) {
     this(new Stream(url));
   }
 
@@ -32,9 +31,9 @@ public class MJPEGStreamReader implements Runnable {
    * @param stream A stream object.
    * @throws IOException If the inputstream cannot be read.
    */
-  public MJPEGStreamReader(Stream stream) throws IOException {
+  public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
-    this.snapShot = getImage();
+    processStream();
   }
 
   @Override
@@ -104,15 +103,12 @@ public class MJPEGStreamReader implements Runnable {
    * @throws IOException when an error occurs fetching the header or reading the jpeg image.
    */
   private byte[] getImage() throws IOException {
-    // Fetch the header and get the content length.
     String header = getHeader();
     int contentLength = getContentLength(header);
 
     if (contentLength != -1) {
-      // We know a content length, use the efficient way.
       return readJPEG(contentLength);
     } else {
-      // We don't know a content length, look for the jpeg trailer manually.
       return readJPEG();
     }
   }
@@ -188,12 +184,7 @@ public class MJPEGStreamReader implements Runnable {
     }
   }
 
-  /**
-   * Changes the byte[] snapshot into a bufferedimage which can be written to file.
-   *
-   * @return a BufferedImage containing the image.
-   * @throws IOException when the image cannot be read from the byte[] image.
-   */
+  @Override
   public BufferedImage getSnapShot() throws IOException {
     return ImageIO.read(new ByteArrayInputStream(this.snapShot));
   }

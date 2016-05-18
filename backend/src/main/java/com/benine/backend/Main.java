@@ -2,9 +2,6 @@ package com.benine.backend;
 
 import com.benine.backend.video.MJPEGStreamReader;
 
-import java.io.IOException;
-import java.net.URL;
-
 public class Main {
 
   /**
@@ -17,18 +14,12 @@ public class Main {
 
     server.start();
 
-    try {
-      MJPEGStreamReader stream1 = new MJPEGStreamReader(new URL("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100"));
-      Thread t1 = new Thread(stream1);
-      t1.start();
+    MJPEGStreamReader stream1 = new MJPEGStreamReader("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
+    Thread t1 = new Thread(stream1);
+    t1.start();
 
-      MJPEGStreamReader stream2 = new MJPEGStreamReader(new URL("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg"));
-      new Thread(stream2).start();
-
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    MJPEGStreamReader stream2 = new MJPEGStreamReader("http://tuincam.bt.tudelft.nl/mjpg/video.mjpg");
+    new Thread(stream2).start();
 
     try {
       while (true) {
