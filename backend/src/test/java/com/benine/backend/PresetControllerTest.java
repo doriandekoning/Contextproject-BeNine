@@ -51,4 +51,48 @@ public class PresetControllerTest {
     controller.removePreset(preset2);
     Assert.assertEquals(expectedPresets, controller.getPresets());
   }
+
+  @Test
+  public void testGetPresetsByTag() {
+    PresetController controller = new PresetController();
+    Preset preset1 = mock(Preset.class);
+    Preset preset2 = mock(Preset.class);
+    preset1.addTag("Piano");
+    preset2.addTag("Violin");
+    controller.addPreset(preset1);
+    controller.addPreset(preset2);
+
+    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
+    expectedPresets.add(preset1);
+
+    Assert.assertEquals(expectedPresets, controller.getPresetsByTag("Piano"));
+  }
+
+  @Test
+  public void testGetPresetsByTagNoMatch() {
+    PresetController controller = new PresetController();
+    Preset preset1 = mock(Preset.class);
+    Preset preset2 = mock(Preset.class);
+    preset1.addTag("Piano");
+    preset2.addTag("Violin");
+    controller.addPreset(preset1);
+    controller.addPreset(preset2);
+
+    Assert.assertEquals(new ArrayList<Preset>(), controller.getPresetsByTag("Overview"));
+  }
+
+  @Test
+  public void testGetPresetsByTagNoMatch() {
+    PresetController controller = new PresetController();
+    Preset preset1 = mock(Preset.class);
+    Preset preset2 = mock(Preset.class);
+    preset1.addTag("Piano");
+    preset2.addTag("Piano");
+    preset2.addTag("Violin");
+    controller.addPreset(preset1);
+    controller.addPreset(preset2);
+
+    Assert.assertEquals(controller.getPresets(), controller.getPresetsByTag("Piano"));
+  }
+  
 }
