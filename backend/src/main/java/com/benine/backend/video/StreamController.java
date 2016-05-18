@@ -55,7 +55,7 @@ public class StreamController {
     String streamLink = getStreamLink(cam);
     StreamType type = verifyType(cam);
 
-    switch(type) {
+    switch (type) {
       case MJPEG: return new MJPEGStreamReader(new Stream(streamLink));
       default: return null;
     }
