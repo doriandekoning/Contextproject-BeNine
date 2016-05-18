@@ -205,7 +205,6 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     sendCommand("%23F" + speed);
   }
 
-
   /**
    * Move the iris in the specified direction.
    * Values between 1 and 99 where 50 is stop moving.
@@ -218,8 +217,9 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendCommand("%23GI" + Integer.toHexString( 1365 + (speed * ((4095-1365)/99))));
+    sendCommand("%23I" + speed);
   }
+
   /**
    * Turn auto focus on or off.
    * @param on true for auto focus on.
