@@ -16,6 +16,8 @@ public class Stream {
   /**
    * Constructor for a new stream object.
    * @param streamurl The url to get the stream from.
+   * @throws IOException If an exception occurs while creating the stream,
+   * rendering the stream useless.
    */
   public Stream(String streamurl) throws IOException {
     URL url = new URL(streamurl);
@@ -27,6 +29,7 @@ public class Stream {
   /**
    * Opens a connection to the stream.
    * @param streamURL The url of the stream to open the connection to.
+   * @throws IOException If an error occurs opening the connection.
    */
   private void openConnection(URL streamURL) throws IOException {
     URLConnection conn = streamURL.openConnection();
@@ -38,9 +41,10 @@ public class Stream {
   /**
    * Fetches the inputstream from the connection.
    * @return  An the inputstream of the feed.
+   * @throws IOException If the inputstream cannot be read from the connection.
    */
   private InputStream fetchInputStream() throws IOException {
-      return connection.getInputStream();
+    return connection.getInputStream();
   }
 
   /**
