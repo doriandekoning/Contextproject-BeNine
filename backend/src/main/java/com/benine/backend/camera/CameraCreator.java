@@ -50,15 +50,24 @@ public class CameraCreator {
     int i = 1;
     String type =  config.getValue("camera_" + i + "_type");   
     while (type != null) {
-      try {
-        ServerController.getInstance().getCameraController().addCamera(createCamera(i, type));
-      } catch (InvalidCameraTypeException e) {
-        CameraController.logger.log("Camera " + i + " in the config file can not be created",
-            LogEvent.Type.CRITICAL);
-      }
+      addCamera(i, type);
       i++;
       type = config.getValue("camera_" + i + "_type");
     }  
+  }
+  
+  /**
+   * Adds a camera from the config file to the camera controller.
+   * @param index in the config file of the camera.
+   * @param type of the camera.
+   */
+  private void addCamera(int index, String type) {
+    try {
+      getCameraController().addCamera(createCamera(index, type));
+    } catch (InvalidCameraTypeException e) {
+      CameraController.logger.log("Camera " + index + " in the config file can not be created",
+          LogEvent.Type.CRITICAL);
+    }
   }
   
   /**
@@ -72,13 +81,21 @@ public class CameraCreator {
     System.out.println(type);
     CameraFactory factory = CAMERA_TYPES.get(type);
     if (factory == null) {
-      CameraController.logger.log("The type of camera" + index + "is not specified: " + type,
+      CameraController.logger.log("The type of camera " + index + " is not specified: " + type,
           LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Camera type is not regonized");
     }
     CameraController.logger.log("New Camera object is created.",
         LogEvent.Type.INFO);
     return factory.createCamera(index);
+  }
+  
+  /**
+   * Returns the camera controller of the server.
+   * @return cameracontroller.
+   */
+  private CameraController getCameraController() {
+    return ServerController.getInstance().getCameraController();
   }
   
   

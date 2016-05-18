@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -357,20 +358,24 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
     try {
-      InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      BufferedReader buf = new BufferedReader(new InputStreamReader(com, "UTF8"));
+      URL url = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1");
+      URLConnection con = url.openConnection();
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(1000);
+      InputStream in = con.getInputStream();
+      BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
         res = buf.readLine();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+          new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
       } finally {
         buf.close();
-        com.close();
+        in.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+      throw new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
     }
     
@@ -385,19 +390,15 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
     json.put("id", Integer.valueOf(this.id));
-    try {
-      json.put("pan", new Double(getPosition().getPan()));
-      json.put("tilt", new Double(getPosition().getTilt()));
-      json.put("zoom", new Double(getZoomPosition()));
-      json.put("focus", new Double(getFocusPos()));
-      json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
-      json.put("iris", new Double(getIrisPos()));
-      json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
-      json.put("streamlink", getStreamLink());
-    } catch (Exception e) {
-      //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
-      System.out.println(e.toString());
-    }
+    json.put("pan", new Double(getPosition().getPan()));
+    json.put("tilt", new Double(getPosition().getTilt()));
+    json.put("zoom", new Double(getZoomPosition()));
+    json.put("focus", new Double(getFocusPos()));
+    json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
+    json.put("iris", new Double(getIrisPos()));
+    json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
+    json.put("streamlink", getStreamLink());
+    
     return  json.toString();
 
   }

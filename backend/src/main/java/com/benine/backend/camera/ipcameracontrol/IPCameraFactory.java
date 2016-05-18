@@ -24,7 +24,7 @@ public class IPCameraFactory extends CameraFactory {
     Config config = ServerController.getInstance().getConfig();
     String address = config.getValue("camera_" + index + "_address");
     if ( address == null) {
-      CameraController.logger.log("Can't create Ipcamera object with specified info.",
+      CameraController.logger.log("Camera: " + index + " has no address specified in the config",
                                                                   LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Type of camera is not right specified");
     }

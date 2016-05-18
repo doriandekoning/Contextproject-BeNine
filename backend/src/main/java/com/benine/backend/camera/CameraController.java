@@ -174,14 +174,30 @@ public class CameraController {
    * @return json string of all the cameras.
    * @throws CameraConnectionException if a connection to a camera cannot be made.
    */
-  public String getCamerasJSON() throws CameraConnectionException {
+  public String getCamerasJSON() {
     // Create expected json object
     JSONObject json = new JSONObject();
     JSONArray array = new JSONArray();
     for (Camera camera : getCameras()) {
-      array.add(camera.toJSON());
+      array.add(getCameraJSON(camera));
     }
     json.put("cameras", array);
     return json.toString();
+  }
+  
+  /**
+   * Get the JSON representation of this camera.
+   * If the connection fails return an empty camera.
+   * @param camera object to create a JSON of.
+   * @return String representation of the JSON.
+   */
+  private String getCameraJSON(Camera camera) {
+    try {
+      return camera.toJSON();
+    } catch (CameraConnectionException e) {
+      JSONObject json = new JSONObject();
+      json.put("id", Integer.valueOf(camera.getId()));
+      return json.toString();
+    }
   }
 }
