@@ -235,7 +235,7 @@ function presetcall(t) {
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
-		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {});
+		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {console.log(data);});
 		console.log(t.attr("presetid"));
 	}
 }
@@ -249,8 +249,11 @@ function loadCreatePreset() {
 	}
 }
 
+/**
+* Create a preset of the current camera view.
+*/
 function createPreset() {
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/camera/"+ currentcamera + "/createpreset" , function(data) {});
+		$.get("/api/backend/camera/"+ currentcamera + "/createpreset" , function(data) {console.log(data);});
 	}
 }

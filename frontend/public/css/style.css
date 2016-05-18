@@ -143,6 +143,7 @@ input[type=range]:focus {
 .modal img {
     position: relative;
 	left: 500px;
+	bottom: 100px;
     height: 250px;
     width: 350px;
 }

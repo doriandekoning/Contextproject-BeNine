@@ -32,6 +32,8 @@ public class PresetCreationHandler  extends RequestHandler {
      * @throws IOException when an error occurs with responding to the request.
   */
   public void handle(HttpExchange exchange) throws IOException {
+    getLogger().log("Got an http request with the following uri in Prest creation: "
+        + exchange.getRequestURI(), LogEvent.Type.INFO);
     try {
       int cameraID = getCameraId(exchange);
       Camera camera = getCameraController().getCameraById(cameraID);
@@ -45,8 +47,17 @@ public class PresetCreationHandler  extends RequestHandler {
         getCameraController().addPreset(cameraID, preset);
         responseSuccess(exchange);
       
+      } else {
+        Preset preset = new Preset(new Position(0,0), 0, 
+             0, 0, false, 0, 0, false);
+        preset.setImage("/static/presets/preset1_1.jpg");
+        //Adding the new preset to the database
+        getCameraController().addPreset(cameraID, preset);
+        responseSuccess(exchange);
+       
       }
     } catch (SQLException e) {
+      e.printStackTrace();
       responseFailure(exchange);
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     }
