@@ -2,18 +2,14 @@ package com.benine.backend;
 
 import com.benine.backend.video.MJPEGStreamReader;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 
 public class Main {
-  
+
   /**
    * Main method of the program.
+   *
    * @param args command line arguments.
    */
   public static void main(String[] args) {

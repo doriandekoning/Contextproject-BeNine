@@ -7,36 +7,52 @@ import java.net.URLConnection;
 
 public class Stream {
 
-    private URL streamURL;
-    private URLConnection connection;
-    private InputStream inputstream;
+  private URL streamURL;
+  private URLConnection connection;
+  private InputStream inputstream;
 
-    public Stream(URL url) {
-        this.streamURL = url;
-        this.connection = openConnection();
-        this.inputstream = fetchInputStream();
-    }
+  /**
+   * Constructor for a new stream object.
+   * @param url The url to get the stream from.
+   */
+  public Stream(URL url) {
+    this.streamURL = url;
+    this.connection = openConnection();
+    this.inputstream = fetchInputStream();
+  }
 
-    private URLConnection openConnection() {
-        try {
-            return streamURL.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+  /**
+   * Opens a connection to the stream.
+   * @return  The connection.
+   */
+  private URLConnection openConnection() {
+    try {
+      return streamURL.openConnection();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
+  }
 
-    private InputStream fetchInputStream() {
-        try {
-            return connection.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+  /**
+   * Fetches the inputstream from the connection.
+   * @return  An the inputstream of the feed.
+   */
+  private InputStream fetchInputStream() {
+    try {
+      return connection.getInputStream();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
+  }
 
-    public InputStream getInputStream() {
-        return this.inputstream;
-    }
+  /**
+   * Returns the inputstream.
+   * @return  The inputstream.
+   */
+  public InputStream getInputStream() {
+    return this.inputstream;
+  }
 
 }
