@@ -121,6 +121,7 @@ var joystickoptions = {
 	size: joysticksize
 };
 
+/* variables used for the joystick movements */
 var joystick = nipplejs.create(joystickoptions);
 var distance = 0;
 var angle = 0
@@ -158,36 +159,81 @@ function sendMove(){
 	console.log(pan + " - " + tilt);
 }
 
+/* Variables used for the zoom slider */
+var zoomSend = false;
+var zoom = 0;
+
 /**
-* Method to send the new input value of the zoom slider to the currently selected camera.
+* Method is called when the inputslider value changes.
 */
-function inputzoomslider(zoom) {
+function inputzoomslider(z) {
+	zoom = z;
+	if (zoomSend === false) {
+		zoomSend = true;
+		setTimeout(function(){sendZoom(); zoomSend = false;}, 130);
+		sendZoom();
+	}
+}
+
+/**
+* Method to send a command to the backend to change the zoom.
+*/
+function sendZoom() {
 	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
 	console.log("Zoom: " + zoom);
 }
+
+/* Variables used for the focus slider */
+var focus = 0;
+var focusSend = false;
 
 /**
 * Method to send the new input value of the focus slider to the currently selected camera.
 * It also change the status of the auto focus.
 * @param focus value of the new input.
 */
-function inputfocusslider(focus) {
+function inputfocusslider(f) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
+	focus = f;
+	if (focusSend === false) {
+		focusSend = true;
+		setTimeout(function(){sendFocus(); focusSend = false;}, 130);
+		sendFocus();
+	}
+}
+
+/**
+* Method to send a command to the backend to change the focus.
+*/
+function sendFocus() {
 	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + focus , function(data) {});
 	console.log("Focus: " + focus);
 }
+
+/* Variables used for the iris slider */
+var iris = 0;
+var irisSend = false;
 
 /**
 * Method to send the new input value of the iris slider to the currently selected camera.
 * It also changes the status of the auto iris.
 * @param iris value of the new input.
 */
-function inputirisslider(iris) {
+function inputirisslider(i) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
+	iris = i;
+	if (irisSend === false) {
+		irisSend = true;
+		setTimeout(function(){sendIris(); irisSend = false;}, 130);
+		sendIris();
+	}
+}
+
+function sendIris() {
 	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
-	console.log("Iris: "+ iris);
+	console.log("Iris: " + iris);
 }
 
 /**
