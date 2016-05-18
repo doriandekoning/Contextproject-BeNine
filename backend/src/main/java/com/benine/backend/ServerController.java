@@ -46,8 +46,6 @@ public class ServerController {
     
     cameraController = new CameraController();
     streamController = new StreamController();
-
-    loadCameras();
   }
   
   /**
@@ -71,6 +69,8 @@ public class ServerController {
         Integer.parseInt(config.getValue("serverport")), logger); 
     
     startupDatabase();
+    loadCameras();
+
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }

@@ -25,8 +25,15 @@ public class StreamController {
    * Constructor for a StreamController.
    */
   public StreamController() {
-    this.streams = new HashMap<>();
-    this.threads = new HashMap<>();
+    this(new HashMap<>(), new HashMap<>());
+  }
+
+  /**
+   * Constructor for a StreamController.
+   */
+  public StreamController(Map<Integer, StreamReader> streams, Map<Integer, Thread> threads) {
+    this.streams = streams;
+    this.threads = threads;
   }
 
   /**
@@ -39,6 +46,7 @@ public class StreamController {
     if (stream != null) {
       Thread thread = new Thread(stream);
 
+      System.out.println(cam.getId());
       streams.put(cam.getId(), stream);
       threads.put(cam.getId(), thread);
 

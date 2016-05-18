@@ -165,7 +165,6 @@ public class MJPEGStreamReader extends StreamReader {
       header.write(bufferedStream.read());
     }
 
-    System.out.println(header.toString());
     return header.toString();
   }
 
