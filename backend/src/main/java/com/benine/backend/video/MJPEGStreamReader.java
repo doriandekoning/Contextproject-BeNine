@@ -16,6 +16,7 @@ public class MJPEGStreamReader implements Runnable {
 
     private Stream stream;
     private BufferedInputStream bufferedStream;
+    private byte[] snapShot;
 
     /**
      * Creates a new MJPEGStreamReader.
@@ -24,37 +25,21 @@ public class MJPEGStreamReader implements Runnable {
     public MJPEGStreamReader(URL url) throws IOException{
         this.stream = new Stream(url);
         this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+        this.snapShot = getImage();
     }
 
     @Override
     public void run() {
-//        try {
-//            JFrame frame= new JFrame();
-//
-//            frame.setLayout(new FlowLayout());
-//            frame.setSize(800,800);
-//            JPanel panel = new JPanel(new BorderLayout());
-//            frame.add(panel);
-//
-//            ImageIcon icon = new ImageIcon();
-//            JLabel picture = new JLabel(icon);
-//            panel.add(picture);
-//            frame.setVisible(true);
-//
-//            while (true) {
-//                ByteArrayInputStream bais = new ByteArrayInputStream(getImage());
-//                BufferedImage bi = ImageIO.read(bais);
-//                icon.setImage(bi);
-//                panel.repaint();
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        processStream();
+    }
 
+    public void processStream() {
         while (true) {
             try {
-                getImage();
+                // Get an image, processing the stream.
+                byte[] image = getImage();
+                snapShot = image;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -96,8 +81,6 @@ public class MJPEGStreamReader implements Runnable {
             header.write(bufferedStream.read());
         }
 
-        System.out.println(header.toString());
-
         int contentLength = getContentLength(header.toString());
         byte[] image = new byte[contentLength];
 
@@ -126,5 +109,9 @@ public class MJPEGStreamReader implements Runnable {
         } else {
             return -1;
         }
+    }
+
+    public byte[] getSnapShot() {
+        return this.snapShot;
     }
 }
