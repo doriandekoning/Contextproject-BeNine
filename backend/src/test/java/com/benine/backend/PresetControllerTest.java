@@ -123,7 +123,7 @@ public class PresetControllerTest {
     controller.addPreset(preset2);
     expectedPresets.add(preset1);
 
-    Assert.assertEquals(expectedPresets, controller.getPresetsById(2));
+    Assert.assertEquals(preset2, controller.getPresetById(2));
   }
 
   @Test
@@ -140,7 +140,7 @@ public class PresetControllerTest {
       controller.addPreset(preset1);
       controller.addPreset(preset2);
 
-      Assert.assertEquals(new ArrayList<Preset>(), controller.getPresetsById(3));
+      Assert.assertEquals(null, controller.getPresetById(3));
     }
 
 

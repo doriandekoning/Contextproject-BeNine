@@ -11,12 +11,24 @@ public class PresetController {
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
 
-  //TODO getPresetsByCamId
+  /**
+   * Returns the preset with the specified id.
+   * @param id the id of the preset
+   * @return an preset with the id.
+   */
+  public Preset getPresetById(int id) {
+    for (Preset p : presets) {
+      if (id == p.getId()) {
+        return p;
+      }
+    }
+    return null;
+  }
 
   /**
    * Returns an list of all the presets that are tagged with the specified tag.
    * @param tag the tag with which the presets have to be tagged.
-   * @return presets an arraylist with all presets tagged with the tag.
+   * @return an arraylist with all presets tagged with the tag.
    */
   public ArrayList<Preset> getPresetsByTag(String tag) {
     ArrayList<Preset> returnList = new ArrayList<>();
