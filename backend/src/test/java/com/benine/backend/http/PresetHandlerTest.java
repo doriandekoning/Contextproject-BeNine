@@ -48,18 +48,6 @@ public class PresetHandlerTest {
     
     out = mock(OutputStream.class);
   }
-  
-  @Test
-  public void testFailingPresetRequest() throws Exception {   
-    URI uri = new  URI("http://localhost/camera/1/public/test.jpg");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    handler.handle(exchange);
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("presets", new JSONArray());
-    String expected = jsonObject.toString();
-    verify(out).write(expected.getBytes());
-  }
 
   @Test
   public void testQueryByKeyWord() throws Exception {
@@ -82,18 +70,4 @@ public class PresetHandlerTest {
     verify(out).write(expected.getBytes());
   }
 
-  @Test
-  public void testDatabaseThrowingException() throws Exception {   
-    URI uri = new  URI("http://localhost/camera/1/public/test.jpg");
-    Database database = mock(Database.class);
-    when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-
-    doThrow(new SQLException("test exception")).when(database).getAllPresetsCamera(1);
-    serverController.setDatabase(database);
-    handler.handle(exchange);
-
-    String expected = "{\"succes\":\"false\"}";
-    verify(out).write(expected.getBytes());
-  }
 }
