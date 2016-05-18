@@ -1,8 +1,6 @@
 package com.benine.backend.video;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -14,7 +12,6 @@ import java.util.regex.Pattern;
 
 public class MJPEGStreamReader implements Runnable {
 
-    private Stream stream;
     private BufferedInputStream bufferedStream;
     private byte[] snapShot;
 
@@ -23,7 +20,7 @@ public class MJPEGStreamReader implements Runnable {
      * @param url The url fo the stream.
      */
     public MJPEGStreamReader(URL url) throws IOException{
-        this.stream = new Stream(url);
+        Stream stream = new Stream(url);
         this.bufferedStream = new BufferedInputStream(stream.getInputStream());
         this.snapShot = getImage();
     }
@@ -37,12 +34,11 @@ public class MJPEGStreamReader implements Runnable {
 
     /**
      * Processes a stream by fetching an image
-     * from the stream and updating the lates snapshot.
+     * from the stream and updating the latest snapshot.
      */
-    public void processStream() {
+    private void processStream() {
         try {
-            byte[] image = getImage();
-            snapShot = image;
+            snapShot = getImage();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,13 +74,11 @@ public class MJPEGStreamReader implements Runnable {
     }
 
     private byte[] getImage() throws IOException {
-        StringWriter header = new StringWriter(128);
+        // Fetch the header and get the content length.
+        String header = getHeader();
+        int contentLength = getContentLength(header);
 
-        while (!checkJPEGHeader()) {
-            header.write(bufferedStream.read());
-        }
-
-        int contentLength = getContentLength(header.toString());
+        // Now use the content length to extract the jpeg.
         byte[] image = new byte[contentLength];
 
         int offset = 0;
@@ -99,6 +93,21 @@ public class MJPEGStreamReader implements Runnable {
     }
 
     /**
+     * Returns a string representation of the header.
+     * @return              String representation of the header.
+     * @throws IOException
+     */
+    private String getHeader() throws IOException {
+        StringWriter header = new StringWriter(128);
+
+        while (!checkJPEGHeader()) {
+            header.write(bufferedStream.read());
+        }
+
+        return header.toString();
+    }
+
+    /**
      * Looks for the Content-Length: tag in the header, and extracts the value.
      * @param header    A header string.
      * @return          -1 if content-length not found, else content length.
@@ -107,6 +116,7 @@ public class MJPEGStreamReader implements Runnable {
         Pattern content_length = Pattern.compile("Content-Length: \\d+");
         Matcher matcher = content_length.matcher(header);
 
+        // On a match, remove all non-digits and parse it to an integer.
         if (matcher.find()) {
             return Integer.parseInt(matcher.group().replaceAll("[^0-9]", ""));
         } else {
@@ -114,7 +124,11 @@ public class MJPEGStreamReader implements Runnable {
         }
     }
 
-    public byte[] getSnapShot() {
-        return this.snapShot;
+    /**
+     * Changes the byte[] snapshot into a bufferedimage which can be written to file.
+     * @return      a BufferedImage containing the image.
+     */
+    public BufferedImage getSnapShot() throws IOException {
+        return ImageIO.read(new ByteArrayInputStream(this.snapShot));
     }
 }
