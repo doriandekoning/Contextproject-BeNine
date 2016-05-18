@@ -101,7 +101,7 @@ public class IrisHandlerTest {
   public void testCameraConnectionException() throws Exception {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
-    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setIrisPos(eq(3));
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setIrisPosition(eq(3));
     try {
       iHandler.handle(exchange);
     } catch (Exception e) {
