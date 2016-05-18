@@ -21,6 +21,7 @@ public class Stream {
 
   /**
    * Opens a connection to the stream.
+   * @param streamURL The url of the stream to open the connection to.
    */
   private void openConnection(URL streamURL) {
     try {

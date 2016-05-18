@@ -1,7 +1,11 @@
 package com.benine.backend.video;
 
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,9 +50,7 @@ public class MJPEGStreamReader implements Runnable {
    */
   public void processStream() {
     try {
-      byte[] image = getImage();
-
-      snapShot = image;
+      snapShot = getImage();
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -82,12 +84,18 @@ public class MJPEGStreamReader implements Runnable {
    */
   private boolean isJPEGHeader() throws IOException {
     int[] byteArray = checkNextBytes(2);
-    return (byteArray[0] == 255 && byteArray[1] == 216);
+    return byteArray[0] == 255 && byteArray[1] == 216;
   }
 
+  /**
+   * Checks the next 2 bytes and checks if they are the JPEG trailer (FF D9).
+   *
+   * @return true if trailer, false if not trailer.
+   * @throws IOException when the next bytes cannot be read from the stream.
+   */
   private boolean isJPEGTrailer() throws IOException {
     int[] byteArray = checkNextBytes(2);
-    return (byteArray[0] == 255 && byteArray[1] == 217);
+    return byteArray[0] == 255 && byteArray[1] == 217;
   }
 
   /**
@@ -109,7 +117,14 @@ public class MJPEGStreamReader implements Runnable {
     }
   }
 
-  public byte[] readJPEG(int contentLength) throws IOException {
+  /**
+   * Reads JPEG bytes if the content length is known.
+   * This is more efficent than looking for the trailer.
+   * @param contentLength Amount of bytes to read.
+   * @return A byte[] containing the jpeg bytes.
+   * @throws IOException If the bufferedstream cannot be read.
+   */
+  private byte[] readJPEG(int contentLength) throws IOException {
     byte[] image = new byte[contentLength];
 
     int offset = 0;
@@ -123,10 +138,15 @@ public class MJPEGStreamReader implements Runnable {
     return image;
   }
 
-  public byte[] readJPEG() throws IOException {
+  /**
+   * Reads JPEG bytes by reading until the JPEGTrailer is found.
+   * @return A byte[] containing the jpeg bytes.
+   * @throws IOException If the bufferedstream cannot be read.
+   */
+  private byte[] readJPEG() throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-    while(!isJPEGTrailer()) {
+    while (!isJPEGTrailer()) {
       baos.write(bufferedStream.read());
     }
 
