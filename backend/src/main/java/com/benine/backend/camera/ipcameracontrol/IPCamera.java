@@ -11,6 +11,7 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
 
+import com.ibatis.common.logging.Log;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -204,6 +205,21 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     sendCommand("%23F" + speed);
   }
 
+
+  /**
+   * Move the iris in the specified direction.
+   * Values between 1 and 99 where 50 is stop moving.
+   * 1 is iris nearer with max speed
+   * 99 is iris further with max speed
+   * @param speed value with which speed iris is changing.
+   * @throws CameraConnectionException when command can not be completed.
+   */
+  public void moveIris(int speed) throws CameraConnectionException {
+    CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
+    speed = Math.max(1, speed);
+    speed = Math.min(99, speed);
+    sendCommand("%23GI" + Integer.toHexString( 1365 + (speed * ((4095-1365)/99))));
+  }
   /**
    * Turn auto focus on or off.
    * @param on true for auto focus on.
