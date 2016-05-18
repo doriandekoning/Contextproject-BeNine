@@ -36,4 +36,19 @@ public class PresetControllerTest {
     expectedPresets.add(preset2);
     Assert.assertEquals(expectedPresets, controller.getPresets());
   }
+
+  @Test
+  public void testRemovePreset() {
+    PresetController controller = new PresetController();
+    Preset preset1 = mock(Preset.class);
+    Preset preset2 = mock(Preset.class);
+    controller.addPreset(preset1);
+    controller.addPreset(preset2);
+
+    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
+    expectedPresets.add(preset1);
+    // The actual method call to test.
+    controller.removePreset(preset2);
+    Assert.assertEquals(expectedPresets, controller.getPresets());
+  }
 }
