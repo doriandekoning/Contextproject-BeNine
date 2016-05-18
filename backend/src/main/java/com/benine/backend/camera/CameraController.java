@@ -2,9 +2,11 @@ package com.benine.backend.camera;
 
 import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
-import com.benine.backend.Main;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.database.Database;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -24,8 +26,6 @@ public class CameraController {
 
   private int highestIdInUse = 1;
 
-
-
   /**
    * Adds a new camera to control.
    * @param camera the camera to add to this controller.
@@ -34,6 +34,14 @@ public class CameraController {
     camera.setId(highestIdInUse);
     highestIdInUse++;
     cameras.add(camera);
+  }
+  
+  /**
+   * Returns the database
+   * @return database to retrieve information from.
+   */
+  private Database getDatabase() {
+    return ServerController.getInstance().getDatabase();
   }
 
 
@@ -80,7 +88,8 @@ public class CameraController {
    */
   public void getPresetsFromDatabase() throws SQLException {
     for (Camera camera : this.getCameras()) {
-      camera.setPresetsFromArrayList(Main.getDatabase().getAllPresetsCamera(camera.getId()));
+      camera.setPresetsFromArrayList(getDatabase()
+                                      .getAllPresetsCamera(camera.getId()));
     }
   }
 
@@ -89,14 +98,14 @@ public class CameraController {
    * @throws SQLException No right connection found
    */
   public void resetPresetsInDatabase() throws SQLException {
-    Main.getDatabase().resetDatabase();
+    getDatabase().resetDatabase();
     for (Camera camera : this.getCameras()) {
       if (camera instanceof IPCamera) {
         IPCamera ipcamera = (IPCamera) camera;
-        Main.getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
+        getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
         for (int i = 0; i < camera.getPresets().length; i++) {
           if (camera.getPresets()[i] != null) {
-            Main.getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
+            getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
           }
         }
       }
@@ -116,7 +125,7 @@ public class CameraController {
       if (cameraPresets[i] == null) {
         cameraPresets[i] = preset;
         cameraPresets[i].setId(i);
-        Main.getDatabase().addPreset(cameraId, i, preset);
+        getDatabase().addPreset(cameraId, i, preset);
         this.getCameraById(cameraId).setPresets(cameraPresets);
         return i;
       }
@@ -134,9 +143,9 @@ public class CameraController {
   public void addPresetAtPosition(int cameraId, Preset preset, int position) throws SQLException {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
     if (cameraPresets[position] != null) {
-      Main.getDatabase().updatePreset(cameraId, position, preset);
+      getDatabase().updatePreset(cameraId, position, preset);
     } else {
-      Main.getDatabase().addPreset(cameraId, position, preset);
+      getDatabase().addPreset(cameraId, position, preset);
     }
     cameraPresets[position] = preset;
   }

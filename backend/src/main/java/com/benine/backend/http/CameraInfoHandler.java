@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -15,11 +14,10 @@ public class CameraInfoHandler extends RequestHandler {
 
   /**
    * Creates a new FocussingHandler.
-   * @param controller the cameracontroller to interact with
    * @param logger the logger to be used to log to
    */
-  public CameraInfoHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public CameraInfoHandler(Logger logger) {
+    super(logger);
   }
 
   /**

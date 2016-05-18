@@ -1,9 +1,7 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.LogWriter;
-import com.benine.backend.Logger;
-import com.benine.backend.Main;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
@@ -13,10 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
+import java.io.File;
 import java.sql.SQLException;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -28,11 +25,15 @@ public class CameraControllerTest {
 
   private final Database database = mock(Database.class);
   private CameraController controller;
+  private ServerController serverController;
 
   @Before
   public void setUp() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
+    serverController.setDatabase(database);
     controller = new CameraController();
-    Main.setDatabase(database);
   }
 
   @Test

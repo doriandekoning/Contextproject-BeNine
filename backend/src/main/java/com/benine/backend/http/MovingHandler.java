@@ -4,7 +4,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,11 +18,10 @@ public class MovingHandler extends RequestHandler {
 
   /**
    * Creates a new MovingHandler.
-   * @param controller the cameracontroller to interact with
    * @param logger the logger to be used to log to
    */
-  public MovingHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
+  public MovingHandler(Logger logger) {
+    super(logger);
   }
 
   /**
