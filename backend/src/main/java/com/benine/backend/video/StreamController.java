@@ -30,6 +30,8 @@ public class StreamController {
 
   /**
    * Constructor for a StreamController.
+   * @param streams Map for integer, thread
+   * @param threads Map for integer, thread
    */
   public StreamController(Map<Integer, StreamReader> streams, Map<Integer, Thread> threads) {
     this.streams = streams;
@@ -46,7 +48,6 @@ public class StreamController {
     if (stream != null) {
       Thread thread = new Thread(stream);
 
-      System.out.println(cam.getId());
       streams.put(cam.getId(), stream);
       threads.put(cam.getId(), thread);
 
