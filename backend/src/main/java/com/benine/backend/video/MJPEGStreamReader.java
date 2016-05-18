@@ -22,7 +22,16 @@ public class MJPEGStreamReader implements Runnable {
    * @throws IOException if the inputstream cannot be read.
    */
   public MJPEGStreamReader(URL url) throws IOException {
-    Stream stream = new Stream(url);
+    this(new Stream(url));
+  }
+
+  /**
+   * Creates a new MJPEGStreamReader.
+   *
+   * @param stream A stream object.
+   * @throws IOException If the inputstream cannot be read.
+   */
+  public MJPEGStreamReader(Stream stream) throws IOException {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
     this.snapShot = getImage();
   }
@@ -38,7 +47,7 @@ public class MJPEGStreamReader implements Runnable {
    * Processes a stream by fetching an image
    * from the stream and updating the latest snapshot.
    */
-  private void processStream() {
+  public void processStream() {
     try {
       snapShot = getImage();
 
