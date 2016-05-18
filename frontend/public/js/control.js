@@ -167,11 +167,13 @@ var zoom = 0;
 * Method is called when the inputslider value changes.
 */
 function inputzoomslider(z) {
-	zoom = z;
 	if (zoomSend === false) {
+		zoom = z;
 		zoomSend = true;
 		setTimeout(function(){sendZoom(); zoomSend = false;}, 130);
 		sendZoom();
+	} else {
+		zoom = (parseInt(z) + parseInt(zoom)) / 2;
 	}
 }
 
@@ -179,8 +181,8 @@ function inputzoomslider(z) {
 * Method to send a command to the backend to change the zoom.
 */
 function sendZoom() {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
-	console.log("Zoom: " + zoom);
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + parseInt(zoom) , function(data) {});
+	console.log("Zoom: " + parseInt(zoom));
 }
 
 /* Variables used for the focus slider */
@@ -195,11 +197,13 @@ var focusSend = false;
 function inputfocusslider(f) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	focus = f;
 	if (focusSend === false) {
+		focus = f;
 		focusSend = true;
 		setTimeout(function(){sendFocus(); focusSend = false;}, 130);
 		sendFocus();
+	} else {
+		focus = (parseInt(f) + parseInt(focus)) / 2;
 	}
 }
 
@@ -207,13 +211,14 @@ function inputfocusslider(f) {
 * Method to send a command to the backend to change the focus.
 */
 function sendFocus() {
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + focus , function(data) {});
-	console.log("Focus: " + focus);
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + parseInt(focus) , function(data) {});
+	console.log("Focus: " + parseInt(focus));
 }
 
 /* Variables used for the iris slider */
 var iris = 0;
 var irisSend = false;
+
 
 /**
 * Method to send the new input value of the iris slider to the currently selected camera.
@@ -223,17 +228,22 @@ var irisSend = false;
 function inputirisslider(i) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	iris = i;
 	if (irisSend === false) {
+		iris = i;
 		irisSend = true;
 		setTimeout(function(){sendIris(); irisSend = false;}, 130);
 		sendIris();
+	} else {
+		iris = (parseInt(i) + parseInt(iris)) / 2;
 	}
 }
 
+/**
+* Function to send a command to the backend to change the iris.
+*/
 function sendIris() {
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
-	console.log("Iris: " + iris);
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + parseInt(iris) , function(data) {});
+	console.log("Iris: " + parseInt(iris));
 }
 
 /**
