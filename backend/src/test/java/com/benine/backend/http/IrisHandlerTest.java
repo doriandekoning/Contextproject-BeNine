@@ -110,4 +110,16 @@ public class IrisHandlerTest {
     String response = "{\"succes\":\"false\"}"; 
     verify(out).write(response.getBytes());
   }
+
+  @Test
+  public void testMoveIrisRelative() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?speed=5");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      iHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    verify(cam).moveIris(72);
+  }
 }
