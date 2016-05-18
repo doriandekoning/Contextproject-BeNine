@@ -48,7 +48,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("gfA42"));
 
-    int res = camera.getFocusPos();
+    int res = camera.getFocusPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
     
@@ -65,7 +65,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("ggA42"));
 
-    camera.getFocusPos();
+    camera.getFocusPosition();
   }
   
   @Test
@@ -78,7 +78,7 @@ public class IpcameraFocusTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("axfFFF"));
 
-    camera.setFocusPos(2882);
+    camera.setFocusPosition(2882);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }

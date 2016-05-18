@@ -29,13 +29,13 @@ public interface IrisCamera extends ControlableCamera {
   * @param pos to set the iris to.
   * @throws CameraConnectionException when command can not be completed.
   */
-  void setIrisPos(int pos) throws CameraConnectionException;
+  void setIrisPosition(int pos) throws CameraConnectionException;
 
   /**
    * Get the current iris position.
    * @return the current iris position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  int getIrisPos() throws CameraConnectionException;
+  int getIrisPosition() throws CameraConnectionException;
 
 }

@@ -51,7 +51,7 @@ public class FocussingHandler extends RequestHandler {
         focusCam.setAutoFocusOn(autoOnBool);
       }
       if (setPos != null) {
-        focusCam.setFocusPos(Integer.parseInt(setPos));
+        focusCam.setFocusPosition(Integer.parseInt(setPos));
       }
       response = "{\"succes\":\"true\"}";
     } catch (CameraConnectionException e) {
