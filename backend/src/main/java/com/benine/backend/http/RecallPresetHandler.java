@@ -38,14 +38,14 @@ public class RecallPresetHandler extends RequestHandler {
       Preset preset = getDatabase().getPreset(cameraID,presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
-      movingCamera(ipcamera,preset, exchange);
+      movingCamera(ipcamera,preset);
       responseSuccess(exchange);
     } catch (MalformedURIException e) {
       responseFailure(exchange);
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
 
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } catch (SQLException | CameraConnectionException e) {
+      getLogger().log("Preset can't be recalled: ", LogEvent.Type.CRITICAL);
       responseFailure(exchange);
     } 
   }
@@ -56,8 +56,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @param preset the preset used with the values for moving the camera.
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
-  public void movingCamera(IPCamera ipcamera, Preset preset, HttpExchange exchange) {
-    try {
+  public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
       Position position = preset.getPosition();
       ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
       ipcamera.zoomTo(preset.getZoom());
@@ -65,8 +64,6 @@ public class RecallPresetHandler extends RequestHandler {
       ipcamera.setAutoFocusOn(preset.isAutofocus());
       ipcamera.setIrisPos(preset.getIris());
       ipcamera.setAutoIrisOn(preset.isAutoiris());
-    } catch (CameraConnectionException e) {
-      responseFailure(exchange);
-    } 
+  
   }
 }
