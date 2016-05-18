@@ -57,7 +57,7 @@ public class PresetHandler extends RequestHandler {
 
       
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("presets", json);
+      jsonObject.put("presets", json.toString());
       response = jsonObject.toString();
       
     } catch (MalformedURIException e) {

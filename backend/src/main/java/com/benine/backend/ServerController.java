@@ -7,6 +7,7 @@ import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Class containing the elements to make the server work.
@@ -28,6 +29,8 @@ public class ServerController {
   private boolean running;
 
   private HttpController httpController;
+
+  private ArrayList<Preset> presets;
   
   /**
    * Constructor of the server controller.
@@ -95,7 +98,9 @@ public class ServerController {
     cameraController.addCamera(camera);
     cameraController.addCamera(camera2);  
   }
-  
+
+
+
   /**
    * Read the login information from the database and create database object..
    * @return database object

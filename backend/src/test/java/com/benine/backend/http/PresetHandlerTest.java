@@ -51,11 +51,11 @@ public class PresetHandlerTest {
 
   @Test
   public void testQueryByKeyWord() throws Exception {
-    URI uri = new URI("http://localhost/camera/1/preset?tag=piano");
+    URI uri = new URI("http://localhost/camera/1/preset?tag=Piano");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     Camera cam = mock(Camera.class);
-    when(camController.getCameraById(1)).thenReturn(cam);
+    camController.addCamera(cam);
     Preset[] presets = {new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true),
                       new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true)};
     presets[0].addTag("Piano");
