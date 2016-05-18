@@ -223,6 +223,13 @@ function toggleButton(btn){
 }
 
 /**
+* Handles input on the tag search field.
+*/
+function tagSearchInput(t) {
+	console.log(t.val());
+}
+
+/**
 * Function to handle a click on a preset.
 * @param t is the div on which is clicked.
 */
