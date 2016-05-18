@@ -1,7 +1,7 @@
 package com.benine.backend.video;
 
 /**
- * Created by Jochem on 18-05-16.
+ * Defines all possible types of streams.
  */
 public enum StreamType {
 

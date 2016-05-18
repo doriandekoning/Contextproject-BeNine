@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+ * Defines a Stream connection.
+ */
 public class Stream {
 
   private URLConnection connection;

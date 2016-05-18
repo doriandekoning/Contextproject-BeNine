@@ -10,6 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
+/**
+ * StreamReader for Motion JPEG streams.
+ */
 public class MJPEGStreamReader extends StreamReader {
 
   private BufferedInputStream bufferedStream;
