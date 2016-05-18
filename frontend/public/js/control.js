@@ -122,27 +122,35 @@ var joystickoptions = {
 };
 
 var joystick = nipplejs.create(joystickoptions);
+var distance = 0;
+var angle = 0
+var moveSend = false;
 
 /**
 * When the joystick is moved send a new move command.
 */
 joystick.on('move', function(evt, data){
-	sendMove(data.distance, data.angle.radian);
+	angle = data.angle.radian;
+	distance = data.distance;
+	if (moveSend === false) {
+		moveSend = true;
+		setTimeout(function(){ sendMove(); moveSend = false;  }, 130)
+		sendMove();
+	} 
 });
 
 /**
 * When the joystick is released send a move to the current camera.
 */
 joystick.on('end', function(){
-	sendMove(0, 0);
+	distance = 0;
+	sendMove();
 });
 
 /**
 * Method to send a move to the current camera.
-* @param distance to determine the speed of the movement.
-* @param angle the direction in which to move.
 */
-function sendMove(distance, angle){
+function sendMove(){
 	var tilt, pan;
 	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
 	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
