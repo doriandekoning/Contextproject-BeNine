@@ -95,7 +95,7 @@ public class CameraController {
 
   /**
    * Get all the cameras from the database.
-   * @throws SQLException
+   * @throws SQLException No right connection to database
    */
   public void getCamerasFromDatabase() throws SQLException {
     cameras = getDatabase().getAllCameras();

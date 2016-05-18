@@ -141,4 +141,19 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyConnectionClosed();
     }
 
+    @Test
+    public final void testGetAllCameras() throws SQLException {
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1,"ip");
+        database.addPreset(1,1,preset);
+        database.getAllCameras();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT ID, IPadress FROM camera");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
 }
