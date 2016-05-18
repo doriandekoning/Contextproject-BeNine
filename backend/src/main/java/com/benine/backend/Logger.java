@@ -23,10 +23,11 @@ public class Logger {
   
   /**
    * Creates a new Logger object with standard logwriter.
+   * @param logLocation location to log to.
    * @throws IOException if the default log file is for some reason tot accesible
    */
-  public Logger() throws IOException {
-    this.writer = new LogWriter(Main.getConfig().getValue("standardloglocation"));
+  public Logger(String logLocation) throws IOException {
+    this.writer = new LogWriter(logLocation);
   }
 
   /**

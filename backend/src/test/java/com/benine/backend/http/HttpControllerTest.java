@@ -1,14 +1,15 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.mockito.Matchers.any;
@@ -18,18 +19,24 @@ import static org.mockito.Mockito.mock;
 public class HttpControllerTest {
 
   private Logger logger = mock(Logger.class);
-  private CameraController cameraController = new CameraController();
+  private CameraController cameraController;
+  private ServerController serverController = mock(ServerController.class);
   private HttpController controller;
   private HttpServer mockserver;
 
   @Before
   public void setUp() throws IOException {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    serverController = ServerController.getInstance();
+    
     mockserver = mock(HttpServer.class);
+    cameraController = new CameraController();
+    serverController.setCameraController(cameraController);
   }
 
   private void setUpCamera(Camera cam) throws IOException {
     cameraController.addCamera(cam);
-    controller = new HttpController(mockserver, logger, cameraController);
+    controller = new HttpController(mockserver, logger);
 
   }
 
@@ -104,7 +111,7 @@ public class HttpControllerTest {
   @Test
   public void testDestroy() {
     mockserver = mock(HttpServer.class);
-    controller = new HttpController(mockserver, logger, cameraController);
+    controller = new HttpController(mockserver, logger);
 
     controller.destroy();
     Mockito.verify(mockserver).stop(0);
