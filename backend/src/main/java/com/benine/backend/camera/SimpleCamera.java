@@ -50,7 +50,7 @@ public class SimpleCamera extends BasicCamera {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + getId();
+    result = prime * result + super.hashCode();
     result = prime * result + ((streamLink == null) ? 0 : streamLink.hashCode());
     return result;
   }
@@ -59,7 +59,7 @@ public class SimpleCamera extends BasicCamera {
   public boolean equals(Object obj) {
     if (obj instanceof SimpleCamera) {
       SimpleCamera that = (SimpleCamera) obj;
-      if (this.getId() == that.getId()
+      if (super.equals(that)
           && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
               || this.getStreamLink() == null && that.getStreamLink() == null)
           ) {

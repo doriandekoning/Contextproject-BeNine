@@ -425,4 +425,27 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public String getIpaddress() {
     return ipaddress;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + super.hashCode();
+    result = prime * result + ((ipaddress == null) ? 0 : ipaddress.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof IPCamera) {
+      IPCamera that = (IPCamera) obj;
+      if (super.equals(that)
+          && (this.ipaddress != null && this.ipaddress.equals(that.ipaddress)
+              || this.ipaddress == null && that.ipaddress == null)
+          ) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
