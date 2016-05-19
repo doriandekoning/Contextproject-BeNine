@@ -22,6 +22,8 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 /**
@@ -457,7 +459,56 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   @Override
   public String getMacAddress() throws CameraConnectionException {
-    // TODO Auto-generated method stub
-    return null;
+    String res = null;
+    CameraController.logger.log("Send command: getInfo command to camera: " + id, LogEvent.Type.INFO);
+    try {
+      URL url = new URL("http://" + ipaddress + "/cgi-bin/getinfo?FILE=1");
+      URLConnection con = url.openConnection();
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(1000);
+      InputStream in = con.getInputStream();
+      BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
+      try { 
+        res = buf.readLine();
+      } catch (IOException excep) {
+        throw 
+          new IpcameraConnectionException("Sending command to camera at " + ipaddress 
+                                                                      + " failed", getId());
+      } finally {
+        buf.close();
+        in.close();
+      }
+    } catch (IOException e) {
+      throw new IpcameraConnectionException("Sending command to camera at " + ipaddress + " failed", getId());
+    }
+    HashMap<String, String> cameraInfo = new HashMap<String, String>();
+    if(res != null) {
+       cameraInfo = parseCameraInfo(res);
+    } 
+    if(cameraInfo.get("MAC") == null) {
+      throw new IpcameraConnectionException("Getting the info of the camera at " + ipaddress + " failed", getId());
+    }
+    return cameraInfo.get("MAC");
+  }
+
+  /**
+   * Parse the camera info to a hashmap.
+   * @param res string of all the camera information
+   * @return hashmap of the camera info.
+   */
+  public HashMap<String, String> parseCameraInfo(String res) {
+    String[] values = res.split(" ");
+    HashMap<String, String> valuesmap = new HashMap<String, String>();
+    for(int i = 0; i < values.length; i++){
+      String[] pair = values[i].split("=");
+      String name = pair[0];
+      String value = null;
+      if (pair.length > 1) {
+        value = pair[1];
+      }
+      valuesmap.put(name, value);
+    }
+    
+    return valuesmap;
   }
 }
