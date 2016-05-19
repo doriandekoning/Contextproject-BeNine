@@ -5,11 +5,11 @@ public abstract class CameraFactory {
 
   /**
   * Creates a camera object as specified in camSpec.
-  * @param camSpec specification of the camera 0: type, 1: additional info.
+  * @param index of the camera in the config file to create.
   * @return Camera object.
   * @throws InvalidCameraTypeException when specified camera type can not be created.
   */
-  public abstract Camera createCamera(String[] camSpec) throws InvalidCameraTypeException;
+  public abstract Camera createCamera(int index) throws InvalidCameraTypeException;
 
   /**
   * Exception thrown when camera object type is not available.

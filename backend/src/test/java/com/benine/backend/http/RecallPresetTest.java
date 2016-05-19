@@ -38,7 +38,7 @@ public class RecallPresetTest {
 
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     ipcamera = mock(IPCamera.class);
@@ -92,7 +92,7 @@ public class RecallPresetTest {
   @Test
   public void testMovingCameraIrisPosition() throws CameraConnectionException {
     recallHandler.movingCamera(ipcamera, preset);
-    verify(ipcamera).setIrisPos(preset.getIris());
+    verify(ipcamera).setIrisPosition(preset.getIris());
   }
 
   @Test
