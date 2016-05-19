@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.PresetController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +55,9 @@ public class RecallPresetTest {
   public void testRecallingPreset() throws Exception {   
     URI uri = new  URI("http://localhost/camera/1/recallPreset?presetid=1&currentcamera=0");
     Database database = mock(Database.class);
-    when(database.getPreset(0, 1)).thenReturn(new Preset(new Position(1, 2), 1, 0, 0, false, 0, 0, false, 0));
+    PresetController presetController = mock(PresetController.class);
+    serverController.setPresetController(presetController);
+    when(presetController.getPresetById(1)).thenReturn(new Preset(new Position(1, 2), 1, 0, 0, false, 0, 0, false, 0));
     when(exchange.getRequestURI()).thenReturn(uri);
 
     serverController.setDatabase(database);

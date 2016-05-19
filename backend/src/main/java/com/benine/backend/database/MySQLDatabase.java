@@ -18,6 +18,7 @@ public class MySQLDatabase implements Database {
   private String user;
   private String password;
   private Logger logger;
+  private int presetID;
 
   /**
    * Constructor of a MySQL Database.
@@ -30,6 +31,7 @@ public class MySQLDatabase implements Database {
     this.user = user;
     this.password = password;
     this.logger = logger;
+    presetID = 1;
   }
 
   @Override
@@ -43,6 +45,8 @@ public class MySQLDatabase implements Database {
     try {
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
+      preset.setId(presetID);
+      presetID++;
       statement.close();
     } finally {
       if (statement != null) {
@@ -172,6 +176,7 @@ public class MySQLDatabase implements Database {
             new InputStreamReader( new FileInputStream("database" + File.separator
                 + "databasefile.sql"), "UTF-8"));
         sr.runScript(reader);
+        presetID = 1;
       } catch (Exception e) {
         logger.log("Database is not reseted.", LogEvent.Type.CRITICAL);
         e.printStackTrace();
@@ -267,7 +272,7 @@ public class MySQLDatabase implements Database {
     if (preset.isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getId() + ","
+    return "INSERT INTO presetsdatabase.presets VALUES(" + presetID + ","
         + preset.getPosition().getPan() + "," + preset.getPosition().getTilt()
         + "," + preset.getZoom() + "," + preset.getFocus()
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","

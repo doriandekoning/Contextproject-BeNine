@@ -50,7 +50,7 @@ public class PresetController {
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
     Database db = ServerController.getInstance().getDatabase();
-    db.deletePreset(preset.getCameraId(), preset.getId());
+    db.deletePreset(preset.getId());
   }
 
   /**
@@ -61,7 +61,7 @@ public class PresetController {
   public void addPreset(Preset preset) throws SQLException {
     presets.add(preset);
     ServerController serverContr = ServerController.getInstance();
-    serverContr.getDatabase().addPreset(preset.getCameraId(), preset);
+    serverContr.getDatabase().addPreset(preset);
   }
 
   /**
