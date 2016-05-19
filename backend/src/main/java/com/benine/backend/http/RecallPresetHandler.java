@@ -33,7 +33,7 @@ public class RecallPresetHandler extends RequestHandler {
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
         
-      int cameraID = getCameraId(exchange);
+      int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = getDatabase().getPreset(cameraID,presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
