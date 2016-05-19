@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.FocussingCamera;
@@ -14,14 +13,6 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 public class FocussingHandler extends RequestHandler {
-
-  /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public FocussingHandler(Logger logger) {
-    super(logger);
-  }
 
   /**
    * Handles a request

@@ -19,7 +19,6 @@ import java.net.InetSocketAddress;
 public class HttpController {
 
   private HttpServer server;
-  private Logger logger;
 
   /**
    * Constructor, creates a new HttpController object.
@@ -28,7 +27,7 @@ public class HttpController {
    * @param port number to connect to.
    */
   public HttpController(String address, int port, Logger logger) {
-    this(createServer(address, port, logger), logger);
+    this(createServer(address, port));
   }
 
   /**
@@ -36,12 +35,12 @@ public class HttpController {
    * @param httpserver a server object.
    * @param logger the logger to use to log to.
    */
-  public HttpController(HttpServer httpserver, Logger logger) {
-    this.logger = logger;
+  public HttpController(HttpServer httpserver) {
     this.server = httpserver;
     createHandlers();
     server.start();
-    logger.log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
+    ServerController.getInstance().getLogger()
+          .log("Server running at: " + server.getAddress(), LogEvent.Type.INFO);
   }
 
   /**
@@ -51,12 +50,13 @@ public class HttpController {
    * @param port port number to connect to
    * @return  An HttpServer.
      */
-  private static HttpServer createServer(String address, int port, Logger logger) {
+  private static HttpServer createServer(String address, int port) {
     try {
       InetSocketAddress socket = new InetSocketAddress(address, port);
       return HttpServer.create(socket, 20);
     } catch (IOException e) {
-      logger.log("Unable to create server", LogEvent.Type.CRITICAL);
+      ServerController.getInstance().getLogger()
+                          .log("Unable to create server", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return null;
     }
@@ -66,8 +66,8 @@ public class HttpController {
    * Creates handlers for all cams in the camera controller.
    */
   private void createHandlers() {
-    server.createContext("/static", new FileHandler(logger));
-    server.createContext("/camera/", new CameraInfoHandler(logger));
+    server.createContext("/static", new FileHandler());
+    server.createContext("/camera/", new CameraInfoHandler());
     for (Camera cam : ServerController.getInstance().getCameraController().getCameras()) {
       createHandlers(cam);
     }
@@ -81,28 +81,29 @@ public class HttpController {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
       server.createContext("/camera/" + camId
-              + "/focus", new FocussingHandler(logger));
+              + "/focus", new FocussingHandler());
     }
     if (cam instanceof IrisCamera) {
       server.createContext("/camera/" + camId + "/iris",
-                                              new IrisHandler(logger));
+                                              new IrisHandler());
     }
     if (cam instanceof MovingCamera) {
       server.createContext("/camera/" + camId + "/move", 
-                                              new MovingHandler(logger));
+                                              new MovingHandler());
     }
     if (cam instanceof ZoomingCamera) {
       server.createContext("/camera/" + camId + "/zoom",
-                                              new ZoomingHandler(logger));
+                                              new ZoomingHandler());
     }
     server.createContext("/camera/" + camId + "/preset", 
-                                              new PresetHandler(logger));
+                                              new PresetHandler());
     server.createContext("/camera/" + camId + "/createpreset", 
-                                              new PresetCreationHandler(logger));
+                                              new PresetCreationHandler());
     server.createContext("/camera/" + camId + "/recallpreset",
-                                               new RecallPresetHandler(logger));
+                                               new RecallPresetHandler());
 
-    logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
+    ServerController.getInstance().getLogger()
+                          .log("Succesufully setup endpoints", LogEvent.Type.INFO);
   }
 
   /**
