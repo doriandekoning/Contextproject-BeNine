@@ -64,7 +64,7 @@ public class ServerController {
     cameraController.loadConfigCameras();
     
     httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger); 
+                      Integer.parseInt(config.getValue("serverport"))); 
     
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);

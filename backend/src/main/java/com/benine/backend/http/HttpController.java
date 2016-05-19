@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.FocussingCamera;
@@ -23,17 +22,15 @@ public class HttpController {
   /**
    * Constructor, creates a new HttpController object.
    * @param address an internetsocet address indicating the ports for the server to listen to.
-   * @param logger the logger to use to log to.
    * @param port number to connect to.
    */
-  public HttpController(String address, int port, Logger logger) {
+  public HttpController(String address, int port) {
     this(createServer(address, port));
   }
 
   /**
    * Constructor, creates a new HttpController object.
    * @param httpserver a server object.
-   * @param logger the logger to use to log to.
    */
   public HttpController(HttpServer httpserver) {
     this.server = httpserver;
@@ -46,7 +43,6 @@ public class HttpController {
   /**
    * Creates a server object.
    * @param address Socket address
-   * @param logger  Logger
    * @param port port number to connect to
    * @return  An HttpServer.
      */
