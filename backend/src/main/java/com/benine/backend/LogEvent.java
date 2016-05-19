@@ -100,7 +100,13 @@ public class LogEvent {
     builder.append(this.description);
     if (this.exception != null) {
       builder.append(", ");
-      builder.append(exception);
+      StackTraceElement[] stacktrace = exception.getStackTrace();
+      for (StackTraceElement e : stacktrace) {
+        builder.append(e.toString());
+        builder.append(System.getProperty("line.separator"));
+        builder.append("     ");
+      }
+      builder.append(exception.getStackTrace().toString());
     }
     return builder.toString();
   }
