@@ -1,18 +1,18 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
+import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by dorian on 5-5-16.
  */
-public class SimpleCamera implements Camera {
+public class SimpleCamera extends Camera {
 
-  private int id = -1;
-  private Preset[] presetsFromCamera = new Preset[16];
   private String streamLink;
+
+  public SimpleCamera() {
+    super(StreamType.MJPEG);
+  }
 
   /**
    * Creates a JSON representation of this object.
@@ -25,24 +25,6 @@ public class SimpleCamera implements Camera {
     object.put("id", getId());
     object.put("streamlink", getStreamLink());
     return object.toString();
-  }
-
-  /**
-   * Sets id.
-   * @param id the new id.
-   */
-  @Override
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  /**
-   * Getter for id.
-   * @return the id of this camera.
-   */
-  @Override
-  public int getId() {
-    return id;
   }
 
   /**
@@ -59,29 +41,5 @@ public class SimpleCamera implements Camera {
    */
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
-  }
-
-  @Override
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
-  }
-
-  @Override
-  public void setPresets(Preset[] presets) {
-    Preset[] newPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, newPresets, 0, presets.length);
-    presetsFromCamera = newPresets;
-  }
-
-  @Override
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
-    }
   }
 }

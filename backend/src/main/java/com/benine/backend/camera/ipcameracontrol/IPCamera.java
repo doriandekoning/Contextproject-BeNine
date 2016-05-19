@@ -1,7 +1,6 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -11,6 +10,7 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
 
+import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,28 +20,23 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-
 
 /**
  * Class to communicate with an IP Camera.
  * @author Bryan
  */
-public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera, FocussingCamera {
+public class IPCamera extends Camera implements MovingCamera,
+        IrisCamera, ZoomingCamera, FocussingCamera {
 
-  String ipaddress;
-
-  private int id = -1;
-
-  private Preset[] presetsFromCamera;
+  private String ipaddress;
 
   /**
    *  Create a new IP Camera object.
    *  @param ip address of this camera.
    */
   public IPCamera(String ip) {
+    super(StreamType.MJPEG);
     ipaddress = ip;
-    presetsFromCamera = new Preset[16];
   }
   
   /**
@@ -90,7 +85,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return new Position(convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7)));
     } else {
-      throw new IpcameraConnectionException("Getting the position of the camera failed.", getId());
+      throw new IpcameraConnectionException("Getting the position of the camera failed.", this.getId());
     }
   }
   
@@ -227,11 +222,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Checking autofocus failed.", LogEvent.Type.INFO);
     String res = sendCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {
-      if (res.substring(2).equals("1")) {
-        return true;
-      } else {
-        return false;
-      }
+      return res.substring(2).equals("1");
     } else {
       CameraController.logger.log("Changing auto focus failed.", LogEvent.Type.CRITICAL);
       throw new CameraConnectionException("Sending command to test autofocus failed", getId());
@@ -363,14 +354,14 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
         res = buf.readLine();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+          new IpcameraConnectionException("Sending command to camera at" + ipaddress
                                                                       + " failed", getId());
       } finally {
         buf.close();
         com.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress
                                                                       + " failed", getId());
     }
     
@@ -384,15 +375,15 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("id", Integer.valueOf(this.id));
+    json.put("id", this.getId());
     try {
-      json.put("pan", new Double(getPosition().getPan()));
-      json.put("tilt", new Double(getPosition().getTilt()));
-      json.put("zoom", new Double(getZoomPosition()));
-      json.put("focus", new Double(getFocusPos()));
-      json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
-      json.put("iris", new Double(getIrisPos()));
-      json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
+      json.put("pan", getPosition().getPan());
+      json.put("tilt", getPosition().getTilt());
+      json.put("zoom", (double) getZoomPosition());
+      json.put("focus", (double) getFocusPos());
+      json.put("autofocus", isAutoFocusOn());
+      json.put("iris", (double) getIrisPos());
+      json.put("autoiris", isAutoIrisOn());
       json.put("videostream", Boolean.valueOf(getStreamLink()));
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
@@ -401,48 +392,12 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     return  json.toString();
 
   }
-  
-  /**
-   * Sets the id of this camera.
-   * @param id the id of this camera
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
-  
-  /**
-   * Gets the id of this camera.
-   * @return the id of this camera
-   */
-  public int getId() {
-    return this.id;
-  }
 
+  /**
+   * Returns the IP Address of this camera.
+   * @return String IP Address
+   */
   public String getIpaddress() {
     return ipaddress;
-  }
-
-  @Override
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
-  }
-
-  @Override
-  public void setPresets(Preset[] presets) {
-    Preset[] copyPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
-    presetsFromCamera = copyPresets;
-  }
-
-  @Override
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
-    }
   }
 }
