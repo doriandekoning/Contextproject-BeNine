@@ -47,7 +47,7 @@ public class PresetHandler extends RequestHandler {
       JSONArray json = new JSONArray();
       String tag = parsedURI.getValue("tag");
       ArrayList<Preset> presets;
-      if( tag == null) {
+      if ( tag == null) {
         presets = ServerController.getInstance()
                 .getPresetController().getPresets();
       } else {
@@ -67,7 +67,7 @@ public class PresetHandler extends RequestHandler {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
-    System.out.println("Response:" +response);
+    System.out.println("Response:" + response);
     respond(exchange, response);
   }
 }

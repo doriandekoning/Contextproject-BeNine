@@ -40,6 +40,7 @@ public class Preset {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
    */
   public Preset(Position pos, int zoom, int focus,int iris,
                boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
@@ -64,6 +65,7 @@ public class Preset {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
    * @param keyWords  The keywords of this preset
    */
   public Preset(Position pos, int zoom, int focus, int iris,
@@ -93,7 +95,7 @@ public class Preset {
     json.put("image", image);
     json.put("id", presetid);
     JSONArray tagsJSON = new JSONArray();
-    for(String tag : tags) {
+    for (String tag : tags) {
       tagsJSON.add(tag);
     }
     json.put("tags", tagsJSON);

@@ -57,14 +57,13 @@ public class PresetController {
 
   /**
    * Adds a preset.
-   * @param preset
-   * @return the id of the created preset.
+   * @param preset the preset to add.
    * @throws SQLException when an error occures in the database.
    */
   public void addPreset(Preset preset) throws SQLException {
     presets.add(preset);
     ServerController serverContr = ServerController.getInstance();
-    preset.setId(serverContr.getDatabase().addPreset(preset.getCameraId(), -1, preset));
+    serverContr.getDatabase().addPreset(preset.getCameraId(), preset);
   }
 
   /**

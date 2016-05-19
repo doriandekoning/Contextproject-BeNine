@@ -6,21 +6,8 @@ import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.OutputStreamWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -53,22 +40,22 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public int addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+  public void addPreset(int camera, Preset preset) throws SQLException {
     Statement statement = connection.createStatement();
     try {
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + cameraPresetNumber + ","
+      sql = "INSERT INTO presetsdatabase.camerapresets VALUES(" + 0 + ","
           + camera + "," + presetId + ")";
       statement.executeUpdate(sql);
       statement.close();
+      preset.setId(presetId);
       presetId++;
     } finally {
       if (statement != null) {
         statement.close();
       }
     }
-    return presetId-1;
   }
 
   @Override
