@@ -70,16 +70,16 @@ public class PresetCreationHandler  extends RequestHandler {
    * @throws StreamNotAvailableException exception if there's no stream for the camera available
    * @throws IOException exception thrown if the input is wrong. 
    */
-  public void createImage(Preset preset, int cameraID, int presetID) throws StreamNotAvailableException, IOException {
+  public static void createImage(Preset preset, int cameraID, int presetID) throws StreamNotAvailableException, IOException {
     ServerController serverController = ServerController.getInstance();
     StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
     BufferedImage bufferedImage = streamReader.getSnapShot(); 
     
     //Rescale image so it loads faster.
-    BufferedImage buffer = (BufferedImage)bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
+    //BufferedImage buffer = (BufferedImage)bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
     
-    File path = new File("presetImages" + File.separator + cameraID + "_" + presetID);
-    ImageIO.write(buffer, "jpeg", path);
+    File path = new File("static" + File.separator + "presets" + File.separator + cameraID + "_" + presetID + ".jpg");
+    ImageIO.write(bufferedImage, "jpg", path);
    
     preset.setImage(path.toString());
   }
