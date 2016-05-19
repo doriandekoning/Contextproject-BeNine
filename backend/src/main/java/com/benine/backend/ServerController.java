@@ -89,7 +89,7 @@ public class ServerController {
   private Database loadDatabase() {
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password, logger);
+    return new MySQLDatabase(user, password);
   }
   
   /**
