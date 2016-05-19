@@ -17,7 +17,7 @@ public class Stream {
    * Constructor for a new stream object.
    * @param streamurl The url to get the stream from.
    * @throws IOException If an exception occurs while creating the stream,
-   * rendering the stream useless.
+   *      rendering the stream useless.
    */
   public Stream(String streamurl) throws IOException {
     URL url = new URL(streamurl);
