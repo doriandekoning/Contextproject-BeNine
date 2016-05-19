@@ -55,8 +55,6 @@ public class PresetHandlerTest {
     URI uri = new URI("http://localhost/camera/1/preset?tag=Piano");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    Camera cam = mock(Camera.class);
-    camController.addCamera(cam);
     ArrayList<Preset> presets = new ArrayList<Preset>();
     presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true, 0));
     presets.add(new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0));
@@ -64,6 +62,8 @@ public class PresetHandlerTest {
     presets.get(1).addTag("Violin");
     when(database.getAllPresets()).thenReturn(presets);
     serverController.setDatabase(database);
+    Camera cam = mock(Camera.class);
+    camController.addCamera(cam);
     handler.handle(exchange);
     JSONObject obj = new JSONObject();
     JSONArray ar = new JSONArray();
