@@ -111,4 +111,10 @@ public class SimpleCamera implements Camera {
     return false;
   }
 
+  @Override
+  public String getMacAddress() throws CameraConnectionException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }

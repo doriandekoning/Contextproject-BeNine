@@ -454,4 +454,10 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       i++;
     }
   }
+
+  @Override
+  public String getMacAddress() throws CameraConnectionException {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
