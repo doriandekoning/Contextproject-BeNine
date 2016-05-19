@@ -2,8 +2,6 @@ package com.benine.backend.camera;
 
 import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
-import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
