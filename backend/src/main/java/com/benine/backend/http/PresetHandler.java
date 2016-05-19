@@ -64,7 +64,6 @@ public class PresetHandler extends RequestHandler {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
-    System.out.println("Response:" + response);
     respond(exchange, response);
   }
 }
