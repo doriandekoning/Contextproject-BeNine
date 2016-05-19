@@ -160,7 +160,7 @@ function sendMove(){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + parseInt(49.5  + (4.95 * zoom)), function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
@@ -172,7 +172,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + (49.5  + (4.95*focus)) , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + parseInt(49.5  + (4.95*focus)) , function(data) {});
 	console.log("Focus: " + focus);
 }
 
@@ -184,7 +184,7 @@ function inputfocusslider(focus) {
 function inputirisslider(iris) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + (49.5 + (4.95*iris)) , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + parseInt(49.5 + (4.95*iris)) , function(data) {});
 	console.log("Iris: "+ iris);
 }
 
