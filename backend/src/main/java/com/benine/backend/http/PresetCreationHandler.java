@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -73,9 +74,8 @@ public class PresetCreationHandler  extends RequestHandler {
     ServerController serverController = ServerController.getInstance();
     StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
     BufferedImage bufferedImage = streamReader.getSnapShot();
-    
-    File path = new File("images" + File.separator + presetID);
-    ImageIO.write(bufferedImage, "jpeg", path);
+    Image image = bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
+    ImageIO.write(bufferedImage, "jpeg", new File("presetImages" + File.separator + presetID));
    
   }
   
