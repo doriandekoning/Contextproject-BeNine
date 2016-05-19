@@ -33,7 +33,6 @@ public class PresetHandlerTest {
   private CameraController camController;
   private OutputStream out;
   private Logger logger;
-  private Database database = mock(Database.class);
   HttpExchange exchange = mock(HttpExchange.class);
   
   @Before
@@ -50,6 +49,7 @@ public class PresetHandlerTest {
 
   @Test
   public void testQueryByKeyWord() throws Exception {
+    Database database = mock(Database.class);
     URI uri = new URI("http://localhost/camera/1/preset?tag=Piano");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
