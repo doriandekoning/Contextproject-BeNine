@@ -108,7 +108,7 @@ public class StreamController {
     if (streams.containsKey(camId)) {
       return streams.get(camId);
     } else {
-      throw new StreamNotAvailableException();
+      throw new StreamNotAvailableException(camId);
     }
   }
 }
