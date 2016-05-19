@@ -60,9 +60,11 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
     CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
+    String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
+    panSp = ("00" + panSp).substring(panSp.length());
     sendCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
                     + convertTiltToHex(pos.getTilt()).toUpperCase()
-                    + convertPanSpeedtoHex(panSpeed).toUpperCase()
+                    + panSp
                     + convertTiltSpeed(tiltSpeed));
   }
   
