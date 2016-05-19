@@ -47,4 +47,10 @@ public interface Camera {
    * @param presets The ArrayList of presets
    */
   void setPresetsFromArrayList(ArrayList<Preset> presets);
+  
+  /**
+   * Requests the MAC address of the camera.
+   * @return MAC address of the camera.
+   */
+  String getMacAddress() throws CameraConnectionException;
 }
