@@ -53,6 +53,7 @@ public class PresetCreationHandler  extends RequestHandler {
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
         
+        //Create corresponding image
         createImage(preset, cameraID, presetID);
         responseSuccess(exchange);
       
@@ -72,11 +73,13 @@ public class PresetCreationHandler  extends RequestHandler {
   public void createImage(Preset preset, int cameraID, int presetID) throws StreamNotAvailableException, IOException {
     ServerController serverController = ServerController.getInstance();
     StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
-    BufferedImage bufferedImage = streamReader.getSnapShot();
-    Image image = bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
+    BufferedImage bufferedImage = streamReader.getSnapShot(); 
+    
+    //Rescale image so it loads faster.
+    BufferedImage buffer = (BufferedImage)bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
     
     File path = new File("presetImages" + File.separator + cameraID + "_" + presetID);
-    ImageIO.write(bufferedImage, "jpeg", path);
+    ImageIO.write(buffer, "jpeg", path);
    
     preset.setImage(path.toString());
   }
@@ -99,7 +102,6 @@ public class PresetCreationHandler  extends RequestHandler {
       boolean autofocus = ipCamera.isAutoFocusOn();
     
       //Create new Preset and return it.
-      //TODO add image of just created preset
       Preset preset = new Preset(new Position(pan,tilt),zoom,
           focus,iris,autofocus, panspeed, tiltspeed, autoiris);
       
