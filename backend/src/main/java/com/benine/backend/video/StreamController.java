@@ -40,7 +40,7 @@ public class StreamController {
   }
 
   /**
-   * Adds a camera to the HashMap containing all streams if there is a stream available.
+   * Adds a camera to the Map containing all streams if there is a stream available.
    * @param cam a Camera object.
    */
   public void addCamera(Camera cam) {
