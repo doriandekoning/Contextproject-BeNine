@@ -34,32 +34,31 @@ public class PresetHandlerTest {
   private OutputStream out;
   private Logger logger;
   HttpExchange exchange = mock(HttpExchange.class);
+  ArrayList<Preset> presets = new ArrayList<Preset>();
+  Database database = mock(Database.class);
   
   @Before
-  public void setUp() throws CameraConnectionException{
+  public void setUp() throws Exception{
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
-    camController = mock(CameraController.class);
     serverController = ServerController.getInstance();
+    camController = mock(CameraController.class);
     serverController.setCameraController(camController);
     logger = mock(Logger.class);
-    handler = new PresetHandler(logger);  
-
-    out = mock(OutputStream.class);
-  }
-
-  @Test
-  public void testQueryByKeyWord() throws Exception {
-    Database database = mock(Database.class);
-    URI uri = new URI("http://localhost/camera/1/preset?tag=Piano");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    when(exchange.getResponseBody()).thenReturn(out);
-    ArrayList<Preset> presets = new ArrayList<Preset>();
+    handler = new PresetHandler(logger);
     presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true, 0));
     presets.add(new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0));
     presets.get(0).addTag("Piano");
     presets.get(1).addTag("Violin");
     when(database.getAllPresets()).thenReturn(presets);
     serverController.setDatabase(database);
+    out = mock(OutputStream.class);
+  }
+
+  @Test
+  public void testQueryByKeyWord() throws Exception {
+    URI uri = new URI("http://localhost/camera/1/preset?tag=Piano");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    when(exchange.getResponseBody()).thenReturn(out);
     Camera cam = mock(Camera.class);
     camController.addCamera(cam);
     handler.handle(exchange);
