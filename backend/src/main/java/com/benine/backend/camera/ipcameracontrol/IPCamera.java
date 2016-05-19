@@ -161,7 +161,6 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     pan = Math.min(175, pan);
     pan = Math.max(-175, pan);
     pan = (pan + 175) * 121.3628571 + 11530;
-
     return Integer.toHexString((int) (pan + 0.5));
   }
   
@@ -206,7 +205,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendCommand("%23F" + speed);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendCommand("%23F" + formatter.format(speed));
   }
 
   /**
@@ -288,7 +288,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void setIrisPosition(int pos) throws CameraConnectionException {
     pos = Math.max(1, pos);
     pos = Math.min(99, pos);
-    sendCommand("%23I" + pos);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendCommand("%23I" + formatter.format(pos));
   }
 
   /**
@@ -343,7 +344,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void zoom(int dir) throws CameraConnectionException {
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
-    sendCommand("%23Z" + dir);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendCommand("%23Z" + formatter.format(dir));
   }
   
   /**
@@ -404,7 +406,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
       json.put("iris", new Double(getIrisPosition()));
       json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
-      json.put("streamlink", Boolean.valueOf(getStreamLink()));
+      json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
       System.out.println(e.toString());

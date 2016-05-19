@@ -99,6 +99,21 @@ public class IpcameraFocusTest {
   }
   
   @Test
+  public final void testMoveFocus2() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#F02"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("fs02"));
+
+    camera.moveFocus(2);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
   public final void testIsAutoFocusOn() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
