@@ -20,7 +20,7 @@ public class CameraInfoHandlerTest {
 
   @Test
   public void testGetInfo() throws Exception {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController serverController = ServerController.getInstance();
    
     // Setup mocks

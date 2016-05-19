@@ -44,19 +44,20 @@ public class FocussingHandler extends RequestHandler {
     FocussingCamera focusCam = (FocussingCamera) cam;
     String autoOn = parsedURI.getValue("autoFocusOn");
     String setPos = parsedURI.getValue("position");
+    String speed = parsedURI.getValue("speed");
     try {
       if (autoOn != null) {
         boolean autoOnBool = Boolean.parseBoolean(autoOn);
         focusCam.setAutoFocusOn(autoOnBool);
       }
       if (setPos != null) {
-        focusCam.setFocusPos(Integer.parseInt(setPos));
+        focusCam.setFocusPosition(Integer.parseInt(setPos));
+      } else if (speed != null) {
+        focusCam.moveFocus(Integer.parseInt(speed));
       }
+      respondSuccess(exchange);
     } catch (CameraConnectionException e) {
       respondFailure(exchange);
-      return;
     }
-    respondSuccess(exchange);
-
   }
 }

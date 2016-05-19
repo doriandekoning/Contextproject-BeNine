@@ -2,7 +2,6 @@ package com.benine.backend.camera;
 
 /**
  * Decorator of a camera with functions to control the iris of the camera.
- * @author Bryan
  *
  */
 public interface IrisCamera extends ControlableCamera {
@@ -29,13 +28,23 @@ public interface IrisCamera extends ControlableCamera {
   * @param pos to set the iris to.
   * @throws CameraConnectionException when command can not be completed.
   */
-  void setIrisPos(int pos) throws CameraConnectionException;
+  void setIrisPosition(int pos) throws CameraConnectionException;
+
+  /**
+   * Move the iris in the specified direction.
+   * Values between 1 and 99 where 50 is stop moving.
+   * 1 is iris nearer with max speed
+   * 99 is iris further with max speed
+   * @param speed value with which speed iris is changing.
+   * @throws CameraConnectionException when command can not be completed.
+   */
+  void moveIris(int speed) throws CameraConnectionException;
 
   /**
    * Get the current iris position.
    * @return the current iris position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  int getIrisPos() throws CameraConnectionException;
+  int getIrisPosition() throws CameraConnectionException;
 
 }

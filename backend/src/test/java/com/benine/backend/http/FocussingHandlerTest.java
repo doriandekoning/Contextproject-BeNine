@@ -32,7 +32,7 @@ public class FocussingHandlerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController serverController = ServerController.getInstance();
     
     CameraController camController = new CameraController();
@@ -44,7 +44,7 @@ public class FocussingHandlerTest {
 
   @Test
   public void testOnlyAutoFocus() throws Exception {  
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoFocusOn=true");  
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?autoFocusOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     try {
       fHandler.handle(exchange);
@@ -55,6 +55,19 @@ public class FocussingHandlerTest {
   }
 
   @Test
+  public void testMoveFocusRelative() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?speed=5");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      fHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    verify(cam).moveFocus(5);
+  }
+
+
+  @Test
   public void testOnlyPosition() throws Exception {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=3");
     when(exchange.getRequestURI()).thenReturn(uri);
@@ -63,7 +76,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
   }
 
 
@@ -76,7 +89,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
     verify(cam).setAutoFocusOn(false);
   }
   
@@ -97,7 +110,7 @@ public class FocussingHandlerTest {
   public void testCameraConnectionException() throws Exception {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=4&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
-    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setFocusPos(4);
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setFocusPosition(4);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {
