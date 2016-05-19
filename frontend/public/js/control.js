@@ -294,6 +294,10 @@ function loadCreatePreset() {
 * Create a preset of the current camera view.
 */
 function createPreset() {
+	var preset_create_div = $('#preset_create_div');
+	var presetName = preset_create_div.find('#preset_name').val();
+	var presetTag = preset_create_div.find('#preset_tag').val();
+	console.log(presetTag + " " + presetName);
 	if (currentcamera !== undefined) {
 		$.get("/api/backend/camera/"+ currentcamera + "/createpreset" , function(data) {console.log(data);});
 	}

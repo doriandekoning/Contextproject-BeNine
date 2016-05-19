@@ -144,7 +144,7 @@
     </div>
 
     <!-- Defines the modal used for preset creation -->
-    <div class="modal fade preset-create-modal" tabindex="-1" role="dialog" aria-labelledby="preset-create-modal">
+    <div id="preset_create_div" class="modal fade preset-create-modal" tabindex="-1" role="dialog" aria-labelledby="preset-create-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -153,8 +153,12 @@
                 </div>
                 <div class="modal-body">
 					<div>
+						Preset name:<br>
+						<input id="preset_name" type="text">
+					</div>
+					<div>
 						Tag:<br>
-						<input type="text">
+						<input id="preset_tag" type="text">
 					</div>
 					
                     <img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
