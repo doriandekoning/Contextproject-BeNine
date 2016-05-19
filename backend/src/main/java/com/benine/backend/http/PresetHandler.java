@@ -39,7 +39,6 @@ public class PresetHandler extends RequestHandler {
     getLogger().log("Got an http request with uri: "
             + exchange.getRequestURI(), LogEvent.Type.INFO);
 
-    int cameraId = getCameraId(exchange);
     String response =  "";
 
 
@@ -68,6 +67,7 @@ public class PresetHandler extends RequestHandler {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";
     }
+    System.out.println("Response:" +response);
     respond(exchange, response);
   }
 }

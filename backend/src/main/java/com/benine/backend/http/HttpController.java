@@ -95,7 +95,7 @@ public class HttpController {
       server.createContext("/camera/" + camId + "/zoom",
                                               new ZoomingHandler(logger));
     }
-    server.createContext("/presets/getpresets", new PresetHandler(logger));
+    server.createContext("/presets/", new PresetHandler(logger));
     server.createContext("/presets/createpreset", new PresetCreationHandler(logger));
     server.createContext("/presets/recallpreset", new RecallPresetHandler(logger));
 
