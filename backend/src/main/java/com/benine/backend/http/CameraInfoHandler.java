@@ -2,7 +2,6 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.camera.CameraConnectionException;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -28,11 +27,6 @@ public class CameraInfoHandler extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     getLogger().log("Got an http request with uri: "
             + exchange.getRequestURI(), LogEvent.Type.INFO);
-    try {
-      respond(exchange, getCameraController().getCamerasJSON());
-    } catch (CameraConnectionException e) {
-      getLogger().log("Cannot connect to camera with id: " + e.getCamId(), LogEvent.Type.CRITICAL);
-    }
-    respond(exchange, "{\"succes\":false}");
+    respond(exchange, getCameraController().getCamerasJSON());
   }
 }

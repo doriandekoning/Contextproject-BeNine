@@ -5,6 +5,9 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -68,5 +71,81 @@ public class SimpleCameraTest {
     Assert.assertEquals(expectedJSON.get("streamlink"), actualJSON.get("streamlink"));
     Assert.assertEquals(expectedJSON.get("id"), actualJSON.get("id"));
   }
+  
+  @Test
+  public void testEqualsId() {
+    SimpleCamera camera1 = new SimpleCamera();
+    camera1.setId(1);
+    SimpleCamera camera2 = new SimpleCamera();
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testEqualsStreamlink() {
+    SimpleCamera camera1 = new SimpleCamera();
+    camera1.setStreamLink("test");
+    SimpleCamera camera2 = new SimpleCamera();
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testEqualsNull() {
+    SimpleCamera camera1 = new SimpleCamera();
+    camera1.setStreamLink("test");
+    assertNotEquals(camera1, null);
+  }
+  
+  @Test
+  public void testEqualsOtherObject() {
+    SimpleCamera camera1 = new SimpleCamera();
+    camera1.setStreamLink("test");
+    String camera2 = "test";
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testEqualsPreset() {
+    SimpleCamera camera1 = new SimpleCamera();
+    Preset[] presets = {};
+    camera1.setPresets(presets);
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setPresets(presets);
+    camera2.setStreamLink("test");
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testEqualsNotPreset() {
+    SimpleCamera camera1 = new SimpleCamera();
+    Preset[] presets = {};
+    camera1.setPresets(presets);
+    SimpleCamera camera2 = new SimpleCamera();
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testEqual() {
+    SimpleCamera camera1 = new SimpleCamera();
+    camera1.setStreamLink("test");
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink("test");
+    assertEquals(camera1, camera2);
+  }
+  
+  @Test
+  public void testHashcode() {
+    SimpleCamera camera1 = new SimpleCamera();
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink("test");
+    assertNotEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
+  @Test
+  public void testHashcodeEquals() {
+    SimpleCamera camera1 = new SimpleCamera();
+    SimpleCamera camera2 = new SimpleCamera();
+    assertEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
 }
 

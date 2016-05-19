@@ -43,11 +43,11 @@ public class PresetCreationHandler  extends RequestHandler {
         
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
-        responseSuccess(exchange);
+        respondSuccess(exchange);
       
       }
     } catch (SQLException e) {
-      System.out.println(e.toString());
+      respondFailure(exchange);
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     }
 
@@ -63,8 +63,8 @@ public class PresetCreationHandler  extends RequestHandler {
       int zoom = ipCamera.getZoomPosition();
       int pan = (int)ipCamera.getPosition().getPan();
       int tilt = (int)ipCamera.getPosition().getTilt();
-      int focus = ipCamera.getFocusPos();
-      int iris = ipCamera.getIrisPos();
+      int focus = ipCamera.getFocusPosition();
+      int iris = ipCamera.getIrisPosition();
       int panspeed = 15;
       int tiltspeed = 1 ;
       boolean autoiris = ipCamera.isAutoIrisOn();

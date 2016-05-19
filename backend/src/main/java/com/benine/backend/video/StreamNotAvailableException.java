@@ -6,12 +6,19 @@ package com.benine.backend.video;
 public class StreamNotAvailableException extends Exception {
 
   /**
+   * Serial Version.
+   */
+  private static final long serialVersionUID = -8728176073385756365L;
+  
+  /**
    * The id of the camera for which a stream is not available.
    */
   private int camid;
 
   /**
    * Should be thrown if a stream is not available.
+   * @param camid camera for which the stream is not available
+   * @param message reason for exception.
    */
   public StreamNotAvailableException(int camid, String message) {
     super(message);

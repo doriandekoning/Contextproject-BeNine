@@ -18,7 +18,6 @@ $(document).ready(function() {
     // Generate the presets area.
     generatePresets();
 
-
     console.log('Page has loaded successfully.');
 });
 
@@ -113,11 +112,6 @@ function addCameraRow(block) {
     			}
     		});
 
-        // Run the placeholder creator.
-        Holder.run({
-            images: camera_image
-        });
-
         camera_element.append(camera_image, camera_title);
         row.append(camera_element);
     }
@@ -170,11 +164,6 @@ function addPreset(elem) {
     preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
 
     preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
-
-    // Run the placeholder creator.
-    Holder.run({
-        images: preset_image
-    });
 
     $(elem).append(preset_image, preset_caption);
 }

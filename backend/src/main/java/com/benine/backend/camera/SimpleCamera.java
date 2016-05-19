@@ -45,4 +45,27 @@ public class SimpleCamera extends BasicCamera {
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
   }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + getId();
+    result = prime * result + ((streamLink == null) ? 0 : streamLink.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof SimpleCamera) {
+      SimpleCamera that = (SimpleCamera) obj;
+      if (this.getId() == that.getId()
+          && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
+              || this.getStreamLink() == null && that.getStreamLink() == null)
+          ) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

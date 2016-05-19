@@ -11,14 +11,14 @@ public interface FocussingCamera extends ControllableCamera {
    * @return focus position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  int getFocusPos() throws CameraConnectionException;
+  int getFocusPosition() throws CameraConnectionException;
 
   /**
    * Set the focus position
    * @param pos position of the focus to move to.
    * @throws CameraConnectionException when command can not be completed.
    */
-  void setFocusPos(int pos) throws CameraConnectionException;
+  void setFocusPosition(int pos) throws CameraConnectionException;
 
   /**
    * Move the focus in the specified direction.
