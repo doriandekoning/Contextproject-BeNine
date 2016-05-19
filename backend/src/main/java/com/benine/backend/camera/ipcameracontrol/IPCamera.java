@@ -422,27 +422,4 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     return ipaddress;
   }
 
-  @Override
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
-  }
-
-  @Override
-  public void setPresets(Preset[] presets) {
-    Preset[] copyPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
-    presetsFromCamera = copyPresets;
-  }
-
-  @Override
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
-    }
-  }
 }

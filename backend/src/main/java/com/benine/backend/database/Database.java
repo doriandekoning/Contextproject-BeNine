@@ -28,7 +28,7 @@ public interface Database {
    * @param preset             The preset to be added
    * @throws SQLException No right connection found
    */
-  void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
+  int addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
 
   /**
    * Delete a preset from the database.

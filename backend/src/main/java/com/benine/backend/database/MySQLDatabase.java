@@ -53,7 +53,7 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
+  public int addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException {
     Statement statement = connection.createStatement();
     try {
       String sql = createAddSqlQuery(preset);
@@ -68,7 +68,7 @@ public class MySQLDatabase implements Database {
         statement.close();
       }
     }
-
+    return presetId-1;
   }
 
   @Override
