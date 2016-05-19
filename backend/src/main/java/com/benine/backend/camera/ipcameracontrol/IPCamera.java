@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -59,8 +60,10 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
     CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
-    sendCommand("%23APS" + convertPanToHex(pos.getPan()) + convertTiltToHex(pos.getTilt()) 
-                    + convertPanSpeedtoHex(panSpeed) + convertTiltSpeed(tiltSpeed));
+    sendCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
+                    + convertTiltToHex(pos.getTilt()).toUpperCase()
+                    + convertPanSpeedtoHex(panSpeed).toUpperCase()
+                    + convertTiltSpeed(tiltSpeed));
   }
   
   /**
@@ -186,7 +189,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
-    sendCommand("%23AXF" + Integer.toHexString(pos + 1365));
+    sendCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
   }
 
   /**
@@ -320,10 +323,11 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws CameraConnectionException {
-    CameraController.logger.log("Zoom to zoom position.", LogEvent.Type.INFO);
+    CameraController.logger.log("Zoom to " + zpos + " position.", LogEvent.Type.INFO);
+    zpos = (int) ((zpos / 100.0) * 2730.0);
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
-    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365));
+    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
   }
 
   /**
@@ -356,21 +360,26 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
+    CameraController.logger.log("Send command: " + cmd + " to camera: " + id, LogEvent.Type.INFO);
     try {
-      InputStream com = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1").openStream();
-      BufferedReader buf = new BufferedReader(new InputStreamReader(com, "UTF8"));
+      URL url = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1");
+      URLConnection con = url.openConnection();
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(1000);
+      InputStream in = con.getInputStream();
+      BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
         res = buf.readLine();
       } catch (IOException excep) {
         throw 
-          new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+          new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
       } finally {
         buf.close();
-        com.close();
+        in.close();
       }
     } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at" + ipaddress 
+      throw new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
     }
     
@@ -384,7 +393,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("id", Integer.valueOf(this.id));
+    json.put("id", Integer.valueOf(this.id));   
     try {
       json.put("pan", new Double(getPosition().getPan()));
       json.put("tilt", new Double(getPosition().getTilt()));
@@ -393,7 +402,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
       json.put("iris", new Double(getIrisPosition()));
       json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
-      json.put("videostream", Boolean.valueOf(getStreamLink()));
+      json.put("streamlink", Boolean.valueOf(getStreamLink()));
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
       System.out.println(e.toString());

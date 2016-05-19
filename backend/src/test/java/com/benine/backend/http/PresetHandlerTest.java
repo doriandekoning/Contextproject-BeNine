@@ -32,7 +32,7 @@ public class PresetHandlerTest {
   
   @Before
   public void setUp() throws CameraConnectionException{
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setDatabase(database);
     logger = mock(Logger.class);

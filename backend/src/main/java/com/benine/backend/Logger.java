@@ -61,6 +61,7 @@ public class Logger {
 
   /**
    * Logs an exception at the current time.
+   * @param description of the exception.
    * @param exception the exception to log.
    */
   public void log(String description, Exception exception) {

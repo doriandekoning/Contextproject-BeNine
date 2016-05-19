@@ -1,5 +1,8 @@
 package com.benine.backend;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Represents an event that happens and has to be logged.
  */
@@ -106,7 +109,10 @@ public class LogEvent {
         builder.append(System.getProperty("line.separator"));
         builder.append("     ");
       }
-      builder.append(exception.getStackTrace().toString());
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      exception.printStackTrace(pw);
+      builder.append(sw.toString());
     }
     return builder.toString();
   }

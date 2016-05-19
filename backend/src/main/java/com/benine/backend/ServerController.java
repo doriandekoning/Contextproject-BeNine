@@ -1,7 +1,6 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
@@ -42,8 +41,6 @@ public class ServerController {
     database = loadDatabase();
     
     cameraController = new CameraController();
-
-    loadCameras();
   }
   
   /**
@@ -63,10 +60,12 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
+    startupDatabase();
+    cameraController.loadConfigCameras();
+    
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger); 
     
-    startupDatabase();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -82,20 +81,7 @@ public class ServerController {
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
   }
-  
-  /**
-   * Load camera's in camera controller.
-   * For now it just adds 2 simple camera's.
-   */
-  private void loadCameras() {
-    SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink(config.getValue("camera1"));
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(config.getValue("camera1"));
-    cameraController.addCamera(camera);
-    cameraController.addCamera(camera2);  
-  }
-  
+
   /**
    * Read the login information from the database and create database object..
    * @return database object
@@ -139,7 +125,7 @@ public class ServerController {
    * @param configPath to the main config file.
    * @return config object.
    */
-  public Config setUpConfig(String configPath) {
+  private Config setUpConfig(String configPath) {
     try {
       return ConfigReader.readConfig(configPath);
     } catch (Exception e) {
