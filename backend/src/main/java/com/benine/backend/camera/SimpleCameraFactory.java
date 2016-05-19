@@ -19,7 +19,7 @@ public class SimpleCameraFactory extends CameraFactory {
       CameraController.logger.log("Can't create simplecamera"
           + " object with specified info of camera " + index,
           LogEvent.Type.CRITICAL);
-      throw new InvalidCameraTypeException("The right information for"
+      throw new InvalidCameraTypeException("The right information for "
           + index + " a simple camera is not specified.");
     }
     SimpleCamera camera = new SimpleCamera();

@@ -17,6 +17,10 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -41,24 +45,15 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetMACAddress() throws CameraConnectionException {
+  public final void testGetMACAddress() throws CameraConnectionException, IOException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("FILE", "1"));
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
                                     .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("MAC=8C-C1-21-F0-46-C9 "
-        + "SERIAL=D5TBA0099 VERSION=V01.0600 NAME=AW-HE130K SDrec=disable SDrec2=disable"
-        + " sAlarm=OFF sAUX=off ePort=31004 aEnable=off aEnc=3 aBitrate=32 aBitrate2=64 "
-        + "aInInterval=40 aOutInterval=640 aOutPort=34004 aOutStatus=off aOutUID=0 aInPort_h264=33004"
-        + " aInPort_h264_2=33014 aInPort_h264_3=33024 aInPort_h264_4=33034 sRtspMode_h264=0 sRtspMode_h264_2=0 "
-        + "sRtspMode_h264_3=0 sRtspMode_h264_4=0 ImageCaptureMode=2m ratio=16_9 Maxfps= StreamMode=1 "
-        + "iTransmit_h264=1 sDelivery_h264=uni iBitrate_h264=4096 iResolution_h264=1920 iQuality_h264=normal"
-        + " iMultiAuto_h264=0 iTransmit_h264_2=1 sDelivery_h264_2=uni iBitrate_h264_2=1536 iResolution_h264_2=640"
-        + " iQuality_h264_2=normal iMultiAuto_h264_2=0 iTransmit_h264_3=1 sDelivery_h264_3=uni "
-        + "iBitrate_h264_3=1024 iResolution_h264_3=320 iQuality_h264_3=normal iMultiAuto_h264_3=0 "
-        + "iTransmit_h264_4=1 sDelivery_h264_4=uni iBitrate_h264_4=512 iResolution_h264_4=160 "
-        + "iQuality_h264_4=normal iMultiAuto_h264_4=0"));
+    byte[] encoded = Files.readAllBytes(Paths.get("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
+    String ipcameraInfo = new String(encoded, "UTF8");
+    mockServerClient.when(request).respond(HttpResponse.response().withBody(ipcameraInfo));
     
     String actual = camera.getMacAddress();
     mockServerClient.verify(request, VerificationTimes.once());
