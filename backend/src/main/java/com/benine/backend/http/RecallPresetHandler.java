@@ -32,23 +32,22 @@ public class RecallPresetHandler extends RequestHandler {
     Attributes parsedURI;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-        
+      
       int cameraID = getCameraId(exchange);
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = getDatabase().getPreset(cameraID,presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
-      responseSuccess(exchange);
+      respondSuccess(exchange);
     } catch (MalformedURIException e) {
-      responseFailure(exchange);
+      respondFailure(exchange);
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
-    } catch (CameraConnectionException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+
+    } catch (SQLException | CameraConnectionException e) {
+      getLogger().log("Preset can't be recalled: ", LogEvent.Type.CRITICAL);
+      respondFailure(exchange);
+    } 
   }
   
   /**
@@ -65,5 +64,6 @@ public class RecallPresetHandler extends RequestHandler {
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPosition(preset.getIris());
     ipcamera.setAutoIrisOn(preset.isAutoiris());
+  
   }
 }
