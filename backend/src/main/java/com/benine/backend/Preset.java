@@ -1,6 +1,7 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.Position;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
@@ -89,7 +90,11 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
-    json.put("keywords", tags);
+    JSONArray tagsJSON = new JSONArray();
+    for(String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
 
     return json.toString();
   }
