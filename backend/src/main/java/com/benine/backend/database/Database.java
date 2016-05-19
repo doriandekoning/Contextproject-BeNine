@@ -1,6 +1,8 @@
 package com.benine.backend.database;
 
 import com.benine.backend.Preset;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -107,6 +109,13 @@ public interface Database {
    * @throws SQLException No right connection found
    */
   void addCamera(int id, String ip) throws SQLException;
+
+  /**
+   * Gets all the cameras in the database.
+   * @return An ArrayList of all te cameras
+   * @throws SQLException Wrong connection to database
+   */
+  ArrayList<Camera> getAllCameras() throws SQLException;
 
   /**
    * Makes sure the right database is used.
