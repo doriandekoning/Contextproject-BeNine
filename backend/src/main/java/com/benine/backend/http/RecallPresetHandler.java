@@ -39,14 +39,14 @@ public class RecallPresetHandler extends RequestHandler {
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       movingCamera(ipcamera,preset);
-      responseSuccess(exchange);
+      respondSuccess(exchange);
     } catch (MalformedURIException e) {
-      responseFailure(exchange);
+      respondFailure(exchange);
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
 
     } catch (SQLException | CameraConnectionException e) {
       getLogger().log("Preset can't be recalled: ", LogEvent.Type.CRITICAL);
-      responseFailure(exchange);
+      respondFailure(exchange);
     } 
   }
   

@@ -56,11 +56,11 @@ public class MovingHandler extends RequestHandler {
       }
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera", LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
     }
-    responseSuccess(exchange);
+    respondSuccess(exchange);
   }
 }

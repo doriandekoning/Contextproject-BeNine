@@ -36,7 +36,7 @@ public class IrisHandler extends RequestHandler {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException exception) {
       getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
       return;
     }
     int camId = getCameraId(exchange);
@@ -55,8 +55,8 @@ public class IrisHandler extends RequestHandler {
       }
     } catch (Exception e) {
       getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
     }
-    responseSuccess(exchange);
+    respondSuccess(exchange);
   }
 }

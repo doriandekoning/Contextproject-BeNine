@@ -37,7 +37,7 @@ public class FocussingHandler extends RequestHandler {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException e) {
       getLogger().log("Mallformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
       return;
     }
     Camera cam = getCameraController().getCameraById(getCameraId(exchange));
@@ -53,10 +53,10 @@ public class FocussingHandler extends RequestHandler {
         focusCam.setFocusPos(Integer.parseInt(setPos));
       }
     } catch (CameraConnectionException e) {
-      responseFailure(exchange);
+      respondFailure(exchange);
       return;
     }
-    responseSuccess(exchange);
+    respondSuccess(exchange);
 
   }
 }

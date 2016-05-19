@@ -57,7 +57,7 @@ public class PresetHandler extends RequestHandler {
     } catch (SQLException e) {
       getLogger().log("Exception occured while respoinding to the request with URI: "
           + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
     }
     respond(exchange, response);
   }

@@ -52,9 +52,9 @@ public class ZoomingHandler extends RequestHandler {
     } catch (MalformedURIException | CameraConnectionException e) {
       getLogger().log("Exception occured while respoinding to the request with URI: "
               + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      responseFailure(exchange);
+      respondFailure(exchange);
     }
-    responseSuccess(exchange);
+    respondSuccess(exchange);
 
   }
 }

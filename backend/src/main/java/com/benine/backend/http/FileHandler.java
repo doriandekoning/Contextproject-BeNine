@@ -51,7 +51,7 @@ public class FileHandler extends RequestHandler {
     File file = new File("." + path).getCanonicalFile();
     //check if the requested file exists
     if (!file.isFile()) {
-      responseFailure(exchange);
+      respondFailure(exchange);
     } else {
       
       String mime = getMime(path);
