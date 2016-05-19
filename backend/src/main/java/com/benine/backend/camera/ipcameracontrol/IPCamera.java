@@ -1,7 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
@@ -9,7 +9,6 @@ import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
-
 import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
@@ -25,7 +24,7 @@ import java.text.NumberFormat;
  * Class to communicate with an IP Camera.
  * @author Bryan
  */
-public class IPCamera extends Camera implements MovingCamera,
+public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
 
   private String ipaddress;
@@ -85,7 +84,8 @@ public class IPCamera extends Camera implements MovingCamera,
       return new Position(convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7)));
     } else {
-      throw new IpcameraConnectionException("Getting the position of the camera failed.", this.getId());
+      throw new IpcameraConnectionException(
+              "Getting the position of the camera failed.", this.getId());
     }
   }
   

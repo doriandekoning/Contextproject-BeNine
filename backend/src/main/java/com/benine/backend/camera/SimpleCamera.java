@@ -6,10 +6,13 @@ import org.json.simple.JSONObject;
 /**
  * Created by dorian on 5-5-16.
  */
-public class SimpleCamera extends Camera {
+public class SimpleCamera extends BasicCamera {
 
   private String streamLink;
 
+  /**
+   * Defines a simple camera, which cannot be controlled.
+   */
   public SimpleCamera() {
     super(StreamType.MJPEG);
   }

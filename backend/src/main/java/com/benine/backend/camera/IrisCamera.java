@@ -5,7 +5,7 @@ package com.benine.backend.camera;
  * @author Bryan
  *
  */
-public interface IrisCamera extends ControlableCamera {
+public interface IrisCamera extends ControllableCamera {
   
   /**
    * Set the control of the iris to on.

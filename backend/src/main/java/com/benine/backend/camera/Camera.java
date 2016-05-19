@@ -10,83 +10,53 @@ import java.util.ArrayList;
  * Interface for communication with remote camera's.
  * @author Bryan
  */
-public abstract class Camera {
-
-  private int id;
-
-  private StreamType streamtype;
-
-  private Preset[] presetsFromCamera;
-
-  public Camera(StreamType type) {
-    this.id = -1;
-    this.streamtype = type;
-    this.presetsFromCamera = new Preset[16];
-  }
-
+public interface Camera {
 
   /**
    * Method to create a json object describinding the camera.
+   *
    * @return Json object in the form of a string.
    * @throws CameraConnectionException When the information can not be retrieved.
    */
-  abstract public String toJSON() throws CameraConnectionException;
+  String toJSON() throws CameraConnectionException;
+
+  /**
+   * Get the ID of this camera.
+   *
+   * @return ID of this camra.
+   */
+  int getId();
 
   /**
    * Set the ID of this camera.
    * @param id to set.
    */
-  public void setId(int id) {
-    this.id = id;
-  };
-
-  /**
-   * Get the ID of this camera.
-   * @return ID of this camra.
-   */
-  public int getId() {
-    return this.id;
-  };
-
+  void setId(int id);
 
   /**
    * Get the Stream Type of this camera.
+   *
    * @return StreamType ENUM of this camera.
    */
-  public StreamType getStreamType() {
-    return this.streamtype;
-  };
+  StreamType getStreamType();
 
   /**
    * Get the list of presets from this camera.
+   *
    * @return The preset array
    */
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
-  }
+  Preset[] getPresets();
 
   /**
    * Set the list of presets from this camera.
    * @param presets The preset array
    */
-  public void setPresets(Preset[] presets) {
-    Preset[] copyPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
-    presetsFromCamera = copyPresets;
-  }
+  void setPresets(Preset[] presets);
 
   /**
    * Set the list of presets from this camera of an arraylist.
    * @param presets The ArrayList of presets
    */
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
-    }
-  }
+  void setPresetsFromArrayList(ArrayList<Preset> presets);
 }
+
