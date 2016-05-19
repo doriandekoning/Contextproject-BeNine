@@ -5,12 +5,16 @@ package com.benine.backend.video;
  */
 public class StreamNotAvailableException extends Exception {
 
+  /**
+   * The id of the camera for which a stream is not available.
+   */
   private int camid;
 
   /**
    * Should be thrown if a stream is not available.
    */
-  public StreamNotAvailableException(int camid) {
+  public StreamNotAvailableException(int camid, String message) {
+    super(message);
     this.camid = camid;
   }
 
@@ -20,5 +24,13 @@ public class StreamNotAvailableException extends Exception {
    */
   public int getCamid() {
     return camid;
+  }
+
+  /**
+   * Returns a string representation of this exception.
+   * @return String with camera id and message.
+   */
+  public String toString() {
+    return "No Stream found for " + camid + " :" + this.getMessage();
   }
 }
