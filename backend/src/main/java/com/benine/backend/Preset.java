@@ -27,6 +27,7 @@ public class Preset {
   private int presetid;
   private Set<String> tags = new HashSet<String>();
   private static Set<String> keywords = new HashSet<String>();
+  private int cameraId;
 
   /**
    * Constructs a preset.
@@ -41,7 +42,7 @@ public class Preset {
    * @param panspeed  The panspeed of the preset
    */
   public Preset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris) {
+               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -50,6 +51,7 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
+    this.cameraId = cameraId;
   }
   /**
    * Constructs a preset.
@@ -66,8 +68,8 @@ public class Preset {
    */
   public Preset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, List<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris);
+                boolean autoiris, int cameraId, List<String> keyWords) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
     this.tags.addAll(keyWords);
   }
 
@@ -177,6 +179,14 @@ public class Preset {
 
   public int getId() {
     return presetid;
+  }
+
+  public void setCameraId(int id) {
+    this.cameraId = id;
+  }
+
+  public int getCameraId() {
+    return cameraId;
   }
 
   public Set<String> getTags() {

@@ -106,7 +106,7 @@ public class MySQLDatabase implements Database {
 
   @Override
   public Preset getPreset(int camera, int cameraPresetNumber) throws SQLException {
-    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 0, 0, false);
+    Preset preset = null;
     Statement statement = connection.createStatement();
     try {
       String sql = "SELECT id, pan, tilt, zoom, focus, iris, autofocus, panspeed,"

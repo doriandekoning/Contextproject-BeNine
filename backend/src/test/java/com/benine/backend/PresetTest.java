@@ -322,7 +322,7 @@ public class PresetTest {
   public void testSetCameraId() {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, -1);
     // Actual method to test
-    preset.setCamerId(42);
+    preset.setCameraId(42);
     Assert.assertEquals(42, preset.getCameraId());
   }
 }
