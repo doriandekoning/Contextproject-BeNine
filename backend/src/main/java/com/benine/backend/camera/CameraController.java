@@ -6,7 +6,7 @@ import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
-
+import com.benine.backend.video.StreamController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -34,8 +34,10 @@ public class CameraController {
     camera.setId(highestIdInUse);
     highestIdInUse++;
     cameras.add(camera);
+
+    getStreamController().addCamera(camera);
   }
-  
+
   /**
    * Returns the database
    * @return database to retrieve information from.
@@ -44,6 +46,13 @@ public class CameraController {
     return ServerController.getInstance().getDatabase();
   }
 
+  /**
+   * Returns the streamcontroller.
+   * @return streamcontroller containing the streams.
+   */
+  private StreamController getStreamController() {
+    return ServerController.getInstance().getStreamController();
+  }
 
   /**
    * Sets up the logger.
