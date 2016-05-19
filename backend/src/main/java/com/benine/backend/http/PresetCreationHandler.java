@@ -1,16 +1,20 @@
 package com.benine.backend.http;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
 import com.sun.net.httpserver.HttpExchange;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
@@ -43,14 +47,28 @@ public class PresetCreationHandler  extends RequestHandler {
         
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
+        
+        createImage(cameraID);
         responseSuccess(exchange);
       
       }
-    } catch (SQLException e) {
+    } catch (SQLException | StreamNotAvailableException e) {
       System.out.println(e.toString());
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
-    }
+    } 
 
+  }
+  
+  /**
+   * Create an image that belongs to a preset
+   * @param cameraID the ID of the camera used with the preset
+   * @throws StreamNotAvailableException exception if there's no stream for the camera available
+   * @throws IOException exception thrown if the input is wrong. 
+   */
+  public void createImage(int cameraID) throws StreamNotAvailableException, IOException {
+    ServerController serverController = ServerController.getInstance();
+    StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
+    BufferedImage bufferedImage = streamReader.getSnapShot();
   }
   
   /**
