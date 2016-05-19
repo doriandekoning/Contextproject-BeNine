@@ -63,7 +63,11 @@ public class StreamController {
    */
   private StreamReader createStream(Camera cam) {
     String streamLink = getStreamLink(cam);
-    StreamType type = verifyType(cam);
+    StreamType type = cam.getStreamType();
+
+    if (type == null) {
+      type = StreamType.UNKNOWN;
+    }
 
     try {
       switch (type) {
@@ -92,21 +96,6 @@ public class StreamController {
     }
 
     return streamLink;
-  }
-
-  /**
-   * Gets the type and sets an ENUM if it matches.
-   * @param   cam The camera from which the stream is fetched.
-   * @return  A StreamType Enum.
-   */
-  private StreamType verifyType(Camera cam) {
-    if (cam instanceof IPCamera) {
-      return StreamType.MJPEG;
-    } else if (cam instanceof SimpleCamera) {
-      return StreamType.MJPEG;
-    } else {
-      return StreamType.UNKNOWN;
-    }
   }
 
   /**
