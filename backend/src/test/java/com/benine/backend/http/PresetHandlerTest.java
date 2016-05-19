@@ -41,9 +41,7 @@ public class PresetHandlerTest {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
     camController = mock(CameraController.class);
     serverController = ServerController.getInstance();
-    serverController.setDatabase(database);
     serverController.setCameraController(camController);
-    serverController.start();
     logger = mock(Logger.class);
     handler = new PresetHandler(logger);  
 
