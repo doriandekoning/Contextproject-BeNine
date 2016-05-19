@@ -1,9 +1,7 @@
 package com.benine.backend;
 
 import com.benine.backend.database.Database;
-import org.json.simple.JSONArray;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

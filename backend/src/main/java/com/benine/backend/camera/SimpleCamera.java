@@ -1,9 +1,6 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
 import org.json.simple.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by dorian on 5-5-16.

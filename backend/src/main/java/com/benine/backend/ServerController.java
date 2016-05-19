@@ -5,11 +5,9 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
-import com.mockrunner.util.common.ArrayUtil;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Class containing the elements to make the server work.

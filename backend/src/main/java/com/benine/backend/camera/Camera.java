@@ -1,10 +1,6 @@
 package com.benine.backend.camera;
 
 
-import com.benine.backend.Preset;
-
-import java.util.ArrayList;
-
 /**
  * Interface for communication with remote camera's.
  * @author Bryan

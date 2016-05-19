@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringJoiner;
 
 /**
  * A moving preset to be able to add to the database.
