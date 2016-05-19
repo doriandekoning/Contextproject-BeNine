@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
@@ -38,7 +37,7 @@ public class CameraZoomHandlerTest {
     serverController.setCameraController(camController);
     camController.addCamera(cam);
     when(exchange.getResponseBody()).thenReturn(out);
-    zHandler = new ZoomingHandler(mock(Logger.class));
+    zHandler = new ZoomingHandler();
   }
 
   @Test

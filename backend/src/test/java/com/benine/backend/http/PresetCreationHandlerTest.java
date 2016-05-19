@@ -31,7 +31,6 @@ public class PresetCreationHandlerTest {
   OutputStream out = mock(OutputStream.class);
   private IPCamera ipcamera = mock(IPCamera.class);
   private Preset preset;
-  private Logger logger;
   private HttpExchange exchange = mock(HttpExchange.class);
   
   @Before
@@ -39,7 +38,6 @@ public class PresetCreationHandlerTest {
     ServerController.setConfigPath("resources" + File.separator 
                           + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
-    logger = mock(Logger.class);
     ipcamera = mock(IPCamera.class);
     when(ipcamera.getFocusPosition()).thenReturn(33);
     when(ipcamera.getIrisPosition()).thenReturn(50);
@@ -48,7 +46,7 @@ public class PresetCreationHandlerTest {
     when(camController.getCameraById(1)).thenReturn(ipcamera);
     serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    handler = new PresetCreationHandler(logger);
+    handler = new PresetCreationHandler();
 
     when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
     when(ipcamera.getZoomPosition()).thenReturn(100);  

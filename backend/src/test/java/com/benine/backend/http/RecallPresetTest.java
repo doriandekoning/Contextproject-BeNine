@@ -30,7 +30,6 @@ public class RecallPresetTest {
   private IPCamera ipcamera;
   private Preset preset;
   private RecallPresetHandler recallHandler;
-  private Logger logger;
   private ServerController serverController;
   private CameraController camController = mock(CameraController.class);
   private HttpExchange exchange = mock(HttpExchange.class);
@@ -45,9 +44,8 @@ public class RecallPresetTest {
     when(camController.getCameraById(1)).thenReturn(ipcamera);
     serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    logger = mock(Logger.class);
     preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);;
-    recallHandler = new RecallPresetHandler(logger);
+    recallHandler = new RecallPresetHandler();
   }
   
   @Test
