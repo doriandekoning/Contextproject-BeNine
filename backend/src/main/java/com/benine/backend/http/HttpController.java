@@ -101,8 +101,6 @@ public class HttpController {
             new PresetCreationHandler(logger));
     server.createContext("/camera/" + camId + "/recallpreset",
             new RecallPresetHandler(logger));
-    server.createContext("/camera/" + camId + "/getstream",
-            new CameraStreamHandler(logger));
 
     logger.log("Succesfully setup endpoints", LogEvent.Type.INFO);
   }

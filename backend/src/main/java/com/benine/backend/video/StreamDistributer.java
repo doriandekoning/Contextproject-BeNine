@@ -15,8 +15,11 @@ public class StreamDistributer implements Observer {
    */
   private PipedOutputStream outputStream;
 
+  private Observable reader;
+
   public StreamDistributer(StreamReader reader) {
     outputStream = new PipedOutputStream();
+    this.reader = reader;
     reader.addObserver(this);
   }
 
@@ -26,7 +29,7 @@ public class StreamDistributer implements Observer {
       try {
         outputStream.write((byte[]) arg);
       } catch (IOException e) {
-        e.printStackTrace();
+        deregister();
       }
     }
   }
@@ -38,4 +41,9 @@ public class StreamDistributer implements Observer {
   public PipedOutputStream getStream() {
     return outputStream;
   }
+
+  public void deregister() {
+    reader.deleteObserver(this);
+  }
+
 }

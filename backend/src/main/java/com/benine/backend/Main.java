@@ -1,5 +1,7 @@
 package com.benine.backend;
 
+import com.benine.backend.http.HTTPStreamServer;
+
 public class Main {
 
   /**
@@ -7,10 +9,13 @@ public class Main {
    *
    * @param args command line arguments.
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     ServerController server = ServerController.getInstance();
 
     server.start();
+
+
+    HTTPStreamServer streamserver = new HTTPStreamServer(3725);
 
     try {
       while (true) {
