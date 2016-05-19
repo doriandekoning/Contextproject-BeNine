@@ -48,17 +48,16 @@ public class PresetCreationHandler  extends RequestHandler {
         IPCamera ipCamera = (IPCamera)camera;
         
         Preset preset = createPreset(ipCamera);
-        int presetID= preset.getId();
+        int presetID = preset.getId();
         
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
         
-        createImage(cameraID, presetID);
+        createImage(preset, cameraID, presetID);
         responseSuccess(exchange);
       
       }
     } catch (SQLException | StreamNotAvailableException e) {
-      System.out.println(e.toString());
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     } 
 
@@ -70,13 +69,16 @@ public class PresetCreationHandler  extends RequestHandler {
    * @throws StreamNotAvailableException exception if there's no stream for the camera available
    * @throws IOException exception thrown if the input is wrong. 
    */
-  public void createImage(int cameraID, int presetID) throws StreamNotAvailableException, IOException {
+  public void createImage(Preset preset, int cameraID, int presetID) throws StreamNotAvailableException, IOException {
     ServerController serverController = ServerController.getInstance();
     StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
     BufferedImage bufferedImage = streamReader.getSnapShot();
     Image image = bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
-    ImageIO.write(bufferedImage, "jpeg", new File("presetImages" + File.separator + presetID));
+    
+    File path = new File("presetImages" + File.separator + cameraID + "_" + presetID);
+    ImageIO.write(bufferedImage, "jpeg", path);
    
+    preset.setImage(path.toString());
   }
   
   /**
