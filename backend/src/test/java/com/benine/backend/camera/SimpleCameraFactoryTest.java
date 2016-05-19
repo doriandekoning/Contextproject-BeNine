@@ -1,8 +1,6 @@
 package com.benine.backend.camera;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 
@@ -38,6 +36,7 @@ public class SimpleCameraFactoryTest {
     Camera result = factory.createCamera(2);
     SimpleCamera camera = new SimpleCamera();
     camera.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
+    camera.setMacAddress("simplecamera3");
     assertEquals(camera, result);
   }
 

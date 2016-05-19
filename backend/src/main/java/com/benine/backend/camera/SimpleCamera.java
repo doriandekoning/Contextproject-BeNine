@@ -14,6 +14,7 @@ public class SimpleCamera implements Camera {
   private int id = -1;
   private Preset[] presetsFromCamera = new Preset[16];
   private String streamLink;
+  private String mACAddress;
 
   /**
    * Creates a JSON representation of this object.
@@ -104,7 +105,8 @@ public class SimpleCamera implements Camera {
           && this.id == that.id
           && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
               || this.getStreamLink() == null && that.getStreamLink() == null)
-          ) {
+          && (this.mACAddress != null && this.mACAddress .equals(that.mACAddress )
+              || this.mACAddress  == null && that.mACAddress  == null)) {
         return true;
       }
     }
@@ -113,8 +115,11 @@ public class SimpleCamera implements Camera {
 
   @Override
   public String getMacAddress() throws CameraConnectionException {
-    // TODO Auto-generated method stub
-    return null;
+    return mACAddress;
+  }
+
+  public void setMacAddress(String mACAddress) {
+    this.mACAddress = mACAddress;
   }
 
 }

@@ -22,6 +22,13 @@ public class SimpleCameraTest {
     simpleCamera.setId(5665);
     Assert.assertEquals(5665, simpleCamera.getId());
   }
+  
+  @Test
+  public void testGetSetMacAddress() throws CameraConnectionException {
+    SimpleCamera simpleCamera = new SimpleCamera();
+    simpleCamera.setMacAddress("testAddress");
+    Assert.assertEquals("testAddress", simpleCamera.getMacAddress());
+  }
 
   @Test
   public void testDefaultId() {
@@ -138,6 +145,15 @@ public class SimpleCameraTest {
     SimpleCamera camera2 = new SimpleCamera();
     camera2.setStreamLink("test");
     assertNotEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
+  @Test
+  public void testEqualsMACAddress() {
+    SimpleCamera camera1 = new SimpleCamera();
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setMacAddress("test1");
+    camera2.setMacAddress("test2");
+    assertNotEquals(camera1, camera2);
   }
   
   @Test
