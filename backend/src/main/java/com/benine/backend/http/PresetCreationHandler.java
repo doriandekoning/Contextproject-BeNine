@@ -1,8 +1,11 @@
 package com.benine.backend.http;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import javax.imageio.ImageIO;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
@@ -44,11 +47,12 @@ public class PresetCreationHandler  extends RequestHandler {
         IPCamera ipCamera = (IPCamera)camera;
         
         Preset preset = createPreset(ipCamera);
+        int presetID= preset.getId();
         
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
         
-        createImage(cameraID);
+        createImage(cameraID, presetID);
         responseSuccess(exchange);
       
       }
@@ -65,10 +69,14 @@ public class PresetCreationHandler  extends RequestHandler {
    * @throws StreamNotAvailableException exception if there's no stream for the camera available
    * @throws IOException exception thrown if the input is wrong. 
    */
-  public void createImage(int cameraID) throws StreamNotAvailableException, IOException {
+  public void createImage(int cameraID, int presetID) throws StreamNotAvailableException, IOException {
     ServerController serverController = ServerController.getInstance();
     StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
     BufferedImage bufferedImage = streamReader.getSnapShot();
+    
+    File path = new File("images" + File.separator + presetID);
+    ImageIO.write(bufferedImage, "jpeg", path);
+   
   }
   
   /**
