@@ -80,29 +80,31 @@ public class HttpController {
   private void createHandlers(Camera cam) {
     int camId = cam.getId();
     if (cam instanceof FocussingCamera) {
-      server.createContext("/camera/" + camId
-              + "/focus", new FocussingHandler(logger));
+      server.createContext("/camera/" + camId + "/focus",
+              new FocussingHandler(logger));
     }
     if (cam instanceof IrisCamera) {
       server.createContext("/camera/" + camId + "/iris",
-                                              new IrisHandler(logger));
+              new IrisHandler(logger));
     }
     if (cam instanceof MovingCamera) {
       server.createContext("/camera/" + camId + "/move", 
-                                              new MovingHandler(logger));
+              new MovingHandler(logger));
     }
     if (cam instanceof ZoomingCamera) {
       server.createContext("/camera/" + camId + "/zoom",
-                                              new ZoomingHandler(logger));
+              new ZoomingHandler(logger));
     }
-    server.createContext("/camera/" + camId + "/preset", 
-                                              new PresetHandler(logger));
-    server.createContext("/camera/" + camId + "/createpreset", 
-                                              new PresetCreationHandler(logger));
+    server.createContext("/camera/" + camId + "/preset",
+            new PresetHandler(logger));
+    server.createContext("/camera/" + camId + "/createpreset",
+            new PresetCreationHandler(logger));
     server.createContext("/camera/" + camId + "/recallpreset",
-                                               new RecallPresetHandler(logger));
+            new RecallPresetHandler(logger));
+    server.createContext("/camera/" + camId + "/getstream",
+            new CameraStreamHandler(logger));
 
-    logger.log("Succesufully setup endpoints", LogEvent.Type.INFO);
+    logger.log("Succesfully setup endpoints", LogEvent.Type.INFO);
   }
 
   /**

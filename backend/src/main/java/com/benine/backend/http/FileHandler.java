@@ -66,6 +66,8 @@ public class FileHandler extends RequestHandler {
         os.write(bs.read());
       }
       bs.close();
+
+      os.flush();
       os.close();
     }  
   }

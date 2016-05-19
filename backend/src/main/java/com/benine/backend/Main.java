@@ -1,8 +1,5 @@
 package com.benine.backend;
 
-import com.benine.backend.video.StreamDistributer;
-import com.benine.backend.video.StreamNotAvailableException;
-
 public class Main {
 
   /**
@@ -14,12 +11,6 @@ public class Main {
     ServerController server = ServerController.getInstance();
 
     server.start();
-
-    try {
-      StreamDistributer reader = new StreamDistributer(server.getStreamController().getStreamReader(1));
-    } catch (StreamNotAvailableException e) {
-      e.printStackTrace();
-    }
 
     try {
       while (true) {

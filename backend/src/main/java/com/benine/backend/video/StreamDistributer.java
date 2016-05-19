@@ -1,9 +1,7 @@
 package com.benine.backend.video;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,10 +13,10 @@ public class StreamDistributer implements Observer {
   /**
    * The outputstream to write to the HTTP endpoint.
    */
-  private OutputStream outputStream;
+  private PipedOutputStream outputStream;
 
   public StreamDistributer(StreamReader reader) {
-    outputStream = new ByteOutputStream();
+    outputStream = new PipedOutputStream();
     reader.addObserver(this);
   }
 
@@ -37,7 +35,7 @@ public class StreamDistributer implements Observer {
    * Returns the output stream.
    * @return  The output stream bytes which can be sent by an HTTP endpoint.
    */
-  public OutputStream getStream() {
+  public PipedOutputStream getStream() {
     return outputStream;
   }
 }
