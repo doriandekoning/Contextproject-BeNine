@@ -58,8 +58,8 @@ public class PresetHandlerTest {
     Camera cam = mock(Camera.class);
     camController.addCamera(cam);
     ArrayList<Preset> presets = new ArrayList<Preset>();
-    presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true));
-    presets.add(new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true));
+    presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true, 0));
+    presets.add(new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0));
     presets.get(0).addTag("Piano");
     presets.get(1).addTag("Violin");
     when(database.getAllPresets()).thenReturn(presets);

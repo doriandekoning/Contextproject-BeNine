@@ -286,18 +286,18 @@ public class MySQLDatabase implements Database {
    */
   public Preset getPresetsFromResultSet(ResultSet resultset) {
     try {
-      Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 0, 0, false);
-      preset.setPosition(new Position(resultset.getInt("pan"), resultset.getInt("tilt")));
-      preset.setZoom(resultset.getInt("zoom"));
-      preset.setFocus(resultset.getInt("focus"));
-      preset.setIris(resultset.getInt("iris"));
-      preset.setAutofocus(resultset.getInt("autofocus") == 1);
-      preset.setPanspeed(resultset.getInt("panspeed"));
-      preset.setTiltspeed(resultset.getInt("tiltspeed"));
-      preset.setAutoiris(resultset.getInt("autoiris") == 1);
-      preset.setImage(resultset.getString("image"));
-      preset.setId(resultset.getInt("id"));
-      return preset;
+      Position pos  = new Position(resultset.getInt("pan"), resultset.getInt("tilt"));
+      int zoom = resultset.getInt("zoom");
+      int focus = resultset.getInt("focus");
+      int iris = resultset.getInt("iris");
+      boolean autoFocus = resultset.getInt("autofocus") == 1;
+      int panspeed = resultset.getInt("panspeed");
+      int tiltspeed = resultset.getInt("tiltspeed");
+      boolean autoIris = resultset.getInt("autoiris") == 1;
+      String image = resultset.getString("image");
+      int id = resultset.getInt("id");
+      return new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
+                          autoIris, -1);
     } catch (Exception e) {
       e.printStackTrace();
       logger.log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);

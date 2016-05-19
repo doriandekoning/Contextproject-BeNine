@@ -32,13 +32,13 @@ public class RecallPresetHandler extends RequestHandler {
     Attributes parsedURI;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-        
+
       int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       Preset preset = getDatabase().getPreset(cameraID,presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
-      movingCamera(ipcamera,preset);
+      moveCamera(ipcamera,preset);
       responseSuccess(exchange);
     } catch (MalformedURIException e) {
       responseFailure(exchange);
@@ -57,7 +57,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @param preset the preset used with the values for moving the camera.
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
-  public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
+  public void moveCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
     Position position = preset.getPosition();
     ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());

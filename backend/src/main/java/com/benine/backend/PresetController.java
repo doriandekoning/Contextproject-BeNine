@@ -47,11 +47,12 @@ public class PresetController {
   /**
    * Removes a preset from this presetcontroller.
    * @param preset the preset to remove.
+   * @throws SQLException if error with database occures.
    */
-  public void removePreset(Preset preset) {
+  public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
     Database db = ServerController.getInstance().getDatabase();
-    db.deletePreset(preset.getCameraId(), preset);
+    db.deletePreset(preset.getCameraId(), preset.getId());
   }
 
   /**

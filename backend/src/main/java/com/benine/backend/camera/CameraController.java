@@ -69,6 +69,20 @@ public class CameraController {
   }
 
   /**
+   * Finds camera with specified id.
+   * @param id the id of the camera
+   * @return the camera associated with the specified id or null if it does not exist.
+   */
+  public Camera getCameraById(int id) {
+    for (Camera c : cameras) {
+      if (c.getId() == id) {
+        return c;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Returns a json string of all the cameras.
    * @return json string of all the cameras.
    * @throws CameraConnectionException if a connection to a camera cannot be made.

@@ -59,7 +59,7 @@ public class Preset {
    * @param pos       The position of this preset.
    * @param zoom      The zoom of the preset
    * @param focus     The focus of the prest
-   * @param iris      The iris of the preset
+   * @param iris      The iris of the presetz
    * @param autofocus The autofocus of the preset
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset

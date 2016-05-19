@@ -33,7 +33,7 @@ public class PresetTest {
     Assert.assertEquals(1, jsonObject.get("panspeed"));
     Assert.assertEquals(2, jsonObject.get("tiltspeed"));
     Assert.assertEquals(false, jsonObject.get("autoiris"));
-    Assert.assertEquals("foo", jsonObject.getJSONArray("keywords").get(0));
+    Assert.assertEquals("foo", jsonObject.getJSONArray("tags").get(0));
   }
 
   @Test

@@ -39,7 +39,7 @@ public class CameraControlTest {
    * @throws CameraConnectionException when the camera can not be created.
    */
   @Before
-  public void setup() throws CameraConnectionException{
+  public void setup() throws Exception{
     server = ServerController.getInstance();
     cameraController = server.getCameraController();
    
@@ -113,8 +113,8 @@ public class CameraControlTest {
     server.getCameraController().addCamera(camera6);
     server.getCameraController().addCamera(camera7);
 
-    Preset preset1 = new Preset(new Position(1, 3.4), 2, 2, 5, false, 3, 4, true );
-    Preset preset2 = new Preset(new Position(42.34, 3.4), 32, 42, 35, true, 6, 3, true);
+    Preset preset1 = new Preset(new Position(1, 3.4), 2, 2, 5, false, 3, 4, true, 0 );
+    Preset preset2 = new Preset(new Position(42.34, 3.4), 32, 42, 35, true, 6, 3, true, 0);
     preset1.addTag("Test");
     preset1.addTag("AnotherTest");
     preset2.addTag("Test");

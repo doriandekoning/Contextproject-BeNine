@@ -56,7 +56,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -70,7 +70,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeletePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -84,8 +84,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testUpdatePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
-        Preset preset2 = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
+        Preset preset2 = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -100,7 +100,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1,"test");
@@ -114,7 +114,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetAllPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(1,1,preset);
@@ -128,7 +128,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetPresetsCamera() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false);;
+        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1,"ip");
