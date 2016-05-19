@@ -51,14 +51,22 @@ public class Logger {
   }
   
   /**
-   * Logs item at current time
+   * Logs item at current time.
    * @param message the description of the logevent
    * @param type The type of the logevent.
    */
   public void log(String message, LogEvent.Type type) {
     log(new LogEvent(new Date().toString(), message, type));
   }
-  
+
+  /**
+   * Logs an exception at the current time.
+   * @param description of the exception.
+   * @param exception the exception to log.
+   */
+  public void log(String description, Exception exception) {
+    log(new LogEvent(new Date().toString(), description, LogEvent.Type.WARNING, exception));
+  }
   /**
    * Logs logevent.
    * @param event event to log.

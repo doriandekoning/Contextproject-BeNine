@@ -63,7 +63,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
   }
 
 
@@ -76,7 +76,7 @@ public class FocussingHandlerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    verify(cam).setFocusPos(3);
+    verify(cam).setFocusPosition(3);
     verify(cam).setAutoFocusOn(false);
   }
   
@@ -97,7 +97,7 @@ public class FocussingHandlerTest {
   public void testCameraConnectionException() throws Exception {
     URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?position=4&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
-    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setFocusPos(4);
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).setFocusPosition(4);
     try {
       fHandler.handle(exchange);
     } catch (Exception e) {

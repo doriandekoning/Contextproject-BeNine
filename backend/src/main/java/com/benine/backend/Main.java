@@ -9,6 +9,7 @@ public class Main {
   public static void main(String[] args) {
     ServerController server = ServerController.getInstance();
 
+
     server.start();
     try {
       while (true) {
