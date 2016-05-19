@@ -281,10 +281,10 @@ public class MySQLDatabase implements Database {
       int panspeed = resultset.getInt("panspeed");
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
-      String image = resultset.getString("image");
+      // String image = resultset.getString("image");
       int id = resultset.getInt("id");
       return new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
-                          autoIris, -1);
+                          autoIris, id);
     } catch (Exception e) {
       e.printStackTrace();
       logger.log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class SimpleCamera implements Camera {
 
   private int id = -1;
-  private Preset[] presetsFromCamera = new Preset[16];
   private String streamLink;
 
   /**

@@ -33,7 +33,6 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   private int id = -1;
 
-  private Preset[] presetsFromCamera;
 
   /**
    *  Create a new IP Camera object.
@@ -41,7 +40,6 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public IPCamera(String ip) {
     ipaddress = ip;
-    presetsFromCamera = new Preset[16];
   }
   
   /**
