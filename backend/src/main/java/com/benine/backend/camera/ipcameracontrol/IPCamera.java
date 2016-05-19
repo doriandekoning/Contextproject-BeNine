@@ -22,7 +22,6 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -62,7 +61,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
     CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
-    sendCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
+    sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
                     + convertTiltToHex(pos.getTilt()).toUpperCase()
                     + convertPanSpeedtoHex(panSpeed).toUpperCase()
                     + convertTiltSpeed(tiltSpeed));
@@ -84,13 +83,13 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     tilt = Math.max(1, tilt);
     tilt = Math.min(99, tilt);
     NumberFormat formatter = new DecimalFormat("00");
-    sendCommand("%23PTS" + formatter.format(pan) + formatter.format(tilt));
+    sendControlCommand("%23PTS" + formatter.format(pan) + formatter.format(tilt));
   }
 
   @Override
   public Position getPosition() throws CameraConnectionException {
     CameraController.logger.log("Get the position of the IP camera.", LogEvent.Type.INFO);
-    String res = sendCommand("%23APC");
+    String res = sendControlCommand("%23APC");
     if (res.substring(0, 3).equals("aPC")) {
       return new Position(convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7)));
@@ -171,7 +170,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getFocusPosition() throws CameraConnectionException {
-    String res = sendCommand("%23GF");
+    String res = sendControlCommand("%23GF");
     if (res.substring(0, 2).equals("gf")) {
       CameraController.logger.log("Get focus position of the IP Camera.", LogEvent.Type.INFO);
       return Integer.valueOf(res.substring(2), 16);
@@ -191,7 +190,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
-    sendCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
+    sendControlCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
   }
 
   /**
@@ -206,7 +205,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendCommand("%23F" + speed);
+    sendControlCommand("%23F" + speed);
   }
 
   /**
@@ -217,9 +216,9 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void setAutoFocusOn(boolean on) throws CameraConnectionException {
     CameraController.logger.log("Set auto focus: " + on, LogEvent.Type.INFO);
     if (on) {
-      sendCommand("%23D11");
+      sendControlCommand("%23D11");
     } else {
-      sendCommand("%23D10");
+      sendControlCommand("%23D10");
     }
   }
   
@@ -230,7 +229,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public boolean isAutoFocusOn() throws CameraConnectionException {
     CameraController.logger.log("Checking autofocus failed.", LogEvent.Type.INFO);
-    String res = sendCommand("%23D1");
+    String res = sendControlCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {
       if (res.substring(2).equals("1")) {
         return true;
@@ -251,9 +250,9 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void setAutoIrisOn(boolean on) throws CameraConnectionException {
     CameraController.logger.log("Changing auto iris.", LogEvent.Type.INFO);
     if (on) {
-      sendCommand("%23D31");
+      sendControlCommand("%23D31");
     } else {
-      sendCommand("%23D30");
+      sendControlCommand("%23D30");
     }
   }
 
@@ -264,7 +263,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public boolean isAutoIrisOn() throws CameraConnectionException {
     CameraController.logger.log("Checking auto iris.", LogEvent.Type.INFO);
-    String res = sendCommand("%23D3");
+    String res = sendControlCommand("%23D3");
     if (res.substring(0, 2).equals("d3")) {
       if (res.substring(2).equals("1")) {
         return true;
@@ -288,7 +287,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void setIrisPosition(int pos) throws CameraConnectionException {
     pos = Math.max(1, pos);
     pos = Math.min(99, pos);
-    sendCommand("%23I" + pos);
+    sendControlCommand("%23I" + pos);
   }
 
   /**
@@ -298,7 +297,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public int getIrisPosition() throws CameraConnectionException {
     CameraController.logger.log("Get iris position.", LogEvent.Type.INFO);
-    String res = sendCommand("%23GI");
+    String res = sendControlCommand("%23GI");
     return Integer.valueOf(res.substring(2, 5), 16);
   }
   
@@ -309,7 +308,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public int getZoomPosition() throws CameraConnectionException {
     CameraController.logger.log("Get zoom position.", LogEvent.Type.INFO);
-    String res = sendCommand("%23GZ");
+    String res = sendControlCommand("%23GZ");
     if (res.substring(0, 2).equals("gz")) {
       return Integer.valueOf(res.substring(2), 16);
     } else {
@@ -329,7 +328,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     zpos = (int) ((zpos / 100.0) * 2730.0);
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
-    sendCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
+    sendControlCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
   }
 
   /**
@@ -343,7 +342,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public void zoom(int dir) throws CameraConnectionException {
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
-    sendCommand("%23Z" + dir);
+    sendControlCommand("%23Z" + dir);
   }
   
   /**
@@ -364,7 +363,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     String res = null;
     CameraController.logger.log("Send command: " + cmd + " to camera: " + id, LogEvent.Type.INFO);
     try {
-      URL url = new URL("http://" + ipaddress + "/cgi-bin/aw_ptz?cmd=" + cmd + "&res=1");
+      URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
       con.setConnectTimeout(1000);
       con.setReadTimeout(1000);
@@ -386,6 +385,16 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     }
     
     return res;
+  }
+  
+  /**
+   * Send a command to the Camera to control the camera.
+   * @param cmd to send.
+   * @return Result of the command
+   * @throws IpcameraConnectionException when command can not succeed.
+   */
+  public String sendControlCommand(String cmd) throws IpcameraConnectionException {
+    return sendCommand("aw_ptz?cmd=" + cmd + "&res=1");
   }
   
   /**
@@ -459,34 +468,16 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
 
   @Override
   public String getMacAddress() throws CameraConnectionException {
-    String res = null;
-    CameraController.logger.log("Send command: getInfo command to camera: " + id, LogEvent.Type.INFO);
-    try {
-      URL url = new URL("http://" + ipaddress + "/cgi-bin/getinfo?FILE=1");
-      URLConnection con = url.openConnection();
-      con.setConnectTimeout(1000);
-      con.setReadTimeout(1000);
-      InputStream in = con.getInputStream();
-      BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
-      try { 
-        res = buf.readLine();
-      } catch (IOException excep) {
-        throw 
-          new IpcameraConnectionException("Sending command to camera at " + ipaddress 
-                                                                      + " failed", getId());
-      } finally {
-        buf.close();
-        in.close();
-      }
-    } catch (IOException e) {
-      throw new IpcameraConnectionException("Sending command to camera at " + ipaddress + " failed", getId());
-    }
+    CameraController.logger.log("Send command: getInfo command to camera: " 
+        + id, LogEvent.Type.INFO);
+    String res = sendCommand("getinfo?FILE=1");
     HashMap<String, String> cameraInfo = new HashMap<String, String>();
-    if(res != null) {
-       cameraInfo = parseCameraInfo(res);
+    if (res != null) {
+      cameraInfo = parseCameraInfo(res);
     } 
-    if(cameraInfo.get("MAC") == null) {
-      throw new IpcameraConnectionException("Getting the info of the camera at " + ipaddress + " failed", getId());
+    if (cameraInfo.get("MAC") == null) {
+      throw new IpcameraConnectionException("Getting the info of the camera at " 
+                                                          + ipaddress + " failed", getId());
     }
     return cameraInfo.get("MAC");
   }
@@ -499,7 +490,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   public HashMap<String, String> parseCameraInfo(String res) {
     String[] values = res.split(" ");
     HashMap<String, String> valuesmap = new HashMap<String, String>();
-    for(int i = 0; i < values.length; i++){
+    for (int i = 0; i < values.length; i++) {
       String[] pair = values[i].split("=");
       String name = pair[0];
       String value = null;
