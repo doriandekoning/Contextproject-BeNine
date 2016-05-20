@@ -1,9 +1,12 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.Config;
+import com.benine.backend.LogEvent;
 import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 
@@ -25,6 +28,15 @@ public class CameraController {
   public static final Logger logger = setupLogger();
 
   private int highestIdInUse = 1;
+  
+  private CameraFactoryProducer camFactoryProducer;
+  
+  /**
+   * Constructor of the camera controller which creates a camera factory producer.
+   */
+  public CameraController() {
+    camFactoryProducer = new CameraFactoryProducer();
+  }
 
   /**
    * Adds a new camera to control.
@@ -34,6 +46,25 @@ public class CameraController {
     camera.setId(highestIdInUse);
     highestIdInUse++;
     cameras.add(camera);
+  }
+  
+  /**
+   * Loads all the camera's specified in the config in the camera controller.
+   */
+  public void loadConfigCameras() {
+    Config config = ServerController.getInstance().getConfig();
+    int i = 1;
+    String type =  config.getValue("camera_" + i + "_type");   
+    while (type != null) {
+      try {
+        addCamera(camFactoryProducer.getFactory(type).createCamera(i));
+      } catch (InvalidCameraTypeException e) {
+        logger.log("Camera: " + i + " from the config can not be created.", LogEvent.Type.WARNING);
+        e.printStackTrace();
+      }
+      i++;
+      type = config.getValue("camera_" + i + "_type");
+    }  
   }
   
   /**
@@ -182,14 +213,30 @@ public class CameraController {
    * @return json string of all the cameras.
    * @throws CameraConnectionException if a connection to a camera cannot be made.
    */
-  public String getCamerasJSON() throws CameraConnectionException {
+  public String getCamerasJSON() {
     // Create expected json object
     JSONObject json = new JSONObject();
     JSONArray array = new JSONArray();
     for (Camera camera : getCameras()) {
-      array.add(camera.toJSON());
+      array.add(getCameraJSON(camera));
     }
     json.put("cameras", array);
     return json.toString();
+  }
+  
+  /**
+   * Get the JSON representation of this camera.
+   * If the connection fails return an empty camera.
+   * @param camera object to create a JSON of.
+   * @return String representation of the JSON.
+   */
+  private String getCameraJSON(Camera camera) {
+    try {
+      return camera.toJSON();
+    } catch (CameraConnectionException e) {
+      JSONObject json = new JSONObject();
+      json.put("id", Integer.valueOf(camera.getId()));
+      return json.toString();
+    }
   }
 }

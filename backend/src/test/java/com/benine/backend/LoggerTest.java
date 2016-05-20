@@ -141,6 +141,15 @@ public class LoggerTest {
     Assert.assertTrue(logger.fileLoggingEnabled());
   }
 
+  @Test
+  public void testLogException() {
+    LogWriter logwriter = mock(LogWriter.class);
+    Logger logger = new Logger(logwriter);
+    NullPointerException e = new NullPointerException();
+    logger.log("Testing an exception", e);
+    verify(logwriter).write(any(LogEvent.class));
+  }
+
   private Answer count = invocation -> {
     counter++;
     return null;

@@ -31,7 +31,7 @@ public class CameraZoomHandlerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController serverController = ServerController.getInstance();
     
     CameraController camController = new CameraController();

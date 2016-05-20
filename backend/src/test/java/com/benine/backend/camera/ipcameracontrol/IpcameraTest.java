@@ -17,6 +17,10 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -36,10 +40,36 @@ public class IpcameraTest {
   
   @Before
   public final void setUp() throws InvalidCameraTypeException{
-	  IPCameraFactory factory = new IPCameraFactory();
-	  String[] camSpec = {"ipcamera", "127.0.0.1:9002"};
-	  camera = factory.createCamera(camSpec);
+	  camera = new IPCamera("127.0.0.1:9002");
 	  mockServerClient.reset();
+  }
+  
+  @Test
+  public final void testGetMACAddress() throws CameraConnectionException, IOException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("FILE", "1"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
+                                    .withQueryStringParameters(parameterList);
+    byte[] encoded = Files.readAllBytes(Paths.get("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
+    String ipcameraInfo = new String(encoded, "UTF8");
+    mockServerClient.when(request).respond(HttpResponse.response().withBody(ipcameraInfo));
+    
+    String actual = camera.getMacAddress();
+    mockServerClient.verify(request, VerificationTimes.once());
+    assertEquals("8C-C1-21-F0-46-C9", actual);
+  }
+  
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testGetMACAddressFails() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("FILE", "1"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
+                                    .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody(""));
+    
+    camera.getMacAddress();
   }
 
 
