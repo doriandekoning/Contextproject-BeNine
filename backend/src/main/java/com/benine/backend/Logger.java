@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Created by dorian on 2-5-16.
+ * Created on 2-5-16.
  */
 public class Logger {
 

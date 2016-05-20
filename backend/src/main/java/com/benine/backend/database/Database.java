@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 /**
  * Interface for communication with the database.
- *
- * @author Ege
  */
 public interface Database {
 

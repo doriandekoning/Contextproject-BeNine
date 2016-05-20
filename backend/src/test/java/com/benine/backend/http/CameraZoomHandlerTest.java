@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 public class CameraZoomHandlerTest {
   

@@ -2,8 +2,6 @@ package com.benine.backend.camera;
 
 /**
  * Decorator of a camera with functions to control the iris of the camera.
- * @author Bryan
- *
  */
 public interface IrisCamera extends ControlableCamera {
   

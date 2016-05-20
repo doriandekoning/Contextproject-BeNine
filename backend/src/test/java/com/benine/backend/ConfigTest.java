@@ -7,7 +7,6 @@ import org.junit.Test;
 
 /**
  * Test class used to test the Config class.
- * @author Dorian
  */
 public class ConfigTest {
 

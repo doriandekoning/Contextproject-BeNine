@@ -19,8 +19,6 @@ import com.sun.net.httpserver.HttpExchange;
 
 /**
  * File handler test.
- * @author Bryan
- *
  */
 public class FileHandlerTest {
   

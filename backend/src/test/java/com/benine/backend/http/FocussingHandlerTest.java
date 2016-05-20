@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 public class FocussingHandlerTest {
   

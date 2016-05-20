@@ -19,7 +19,6 @@ import com.benine.backend.camera.CameraConnectionException;
 /**
  * Test class to test the IP Camera zoom functions class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraZoomTest {
   

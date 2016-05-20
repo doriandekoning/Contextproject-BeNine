@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
 public class CameraControllerTest {
 

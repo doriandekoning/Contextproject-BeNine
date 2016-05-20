@@ -10,10 +10,9 @@ import com.benine.backend.camera.Position;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Created by dorian on 3-5-16.
+ * Created on 3-5-16.
  */
 public class PresetTest {
 

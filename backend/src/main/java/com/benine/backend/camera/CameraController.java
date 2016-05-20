@@ -18,7 +18,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by dorian on 4-5-16.
+ * Class to control the camera's.
+ * Created on 4-5-16.
  */
 public class CameraController {
 

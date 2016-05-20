@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Created on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
   

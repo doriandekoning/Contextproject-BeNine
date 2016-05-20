@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * Test class for the logevent class.

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
 public class SimpleCamera implements Camera {
 

@@ -9,8 +9,6 @@ import com.benine.backend.camera.InvalidCameraTypeException;
 
 /**
  * Class to create camera objects.
- * @author Bryan
- *
  */
 
 public class IPCameraFactory implements CameraFactory {

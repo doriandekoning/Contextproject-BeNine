@@ -22,7 +22,6 @@ import java.util.ArrayList;
 /**
  * Test class to test the IP Camera class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraTest {
 

@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 /**
- * Created by dorian on 10-5-16.
+ * Controls all the HTTP endpoints of the backend server.
+ * Created on 10-5-16.
  */
 public class HttpController {
 

@@ -1,10 +1,11 @@
 package com.benine.backend;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
 
 import org.json.simple.JSONObject;
 import org.junit.Before;
@@ -17,13 +18,12 @@ import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import static org.mockito.Mockito.doAnswer;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  * Test class to test the interaction with a camera using the user interface.
@@ -39,7 +39,7 @@ public class CameraControlTest {
    * @throws CameraConnectionException when the camera can not be created.
    */
   @Before
-  public void setup() throws CameraConnectionException{
+  public void setup() throws CameraConnectionException {
     server = ServerController.getInstance();
     cameraController = server.getCameraController();
    
@@ -77,11 +77,11 @@ public class CameraControlTest {
           int tilt = (int) args[1];
           if (pan > 85) {
             sendCommand("ptzMoveRight", "83.128.144.84:88");
-          } else if( pan < 15) {
+          } else if ( pan < 15) {
             sendCommand("ptzMoveLeft", "83.128.144.84:88");
-          } else if( tilt > 85) {
+          } else if ( tilt > 85) {
             sendCommand("ptzMoveUp", "83.128.144.84:88");
-          } else if( tilt < 15) {
+          } else if ( tilt < 15) {
             sendCommand("ptzMoveDown", "83.128.144.84:88");
           } else {
             sendCommand("ptzStopRun", "83.128.144.84:88");

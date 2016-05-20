@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 /**
  * Class to communicate with an IP Camera.
- * @author Bryan
  */
 public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera, FocussingCamera {
 

@@ -13,7 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles a request to get information about presets.
+ * Created on 4-5-16.
  */
 public class PresetHandler extends RequestHandler {
 
