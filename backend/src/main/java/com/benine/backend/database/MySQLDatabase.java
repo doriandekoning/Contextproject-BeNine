@@ -7,7 +7,6 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.*;
@@ -250,35 +249,49 @@ public class MySQLDatabase implements Database {
     }
   }
 
-  public void checkOldCameras(ResultSet resultset, ArrayList<Camera> cameras, ArrayList<String> macs)
+  /**
+   * Cheks if there are cameras in the database to be deleted.
+   * @param result The resultset from the query
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws SQLException No right connection to the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
+  public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
       throws SQLException, CameraConnectionException {
-    while (resultset.next()) {
+    while (result.next()) {
       boolean contains = false;
-      String mac = resultset.getString("MACAddress");
+      String mac = result.getString("MACAddress");
       macs.add(mac);
-      for(Camera camera : cameras) {
-        if(camera.getMacAddress() == mac) {
+      for (Camera camera : cameras) {
+        if (camera.getMacAddress().equals(mac)) {
           contains = true;
           break;
         }
       }
-      if(!contains) {
-        deleteCamera(resultset.getInt("ID"));
+      if (!contains) {
+        deleteCamera(result.getInt("ID"));
       }
     }
   }
 
+  /**
+   * Checks if there are new cameras to be added to the database.
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
   public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
       throws CameraConnectionException {
     boolean contains = false;
-    for(Camera camera : cameras) {
-      for(String mac : macs) {
-        if(mac == camera.getMacAddress()) {
+    for (Camera camera : cameras) {
+      for (String mac : macs) {
+        if (mac.equals(camera.getMacAddress())) {
           contains = true;
           break;
         }
       }
-      if(!contains) {
+      if (!contains) {
         addCamera(camera.getId(), camera.getMacAddress());
       }
     }

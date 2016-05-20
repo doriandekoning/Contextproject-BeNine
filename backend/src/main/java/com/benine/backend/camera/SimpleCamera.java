@@ -71,7 +71,8 @@ public class SimpleCamera implements Camera {
   public boolean equals(Object obj) {
     if (obj instanceof SimpleCamera) {
       SimpleCamera that = (SimpleCamera) obj;
-      if (this.id == that.id && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
+      if (this.id == that.id
+          && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
               || this.getStreamLink() == null && that.getStreamLink() == null)
           && (this.mACAddress != null && this.mACAddress .equals(that.mACAddress )
               || this.mACAddress  == null && that.mACAddress  == null)) {

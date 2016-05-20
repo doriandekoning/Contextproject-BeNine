@@ -1,8 +1,6 @@
 package com.benine.backend.database;
 
 import com.benine.backend.Preset;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,10 +29,10 @@ public interface Database {
 
   /**
    * Delete a preset from the database.
-   * @param camera ID of the camera
+   * @param presetID ID of the camera
    * @throws SQLException No right connection found
    */
-  void deletePreset(int camera) throws SQLException;
+  void deletePreset(int presetID) throws SQLException;
 
   /**
    * Update a preset to the database.
@@ -96,7 +94,6 @@ public interface Database {
 
   /**
    * Checks if cameras are correct in database.
-   * @return An ArrayList of all te cameras
    * @throws SQLException Wrong connection to database
    */
   void checkCameras() throws SQLException;

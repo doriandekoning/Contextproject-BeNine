@@ -6,13 +6,11 @@ import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
-import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -62,14 +60,6 @@ public class CameraController {
       i++;
       type = config.getValue("camera_" + i + "_type");
     }  
-  }
-  
-  /**
-   * Returns the database
-   * @return database to retrieve information from.
-   */
-  private Database getDatabase() {
-    return ServerController.getInstance().getDatabase();
   }
 
   /**
