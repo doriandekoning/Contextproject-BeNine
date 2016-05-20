@@ -405,20 +405,20 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     try {
-      json.put("pan", new Double(getPosition().getPan()));
-      json.put("tilt", new Double(getPosition().getTilt()));
-      json.put("zoom", new Double(getZoomPosition()));
-      json.put("focus", new Double(getFocusPosition()));
-      json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
-      json.put("iris", new Double(getIrisPosition()));
-      json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
+      json.put("pan", getPosition().getPan());
+      json.put("tilt", getPosition().getTilt());
+      json.put("zoom", getZoomPosition());
+      json.put("focus", getFocusPosition());
+      json.put("autofocus", isAutoFocusOn());
+      json.put("iris", getIrisPosition());
+      json.put("autoiris", isAutoIrisOn());
       json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
       System.out.println(e.toString());
     }
     return  json.toString();
-
+    
   }
 
   /**
