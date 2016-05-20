@@ -5,6 +5,6 @@ package com.benine.backend.video;
  */
 public enum StreamType {
 
-  UNKNOWN, MJPEG
+  UNKNOWN, NONE, MJPEG
 
 }

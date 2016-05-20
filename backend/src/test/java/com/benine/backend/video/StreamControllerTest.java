@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 
 /**
- * Created by Jochem on 18-05-16.
+ * Created on 18-05-16.
  */
 public class StreamControllerTest {
 

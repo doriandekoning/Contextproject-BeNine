@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 public class CameraZoomHandlerTest {
   
@@ -31,14 +30,14 @@ public class CameraZoomHandlerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController serverController = ServerController.getInstance();
     
     CameraController camController = new CameraController();
     serverController.setCameraController(camController);
     camController.addCamera(cam);
     when(exchange.getResponseBody()).thenReturn(out);
-    zHandler = new ZoomingHandler(mock(Logger.class));
+    zHandler = new ZoomingHandler();
   }
 
   @Test

@@ -15,20 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 
 public abstract class RequestHandler implements HttpHandler {
-
-  private Logger logger;
-
-  /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public RequestHandler(Logger logger) {
-    this.logger = logger;
-  }
 
   /**
    * Decodes the given (decoded) uri into an attributes table
@@ -55,7 +45,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @param exchange the HttpExchange.
    */
 
-  public void responseSuccess(HttpExchange exchange) {
+  public void respondSuccess(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"true\"}");
   }
   
@@ -63,7 +53,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Formats the response message as a failure.
    * @param exchange the HttpExchange.
    */
-  public void responseFailure(HttpExchange exchange) {
+  public void respondFailure(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"false\"}");
   } 
   
@@ -121,6 +111,6 @@ public abstract class RequestHandler implements HttpHandler {
    * @return Logger.
    */
   public Logger getLogger() {
-    return logger;
+    return ServerController.getInstance().getLogger();
   }
 }

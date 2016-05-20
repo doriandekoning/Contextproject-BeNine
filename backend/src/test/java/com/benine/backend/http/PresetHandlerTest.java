@@ -26,17 +26,15 @@ public class PresetHandlerTest {
   private ServerController serverController;
   private PresetHandler handler;
   private OutputStream out;
-  private Logger logger;
   private Database database = mock(Database.class);
   HttpExchange exchange = mock(HttpExchange.class);
   
   @Before
   public void setUp() throws CameraConnectionException{
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setDatabase(database);
-    logger = mock(Logger.class);
-    handler = new PresetHandler(logger);  
+    handler = new PresetHandler();  
     
     out = mock(OutputStream.class);
   }

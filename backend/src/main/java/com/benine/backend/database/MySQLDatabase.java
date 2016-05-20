@@ -3,17 +3,18 @@ package com.benine.backend.database;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.OutputStreamWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.Writer;
 
 import java.sql.Connection;
@@ -24,27 +25,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Created on 4-5-2016.
  */
 public class MySQLDatabase implements Database {
   private Connection connection;
   private int presetId;
   private String user;
   private String password;
-  private Logger logger;
 
   /**
    * Constructor of a MySQL Database.
    * @param user username used to connect to the database.
    * @param password used to connect to the databse.
-   * @param logger used to log important info. 
    */
-  public MySQLDatabase(String user, String password, Logger logger) {
+  public MySQLDatabase(String user, String password) {
     connection = null;
     presetId = 0;
     this.user = user;
     this.password = password;
-    this.logger = logger;
   }
 
   @Override
@@ -188,7 +186,7 @@ public class MySQLDatabase implements Database {
     try {
       return !connection.isClosed();
     } catch (Exception e) {
-      logger.log("Connection with database failed.", LogEvent.Type.CRITICAL);
+      getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
     }
@@ -206,7 +204,7 @@ public class MySQLDatabase implements Database {
       }
       databaseNames.close();
     } catch (Exception e) {
-      logger.log("Database check failed.", LogEvent.Type.CRITICAL);
+      getLogger().log("Database check failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
     return false;
@@ -225,7 +223,7 @@ public class MySQLDatabase implements Database {
       sr.runScript(reader);
       presetId = 0;
     } catch (Exception e) {
-      logger.log("Database is not reseted.", LogEvent.Type.CRITICAL);
+      getLogger().log("Database is not reseted.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
   }
@@ -236,7 +234,7 @@ public class MySQLDatabase implements Database {
       try {
         connection.close();
       } catch (Exception e) {
-        logger.log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
+        getLogger().log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
         e.printStackTrace();
       }
     }
@@ -253,7 +251,7 @@ public class MySQLDatabase implements Database {
       statement.close();
     } catch (SQLException e) {
       e.printStackTrace();
-      logger.log("Camera couldn't be added", LogEvent.Type.CRITICAL);
+      getLogger().log("Camera couldn't be added", LogEvent.Type.CRITICAL);
     } finally {
       if (statement != null) {
         try {
@@ -300,7 +298,7 @@ public class MySQLDatabase implements Database {
       return preset;
     } catch (Exception e) {
       e.printStackTrace();
-      logger.log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
@@ -325,4 +323,14 @@ public class MySQLDatabase implements Database {
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
         + preset.getTiltspeed() + "," + autoir + ",'" + preset.getImage() + "')";
   }
+  
+
+  /**
+   * Get the logger of the single servercontroller.
+   * @return logger object.
+   */
+  private Logger getLogger() {
+    return ServerController.getInstance().getLogger();
+  }
+
 }

@@ -19,8 +19,6 @@ import com.sun.net.httpserver.HttpExchange;
 
 /**
  * File handler test.
- * @author Bryan
- *
  */
 public class FileHandlerTest {
   
@@ -41,7 +39,7 @@ public class FileHandlerTest {
     URI uri = new  URI("http://localhost/public/test.jpg");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    FileHandler handler = new FileHandler(mock(Logger.class));
+    FileHandler handler = new FileHandler();
     handler.handle(exchange);
     verify(out).write("{\"succes\":\"false\"}".getBytes());
   }
@@ -53,7 +51,7 @@ public class FileHandlerTest {
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     when(exchange.getResponseHeaders()).thenReturn(header);
-    FileHandler handler = new FileHandler(mock(Logger.class));
+    FileHandler handler = new FileHandler();
     handler.handle(exchange);
     verify(exchange).sendResponseHeaders(200, 0);
     verify(header).set("Content-Type",  "image/jpeg");
@@ -66,7 +64,7 @@ public class FileHandlerTest {
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
     when(exchange.getResponseHeaders()).thenReturn(header);
-    FileHandler handler = new FileHandler(mock(Logger.class));
+    FileHandler handler = new FileHandler();
     handler.handle(exchange);
     verify(exchange).sendResponseHeaders(200, 0);
     verify(header).set("Content-Type",  "text/html");

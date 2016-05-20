@@ -40,7 +40,7 @@ public class StreamController {
   }
 
   /**
-   * Adds a camera to the HashMap containing all streams if there is a stream available.
+   * Adds a camera to the Map containing all streams if there is a stream available.
    * @param cam a Camera object.
    */
   public void addCamera(Camera cam) {
@@ -63,7 +63,11 @@ public class StreamController {
    */
   private StreamReader createStream(Camera cam) {
     String streamLink = getStreamLink(cam);
-    StreamType type = verifyType(cam);
+    StreamType type = cam.getStreamType();
+
+    if (type == null) {
+      type = StreamType.UNKNOWN;
+    }
 
     try {
       switch (type) {
@@ -95,21 +99,6 @@ public class StreamController {
   }
 
   /**
-   * Gets the type and sets an ENUM if it matches.
-   * @param   cam The camera from which the stream is fetched.
-   * @return  A StreamType Enum.
-   */
-  private StreamType verifyType(Camera cam) {
-    if (cam instanceof IPCamera) {
-      return StreamType.MJPEG;
-    } else if (cam instanceof SimpleCamera) {
-      return StreamType.MJPEG;
-    } else {
-      return StreamType.UNKNOWN;
-    }
-  }
-
-  /**
    * Returns the streamreader belonging to a camera.
    * @param camId The identifier of the camera.
    * @return  A StreamReader object.
@@ -119,7 +108,7 @@ public class StreamController {
     if (streams.containsKey(camId)) {
       return streams.get(camId);
     } else {
-      throw new StreamNotAvailableException();
+      throw new StreamNotAvailableException(camId, "No stream associated with this camera.");
     }
   }
 }

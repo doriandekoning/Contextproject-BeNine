@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
-
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
@@ -13,18 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles a request to get information about presets.
+ * Created on 4-5-16.
  */
 public class PresetHandler extends RequestHandler {
-
-  /**
-   * Creates a new PresetHandler.
-   * @param logger the logger to be used to log to
-   */
-  public PresetHandler(Logger logger) {
-    super(logger);
-  }
-
 
   /**
    * Handles a request
@@ -57,7 +47,7 @@ public class PresetHandler extends RequestHandler {
     } catch (SQLException e) {
       getLogger().log("Exception occured while respoinding to the request with URI: "
           + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      response = "{\"succes\":\"false\"}";
+      respondFailure(exchange);
     }
     respond(exchange, response);
   }

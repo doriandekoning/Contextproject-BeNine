@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
@@ -26,15 +25,6 @@ import javax.imageio.ImageIO;
 **/
 public class PresetCreationHandler  extends RequestHandler {
   
- 
-  /**
-   * Create a new handler for creating new presets.
-   * @param logger to log to.
-   */
-  public PresetCreationHandler(Logger logger) {
-    super(logger);
-  }
-  
   /**
      * Handles a request of making a new preset. 
      * @param exchange the exchange containing data about the request.
@@ -56,17 +46,17 @@ public class PresetCreationHandler  extends RequestHandler {
         
         //Create corresponding image
         createImage(preset, cameraID, presetID);
-        responseSuccess(exchange);
-      
+        respondSuccess(exchange);  
       }
     } catch (SQLException e) {
       getLogger().log("Preset can not be added to the database"
           + "because of a database exception", LogEvent.Type.CRITICAL);
+      respondFailure(exchange);
     } catch (StreamNotAvailableException e) {
       getLogger().log("Preset can not be added to the database "
           + "because the stream isn't available ", LogEvent.Type.CRITICAL);
+      respondFailure(exchange);
     }
-
   }
   
   /**
