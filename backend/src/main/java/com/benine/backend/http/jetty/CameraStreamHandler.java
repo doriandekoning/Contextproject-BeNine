@@ -21,13 +21,18 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraStreamHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+  public void handle(String s, Request request,
+                     HttpServletRequest httpServletRequest,
+                     HttpServletResponse httpServletResponse)
+          throws IOException, ServletException {
+
     int camID = getCameraId(request);
 
     StreamReader streamReader = null;
     try {
       streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
+      e.printStackTrace();
       //getLogger().log(e.toString(), LogEvent.Type.WARNING);
     }
 
@@ -40,7 +45,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
       setHeaders(streamReaderMJPEG, httpServletResponse);
 
       // Get an inputstream from the distributer.
-      BufferedInputStream bs = new BufferedInputStream(new PipedInputStream(distributer.getStream()));
+      PipedInputStream in = new PipedInputStream(distributer.getStream());
+      BufferedInputStream bs = new BufferedInputStream(in);
       OutputStream os = httpServletResponse.getOutputStream();
 
       boolean sending = true;
@@ -55,6 +61,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
 
       os.close();
       bs.close();
+      in.close();
 
     } else {
       httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -69,8 +76,10 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @param httpServletResponse   The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
-    httpServletResponse.setContentType("multipart/x-mixed-replace;boundary=" + reader.getBoundary());
-    httpServletResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0");
+    httpServletResponse.setContentType("multipart/x-mixed-replace;boundary="
+            + reader.getBoundary());
+    httpServletResponse.setHeader("Cache-Control", "no-store, "
+            + "no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0");
     httpServletResponse.setHeader("Connection", "close");
     httpServletResponse.setHeader("Pragma", "no-cache");
     httpServletResponse.setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");

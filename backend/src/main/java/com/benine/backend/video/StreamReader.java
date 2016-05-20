@@ -3,6 +3,7 @@ package com.benine.backend.video;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Observable;
 import javax.imageio.ImageIO;
 
@@ -24,7 +25,7 @@ public abstract class StreamReader extends Observable implements Runnable {
    * @return  A byte array containing header + jpeg.
    */
   public byte[] getSnapShotBytes() {
-    return snapShot;
+    return Arrays.copyOf(snapShot, snapShot.length);
   }
 
   /**
@@ -32,7 +33,7 @@ public abstract class StreamReader extends Observable implements Runnable {
    * @param newSnapshot new SnapShot byte array.
    */
   public void setSnapShot(byte[] newSnapshot) {
-    this.snapShot = newSnapshot;
+    this.snapShot = Arrays.copyOf(newSnapshot, newSnapshot.length);
   }
 
 }

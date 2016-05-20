@@ -138,6 +138,7 @@ public class MJPEGStreamReader extends StreamReader {
 
   /**
    * Fetches the header and gets the jpeg file according to the content length.
+   * @param   header A string representation of the header belonging to the image.
    * @return  a byte[] representing the image.
    * @throws IOException when an error occurs fetching the header or reading the jpeg image.
    */

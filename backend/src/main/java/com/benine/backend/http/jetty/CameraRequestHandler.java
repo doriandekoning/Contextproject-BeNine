@@ -1,6 +1,5 @@
 package com.benine.backend.http.jetty;
 
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
@@ -14,11 +13,6 @@ import java.util.regex.Pattern;
  * Handles all requests requiring the camera ID.
  */
 public abstract class CameraRequestHandler extends AbstractHandler {
-
-  /**
-   * Contains the logger.
-   */
-  private Logger logger;
 
   /**
    * Returns cameracontroller

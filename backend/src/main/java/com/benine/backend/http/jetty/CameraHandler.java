@@ -16,18 +16,29 @@ public class CameraHandler extends CameraRequestHandler {
 
   private CameraStreamHandler streamHandler;
 
+  /**
+   * Constructor for a new CameraHandler, handling the /camera/ request.
+   */
   public CameraHandler() {
     this.streamHandler = new CameraStreamHandler();
   }
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+  public void handle(String s, Request request,
+                     HttpServletRequest httpServletRequest,
+                     HttpServletResponse httpServletResponse)
+          throws IOException, ServletException {
+
     if (checkValidCameraID(request)) {
       String route = getRoute(request);
 
       switch (route) {
-        case "mjpeg": streamHandler.handle(s, request, httpServletRequest, httpServletResponse);
-        case "default": request.setHandled(true);
+        case "mjpeg":
+          streamHandler.handle(s, request, httpServletRequest, httpServletResponse);
+          break;
+        default:
+          request.setHandled(true);
+          break;
       }
 
     } else {
@@ -36,6 +47,11 @@ public class CameraHandler extends CameraRequestHandler {
     }
   }
 
+  /**
+   * Checks if the camera id of this request is valid.
+   * @param request   The current request.
+   * @return          True if valid, False if invalid.
+   */
   private boolean checkValidCameraID(Request request) {
     int id = getCameraId(request);
 

@@ -16,7 +16,7 @@ public class HTTPStreamServer {
    * @param port        The port to start the server on.
    * @throws Exception  If the server cannot be started, thus rendering the application useless.
    */
-  public HTTPStreamServer (int port) throws Exception {
+  public HTTPStreamServer(int port) throws Exception {
     /*
     The Jetty server object.
    */

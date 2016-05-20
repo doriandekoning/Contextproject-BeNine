@@ -17,6 +17,11 @@ public class StreamDistributer implements Observer {
 
   private Observable reader;
 
+  /**
+   * Creates a new StreamDistributer object from a StreamReader.
+   * It provides an outputstream and registrers the distributer to the reader.
+   * @param reader  A StreamReader object.
+   */
   public StreamDistributer(StreamReader reader) {
     outputStream = new PipedOutputStream();
     this.reader = reader;
@@ -42,6 +47,9 @@ public class StreamDistributer implements Observer {
     return outputStream;
   }
 
+  /**
+   * Deregistres this distributer from a streamreader.
+   */
   public void deregister() {
     reader.deleteObserver(this);
   }

@@ -9,6 +9,7 @@ public class StreamNotAvailableException extends Exception {
 
   /**
    * Should be thrown if a stream is not available.
+   * @param camid The id of the camere for which the stream is not available.
    */
   public StreamNotAvailableException(int camid) {
     this.camid = camid;
