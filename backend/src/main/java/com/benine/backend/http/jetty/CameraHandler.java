@@ -9,9 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Jochem on 19-05-16.
- */
 public class CameraHandler extends CameraRequestHandler {
 
   private CameraStreamHandler streamHandler;
