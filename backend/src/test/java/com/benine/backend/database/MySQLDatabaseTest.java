@@ -2,6 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -12,10 +13,12 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by Ege on 4-5-2016.
@@ -111,13 +114,25 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
+    public final void testAddCamera() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1,"ip");
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO presetsdatabase.camera VALUES(1,'ip')");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
     public final void testGetPresetsCamera() throws SQLException {
         Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1,"ip");
         database.addPreset(preset);
-        ArrayList<Preset> result = database.getAllPresetsCamera(1);
+        database.getAllPresetsCamera(1);
         database.closeConnection();
         verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
@@ -125,4 +140,42 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyConnectionClosed();
     }
 
+    @Test
+    public final void testCheckCameras() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1,"ip");
+        database.checkCameras();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT ID, MACAddress FROM camera");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeleteCamera() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1,"ip");
+        database.deleteCamera(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM presets WHERE camera_ID = 1");
+        verifySQLStatementExecuted("DELETE FROM camera WHERE ID = 1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testUseDatabase() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.useDatabase();
+        database.closeConnection();
+        verifySQLStatementExecuted("USE presetsdatabase");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
 }
