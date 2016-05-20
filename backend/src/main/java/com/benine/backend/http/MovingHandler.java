@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
@@ -16,14 +15,6 @@ import java.util.jar.Attributes;
  * Created on 4-5-16.
  */
 public class MovingHandler extends RequestHandler {
-
-  /**
-   * Creates a new MovingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public MovingHandler(Logger logger) {
-    super(logger);
-  }
 
   /**
    * Handles a request

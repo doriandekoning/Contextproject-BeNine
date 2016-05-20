@@ -39,7 +39,7 @@ public class IrisHandlerTest {
     when(camController.getCameraById(1)).thenReturn(cam);
     camController.addCamera(cam);
     serverController.setCameraController(camController);
-    iHandler = new IrisHandler(mock(Logger.class));
+    iHandler = new IrisHandler();
 
     when(exchange.getResponseBody()).thenReturn(out);
   }

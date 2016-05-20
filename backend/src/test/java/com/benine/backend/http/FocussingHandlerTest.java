@@ -38,7 +38,7 @@ public class FocussingHandlerTest {
     CameraController camController = new CameraController();
     camController.addCamera(cam);
     serverController.setCameraController(camController);
-    fHandler = new FocussingHandler(mock(Logger.class));
+    fHandler = new FocussingHandler();
     when(exchange.getResponseBody()).thenReturn(out);
   }
 

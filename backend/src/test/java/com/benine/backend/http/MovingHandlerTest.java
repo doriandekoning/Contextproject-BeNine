@@ -28,7 +28,7 @@ public class MovingHandlerTest {
   MovingCamera cam = mock(MovingCamera.class);
   ServerController serverController;
   CameraController camController;
-  MovingHandler mHandler = new MovingHandler(mock(Logger.class));
+  MovingHandler mHandler = new MovingHandler();
   
   @Before
   public void setup() {
@@ -39,7 +39,7 @@ public class MovingHandlerTest {
     camController.addCamera(cam);
     serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    mHandler = new MovingHandler(mock(Logger.class));
+    mHandler = new MovingHandler();
   }
 
   @Test

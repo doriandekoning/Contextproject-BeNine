@@ -69,8 +69,9 @@ public class ServerController {
     cameraController.loadConfigCameras();
     
     httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger); 
 
+    Integer.parseInt(config.getValue("serverport"))); 
+    
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -94,7 +95,7 @@ public class ServerController {
   private Database loadDatabase() {
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password, logger);
+    return new MySQLDatabase(user, password);
   }
   
   /**

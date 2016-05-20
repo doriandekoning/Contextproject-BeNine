@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
@@ -36,7 +35,7 @@ public class CameraInfoHandlerTest {
     URI uri = new  URI("http://localhost/camera/");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    CameraInfoHandler cHandler = new CameraInfoHandler(mock(Logger.class));
+    CameraInfoHandler cHandler = new CameraInfoHandler();
     try {
       cHandler.handle(exchange);
     } catch (Exception e) {

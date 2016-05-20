@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -16,14 +15,6 @@ import java.util.jar.Attributes;
  * Class to handle the recalling of a preset.
  */
 public class RecallPresetHandler extends RequestHandler {
-
-  /**
-   * Create a new handler for recalling presets.
-   * @param logger to log to.
-   */
-  public RecallPresetHandler(Logger logger) {
-    super(logger);
-  }
   
   /**
   * Handles a request of making a new preset. 

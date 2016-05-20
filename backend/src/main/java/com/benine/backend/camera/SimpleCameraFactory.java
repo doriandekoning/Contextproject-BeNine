@@ -14,15 +14,17 @@ public class SimpleCameraFactory implements CameraFactory {
   public Camera createCamera(int index) throws InvalidCameraTypeException {
     Config config = ServerController.getInstance().getConfig();
     String address = config.getValue("camera_" + index + "_address");
-    if (address == null) {
+    String mACaddress = config.getValue("camera_" + index + "_macaddress");
+    if (address == null || mACaddress ==  null) {
       CameraController.logger.log("Can't create simplecamera"
           + " object with specified info of camera " + index,
           LogEvent.Type.CRITICAL);
-      throw new InvalidCameraTypeException("The right information for"
-          + " a simple camera is not specified." + config.getValue("camera_1_address"));
+      throw new InvalidCameraTypeException("The right information for "
+          + index + " a simple camera is not specified.");
     }
     SimpleCamera camera = new SimpleCamera();
     camera.setStreamLink(address);
+    camera.setMacAddress(mACaddress);
     return camera;
   }
 

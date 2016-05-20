@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 public class SimpleCamera extends BasicCamera {
 
   private String streamLink;
+  private String mACAddress;
 
   /**
    * Defines a simple camera, which cannot be controlled.
@@ -62,10 +63,20 @@ public class SimpleCamera extends BasicCamera {
       if (super.equals(that)
           && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
               || this.getStreamLink() == null && that.getStreamLink() == null)
-          ) {
+          && (this.mACAddress != null && this.mACAddress .equals(that.mACAddress )
+              || this.mACAddress  == null && that.mACAddress  == null)) {
         return true;
       }
     }
     return false;
+  }
+  
+  @Override
+  public String getMacAddress() throws CameraConnectionException {
+    return mACAddress;
+  }
+
+  public void setMacAddress(String mACAddress) {
+    this.mACAddress = mACAddress;
   }
 }

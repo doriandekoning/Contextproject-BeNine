@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
@@ -16,15 +15,6 @@ import java.sql.SQLException;
  * Class allows creation of a preset by tagging a camera viewpoint location.
 **/
 public class PresetCreationHandler  extends RequestHandler {
-  
- 
-  /**
-   * Create a new handler for creating new presets.
-   * @param logger to log to.
-   */
-  public PresetCreationHandler(Logger logger) {
-    super(logger);
-  }
   
   /**
      * Handles a request of making a new preset. 
