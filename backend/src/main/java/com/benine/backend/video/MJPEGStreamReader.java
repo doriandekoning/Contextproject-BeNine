@@ -35,7 +35,8 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
-    this.boundary = null;
+
+    setMJPEGBoundary();
     processStream();
   }
 
@@ -43,6 +44,17 @@ public class MJPEGStreamReader extends StreamReader {
   public void run() {
     while (!Thread.interrupted()) {
       processStream();
+    }
+  }
+
+  /**
+   * Sets the MJPEG boundary by parsing the first header.
+   */
+  private void setMJPEGBoundary() {
+    try {
+      this.boundary = getMJPEGBoundary(new String(getHeader(), StandardCharsets.UTF_8));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -59,23 +71,28 @@ public class MJPEGStreamReader extends StreamReader {
 
       this.setSnapShot(imageByte);
 
-      if (this.boundary == null) {
-        this.boundary = getMJPEGBoundary(header.toString());
-      }
-
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream(headerByte.length + imageByte.length);
-      outputStream.write(headerByte);
-      outputStream.write(imageByte);
-
-      byte[] frameByte = outputStream.toByteArray();
-
       // Notify the StreamDistributers
       setChanged();
-      notifyObservers(frameByte);
+      notifyObservers(frameToSend(headerByte, imageByte));
 
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Prepares the frame to send to the observing streamdistributers.
+   * @param header        Header bytes
+   * @param image         Image bytes
+   * @return              Byte array composed of header and image.
+   * @throws IOException  If an error occurs composing the header and the image.
+   */
+  private byte[] frameToSend(byte[] header, byte[] image) throws IOException {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(header.length + image.length);
+    outputStream.write(header);
+    outputStream.write(image);
+
+    return outputStream.toByteArray();
   }
 
   /**
