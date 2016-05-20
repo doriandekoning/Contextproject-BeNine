@@ -237,6 +237,11 @@ function inputRecieved(fun, input, newvalue) {
 	}
 }
 
+function releaseSlider(fun, input) {
+	input.value = 0;
+	fun();
+}
+
 /**
 * On click of the auto focus button change the color of the button.
 * And send the http request to change to auto focus.
