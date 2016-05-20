@@ -44,6 +44,7 @@ public class RecallPresetHandler extends RequestHandler {
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
+
       respondFailure(exchange);
     }
   }

@@ -36,7 +36,12 @@ public class PresetHandlerTest {
   ArrayList<Preset> presets = new ArrayList<Preset>();
   
   @Before
-  public void setUp() throws Exception{
+  public void setUp() throws CameraConnectionException{
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    serverController = ServerController.getInstance();
+    serverController.setDatabase(database);
+    handler = new PresetHandler();
+
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     handler = new PresetHandler();
@@ -49,7 +54,6 @@ public class PresetHandlerTest {
     serverController.setDatabase(database);
     handler = new PresetHandler();  
     
-
     out = mock(OutputStream.class);
   }
 

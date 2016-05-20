@@ -28,7 +28,6 @@ public class PresetHandler extends RequestHandler {
 
     String response =  "";
 
-
     try {
       Attributes parsedURI = parseURI(exchange.getRequestURI().getQuery());
       JSONArray json = new JSONArray();
@@ -49,6 +48,7 @@ public class PresetHandler extends RequestHandler {
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("presets", json);
       response = jsonObject.toString();
+
     } catch (MalformedURIException e) {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";

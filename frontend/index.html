@@ -95,12 +95,16 @@
     <div id="body_area">
         <div id="left_area" class="col-xs-6">
             <!-- Area in which the presets will be generated -->
-            <div id="preset_area"></div>
+			<div id="preset_area">
+				<div id='tagsearch' class="input-group">
+					<input oninput='tagSearchInput($(this))' type="text" class="form-control" placeholder="Tag" aria-describedby="sizing-addon2">
+				</div>
+            </div>
         </div>
         <div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
             <div class="control_buttons">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
+                    <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target=".preset-edit-modal"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</button>
                 </div>
             </div>
@@ -115,18 +119,18 @@
                                 <div class="slider" id="focus">
                                     <button id="auto_focus" type="button" class="btn btn-success">Auto</button>
                                     <input type="range" min="-10" max="10" value="0" class="focusslider"
-                                           orient="vertical" oninput="inputfocusslider(value)" onmouseup="this.value=0" ontouchend="this.value=0">
+                                           orient="vertical" oninput="inputfocusslider(value)" onmouseup="this.value=0; releaseSlider(sendFocus, focusInput);" ontouchend="this.value=0">
                                     <span>Focus</span>
                                 </div>
                                 <div class="slider" id="iris">
                                     <button id="auto_iris" type="button" class="btn btn-success">Auto</button>
                                     <input type="range" min="-10" max="10" value="0" class="irisslider"
-                                           orient="vertical" oninput="inputirisslider(value)" onmouseup="this.value=0" ontouchend="this.value=0">
+                                           orient="vertical" oninput="inputirisslider(value)" onmouseup="this.value=0; releaseSlider(sendIris, irisInput);" ontouchend="this.value=0">
                                     <span>Iris</span>
                                 </div>
                                 <div class="slider" id="zoom">
                                     <input type="range" min="-10" max="10" value="0" class="zoomslider"
-                                           orient="vertical" oninput="inputzoomslider(value)" onmouseup="this.value=0" ontouchend="this.value=0">
+                                           orient="vertical" oninput="inputzoomslider(value)" onmouseup="this.value=0; releaseSlider(sendZoom, zoomInput);" ontouchend="this.value=0">
                                     <span>Zoom</span>
                                 </div>
                             </div>
@@ -140,7 +144,7 @@
     </div>
 
     <!-- Defines the modal used for preset creation -->
-    <div class="modal fade preset-create-modal" tabindex="-1" role="dialog" aria-labelledby="preset-create-modal">
+    <div id="preset_create_div" class="modal fade preset-create-modal" tabindex="-1" role="dialog" aria-labelledby="preset-create-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -148,11 +152,20 @@
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
                 </div>
                 <div class="modal-body">
-                    ...
+					<div>
+						Preset name:<br>
+						<input id="preset_name" type="text">
+					</div>
+					<div>
+						Tag:<br>
+						<input id="preset_tag" type="text">
+					</div>
+					
+                    <img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createPreset()"><span class="glyphicon glyphicon-floppy-disk"></span> Save </button>
                 </div>
             </div>
         </div>

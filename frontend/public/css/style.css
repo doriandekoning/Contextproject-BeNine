@@ -139,6 +139,15 @@ input[type=range]:focus {
 	outline: none;
 }
 
+/* modals */
+.modal img {
+    position: relative;
+	left: 500px;
+	bottom: 100px;
+    height: 250px;
+    width: 350px;
+}
+
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
 	height: 28vw;
@@ -225,6 +234,13 @@ input[type=range]:focus {
 }
 
 /* Preset area configuration. */
+#tagsearch {
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;    
+	box-sizing: border-box;
+}
+
 #preset_area {
     background-color: #1A1A1A;
     flex-direction: column;

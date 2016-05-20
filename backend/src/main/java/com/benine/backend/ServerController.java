@@ -49,7 +49,7 @@ public class ServerController {
     cameraController = new CameraController();
 
     presetController = new PresetController();
-
+    
     streamController = new StreamController();
   }
   
@@ -74,8 +74,7 @@ public class ServerController {
     cameraController.loadConfigCameras();
     
     httpController = new HttpController(config.getValue("serverip"),
-
-    Integer.parseInt(config.getValue("serverport"))); 
+                        Integer.parseInt(config.getValue("serverport"))); 
     
     loadPresets();
     
@@ -94,7 +93,6 @@ public class ServerController {
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
   }
-
 
   /**
    * Loads the presets from the database.

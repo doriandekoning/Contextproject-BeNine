@@ -84,5 +84,4 @@ public class CameraControllerTest {
     Assert.assertEquals(actualJSON, expectedJSON);
   }
 
-
 }
