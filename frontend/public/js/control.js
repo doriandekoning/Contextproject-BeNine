@@ -45,9 +45,9 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
-	
+
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
@@ -67,15 +67,13 @@ function setCurrentCamera(id) {
 		iris.hide();
 	} else {
 		iris.show();
-		$('.irisslider').val(cameras[id].iris);
 	}
 	if  (cameras[id].focus === undefined) {
 		focus.hide();
 	} else {
 		focus.show();
-		$('.focusslider').val(cameras[id].focus);
 	}
-	
+
 	loadPresets(currentcamera);
 }
 
@@ -162,7 +160,7 @@ function sendMove(){
 * Method to send the new input value of the zoom slider to the currently selected camera.
 */
 function inputzoomslider(zoom) {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + zoom , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + parseInt(49.5  + (4.95 * zoom)), function(data) {});
 	console.log("Zoom: " + zoom);
 }
 
@@ -174,7 +172,7 @@ function inputzoomslider(zoom) {
 function inputfocusslider(focus) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + focus , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + parseInt(49.5  + (4.95*focus)) , function(data) {});
 	console.log("Focus: " + focus);
 }
 
@@ -186,7 +184,7 @@ function inputfocusslider(focus) {
 function inputirisslider(iris) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + iris , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + parseInt(49.5 + (4.95*iris)) , function(data) {});
 	console.log("Iris: "+ iris);
 }
 

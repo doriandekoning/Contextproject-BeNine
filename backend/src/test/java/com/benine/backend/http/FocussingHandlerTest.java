@@ -44,7 +44,7 @@ public class FocussingHandlerTest {
 
   @Test
   public void testOnlyAutoFocus() throws Exception {  
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?autoFocusOn=true");  
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?autoFocusOn=true");
     when(exchange.getRequestURI()).thenReturn(uri);
     try {
       fHandler.handle(exchange);
@@ -53,6 +53,19 @@ public class FocussingHandlerTest {
     }
     verify(cam).setAutoFocusOn(true);
   }
+
+  @Test
+  public void testMoveFocusRelative() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?speed=5");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      fHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    verify(cam).moveFocus(5);
+  }
+
 
   @Test
   public void testOnlyPosition() throws Exception {

@@ -1,6 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -162,5 +163,42 @@ public class IpcameraTest {
   public final void testUninitializedId(){
     IPCamera camera = new IPCamera("1.300.3.4");
     Assert.assertEquals(-1, camera.getId());
+  }
+  
+  @Test
+  public final void testNotEqualsIPAddress() {
+    IPCamera camera1 = new IPCamera("12");
+    IPCamera camera2 = new IPCamera("13");
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public final void testEquals() {
+    IPCamera camera1 = new IPCamera("12");
+    IPCamera camera2 = new IPCamera("12");
+    assertEquals(camera1, camera2);
+  }
+  
+  @Test
+  public final void testNotEqualsID() {
+    IPCamera camera1 = new IPCamera("12");
+    IPCamera camera2 = new IPCamera("12");
+    camera2.setId(5);
+    assertNotEquals(camera1, camera2);
+  }
+  
+  @Test
+  public final void testHashCodeNotEqual() {
+    IPCamera camera1 = new IPCamera("12");
+    IPCamera camera2 = new IPCamera("12");
+    camera2.setId(5);
+    assertNotEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
+  @Test
+  public final void testHashCodeEqual() {
+    IPCamera camera1 = new IPCamera("12");
+    IPCamera camera2 = new IPCamera("12");
+    assertEquals(camera1.hashCode(), camera2.hashCode());
   }
 }

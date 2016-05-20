@@ -1,8 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
-import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
@@ -10,7 +9,7 @@ import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
-
+import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,29 +20,24 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-
 
 /**
  * Class to communicate with an IP Camera.
  * @author Bryan
  */
-public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera, FocussingCamera {
+public class IPCamera extends BasicCamera implements MovingCamera,
+        IrisCamera, ZoomingCamera, FocussingCamera {
 
-  String ipaddress;
-
-  private int id = -1;
-
-  private Preset[] presetsFromCamera;
+  private String ipaddress;
 
   /**
    *  Create a new IP Camera object.
    *  @param ip address of this camera.
    */
   public IPCamera(String ip) {
+    super(StreamType.MJPEG);
     ipaddress = ip;
-    presetsFromCamera = new Preset[16];
   }
   
   /**
@@ -94,7 +88,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
       return new Position(convertPanToDouble(res.substring(3, 7)),
                                   convertTiltToDouble(res.substring(7)));
     } else {
-      throw new IpcameraConnectionException("Getting the position of the camera failed.", getId());
+      throw new IpcameraConnectionException(
+              "Getting the position of the camera failed.", this.getId());
     }
   }
   
@@ -209,6 +204,21 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   }
 
   /**
+   * Move the iris in the specified direction.
+   * Values between 1 and 99 where 50 is stop moving.
+   * 1 is iris nearer with max speed
+   * 99 is iris further with max speed
+   * @param speed value with which speed iris is changing.
+   * @throws CameraConnectionException when command can not be completed.
+   */
+  public void moveIris(int speed) throws CameraConnectionException {
+    CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
+    speed = Math.max(1, speed);
+    speed = Math.min(99, speed);
+    sendCommand("%23I" + speed);
+  }
+
+  /**
    * Turn auto focus on or off.
    * @param on true for auto focus on.
    * @throws CameraConnectionException when command can not be completed.
@@ -231,11 +241,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     CameraController.logger.log("Checking autofocus failed.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23D1");
     if (res.substring(0, 2).equals("d1")) {
-      if (res.substring(2).equals("1")) {
-        return true;
-      } else {
-        return false;
-      }
+      return res.substring(2).equals("1");
     } else {
       CameraController.logger.log("Changing auto focus failed.", LogEvent.Type.CRITICAL);
       throw new CameraConnectionException("Sending command to test autofocus failed", getId());
@@ -361,7 +367,8 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
    */
   public String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = null;
-    CameraController.logger.log("Send command: " + cmd + " to camera: " + id, LogEvent.Type.INFO);
+    CameraController.logger.log("Send command: " + cmd + " to camera: " + getId(),
+                                                                        LogEvent.Type.INFO);
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
@@ -404,7 +411,7 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
   @Override
   public String toJSON() throws CameraConnectionException {
     JSONObject json = new JSONObject();
-    json.put("id", Integer.valueOf(this.id));   
+    json.put("id", this.getId());
     try {
       json.put("pan", new Double(getPosition().getPan()));
       json.put("tilt", new Double(getPosition().getTilt()));
@@ -421,55 +428,42 @@ public class IPCamera implements Camera, MovingCamera, IrisCamera, ZoomingCamera
     return  json.toString();
 
   }
-  
-  /**
-   * Sets the id of this camera.
-   * @param id the id of this camera
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
-  
-  /**
-   * Gets the id of this camera.
-   * @return the id of this camera
-   */
-  public int getId() {
-    return this.id;
-  }
 
+  /**
+   * Returns the IP Address of this camera.
+   * @return String IP Address
+   */
   public String getIpaddress() {
     return ipaddress;
   }
 
   @Override
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + super.hashCode();
+    result = prime * result + ((ipaddress == null) ? 0 : ipaddress.hashCode());
+    return result;
   }
 
   @Override
-  public void setPresets(Preset[] presets) {
-    Preset[] copyPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
-    presetsFromCamera = copyPresets;
-  }
-
-  @Override
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
+  public boolean equals(Object obj) {
+    if (obj instanceof IPCamera) {
+      IPCamera that = (IPCamera) obj;
+      if (super.equals(that)
+          && (this.ipaddress != null && this.ipaddress.equals(that.ipaddress)
+              || this.ipaddress == null && that.ipaddress == null)
+          ) {
+        return true;
+      }
     }
+    return false;
   }
 
   @Override
   public String getMacAddress() throws CameraConnectionException {
     CameraController.logger.log("Send command: getInfo command to camera: " 
-        + id, LogEvent.Type.INFO);
+        + getId(), LogEvent.Type.INFO);
     String res = sendCommand("getinfo?FILE=1");
     HashMap<String, String> cameraInfo = new HashMap<String, String>();
     if (res != null) {
