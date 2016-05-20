@@ -8,7 +8,7 @@ import com.benine.backend.ServerController;
  * Factory for the creation of a simple camera object.
  *
  */
-public class SimpleCameraFactory extends CameraFactory {
+public class SimpleCameraFactory implements CameraFactory {
 
   @Override
   public Camera createCamera(int index) throws InvalidCameraTypeException {

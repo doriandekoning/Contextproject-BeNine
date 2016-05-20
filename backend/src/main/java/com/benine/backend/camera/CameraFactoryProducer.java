@@ -1,7 +1,6 @@
 package com.benine.backend.camera;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
 
 import java.util.HashMap;
@@ -27,12 +26,11 @@ public class CameraFactoryProducer {
    * @throws InvalidCameraTypeException when the type does not exists.
    */
   public CameraFactory getFactory(String type) throws InvalidCameraTypeException {
-    CameraFactory factory = CAMERA_TYPES.get(type);
-    if (factory == null) {
+    if (CAMERA_TYPES.get(type) == null) {
       CameraController.logger.log("The following type is not specified: " + type,
           LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Camera type is not regonized");
     }
-    return factory;
+    return (index) -> CAMERA_TYPES.get(type).createCamera(index);
   }
 }

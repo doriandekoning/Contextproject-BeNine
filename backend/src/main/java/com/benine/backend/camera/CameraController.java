@@ -6,7 +6,6 @@ import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 

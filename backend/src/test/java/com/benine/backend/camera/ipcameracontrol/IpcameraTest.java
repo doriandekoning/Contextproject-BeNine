@@ -14,7 +14,7 @@ import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
+import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 
 import java.util.ArrayList;
