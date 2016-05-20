@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.sql.SQLException;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -29,11 +30,17 @@ public class CameraControllerTest {
 
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     serverController.setDatabase(database);
     controller = new CameraController();
+  }
+  
+  @Test
+  public void testLoadConfigCameras() {
+    controller.loadConfigCameras();
+    assertTrue(controller.getCameras().size() == 1);
   }
 
   @Test
@@ -76,6 +83,5 @@ public class CameraControllerTest {
     String expectedJSON = obj.toString();
     Assert.assertEquals(actualJSON, expectedJSON);
   }
-
 
 }

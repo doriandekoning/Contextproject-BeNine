@@ -9,6 +9,7 @@ public class SimpleCamera implements Camera {
 
   private int id = -1;
   private String streamLink;
+  private String mACAddress;
 
   /**
    * Creates a JSON representation of this object.
@@ -55,6 +56,39 @@ public class SimpleCamera implements Camera {
    */
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
+  }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + id;
+    result = prime * result + ((streamLink == null) ? 0 : streamLink.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof SimpleCamera) {
+      SimpleCamera that = (SimpleCamera) obj;
+      if (this.id == that.id
+          && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
+              || this.getStreamLink() == null && that.getStreamLink() == null)
+          && (this.mACAddress != null && this.mACAddress .equals(that.mACAddress )
+              || this.mACAddress  == null && that.mACAddress  == null)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public String getMacAddress() throws CameraConnectionException {
+    return mACAddress;
+  }
+
+  public void setMacAddress(String mACAddress) {
+    this.mACAddress = mACAddress;
   }
 
 }

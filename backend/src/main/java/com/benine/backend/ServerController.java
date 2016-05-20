@@ -68,10 +68,11 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
-    httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger); 
-    
+    cameraController.loadConfigCameras();
     startupDatabase();
+    
+    httpController = new HttpController(config.getValue("serverip"),
+        Integer.parseInt(config.getValue("serverport")), logger);
     loadPresets();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
@@ -138,6 +139,11 @@ public class ServerController {
         e.printStackTrace();
       }
     }
+    try {
+      database.checkCameras();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
   
   /**
@@ -156,7 +162,7 @@ public class ServerController {
    * @param configPath to the main config file.
    * @return config object.
    */
-  public Config setUpConfig(String configPath) {
+  private Config setUpConfig(String configPath) {
     try {
       return ConfigReader.readConfig(configPath);
     } catch (Exception e) {

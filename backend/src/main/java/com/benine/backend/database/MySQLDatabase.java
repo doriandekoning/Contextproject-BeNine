@@ -3,6 +3,9 @@ package com.benine.backend.database;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -215,6 +218,97 @@ public class MySQLDatabase implements Database {
         } catch (SQLException e) {
           e.printStackTrace();
         }
+      }
+    }
+  }
+
+  @Override
+  public void checkCameras() throws SQLException {
+    ArrayList<Camera> cameras = ServerController.getInstance().getCameraController().getCameras();
+    ArrayList<String> macs = new ArrayList<String>();
+    ResultSet resultset = null;
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT ID, MACAddress FROM camera";
+      resultset = statement.executeQuery(sql);
+      checkOldCameras(resultset, cameras, macs);
+      checkNewCameras(cameras, macs);
+      statement.close();
+      resultset.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      logger.log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
+    } catch (CameraConnectionException e) {
+      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+        resultset.close();
+      }
+    }
+  }
+
+  /**
+   * Cheks if there are cameras in the database to be deleted.
+   * @param result The resultset from the query
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws SQLException No right connection to the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
+  public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws SQLException, CameraConnectionException {
+    while (result.next()) {
+      boolean contains = false;
+      String mac = result.getString("MACAddress");
+      macs.add(mac);
+      for (Camera camera : cameras) {
+        if (camera.getMacAddress().equals(mac)) {
+          contains = true;
+          break;
+        }
+      }
+      if (!contains) {
+        deleteCamera(result.getInt("ID"));
+      }
+    }
+  }
+
+  /**
+   * Checks if there are new cameras to be added to the database.
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
+  public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws CameraConnectionException {
+    boolean contains = false;
+    for (Camera camera : cameras) {
+      for (String mac : macs) {
+        if (mac.equals(camera.getMacAddress())) {
+          contains = true;
+          break;
+        }
+      }
+      if (!contains) {
+        addCamera(camera.getId(), camera.getMacAddress());
+      }
+    }
+  }
+
+  @Override
+  public void deleteCamera(int cameraID) throws SQLException {
+    Statement statement = connection.createStatement();
+    try {
+      String sql = "DELETE FROM presets WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM camera WHERE ID = " + cameraID;
+      statement.executeUpdate(sql);
+      statement.close();
+    } finally {
+      if (statement != null) {
+        statement.close();
       }
     }
   }
