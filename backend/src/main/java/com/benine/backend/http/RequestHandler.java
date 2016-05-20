@@ -15,20 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 
 public abstract class RequestHandler implements HttpHandler {
-
-  private Logger logger;
-
-  /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public RequestHandler(Logger logger) {
-    this.logger = logger;
-  }
 
   /**
    * Decodes the given (decoded) uri into an attributes table
@@ -39,11 +29,17 @@ public abstract class RequestHandler implements HttpHandler {
    */
   public Attributes parseURI(String uri) throws MalformedURIException {
     Attributes params = new Attributes();
+    if (uri == null) {
+      return params;
+    }
     for (String pair : uri.split("&")) {
       String[] splitPair = pair.split("=");
       if (params.containsKey(new Attributes.Name(splitPair[0]))) {
         throw new MalformedURIException("Multiple occurences of parameter with name: "
                                             + splitPair[0]);
+      }
+      if (splitPair.length < 2) {
+        throw new MalformedURIException("Nothing after =");
       }
       params.putValue(splitPair[0], splitPair[1]);
     }
@@ -55,7 +51,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @param exchange the HttpExchange.
    */
 
-  public void responseSuccess(HttpExchange exchange) {
+  public void respondSuccess(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"true\"}");
   }
   
@@ -63,7 +59,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Formats the response message as a failure.
    * @param exchange the HttpExchange.
    */
-  public void responseFailure(HttpExchange exchange) {
+  public void respondFailure(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"false\"}");
   } 
   
@@ -121,6 +117,6 @@ public abstract class RequestHandler implements HttpHandler {
    * @return Logger.
    */
   public Logger getLogger() {
-    return logger;
+    return ServerController.getInstance().getLogger();
   }
 }

@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
@@ -14,13 +13,13 @@ import java.net.URI;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 public class CameraInfoHandlerTest {
 
   @Test
   public void testGetInfo() throws Exception {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController serverController = ServerController.getInstance();
    
     // Setup mocks
@@ -36,7 +35,7 @@ public class CameraInfoHandlerTest {
     URI uri = new  URI("http://localhost/camera/");
     when(exchange.getRequestURI()).thenReturn(uri);
     when(exchange.getResponseBody()).thenReturn(out);
-    CameraInfoHandler cHandler = new CameraInfoHandler(mock(Logger.class));
+    CameraInfoHandler cHandler = new CameraInfoHandler();
     try {
       cHandler.handle(exchange);
     } catch (Exception e) {

@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 /**
- * Created by dorian on 2-5-16.
+ * Created on 2-5-16.
  */
 public class LoggerTest {
 
@@ -139,6 +139,15 @@ public class LoggerTest {
     logger.disableFileLogging();
     logger.enableFileLogging();
     Assert.assertTrue(logger.fileLoggingEnabled());
+  }
+
+  @Test
+  public void testLogException() {
+    LogWriter logwriter = mock(LogWriter.class);
+    Logger logger = new Logger(logwriter);
+    NullPointerException e = new NullPointerException();
+    logger.log("Testing an exception", e);
+    verify(logwriter).write(any(LogEvent.class));
   }
 
   private Answer count = invocation -> {

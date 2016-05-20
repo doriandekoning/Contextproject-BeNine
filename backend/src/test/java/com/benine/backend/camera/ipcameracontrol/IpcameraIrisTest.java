@@ -21,7 +21,6 @@ import com.benine.backend.camera.CameraConnectionException;
 /**
  * Test class to test the IP Camera Iris functions class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraIrisTest {
   
@@ -123,7 +122,22 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
 
-    camera.setIrisPos(80);
+    camera.setIrisPosition(80);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
+  public final void testSetIrisPosition2() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#I02"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC02"));
+
+    camera.setIrisPosition(2);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }
@@ -138,10 +152,25 @@ public class IpcameraIrisTest {
                                   .withQueryStringParameters(parameterList);
     mockServerClient.when(request).respond(HttpResponse.response().withBody("giD421"));
 
-    int res = camera.getIrisPos();
+    int res = camera.getIrisPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
     
     assertEquals(res, 3394, 0.000001);
+  }
+
+  @Test
+  public final void testMoveIris() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#I40"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+            .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC40"));
+
+    camera.moveIris(40);
+
+    mockServerClient.verify(request, VerificationTimes.once());
   }
 }

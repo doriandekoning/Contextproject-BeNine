@@ -5,6 +5,7 @@ import com.benine.backend.Preset;
 import com.benine.backend.video.StreamType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Interface for communication with remote camera's.
@@ -91,5 +92,29 @@ public abstract class BasicCamera implements Camera {
       presetsFromCamera[i] = preset;
       i++;
     }
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + id;
+    result = prime * result + Arrays.hashCode(presetsFromCamera);
+    result = prime * result + ((streamtype == null) ? 0 : streamtype.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof BasicCamera) {
+      BasicCamera that = (BasicCamera) obj;
+      if (this.getId() == that.getId()
+          && this.streamtype.equals(that.streamtype)
+          && Arrays.equals(this.presetsFromCamera, that.presetsFromCamera)
+          ) {
+        return true;
+      }
+    }
+    return false;
   }
 }
