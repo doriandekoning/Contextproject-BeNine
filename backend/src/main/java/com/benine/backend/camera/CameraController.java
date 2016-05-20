@@ -161,7 +161,7 @@ public class CameraController {
    */
   public int addPreset(int cameraId, Preset preset) throws SQLException {
     Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
-    for (int i = 0; i < cameraPresets.length; i++) {
+    for (int i = 1; i < cameraPresets.length; i++) {
       if (cameraPresets[i] == null) {
         cameraPresets[i] = preset;
         cameraPresets[i].setId(i);

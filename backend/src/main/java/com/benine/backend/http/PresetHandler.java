@@ -49,7 +49,7 @@ public class PresetHandler extends RequestHandler {
       jsonObject.put("presets", json);
       response = jsonObject.toString();
     } catch (MalformedURIException | SQLException e) {
-      getLogger().log("Exception occured while respoinding to the request with URI: "
+      getLogger().log("Exception occured while responding to the request with URI: "
           + exchange.getRequestURI(), LogEvent.Type.WARNING);
       respondFailure(exchange);
     } 
