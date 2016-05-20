@@ -29,10 +29,10 @@ public interface Database {
 
   /**
    * Delete a preset from the database.
-   * @param camera ID of the camera
+   * @param presetID ID of the camera
    * @throws SQLException No right connection found
    */
-  void deletePreset(int camera) throws SQLException;
+  void deletePreset(int presetID) throws SQLException;
 
   /**
    * Update a preset to the database.
