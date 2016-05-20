@@ -215,7 +215,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendCommand("%23I" + speed);
+    sendControlCommand("%23I" + speed);
   }
 
   /**
