@@ -11,14 +11,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles all requests requiring the camera ID.
  */
-
 public abstract class CameraRequestHandler extends AbstractHandler {
 
+  /**
+   * Contains the logger.
+   */
   private Logger logger;
-
-  public CameraRequestHandler() {}
 
   /**
    * Returns cameracontroller
@@ -47,15 +47,20 @@ public abstract class CameraRequestHandler extends AbstractHandler {
     Pattern pattern = Pattern.compile(".*/(\\d*)/.*");
     String path = request.getPathInfo();
 
-    try {
-      Matcher m = pattern.matcher(path);
-      m.matches();
+    Matcher m = pattern.matcher(path);
+
+    if (m.matches()) {
       return Integer.parseInt(m.group(1));
-    } catch (IllegalStateException e) {
+    } else {
       return -1;
     }
   }
 
+  /**
+   * Returns the route of the url, so we can select the next handler.
+   * @param request   The current request.
+   * @return          Returns the route.
+   */
   public String getRoute(Request request) {
     String path = request.getPathInfo();
 

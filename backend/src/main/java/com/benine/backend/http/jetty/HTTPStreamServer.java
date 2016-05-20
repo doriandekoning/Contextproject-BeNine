@@ -5,19 +5,22 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerCollection;
 
+/**
+ * Class responsible for starting and mutating the HTTP Stream Server.
+ */
 public class HTTPStreamServer {
 
-  private int port;
-  private Server server;
-
+  /**
+   * Creates a new Jetty server for handling requests.
+   * @param port        The port to start the server on.
+   * @throws Exception  If the server cannot be started, thus rendering the application useless.
+   */
   public HTTPStreamServer (int port) throws Exception {
-    this.port = port;
-    this.server = new Server(port);
-
-    // Mutable handler collection
-    HandlerCollection contextHandlerCollection = new HandlerCollection(true);
+    /*
+    The Jetty server object.
+   */
+    Server server = new Server(port);
 
     ContextHandler cameraContext = new ContextHandler("/camera");
     cameraContext.setHandler(new CameraHandler());
@@ -30,6 +33,7 @@ public class HTTPStreamServer {
     server.start();
     server.join();
   }
+
 
 
 }
