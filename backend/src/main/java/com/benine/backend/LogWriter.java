@@ -127,7 +127,7 @@ public class LogWriter {
    * Sets the max log size.
    * @param maxLogSize max level to log.
    */
-  public void setMaxLogSize(int maxLogSize) {
+  public synchronized void setMaxLogSize(int maxLogSize) {
     this.maxLogSize = maxLogSize;
   }
 

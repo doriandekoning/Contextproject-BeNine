@@ -13,7 +13,7 @@ import java.net.URI;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 public class CameraInfoHandlerTest {
 

@@ -51,7 +51,6 @@ public class ServerController {
     presetController = new PresetController();
     
     streamController = new StreamController();
-
   }
   
   /**
@@ -78,6 +77,7 @@ public class ServerController {
                         Integer.parseInt(config.getValue("serverport"))); 
     
     loadPresets();
+    
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -100,7 +100,6 @@ public class ServerController {
   private void loadPresets() {
     try {
       presetController.addPresets(database.getAllPresets());
-      //Should be removed
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }
@@ -232,6 +231,10 @@ public class ServerController {
    */
   public PresetController getPresetController() {
     return presetController;
+  }
+
+  public void setPresetController(PresetController newController) {
+    this.presetController = newController;
   }
 
   /**

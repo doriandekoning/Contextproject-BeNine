@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
 public class CameraControllerTest {
 
@@ -82,104 +82,6 @@ public class CameraControllerTest {
     obj.put("cameras", ar);
     String expectedJSON = obj.toString();
     Assert.assertEquals(actualJSON, expectedJSON);
-  }
-
-  @Test
-  public void testAddPreset() throws SQLException {
-    Camera cam1 = new SimpleCamera();
-
-    controller.addCamera(cam1);
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.addPreset(1, preset);
-
-    Mockito.verify(database).addPreset(1, 0, preset);
-    //Mockito.verifyZeroInteractions(database);
-  }
-
-  @Test
-  public void testAddPresetNoSpaceAvailable() throws SQLException {
-    Camera cam1 = new SimpleCamera();
-
-    controller.addCamera(cam1);
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-
-    Preset[] empty = new Preset[0];
-    controller.getCameraById(1).setPresets(empty);
-
-    Assert.assertEquals(-1, controller.addPreset(1, preset));
-  }
-
-  @Test
-  public void testAddPresetAtPosition() throws SQLException {
-    controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.addPresetAtPosition(1, preset, 0);
-    Mockito.verify(database).addPreset(1, 0, preset);
-    //Mockito.verifyZeroInteractions(database);
-  }
-
-  @Test
-  public void testAddPresetAtPositionUpdate() throws SQLException {
-    controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    Preset newPreset = new Preset(new Position(1,1), 1,1,1,false,0,0,false);
-
-    Preset[] presetList = new Preset[1];
-    presetList[0] = preset;
-    controller.getCameraById(1).setPresets(presetList);
-
-    controller.addPresetAtPosition(1, newPreset, 0);
-
-    Mockito.verify(database).updatePreset(1, 0, newPreset);
-  }
-
-  @Test
-  public void testGetPresetsFromDatabase() throws SQLException {
-    controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.getPresetsFromDatabase();
-    Mockito.verify(database).getAllPresetsCamera(1);
-    //Mockito.verifyZeroInteractions(database);
-  }
-
-  @Test
-  public void testResetPresetsInDatabase() throws SQLException {
-    controller.addCamera(new IPCamera("ip"));
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.addPreset(1, preset);
-    controller.resetPresetsInDatabase();
-    Mockito.verify(database).resetDatabase();
-    Mockito.verify(database).addCamera(1, "ip");
-    Mockito.verify(database, times(2)).addPreset(1, 0, preset);
-    //Mockito.verifyZeroInteractions(database);
-  }
-
-  @Test
-  public void testResetPresetsInDatabaseNotIp() throws SQLException {
-    SimpleCamera cameramock = mock(SimpleCamera.class);
-    controller.addCamera(cameramock);
-    Mockito.reset(cameramock);
-
-    controller.resetPresetsInDatabase();
-
-    Mockito.verifyZeroInteractions(cameramock);
-  }
-
-  @Test
-  public void testGetPreset() throws SQLException {
-    controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.addPreset(1, preset);
-    Assert.assertEquals(preset, controller.getPreset(1, 0));
-  }
-
-  @Test
-  public void testResetPresets() throws SQLException {
-    controller.addCamera(new SimpleCamera());
-    Preset preset = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    controller.addPreset(1, preset);
-    controller.resetPresets();
-    Assert.assertNull(controller.getPreset(1,0));
   }
 
 }

@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 
 /**
  * Class used for reading configuration details from a .config file and creates a new config object.
- * @author Dorian
  */
 public class ConfigReader {
+  
   /**
    * Reads a config file from a string and returns an new config object.
    * @param location the location of the file

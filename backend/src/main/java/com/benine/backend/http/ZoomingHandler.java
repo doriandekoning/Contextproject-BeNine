@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.jar.Attributes;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles zooming commands from the client.
+ * Created on 4-5-16.
  */
-// Add superclass requesthandler
 public class ZoomingHandler extends RequestHandler {
 
   /**

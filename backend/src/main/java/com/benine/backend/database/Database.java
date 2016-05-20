@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 /**
  * Interface for communication with the database.
- *
- * @author Ege
  */
 public interface Database {
 
@@ -22,41 +20,25 @@ public interface Database {
 
   /**
    * Add a preset to the database.
-   *
-   * @param camera             ID of the camera
-   * @param cameraPresetNumber ID of the preset for the camera
    * @param preset             The preset to be added
    * @throws SQLException No right connection found
    */
-  void addPreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
+  void addPreset(Preset preset) throws SQLException;
 
   /**
    * Delete a preset from the database.
-   * @param camera ID of the camera
-   * @param cameraPresetNumber ID of the preset for the camera
+   * @param presetID ID of the camera
    * @throws SQLException No right connection found
    */
-  void deletePreset(int camera, int cameraPresetNumber) throws SQLException;
+  void deletePreset(int presetID) throws SQLException;
 
   /**
    * Update a preset to the database.
    *
-   * @param camera             ID of the camera
-   * @param cameraPresetNumber ID of the preset for the camera
    * @param preset             The preset to be updated
    * @throws SQLException No right connection found
    */
-  void updatePreset(int camera, int cameraPresetNumber, Preset preset) throws SQLException;
-
-  /**
-   * Returns a preset of the camera.
-   *
-   * @param camera             ID of the camera
-   * @param cameraPresetNumber ID of the preset of the camera
-   * @return A preset
-   * @throws SQLException No right connection found
-   */
-  Preset getPreset(int camera, int cameraPresetNumber) throws SQLException;
+  void updatePreset(Preset preset) throws SQLException;
 
   /**
    * Returns all the presets.

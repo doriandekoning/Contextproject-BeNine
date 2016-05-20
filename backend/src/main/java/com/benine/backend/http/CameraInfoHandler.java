@@ -6,7 +6,8 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles requests from the client about which camera's there are.
+ * Created on 4-5-16.
  */
 public class CameraInfoHandler extends RequestHandler {
 

@@ -2,14 +2,24 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
 import com.sun.net.httpserver.HttpExchange;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import javax.imageio.ImageIO;
+
+
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
@@ -32,26 +42,50 @@ public class PresetCreationHandler  extends RequestHandler {
         IPCamera ipCamera = (IPCamera)camera;
         
         Preset preset = createPreset(ipCamera);
+        int presetID = preset.getId();
         
         //Adding the new preset to the database
-        getCameraController().addPreset(cameraID, preset);
-        respondSuccess(exchange);
-      
-      } else {
-        Preset preset = new Preset(new Position(0,0), 0, 
-             0, 0, false, 0, 0, false);
-        preset.setImage("/static/presets/preset1_1.jpg");
-        //Adding the new preset to the database
-        getCameraController().addPreset(cameraID, preset);
-        respondSuccess(exchange);
-       
+        PresetController preseController = ServerController.getInstance().getPresetController();
+        preseController.addPreset(preset);
+              
+        //Create corresponding image
+        createImage(preset, cameraID, presetID);
+        respondSuccess(exchange);  
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      getLogger().log("Preset can not be added to the database"
+          + "because of a database exception", LogEvent.Type.CRITICAL);
       respondFailure(exchange);
-      getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
+    } catch (StreamNotAvailableException e) {
+      getLogger().log("Preset can not be added to the database "
+          + "because the stream isn't available ", LogEvent.Type.CRITICAL);
+      respondFailure(exchange);
     }
-
+  }
+  
+  /**
+   * Create an image that belongs to a preset
+   * @param cameraID the ID of the camera used with the preset
+   * @param preset the preset belonging to the created image
+   * @param presetID the ID belonging to the preset
+   * @throws StreamNotAvailableException exception if there's no stream for the camera available
+   * @throws IOException exception thrown if the input is wrong. 
+   */
+  public static void createImage(Preset preset, int cameraID, int presetID) throws 
+  StreamNotAvailableException, IOException {
+    ServerController serverController = ServerController.getInstance();
+    StreamReader streamReader = serverController.getStreamController().getStreamReader(cameraID);
+    BufferedImage bufferedImage = streamReader.getSnapShot(); 
+    
+    //Rescale image so it loads faster.
+    //BufferedImage buffer = 
+    //(BufferedImage)bufferedImage.getScaledInstance(360, 235, BufferedImage.SCALE_DEFAULT);
+    
+    File path = new File("static" + File.separator + "presets" + File.separator 
+        + cameraID + "_" + presetID + ".jpg");
+    ImageIO.write(bufferedImage, "jpg", path);
+   
+    preset.setImage(path.toString());
   }
   
   /**
@@ -70,11 +104,13 @@ public class PresetCreationHandler  extends RequestHandler {
       int tiltspeed = 1 ;
       boolean autoiris = ipCamera.isAutoIrisOn();
       boolean autofocus = ipCamera.isAutoFocusOn();
-    
+      // TODO get cameraId from db
+      int cameraId = 0;
+
+
       //Create new Preset and return it.
-      //TODO add image of just created preset
       Preset preset = new Preset(new Position(pan,tilt),zoom,
-          focus,iris,autofocus, panspeed, tiltspeed, autoiris);
+          focus,iris,autofocus, panspeed, tiltspeed, autoiris, cameraId);
       
       return preset; 
       

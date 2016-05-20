@@ -1,5 +1,9 @@
 package com.benine.backend;
 
+import com.benine.backend.database.Database;
+
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 /**
@@ -42,25 +46,34 @@ public class PresetController {
   /**
    * Removes a preset from this presetcontroller.
    * @param preset the preset to remove.
+   * @throws SQLException if error with database occures.
    */
-  public void removePreset(Preset preset) {
+  public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
+    Database db = ServerController.getInstance().getDatabase();
+    db.deletePreset(preset.getId());
   }
 
   /**
-   * Add a preset to be controlled by this presetcontroller.
+   * Adds a preset.
    * @param preset the preset to add.
+   * @throws SQLException when an error occures in the database.
    */
-  public void addPreset(Preset preset) {
+  public void addPreset(Preset preset) throws SQLException {
     presets.add(preset);
+    ServerController serverContr = ServerController.getInstance();
+    serverContr.getDatabase().addPreset(preset);
   }
 
   /**
    * Adds a list of presets to be controllerd.
    * @param presets the list of presets to add.
+   * @throws SQLException when an error occures in the database.
    */
-  public void addPresets(ArrayList<Preset> presets) {
-    this.presets.addAll(presets);
+  public void addPresets(ArrayList<Preset> presets) throws SQLException {
+    for (Preset preset : presets) {
+      addPreset(preset);
+    }
   }
 
   /**
@@ -70,4 +83,5 @@ public class PresetController {
   public ArrayList<Preset> getPresets() {
     return presets;
   }
+
 }

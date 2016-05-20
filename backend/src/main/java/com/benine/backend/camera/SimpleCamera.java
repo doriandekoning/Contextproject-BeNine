@@ -4,7 +4,7 @@ import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
 public class SimpleCamera extends BasicCamera {
 

@@ -91,7 +91,11 @@ function loadPresets(cameraID) {
 	preset_area.find('img').removeAttr("src");
 	preset_area.find('h5').removeClass();
 	Holder.run({images:"#preset_area img"})
+<<<<<<< HEAD
 	$.get("/api/backend/camera/" + cameraID + "/preset?bla=5", function(data) {
+=======
+	$.get("/api/backend/presets/getpresets", function(data) {
+>>>>>>> develop
 		obj = JSON.parse(data);
 		console.log(obj);
 		presets = obj.presets;
@@ -334,7 +338,11 @@ function presetcall(t) {
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
+<<<<<<< HEAD
 		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {console.log(data);});
+=======
+		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
+>>>>>>> develop
 		console.log(t.attr("presetid"));
 	}
 }

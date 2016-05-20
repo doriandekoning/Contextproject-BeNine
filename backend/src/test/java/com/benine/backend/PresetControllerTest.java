@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 public class PresetControllerTest {
 
   @Test
-  public void testAddPreset() {
+  public void testAddPreset() throws Exception {
     PresetController controller = new PresetController();
     Preset preset = mock(Preset.class);
     controller.addPreset(preset);
@@ -25,7 +25,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testAddPresetList() {
+  public void testAddPresetList() throws Exception  {
     PresetController controller = new PresetController();
     ArrayList<Preset> presets = new ArrayList<Preset>();
     Preset preset1 = mock(Preset.class);
@@ -40,7 +40,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testRemovePreset() {
+  public void testRemovePreset() throws Exception {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
@@ -55,7 +55,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsByTag() {
+  public void testGetPresetsByTag() throws Exception {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
@@ -76,7 +76,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsByTagNoMatch() {
+  public void testGetPresetsByTagNoMatch() throws Exception  {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
@@ -94,7 +94,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsByTagMultiple() {
+  public void testGetPresetsByTagMultiple() throws Exception {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
@@ -109,7 +109,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsById() {
+  public void testGetPresetsById() throws Exception {
     PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
     Preset preset2 = mock(Preset.class);
@@ -127,7 +127,7 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testGetPresetsByIdNoMatch() {
+  public void testGetPresetsByIdNoMatch() throws Exception {
       PresetController controller = new PresetController();
       Preset preset1 = mock(Preset.class);
       Preset preset2 = mock(Preset.class);
