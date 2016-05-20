@@ -11,10 +11,14 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+
 import com.benine.backend.database.Database;
 import com.sun.net.httpserver.HttpExchange;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.io.OutputStream;
+
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
@@ -31,24 +35,24 @@ public class RecallPresetTest {
   private IPCamera ipcamera;
   private Preset preset;
   private RecallPresetHandler recallHandler;
-  private Logger logger;
   private ServerController serverController;
   private CameraController camController = mock(CameraController.class);
   private HttpExchange exchange = mock(HttpExchange.class);
   private OutputStream out = mock(OutputStream.class);
-
+  
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    CameraController controller = mock(CameraController.class);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+
     serverController = ServerController.getInstance();
-    
     ipcamera = mock(IPCamera.class);
     when(camController.getCameraById(0)).thenReturn(ipcamera);
     serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
-    logger = mock(Logger.class);
     preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0);;
-    recallHandler = new RecallPresetHandler(logger);
+    recallHandler = new RecallPresetHandler();
+
   }
   
   @Test
@@ -71,6 +75,7 @@ public class RecallPresetTest {
   public void testMalformedURI() throws Exception {
     URI uri = new  URI("http://localhost/camera/1/focus?position=4&position=3&autoFocusOn=false");
     when(exchange.getRequestURI()).thenReturn(uri);
+
     try {
       recallHandler.handle(exchange);
     } catch (Exception e) {
@@ -87,6 +92,7 @@ public class RecallPresetTest {
   }
 
   @Test
+
   public void testMovingCameraFocusPosition() throws CameraConnectionException {
     recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).moveFocus(preset.getFocus());

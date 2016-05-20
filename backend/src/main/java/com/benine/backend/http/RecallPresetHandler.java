@@ -1,6 +1,9 @@
 package com.benine.backend.http;
 
-import com.benine.backend.*;
+import com.benine.backend.LogEvent;
+import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -9,16 +12,10 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.util.jar.Attributes;
 
-
+/**
+ * Class to handle the recalling of a preset.
+ */
 public class RecallPresetHandler extends RequestHandler {
-
-  /**
-   * Create a new handler for recalling presets.
-   * @param logger to log to.
-   */
-  public RecallPresetHandler(Logger logger) {
-    super(logger);
-  }
   
   /**
   * Handles a request of making a new preset. 
@@ -31,19 +28,23 @@ public class RecallPresetHandler extends RequestHandler {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
 
       int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
+
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       PresetController presetController = ServerController.getInstance().getPresetController();
       Preset preset = presetController.getPresetById(presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       moveCamera(ipcamera,preset);
-      responseSuccess(exchange);
+      respondSuccess(exchange);
+      
     } catch (MalformedURIException e) {
-      responseFailure(exchange);
+      respondFailure(exchange);
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
+
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
+      respondFailure(exchange);
     }
   }
   
@@ -61,5 +62,6 @@ public class RecallPresetHandler extends RequestHandler {
     ipcamera.setAutoFocusOn(preset.isAutofocus());
     ipcamera.setIrisPosition(preset.getIris());
     ipcamera.setAutoIrisOn(preset.isAutoiris());
+  
   }
 }

@@ -1,38 +1,35 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraFactory;
+import com.benine.backend.camera.InvalidCameraTypeException;
 
 /**
  * Class to create camera objects.
- * @author Bryan
- *
  */
-public class IPCameraFactory extends CameraFactory {
 
-
-  /**
-   * Constructor of the camera handler.
-   */
-  public IPCameraFactory(){
-
-  }
+public class IPCameraFactory implements CameraFactory {
 
 
   /**
    * Creates a camera object as specified in camSpec.
-   * @param camSpec specification of the camera 0: type, 1: additional info.
+   * @param index of the camera in the config file.
    * @return Camera object.
    * @throws InvalidCameraTypeException when specified camera type can not be created.
    */
-  public IPCamera createCamera(String[] camSpec) throws InvalidCameraTypeException {
-    switch (camSpec[0]) {
-      case "ipcamera" : CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
-      return createIpcamera(camSpec[1]);
-      default: CameraController.logger.log("Create IP camera object", LogEvent.Type.WARNING);
+  public IPCamera createCamera(int index) throws InvalidCameraTypeException {
+    Config config = ServerController.getInstance().getConfig();
+    String address = config.getValue("camera_" + index + "_address");
+    if ( address == null) {
+      CameraController.logger.log("Camera: " + index + " has no address specified in the config",
+                                                                  LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
+    CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
+    return createIpcamera(address);
   }
   
   /**

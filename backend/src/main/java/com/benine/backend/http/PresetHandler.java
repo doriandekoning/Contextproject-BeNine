@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
-
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.sun.net.httpserver.HttpExchange;
@@ -14,18 +12,10 @@ import java.util.ArrayList;
 import java.util.jar.Attributes;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles a request to get information about presets.
+ * Created on 4-5-16.
  */
 public class PresetHandler extends RequestHandler {
-
-  /**
-   * Creates a new PresetHandler.
-   * @param logger the logger to be used to log to
-   */
-  public PresetHandler(Logger logger) {
-    super(logger);
-  }
-
 
   /**
    * Handles a request
@@ -59,7 +49,6 @@ public class PresetHandler extends RequestHandler {
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("presets", json);
       response = jsonObject.toString();
-      
     } catch (MalformedURIException e) {
       getLogger().log("URI is malformed: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
       response = "{\"succes\":\"false\"}";

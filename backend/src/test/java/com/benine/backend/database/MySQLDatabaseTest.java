@@ -1,6 +1,5 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Created on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
   
@@ -32,7 +31,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
                 connection.getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
-        database = new MySQLDatabase("root", "root", mock(Logger.class));
+        database = new MySQLDatabase("root", "root");
     }
 
     @Test

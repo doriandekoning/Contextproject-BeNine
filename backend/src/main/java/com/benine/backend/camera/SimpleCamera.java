@@ -1,14 +1,22 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
-public class SimpleCamera implements Camera {
+public class SimpleCamera extends BasicCamera {
 
-  private int id = -1;
   private String streamLink;
+  private String mACAddress;
+
+  /**
+   * Defines a simple camera, which cannot be controlled.
+   */
+  public SimpleCamera() {
+    super(StreamType.MJPEG);
+  }
 
   /**
    * Creates a JSON representation of this object.
@@ -21,24 +29,6 @@ public class SimpleCamera implements Camera {
     object.put("id", getId());
     object.put("streamlink", getStreamLink());
     return object.toString();
-  }
-
-  /**
-   * Sets id.
-   * @param id the new id.
-   */
-  @Override
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  /**
-   * Getter for id.
-   * @return the id of this camera.
-   */
-  @Override
-  public int getId() {
-    return id;
   }
 
   /**
@@ -56,5 +46,37 @@ public class SimpleCamera implements Camera {
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
   }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + super.hashCode();
+    result = prime * result + ((streamLink == null) ? 0 : streamLink.hashCode());
+    return result;
+  }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof SimpleCamera) {
+      SimpleCamera that = (SimpleCamera) obj;
+      if (super.equals(that)
+          && (this.getStreamLink() != null && this.getStreamLink().equals(that.getStreamLink())
+              || this.getStreamLink() == null && that.getStreamLink() == null)
+          && (this.mACAddress != null && this.mACAddress .equals(that.mACAddress )
+              || this.mACAddress  == null && that.mACAddress  == null)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  @Override
+  public String getMacAddress() throws CameraConnectionException {
+    return mACAddress;
+  }
+
+  public void setMacAddress(String mACAddress) {
+    this.mACAddress = mACAddress;
+  }
 }

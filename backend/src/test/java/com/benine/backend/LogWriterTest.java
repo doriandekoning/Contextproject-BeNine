@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dorian on 26-4-16.
+ * Created on 26-4-16.
  */
 public class LogWriterTest {
   @Before

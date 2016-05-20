@@ -1,9 +1,10 @@
 package com.benine.backend.camera;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
-public interface ControlableCamera extends Camera {
+public interface ControllableCamera extends Camera {
+
   /**
    * Method to send a command to this camera.
    * @param cmd command to send to the camera.

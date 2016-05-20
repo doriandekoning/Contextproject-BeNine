@@ -10,7 +10,6 @@ import java.util.Set;
 
 /**
  * A moving preset to be able to add to the database.
- * @author Ege
  */
 public class Preset {
 

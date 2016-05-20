@@ -14,6 +14,8 @@ import com.benine.backend.PresetController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
+import com.benine.backend.database.Database;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Before;
@@ -29,21 +31,25 @@ public class PresetHandlerTest {
   private ServerController serverController;
   private PresetHandler handler;
   private OutputStream out;
-  private Logger logger;
+  private Database database = mock(Database.class);
   HttpExchange exchange = mock(HttpExchange.class);
   ArrayList<Preset> presets = new ArrayList<Preset>();
   
   @Before
   public void setUp() throws Exception{
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
-    logger = mock(Logger.class);
-    handler = new PresetHandler(logger);
+    handler = new PresetHandler();
     presets.add(new Preset(new Position(0, 0), 0, 0, 0, true, 0, 0, true, 0));
     presets.get(0).addTag("Piano");
     PresetController presetcontroller = mock(PresetController.class);
     when(presetcontroller.getPresetsByTag("Piano")).thenReturn(presets); 
     serverController.setPresetController(presetcontroller);
+    
+    serverController.setDatabase(database);
+    handler = new PresetHandler();  
+    
+
     out = mock(OutputStream.class);
   }
 
