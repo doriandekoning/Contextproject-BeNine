@@ -159,35 +159,26 @@ function sendMove(){
 	console.log(pan + " - " + tilt);
 }
 
-/* Variables used for the zoom slider */
-var zoomSend = false;
-var zoom = 0;
+/* Variable used for the zoom slider */
+var zoomInput = {value:0, send:false};
 
 /**
 * Method is called when the inputslider value changes.
 */
 function inputzoomslider(z) {
-	if (zoomSend === false) {
-		zoom = z;
-		zoomSend = true;
-		setTimeout(function(){sendZoom(); zoomSend = false;}, 130);
-		sendZoom();
-	} else {
-		zoom = (parseInt(z) + parseInt(zoom)) / 2;
-	}
+	inputRecieved(sendZoom, zoomInput, z);
 }
 
 /**
 * Method to send a command to the backend to change the zoom.
 */
 function sendZoom() {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + parseInt(zoom) , function(data) {});
-	console.log("Zoom: " + parseInt(zoom));
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + parseInt(zoomInput.value) , function(data) {});
+	console.log("Zoom: " + parseInt(zoomInput.value));
 }
 
-/* Variables used for the focus slider */
-var focus = 0;
-var focusSend = false;
+/* Variable used for the focus slider */
+var focusInput = {value:0, send:false};
 
 /**
 * Method to send the new input value of the focus slider to the currently selected camera.
@@ -197,27 +188,19 @@ var focusSend = false;
 function inputfocusslider(f) {
 	$('#auto_focus').addClass("btn-danger");
 	$('#auto_focus').removeClass("btn-success");
-	if (focusSend === false) {
-		focus = f;
-		focusSend = true;
-		setTimeout(function(){sendFocus(); focusSend = false;}, 130);
-		sendFocus();
-	} else {
-		focus = (parseInt(f) + parseInt(focus)) / 2;
-	}
+	inputRecieved(sendFocus, focusInput, f);
 }
 
 /**
 * Method to send a command to the backend to change the focus.
 */
 function sendFocus() {
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + parseInt(focus) , function(data) {});
-	console.log("Focus: " + parseInt(focus));
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + parseInt(focusInput.value) , function(data) {});
+	console.log("Focus: " + parseInt(focusInput.value));
 }
 
 /* Variables used for the iris slider */
-var iris = 0;
-var irisSend = false;
+var irisInput = {value:0, send:false};
 
 
 /**
@@ -228,22 +211,29 @@ var irisSend = false;
 function inputirisslider(i) {
 	$('#auto_iris').addClass("btn-danger");
 	$('#auto_iris').removeClass("btn-success");
-	if (irisSend === false) {
-		iris = i;
-		irisSend = true;
-		setTimeout(function(){sendIris(); irisSend = false;}, 130);
-		sendIris();
-	} else {
-		iris = (parseInt(i) + parseInt(iris)) / 2;
-	}
+	inputRecieved(sendIris, irisInput, i);
 }
 
 /**
 * Function to send a command to the backend to change the iris.
 */
 function sendIris() {
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + parseInt(iris) , function(data) {});
-	console.log("Iris: " + parseInt(iris));
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + parseInt(irisInput.value) , function(data) {});
+	console.log("Iris: " + parseInt(irisInput.value));
+}
+
+/**
+* function to process the input of a slider.
+*/
+function inputRecieved(fun, input, newvalue) {
+	if (input.send === false) {
+		input.value = newvalue;
+		input.send = true;
+		setTimeout(function(){fun(); input.send = false;}, 130);
+		fun();
+	} else {
+		input.value = (parseInt(newvalue) + parseInt(input.value)) / 2;
+	}
 }
 
 /**
