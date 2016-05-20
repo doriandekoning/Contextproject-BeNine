@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
 
 /**
  * Class responsible for starting and mutating the HTTP Stream Server.
@@ -22,13 +23,19 @@ public class HTTPStreamServer {
    */
     Server server = new Server(port);
 
+    Handler logHandler = new LogHandler();
+
     ContextHandler cameraContext = new ContextHandler("/camera");
     cameraContext.setHandler(new CameraHandler());
 
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] { cameraContext });
+    contexts.setHandlers(new Handler[] { logHandler, cameraContext });
 
-    server.setHandler(contexts);
+    HandlerList handlerList = new HandlerList();
+    handlerList.addHandler(logHandler);
+    handlerList.addHandler(contexts);
+
+    server.setHandler(handlerList);
 
     server.start();
     server.join();

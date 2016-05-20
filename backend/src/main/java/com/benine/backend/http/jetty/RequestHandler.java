@@ -1,8 +1,11 @@
 package com.benine.backend.http.jetty;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.io.IOException;
@@ -13,6 +16,12 @@ import javax.servlet.http.HttpServletResponse;
  * Created on 20-05-16.
  */
 public abstract class RequestHandler extends AbstractHandler {
+
+  private Logger logger;
+
+  public RequestHandler() {
+    this.logger = ServerController.getInstance().getLogger();
+  }
 
   /**
    * Returns cameracontroller
@@ -35,7 +44,7 @@ public abstract class RequestHandler extends AbstractHandler {
    * @param response the httpservletresponse to respond to.
    * @param body a string with the response.
    */
-  public void respond(HttpServletResponse response, String body) {
+  public void respond(Request request, HttpServletResponse response, String body) {
     try {
       response.setStatus(HttpServletResponse.SC_OK);
       response.setContentLength(body.length());
@@ -45,8 +54,16 @@ public abstract class RequestHandler extends AbstractHandler {
       out.close();
 
     } catch (IOException e) {
-      //Logger().log("Error occured while writing the response to a request at URI"
-      //        + exchange.getRequestURI(), LogEvent.Type.WARNING);
+      getLogger().log("Error occured while writing the response to a request at URI"
+              + request.getRequestURI(), LogEvent.Type.WARNING);
     }
+  }
+
+  /**
+   * Returns the logger.
+   * @return A Logger object.
+   */
+  public Logger getLogger() {
+    return this.logger;
   }
 }

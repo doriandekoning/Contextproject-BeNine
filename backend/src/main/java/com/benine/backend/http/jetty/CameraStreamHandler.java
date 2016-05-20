@@ -1,5 +1,6 @@
 package com.benine.backend.http.jetty;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamDistributer;
@@ -23,8 +24,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
   @Override
   public void handle(String s, Request request,
                      HttpServletRequest httpServletRequest,
-                     HttpServletResponse httpServletResponse)
-          throws IOException, ServletException {
+                     HttpServletResponse httpServletResponse) throws IOException, ServletException {
 
     int camID = getCameraId(request);
 
@@ -33,7 +33,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
       streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
       e.printStackTrace();
-      //getLogger().log(e.toString(), LogEvent.Type.WARNING);
+      getLogger().log(e.toString(), LogEvent.Type.WARNING);
     }
 
     // We need an MJPEG streamreader to stream MJPEG.
@@ -45,6 +45,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
       setHeaders(streamReaderMJPEG, httpServletResponse);
 
       // Get an inputstream from the distributer.
+
       PipedInputStream in = new PipedInputStream(distributer.getStream());
       BufferedInputStream bs = new BufferedInputStream(in);
       OutputStream os = httpServletResponse.getOutputStream();

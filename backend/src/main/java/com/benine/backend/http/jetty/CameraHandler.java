@@ -23,8 +23,7 @@ public class CameraHandler extends CameraRequestHandler {
   @Override
   public void handle(String s, Request request,
                      HttpServletRequest httpServletRequest,
-                     HttpServletResponse httpServletResponse)
-          throws IOException, ServletException {
+                     HttpServletResponse httpServletResponse) throws IOException, ServletException {
 
     String cameraInfo = getCameraController().getCamerasJSON();
 
@@ -36,12 +35,12 @@ public class CameraHandler extends CameraRequestHandler {
           streamHandler.handle(s, request, httpServletRequest, httpServletResponse);
           break;
         default:
-          respond(httpServletResponse, cameraInfo);
+          respond(request, httpServletResponse, cameraInfo);
           break;
       }
 
     } else {
-      respond(httpServletResponse, cameraInfo);
+      respond(request, httpServletResponse, cameraInfo);
     }
 
     request.setHandled(true);
