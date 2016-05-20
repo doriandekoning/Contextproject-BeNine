@@ -1,9 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.IrisCamera;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -11,18 +9,10 @@ import java.io.IOException;
 import java.util.jar.Attributes;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles an command from the client to change the iris of a camera.
+ * Created on 4-5-16.
  */
 public class IrisHandler extends RequestHandler {
-
-  /**
-   * Creates a new IrisHandler.
-   * @param controller which controls the cameras.
-   * @param logger the logger to be used to log to
-   */
-  public IrisHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
-  }
   
   /**
    * Handles a request
@@ -34,12 +24,11 @@ public class IrisHandler extends RequestHandler {
             + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response = "{\"succes\":\"true\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
     } catch (MalformedURIException exception) {
       getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      respond(exchange, "{\"succes\":\"false\"}");
+      respondFailure(exchange);
       return;
     }
     int camId = getCameraId(exchange);
@@ -48,18 +37,21 @@ public class IrisHandler extends RequestHandler {
     IrisCamera irisCam = (IrisCamera)cam;
     String autoOn = parsedURI.getValue("autoIrisOn");
     String setPos = parsedURI.getValue("position");
+    String speed = parsedURI.getValue("speed");
     try {
       if (autoOn != null) {
         boolean autoOnBool = Boolean.parseBoolean(autoOn);
         irisCam.setAutoIrisOn(autoOnBool);
       }
       if (setPos != null) {
-        irisCam.setIrisPos(Integer.parseInt(setPos));
+        irisCam.setIrisPosition(Integer.parseInt(setPos));
+      } else if (speed != null) {
+        irisCam.moveIris(Integer.parseInt(speed));
       }
     } catch (Exception e) {
       getLogger().log("Cannot connect with camera: " + cam.getId(), LogEvent.Type.WARNING);
-      response = "{\"succes\":\"false\"}";
+      respondFailure(exchange);
     }
-    respond(exchange, response);
+    respondSuccess(exchange);
   }
 }

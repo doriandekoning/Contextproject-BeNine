@@ -2,8 +2,6 @@ package com.benine.backend.camera;
 
 /**
  * Class to represent a position of a camera.
- * @author Bryan
- *
  */
 public class Position {
 
@@ -68,8 +66,8 @@ public class Position {
   public boolean equals(Object o) {
     if (o instanceof Position) {
       Position that = (Position) o;
-      if (Double.compare(this.pan, that.pan) < 0.0001 
-                && Double.compare(this.tilt, that.tilt) < 0.0001 ) {
+      if (Double.compare(this.pan, that.pan) == 0
+                && Double.compare(this.tilt, that.tilt) == 0 ) {
         return true;
       }
     }

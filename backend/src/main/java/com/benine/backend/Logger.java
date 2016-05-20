@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Created by dorian on 2-5-16.
+ * Created on 2-5-16.
  */
 public class Logger {
 
@@ -23,10 +23,11 @@ public class Logger {
   
   /**
    * Creates a new Logger object with standard logwriter.
+   * @param logLocation location to log to.
    * @throws IOException if the default log file is for some reason tot accesible
    */
-  public Logger() throws IOException {
-    this.writer = new LogWriter(Main.getConfig().getValue("standardloglocation"));
+  public Logger(String logLocation) throws IOException {
+    this.writer = new LogWriter(logLocation);
   }
 
   /**
@@ -50,14 +51,22 @@ public class Logger {
   }
   
   /**
-   * Logs item at current time
+   * Logs item at current time.
    * @param message the description of the logevent
    * @param type The type of the logevent.
    */
   public void log(String message, LogEvent.Type type) {
     log(new LogEvent(new Date().toString(), message, type));
   }
-  
+
+  /**
+   * Logs an exception at the current time.
+   * @param description of the exception.
+   * @param exception the exception to log.
+   */
+  public void log(String description, Exception exception) {
+    log(new LogEvent(new Date().toString(), description, LogEvent.Type.WARNING, exception));
+  }
   /**
    * Logs logevent.
    * @param event event to log.

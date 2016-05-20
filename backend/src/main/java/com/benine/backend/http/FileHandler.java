@@ -1,8 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
-
-import com.benine.backend.camera.CameraController;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -31,16 +28,6 @@ public class FileHandler extends RequestHandler {
     MIME_MAP.put("jpg", "image/jpeg");
     MIME_MAP.put("html", "text/html");
   }
-  
-  /**
-   * Constructor of this request handler.
-   * @param controller of the camera's.
-   * @param logger object to log to.
-   */
-  public FileHandler(CameraController controller, Logger logger) {
-    super(controller, logger);
-
-  }
 
   /**
    * Handle incoming requests.
@@ -54,7 +41,7 @@ public class FileHandler extends RequestHandler {
     File file = new File("." + path).getCanonicalFile();
     //check if the requested file exists
     if (!file.isFile()) {
-      respond(exchange, "{\"succes\":\"false\"}");
+      respondFailure(exchange);
     } else {
       
       String mime = getMime(path);
