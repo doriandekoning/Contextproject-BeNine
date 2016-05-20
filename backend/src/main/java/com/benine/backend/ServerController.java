@@ -68,8 +68,8 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
-    startupDatabase();
     cameraController.loadConfigCameras();
+    startupDatabase();
     
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger);
@@ -138,6 +138,11 @@ public class ServerController {
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }
+    try {
+      database.checkCameras();
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
   

@@ -3,7 +3,9 @@ package com.benine.backend.database;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.ibatis.common.jdbc.ScriptRunner;
@@ -222,35 +224,80 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public ArrayList<Camera> getAllCameras() throws SQLException {
-    ArrayList<Camera> list = new ArrayList<Camera>();
+  public void checkCameras() throws SQLException {
+    ArrayList<Camera> cameras = ServerController.getInstance().getCameraController().getCameras();
+    ArrayList<String> macs = new ArrayList<String>();
     ResultSet resultset = null;
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT ID, IPadress FROM camera";
+      String sql = "SELECT ID, MACAddress FROM camera";
       resultset = statement.executeQuery(sql);
-      while (resultset.next()) {
-        IPCamera camera = new IPCamera(resultset.getString("IPadress"));
-        camera.setId(resultset.getInt("ID"));
-        list.add(camera);
-      }
+      checkOldCameras(resultset, cameras, macs);
+      checkNewCameras(cameras, macs);
       statement.close();
       resultset.close();
     } catch (SQLException e) {
       e.printStackTrace();
-      logger.log("Cameras could not be get from database.", LogEvent.Type.CRITICAL);
+      logger.log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
+    } catch (CameraConnectionException e) {
+      e.printStackTrace();
     } finally {
       if (statement != null) {
-        try {
-          statement.close();
-          resultset.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
+        statement.close();
+        resultset.close();
       }
     }
-    return list;
+  }
+
+  public void checkOldCameras(ResultSet resultset, ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws SQLException, CameraConnectionException {
+    while (resultset.next()) {
+      boolean contains = false;
+      String mac = resultset.getString("MACAddress");
+      macs.add(mac);
+      for(Camera camera : cameras) {
+        if(camera.getMacAddress() == mac) {
+          contains = true;
+          break;
+        }
+      }
+      if(!contains) {
+        deleteCamera(resultset.getInt("ID"));
+      }
+    }
+  }
+
+  public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws CameraConnectionException {
+    boolean contains = false;
+    for(Camera camera : cameras) {
+      for(String mac : macs) {
+        if(mac == camera.getMacAddress()) {
+          contains = true;
+          break;
+        }
+      }
+      if(!contains) {
+        addCamera(camera.getId(), camera.getMacAddress());
+      }
+    }
+  }
+
+  @Override
+  public void deleteCamera(int cameraID) throws SQLException {
+    Statement statement = connection.createStatement();
+    try {
+      String sql = "DELETE FROM presets WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM camera WHERE ID = " + cameraID;
+      statement.executeUpdate(sql);
+      statement.close();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
+    }
   }
 
   @Override

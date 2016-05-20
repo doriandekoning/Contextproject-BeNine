@@ -95,11 +95,18 @@ public interface Database {
   void addCamera(int id, String ip) throws SQLException;
 
   /**
-   * Gets all the cameras in the database.
+   * Checks if cameras are correct in database.
    * @return An ArrayList of all te cameras
    * @throws SQLException Wrong connection to database
    */
-  ArrayList<Camera> getAllCameras() throws SQLException;
+  void checkCameras() throws SQLException;
+
+  /**
+   * deletes a camera from the database.
+   * @param cameraID the camera to be deleted
+   * @throws SQLException Wrong connecton to database
+   */
+  void deleteCamera(int cameraID) throws SQLException;
 
   /**
    * Makes sure the right database is used.
