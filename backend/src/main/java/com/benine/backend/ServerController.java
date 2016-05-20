@@ -1,6 +1,7 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
@@ -28,6 +29,8 @@ public class ServerController {
   private boolean running;
 
   private HttpController httpController;
+
+  private PresetController presetController;
   
   /**
    * Constructor of the server controller.
@@ -38,10 +41,14 @@ public class ServerController {
     config = setUpConfig(configPath);
     running = false;
     setupLogger();
-    
+
     database = loadDatabase();
-    
+
     cameraController = new CameraController();
+
+    presetController = new PresetController();
+
+    loadCameras();
   }
   
   /**
@@ -66,6 +73,7 @@ public class ServerController {
     
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger);
+    loadPresets();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -79,6 +87,30 @@ public class ServerController {
       database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
+    }
+  }
+  
+  /**
+   * Load camera's in camera controller.
+   * For now it just adds 2 simple camera's.
+   */
+  private void loadCameras() {
+    SimpleCamera camera = new SimpleCamera();
+    camera.setStreamLink(config.getValue("camera1"));
+    SimpleCamera camera2 = new SimpleCamera();
+    camera2.setStreamLink(config.getValue("camera1"));
+    cameraController.addCamera(camera);
+    cameraController.addCamera(camera2);  
+  }
+
+  /**
+   * Loads the presets from the database.
+   */
+  private void loadPresets() {
+    try {
+      presetController.addPresets(database.getAllPresets());
+    } catch (SQLException e) {
+      logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }
   }
 
@@ -159,11 +191,14 @@ public class ServerController {
   }
 
   /**
-   * Setter for the database.
+   * Setter for the database also updates the presets and cameras according to new database.
    * @param newDatabase the new database
    */
   public void setDatabase(Database newDatabase) {
     database = newDatabase;
+    loadDatabase();
+    loadCameras();
+    loadPresets();
   }
 
   /**
@@ -190,7 +225,18 @@ public class ServerController {
     return running;
   }
 
-  
+  /**
+   * Getter for presetController
+   * @return Returns the presetController.
+   */
+  public PresetController getPresetController() {
+    return presetController;
+  }
+
+  public void setPresetController(PresetController newController) {
+    this.presetController = newController;
+  }
+
   /**
    * Get the main config file.
    * @return the config file.

@@ -39,11 +39,17 @@ public abstract class RequestHandler implements HttpHandler {
    */
   public Attributes parseURI(String uri) throws MalformedURIException {
     Attributes params = new Attributes();
+    if (uri == null) {
+      return params;
+    }
     for (String pair : uri.split("&")) {
       String[] splitPair = pair.split("=");
       if (params.containsKey(new Attributes.Name(splitPair[0]))) {
         throw new MalformedURIException("Multiple occurences of parameter with name: "
                                             + splitPair[0]);
+      }
+      if (splitPair.length < 2) {
+        throw new MalformedURIException("Nothing after =");
       }
       params.putValue(splitPair[0], splitPair[1]);
     }

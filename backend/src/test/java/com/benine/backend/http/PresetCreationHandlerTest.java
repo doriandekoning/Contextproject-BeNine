@@ -56,23 +56,11 @@ public class PresetCreationHandlerTest {
     when(ipcamera.isAutoIrisOn()).thenReturn(true);
     when(ipcamera.getId()).thenReturn(1);
     Preset[] presets = {};
-    when(ipcamera.getPresets()).thenReturn(presets);
     
-    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);
+    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0);
     
   }
-  
-  @Test
-  public void testCreatePreset() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+ipcamera.getId()+"/zoom?autoIrisOn=true");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      handler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    verify(camController).addPreset(1, preset);
-  }
+
   
   @Test
   public void testGetFocusPos() {

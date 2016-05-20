@@ -4,12 +4,9 @@ import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
-import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -75,7 +72,6 @@ public class CameraController {
     return ServerController.getInstance().getDatabase();
   }
 
-
   /**
    * Sets up the logger.
    * @return logger object.
@@ -114,100 +110,12 @@ public class CameraController {
   }
 
   /**
-   * Get all the presets from the database and set them to the right camera.
-   * @throws SQLException No right connection found
-   */
-  public void getPresetsFromDatabase() throws SQLException {
-    for (Camera camera : this.getCameras()) {
-      camera.setPresetsFromArrayList(getDatabase()
-                                      .getAllPresetsCamera(camera.getId()));
-    }
-  }
-
-  /**
    * Get all the cameras from the database.
    * @throws SQLException No right connection to database
    */
   public void getCamerasFromDatabase() throws SQLException {
     cameras = getDatabase().getAllCameras();
   }
-
-  /**
-   * Reset the database with the new presets.
-   * @throws SQLException No right connection found
-   */
-  public void resetPresetsInDatabase() throws SQLException {
-    getDatabase().resetDatabase();
-    for (Camera camera : this.getCameras()) {
-      if (camera instanceof IPCamera) {
-        IPCamera ipcamera = (IPCamera) camera;
-        getDatabase().addCamera(camera.getId(), ipcamera.getIpaddress());
-        for (int i = 0; i < camera.getPresets().length; i++) {
-          if (camera.getPresets()[i] != null) {
-            getDatabase().addPreset(camera.getId(), i, camera.getPresets()[i]);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Add a preset to the first free position.
-   * @param cameraId The id of the camera
-   * @param preset The preset
-   * @return The position the preset is added
-   * @throws SQLException No right connection found
-   */
-  public int addPreset(int cameraId, Preset preset) throws SQLException {
-    Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
-    for (int i = 0; i < cameraPresets.length; i++) {
-      if (cameraPresets[i] == null) {
-        cameraPresets[i] = preset;
-        cameraPresets[i].setId(i);
-        getDatabase().addPreset(cameraId, i, preset);
-        this.getCameraById(cameraId).setPresets(cameraPresets);
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Add a preset to a specific position on the camera.
-   * @param cameraId The id of the camera
-   * @param preset The preset
-   * @param position The position to add the preset
-   * @throws SQLException No right connection found
-   */
-  public void addPresetAtPosition(int cameraId, Preset preset, int position) throws SQLException {
-    Preset[] cameraPresets = this.getCameraById(cameraId).getPresets();
-    if (cameraPresets[position] != null) {
-      getDatabase().updatePreset(cameraId, position, preset);
-    } else {
-      getDatabase().addPreset(cameraId, position, preset);
-    }
-    cameraPresets[position] = preset;
-  }
-
-  /**
-   * Get a preset from a camera with the presetId.
-   * @param cameraId The id of the camera
-   * @param presetPosition The preset id of the camera
-   * @return The preset
-   */
-  public Preset getPreset(int cameraId, int presetPosition) {
-    return getCameraById(cameraId).getPresets()[presetPosition];
-  }
-
-  /**
-   * Deletes all presets from the cameras.
-   */
-  public void resetPresets() {
-    for (Camera camera : this.getCameras()) {
-      camera.setPresets(new Preset[16]);
-    }
-  }
-
   /**
    * Returns a json string of all the cameras.
    * @return json string of all the cameras.

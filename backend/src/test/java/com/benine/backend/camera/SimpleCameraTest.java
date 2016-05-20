@@ -36,30 +36,6 @@ public class SimpleCameraTest {
   }
 
   @Test
-  public void testSetPresets() {
-    Camera simpleCamera = new SimpleCamera();
-
-    Preset[] presets = new Preset[16];
-    presets[14] = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-
-
-    simpleCamera.setPresets(presets);
-    Assert.assertTrue(Arrays.equals(presets, simpleCamera.getPresets()));
-  }
-
-  @Test
-  public void testSetPresetsFromArrayList() {
-    Camera simpleCamera = new SimpleCamera();
-
-    Preset[] presets = new Preset[16];
-    presets[14] = new Preset(new Position(0,0), 0,0,0,false,0,0,false);
-    ArrayList<Preset> presetarrayList = new ArrayList(Arrays.asList(presets));
-
-    simpleCamera.setPresetsFromArrayList(presetarrayList);
-    Assert.assertTrue(Arrays.equals(presets, simpleCamera.getPresets()));
-  }
-
-  @Test
   public void testGetSetStreamLink() {
     SimpleCamera simpleCamera = new SimpleCamera();
     simpleCamera.setStreamLink("link.something");

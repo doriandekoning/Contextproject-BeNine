@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.PresetController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,19 +43,21 @@ public class RecallPresetTest {
     serverController = ServerController.getInstance();
     
     ipcamera = mock(IPCamera.class);
-    when(camController.getCameraById(1)).thenReturn(ipcamera);
+    when(camController.getCameraById(0)).thenReturn(ipcamera);
     serverController.setCameraController(camController);
     when(exchange.getResponseBody()).thenReturn(out);
     logger = mock(Logger.class);
-    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true);;
+    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0);;
     recallHandler = new RecallPresetHandler(logger);
   }
   
   @Test
   public void testRecallingPreset() throws Exception {   
-    URI uri = new  URI("http://localhost/camera/1/recallPreset?presetid=1");
+    URI uri = new  URI("http://localhost/camera/1/recallPreset?presetid=1&currentcamera=0");
     Database database = mock(Database.class);
-    when(database.getPreset(1, 1)).thenReturn(new Preset(new Position(1, 2), 1, 0, 0, false, 0, 0, false));
+    PresetController presetController = mock(PresetController.class);
+    serverController.setPresetController(presetController);
+    when(presetController.getPresetById(1)).thenReturn(new Preset(new Position(1, 2), 1, 0, 0, false, 0, 0, false, 0));
     when(exchange.getRequestURI()).thenReturn(uri);
 
     serverController.setDatabase(database);
@@ -79,37 +82,37 @@ public class RecallPresetTest {
 
   @Test
   public void testMovingCameraZoomPosition() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).zoomTo(preset.getZoom());
   }
 
   @Test
   public void testMovingCameraFocusPosition() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).moveFocus(preset.getFocus());
   }
 
   @Test
   public void testMovingCameraIrisPosition() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).setIrisPosition(preset.getIris());
   }
 
   @Test
   public void testMovingCameraAutofocus() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).setAutoFocusOn(preset.isAutofocus());
   }
 
   @Test
   public void testMovingCameraZoomAutoiris() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).setAutoIrisOn(preset.isAutoiris());
   }
 
   @Test
   public void testMovingCamera() throws CameraConnectionException {
-    recallHandler.movingCamera(ipcamera, preset);
+    recallHandler.moveCamera(ipcamera, preset);
     verify(ipcamera).moveTo(any(Position.class), eq(preset.getPanspeed()), eq(preset.getTiltspeed()));
   }
 }

@@ -1,6 +1,7 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.Position;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
@@ -25,6 +26,7 @@ public class Preset {
   private int presetid;
   private Set<String> tags = new HashSet<String>();
   private static Set<String> keywords = new HashSet<String>();
+  private int cameraId;
 
   /**
    * Constructs a preset.
@@ -37,9 +39,10 @@ public class Preset {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
    */
   public Preset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris) {
+               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -48,6 +51,7 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
+    this.cameraId = cameraId;
   }
   /**
    * Constructs a preset.
@@ -55,17 +59,18 @@ public class Preset {
    * @param pos       The position of this preset.
    * @param zoom      The zoom of the preset
    * @param focus     The focus of the prest
-   * @param iris      The iris of the preset
+   * @param iris      The iris of the presetz
    * @param autofocus The autofocus of the preset
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
    * @param keyWords  The keywords of this preset
    */
   public Preset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, List<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris);
+                boolean autoiris, int cameraId, List<String> keyWords) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
     this.tags.addAll(keyWords);
   }
 
@@ -88,7 +93,11 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
-    json.put("keywords", tags);
+    JSONArray tagsJSON = new JSONArray();
+    for (String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
 
     return json.toString();
   }
@@ -171,6 +180,14 @@ public class Preset {
 
   public int getId() {
     return presetid;
+  }
+
+  public void setCameraId(int id) {
+    this.cameraId = id;
+  }
+
+  public int getCameraId() {
+    return cameraId;
   }
 
   public Set<String> getTags() {

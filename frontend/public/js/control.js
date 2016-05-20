@@ -45,9 +45,9 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
-	
+
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
@@ -75,7 +75,7 @@ function setCurrentCamera(id) {
 		focus.show();
 		$('.focusslider').val(cameras[id].focus);
 	}
-	
+
 	loadPresets(currentcamera);
 }
 
@@ -90,7 +90,7 @@ function loadPresets(cameraID) {
 	preset_area.find('img').removeAttr("src");
 	preset_area.find('h5').removeClass();
 	Holder.run({images:"#preset_area img"})
-	$.get("/api/backend/camera/" + cameraID + "/preset", function(data) {
+	$.get("/api/backend/presets/getpresets", function(data) {
 		obj = JSON.parse(data);
 		console.log(obj);
 		presets = obj.presets;
@@ -243,7 +243,7 @@ function presetcall(t){
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
-		$.get("/api/backend/camera/"+ currentcamera + "/recallPreset?presetid=" + t.attr("presetid") , function(data) {});
+		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
 		console.log(t.attr("presetid"));
 	}
 }

@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
-import com.benine.backend.Preset;
+import com.benine.backend.*;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -42,7 +40,8 @@ public class PresetCreationHandler  extends RequestHandler {
         Preset preset = createPreset(ipCamera);
         
         //Adding the new preset to the database
-        getCameraController().addPreset(cameraID, preset);
+        PresetController presetController =  ServerController.getInstance().getPresetController();
+        presetController.addPreset(preset);
         responseSuccess(exchange);
       
       }
@@ -69,11 +68,14 @@ public class PresetCreationHandler  extends RequestHandler {
       int tiltspeed = 1 ;
       boolean autoiris = ipCamera.isAutoIrisOn();
       boolean autofocus = ipCamera.isAutoFocusOn();
-    
+      // TODO get cameraId from db
+      int cameraId = 0;
+
+
       //Create new Preset and return it.
       //TODO add image of just created preset
       Preset preset = new Preset(new Position(pan,tilt),zoom,
-          focus,iris,autofocus, panspeed, tiltspeed, autoiris);
+          focus,iris,autofocus, panspeed, tiltspeed, autoiris, cameraId);
       
       return preset; 
       
