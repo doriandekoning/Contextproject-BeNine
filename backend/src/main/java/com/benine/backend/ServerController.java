@@ -75,8 +75,7 @@ public class ServerController {
     cameraController.loadConfigCameras();
     
     httpController = new HttpController(config.getValue("serverip"),
-
-    Integer.parseInt(config.getValue("serverport"))); 
+                        Integer.parseInt(config.getValue("serverport"))); 
     
     loadPresets();
     running = true;
