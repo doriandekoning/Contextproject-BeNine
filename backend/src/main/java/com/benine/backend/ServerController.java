@@ -4,6 +4,7 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
+import com.benine.backend.video.StreamController;
 
 import java.io.File;
 
@@ -21,7 +22,9 @@ public class ServerController {
   private Config config;
 
   private CameraController cameraController;
-  
+
+  private StreamController streamController;
+
   private Database database;
   
   private boolean running;
@@ -41,6 +44,8 @@ public class ServerController {
     database = loadDatabase();
     
     cameraController = new CameraController();
+    
+    streamController = new StreamController();
   }
   
   /**
@@ -65,7 +70,7 @@ public class ServerController {
     
     httpController = new HttpController(config.getValue("serverip"),
         Integer.parseInt(config.getValue("serverport")), logger); 
-    
+
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
@@ -141,7 +146,16 @@ public class ServerController {
   public CameraController getCameraController() {
     return cameraController;
   }
-  
+
+  /**
+   * Returns the streamController.
+   * @return the streamController
+   */
+  public StreamController getStreamController() {
+    return streamController;
+  }
+
+
   /**
    * Sets the cameraController.
    * @param cameraController the cameracontroller

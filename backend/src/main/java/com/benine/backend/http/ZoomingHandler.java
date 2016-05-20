@@ -34,7 +34,6 @@ public class ZoomingHandler extends RequestHandler {
             + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
 
@@ -50,13 +49,12 @@ public class ZoomingHandler extends RequestHandler {
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
-      response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException | CameraConnectionException e) {
       getLogger().log("Exception occured while respoinding to the request with URI: "
               + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      response = "{\"succes\":\"false\"}";
+      respondFailure(exchange);
     }
-    respond(exchange, response);
+    respondSuccess(exchange);
 
   }
 }

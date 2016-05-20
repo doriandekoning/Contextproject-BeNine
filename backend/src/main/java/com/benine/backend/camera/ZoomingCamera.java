@@ -3,7 +3,7 @@ package com.benine.backend.camera;
 /**
  * Decorator of a camera with functions to control the zooming of the camera.
  */
-public interface ZoomingCamera extends ControlableCamera {
+public interface ZoomingCamera extends ControllableCamera {
   
   /**
    * Get the current zoom position.
@@ -18,7 +18,7 @@ public interface ZoomingCamera extends ControlableCamera {
    * @throws CameraConnectionException when command can not be completed.
    */
   void zoomTo(int zpos) throws CameraConnectionException;
-  
+
   /**
    * Zoom with the specified speed.
    * Value between 1 and 99 where 51 is stop zoom.

@@ -55,7 +55,7 @@ public abstract class RequestHandler implements HttpHandler {
    * @param exchange the HttpExchange.
    */
 
-  public void responseSuccess(HttpExchange exchange) {
+  public void respondSuccess(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"true\"}");
   }
   
@@ -63,7 +63,7 @@ public abstract class RequestHandler implements HttpHandler {
    * Formats the response message as a failure.
    * @param exchange the HttpExchange.
    */
-  public void responseFailure(HttpExchange exchange) {
+  public void respondFailure(HttpExchange exchange) {
     respond(exchange, "{\"succes\":\"false\"}");
   } 
   

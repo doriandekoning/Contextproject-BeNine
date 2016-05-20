@@ -41,7 +41,8 @@ public class CameraControlTest {
   @Before
   public void setup() throws CameraConnectionException {
     server = ServerController.getInstance();
-    cameraController = server.getCameraController();
+    cameraController = new CameraController();
+    
    
     IPCamera mockcamera = mock(IPCamera.class);
     when(mockcamera.getStreamLink()).thenReturn("http://83.128.144.84:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture&usr=user&pwd=geheim");
@@ -57,16 +58,17 @@ public class CameraControlTest {
       public Void answer(InvocationOnMock invocation) throws IpcameraConnectionException {
           Object[] args = invocation.getArguments();
           int zoom = (int) args[0];
-          if (zoom > 60) {
+          System.out.println(zoom);
+          if (zoom > 0) {
             sendCommand("zoomIn", "83.128.144.84:88");
-          } else if( zoom < 40) {
+          } else if( zoom < 0) {
             sendCommand("zoomOut", "83.128.144.84:88");
           } else {
             sendCommand("zoomStop", "83.128.144.84:88");
           }
           return null;
       }
-    }).when(mockcamera).zoomTo(any(Integer.class));
+    }).when(mockcamera).zoom(any(Integer.class));
     
     //Define which command to send when move is called on mocked camera.
     doAnswer(new Answer<Void>() {
@@ -106,12 +108,14 @@ public class CameraControlTest {
     camera6.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     SimpleCamera camera7 = new SimpleCamera();
     camera7.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&buffer=100");
-    server.getCameraController().addCamera(camera2);
-    server.getCameraController().addCamera(camera3);
-    server.getCameraController().addCamera(camera4);
-    server.getCameraController().addCamera(camera5);
-    server.getCameraController().addCamera(camera6);
-    server.getCameraController().addCamera(camera7);
+    
+    cameraController.addCamera(camera2);
+    cameraController.addCamera(camera3);
+    cameraController.addCamera(camera4);
+    cameraController.addCamera(camera5);
+    cameraController.addCamera(camera6);
+    cameraController.addCamera(camera7);
+    server.setCameraController(cameraController);
   }
   
   /**
