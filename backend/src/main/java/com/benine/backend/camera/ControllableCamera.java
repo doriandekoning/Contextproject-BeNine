@@ -1,7 +1,7 @@
 package com.benine.backend.camera;
 
 /**
- * Created by dorian on 5-5-16.
+ * Created on 5-5-16.
  */
 public interface ControllableCamera extends Camera {
 

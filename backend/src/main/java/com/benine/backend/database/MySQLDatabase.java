@@ -25,7 +25,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Created on 4-5-2016.
  */
 public class MySQLDatabase implements Database {
   private Connection connection;

@@ -15,7 +15,7 @@ import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
+import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 
 import java.io.File;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 /**
  * Test class to test the IP Camera class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraTest {
 
@@ -87,6 +86,22 @@ public class IpcameraTest {
     //move with pan speed 17 and tilt speed 1
     Position pos = new Position(0, 180);
     camera.moveTo(pos, 17, 1);
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
+  public final void testMoveToWithSpeed1() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#APS80008000011"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                    .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPS80008000011"));
+    
+    //move with pan speed 17 and tilt speed 1
+    Position pos = new Position(0, 180);
+    camera.moveTo(pos, 1, 1);
     mockServerClient.verify(request, VerificationTimes.once());
   }
   

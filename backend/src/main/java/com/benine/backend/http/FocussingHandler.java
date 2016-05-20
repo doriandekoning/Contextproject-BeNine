@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.jar.Attributes;
 
 /**
- * Created by dorian on 4-5-16.
+ * Handles commands from the client to change the focus position of a camera.
+ * Created on 4-5-16.
  */
 public class FocussingHandler extends RequestHandler {
 

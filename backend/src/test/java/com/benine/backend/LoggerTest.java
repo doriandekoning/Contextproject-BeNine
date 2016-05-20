@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 /**
- * Created by dorian on 2-5-16.
+ * Created on 2-5-16.
  */
 public class LoggerTest {
 

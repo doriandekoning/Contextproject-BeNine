@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 /**
  * Class to communicate with an IP Camera.
- * @author Bryan
  */
 public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
@@ -56,9 +55,11 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
     CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
+    String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
+    panSp = ("00" + panSp).substring(panSp.length());
     sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
                     + convertTiltToHex(pos.getTilt()).toUpperCase()
-                    + convertPanSpeedtoHex(panSpeed).toUpperCase()
+                    + panSp
                     + convertTiltSpeed(tiltSpeed));
   }
   
@@ -156,7 +157,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     pan = Math.min(175, pan);
     pan = Math.max(-175, pan);
     pan = (pan + 175) * 121.3628571 + 11530;
-
     return Integer.toHexString((int) (pan + 0.5));
   }
   
@@ -201,7 +201,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     CameraController.logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendControlCommand("%23F" + speed);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendControlCommand("%23F" + formatter.format(speed));
   }
 
   /**
@@ -294,7 +295,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public void setIrisPosition(int pos) throws CameraConnectionException {
     pos = Math.max(1, pos);
     pos = Math.min(99, pos);
-    sendControlCommand("%23I" + pos);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendControlCommand("%23I" + formatter.format(pos));
   }
 
   /**
@@ -349,7 +351,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public void zoom(int dir) throws CameraConnectionException {
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
-    sendControlCommand("%23Z" + dir);
+    NumberFormat formatter = new DecimalFormat("00");
+    sendControlCommand("%23Z" + formatter.format(dir));
   }
   
   /**
@@ -414,20 +417,20 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     try {
-      json.put("pan", new Double(getPosition().getPan()));
-      json.put("tilt", new Double(getPosition().getTilt()));
-      json.put("zoom", new Double(getZoomPosition()));
-      json.put("focus", new Double(getFocusPosition()));
-      json.put("autofocus", Boolean.valueOf(isAutoFocusOn()));
-      json.put("iris", new Double(getIrisPosition()));
-      json.put("autoiris", Boolean.valueOf(isAutoIrisOn()));
+      json.put("pan", getPosition().getPan());
+      json.put("tilt", getPosition().getTilt());
+      json.put("zoom", getZoomPosition());
+      json.put("focus", getFocusPosition());
+      json.put("autofocus", isAutoFocusOn());
+      json.put("iris", getIrisPosition());
+      json.put("autoiris", isAutoIrisOn());
       json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
       System.out.println(e.toString());
     }
     return  json.toString();
-
+    
   }
 
   /**

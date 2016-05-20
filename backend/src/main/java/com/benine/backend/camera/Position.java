@@ -2,8 +2,6 @@ package com.benine.backend.camera;
 
 /**
  * Class to represent a position of a camera.
- * @author Bryan
- *
  */
 public class Position {
 

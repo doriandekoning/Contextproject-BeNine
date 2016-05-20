@@ -5,13 +5,13 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraFactory;
+import com.benine.backend.camera.InvalidCameraTypeException;
 
 /**
  * Class to create camera objects.
- * @author Bryan
- *
  */
-public class IPCameraFactory extends CameraFactory {
+
+public class IPCameraFactory implements CameraFactory {
 
 
   /**

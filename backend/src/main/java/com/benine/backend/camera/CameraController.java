@@ -6,7 +6,6 @@ import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.video.StreamController;
@@ -19,7 +18,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by dorian on 4-5-16.
+ * Class to control the camera's.
+ * Created on 4-5-16.
  */
 public class CameraController {
 

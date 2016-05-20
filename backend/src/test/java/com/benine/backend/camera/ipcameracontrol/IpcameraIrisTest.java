@@ -21,7 +21,6 @@ import com.benine.backend.camera.CameraConnectionException;
 /**
  * Test class to test the IP Camera Iris functions class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraIrisTest {
   
@@ -124,6 +123,21 @@ public class IpcameraIrisTest {
     mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
 
     camera.setIrisPosition(80);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
+  public final void testSetIrisPosition2() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#I02"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC02"));
+
+    camera.setIrisPosition(2);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }

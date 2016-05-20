@@ -21,7 +21,6 @@ import com.benine.backend.camera.CameraConnectionException;
 /**
  * Test class to test the IP Camera Focus function class.
  * The mock server is used to simulate the camera.
- * @author Bryan
  */
 public class IpcameraFocusTest {
   
@@ -34,7 +33,7 @@ public class IpcameraFocusTest {
   private ArrayList<Parameter> parameterList;
   
   @Before
-  public final void setUp(){
+  public final void setUp() {
     mockServerClient.reset();
   }
   
@@ -94,6 +93,21 @@ public class IpcameraFocusTest {
     mockServerClient.when(request).respond(HttpResponse.response().withBody("fs80"));
 
     camera.moveFocus(80);
+    
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
+  
+  @Test
+  public final void testMoveFocus2() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#F02"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("fs02"));
+
+    camera.moveFocus(2);
     
     mockServerClient.verify(request, VerificationTimes.once());
   }

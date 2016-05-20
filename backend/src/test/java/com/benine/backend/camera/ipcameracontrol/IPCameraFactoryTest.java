@@ -10,12 +10,11 @@ import org.junit.Test;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 
 /**
- * Test class to test the Camera handler wich creates camera objects.
- * @author Bryan
+ * Test class to test the Camera handler which creates camera objects.
  */
 public class IPCameraFactoryTest {
   

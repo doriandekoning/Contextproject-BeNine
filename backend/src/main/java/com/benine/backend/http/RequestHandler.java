@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by dorian on 4-5-16.
+ * Created on 4-5-16.
  */
 
 public abstract class RequestHandler implements HttpHandler {

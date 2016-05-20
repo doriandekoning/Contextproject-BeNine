@@ -2,11 +2,13 @@ package com.benine.backend.camera;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
-import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 public class CameraFactoryProducerTest {
   
@@ -15,16 +17,19 @@ public class CameraFactoryProducerTest {
   @Before
   public void setUp() {
     camFactoryProducer = new CameraFactoryProducer();
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
   }
   
   @Test
   public void testCreateIPCameraFactory() throws InvalidCameraTypeException {
-    assertTrue(camFactoryProducer.getFactory("ipcamera") instanceof IPCameraFactory);
+    Camera camera = camFactoryProducer.getFactory("ipcamera").createCamera(2);
+    assertTrue(camera instanceof IPCamera);
   }
   
   @Test
   public void testCreateSimpleCameraFactory() throws InvalidCameraTypeException {
-    assertTrue(camFactoryProducer.getFactory("simplecamera") instanceof SimpleCameraFactory);
+    Camera camera = camFactoryProducer.getFactory("simplecamera").createCamera(2);
+    assertTrue(camera instanceof SimpleCamera);
   }
   
   @Test(expected = InvalidCameraTypeException.class)

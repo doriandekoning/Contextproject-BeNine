@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraFactory.InvalidCameraTypeException;
 
 public class SimpleCameraFactoryTest {
   

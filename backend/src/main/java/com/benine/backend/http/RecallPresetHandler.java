@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.jar.Attributes;
 
-
+/**
+ * Class to handle the recalling of a preset.
+ */
 public class RecallPresetHandler extends RequestHandler {
   
   /**

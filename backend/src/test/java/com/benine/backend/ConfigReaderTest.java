@@ -7,11 +7,8 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.fail;
-
 /**
  * Unit test class used to test the default configReader class.
- * @author Dorian
  */
 public class ConfigReaderTest {
 

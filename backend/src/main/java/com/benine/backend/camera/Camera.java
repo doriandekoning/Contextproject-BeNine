@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 /**
  * Interface for communication with remote camera's.
- * @author Bryan
  */
 public interface Camera {
 
