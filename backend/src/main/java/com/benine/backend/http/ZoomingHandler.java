@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
@@ -15,14 +14,6 @@ import java.util.jar.Attributes;
  */
 // Add superclass requesthandler
 public class ZoomingHandler extends RequestHandler {
-
-  /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public ZoomingHandler(Logger logger) {
-    super(logger);
-  }
 
   /**
    * Handles incoming httprequest.

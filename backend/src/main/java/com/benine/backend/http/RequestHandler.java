@@ -20,16 +20,6 @@ import java.util.regex.Pattern;
 
 public abstract class RequestHandler implements HttpHandler {
 
-  private Logger logger;
-
-  /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public RequestHandler(Logger logger) {
-    this.logger = logger;
-  }
-
   /**
    * Decodes the given (decoded) uri into an attributes table
    * @param uri the uri to parse.
@@ -121,6 +111,6 @@ public abstract class RequestHandler implements HttpHandler {
    * @return Logger.
    */
   public Logger getLogger() {
-    return logger;
+    return ServerController.getInstance().getLogger();
   }
 }

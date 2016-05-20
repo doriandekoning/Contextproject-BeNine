@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.IrisCamera;
 import com.sun.net.httpserver.HttpExchange;
@@ -13,14 +12,6 @@ import java.util.jar.Attributes;
  * Created by dorian on 4-5-16.
  */
 public class IrisHandler extends RequestHandler {
-
-  /**
-   * Creates a new IrisHandler.
-   * @param logger the logger to be used to log to
-   */
-  public IrisHandler(Logger logger) {
-    super(logger);
-  }
   
   /**
    * Handles a request

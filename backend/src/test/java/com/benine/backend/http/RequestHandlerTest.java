@@ -1,11 +1,13 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,12 +27,15 @@ public class RequestHandlerTest {
   private PresetCreationHandler handler;
   private HttpExchange exchangeMock;
   private OutputStream out;
-  private Logger logger;
+  private ServerController serverController;
+  private Logger logger = mock(Logger.class);
   
   @Before
   public void initialize(){
-    logger = mock(Logger.class);
-    handler = new PresetCreationHandler(logger);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    serverController = ServerController.getInstance();
+    serverController.setLogger(logger);
+    handler = new PresetCreationHandler();
     exchangeMock = mock(HttpExchange.class);
     out = mock(OutputStream.class);
     when(exchangeMock.getResponseBody()).thenReturn(out);
@@ -41,18 +46,18 @@ public class RequestHandlerTest {
     Attributes expected = new Attributes();
     expected.putValue("id", "4");
     expected.putValue("Hello", "World!");
-    Attributes actual = new testRequestHandler(null).parseURI("id=4&Hello=World!");
+    Attributes actual = new testRequestHandler().parseURI("id=4&Hello=World!");
     Assert.assertEquals(expected, actual);
   }
   
   @Test(expected=MalformedURIException.class)
   public final void testDecodeMalformedURI() throws MalformedURIException {
-    new testRequestHandler(null).parseURI("id=3&id=4");
+    new testRequestHandler().parseURI("id=3&id=4");
   }
 
   @Test
   public final void testRespond() throws Exception {
-    RequestHandler handler = new testRequestHandler(logger);
+    RequestHandler handler = new testRequestHandler();
     String response = "response";
     handler.respond(exchangeMock, response);
     verify(exchangeMock).sendResponseHeaders(200, response.length());
@@ -90,9 +95,6 @@ public class RequestHandlerTest {
   // Test used to be able to instantiate RequestHandler
   private class testRequestHandler extends RequestHandler {
 
-    public testRequestHandler(Logger logger) {
-      super(logger);
-    }
     public void handle(HttpExchange e) {
       // Do nothing
     }

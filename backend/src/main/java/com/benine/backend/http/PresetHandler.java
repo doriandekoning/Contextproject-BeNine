@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
-
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
@@ -16,15 +14,6 @@ import java.util.ArrayList;
  * Created by dorian on 4-5-16.
  */
 public class PresetHandler extends RequestHandler {
-
-  /**
-   * Creates a new PresetHandler.
-   * @param logger the logger to be used to log to
-   */
-  public PresetHandler(Logger logger) {
-    super(logger);
-  }
-
 
   /**
    * Handles a request

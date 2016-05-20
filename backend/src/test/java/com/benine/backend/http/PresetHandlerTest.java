@@ -26,7 +26,6 @@ public class PresetHandlerTest {
   private ServerController serverController;
   private PresetHandler handler;
   private OutputStream out;
-  private Logger logger;
   private Database database = mock(Database.class);
   HttpExchange exchange = mock(HttpExchange.class);
   
@@ -35,8 +34,7 @@ public class PresetHandlerTest {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setDatabase(database);
-    logger = mock(Logger.class);
-    handler = new PresetHandler(logger);  
+    handler = new PresetHandler();  
     
     out = mock(OutputStream.class);
   }
