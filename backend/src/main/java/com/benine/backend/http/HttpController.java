@@ -64,7 +64,7 @@ public class HttpController {
    */
   private void createHandlers() {
     server.createContext("/static", new FileHandler());
-    server.createContext("/camera/", new CameraInfoHandler());
+    //server.createContext("/camera/", new CameraInfoHandler());
     for (Camera cam : ServerController.getInstance().getCameraController().getCameras()) {
       createHandlers(cam);
     }

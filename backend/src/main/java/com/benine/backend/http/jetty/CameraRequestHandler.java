@@ -1,10 +1,6 @@
 package com.benine.backend.http.jetty;
 
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,24 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Handles all requests requiring the camera ID.
  */
-public abstract class CameraRequestHandler extends AbstractHandler {
-
-  /**
-   * Returns cameracontroller
-   * @return cameracontroller interacting with.
-   */
-  protected CameraController getCameraController() {
-    return ServerController.getInstance().getCameraController();
-  }
-  
-  /**
-   * Returns the database
-   * @return database to retrieve information from.
-   */
-  protected Database getDatabase() {
-    return ServerController.getInstance().getDatabase();
-  }
-
+public abstract class CameraRequestHandler extends RequestHandler {
 
   /**
    * Fetches camera id from http exchange.

@@ -26,6 +26,8 @@ public class CameraHandler extends CameraRequestHandler {
                      HttpServletResponse httpServletResponse)
           throws IOException, ServletException {
 
+    String cameraInfo = getCameraController().getCamerasJSON();
+
     if (checkValidCameraID(request)) {
       String route = getRoute(request);
 
@@ -34,14 +36,16 @@ public class CameraHandler extends CameraRequestHandler {
           streamHandler.handle(s, request, httpServletRequest, httpServletResponse);
           break;
         default:
-          request.setHandled(true);
+          respond(httpServletResponse, cameraInfo);
           break;
       }
 
     } else {
-      httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-      request.setHandled(true);
+      respond(httpServletResponse, cameraInfo);
     }
+
+    request.setHandled(true);
+
   }
 
   /**

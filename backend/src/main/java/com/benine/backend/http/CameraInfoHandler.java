@@ -9,6 +9,7 @@ import java.io.IOException;
  * Handles requests from the client about which camera's there are.
  * Created on 4-5-16.
  */
+@Deprecated
 public class CameraInfoHandler extends RequestHandler {
 
   /**
