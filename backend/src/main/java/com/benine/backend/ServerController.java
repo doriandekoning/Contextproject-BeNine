@@ -232,6 +232,10 @@ public class ServerController {
     return presetController;
   }
 
+  public void setPresetController(PresetController newController) {
+    this.presetController = newController;
+  }
+
   /**
    * Get the main config file.
    * @return the config file.

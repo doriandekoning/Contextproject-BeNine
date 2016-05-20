@@ -1,15 +1,12 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
-import com.benine.backend.Preset;
+import com.benine.backend.*;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.jar.Attributes;
 
 
@@ -35,7 +32,8 @@ public class RecallPresetHandler extends RequestHandler {
 
       int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
-      Preset preset = getDatabase().getPreset(cameraID,presetID);
+      PresetController presetController = ServerController.getInstance().getPresetController();
+      Preset preset = presetController.getPresetById(presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
       moveCamera(ipcamera,preset);
@@ -45,8 +43,6 @@ public class RecallPresetHandler extends RequestHandler {
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
     } catch (CameraConnectionException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (SQLException e) {
       e.printStackTrace();
     }
   }
