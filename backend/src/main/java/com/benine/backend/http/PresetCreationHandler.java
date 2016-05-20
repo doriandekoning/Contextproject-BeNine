@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.jar.Attributes;
 
 import javax.imageio.ImageIO;
 
@@ -34,23 +35,33 @@ public class PresetCreationHandler  extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     getLogger().log("Got an http request with the following uri in Prest creation: "
         + exchange.getRequestURI(), LogEvent.Type.INFO);
+    Attributes parsedURI;
     try {
-      int cameraID = getCameraId(exchange);
-      Camera camera = getCameraController().getCameraById(cameraID);
-            
-      if (camera instanceof IPCamera) {
-        IPCamera ipCamera = (IPCamera)camera;
-        
-        Preset preset = createPreset(ipCamera);
-        int presetID = preset.getId();
-        
-        //Adding the new preset to the database
-        PresetController preseController = ServerController.getInstance().getPresetController();
-        preseController.addPreset(preset);
+      parsedURI = parseURI(exchange.getRequestURI().getQuery());
+      
+      String cameraID = parsedURI.getValue("camera");
+      if (cameraID == null) {
+        getLogger().log("Preset can not be created, parameter not specified.",
+                                                            LogEvent.Type.CRITICAL);
+        respondFailure(exchange);
+      } else {
+        Camera camera = getCameraController().getCameraById(Integer.parseInt(cameraID));
               
-        //Create corresponding image
-        createImage(preset, cameraID, presetID);
-        respondSuccess(exchange);  
+        if (camera instanceof IPCamera) {
+          IPCamera ipCamera = (IPCamera)camera;
+          
+          Preset preset = createPreset(ipCamera);
+          int presetID = preset.getId();
+          //Create corresponding image
+          createImage(preset, Integer.parseInt(cameraID), presetID);
+          
+          //Adding the new preset to the database
+          PresetController preseController = ServerController.getInstance().getPresetController();
+          preseController.addPreset(preset);
+                
+          
+          respondSuccess(exchange);  
+        }
       }
     } catch (SQLException e) {
       getLogger().log("Preset can not be added to the database"
@@ -60,6 +71,11 @@ public class PresetCreationHandler  extends RequestHandler {
       getLogger().log("Preset can not be added to the database "
           + "because the stream isn't available ", LogEvent.Type.CRITICAL);
       respondFailure(exchange);
+    } catch (MalformedURIException e) {
+      getLogger().log("Preset can not be create url is not well formed ",
+                                                          LogEvent.Type.CRITICAL);
+      respondFailure(exchange);
+      e.printStackTrace();
     }
   }
   
@@ -85,7 +101,7 @@ public class PresetCreationHandler  extends RequestHandler {
         + cameraID + "_" + presetID + ".jpg");
     ImageIO.write(bufferedImage, "jpg", path);
    
-    preset.setImage(path.toString());
+    preset.setImage(File.separator + path.toString());
   }
   
   /**
