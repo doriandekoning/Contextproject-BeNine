@@ -1,6 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
+
 import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -11,6 +12,7 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomingCamera;
 
 import com.benine.backend.video.StreamType;
+
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -23,6 +25,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 
+
 /**
  * Class to communicate with an IP Camera.
  */
@@ -30,6 +33,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
 
   private String ipaddress;
+
 
   /**
    *  Create a new IP Camera object.

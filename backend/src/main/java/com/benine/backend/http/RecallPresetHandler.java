@@ -2,13 +2,14 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.jar.Attributes;
 
 /**
@@ -25,22 +26,26 @@ public class RecallPresetHandler extends RequestHandler {
     Attributes parsedURI;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
-      
-      int cameraID = getCameraId(exchange);
+
+      int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
+
       int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
-      Preset preset = getDatabase().getPreset(cameraID,presetID);
+      PresetController presetController = ServerController.getInstance().getPresetController();
+      Preset preset = presetController.getPresetById(presetID);
       IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
       
-      movingCamera(ipcamera,preset);
+      moveCamera(ipcamera,preset);
       respondSuccess(exchange);
+      
     } catch (MalformedURIException e) {
       respondFailure(exchange);
       getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
 
-    } catch (SQLException | CameraConnectionException e) {
-      getLogger().log("Preset can't be recalled: ", LogEvent.Type.CRITICAL);
+    } catch (CameraConnectionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
       respondFailure(exchange);
-    } 
+    }
   }
   
   /**
@@ -49,7 +54,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @param preset the preset used with the values for moving the camera.
    * @throws CameraConnectionException exception thrown when camera cannot connect.
    */
-  public void movingCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
+  public void moveCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
     Position position = preset.getPosition();
     ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
     ipcamera.zoomTo(preset.getZoom());

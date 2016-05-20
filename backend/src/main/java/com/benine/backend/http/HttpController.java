@@ -92,12 +92,9 @@ public class HttpController {
       server.createContext("/camera/" + camId + "/zoom",
                                               new ZoomingHandler());
     }
-    server.createContext("/camera/" + camId + "/preset", 
-                                              new PresetHandler());
-    server.createContext("/camera/" + camId + "/createpreset", 
-                                              new PresetCreationHandler());
-    server.createContext("/camera/" + camId + "/recallpreset",
-                                               new RecallPresetHandler());
+    server.createContext("/presets/", new PresetHandler());
+    server.createContext("/presets/createpreset", new PresetCreationHandler());
+    server.createContext("/presets/recallpreset", new RecallPresetHandler());
 
     ServerController.getInstance().getLogger()
                           .log("Succesufully setup endpoints", LogEvent.Type.INFO);

@@ -81,21 +81,26 @@ public class HttpControllerTest {
   }
 
   @Test
+  public void testCreateStaticHandler() throws IOException {
+    Camera cam = mock(Camera.class);
+    setUpCamera(cam);
+
+    Mockito.verify(mockserver).createContext(eq("/static"), any());
+  }
+
+  @Test
   public void testCreatePresetHandler() throws IOException {
     Camera cam = mock(Camera.class);
     setUpCamera(cam);
-    int camId = cam.getId();
 
-    Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/preset"), any());
+    Mockito.verify(mockserver).createContext(eq("/presets/"), any());
   }
 
   @Test
   public void testCreateRecallPresetHandler() throws IOException  {
     Camera cam = mock(Camera.class);
     setUpCamera(cam);
-    int camId = cam.getId();
-
-    Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/recallpreset"), any());
+    Mockito.verify(mockserver).createContext(eq("/presets/recallpreset"), any());
   }
 
   @Test
@@ -104,7 +109,7 @@ public class HttpControllerTest {
     setUpCamera(cam);
     int camId = cam.getId();
 
-    Mockito.verify(mockserver).createContext(eq("/camera/" + camId + "/createpreset"), any());
+    Mockito.verify(mockserver).createContext(eq("/presets/createpreset"), any());
   }
 
   @Test
