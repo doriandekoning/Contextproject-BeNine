@@ -84,11 +84,4 @@ public class CameraControllerTest {
     Assert.assertEquals(actualJSON, expectedJSON);
   }
 
-
-  @Test
-  public void testGetAllCameras() throws SQLException {
-    controller.getCamerasFromDatabase();
-    Mockito.verify(database, times(1)).getAllCameras();
-  }
-
 }

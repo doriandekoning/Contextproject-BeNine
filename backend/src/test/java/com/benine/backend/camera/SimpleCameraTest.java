@@ -87,26 +87,6 @@ public class SimpleCameraTest {
   }
   
   @Test
-  public void testEqualsPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setPresets(presets);
-    camera2.setStreamLink("test");
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
-  public void testEqualsNotPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
   public void testEqual() {
     SimpleCamera camera1 = new SimpleCamera();
     camera1.setStreamLink("test");

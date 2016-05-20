@@ -110,13 +110,6 @@ public class CameraController {
   }
 
   /**
-   * Get all the cameras from the database.
-   * @throws SQLException No right connection to database
-   */
-  public void getCamerasFromDatabase() throws SQLException {
-    cameras = getDatabase().getAllCameras();
-  }
-  /**
    * Returns a json string of all the cameras.
    * @return json string of all the cameras.
    * @throws CameraConnectionException if a connection to a camera cannot be made.
