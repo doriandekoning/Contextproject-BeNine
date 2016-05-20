@@ -1,4 +1,4 @@
-package com.benine.backend.http;
+package com.benine.backend.http.jetty;
 
 
 import org.eclipse.jetty.server.Handler;

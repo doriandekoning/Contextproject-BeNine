@@ -1,4 +1,4 @@
-package com.benine.backend.http;
+package com.benine.backend.http.jetty;
 
 import com.benine.backend.ServerController;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -6,7 +6,6 @@ import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,16 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CameraStreamHandler extends AbstractHandler {
-
-  private int camID;
-
-  public CameraStreamHandler(int camID) {
-    this.camID = camID;
-  }
+public class CameraStreamHandler extends CameraRequestHandler {
 
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    int camID = getCameraId(request);
     StreamReader streamReader = null;
     try {
       streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
