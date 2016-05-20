@@ -21,9 +21,8 @@ public class CameraHandler extends CameraRequestHandler {
   }
 
   @Override
-  public void handle(String s, Request request,
-                     HttpServletRequest httpServletRequest,
-                     HttpServletResponse httpServletResponse) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
 
     String cameraInfo = getCameraController().getCamerasJSON();
 
@@ -32,15 +31,15 @@ public class CameraHandler extends CameraRequestHandler {
 
       switch (route) {
         case "mjpeg":
-          streamHandler.handle(s, request, httpServletRequest, httpServletResponse);
+          streamHandler.handle(s, request, req, res);
           break;
         default:
-          respond(request, httpServletResponse, cameraInfo);
+          respond(request, res, cameraInfo);
           break;
       }
 
     } else {
-      respond(request, httpServletResponse, cameraInfo);
+      respond(request, res, cameraInfo);
     }
 
     request.setHandled(true);

@@ -22,9 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraStreamHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request,
-                     HttpServletRequest httpServletRequest,
-                     HttpServletResponse httpServletResponse) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
 
     int camID = getCameraId(request);
 
@@ -42,13 +41,13 @@ public class CameraStreamHandler extends CameraRequestHandler {
       StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
 
       // Set the headers
-      setHeaders(streamReaderMJPEG, httpServletResponse);
+      setHeaders(streamReaderMJPEG, res);
 
       // Get an inputstream from the distributer.
 
       PipedInputStream in = new PipedInputStream(distributer.getStream());
       BufferedInputStream bs = new BufferedInputStream(in);
-      OutputStream os = httpServletResponse.getOutputStream();
+      OutputStream os = res.getOutputStream();
 
       boolean sending = true;
       while (bs.available() > -1 && sending) {
@@ -65,7 +64,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
       in.close();
 
     } else {
-      httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
     request.setHandled(true);

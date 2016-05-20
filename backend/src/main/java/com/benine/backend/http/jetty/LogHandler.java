@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LogHandler extends RequestHandler {
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
     getLogger().log("Got an http request with uri: "
             + request.getRequestURI(), LogEvent.Type.INFO);
   }
