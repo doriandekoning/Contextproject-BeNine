@@ -25,7 +25,7 @@ public class ServerControllerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
   }
   
@@ -66,7 +66,7 @@ public class ServerControllerTest {
   
   @Test
   public void testGetConfig() throws Exception {
-    assertEquals(ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf"), serverController.getConfig());
+    assertEquals(ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "maintest.conf"), serverController.getConfig());
   }
 
 }

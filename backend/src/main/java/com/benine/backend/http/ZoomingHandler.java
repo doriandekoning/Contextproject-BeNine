@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
@@ -17,14 +16,6 @@ import java.util.jar.Attributes;
 public class ZoomingHandler extends RequestHandler {
 
   /**
-   * Creates a new FocussingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public ZoomingHandler(Logger logger) {
-    super(logger);
-  }
-
-  /**
    * Handles incoming httprequest.
    * @param exchange the exchange containing data about the request and response.
    * @throws IOException When writing the response fails.
@@ -34,7 +25,6 @@ public class ZoomingHandler extends RequestHandler {
             + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response;
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
 
@@ -50,13 +40,12 @@ public class ZoomingHandler extends RequestHandler {
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
-      response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException | CameraConnectionException e) {
       getLogger().log("Exception occured while respoinding to the request with URI: "
               + exchange.getRequestURI(), LogEvent.Type.WARNING);
-      response = "{\"succes\":\"false\"}";
+      respondFailure(exchange);
     }
-    respond(exchange, response);
+    respondSuccess(exchange);
 
   }
 }

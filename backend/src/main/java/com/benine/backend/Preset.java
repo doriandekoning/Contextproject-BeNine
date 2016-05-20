@@ -1,12 +1,13 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.Position;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringJoiner;
 
 /**
  * A moving preset to be able to add to the database.
@@ -89,7 +90,11 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
-    json.put("keywords", tags.toString());
+    JSONArray tagsJSON = new JSONArray();
+    for (String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
 
     return json.toString();
   }

@@ -1,15 +1,13 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HttpController;
-import com.mockrunner.util.common.ArrayUtil;
+import com.benine.backend.video.StreamController;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Class containing the elements to make the server work.
@@ -25,7 +23,9 @@ public class ServerController {
   private Config config;
 
   private CameraController cameraController;
-  
+
+  private StreamController streamController;
+
   private Database database;
   
   private boolean running;
@@ -49,8 +49,9 @@ public class ServerController {
     cameraController = new CameraController();
 
     presetController = new PresetController();
+    
+    streamController = new StreamController();
 
-    loadCameras();
   }
   
   /**
@@ -70,10 +71,13 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
-    httpController = new HttpController(config.getValue("serverip"),
-        Integer.parseInt(config.getValue("serverport")), logger); 
-    
     startupDatabase();
+    cameraController.loadConfigCameras();
+    
+    httpController = new HttpController(config.getValue("serverip"),
+
+    Integer.parseInt(config.getValue("serverport"))); 
+    
     loadPresets();
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
@@ -90,19 +94,6 @@ public class ServerController {
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
   }
-  
-  /**
-   * Load camera's in camera controller.
-   * For now it just adds 2 simple camera's.
-   */
-  private void loadCameras() {
-    SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink(config.getValue("camera1"));
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(config.getValue("camera1"));
-    cameraController.addCamera(camera);
-    cameraController.addCamera(camera2);  
-  }
 
   /**
    * Loads the presets from the database.
@@ -111,9 +102,6 @@ public class ServerController {
     try {
       presetController.addPresets(database.getAllPresets());
       //Should be removed
-      presetController.getPresetById(1).addTag("test");
-      presetController.getPresetById(2).addTag("test");
-      presetController.getPresetById(3).addTag("test");
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }
@@ -126,7 +114,7 @@ public class ServerController {
   private Database loadDatabase() {
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password, logger);
+    return new MySQLDatabase(user, password);
   }
   
   /**
@@ -162,7 +150,7 @@ public class ServerController {
    * @param configPath to the main config file.
    * @return config object.
    */
-  public Config setUpConfig(String configPath) {
+  private Config setUpConfig(String configPath) {
     try {
       return ConfigReader.readConfig(configPath);
     } catch (Exception e) {
@@ -178,7 +166,16 @@ public class ServerController {
   public CameraController getCameraController() {
     return cameraController;
   }
-  
+
+  /**
+   * Returns the streamController.
+   * @return the streamController
+   */
+  public StreamController getStreamController() {
+    return streamController;
+  }
+
+
   /**
    * Sets the cameraController.
    * @param cameraController the cameracontroller
@@ -202,7 +199,7 @@ public class ServerController {
   public void setDatabase(Database newDatabase) {
     database = newDatabase;
     loadDatabase();
-    loadCameras();
+    cameraController.loadConfigCameras();
     loadPresets();
   }
 

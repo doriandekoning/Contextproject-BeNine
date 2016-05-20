@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
@@ -17,14 +16,6 @@ import java.util.jar.Attributes;
 public class MovingHandler extends RequestHandler {
 
   /**
-   * Creates a new MovingHandler.
-   * @param logger the logger to be used to log to
-   */
-  public MovingHandler(Logger logger) {
-    super(logger);
-  }
-
-  /**
    * Handles a request
    * @param exchange the exchange containing data about the request.
    * @throws IOException when an error occurs with responding to the request.
@@ -34,7 +25,6 @@ public class MovingHandler extends RequestHandler {
             + exchange.getRequestURI(), LogEvent.Type.INFO);
     // Extract camera id from function and amount to zoom in
     Attributes parsedURI;
-    String response = "{\"succes\":\"false\"}";
     try {
       parsedURI = parseURI(exchange.getRequestURI().getQuery());
       Camera cam = getCameraController().getCameraById(getCameraId(exchange));
@@ -55,12 +45,13 @@ public class MovingHandler extends RequestHandler {
       } else {
         throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
       }
-      response = "{\"succes\":\"true\"}";
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + exchange.getRequestURI(), LogEvent.Type.WARNING);
+      respondFailure(exchange);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera", LogEvent.Type.WARNING);
+      respondFailure(exchange);
     }
-    respond(exchange, response);
+    respondSuccess(exchange);
   }
 }
