@@ -5,7 +5,7 @@ package com.benine.backend.camera;
  * @author Bryan
  *
  */
-public interface ZoomingCamera extends ControlableCamera {
+public interface ZoomingCamera extends ControllableCamera {
   
   /**
    * Get the current zoom position.

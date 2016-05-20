@@ -153,7 +153,7 @@ public class IpcameraIrisTest {
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
             .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("giAAA"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC40"));
 
     camera.moveIris(40);
 

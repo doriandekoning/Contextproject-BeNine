@@ -18,6 +18,6 @@ public class CameraInfoHandler extends RequestHandler {
   public void handle(HttpExchange exchange) throws IOException {
     getLogger().log("Got an http request with uri: "
             + exchange.getRequestURI(), LogEvent.Type.INFO);
-    respond(exchange, getCameraController().getCamerasJSON());    
+    respond(exchange, getCameraController().getCamerasJSON());
   }
 }

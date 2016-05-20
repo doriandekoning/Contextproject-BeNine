@@ -33,11 +33,11 @@ public class PresetCreationHandler  extends RequestHandler {
         
         //Adding the new preset to the database
         getCameraController().addPreset(cameraID, preset);
-        responseSuccess(exchange);
+        respondSuccess(exchange);
       
       }
     } catch (SQLException e) {
-      System.out.println(e.toString());
+      respondFailure(exchange);
       getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
     }
 
