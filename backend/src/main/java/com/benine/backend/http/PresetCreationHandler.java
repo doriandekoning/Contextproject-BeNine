@@ -59,9 +59,13 @@ public class PresetCreationHandler  extends RequestHandler {
         responseSuccess(exchange);
       
       }
-    } catch (SQLException | StreamNotAvailableException e) {
-      getLogger().log("Preset can not be added to the database", LogEvent.Type.CRITICAL);
-    } 
+    } catch (SQLException e) {
+      getLogger().log("Preset can not be added to the database"
+          + "because of a database exception", LogEvent.Type.CRITICAL);
+    } catch (StreamNotAvailableException e) {
+      getLogger().log("Preset can not be added to the database "
+          + "because the stream isn't available ", LogEvent.Type.CRITICAL);
+    }
 
   }
   
