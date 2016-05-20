@@ -45,9 +45,9 @@ function setCurrentCamera(id) {
 	camera_div = $('#current_camera');
 	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
 	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);	
+	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
-	
+
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
@@ -67,15 +67,13 @@ function setCurrentCamera(id) {
 		iris.hide();
 	} else {
 		iris.show();
-		$('.irisslider').val(cameras[id].iris);
 	}
 	if  (cameras[id].focus === undefined) {
 		focus.hide();
 	} else {
 		focus.show();
-		$('.focusslider').val(cameras[id].focus);
 	}
-	
+
 	loadPresets(currentcamera);
 }
 
@@ -173,7 +171,7 @@ function inputzoomslider(z) {
 * Method to send a command to the backend to change the zoom.
 */
 function sendZoom() {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=absolute&zoom=" + parseInt(zoomInput.value) , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + parseInt(49.5  + (4.95 * parseInt(zoomInput.value))), function(data) {});
 	console.log("Zoom: " + parseInt(zoomInput.value));
 }
 
@@ -195,7 +193,7 @@ function inputfocusslider(f) {
 * Method to send a command to the backend to change the focus.
 */
 function sendFocus() {
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&position=" + parseInt(focusInput.value) , function(data) {});
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + parseInt(49.5  + (4.95*parseInt(focusInput.value))) , function(data) {});
 	console.log("Focus: " + parseInt(focusInput.value));
 }
 
@@ -218,7 +216,7 @@ function inputirisslider(i) {
 * Function to send a command to the backend to change the iris.
 */
 function sendIris() {
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&position=" + parseInt(irisInput.value) , function(data) {});
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + parseInt(49.5 + (4.95*parseInt(irisInput.value))) , function(data) {});
 	console.log("Iris: " + parseInt(irisInput.value));
 }
 

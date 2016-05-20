@@ -26,7 +26,7 @@ public class HttpControllerTest {
 
   @Before
   public void setUp() throws IOException {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     mockserver = mock(HttpServer.class);

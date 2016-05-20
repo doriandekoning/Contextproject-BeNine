@@ -32,7 +32,7 @@ public class IrisHandlerTest {
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "serverControllertest.conf");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     
     when(cam.getId()).thenReturn(1);
@@ -109,5 +109,17 @@ public class IrisHandlerTest {
     }
     String response = "{\"succes\":\"false\"}"; 
     verify(out).write(response.getBytes());
+  }
+
+  @Test
+  public void testMoveIrisRelative() throws Exception {
+    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/iris?speed=5");
+    when(exchange.getRequestURI()).thenReturn(uri);
+    try {
+      iHandler.handle(exchange);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    verify(cam).moveIris(5);
   }
 }

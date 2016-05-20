@@ -144,4 +144,19 @@ public class IpcameraIrisTest {
     
     assertEquals(res, 3394, 0.000001);
   }
+
+  @Test
+  public final void testMoveIris() throws CameraConnectionException {
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#I40"));
+
+    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
+            .withQueryStringParameters(parameterList);
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC40"));
+
+    camera.moveIris(40);
+
+    mockServerClient.verify(request, VerificationTimes.once());
+  }
 }
