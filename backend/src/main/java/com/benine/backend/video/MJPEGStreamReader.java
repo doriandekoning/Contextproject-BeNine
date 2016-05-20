@@ -1,11 +1,15 @@
 package com.benine.backend.video;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 
 /**
  * StreamReader for Motion JPEG streams.
@@ -16,6 +20,7 @@ public class MJPEGStreamReader extends StreamReader {
 
   private String boundary;
 
+  private byte[] snapshot;
 
   /**
    * Creates a new MJPEGStreamReader.
@@ -35,6 +40,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+    this.snapshot = new byte[0];
 
     setMJPEGBoundary();
     processStream();
@@ -69,7 +75,7 @@ public class MJPEGStreamReader extends StreamReader {
 
       byte[] imageByte = getImage(header);
 
-      this.setSnapShot(imageByte);
+      snapshot = imageByte;
 
       // Notify the StreamDistributers
       setChanged();
@@ -244,6 +250,16 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public String getBoundary() {
     return boundary;
+  }
+
+  @Override
+  public BufferedImage getSnapShot() throws IOException {
+    return ImageIO.read(new ByteArrayInputStream(this.snapshot));
+  }
+
+  @Override
+  public byte[] getSnapShotBytes() {
+    return Arrays.copyOf(snapshot, snapshot.length);
   }
 
 }
