@@ -1,13 +1,5 @@
 package com.benine.backend.http;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.imageio.ImageIO;
-
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
@@ -19,6 +11,15 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
 import com.sun.net.httpserver.HttpExchange;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.imageio.ImageIO;
+
+
 
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
