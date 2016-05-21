@@ -7,6 +7,7 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

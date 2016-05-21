@@ -5,6 +5,7 @@ import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

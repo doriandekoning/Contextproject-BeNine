@@ -4,7 +4,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
-import com.benine.backend.http.MalformedURIException;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -35,7 +34,7 @@ public class CameraMovingHandler extends CameraRequestHandler {
       getLogger().log("Malformed URI: " + request.getRequestURI(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (CameraConnectionException e) {
-      getLogger().log("Cannot connect to camera", LogEvent.Type.WARNING);
+      getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }
   }

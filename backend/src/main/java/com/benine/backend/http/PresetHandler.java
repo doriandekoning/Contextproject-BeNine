@@ -3,6 +3,7 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

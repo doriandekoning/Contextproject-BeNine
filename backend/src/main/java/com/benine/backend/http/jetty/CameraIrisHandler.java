@@ -1,6 +1,7 @@
 package com.benine.backend.http.jetty;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.IrisCamera;
 import org.eclipse.jetty.server.Request;
 
@@ -34,7 +35,7 @@ public class CameraIrisHandler extends CameraRequestHandler {
         irisCam.moveIris(Integer.parseInt(speed));
       }
       respondSuccess(request, res);
-    } catch (Exception e) {
+    } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + irisCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }

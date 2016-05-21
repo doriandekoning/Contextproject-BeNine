@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Before;

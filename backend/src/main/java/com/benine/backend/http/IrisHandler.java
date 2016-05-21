@@ -3,6 +3,7 @@ package com.benine.backend.http;
 import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.IrisCamera;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

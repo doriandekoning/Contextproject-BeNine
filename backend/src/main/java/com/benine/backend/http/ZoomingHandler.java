@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
+import com.benine.backend.http.jetty.MalformedURIException;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.jar.Attributes;
  * Handles zooming commands from the client.
  * Created on 4-5-16.
  */
+@Deprecated
 public class ZoomingHandler extends RequestHandler {
 
   /**
