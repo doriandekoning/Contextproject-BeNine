@@ -1,6 +1,6 @@
 package com.benine.backend;
 
-import com.benine.backend.http.jetty.HTTPStreamServer;
+import com.benine.backend.http.HTTPStreamServer;
 
 public class Main {
 

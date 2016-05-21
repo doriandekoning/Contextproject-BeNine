@@ -1,4 +1,4 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 /**
  * Created on 4-5-16.

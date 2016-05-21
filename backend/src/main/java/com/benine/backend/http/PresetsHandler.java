@@ -1,4 +1,4 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.Preset;
 import com.benine.backend.PresetController;

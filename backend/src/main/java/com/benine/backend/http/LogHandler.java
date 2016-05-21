@@ -1,4 +1,4 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import org.eclipse.jetty.server.Request;

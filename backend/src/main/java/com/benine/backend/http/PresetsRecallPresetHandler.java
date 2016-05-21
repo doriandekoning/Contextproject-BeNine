@@ -1,4 +1,4 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
@@ -55,7 +55,7 @@ public class PresetsRecallPresetHandler extends RequestHandler {
 
   public void moveCamera(Camera camera, Preset preset) throws CameraConnectionException, MalformedURIException {
     if (camera instanceof IPCamera) {
-      IPCamera ipcamera = (IPCamera camera);
+      IPCamera ipcamera = (IPCamera) camera;
 
       Position position = preset.getPosition();
       ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
