@@ -3,6 +3,8 @@ package com.benine.backend.http.jetty;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.FocussingCamera;
+import com.benine.backend.camera.IrisCamera;
+import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -36,16 +38,25 @@ public class CameraInfoHandler extends CameraRequestHandler {
 
       switch (route) {
         case "mjpeg":
-          streamHandler.handle(s, request, req, res);
+          if (cam.getStreamType() == StreamType.MJPEG) {
+            streamHandler.handle(s, request, req, res);
+          }
           break;
         case "focus":
           if (cam instanceof FocussingCamera) {
             focusHandler.handle(s, request, req, res);
           }
           break;
+        case "iris":
+          if (cam instanceof IrisCamera) {
+            focusHandler.handle(s, request, req, res);
+          }
+          break;
       }
     }
 
+    // If no route has been selected,
+    // return all camera info.
     respond(request, res, cameraInfo);
     request.setHandled(true);
 

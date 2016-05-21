@@ -12,6 +12,7 @@ import java.util.jar.Attributes;
  * Handles an command from the client to change the iris of a camera.
  * Created on 4-5-16.
  */
+@Deprecated
 public class IrisHandler extends RequestHandler {
   
   /**
