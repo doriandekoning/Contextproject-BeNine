@@ -16,6 +16,7 @@ import java.util.jar.Attributes;
  * Handles a request to get information about presets.
  * Created on 4-5-16.
  */
+@Deprecated
 public class PresetHandler extends RequestHandler {
 
   /**

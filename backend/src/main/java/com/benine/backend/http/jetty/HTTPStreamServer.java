@@ -32,13 +32,16 @@ public class HTTPStreamServer {
     ContextHandler cameraContext = new ContextHandler("/camera");
     cameraContext.setHandler(new CameraInfoHandler());
 
+    ContextHandler presetContext = new ContextHandler("/presets");
+    cameraContext.setHandler(new PresetsHandler());
+
     ContextHandler fileserverContext = new ContextHandler("/static");
     ResourceHandler fileHandler = new ResourceHandler();
     fileHandler.setResourceBase("static");
     fileserverContext.setHandler(fileHandler);
 
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] { logHandler, cameraContext, fileserverContext });
+    contexts.setHandlers(new Handler[] { logHandler, cameraContext, presetContext, fileserverContext });
 
     HandlerList handlerList = new HandlerList();
     handlerList.addHandler(logHandler);
