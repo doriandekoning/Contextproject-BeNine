@@ -3,6 +3,7 @@ package com.benine.backend;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
+import com.benine.backend.http.HTTPServer;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class ServerController {
   
   private boolean running;
 
-  private HttpController httpController;
+  private HTTPServer httpServer;
 
   private PresetController presetController;
   
@@ -68,12 +69,10 @@ public class ServerController {
   /**
    * Start the server.
    */
-  public void start() {
+  public void start() throws Exception {
     startupDatabase();
     cameraController.loadConfigCameras();
-
-    httpController = new HttpController(config.getValue("serverip"),
-            Integer.parseInt(config.getValue("serverport")));
+    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
     
     loadPresets();
 
@@ -84,9 +83,9 @@ public class ServerController {
   /**
    * Stop the server.
    */
-  public void stop() {
+  public void stop() throws Exception {
     if (running) {
-      httpController.destroy();
+      httpServer.destroy();
       database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
