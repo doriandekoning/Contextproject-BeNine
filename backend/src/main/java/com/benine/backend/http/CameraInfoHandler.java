@@ -70,14 +70,15 @@ public class CameraInfoHandler extends CameraRequestHandler {
             zoomHandler.handle(s, request, req, res);
           }
           break;
+        default: {
+          respond(request, res, cameraInfo);
+          request.setHandled(true);
+        }
       }
+    } else {
+      respond(request, res, cameraInfo);
+      request.setHandled(true);
     }
-
-    // If no route has been selected,
-    // return all camera info.
-    respond(request, res, cameraInfo);
-    request.setHandled(true);
-
   }
 
   /**

@@ -49,8 +49,9 @@ public class PresetsRecallPresetHandler extends RequestHandler {
     } catch (MalformedURIException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
-
     }
+
+    request.setHandled(true);
   }
 
   public void moveCamera(Camera camera, Preset preset) throws CameraConnectionException, MalformedURIException {

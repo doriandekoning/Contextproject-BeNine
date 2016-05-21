@@ -64,6 +64,8 @@ public class PresetsCreatePresetHandler extends RequestHandler {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
       respondFailure(request, res);
     }
+
+    request.setHandled(true);
   }
 
   private void createImage(Preset preset, int cameraID, int presetID) throws

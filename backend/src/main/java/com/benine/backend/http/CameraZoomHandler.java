@@ -33,6 +33,7 @@ public class CameraZoomHandler extends CameraRequestHandler {
       respondFailure(request, res);
     }
 
+    request.setHandled(true);
   }
 
   private void zoom(ZoomingCamera zoomingCam, String zoomto, String zoom) throws MalformedURIException, CameraConnectionException {

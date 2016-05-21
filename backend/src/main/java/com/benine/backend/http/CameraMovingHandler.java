@@ -37,6 +37,8 @@ public class CameraMovingHandler extends CameraRequestHandler {
       getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }
+
+    request.setHandled(true);
   }
 
   public void move(MovingCamera movingCam, String moveType, String pan, String tilt, String panSpeed, String tiltSpeed)

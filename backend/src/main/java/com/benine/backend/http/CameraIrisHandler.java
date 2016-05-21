@@ -39,5 +39,7 @@ public class CameraIrisHandler extends CameraRequestHandler {
       getLogger().log("Cannot connect to camera: " + irisCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }
+
+    request.setHandled(true);
   }
 }

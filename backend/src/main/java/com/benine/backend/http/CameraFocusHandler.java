@@ -40,5 +40,6 @@ public class CameraFocusHandler extends CameraRequestHandler {
       respondFailure(request, res);
     }
 
+    request.setHandled(true);
   }
 }
