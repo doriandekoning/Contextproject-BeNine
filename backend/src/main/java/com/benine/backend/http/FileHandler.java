@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * Handles static files like the images of a preset.
  */
+@Deprecated
 public class FileHandler extends RequestHandler {
   
   /**

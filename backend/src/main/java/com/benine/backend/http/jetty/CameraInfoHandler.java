@@ -2,6 +2,7 @@ package com.benine.backend.http.jetty;
 
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.FocussingCamera;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -9,15 +10,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CameraHandler extends CameraRequestHandler {
+public class CameraInfoHandler extends CameraRequestHandler {
 
   private CameraStreamHandler streamHandler;
 
+  private CameraFocusHandler focusHandler;
+
   /**
-   * Constructor for a new CameraHandler, handling the /camera/ request.
+   * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
-  public CameraHandler() {
+  public CameraInfoHandler() {
     this.streamHandler = new CameraStreamHandler();
+    this.focusHandler = new CameraFocusHandler();
   }
 
   @Override
@@ -28,20 +32,21 @@ public class CameraHandler extends CameraRequestHandler {
 
     if (checkValidCameraID(request)) {
       String route = getRoute(request);
+      Camera cam = getCameraController().getCameraById(getCameraId(request));
 
       switch (route) {
         case "mjpeg":
           streamHandler.handle(s, request, req, res);
           break;
-        default:
-          respond(request, res, cameraInfo);
+        case "focus":
+          if (cam instanceof FocussingCamera) {
+            focusHandler.handle(s, request, req, res);
+          }
           break;
       }
-
-    } else {
-      respond(request, res, cameraInfo);
     }
 
+    respond(request, res, cameraInfo);
     request.setHandled(true);
 
   }

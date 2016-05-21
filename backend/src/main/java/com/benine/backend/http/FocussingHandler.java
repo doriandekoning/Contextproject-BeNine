@@ -13,6 +13,7 @@ import java.util.jar.Attributes;
  * Handles commands from the client to change the focus position of a camera.
  * Created on 4-5-16.
  */
+@Deprecated
 public class FocussingHandler extends RequestHandler {
 
   /**

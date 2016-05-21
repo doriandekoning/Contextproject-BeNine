@@ -59,6 +59,15 @@ public abstract class RequestHandler extends AbstractHandler {
     }
   }
 
+  public void respondSuccess(Request request, HttpServletResponse response) {
+    respond(request, response, "{\"succes\":\"true\"}");
+  }
+
+  public void respondFailure(Request request, HttpServletResponse response) {
+    respond(request, response, "{\"succes\":\"false\"}");
+  }
+
+
   /**
    * Returns the logger.
    * @return A Logger object.
