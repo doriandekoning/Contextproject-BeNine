@@ -1,7 +1,6 @@
 package com.benine.backend.http.jetty;
 
 
-import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import org.eclipse.jetty.server.Handler;
@@ -33,7 +32,7 @@ public class HTTPStreamServer {
     cameraContext.setHandler(new CameraInfoHandler());
 
     ContextHandler presetContext = new ContextHandler("/presets");
-    cameraContext.setHandler(new PresetsHandler());
+    presetContext.setHandler(new PresetsHandler());
 
     ContextHandler fileserverContext = new ContextHandler("/static");
     ResourceHandler fileHandler = new ResourceHandler();
@@ -41,7 +40,7 @@ public class HTTPStreamServer {
     fileserverContext.setHandler(fileHandler);
 
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] { logHandler, cameraContext, presetContext, fileserverContext });
+    contexts.setHandlers(new Handler[] {cameraContext, presetContext, fileserverContext });
 
     HandlerList handlerList = new HandlerList();
     handlerList.addHandler(logHandler);
@@ -49,10 +48,10 @@ public class HTTPStreamServer {
 
     server.setHandler(handlerList);
 
-    getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
+    //getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
 
     server.start();
-    getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
+   //getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
 
     server.join();
   }

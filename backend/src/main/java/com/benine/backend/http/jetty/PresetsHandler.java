@@ -15,27 +15,27 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PresetsHandler extends CameraRequestHandler {
 
+  PresetsCreatePresetHandler createPreset;
+
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
   public PresetsHandler() {
+    this.createPreset = new PresetsCreatePresetHandler();
   }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
 
-    String cameraInfo = getCameraController().getCamerasJSON();
     String route = getRoute(request);
+    System.out.println(route);
 
-    request.getParameter("tag");
-
-//      switch (route) {
-//        case "createpreset":
-//          presetCreationHandler.handle(s, request, req, res);
-//          break;
-//      }
-
+      switch (route) {
+        case "createpreset":
+          createPreset.handle(s, request, req, res);
+          break;
+      }
 
     String presetInfo = getPresetsInfo(request);
 
