@@ -14,6 +14,7 @@ import java.util.jar.Attributes;
  * Handles a moving command from the client to move a camera.
  * Created on 4-5-16.
  */
+@Deprecated
 public class MovingHandler extends RequestHandler {
 
   /**
