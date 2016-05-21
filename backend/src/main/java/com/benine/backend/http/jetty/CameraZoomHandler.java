@@ -41,7 +41,7 @@ public class CameraZoomHandler extends CameraRequestHandler {
     } else if (zoom != null && zoomto.equals("absolute")) {
       zoomingCam.zoomTo(Integer.parseInt(zoom));
     } else {
-      throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
+      throw new MalformedURIException("Invalid Zoom parameters");
     }
   }
 }

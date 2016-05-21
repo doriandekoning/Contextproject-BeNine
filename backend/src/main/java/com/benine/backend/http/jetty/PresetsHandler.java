@@ -17,6 +17,8 @@ public class PresetsHandler extends CameraRequestHandler {
 
   PresetsCreatePresetHandler createPreset;
 
+  PresetsRecallPresetHandler recallPreset;
+
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
@@ -34,6 +36,9 @@ public class PresetsHandler extends CameraRequestHandler {
       switch (route) {
         case "createpreset":
           createPreset.handle(s, request, req, res);
+          break;
+        case "recallpreset":
+          recallPreset.handle(s, request, req, res);
           break;
       }
 
