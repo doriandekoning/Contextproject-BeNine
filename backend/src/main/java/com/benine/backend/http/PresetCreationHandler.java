@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 /**
  * Class allows creation of a preset by tagging a camera viewpoint location.
 **/
+@Deprecated
 public class PresetCreationHandler  extends RequestHandler {
   
   /**

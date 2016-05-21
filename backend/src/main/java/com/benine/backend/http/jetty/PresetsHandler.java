@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PresetsHandler extends CameraRequestHandler {
+public class PresetsHandler extends RequestHandler {
 
   PresetsCreatePresetHandler createPreset;
 
