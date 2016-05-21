@@ -1,6 +1,9 @@
 package com.benine.backend.http.jetty;
 
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -43,8 +46,16 @@ public class HTTPStreamServer {
 
     server.setHandler(handlerList);
 
+    getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
+
     server.start();
+    getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
+
     server.join();
+  }
+
+  private Logger getLogger() {
+    return ServerController.getInstance().getLogger();
   }
 
 
