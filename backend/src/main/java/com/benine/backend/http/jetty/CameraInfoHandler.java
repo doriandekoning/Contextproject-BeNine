@@ -5,6 +5,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
+import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
@@ -21,6 +22,8 @@ public class CameraInfoHandler extends CameraRequestHandler {
 
   private CameraMovingHandler moveHandler;
 
+  private CameraZoomHandler zoomHandler;
+
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
@@ -28,6 +31,7 @@ public class CameraInfoHandler extends CameraRequestHandler {
     this.streamHandler = new CameraStreamHandler();
     this.focusHandler = new CameraFocusHandler();
     this.moveHandler = new CameraMovingHandler();
+    this.zoomHandler = new CameraZoomHandler();
   }
 
   @Override
@@ -59,6 +63,11 @@ public class CameraInfoHandler extends CameraRequestHandler {
         case "iris":
           if (cam instanceof IrisCamera) {
             focusHandler.handle(s, request, req, res);
+          }
+          break;
+        case "zoom":
+          if (cam instanceof ZoomingCamera) {
+            zoomHandler.handle(s, request, req, res);
           }
           break;
       }
