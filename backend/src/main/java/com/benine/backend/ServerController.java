@@ -179,7 +179,12 @@ public class ServerController {
   public void setCameraController(CameraController cameraController) {
     this.cameraController = cameraController;
   }
-  
+
+  public void setStreamController(StreamController streamController) {
+    this.streamController = streamController;
+  }
+
+
   /**
    * Getter for the database.
    * @return the database

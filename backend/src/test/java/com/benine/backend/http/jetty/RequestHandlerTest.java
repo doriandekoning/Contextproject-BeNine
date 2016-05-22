@@ -4,6 +4,7 @@ import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.http.RequestHandler;
+import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ public abstract class RequestHandlerTest {
   String target;
   Request requestMock;
   CameraController cameracontroller;
+  StreamController streamController;
   HttpServletResponse httpresponseMock;
   HttpServletRequest httprequestMock;
 
@@ -40,11 +42,13 @@ public abstract class RequestHandlerTest {
   public void initialize() throws IOException {
     handler = supplyHandler();
     cameracontroller = mock(CameraController.class);
+    streamController = mock(StreamController.class);
 
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setLogger(logger);
     serverController.setCameraController(cameracontroller);
+    serverController.setStreamController(streamController);
 
     out = mock(PrintWriter.class);
     target = "target";
