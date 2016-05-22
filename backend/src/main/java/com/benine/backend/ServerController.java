@@ -73,7 +73,7 @@ public class ServerController {
     startupDatabase();
     cameraController.loadConfigCameras();
     httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
-    
+
     loadPresets();
 
     running = true;

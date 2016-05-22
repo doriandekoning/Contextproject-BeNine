@@ -54,8 +54,6 @@ public class HTTPServer {
     getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
     server.start();
     getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
-
-    server.join();
   }
 
   private Logger getLogger() {
