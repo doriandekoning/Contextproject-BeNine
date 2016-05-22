@@ -90,7 +90,7 @@ function loadPresets(cameraID) {
 	preset_area.find('div').removeAttr("presetID");
 	preset_area.find('img').removeAttr("src");
 	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"})
+	Holder.run({images:"#preset_area img"});
 	$.get("/api/backend/presets/getpresets", function(data) {
 		obj = JSON.parse(data);
 		console.log(obj);
@@ -125,8 +125,9 @@ var joystickoptions = {
 /* variables used for the joystick movements */
 var joystick = nipplejs.create(joystickoptions);
 var distance = 0;
-var angle = 0
+var angle = 0;
 var moveSend = false;
+var lastSend = {distance: 0, angle:0};
 
 /**
 * When the joystick is moved send a new move command.
@@ -136,7 +137,7 @@ joystick.on('move', function(evt, data){
 	distance = data.distance;
 	if (moveSend === false) {
 		moveSend = true;
-		setTimeout(function(){ sendMove(); moveSend = false;  }, 130)
+		setTimeout(function(){ sendMove(); moveSend = false;  }, 130);
 		sendMove();
 	} 
 });
@@ -153,15 +154,19 @@ joystick.on('end', function(){
 * Method to send a move to the current camera.
 */
 function sendMove(){
-	var tilt, pan;
-	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
-	console.log(pan + " - " + tilt);
+	if (lastSend.distance !== distance || lastSend.angle !== angle) {
+		var tilt, pan;
+		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
+		lastSend.distance = distance;
+		lastSend.angle = angle;
+		console.log(pan + " - " + tilt);
+	}
 }
 
 /* Variable used for the zoom slider */
-var zoomInput = {value:0, send:false};
+var zoomInput = {value:0, send:false, lastSend: 0};
 
 /**
 * Method is called when the inputslider value changes.
@@ -175,13 +180,16 @@ function inputzoomslider(z) {
 * values send to the backend are between 1 and 99
 */
 function sendZoom() {
-	var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
-	console.log("Zoom: " + zoom);
+	if (zoomInput.value !== zoomInput.lastSend) {
+		var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
+		$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
+		zoomInput.lastSend = zoomInput.value;
+		console.log("Zoom: " + zoom);
+	}
 }
 
 /* Variable used for the focus slider */
-var focusInput = {value:0, send:false};
+var focusInput = {value:0, send:false, lastSend: 0};
 
 /**
 * Method to send the new input value of the focus slider to the currently selected camera.
@@ -199,13 +207,16 @@ function inputfocusslider(f) {
 * values send to the backend are between 1 and 99
 */
 function sendFocus() {
-	var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
-	console.log("Focus: " + focus);
+	if (focusInput.value != focusInput.lastSend) {
+		var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
+		$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
+		focusInput.lastSend = focusInput.value;
+		console.log("Focus: " + focus);
+	}
 }
 
 /* Variables used for the iris slider */
-var irisInput = {value:0, send:false};
+var irisInput = {value:0, send:false, lastSend: 0};
 
 
 /**
@@ -224,9 +235,12 @@ function inputirisslider(i) {
 * values send to the backend are between 1 and 99
 */
 function sendIris() {
-	var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
-	console.log("Iris: " + iris);
+	if (irisInput.value !== irisInput.lastSend) {
+		var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
+		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
+		irisInput.lastSend = irisInput.value;
+		console.log("Iris: " + iris);
+	}
 }
 
 /**
@@ -313,7 +327,7 @@ function loadPresetsOnTag(obj) {
 	preset_area.find('div').removeAttr("presetID");
 	preset_area.find('img').removeAttr("src");
 	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"})
+	Holder.run({images:"#preset_area img"});
 	presets = obj.presets;
 	place = 1;
 	for (var p in presets) {
@@ -335,7 +349,7 @@ function presetcall(t) {
 	var presetID = t.attr("presetid");
 	if (presetID !== undefined) {
 		var title = t.find('h5');
-		if(selectedPreset != undefined){
+		if(selectedPreset !== undefined){
 			$('#' + selectedPreset).find('h5').removeClass("selected");
 		}
 		selectedPreset = t.attr("id");
