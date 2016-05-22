@@ -36,7 +36,10 @@ public class CameraMovingHandler extends CameraRequestHandler {
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
-    }
+    } catch (NumberFormatException e) {
+    getLogger().log(e.toString(), LogEvent.Type.WARNING);
+    respondFailure(request, res);
+  }
 
     request.setHandled(true);
   }

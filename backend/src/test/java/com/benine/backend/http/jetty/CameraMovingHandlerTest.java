@@ -1,93 +1,110 @@
 package com.benine.backend.http.jetty;
 
-import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.*;
-import com.sun.net.httpserver.HttpExchange;
-
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.MovingCamera;
+import com.benine.backend.camera.Position;
+import com.benine.backend.http.CameraMovingHandler;
+import com.benine.backend.http.CameraRequestHandler;
+import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.net.URI;
+import java.io.IOException;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * Created on 4-5-16.
  */
-public class CameraMovingHandlerTest {
-  
-  HttpExchange exchange = mock(HttpExchange.class);
-  OutputStream out = mock(OutputStream.class);
+public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
+
   MovingCamera cam = mock(MovingCamera.class);
-  ServerController serverController;
-  CameraController camController;
-  MovingHandler mHandler = new MovingHandler();
-  
+
+  @Override
+  public CameraRequestHandler supplyHandler() {
+    return new CameraMovingHandler();
+  }
+
   @Before
-  public void setup() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
-    serverController = ServerController.getInstance();
-    
-    camController = new CameraController();
-    camController.addCamera(cam);
-    serverController.setCameraController(camController);
-    when(exchange.getResponseBody()).thenReturn(out);
-    mHandler = new MovingHandler();
+  public void initialize() throws IOException {
+    super.initialize();
+    when(cameracontroller.getCameraById(42)).thenReturn(cam);
   }
 
   @Test
   public void testMoveAbsolute() throws Exception {
-    URI uri = new  URI("http://localhost/camera/" +cam.getId()+ "/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      mHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    setPath("/camera/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("pan", "1");
+    parameters.add("tilt", "2");
+    parameters.add("moveType", "absolute");
+    parameters.add("panSpeed", "3");
+    parameters.add("tiltSpeed", "4");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
     verify(cam).moveTo(any(Position.class), eq(3), eq(4));
+    verify(requestMock).setHandled(true);
   }
   
   @Test
   public void testMalformedURI() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/move?pan=4&pan=3");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      mHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    String response = "{\"succes\":\"false\"}"; 
-    verify(out).write(response.getBytes());
+    setPath("/camera/42/move?pan=1&pan=2&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("pan", "1");
+    parameters.add("pan", "2");
+    parameters.add("tilt", "2");
+    parameters.add("moveType", "absolute");
+    parameters.add("panSpeed", "3");
+    parameters.add("tiltSpeed", "4");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
   }
   
   @Test
   public void testMoveWithNotAllValues() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/move?pan=5");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    mHandler.handle(exchange);
-    String response = "{\"succes\":\"false\"}"; 
-    verify(out).write(response.getBytes());
+    setPath("/camera/42/move?pan=5");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("pan", "5");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
   }
   
   @Test
   public void testCameraConnectionException() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/focus?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    doThrow(new CameraConnectionException("test exception", 0)).when(cam).moveTo(any(Position.class), eq(3), eq(4));
-    try {
-      mHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    String response = "{\"succes\":\"false\"}"; 
-    verify(out).write(response.getBytes());
-  }
+    setPath("/camera/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
 
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("pan", "1");
+    parameters.add("tilt", "2");
+    parameters.add("moveType", "absolute");
+    parameters.add("panSpeed", "3");
+    parameters.add("tiltSpeed", "4");
+    setParameters(parameters);
+
+    setParameters(parameters);
+    doThrow(new CameraConnectionException("test exception", 0)).when(cam).moveTo(any(Position.class), eq(3), eq(4));
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
+  }
 }
