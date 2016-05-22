@@ -186,4 +186,12 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     verify(request).setHandled(true);
   }
 
+  @Test
+  public void testRouteUnknown() throws IOException, ServletException {
+    setPath("/camera/44/thisisanunknownroute");
+    getHandler().handle(target, request, httprequest, httpresponse);
+    verify(httpresponse.getWriter()).write(caminfo);
+    verify(request).setHandled(true);
+  }
+
 }
