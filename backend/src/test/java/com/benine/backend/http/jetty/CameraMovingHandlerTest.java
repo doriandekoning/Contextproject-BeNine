@@ -50,6 +50,24 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
     verify(cam).moveTo(any(Position.class), eq(3), eq(4));
     verify(requestMock).setHandled(true);
   }
+
+  @Test
+  public void testMoveRelative() throws Exception {
+    setPath("/camera/42/move?pan=1&tilt=2&moveType=relative&panSpeed=3&tiltSpeed=4");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("pan", "1");
+    parameters.add("tilt", "2");
+    parameters.add("moveType", "relative");
+    parameters.add("panSpeed", "3");
+    parameters.add("tiltSpeed", "4");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(cam).move(eq(1), eq(2));
+    verify(requestMock).setHandled(true);
+  }
   
   @Test
   public void testMalformedURI() throws Exception {

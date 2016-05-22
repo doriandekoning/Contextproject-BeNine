@@ -62,7 +62,7 @@ public class CameraMovingHandler extends CameraRequestHandler {
         break;
       }
       default: {
-        throw new MalformedURIException("Invalid value for zoom or zoomType invalid");
+        throw new MalformedURIException("Invalid value for moveType");
       }
     }
   }
