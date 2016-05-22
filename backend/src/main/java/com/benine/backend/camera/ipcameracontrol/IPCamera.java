@@ -1,7 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
-
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -221,7 +221,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
-    sendControlCommand("%23I" + speed);
+    NumberFormat formatter = new DecimalFormat("00");
+    String response = sendControlCommand("%23I" + formatter.format(speed));
+    verifyResponse(response, "iC");
   }
 
   /**
@@ -311,7 +313,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public int getIrisPosition() throws CameraConnectionException {
     CameraController.logger.log("Get iris position.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23GI");
-    return Integer.valueOf(res.substring(2, 5), 16);
+    return Integer.valueOf(verifyResponse(res, "gi").substring(0, 3), 16);
   }
   
   /**
@@ -503,5 +505,27 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     }
     
     return valuesmap;
+  }
+  
+  /**
+   * Verify response from  IP camera.
+   * @param response received from camera.
+   * @param expected prefix of the response.
+   * @return data of the response.
+   * @throws IpcameraConnectionException when response is not as expected.
+   */
+  private String verifyResponse(String response, String expected) throws IpcameraConnectionException {
+    if (response.startsWith(expected)) {
+      ServerController.getInstance().getLogger().log(
+                          "Camera responded correctly: "
+                          + response, LogEvent.Type.INFO);
+      return response.substring(expected.length());
+    } else {
+      ServerController.getInstance().getLogger().log(
+          "Camera response is not correct, expected: "
+           + expected + ", but it was : " + response, LogEvent.Type.CRITICAL);
+      throw new IpcameraConnectionException("Response of camera is not correct expected: " 
+          + expected + ", but it was : " + response, getId());
+    }
   }
 }
