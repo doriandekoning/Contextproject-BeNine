@@ -4,7 +4,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -29,14 +28,6 @@ public abstract class RequestHandler extends AbstractHandler {
    */
   protected CameraController getCameraController() {
     return ServerController.getInstance().getCameraController();
-  }
-
-  /**
-   * Returns the database
-   * @return database to retrieve information from.
-   */
-  protected Database getDatabase() {
-    return ServerController.getInstance().getDatabase();
   }
 
   /**

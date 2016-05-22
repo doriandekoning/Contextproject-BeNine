@@ -2,6 +2,7 @@ package com.benine.backend.http.jetty;
 
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.http.RequestHandler;
 import org.eclipse.jetty.server.Request;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.*;
@@ -20,12 +22,15 @@ import static org.mockito.Mockito.*;
  */
 public abstract class RequestHandlerTest {
 
-  private HttpServletResponse responseMock;
   private PrintWriter out;
   private ServerController serverController;
   private Logger logger = mock(Logger.class);
+  private CameraController cameracontroller = mock(CameraController.class);
+  private String target = "target";
   private RequestHandler handler;
-  private Request requestMock;
+  private HttpServletResponse httpresponseMock = mock(HttpServletResponse.class);;
+  private HttpServletRequest httprequestMock = mock(HttpServletRequest.class);;
+  private Request requestMock = mock(Request.class);;
 
   public abstract RequestHandler supplyHandler();
 
@@ -35,73 +40,79 @@ public abstract class RequestHandlerTest {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setLogger(logger);
-
-    responseMock = mock(HttpServletResponse.class);
-    requestMock = mock(Request.class);
+    serverController.setCameraController(cameracontroller);
 
     out = mock(PrintWriter.class);
-    when(responseMock.getWriter()).thenReturn(out);
+    when(httpresponseMock.getWriter()).thenReturn(out);
+  }
+
+  public String getTargetMock() {
+    return target;
   }
 
   public Request getRequestMock() {
     return requestMock;
   }
 
-  public RequestHandler getHandler() {
-    return handler;
+  public HttpServletResponse getHTTPresponseMock() {
+    return httpresponseMock;
   }
 
-  public HttpServletResponse getResponseMock() {
-    return responseMock;
+  public HttpServletRequest getHTTPrequestMock() {
+    return httprequestMock;
+  }
+
+  public RequestHandler getHandler() {
+    return handler;
   }
 
   @Test
   public final void testRespondStatus() throws IOException {
     String response = "response";
-    handler.respond(requestMock, responseMock, response);
-    verify(responseMock).setStatus(200);
+    handler.respond(requestMock, httpresponseMock, response);
+    verify(httpresponseMock).setStatus(200);
   }
 
   @Test
   public final void testRespondStatusError() throws IOException {
     String response = "response";
-    when(responseMock.getWriter()).thenThrow(new IOException());
+    when(httpresponseMock.getWriter()).thenThrow(new IOException());
 
-    handler.respond(requestMock, responseMock, response);
-    verify(responseMock).setStatus(500);
+    handler.respond(requestMock, httpresponseMock, response);
+    verify(httpresponseMock).setStatus(500);
   }
 
   @Test
   public final void testRespond() throws IOException {
     String response = "response";
-    handler.respond(requestMock, responseMock, response);
+    handler.respond(requestMock, httpresponseMock, response);
     verify(out).write(response);
     verify(out).close();
   }
 
   @Test
   public void testResponseMessageTrueStatus() throws Exception {
-    handler.respondSuccess(requestMock, responseMock);
-    verify(responseMock).setStatus(200);
+    handler.respondSuccess(requestMock, httpresponseMock);
+    verify(httpresponseMock).setStatus(200);
   }
   
   @Test
   public void testResponseMessageFalseStatus() throws Exception {
-    handler.respondFailure(requestMock, responseMock);
-    verify(responseMock).setStatus(200);
+    handler.respondFailure(requestMock, httpresponseMock);
+    verify(httpresponseMock).setStatus(200);
   }
 
   @Test
   public void testResponseMessageTrueMessage() throws Exception {
     String response = "{\"succes\":\"true\"}";
-    handler.respondSuccess(requestMock, responseMock);
+    handler.respondSuccess(requestMock, httpresponseMock);
     verify(out).write(response);
   }
 
   @Test
   public void testResponseMessageFalseMessage() throws Exception {
     String response = "{\"succes\":\"false\"}";
-    handler.respondFailure(requestMock, responseMock);
+    handler.respondFailure(requestMock, httpresponseMock);
     verify(out).write(response);
   }
 }

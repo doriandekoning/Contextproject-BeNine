@@ -18,8 +18,6 @@ public abstract class CameraRequestHandlerTest extends RequestHandlerTest {
     when(getRequestMock().getPathInfo()).thenReturn(path);
   }
 
-
-
   @Test
   public void testGetCameraID() {
     setPath("/camera/42/test");
