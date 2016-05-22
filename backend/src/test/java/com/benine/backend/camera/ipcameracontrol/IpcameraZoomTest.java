@@ -48,7 +48,7 @@ public class IpcameraZoomTest {
     int res = camera.getZoomPosition();
     
     mockServerClient.verify(request, VerificationTimes.once());
-    assertEquals(res, 1621, 0.000001);
+    assertEquals(res, 256, 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -68,11 +68,11 @@ public class IpcameraZoomTest {
   public final void testZoomTo() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#AXZB84"));
+    parameterList.add(new Parameter("cmd", "#AXZ58F"));
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
                                   .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("axz58F"));
 
     camera.zoomTo(58);
     

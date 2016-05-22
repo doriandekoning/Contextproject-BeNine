@@ -51,7 +51,7 @@ public class IpcameraFocusTest {
     
     mockServerClient.verify(request, VerificationTimes.once());
     
-    assertEquals(res, 2626, 0.000001);
+    assertEquals(res, 1261, 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -90,7 +90,7 @@ public class IpcameraFocusTest {
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
                                   .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("fs80"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("fS80"));
 
     camera.moveFocus(80);
     
@@ -105,7 +105,7 @@ public class IpcameraFocusTest {
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
                                   .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("fs02"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("fS02"));
 
     camera.moveFocus(2);
     

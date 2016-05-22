@@ -116,11 +116,11 @@ public class IpcameraIrisTest {
   public final void testSetIrisPosition() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#I80"));
+    parameterList.add(new Parameter("cmd", "#AXI5A5"));
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
                                   .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("axi5A5"));
 
     camera.setIrisPosition(80);
     
@@ -131,11 +131,11 @@ public class IpcameraIrisTest {
   public final void testSetIrisPosition2() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#I02"));
+    parameterList.add(new Parameter("cmd", "#AXI557"));
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
                                   .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC02"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("axi557"));
 
     camera.setIrisPosition(2);
     
@@ -156,18 +156,26 @@ public class IpcameraIrisTest {
     
     mockServerClient.verify(request, VerificationTimes.once());
     
-    assertEquals(res, 3394, 0.000001);
+    assertEquals(res, 2029, 0.000001);
   }
 
   @Test
   public final void testMoveIris() throws CameraConnectionException {
     parameterList = new ArrayList<Parameter>();
     parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#I40"));
+    parameterList.add(new Parameter("cmd", "#GI"));
+
+    final HttpRequest request1 = HttpRequest.request("/cgi-bin/aw_ptz")
+                                  .withQueryStringParameters(parameterList);
+    mockServerClient.when(request1).respond(HttpResponse.response().withBody("giD421"));
+    
+    parameterList = new ArrayList<Parameter>();
+    parameterList.add(new Parameter("res", "1"));
+    parameterList.add(new Parameter("cmd", "#AXIC34"));
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
             .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC40"));
+    mockServerClient.when(request).respond(HttpResponse.response().withBody("axiC34"));
 
     camera.moveIris(40);
 

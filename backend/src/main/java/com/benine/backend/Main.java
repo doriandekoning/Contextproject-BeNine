@@ -1,6 +1,7 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 public class Main {
@@ -25,7 +26,9 @@ public class Main {
 //      e.printStackTrace();
 //    }
     IPCamera camera = new IPCamera("192.168.10.101");
-    camera.moveIris(99);
-    System.out.println(camera.getIrisPosition());
+    camera.setAutoFocusOn(false);
+    camera.setFocusPosition(2730);
+  
+    System.out.println(camera.getFocusPosition());
   }
 }
