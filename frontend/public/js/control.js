@@ -57,7 +57,6 @@ function setCurrentCamera(id) {
 		zoom.hide();
 	} else {
 		zoom.show();
-		zoom.val(cameras[id].zoom);
 	}
 	if  (cameras[id].tilt === undefined) {
 		$('.joystick_zone').hide();
@@ -68,17 +67,28 @@ function setCurrentCamera(id) {
 		iris.hide();
 	} else {
 		iris.show();
+		setButton(iris.find("#auto_iris"), cameras[id].autoiris);
 	}
 	if  (cameras[id].focus === undefined) {
 		focus.hide();
 	} else {
 		focus.show();
+		setButton(focus.find("#auto_focus"), cameras[id].autofocus);
 	}
-
 	loadPresets(currentcamera);
 }
 
-
+/**
+* Set the button specified to the boolean value bool.
+*/
+function setButton(btn, bool) {
+	console.log(bool);
+	if (bool === true) {
+		btn.removeClass( "btn-danger" ).addClass("btn-success");
+	} else {
+		btn.removeClass( "btn-success" ).addClass("btn-danger");
+	}
+}
 
 /**
 * Function loads the presets of this camera in the preset window.
@@ -267,11 +277,11 @@ function releaseSlider(fun, input) {
 * And send the http request to change to auto focus.
 */
 $('#auto_focus').click(function() {
-	toggleButton($(this));
-	var on = true;
+	var on = false;
 	if($(this).hasClass("btn-danger")){
-		on = false;
+		on = true;
 	}
+	setButton($(this), on);
 	$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
 });
 
@@ -280,27 +290,13 @@ $('#auto_focus').click(function() {
 * And send the http request to change to auto iris.
 */
 $('#auto_iris').click(function() {
-	toggleButton($(this));
-	var on = true;
+	var on = false;
 	if($(this).hasClass("btn-danger")){
-		on = false;
+		on = true;
 	}
+	setButton($(this), on);
 	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
 });
-
-/**
-* Toggle the color of the button between green and red.
-* @param btn the button to change.
-*/
-function toggleButton(btn){
-	if(btn.attr("class") === "btn btn-success") {
-		btn.addClass("btn-danger");
-		btn.removeClass("btn-success");
-	} else {
-		btn.addClass("btn-success");
-		btn.removeClass("btn-danger");
-	}
-}
 
 /**
 * Handles input on the tag search field.
@@ -322,7 +318,7 @@ function tagSearchInput(t) {
 * @param presets object
 */
 function loadPresetsOnTag(obj) {
-	var preset_div, obj, presets, place, preset, preset_area;
+	var preset_div, presets, place, preset, preset_area;
 	preset_area = $('#preset_area');
 	preset_area.find('div').removeAttr("presetID");
 	preset_area.find('img').removeAttr("src");
