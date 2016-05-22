@@ -1,8 +1,9 @@
-package com.benine.backend.http;
+package com.benine.backend.http.old;
 
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
+import com.benine.backend.http.CameraInfoHandler;
 import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 

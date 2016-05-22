@@ -56,23 +56,33 @@ public abstract class RequestHandler extends AbstractHandler {
     } catch (IOException e) {
       getLogger().log("Error occured while writing the response to a request at URI"
               + request.getRequestURI(), LogEvent.Type.WARNING);
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
+  /**
+   * Responds a success true JSON.
+   * @param request   The request to respond to.
+   * @param response  The response
+   */
   public void respondSuccess(Request request, HttpServletResponse response) {
     respond(request, response, "{\"succes\":\"true\"}");
   }
 
+  /**
+   * Responds a success false JSON.
+   * @param request   The request to respond to.
+   * @param response  The response
+   */
   public void respondFailure(Request request, HttpServletResponse response) {
     respond(request, response, "{\"succes\":\"false\"}");
   }
-
 
   /**
    * Returns the logger.
    * @return A Logger object.
    */
-  public Logger getLogger() {
+  protected Logger getLogger() {
     return this.logger;
   }
 }
