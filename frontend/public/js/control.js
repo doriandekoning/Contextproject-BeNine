@@ -172,10 +172,12 @@ function inputzoomslider(z) {
 
 /**
 * Method to send a command to the backend to change the zoom.
+* values send to the backend are between 1 and 99
 */
 function sendZoom() {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + parseInt(49.5  + (4.95 * parseInt(zoomInput.value))), function(data) {});
-	console.log("Zoom: " + parseInt(zoomInput.value));
+	var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
+	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
+	console.log("Zoom: " + zoom);
 }
 
 /* Variable used for the focus slider */
@@ -194,10 +196,12 @@ function inputfocusslider(f) {
 
 /**
 * Method to send a command to the backend to change the focus.
+* values send to the backend are between 1 and 99
 */
 function sendFocus() {
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + parseInt(49.5  + (4.95*parseInt(focusInput.value))) , function(data) {});
-	console.log("Focus: " + parseInt(focusInput.value));
+	var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
+	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
+	console.log("Focus: " + focus);
 }
 
 /* Variables used for the iris slider */
@@ -217,10 +221,12 @@ function inputirisslider(i) {
 
 /**
 * Function to send a command to the backend to change the iris.
+* values send to the backend are between 1 and 99
 */
 function sendIris() {
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + parseInt(49.5 + (4.95*parseInt(irisInput.value))) , function(data) {});
-	console.log("Iris: " + parseInt(irisInput.value));
+	var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
+	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
+	console.log("Iris: " + iris);
 }
 
 /**
