@@ -2,7 +2,6 @@ package com.benine.backend.camera;
 
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
-import com.benine.backend.LogWriter;
 import com.benine.backend.Logger;
 
 import com.benine.backend.ServerController;
@@ -11,8 +10,6 @@ import com.benine.backend.video.StreamController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -22,8 +19,6 @@ import java.util.ArrayList;
 public class CameraController {
 
   private ArrayList<Camera> cameras = new ArrayList<>();
-
-  public static final Logger logger = setupLogger();
 
   private int highestIdInUse = 1;
   
@@ -59,7 +54,8 @@ public class CameraController {
       try {
         addCamera(camFactoryProducer.getFactory(type).createCamera(i));
       } catch (InvalidCameraTypeException e) {
-        logger.log("Camera: " + i + " from the config can not be created.", LogEvent.Type.WARNING);
+        getLogger().log("Camera: " + i + " from the config can not be created.",
+                                                                LogEvent.Type.WARNING);
         e.printStackTrace();
       }
       i++;
@@ -76,18 +72,11 @@ public class CameraController {
   }
 
   /**
-   * Sets up the logger.
+   * Returns the single instance of the logger.
    * @return logger object.
    */
-  private static Logger setupLogger() {
-    // Setup logger
-    try {
-      return new Logger(new LogWriter("logs" + File.separator + "mainlog"));
-    } catch (IOException e) {
-      System.out.println("Cannot create log file");
-      e.printStackTrace();
-      return null;
-    }
+  private Logger getLogger() {
+    return ServerController.getInstance().getLogger();
   }
 
   /**

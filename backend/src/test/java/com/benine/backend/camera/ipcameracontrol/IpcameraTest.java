@@ -3,6 +3,7 @@ package com.benine.backend.camera.ipcameracontrol;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -153,10 +154,6 @@ public class IpcameraTest {
    
   @Test
   public final void testGetStreamLink() {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#D30"));
-
     String res = camera.getStreamLink();
     assertEquals(res, "http://127.0.0.1:9002/cgi-bin/mjpeg");
   }
@@ -215,5 +212,13 @@ public class IpcameraTest {
     IPCamera camera1 = new IPCamera("12");
     IPCamera camera2 = new IPCamera("12");
     assertEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
+  @Test
+  public final void testGetJSONFails() throws CameraConnectionException {
+    IPCamera camera = new IPCamera("12");
+    JSONObject json = new JSONObject();
+    json.put("id", -1);
+    assertEquals(json.toString(), camera.toJSON());
   }
 }

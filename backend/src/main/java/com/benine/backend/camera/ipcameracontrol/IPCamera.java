@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 
 /**
- * Class to communicate with an IP Camera.
+ * Class to communicate with an IP Camera from .
  */
 public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
@@ -58,8 +58,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   @Override
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
-    logger.log("Move IP camera", LogEvent.Type.INFO);
     String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
     panSp = ("00" + panSp).substring(panSp.length());
     String res = sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
@@ -79,8 +77,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   @Override
   public void move(int pan, int tilt) throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
-    logger.log("Move IP camera with specified speed.", LogEvent.Type.INFO);
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
@@ -92,8 +88,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   @Override
   public Position getPosition() throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
-    logger.log("Get the position of the IP camera.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23APC");
     res = verifyResponse(res, "aPC");
     return new Position(convertPanToDouble(res.substring(0, 4)),
@@ -182,8 +176,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setFocusPosition(int pos) throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
-    logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
     String res = sendControlCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
@@ -199,8 +191,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void moveFocus(int speed) throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
-    logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     NumberFormat formatter = new DecimalFormat("00");
@@ -360,7 +350,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
         while (buf.ready()) {
-          res = res + buf.readLine() + " ";
+          res = res.concat(buf.readLine()).concat(" ");
         }
         res = res.substring(0, res.length() - 1);
       } catch (IOException | StringIndexOutOfBoundsException excep) {
@@ -475,8 +465,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
         value = pair[1];
       }
       valuesmap.put(name, value);
-    }
-    
+    }  
     return valuesmap;
   }
   
