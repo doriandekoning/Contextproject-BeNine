@@ -21,11 +21,11 @@ public class CameraMovingHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
 
     MovingCamera movingCam = (MovingCamera) getCameraController().getCameraById(camID);
-    String moveType = req.getParameter("moveType");
-    String pan = req.getParameter("pan");
-    String tilt = req.getParameter("tilt");
-    String panSpeed = req.getParameter("panSpeed");
-    String tiltSpeed = req.getParameter("tiltSpeed");
+    String moveType = request.getParameter("moveType");
+    String pan = request.getParameter("pan");
+    String tilt = request.getParameter("tilt");
+    String panSpeed = request.getParameter("panSpeed");
+    String tiltSpeed = request.getParameter("tiltSpeed");
 
     try {
       move(movingCam, moveType, pan, tilt, panSpeed, tiltSpeed);

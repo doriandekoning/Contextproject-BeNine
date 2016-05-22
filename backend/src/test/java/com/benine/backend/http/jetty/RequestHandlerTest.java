@@ -22,44 +22,38 @@ import static org.mockito.Mockito.*;
  */
 public abstract class RequestHandlerTest {
 
-  private PrintWriter out;
   private ServerController serverController;
   private Logger logger = mock(Logger.class);
-  private CameraController cameracontroller = mock(CameraController.class);
-  private String target = "target";
   private RequestHandler handler;
-  private HttpServletResponse httpresponseMock = mock(HttpServletResponse.class);;
-  private HttpServletRequest httprequestMock = mock(HttpServletRequest.class);;
-  private Request requestMock = mock(Request.class);;
+
+  PrintWriter out;
+  String target;
+  Request requestMock;
+  CameraController cameracontroller;
+  HttpServletResponse httpresponseMock;
+  HttpServletRequest httprequestMock;
+
 
   public abstract RequestHandler supplyHandler();
 
   @Before
   public void initialize() throws IOException {
     handler = supplyHandler();
+    cameracontroller = mock(CameraController.class);
+
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setLogger(logger);
     serverController.setCameraController(cameracontroller);
 
     out = mock(PrintWriter.class);
+    target = "target";
+
+    requestMock = mock(Request.class);
+    httpresponseMock = mock(HttpServletResponse.class);
+    httprequestMock = mock(HttpServletRequest.class);
+
     when(httpresponseMock.getWriter()).thenReturn(out);
-  }
-
-  public String getTargetMock() {
-    return target;
-  }
-
-  public Request getRequestMock() {
-    return requestMock;
-  }
-
-  public HttpServletResponse getHTTPresponseMock() {
-    return httpresponseMock;
-  }
-
-  public HttpServletRequest getHTTPrequestMock() {
-    return httprequestMock;
   }
 
   public RequestHandler getHandler() {

@@ -20,9 +20,10 @@ public class CameraFocusHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
 
     FocussingCamera focusCam = (FocussingCamera) getCameraController().getCameraById(camID);
-    String autoOn = req.getParameter("autoFocusOn");
-    String setPos = req.getParameter("position");
-    String speed = req.getParameter("speed");
+
+    String autoOn = request.getParameter("autoFocusOn");
+    String setPos = request.getParameter("position");
+    String speed = request.getParameter("speed");
 
     try {
       if (autoOn != null) {
@@ -37,6 +38,9 @@ public class CameraFocusHandler extends CameraRequestHandler {
       respondSuccess(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + focusCam.getId(), LogEvent.Type.WARNING);
+      respondFailure(request, res);
+    } catch (NumberFormatException e) {
+      getLogger().log(e.toString(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }
 

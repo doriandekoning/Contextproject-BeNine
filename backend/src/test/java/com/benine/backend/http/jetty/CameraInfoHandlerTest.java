@@ -2,7 +2,6 @@ package com.benine.backend.http.jetty;
 
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.BasicCamera;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
@@ -51,8 +50,6 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   private CameraZoomHandler zoomHandler = mock(CameraZoomHandler.class);;
 
-  private CameraController camcontroller;
-
   @Override
   public CameraRequestHandler supplyHandler() {
     return new CameraInfoHandler();
@@ -62,19 +59,14 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   public void initialize() throws IOException {
     super.initialize();
     caminfo = "testcaminfo";
-    camcontroller = ServerController.getInstance().getCameraController();
+    cameracontroller = ServerController.getInstance().getCameraController();
 
-    when(camcontroller.getCamerasJSON()).thenReturn(caminfo);
-    when(camcontroller.getCameraById(42)).thenReturn(new SimpleCamera());
-    when(camcontroller.getCameraById(43)).thenReturn(null);
-    when(camcontroller.getCameraById(44)).thenReturn(mock(BasicCamera.class));
+    when(cameracontroller.getCamerasJSON()).thenReturn(caminfo);
+    when(cameracontroller.getCameraById(42)).thenReturn(new SimpleCamera());
+    when(cameracontroller.getCameraById(43)).thenReturn(null);
+    when(cameracontroller.getCameraById(44)).thenReturn(mock(BasicCamera.class));
 
     ((CameraInfoHandler) getHandler()).setHandlers(streamHandler, focusHandler, irisHandler, moveHandler, zoomHandler);
-
-    target = getTargetMock();
-    request = getRequestMock();
-    httprequest = getHTTPrequestMock();
-    httpresponse = getHTTPresponseMock();
   }
 
   @Test
@@ -120,7 +112,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   @Test
   public void testRouteFocus() throws IOException, ServletException {
     setPath("/camera/42/focus");
-    when(camcontroller.getCameraById(42)).thenReturn(mock(FocussingCamera.class));
+    when(cameracontroller.getCameraById(42)).thenReturn(mock(FocussingCamera.class));
 
     getHandler().handle(target, request, httprequest, httpresponse);
     verify(focusHandler).handle(target, request, httprequest, httpresponse);
@@ -137,7 +129,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   @Test
   public void testRouteIris() throws IOException, ServletException {
     setPath("/camera/42/iris");
-    when(camcontroller.getCameraById(42)).thenReturn(mock(IrisCamera.class));
+    when(cameracontroller.getCameraById(42)).thenReturn(mock(IrisCamera.class));
 
     getHandler().handle(target, request, httprequest, httpresponse);
     verify(irisHandler).handle(target, request, httprequest, httpresponse);
@@ -155,7 +147,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   @Test
   public void testRouteZoom() throws IOException, ServletException {
     setPath("/camera/42/zoom");
-    when(camcontroller.getCameraById(42)).thenReturn(mock(ZoomingCamera.class));
+    when(cameracontroller.getCameraById(42)).thenReturn(mock(ZoomingCamera.class));
 
     getHandler().handle(target, request, httprequest, httpresponse);
     verify(zoomHandler).handle(target, request, httprequest, httpresponse);
@@ -172,7 +164,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   @Test
   public void testRouteMove() throws IOException, ServletException {
     setPath("/camera/42/move");
-    when(camcontroller.getCameraById(42)).thenReturn(mock(MovingCamera.class));
+    when(cameracontroller.getCameraById(42)).thenReturn(mock(MovingCamera.class));
 
     getHandler().handle(target, request, httprequest, httpresponse);
     verify(moveHandler).handle(target, request, httprequest, httpresponse);

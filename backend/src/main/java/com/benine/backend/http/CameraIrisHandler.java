@@ -20,9 +20,9 @@ public class CameraIrisHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
 
     IrisCamera irisCam =  (IrisCamera) getCameraController().getCameraById(camID);
-    String autoOn = req.getParameter("autoIrisOn");
-    String setPos = req.getParameter("position");
-    String speed = req.getParameter("speed");
+    String autoOn = request.getParameter("autoIrisOn");
+    String setPos = request.getParameter("position");
+    String speed = request.getParameter("speed");
 
     try {
       if (autoOn != null) {

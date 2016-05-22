@@ -20,11 +20,14 @@ public class CameraZoomHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
 
     ZoomingCamera zoomingCam = (ZoomingCamera) getCameraController().getCameraById(camID);
-    String zoomto = request.getParameter("zoomType");
+    String zoomType = request.getParameter("zoomType");
     String zoom = request.getParameter("zoom");
 
+    System.out.println(zoomType);
+    System.out.println(zoom);
+
     try {
-      zoom(zoomingCam, zoomto, zoom);
+      zoom(zoomingCam, zoomType, zoom);
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + request.getRequestURI(), LogEvent.Type.WARNING);
       respondFailure(request, res);
@@ -36,10 +39,11 @@ public class CameraZoomHandler extends CameraRequestHandler {
     request.setHandled(true);
   }
 
-  private void zoom(ZoomingCamera zoomingCam, String zoomto, String zoom) throws MalformedURIException, CameraConnectionException {
-    if (zoom != null && zoomto.equals("relative")) {
+  private void zoom(ZoomingCamera zoomingCam, String zoomType, String zoom) throws MalformedURIException, CameraConnectionException {
+
+    if (zoom != null && zoomType.equals("relative")) {
       zoomingCam.zoom(Integer.parseInt(zoom));
-    } else if (zoom != null && zoomto.equals("absolute")) {
+    } else if (zoom != null && zoomType.equals("absolute")) {
       zoomingCam.zoomTo(Integer.parseInt(zoom));
     } else {
       throw new MalformedURIException("Invalid Zoom parameters");
