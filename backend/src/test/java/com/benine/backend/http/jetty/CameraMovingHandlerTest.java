@@ -1,4 +1,4 @@
-package com.benine.backend.http.old;
+package com.benine.backend.http.jetty;
 
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created on 4-5-16.
  */
-public class MovingHandlerTest {
+public class CameraMovingHandlerTest {
   
   HttpExchange exchange = mock(HttpExchange.class);
   OutputStream out = mock(OutputStream.class);
