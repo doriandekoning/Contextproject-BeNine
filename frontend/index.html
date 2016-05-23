@@ -37,6 +37,8 @@
     <!-- Bootstrap -->
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css" rel="stylesheet">
     <!-- Bootstrap CSS overwrites -->
     <link href="public/css/style.css" rel="stylesheet">
 </head>
@@ -151,19 +153,29 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
                 </div>
-                <div class="modal-body">
-					<div>
-						Preset name:<br>
-						<input id="preset_name" type="text">
+                <div class="modal-body row">
+					<div class="col-xs-4 col-dm-4">
+						<div>
+							Preset name:<br>
+							<input id="preset_name" type="text">
+						</div>
+						<br>
+						<div>
+							Description:<br>
+							<input id="description" type="text">
+						</div>
 					</div>
-					<div>
-						Tag:<br>
-						<input id="preset_tag" type="text">
-					</div>
-					
-                    <img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+					<div class="col-xs-3 col-dm-3">
+						
+					</div>	
+					<div class="col-xs-5 col-dm-5">
+						<img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+					</div>	
                 </div>
                 <div class="modal-footer">
+					<div class="tags_input">
+						<input type="text" data-role="tagsinput"  />
+					</div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createPreset()"><span class="glyphicon glyphicon-floppy-disk"></span> Save </button>
                 </div>
@@ -197,10 +209,17 @@
 
     <!-- HammerJS for supporting touch actions -->
     <script src="bower_components/hammerjs/hammer.min.js"></script>
+	
+	<!-- Bootstrap tagsinput for supporting tags display -->
+	<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+	
+	<!-- Type Ahead input -->
+	<script src="bower_components/typeahead.js/dist/typeahead.bundle.min.js"></script>
 
     <!-- Holder JS for placeholders -->
     <script src="bower_components/holderjs/holder.js"></script>
-
+	
+	<script src="public/js/preset_create.js"></script>
     <script src="public/js/generator.js"></script>
     <script src="public/js/control.js"></script>
     <script src="public/js/touch.js"></script>

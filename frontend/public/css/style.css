@@ -141,11 +141,15 @@ input[type=range]:focus {
 
 /* modals */
 .modal img {
-    position: relative;
-	left: 500px;
-	bottom: 100px;
-    height: 250px;
-    width: 350px;
+    width: 100%;
+}
+.bootstrap-tagsinput {
+	position: absolute;
+	left: 10px;
+	font-size: 17px;
+}
+.tt-menu {
+	text-align: left;
 }
 
 /* Top block consisting of the camera views, and the editing camera view.*/
