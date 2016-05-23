@@ -107,7 +107,7 @@
                         <logback.configurationFile>${basedir}/logback.xml</logback.configurationFile>
                     </systemPropertyVariables>
                     <excludes>
-                        <exclude>../ipcameracontrol/IpcameraTest.java</exclude>
+                        <exclude>../ipcameracontrol/IPCameraFactoryTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
