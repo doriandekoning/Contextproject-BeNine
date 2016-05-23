@@ -39,43 +39,45 @@ function loadCameras() {
 * It changes the visible controls and displays the camera stream in the editing view.
 */
 function setCurrentCamera(id) {
-	var camera_div, camera_title, zoomslider, iris, focus;
-	currentcamera = id;
-	// Show the current camera in the editing view.
-	camera_div = $('#current_camera');
-	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
-	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);
-	selectedPreset = undefined;
-	$('#createPreset').prop('disabled', false);
+	if (id !== currentcamera) {
+		var camera_div, camera_title, zoomslider, iris, focus;
+		currentcamera = id;
+		// Show the current camera in the editing view.
+		camera_div = $('#current_camera');
+		camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
+		camera_title = camera_div.find('.camera_title');
+		camera_title.find('#camera_title').text(cameras[currentcamera].id);
+		selectedPreset = undefined;
+		$('#createPreset').prop('disabled', false);
 
-	//determine which elements of the UI to show
-	zoom = $('#zoom');
-	iris = $('#iris');
-	focus = $('#focus');
-	if (cameras[id].zoom === undefined) {
-		zoom.hide();
-	} else {
-		zoom.show();
-		zoom.val(cameras[id].zoom);
+		//determine which elements of the UI to show
+		zoom = $('#zoom');
+		iris = $('#iris');
+		focus = $('#focus');
+		if (cameras[id].zoom === undefined) {
+			zoom.hide();
+		} else {
+			zoom.show();
+			zoom.val(cameras[id].zoom);
+		}
+		if  (cameras[id].tilt === undefined) {
+			$('.joystick_zone').hide();
+		} else {
+			$('.joystick_zone').show();
+		}
+		if  (cameras[id].iris === undefined) {
+			iris.hide();
+		} else {
+			iris.show();
+		}
+		if  (cameras[id].focus === undefined) {
+			focus.hide();
+		} else {
+			focus.show();
+		}
+		$('#preset_create_div .tags_input').tagsinput('removeAll');
+		loadPresets(currentcamera);
 	}
-	if  (cameras[id].tilt === undefined) {
-		$('.joystick_zone').hide();
-	} else {
-		$('.joystick_zone').show();
-	}
-	if  (cameras[id].iris === undefined) {
-		iris.hide();
-	} else {
-		iris.show();
-	}
-	if  (cameras[id].focus === undefined) {
-		focus.hide();
-	} else {
-		focus.show();
-	}
-
-	loadPresets(currentcamera);
 }
 
 

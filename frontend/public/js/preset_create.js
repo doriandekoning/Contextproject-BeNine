@@ -6,6 +6,8 @@ var localTags = [{name: "test"}];
 function loadCreatePreset() {
 	if (currentcamera !== undefined) {
 		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
+		tagnames.clearPrefetchCache();
+		tagnames.initialize(true);
 	}
 }
 
