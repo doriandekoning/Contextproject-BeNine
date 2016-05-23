@@ -13,6 +13,7 @@ public class Main {
   public static void main(String[] args) throws Exception {
     ServerController server = ServerController.getInstance();
 
+
     server.start();
 
     new HTTPStreamServer(3725);

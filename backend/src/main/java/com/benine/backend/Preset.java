@@ -1,11 +1,15 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.Position;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A moving preset to be able to add to the database.
- * @author Ege
  */
 public class Preset {
 
@@ -19,6 +23,9 @@ public class Preset {
   private boolean autoiris;
   private String image;
   private int presetid;
+  private Set<String> tags = new HashSet<String>();
+  private static Set<String> keywords = new HashSet<String>();
+  private int cameraId;
 
   /**
    * Constructs a preset.
@@ -31,9 +38,10 @@ public class Preset {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
    */
   public Preset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris) {
+               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -42,6 +50,27 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
+    this.cameraId = cameraId;
+  }
+  /**
+   * Constructs a preset.
+   *
+   * @param pos       The position of this preset.
+   * @param zoom      The zoom of the preset
+   * @param focus     The focus of the prest
+   * @param iris      The iris of the presetz
+   * @param autofocus The autofocus of the preset
+   * @param autoiris  The autoiris of the preset
+   * @param tiltspeed The tiltspeed of the preset
+   * @param panspeed  The panspeed of the preset
+   * @param cameraId  The id of the camera associated with this preset.
+   * @param keyWords  The keywords of this preset
+   */
+  public Preset(Position pos, int zoom, int focus, int iris,
+                boolean autofocus, int panspeed, int tiltspeed,
+                boolean autoiris, int cameraId, List<String> keyWords) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
+    this.tags.addAll(keyWords);
   }
 
   /**
@@ -63,6 +92,11 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
+    JSONArray tagsJSON = new JSONArray();
+    for (String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
 
     return json.toString();
   }
@@ -131,6 +165,80 @@ public class Preset {
     this.autoiris = autoiris;
   }
 
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public void setId(int id) {
+    this.presetid = id;
+  }
+
+  public int getId() {
+    return presetid;
+  }
+
+  public void setCameraId(int id) {
+    this.cameraId = id;
+  }
+
+  public int getCameraId() {
+    return cameraId;
+  }
+
+  public Set<String> getTags() {
+    return tags;
+  }
+
+  public static Set<String> getKeywords() {
+    return keywords;
+  }
+
+  /**
+   * Adds a new tag to this object.
+   * @param tag the tag to add.
+   */
+  public void addTag(String tag) {
+    tags.add(tag);
+  }
+
+
+  /**
+   * Adds a list of keywords to this class.
+   * @param tags a list of keywords
+   */
+  public void addTags(List<String> tags) {
+    this.tags.addAll(tags);
+  }
+
+  /**
+   * Removes a keyword from this preset.
+   * @param tag the keyword to remove
+   */
+  public void removeTag(String tag) {
+    tags.remove(tag);
+  }
+
+
+  /**
+   * Removes a keyword.
+   * @param keyword the keyword to remove
+   */
+  public static void removeKeyword(String keyword) {
+    keywords.remove(keyword);
+  }
+
+  /**
+   * Adds a new keyword.
+   * @param keyword keyword to add
+   */
+  public static void addKeyword(String keyword) {
+    keywords.add(keyword);
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -142,6 +250,7 @@ public class Preset {
     result = prime * result + panspeed;
     result = prime * result + tiltspeed;
     result = prime * result + zoom;
+    result = prime * result + tags.hashCode();
     return result;
   }
 
@@ -188,23 +297,11 @@ public class Preset {
     if (autofocus != preset.autofocus) {
       return false;
     }
-    
+    if (!tags.equals(preset.getTags())) {
+      return false;
+    }
     return true;
   }
 
-  public String getImage() {
-    return image;
-  }
 
-  public void setImage(String image) {
-    this.image = image;
-  }
-
-  public void setId(int id) {
-    this.presetid = id;
-  }
-  
-  public int getId() {
-    return presetid;
-  }
 }

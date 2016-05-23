@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Logger;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -29,15 +28,6 @@ public class FileHandler extends RequestHandler {
     MIME_MAP.put("jpg", "image/jpeg");
     MIME_MAP.put("html", "text/html");
   }
-  
-  /**
-   * Constructor of this request handler.
-   * @param logger object to log to.
-   */
-  public FileHandler(Logger logger) {
-    super(logger);
-
-  }
 
   /**
    * Handle incoming requests.
@@ -51,7 +41,7 @@ public class FileHandler extends RequestHandler {
     File file = new File("." + path).getCanonicalFile();
     //check if the requested file exists
     if (!file.isFile()) {
-      respond(exchange, "{\"succes\":\"false\"}");
+      respondFailure(exchange);
     } else {
       
       String mime = getMime(path);

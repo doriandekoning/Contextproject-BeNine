@@ -1,14 +1,10 @@
 package com.benine.backend.camera;
 
-
-import com.benine.backend.Preset;
 import com.benine.backend.video.StreamType;
 
-import java.util.ArrayList;
 
 /**
  * Interface for communication with remote camera's.
- * @author Bryan
  */
 public interface Camera {
 
@@ -41,22 +37,11 @@ public interface Camera {
   StreamType getStreamType();
 
   /**
-   * Get the list of presets from this camera.
-   *
-   * @return The preset array
+   * Requests the MAC address of the camera.
+   * @return MAC address of the camera.
+   * @throws CameraConnectionException when mac address can not be retrieved.
    */
-  Preset[] getPresets();
+  String getMacAddress() throws CameraConnectionException;
 
-  /**
-   * Set the list of presets from this camera.
-   * @param presets The preset array
-   */
-  void setPresets(Preset[] presets);
-
-  /**
-   * Set the list of presets from this camera of an arraylist.
-   * @param presets The ArrayList of presets
-   */
-  void setPresetsFromArrayList(ArrayList<Preset> presets);
 }
 

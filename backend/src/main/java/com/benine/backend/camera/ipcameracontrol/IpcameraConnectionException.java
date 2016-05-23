@@ -4,8 +4,6 @@ import com.benine.backend.camera.CameraConnectionException;
 
 /**
  * Exception class for problems with the IP connection.
- * @author Bryan
- *
  */
 public class IpcameraConnectionException extends CameraConnectionException {
   

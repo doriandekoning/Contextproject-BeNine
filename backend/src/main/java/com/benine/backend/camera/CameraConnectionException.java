@@ -2,8 +2,6 @@ package com.benine.backend.camera;
 
 /**
  * Exception class for problems with the camera connection.
- * @author Bryan
- *
  */
 public class CameraConnectionException extends Exception {
 

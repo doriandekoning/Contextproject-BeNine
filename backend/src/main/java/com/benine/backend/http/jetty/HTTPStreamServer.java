@@ -31,7 +31,6 @@ public class HTTPStreamServer {
     server.setHandler(contexts);
 
     server.start();
-    server.join();
   }
 
 
