@@ -4,7 +4,6 @@ import com.benine.backend.Logger;
 import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.http.RequestHandler;
 import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.MultiMap;
@@ -26,7 +25,7 @@ import static org.mockito.Mockito.*;
 public abstract class RequestHandlerTest {
 
   private ServerController serverController;
-  private Logger logger = mock(Logger.class);
+  Logger logger;
   private RequestHandler handler;
 
   PrintWriter out;
@@ -47,6 +46,7 @@ public abstract class RequestHandlerTest {
     cameracontroller = mock(CameraController.class);
     streamController = mock(StreamController.class);
     presetController = mock(PresetController.class);
+    logger = mock(Logger.class);
 
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();

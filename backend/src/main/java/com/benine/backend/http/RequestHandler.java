@@ -16,12 +16,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class RequestHandler extends AbstractHandler {
 
-  private Logger logger;
-
-  public RequestHandler() {
-    this.logger = ServerController.getInstance().getLogger();
-  }
-
   /**
    * Returns cameracontroller
    * @return cameracontroller interacting with.
@@ -74,6 +68,6 @@ public abstract class RequestHandler extends AbstractHandler {
    * @return A Logger object.
    */
   protected Logger getLogger() {
-    return this.logger;
+    return ServerController.getInstance().getLogger();
   }
 }
