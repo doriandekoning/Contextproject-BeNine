@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
@@ -27,8 +25,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
 
   private CameraZoomHandler zoomHandler;
 
-  private CameraController cameraController;
-
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
@@ -38,7 +34,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
     this.irisHandler = new CameraIrisHandler();
     this.moveHandler = new CameraMovingHandler();
     this.zoomHandler = new CameraZoomHandler();
-    this.cameraController = ServerController.getInstance().getCameraController();
   }
 
   @Override
@@ -100,26 +95,9 @@ public class CameraInfoHandler extends CameraRequestHandler {
    */
   private boolean checkValidCameraID(Request request) {
     int id = getCameraId(request);
-
-    Camera camera = cameraController.getCameraById(id);
+    Camera camera = getCameraController().getCameraById(id);
 
     return id > 0 && camera != null;
-  }
-
-  public CameraStreamHandler getStreamHandler() {
-    return streamHandler;
-  }
-
-  public CameraFocusHandler getFocusHandler() {
-    return focusHandler;
-  }
-
-  public CameraMovingHandler getMoveHandler() {
-    return moveHandler;
-  }
-
-  public CameraZoomHandler getZoomHandler() {
-    return zoomHandler;
   }
 
   public void setHandlers(CameraStreamHandler streamHandler,  CameraFocusHandler focusHandler,
