@@ -378,11 +378,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     CameraController.logger.log("Send command: " + cmd + " to camera: " + getId(),
                                                                         LogEvent.Type.INFO);
     try {
-      URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
-      URLConnection con = url.openConnection();
-      con.setConnectTimeout(10000);
-      con.setReadTimeout(10000);
-      InputStream in = con.getInputStream();
+      InputStream in = new URL("http://" + ipaddress + "/cgi-bin/" + cmd).openStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
         res = buf.readLine();
