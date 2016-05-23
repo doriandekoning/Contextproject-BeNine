@@ -106,9 +106,6 @@
                     <systemPropertyVariables>
                         <logback.configurationFile>${basedir}/logback.xml</logback.configurationFile>
                     </systemPropertyVariables>
-                    <excludes>
-                        <exclude>../http/*.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
