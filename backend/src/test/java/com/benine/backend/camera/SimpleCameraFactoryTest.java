@@ -33,7 +33,7 @@ public class SimpleCameraFactoryTest {
     SimpleCameraFactory factory = new SimpleCameraFactory();
     Camera result = factory.createCamera(2);
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("http://test");
+    camera.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     camera.setMacAddress("simplecamera3");
     assertEquals(camera, result);
   }
