@@ -95,7 +95,7 @@ public class ServerController {
     SimpleCamera camera = new SimpleCamera();
     camera.setStreamLink(config.getValue("camera1"));
     SimpleCamera camera2 = new SimpleCamera();
-    camera2.setStreamLink(config.getValue("camera1"));
+    camera2.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=100&buffer=100");
     cameraController.addCamera(camera);
     cameraController.addCamera(camera2);  
   }

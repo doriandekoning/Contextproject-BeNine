@@ -72,14 +72,11 @@ public class MJPEGStreamReader extends StreamReader {
     try {
       byte[] headerByte = getHeader();
       String header = new String(headerByte, StandardCharsets.UTF_8);
-
       byte[] imageByte = getImage(header);
 
-      snapshot = imageByte;
+      sendToDistributers(headerByte, imageByte);
 
-      // Notify the StreamDistributers
-      setChanged();
-      notifyObservers(frameToSend(headerByte, imageByte));
+      snapshot = imageByte;
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -87,18 +84,15 @@ public class MJPEGStreamReader extends StreamReader {
   }
 
   /**
-   * Prepares the frame to send to the observing streamdistributers.
-   * @param header        Header bytes
-   * @param image         Image bytes
-   * @return              Byte array composed of header and image.
-   * @throws IOException  If an error occurs composing the header and the image.
+   * Notify the observers about the header and the image.
+   * @param headerByte    The header in byte array format.
+   * @param imageByte     The image in byte array format.
    */
-  private byte[] frameToSend(byte[] header, byte[] image) throws IOException {
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(header.length + image.length);
-    outputStream.write(header);
-    outputStream.write(image);
-
-    return outputStream.toByteArray();
+  private void sendToDistributers(byte[] headerByte, byte[] imageByte) {
+    setChanged();
+    notifyObservers(headerByte);
+    setChanged();
+    notifyObservers(imageByte);
   }
 
   /**
