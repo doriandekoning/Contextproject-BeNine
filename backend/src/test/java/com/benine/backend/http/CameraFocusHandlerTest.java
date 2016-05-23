@@ -1,9 +1,7 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.FocussingCamera;
-import com.benine.backend.http.CameraFocusHandler;
-import com.benine.backend.http.CameraRequestHandler;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;

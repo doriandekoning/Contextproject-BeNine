@@ -1,4 +1,4 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.BasicCamera;
@@ -7,13 +7,6 @@ import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomingCamera;
-import com.benine.backend.http.CameraFocusHandler;
-import com.benine.backend.http.CameraInfoHandler;
-import com.benine.backend.http.CameraIrisHandler;
-import com.benine.backend.http.CameraMovingHandler;
-import com.benine.backend.http.CameraRequestHandler;
-import com.benine.backend.http.CameraStreamHandler;
-import com.benine.backend.http.CameraZoomHandler;
 import org.eclipse.jetty.server.Request;
 import org.junit.Before;
 import org.junit.Test;

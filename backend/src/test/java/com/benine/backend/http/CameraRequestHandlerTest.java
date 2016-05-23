@@ -1,6 +1,5 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
-import com.benine.backend.http.CameraRequestHandler;
 import org.junit.Assert;
 import org.junit.Test;
 

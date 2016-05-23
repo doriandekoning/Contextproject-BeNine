@@ -1,11 +1,7 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
-import com.benine.backend.http.PresetsCreatePresetHandler;
-import com.benine.backend.http.PresetsHandler;
-import com.benine.backend.http.PresetsRecallPresetHandler;
-import com.benine.backend.http.RequestHandler;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;

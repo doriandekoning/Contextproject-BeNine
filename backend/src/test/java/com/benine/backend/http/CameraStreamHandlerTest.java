@@ -1,8 +1,6 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.CameraRequestHandler;
-import com.benine.backend.http.CameraStreamHandler;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;

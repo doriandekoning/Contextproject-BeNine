@@ -1,8 +1,6 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
 import com.benine.backend.camera.ZoomingCamera;
-import com.benine.backend.http.CameraRequestHandler;
-import com.benine.backend.http.CameraZoomHandler;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
