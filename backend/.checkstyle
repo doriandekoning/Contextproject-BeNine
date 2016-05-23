@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fileset-config file-format-version="1.2.0" simple-config="false" sync-formatter="false">
-  <local-check-config name="maven-checkstyle-plugin verify-style" location="file:/D:/Git/Contextproject-BeNine/checkstyle.xml" type="remote" description="maven-checkstyle-plugin configuration verify-style">
+  <local-check-config name="maven-checkstyle-plugin verify-style" location="file:/C:/Users/bryan/Documents/Git/Contextproject-BeNine/checkstyle.xml" type="remote" description="maven-checkstyle-plugin configuration verify-style">
     <property name="checkstyle.cache.file" value="${project_loc}/target/checkstyle-cachefile"/>
     <property name="checkstyle.header.file" value="C:\Users\bryan\workspace\.metadata\.plugins\org.eclipse.core.resources\.projects\backend\com.basistech.m2e.code.quality.checkstyleConfigurator\checkstyle-header-verify-style.txt"/>
   </local-check-config>
