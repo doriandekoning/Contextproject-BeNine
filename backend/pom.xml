@@ -108,6 +108,8 @@
                     </systemPropertyVariables>
                     <excludes>
                         <exclude>**/CameraControlTest.java</exclude>
+                        <exclude>**/IpcameraIrisTest.java</exclude>
+                        <exclude>**/IpcameraFocusTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
