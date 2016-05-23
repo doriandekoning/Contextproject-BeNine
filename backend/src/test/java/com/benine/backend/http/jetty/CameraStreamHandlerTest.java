@@ -59,9 +59,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
       public void run() {
         try {
           getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-        } catch (IOException e) {
-          e.printStackTrace();
-        } catch (ServletException e) {
+        } catch (IOException | ServletException e) {
           e.printStackTrace();
         }
       }

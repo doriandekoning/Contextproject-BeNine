@@ -1,11 +1,13 @@
 package com.benine.backend.http.jetty;
 
 import com.benine.backend.Logger;
+import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.http.RequestHandler;
 import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +34,7 @@ public abstract class RequestHandlerTest {
   Request requestMock;
   CameraController cameracontroller;
   StreamController streamController;
+  PresetController presetController;
   HttpServletResponse httpresponseMock;
   HttpServletRequest httprequestMock;
 
@@ -43,12 +46,14 @@ public abstract class RequestHandlerTest {
     handler = supplyHandler();
     cameracontroller = mock(CameraController.class);
     streamController = mock(StreamController.class);
+    presetController = mock(PresetController.class);
 
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setLogger(logger);
     serverController.setCameraController(cameracontroller);
     serverController.setStreamController(streamController);
+    serverController.setPresetController(presetController);
 
     out = mock(PrintWriter.class);
     target = "target";
@@ -62,6 +67,21 @@ public abstract class RequestHandlerTest {
 
   public RequestHandler getHandler() {
     return handler;
+  }
+
+  public void setPath(String path) {
+    when(requestMock.getPathInfo()).thenReturn(path);
+  }
+
+  public void setParameters(MultiMap<String> parameters) {
+    requestMock.setParameters(parameters);
+
+    for (String s : parameters.keySet()) {
+      when(requestMock.getParameter(s)).thenReturn(parameters.getString(s));
+    }
+
+    when(requestMock.getParameters()).thenReturn(parameters);
+
   }
 
   @Test

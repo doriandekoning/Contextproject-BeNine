@@ -15,15 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PresetsHandler extends RequestHandler {
 
-  PresetsCreatePresetHandler createPreset;
+  private PresetsCreatePresetHandler createPreset;
 
-  PresetsRecallPresetHandler recallPreset;
+  private PresetsRecallPresetHandler recallPreset;
 
   /**
-   * Constructor for a new CameraInfoHandler, handling the /camera/ request.
+   * Constructor for a new PresetsHandler, handling the /presets/ request.
    */
   public PresetsHandler() {
     this.createPreset = new PresetsCreatePresetHandler();
+    this.recallPreset = new PresetsRecallPresetHandler();
   }
 
   @Override
@@ -32,17 +33,23 @@ public class PresetsHandler extends RequestHandler {
 
     String route = getRoute(request);
 
+    boolean routed = false;
+
     switch (route) {
       case "createpreset":
         createPreset.handle(s, request, req, res);
+        routed = true;
         break;
       case "recallpreset":
         recallPreset.handle(s, request, req, res);
+        routed = true;
         break;
-      default:
-        String presetInfo = getPresetsInfo(request);
-        respond(request, res, presetInfo);
-        request.setHandled(true);
+    }
+
+    if (!routed) {
+      String presetInfo = getPresetsInfo(request);
+      respond(request, res, presetInfo);
+      request.setHandled(true);
     }
   }
 
@@ -77,5 +84,13 @@ public class PresetsHandler extends RequestHandler {
     String path = request.getPathInfo();
 
     return path.replaceFirst(".*/", "");
+  }
+
+  public void setHandlers(PresetsCreatePresetHandler createPreset,
+                          PresetsRecallPresetHandler recallPreset) {
+
+    this.createPreset = createPreset;
+    this.recallPreset = recallPreset;
+
   }
 }
