@@ -25,22 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PresetsCreatePresetHandler extends RequestHandler {
 
-  private PresetController presetController;
-
-  private StreamController streamController;
-
-  private CameraController cameraController;
-
   /**
-   * Constructor for a new CameraInfoHandler, handling the /camera/ request.
+   * Constructor for a new PresetsCreatePresetHandler, handling the /presets/createpreset request.
    */
-  public PresetsCreatePresetHandler() {
-    ServerController serverController = ServerController.getInstance();
-
-    this.presetController = serverController.getPresetController();
-    this.streamController = serverController.getStreamController();
-    this.cameraController = serverController.getCameraController();
-  }
+  public PresetsCreatePresetHandler() {};
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -51,9 +39,18 @@ public class PresetsCreatePresetHandler extends RequestHandler {
         throw new MalformedURIException("No Camera ID Specified.");
       }
 
+      CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      setPreset(camera);
-      respondSuccess(request, res);
+      System.out.println(ServerController.getInstance().getCameraController().getCameraById(1));
+
+      if (camera instanceof IPCamera) {
+        IPCamera ipcam = (IPCamera) camera;
+        System.out.println(ipcam);
+        setPreset(ipcam);
+        respondSuccess(request, res);
+      } else {
+        throw new MalformedURIException("Camera does not support presets or is nonexistent.");
+      }
 
     } catch (MalformedURIException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
@@ -70,6 +67,7 @@ public class PresetsCreatePresetHandler extends RequestHandler {
 
   private void createImage(Preset preset, int cameraID, int presetID) throws
           StreamNotAvailableException, IOException {
+    StreamController streamController = ServerController.getInstance().getStreamController();
 
     StreamReader streamReader = streamController.getStreamReader(cameraID);
     BufferedImage bufferedImage = streamReader.getSnapShot();
@@ -81,18 +79,14 @@ public class PresetsCreatePresetHandler extends RequestHandler {
     preset.setImage(path.toString());
   }
 
-  private void setPreset(Camera camera)
+  private void setPreset(IPCamera camera)
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
+    PresetController presetController = ServerController.getInstance().getPresetController();
 
-    if (camera instanceof IPCamera) {
-      IPCamera ipcam = (IPCamera) camera;
-      Preset preset = createPreset(ipcam);
-      createImage(preset, camera.getId(), preset.getId());
-      presetController.addPreset(preset);
-    } else {
-      throw new MalformedURIException("Camera does not support presets.");
-    }
+    Preset preset = createPreset(camera);
+    createImage(preset, camera.getId(), preset.getId());
+    presetController.addPreset(preset);
   }
 
   private Preset createPreset(IPCamera camera) throws CameraConnectionException {

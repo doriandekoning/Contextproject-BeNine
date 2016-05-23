@@ -18,17 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PresetsRecallPresetHandler extends RequestHandler {
 
-  private PresetController presetController;
-
-  private CameraController cameraController;
-
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
-  public PresetsRecallPresetHandler() {
-    this.presetController = ServerController.getInstance().getPresetController();
-    this.cameraController = ServerController.getInstance().getCameraController();
-  }
+  public PresetsRecallPresetHandler() {};
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -37,7 +30,10 @@ public class PresetsRecallPresetHandler extends RequestHandler {
       int cameraID = Integer.parseInt(request.getParameter("currentcamera"));
       int presetID = Integer.parseInt(request.getParameter("presetid"));
 
+      PresetController presetController = ServerController.getInstance().getPresetController();
       Preset preset = presetController.getPresetById(presetID);
+
+      CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(cameraID);
 
       moveCamera(camera, preset);
@@ -46,7 +42,7 @@ public class PresetsRecallPresetHandler extends RequestHandler {
     } catch (CameraConnectionException e) {
       e.printStackTrace();
       respondFailure(request, res);
-    } catch (MalformedURIException e) {
+    } catch (MalformedURIException | NumberFormatException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     }

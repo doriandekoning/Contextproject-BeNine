@@ -65,7 +65,6 @@ public class ServerController {
     return serverController;
   }
   
-  
   /**
    * Start the server.
    */

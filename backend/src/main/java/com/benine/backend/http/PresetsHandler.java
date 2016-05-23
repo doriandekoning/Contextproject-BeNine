@@ -80,7 +80,7 @@ public class PresetsHandler extends RequestHandler {
    * @param request The current request.
    * @return Returns the route.
    */
-  public String getRoute(Request request) {
+  private String getRoute(Request request) {
     String path = request.getPathInfo();
 
     return path.replaceFirst(".*/", "");
