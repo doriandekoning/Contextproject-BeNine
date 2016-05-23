@@ -29,8 +29,17 @@ public class HTTPServer {
    */
     this.server = new Server(port);
 
-    Handler logHandler = new LogHandler();
+    setUpHandlers();
 
+    getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
+    server.start();
+    getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
+  }
+
+  /**
+   * Sets up the server Context Handlers.
+   */
+  private void setUpHandlers() {
     ContextHandler cameraContext = new ContextHandler("/camera");
     cameraContext.setHandler(new CameraInfoHandler());
 
@@ -45,21 +54,26 @@ public class HTTPServer {
     ContextHandlerCollection contexts = new ContextHandlerCollection();
     contexts.setHandlers(new Handler[] {cameraContext, presetContext, fileserverContext });
 
+    Handler logHandler = new LogHandler();
     HandlerList handlerList = new HandlerList();
     handlerList.addHandler(logHandler);
     handlerList.addHandler(contexts);
 
     server.setHandler(handlerList);
-
-    getLogger().log("Successfully setup endpoints", LogEvent.Type.INFO);
-    server.start();
-    getLogger().log("Server running at: http://localhost:" + port , LogEvent.Type.INFO);
   }
 
+  /**
+   * Returns the ServerController logger.
+   * @return  A Logger object.
+   */
   private Logger getLogger() {
     return ServerController.getInstance().getLogger();
   }
 
+  /**
+   * Shuts down the server.
+   * @throws Exception  If the server cannot be stopped.
+   */
   public void destroy() throws Exception {
     server.stop();
   }

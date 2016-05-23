@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraIrisHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
     int camID = getCameraId(request);
 
     IrisCamera irisCam =  (IrisCamera) getCameraController().getCameraById(camID);

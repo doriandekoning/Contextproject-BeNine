@@ -44,6 +44,8 @@ public class PresetsHandler extends RequestHandler {
         recallPreset.handle(s, request, req, res);
         routed = true;
         break;
+      default:
+        break;
     }
 
     if (!routed) {
@@ -53,6 +55,11 @@ public class PresetsHandler extends RequestHandler {
     }
   }
 
+  /**
+   * Returns a JSON string about presets.
+   * @param request A request object.
+   * @return  JSON string with preset information.
+   */
   private String getPresetsInfo(Request request) {
     String tag = request.getParameter("tag");
 
@@ -86,6 +93,11 @@ public class PresetsHandler extends RequestHandler {
     return path.replaceFirst(".*/", "");
   }
 
+  /**
+   * Sets the handlers where this handler routes to.
+   * @param createPreset  a PresetsCreatePresetHandler.
+   * @param recallPreset  a PresetsRecallPresetHandler.
+   */
   public void setHandlers(PresetsCreatePresetHandler createPreset,
                           PresetsRecallPresetHandler recallPreset) {
 

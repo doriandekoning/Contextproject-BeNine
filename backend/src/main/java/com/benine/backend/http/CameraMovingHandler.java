@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraMovingHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
     int camID = getCameraId(request);
 
     MovingCamera movingCam = (MovingCamera) getCameraController().getCameraById(camID);
@@ -37,14 +38,26 @@ public class CameraMovingHandler extends CameraRequestHandler {
       getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (NumberFormatException e) {
-    getLogger().log(e.toString(), LogEvent.Type.WARNING);
-    respondFailure(request, res);
-  }
+      getLogger().log(e.toString(), LogEvent.Type.WARNING);
+      respondFailure(request, res);
+    }
 
     request.setHandled(true);
   }
 
-  public void move(MovingCamera movingCam, String moveType, String pan, String tilt, String panSpeed, String tiltSpeed)
+  /**
+   * Moves the camera.
+   * @param movingCam     a MovingCamera object.
+   * @param moveType      The type of movement.
+   * @param pan           The pan value.
+   * @param tilt          The tilt value.
+   * @param panSpeed      The panspeed value.
+   * @param tiltSpeed     The tiltspeed value.
+   * @throws MalformedURIException      If the url contains the wrong parameters.
+   * @throws CameraConnectionException  If the camera cannot be reached.
+   */
+  public void move(MovingCamera movingCam, String moveType, String pan, String tilt,
+                   String panSpeed, String tiltSpeed)
           throws MalformedURIException, CameraConnectionException {
 
     if (pan == null || tilt == null || panSpeed == null || tiltSpeed == null) {

@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraZoomHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
     int camID = getCameraId(request);
 
     ZoomingCamera zoomingCam = (ZoomingCamera) getCameraController().getCameraById(camID);
@@ -39,7 +40,16 @@ public class CameraZoomHandler extends CameraRequestHandler {
     request.setHandled(true);
   }
 
-  private void zoom(ZoomingCamera zoomingCam, String zoomType, String zoom) throws MalformedURIException, CameraConnectionException {
+  /**
+   * Zooms the camera.
+   * @param zoomingCam  A ZoomingCamera.
+   * @param zoomType    The type of zooming operation.
+   * @param zoom        The zoom value.
+   * @throws MalformedURIException      If there is an error in the request.
+   * @throws CameraConnectionException  If the camera cannot be reached.
+   */
+  private void zoom(ZoomingCamera zoomingCam, String zoomType, String zoom)
+          throws MalformedURIException, CameraConnectionException {
 
     if (zoom != null && zoomType.equals("relative")) {
       zoomingCam.zoom(Integer.parseInt(zoom));

@@ -26,6 +26,7 @@ public abstract class RequestHandler extends AbstractHandler {
 
   /**
    * Responds to a request with status 200.
+   * @param request the httpservletrequest to process.
    * @param response the httpservletresponse to respond to.
    * @param body a string with the response.
    */

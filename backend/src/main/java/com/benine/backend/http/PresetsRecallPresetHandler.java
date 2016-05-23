@@ -21,7 +21,7 @@ public class PresetsRecallPresetHandler extends RequestHandler {
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
    */
-  public PresetsRecallPresetHandler() {};
+  public PresetsRecallPresetHandler() {}
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -50,7 +50,15 @@ public class PresetsRecallPresetHandler extends RequestHandler {
     request.setHandled(true);
   }
 
-  public void moveCamera(Camera camera, Preset preset) throws CameraConnectionException, MalformedURIException {
+  /**
+   * Moves the camera
+   * @param camera  A Camera object.
+   * @param preset  The preset to move the camera to.
+   * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws MalformedURIException      If the request contains an error.
+   */
+  public void moveCamera(Camera camera, Preset preset)
+          throws CameraConnectionException, MalformedURIException {
     if (camera instanceof IPCamera) {
       IPCamera ipcamera = (IPCamera) camera;
 

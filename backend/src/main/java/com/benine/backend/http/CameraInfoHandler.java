@@ -79,6 +79,8 @@ public class CameraInfoHandler extends CameraRequestHandler {
             routed = true;
           }
           break;
+        default:
+          break;
       }
     }
 
@@ -100,6 +102,14 @@ public class CameraInfoHandler extends CameraRequestHandler {
     return id > 0 && camera != null;
   }
 
+  /**
+   * Sets the handlers of this cameraInfoHandler
+   * @param streamHandler A StreamHandler object.
+   * @param focusHandler A FocusHandler object.
+   * @param irishandler An IrisHandler object.
+   * @param movingHandler A MovingHandler object.
+   * @param zoomHandler A ZoomHandler object.
+   */
   public void setHandlers(CameraStreamHandler streamHandler,  CameraFocusHandler focusHandler,
                      CameraIrisHandler irishandler,
                      CameraMovingHandler movingHandler,

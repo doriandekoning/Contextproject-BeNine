@@ -67,6 +67,7 @@ public class ServerController {
   
   /**
    * Start the server.
+   * @throws Exception If the server cannot be started.
    */
   public void start() throws Exception {
     startupDatabase();
@@ -81,6 +82,7 @@ public class ServerController {
   
   /**
    * Stop the server.
+   * @throws Exception If the server cannot be stopped.
    */
   public void stop() throws Exception {
     if (running) {
