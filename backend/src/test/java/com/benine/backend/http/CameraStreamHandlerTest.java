@@ -70,7 +70,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMJPEGContentType() throws Exception {
-    setPath("/camera/42/mjpeg");
+    setPath("/42/mjpeg");
     testHandleWithThread();
 
     verify(httpresponseMock).setContentType("multipart/x-mixed-replace;boundary=" + streamReader.getBoundary());
@@ -78,7 +78,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMJPEGCacheControl() throws Exception {
-    setPath("/camera/42/mjpeg");
+    setPath("/42/mjpeg");
     testHandleWithThread();
 
     verify(httpresponseMock).setHeader("Cache-Control", "no-store, "
@@ -87,7 +87,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMJPEGConnection() throws Exception {
-    setPath("/camera/42/mjpeg");
+    setPath("/42/mjpeg");
     testHandleWithThread();
 
     verify(httpresponseMock).setHeader("Connection", "close");
@@ -95,7 +95,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMJPEGPragma() throws Exception {
-    setPath("/camera/42/mjpeg");
+    setPath("/42/mjpeg");
     testHandleWithThread();
 
     verify(httpresponseMock).setHeader("Pragma", "no-cache");
@@ -103,7 +103,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMJPEGExpires() throws Exception {
-    setPath("/camera/42/mjpeg");
+    setPath("/42/mjpeg");
     testHandleWithThread();
 
     verify(httpresponseMock).setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");

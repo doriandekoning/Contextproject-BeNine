@@ -30,7 +30,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testOnlyAutoFocus() throws Exception {
-    setPath("/camera/42/focus?autoFocusOn=true");
+    setPath("/42/focus?autoFocusOn=true");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("autoFocusOn", "true");
@@ -44,7 +44,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMoveFocusRelative() throws Exception {
-    setPath("/camera/42/focus?speed=5");
+    setPath("/42/focus?speed=5");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("speed", "5");
@@ -59,7 +59,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testOnlyPosition() throws Exception {
-    setPath("/camera/42/focus?position=3");
+    setPath("/42/focus?position=3");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -74,7 +74,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testPositionAndAutoFocus() throws Exception {
-    setPath("/camera/42/focus?position=3&autoFocusOn=false");
+    setPath("/42/focus?position=3&autoFocusOn=false");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -91,7 +91,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
   
   @Test
   public void testMalformedURI() throws Exception {
-    setPath("/camera/42/focus?position=4&position=3&autoFocusOn=false");
+    setPath("/42/focus?position=4&position=3&autoFocusOn=false");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "4");
@@ -109,7 +109,7 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
   
   @Test
   public void testCameraConnectionException() throws Exception {
-    setPath("/camera/42/focus?position=4&autoFocusOn=false");
+    setPath("/42/focus?position=4&autoFocusOn=false");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "4");

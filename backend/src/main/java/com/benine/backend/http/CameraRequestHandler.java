@@ -26,7 +26,7 @@ public abstract class CameraRequestHandler extends RequestHandler {
    */
   public int getCameraId(Request request) {
     // Get path
-    Pattern pattern = Pattern.compile("/camera/(\\d*)/.*");
+    Pattern pattern = Pattern.compile("^/(\\d*)/.*");
     String path = request.getPathInfo();
 
     Matcher m = pattern.matcher(path);

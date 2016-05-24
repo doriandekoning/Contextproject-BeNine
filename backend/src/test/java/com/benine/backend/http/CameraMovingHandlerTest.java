@@ -33,7 +33,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
   @Test
   public void testMoveAbsolute() throws Exception {
-    setPath("/camera/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+    setPath("/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("pan", "1");
@@ -51,7 +51,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
   @Test
   public void testMoveRelative() throws Exception {
-    setPath("/camera/42/move?pan=1&tilt=2&moveType=relative&panSpeed=3&tiltSpeed=4");
+    setPath("/42/move?pan=1&tilt=2&moveType=relative&panSpeed=3&tiltSpeed=4");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("pan", "1");
@@ -69,7 +69,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
   
   @Test
   public void testMalformedURI() throws Exception {
-    setPath("/camera/42/move?pan=1&pan=2&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+    setPath("/42/move?pan=1&pan=2&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("pan", "1");
@@ -89,7 +89,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
   
   @Test
   public void testMoveWithNotAllValues() throws Exception {
-    setPath("/camera/42/move?pan=5");
+    setPath("/42/move?pan=5");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("pan", "5");
@@ -104,7 +104,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
   
   @Test
   public void testCameraConnectionException() throws Exception {
-    setPath("/camera/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
+    setPath("/42/move?pan=1&tilt=2&moveType=absolute&panSpeed=3&tiltSpeed=4");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("pan", "1");

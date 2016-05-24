@@ -31,7 +31,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testOnlyAutoIris() throws Exception {
-    setPath("/camera/42/iris?autoIrisOn=true");
+    setPath("/42/iris?autoIrisOn=true");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("autoIrisOn", "true");
@@ -46,7 +46,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testOnlyIrisPosIris() throws Exception {
-    setPath("/camera/42/iris?position=3");
+    setPath("/42/iris?position=3");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -61,7 +61,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testAutoIrisOnAndIrisPosIris() throws Exception {
-    setPath("/camera/42/iris?position=3&autoIrisOn=true");
+    setPath("/42/iris?position=3&autoIrisOn=true");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -77,7 +77,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
   
   @Test
   public void testMalformedURI() throws Exception {
-    setPath("/camera/42/iris?position=3&position=true");
+    setPath("/42/iris?position=3&position=true");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -92,7 +92,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
   
   @Test
   public void testCameraConnectionException() throws Exception {
-    setPath("/camera/42/iris?position=3");
+    setPath("/42/iris?position=3");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("position", "3");
@@ -107,7 +107,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testMoveIrisRelative() throws Exception {
-    setPath("/camera/42/iris?speed=5");
+    setPath("/42/iris?speed=5");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("speed", "5");

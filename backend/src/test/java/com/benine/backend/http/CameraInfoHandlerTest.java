@@ -64,7 +64,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testHandleInvalidCamera() throws IOException, ServletException {
-    setPath("/camera/43/mjpeg");
+    setPath("/43/mjpeg");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -72,7 +72,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testHandleInvalidCameraID() throws IOException, ServletException {
-    setPath("/camera/invalid/mjpeg");
+    setPath("/invalid/mjpeg");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -80,7 +80,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testValidCameraNoRoute() throws IOException, ServletException {
-    setPath("/camera/42");
+    setPath("/42");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -88,7 +88,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteMJPEG() throws IOException, ServletException {
-    setPath("/camera/44/mjpeg");
+    setPath("/44/mjpeg");
 
     IPCamera ipmock = mock(IPCamera.class);
     when(cameracontroller.getCameraById(44)).thenReturn(ipmock);
@@ -100,7 +100,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteMJPEGNotAvailable() throws IOException, ServletException {
-    setPath("/camera/44/mjpeg");
+    setPath("/44/mjpeg");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -109,7 +109,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteFocus() throws IOException, ServletException {
-    setPath("/camera/44/focus");
+    setPath("/44/focus");
 
     FocussingCamera focusMock = mock(FocussingCamera.class);
     when(cameracontroller.getCameraById(44)).thenReturn(focusMock);
@@ -121,7 +121,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteFocusNotAvailable() throws IOException, ServletException {
-    setPath("/camera/44/focus");
+    setPath("/44/focus");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -129,7 +129,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteIris() throws IOException, ServletException {
-    setPath("/camera/44/iris");
+    setPath("/44/iris");
 
     IrisCamera irisMock = mock(IrisCamera.class);
     when(cameracontroller.getCameraById(44)).thenReturn(irisMock);
@@ -142,7 +142,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteIrisNotAvailable() throws IOException, ServletException {
-    setPath("/camera/44/iris");
+    setPath("/44/iris");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -150,7 +150,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteZoom() throws IOException, ServletException {
-    setPath("/camera/44/zoom");
+    setPath("/44/zoom");
 
     ZoomingCamera zoomingMock = mock(ZoomingCamera.class);
     when(cameracontroller.getCameraById(44)).thenReturn(zoomingMock);
@@ -162,7 +162,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteZoomNotAvailable() throws IOException, ServletException {
-    setPath("/camera/44/zoom");
+    setPath("/44/zoom");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -170,7 +170,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteMove() throws IOException, ServletException {
-    setPath("/camera/44/move");
+    setPath("/44/move");
 
     MovingCamera movingMock = mock(MovingCamera.class);
     when(cameracontroller.getCameraById(44)).thenReturn(movingMock);
@@ -182,7 +182,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteMoveNotAvailable() throws IOException, ServletException {
-    setPath("/camera/44/move");
+    setPath("/44/move");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);
@@ -190,7 +190,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testRouteUnknown() throws IOException, ServletException {
-    setPath("/camera/44/thisisanunknownroute");
+    setPath("/44/thisisanunknownroute");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock.getWriter()).write(caminfo);
     verify(requestMock).setHandled(true);

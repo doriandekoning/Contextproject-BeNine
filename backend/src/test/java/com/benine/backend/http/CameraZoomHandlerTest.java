@@ -29,7 +29,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testZoomAbsolute() throws Exception {
-    setPath("/camera/42/zoom?zoomType=absolute&zoom=2");
+    setPath("/42/zoom?zoomType=absolute&zoom=2");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("zoomType", "absolute");
@@ -44,7 +44,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
 
   @Test
   public void testZoomRelative() throws Exception {
-    setPath("/camera/42/zoom?zoomType=relative&zoom=2");
+    setPath("/42/zoom?zoomType=relative&zoom=2");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("zoomType", "relative");

@@ -13,8 +13,9 @@ public abstract class CameraRequestHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testGetCameraID() {
-    setPath("/camera/42/test");
+    setPath("/42/test");
     int camid = ((CameraRequestHandler) getHandler()).getCameraId(requestMock);
+    System.out.println(requestMock.getPathInfo());
 
     Assert.assertEquals(42, camid, 0);
   }
@@ -29,7 +30,7 @@ public abstract class CameraRequestHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testGetRoute() {
-    setPath("/camera/42/test");
+    setPath("/42/test");
     String route = ((CameraRequestHandler) getHandler()).getRoute(requestMock);
 
     Assert.assertEquals("test", route);
