@@ -2,6 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.Preset;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -110,4 +111,10 @@ public interface Database {
    * @throws SQLException No right connection found
    */
   void useDatabase() throws SQLException;
+
+  /**
+   * Setter for the connection.
+   * @param connection The new connection
+   */
+  void setConnection(Connection connection);
 }

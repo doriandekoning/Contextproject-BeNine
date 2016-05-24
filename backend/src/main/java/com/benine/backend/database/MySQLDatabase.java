@@ -36,6 +36,11 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
+  public void setConnection(Connection connect) {
+    connection = connect;
+  }
+
+  @Override
   public boolean isConnected() throws SQLException {
     return connection != null && !connection.isClosed();
   }
@@ -48,7 +53,6 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       preset.setId(presetID);
       presetID++;
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -62,7 +66,6 @@ public class MySQLDatabase implements Database {
     try {
       String sql = "DELETE FROM presets WHERE ID = " + presetID;
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -77,7 +80,6 @@ public class MySQLDatabase implements Database {
       deletePreset(preset.getId());
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -98,7 +100,6 @@ public class MySQLDatabase implements Database {
         list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -120,7 +121,6 @@ public class MySQLDatabase implements Database {
         list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -136,12 +136,14 @@ public class MySQLDatabase implements Database {
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
           + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
       connection = DriverManager.getConnection(connect, user, password);
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
     try {
       return !connection.isClosed();
-    } catch (Exception e) {
+    } catch (SQLException e) {
       getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
@@ -204,7 +206,6 @@ public class MySQLDatabase implements Database {
       final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
           id, macAddress);
       statement.executeUpdate(sql);
-      statement.close();
     } catch (SQLException e) {
       e.printStackTrace();
       getLogger().log("Camera couldn't be added", LogEvent.Type.CRITICAL);
@@ -229,8 +230,6 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = "SELECT ID, MACAddress FROM camera";
       resultset = statement.executeQuery(sql);
-      statement.close();
-      resultset.close();
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
     } catch (SQLException e) {
@@ -302,7 +301,6 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       sql = "DELETE FROM camera WHERE ID = " + cameraID;
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -316,7 +314,6 @@ public class MySQLDatabase implements Database {
     try {
       String sql = "USE presetsdatabase";
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
