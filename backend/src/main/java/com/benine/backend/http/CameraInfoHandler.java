@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraInfoHandler extends CameraRequestHandler {
 
   /**
-   * Map containing the handlers, (route, handler);
+   * Map containing the handlers, (route, handler).
    */
   private Map<String, CameraRequestHandler> handlers;
 

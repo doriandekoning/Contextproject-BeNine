@@ -33,4 +33,4 @@ public enum MJPEGHeader {
     return this.contents;
   }
 
-  }
+}

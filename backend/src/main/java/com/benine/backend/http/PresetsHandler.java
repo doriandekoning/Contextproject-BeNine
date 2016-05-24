@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PresetsHandler extends RequestHandler {
 
   /**
-   * Map containing the handlers, (route, handler);
+   * Map containing the handlers, (route, handler).
    */
   private Map<String, RequestHandler> handlers;
 
