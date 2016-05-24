@@ -44,19 +44,6 @@ public class PresetsHandler extends RequestHandler {
       routed = true;
     }
 
-//    switch (route) {
-//      case "createpreset":
-//        createPreset.handle(s, request, req, res);
-//        routed = true;
-//        break;
-//      case "recallpreset":
-//        recallPreset.handle(s, request, req, res);
-//        routed = true;
-//        break;
-//      default:
-//        break;
-//    }
-
     if (!routed) {
       String presetInfo = getPresetsInfo(request);
       respond(request, res, presetInfo);
