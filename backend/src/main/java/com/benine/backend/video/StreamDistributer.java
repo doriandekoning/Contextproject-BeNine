@@ -48,6 +48,15 @@ public class StreamDistributer implements Observer {
   }
 
   /**
+   * Sets the output stream.
+   * @param stream An outputstream to write to.
+   */
+  public void setStream(PipedOutputStream stream) {
+    this.outputStream = stream;
+  }
+
+
+  /**
    * Deregistres this distributer from a streamreader.
    */
   public void deregister() {

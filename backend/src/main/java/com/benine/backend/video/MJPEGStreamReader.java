@@ -1,11 +1,15 @@
 package com.benine.backend.video;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 
 /**
  * StreamReader for Motion JPEG streams.
@@ -16,6 +20,7 @@ public class MJPEGStreamReader extends StreamReader {
 
   private String boundary;
 
+  private byte[] snapshot;
 
   /**
    * Creates a new MJPEGStreamReader.
@@ -35,6 +40,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+    this.snapshot = new byte[0];
 
     setMJPEGBoundary();
     processStream();
@@ -66,14 +72,11 @@ public class MJPEGStreamReader extends StreamReader {
     try {
       byte[] headerByte = getHeader();
       String header = new String(headerByte, StandardCharsets.UTF_8);
-
       byte[] imageByte = getImage(header);
 
-      this.setSnapShot(imageByte);
+      sendToDistributers(headerByte, imageByte);
 
-      // Notify the StreamDistributers
-      setChanged();
-      notifyObservers(frameToSend(headerByte, imageByte));
+      snapshot = imageByte;
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -81,18 +84,15 @@ public class MJPEGStreamReader extends StreamReader {
   }
 
   /**
-   * Prepares the frame to send to the observing streamdistributers.
-   * @param header        Header bytes
-   * @param image         Image bytes
-   * @return              Byte array composed of header and image.
-   * @throws IOException  If an error occurs composing the header and the image.
+   * Notify the observers about the header and the image.
+   * @param headerByte    The header in byte array format.
+   * @param imageByte     The image in byte array format.
    */
-  private byte[] frameToSend(byte[] header, byte[] image) throws IOException {
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(header.length + image.length);
-    outputStream.write(header);
-    outputStream.write(image);
-
-    return outputStream.toByteArray();
+  private void sendToDistributers(byte[] headerByte, byte[] imageByte) {
+    setChanged();
+    notifyObservers(headerByte);
+    setChanged();
+    notifyObservers(imageByte);
   }
 
   /**
@@ -244,6 +244,16 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public String getBoundary() {
     return boundary;
+  }
+
+  @Override
+  public BufferedImage getSnapShot() throws IOException {
+    return ImageIO.read(new ByteArrayInputStream(this.snapshot));
+  }
+
+  @Override
+  public byte[] getSnapShotBytes() {
+    return Arrays.copyOf(snapshot, snapshot.length);
   }
 
 }
