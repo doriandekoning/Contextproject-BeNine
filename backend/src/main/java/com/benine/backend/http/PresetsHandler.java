@@ -9,22 +9,25 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class PresetsHandler extends RequestHandler {
 
-  private PresetsCreatePresetHandler createPreset;
-
-  private PresetsRecallPresetHandler recallPreset;
+  /**
+   * Map containing the handlers, (route, handler);
+   */
+  private Map<String, RequestHandler> handlers;
 
   /**
    * Constructor for a new PresetsHandler, handling the /presets/ request.
    */
   public PresetsHandler() {
-    this.createPreset = new PresetsCreatePresetHandler();
-    this.recallPreset = new PresetsRecallPresetHandler();
+    this.handlers = new HashMap<>();
+    setHandlers(new PresetsCreatePresetHandler(), new PresetsRecallPresetHandler());
   }
 
   @Override
@@ -35,18 +38,24 @@ public class PresetsHandler extends RequestHandler {
 
     boolean routed = false;
 
-    switch (route) {
-      case "createpreset":
-        createPreset.handle(s, request, req, res);
-        routed = true;
-        break;
-      case "recallpreset":
-        recallPreset.handle(s, request, req, res);
-        routed = true;
-        break;
-      default:
-        break;
+
+    if (handlers.containsKey(route)) {
+      handlers.get(route).handle(s, request, req, res);
+      routed = true;
     }
+
+//    switch (route) {
+//      case "createpreset":
+//        createPreset.handle(s, request, req, res);
+//        routed = true;
+//        break;
+//      case "recallpreset":
+//        recallPreset.handle(s, request, req, res);
+//        routed = true;
+//        break;
+//      default:
+//        break;
+//    }
 
     if (!routed) {
       String presetInfo = getPresetsInfo(request);
@@ -101,8 +110,8 @@ public class PresetsHandler extends RequestHandler {
   public void setHandlers(PresetsCreatePresetHandler createPreset,
                           PresetsRecallPresetHandler recallPreset) {
 
-    this.createPreset = createPreset;
-    this.recallPreset = recallPreset;
+    handlers.put("createpreset", createPreset);
+    handlers.put("recallpreset", recallPreset);
 
   }
 }
