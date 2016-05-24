@@ -32,8 +32,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
 
-    String cameraInfo = getCameraController().getCamerasJSON();
-
     boolean routed = false;
     String route = getRoute(request);
 
@@ -48,6 +46,7 @@ public class CameraInfoHandler extends CameraRequestHandler {
     }
 
     if (!routed) {
+      String cameraInfo = getCameraController().getCamerasJSON();
       respond(request, res, cameraInfo);
       request.setHandled(true);
     }
