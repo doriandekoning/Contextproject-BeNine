@@ -14,7 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Class for communicating with the MySQL Database.
  */
 public class MySQLDatabase implements Database {
   private Connection connection;

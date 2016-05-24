@@ -70,9 +70,9 @@ public class ServerController {
    * Start the server.
    */
   public void start() {
-    startupDatabase();
     cameraController.loadConfigCameras();
-    
+    startupDatabase();
+
     httpController = new HttpController(config.getValue("serverip"),
                         Integer.parseInt(config.getValue("serverport"))); 
     
