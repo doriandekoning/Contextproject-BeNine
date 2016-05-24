@@ -20,7 +20,6 @@ public class MySQLDatabase implements Database {
   private Connection connection;
   private String user;
   private String password;
-  private Logger logger;
   private int presetID;
 
   /**
@@ -28,13 +27,11 @@ public class MySQLDatabase implements Database {
    *
    * @param user     username used to connect to the database.
    * @param password used to connect to the databse.
-   * @param logger   used to log important info.
    */
-  public MySQLDatabase(String user, String password, Logger logger) {
+  public MySQLDatabase(String user, String password) {
     connection = null;
     this.user = user;
     this.password = password;
-    this.logger = logger;
     presetID = 1;
   }
 
@@ -145,7 +142,7 @@ public class MySQLDatabase implements Database {
     try {
       return !connection.isClosed();
     } catch (Exception e) {
-      logger.log("Connection with database failed.", LogEvent.Type.CRITICAL);
+      getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
     }
@@ -163,7 +160,7 @@ public class MySQLDatabase implements Database {
       }
       databaseNames.close();
     } catch (Exception e) {
-      logger.log("Database check failed.", LogEvent.Type.CRITICAL);
+      getLogger().log("Database check failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
     return false;
@@ -182,7 +179,7 @@ public class MySQLDatabase implements Database {
       sr.runScript(reader);
       presetID = 1;
     } catch (Exception e) {
-      logger.log("Database is not reseted.", LogEvent.Type.CRITICAL);
+      getLogger().log("Database is not reset.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
   }
@@ -193,7 +190,7 @@ public class MySQLDatabase implements Database {
       try {
         connection.close();
       } catch (Exception e) {
-        logger.log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
+        getLogger().log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
         e.printStackTrace();
       }
     }
@@ -210,7 +207,7 @@ public class MySQLDatabase implements Database {
       statement.close();
     } catch (SQLException e) {
       e.printStackTrace();
-      logger.log("Camera couldn't be added", LogEvent.Type.CRITICAL);
+      getLogger().log("Camera couldn't be added", LogEvent.Type.CRITICAL);
     } finally {
       if (statement != null) {
         try {
@@ -238,7 +235,7 @@ public class MySQLDatabase implements Database {
       resultset.close();
     } catch (SQLException e) {
       e.printStackTrace();
-      logger.log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
+      getLogger().log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     } catch (CameraConnectionException e) {
       e.printStackTrace();
     } finally {
@@ -349,7 +346,7 @@ public class MySQLDatabase implements Database {
           autoIris, id);
     } catch (Exception e) {
       e.printStackTrace();
-      logger.log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
@@ -375,5 +372,13 @@ public class MySQLDatabase implements Database {
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
         + preset.getTiltspeed() + "," + autoir + ",'" + preset.getImage() + "',"
         + preset.getCameraId() + ")";
+  }
+
+  /**
+   * Get the logger of the single servercontroller.
+   * @return logger object.
+   */
+  private Logger getLogger() {
+    return ServerController.getInstance().getLogger();
   }
 }

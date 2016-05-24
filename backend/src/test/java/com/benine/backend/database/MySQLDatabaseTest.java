@@ -1,13 +1,16 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockResultSet;
+
 import static org.mockito.Mockito.mock;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,18 +20,18 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
- * Created on 4-5-2016.
+ * Created by Ege on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
-  
+
     private Database database;
-  
+
     @Before
     public void prepareEmptyResultSet() {
         MockConnection connection =
-                getJDBCMockObjectFactory().getMockConnection();
+            getJDBCMockObjectFactory().getMockConnection();
         StatementResultSetHandler statementHandler =
-                connection.getStatementResultSetHandler();
+            connection.getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
         database = new MySQLDatabase("root", "root");
@@ -55,7 +58,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        ;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
@@ -68,7 +72,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeletePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        ;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
@@ -82,7 +87,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testUpdatePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
@@ -97,7 +102,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetAllPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        ;
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
@@ -110,13 +116,26 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetPresetsCamera() throws SQLException {
-        Preset preset = new Preset(new Position(1,1), 1, 1,1,true,1,1,false, 0);;
+    public final void testAddCamera() throws SQLException {
         database.connectToDatabaseServer();
         database.resetDatabase();
-        database.addCamera(1,"ip");
+        database.addCamera(1, "ip");
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO presetsdatabase.camera VALUES(1,'ip')");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetPresetsCamera() throws SQLException {
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        ;
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1, "ip");
         database.addPreset(preset);
-        ArrayList<Preset> result = database.getAllPresetsCamera(1);
+        database.getAllPresetsCamera(1);
         database.closeConnection();
         verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
@@ -124,4 +143,50 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyConnectionClosed();
     }
 
+    @Test
+    public final void testCheckCameras() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1, "ip");
+        database.checkCameras();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT ID, MACAddress FROM camera");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeleteCamera() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.addCamera(1, "ip");
+        database.deleteCamera(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM presets WHERE camera_ID = 1");
+        verifySQLStatementExecuted("DELETE FROM camera WHERE ID = 1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testUseDatabase() throws SQLException {
+        database.connectToDatabaseServer();
+        database.resetDatabase();
+        database.useDatabase();
+        database.closeConnection();
+        verifySQLStatementExecuted("USE presetsdatabase");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+    }
+
+    @Test
+    public final void testCheckDatabase() throws SQLException {
+        database.connectToDatabaseServer();
+        Assert.assertFalse(database.checkDatabase());
+        database.closeConnection();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
 }

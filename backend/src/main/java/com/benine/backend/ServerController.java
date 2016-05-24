@@ -130,6 +130,11 @@ public class ServerController {
         e.printStackTrace();
       }
     }
+    try {
+      database.checkCameras();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
   
   /**
