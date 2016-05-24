@@ -103,6 +103,7 @@
 				</systemPropertyVariables>
 				 <excludes>
             		<exclude>**/CameraControlTest.java</exclude>
+                     <exclude>../ipcameracontrol/*.java</exclude>
           		</excludes>
 			</configuration>
          </plugin>
