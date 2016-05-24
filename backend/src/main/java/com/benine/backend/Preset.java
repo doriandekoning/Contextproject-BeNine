@@ -52,6 +52,7 @@ public class Preset {
     this.autoiris = autoiris;
     this.cameraId = cameraId;
   }
+
   /**
    * Constructs a preset.
    *

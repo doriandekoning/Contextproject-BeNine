@@ -1,10 +1,13 @@
-package com.benine.backend.http.jetty;
+package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
+import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
 import java.io.BufferedInputStream;
@@ -21,9 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CameraStreamHandler extends CameraRequestHandler {
 
   @Override
-  public void handle(String s, Request request,
-                     HttpServletRequest httpServletRequest,
-                     HttpServletResponse httpServletResponse)
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
 
     int camID = getCameraId(request);
@@ -32,8 +33,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     try {
       streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
-      e.printStackTrace();
-      //getLogger().log(e.toString(), LogEvent.Type.WARNING);
+      getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
     }
 
     // We need an MJPEG streamreader to stream MJPEG.
@@ -42,12 +42,13 @@ public class CameraStreamHandler extends CameraRequestHandler {
       StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
 
       // Set the headers
-      setHeaders(streamReaderMJPEG, httpServletResponse);
+      setHeaders(streamReaderMJPEG, res);
 
       // Get an inputstream from the distributer.
+
       PipedInputStream in = new PipedInputStream(distributer.getStream());
       BufferedInputStream bs = new BufferedInputStream(in);
-      OutputStream os = httpServletResponse.getOutputStream();
+      OutputStream os = res.getOutputStream();
 
       boolean sending = true;
       while (bs.available() > -1 && sending) {
@@ -64,7 +65,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
       in.close();
 
     } else {
-      httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
     request.setHandled(true);
@@ -76,13 +77,17 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @param httpServletResponse   The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
-    httpServletResponse.setContentType("multipart/x-mixed-replace;boundary="
+    httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents()
             + reader.getBoundary());
-    httpServletResponse.setHeader("Cache-Control", "no-store, "
-            + "no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0");
-    httpServletResponse.setHeader("Connection", "close");
-    httpServletResponse.setHeader("Pragma", "no-cache");
-    httpServletResponse.setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");
+    httpServletResponse.setHeader("Cache-Control", MJPEGHeader.CACHE_CONTROL.getContents());
+    httpServletResponse.setHeader("Connection", MJPEGHeader.CONNECTION.getContents());
+    httpServletResponse.setHeader("Pragma", MJPEGHeader.PRAGMA.getContents());
+    httpServletResponse.setHeader("Expires", MJPEGHeader.EXPIRES.getContents());
     httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam.getStreamType() == StreamType.MJPEG;
   }
 }

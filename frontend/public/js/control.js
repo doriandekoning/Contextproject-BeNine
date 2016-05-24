@@ -26,7 +26,7 @@ function loadCameras() {
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
-			camera_div.find('img').attr("src", cameras[c].streamlink);
+			camera_div.find('img').attr("src", "/api/backend/camera/" + c + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
@@ -357,6 +357,8 @@ function createPreset() {
 	var presetTag = preset_create_div.find('#preset_tag').val();
 	console.log(presetTag + " " + presetName);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
-	}
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera, function (data) {
+			console.log(data);
+		});
+	};
 }

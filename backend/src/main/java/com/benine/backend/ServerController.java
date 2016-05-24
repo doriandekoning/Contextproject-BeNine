@@ -3,7 +3,7 @@ package com.benine.backend;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
-import com.benine.backend.http.HttpController;
+import com.benine.backend.http.HTTPServer;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class ServerController {
   
   private boolean running;
 
-  private HttpController httpController;
+  private HTTPServer httpServer;
 
   private PresetController presetController;
   
@@ -65,28 +65,28 @@ public class ServerController {
     return serverController;
   }
   
-  
   /**
    * Start the server.
+   * @throws Exception If the server cannot be started.
    */
-  public void start() {
+  public void start() throws Exception {
     startupDatabase();
     cameraController.loadConfigCameras();
+    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
 
-    httpController = new HttpController(config.getValue("serverip"),
-                        Integer.parseInt(config.getValue("serverport"))); 
-    
     loadPresets();
+
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
   
   /**
    * Stop the server.
+   * @throws Exception If the server cannot be stopped.
    */
-  public void stop() {
+  public void stop() throws Exception {
     if (running) {
-      httpController.destroy();
+      httpServer.destroy();
       database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
@@ -180,7 +180,12 @@ public class ServerController {
   public void setCameraController(CameraController cameraController) {
     this.cameraController = cameraController;
   }
-  
+
+  public void setStreamController(StreamController streamController) {
+    this.streamController = streamController;
+  }
+
+
   /**
    * Getter for the database.
    * @return the database

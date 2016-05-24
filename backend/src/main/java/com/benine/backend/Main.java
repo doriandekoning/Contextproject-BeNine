@@ -1,7 +1,5 @@
 package com.benine.backend;
 
-import com.benine.backend.http.jetty.HTTPStreamServer;
-
 public class Main {
 
   /**
@@ -12,11 +10,7 @@ public class Main {
    */
   public static void main(String[] args) throws Exception {
     ServerController server = ServerController.getInstance();
-
-
     server.start();
-
-    new HTTPStreamServer(3725);
 
     try {
       while (true) {

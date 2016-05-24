@@ -1,8 +1,9 @@
 package com.benine.backend.camera.ipcameracontrol;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.InvalidCameraTypeException;
+import com.benine.backend.camera.Position;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,15 +15,13 @@ import org.mockserver.model.HttpResponse;
 import org.mockserver.model.Parameter;
 import org.mockserver.verify.VerificationTimes;
 
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.InvalidCameraTypeException;
-import com.benine.backend.camera.Position;
-
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Test class to test the IP Camera class.
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 public class IpcameraTest {
 
   @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 9002);
+  public MockServerRule mockServerRule = new MockServerRule(this, false);
 
   private MockServerClient mockServerClient;
   private IPCamera camera;
@@ -40,7 +39,7 @@ public class IpcameraTest {
   
   @Before
   public final void setUp() throws InvalidCameraTypeException{
-	  camera = new IPCamera("127.0.0.1:9002");
+	  camera = new IPCamera("127.0.0.1:" + mockServerRule.getPort());
 	  mockServerClient.reset();
   }
   
@@ -51,8 +50,8 @@ public class IpcameraTest {
 
     final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
                                     .withQueryStringParameters(parameterList);
-    byte[] encoded = Files.readAllBytes(Paths.get("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
-    String ipcameraInfo = new String(encoded, "UTF8");
+
+    String ipcameraInfo = IOUtils.toString(new FileInputStream("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
     mockServerClient.when(request).respond(HttpResponse.response().withBody(ipcameraInfo));
     
     String actual = camera.getMacAddress();
@@ -158,7 +157,7 @@ public class IpcameraTest {
     parameterList.add(new Parameter("cmd", "#D30"));
 
     String res = camera.getStreamLink();
-    assertEquals(res, "http://127.0.0.1:9002/cgi-bin/mjpeg");
+    assertEquals(res, "http://127.0.0.1:" + mockServerRule.getPort() + "/cgi-bin/mjpeg");
   }
   
   @Test(expected = IpcameraConnectionException.class)

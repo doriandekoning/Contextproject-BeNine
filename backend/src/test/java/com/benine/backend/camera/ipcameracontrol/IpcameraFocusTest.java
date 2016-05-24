@@ -25,15 +25,16 @@ import com.benine.backend.camera.CameraConnectionException;
 public class IpcameraFocusTest {
   
   @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 8100);
+  public MockServerRule mockServerRule = new MockServerRule(this, false);
 
   private MockServerClient mockServerClient;
-  private IPCamera camera = new IPCamera("127.0.0.1:8100");
+  private IPCamera camera;
 
   private ArrayList<Parameter> parameterList;
   
   @Before
   public final void setUp() {
+    camera = new IPCamera("127.0.0.1:" + mockServerRule.getPort());
     mockServerClient.reset();
   }
   
