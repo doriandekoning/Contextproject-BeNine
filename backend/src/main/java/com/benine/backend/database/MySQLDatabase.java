@@ -73,8 +73,8 @@ public class MySQLDatabase implements Database {
   @Override
   public void updatePreset(Preset preset) throws SQLException {
     Statement statement = connection.createStatement();
-    deletePreset(preset.getId());
     try {
+      deletePreset(preset.getId());
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
       statement.close();
@@ -229,10 +229,10 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = "SELECT ID, MACAddress FROM camera";
       resultset = statement.executeQuery(sql);
-      checkOldCameras(resultset, cameras, macs);
-      checkNewCameras(cameras, macs);
       statement.close();
       resultset.close();
+      checkOldCameras(resultset, cameras, macs);
+      checkNewCameras(cameras, macs);
     } catch (SQLException e) {
       e.printStackTrace();
       getLogger().log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
