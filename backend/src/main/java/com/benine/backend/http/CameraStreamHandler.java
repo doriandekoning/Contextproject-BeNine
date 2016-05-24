@@ -77,13 +77,11 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @param httpServletResponse   The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
-    httpServletResponse.setContentType("multipart/x-mixed-replace;boundary="
-            + reader.getBoundary());
-    httpServletResponse.setHeader("Cache-Control", "no-store, "
-            + "no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0");
-    httpServletResponse.setHeader("Connection", "close");
-    httpServletResponse.setHeader("Pragma", "no-cache");
-    httpServletResponse.setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");
+    httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents() + reader.getBoundary());
+    httpServletResponse.setHeader("Cache-Control", MJPEGHeader.CACHE_CONTROL.getContents());
+    httpServletResponse.setHeader("Connection", MJPEGHeader.CONNECTION.getContents());
+    httpServletResponse.setHeader("Pragma", MJPEGHeader.PRAGMA.getContents());
+    httpServletResponse.setHeader("Expires", MJPEGHeader.EXPIRES.getContents());
     httpServletResponse.setStatus(HttpServletResponse.SC_OK);
   }
 

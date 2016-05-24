@@ -37,8 +37,7 @@ public class PresetsHandler extends RequestHandler {
     String route = getRoute(request);
 
     boolean routed = false;
-
-
+    
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);
       routed = true;
