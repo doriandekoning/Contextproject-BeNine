@@ -1,5 +1,6 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.Camera;
 import org.eclipse.jetty.server.Request;
 
 import java.util.regex.Matcher;
@@ -9,6 +10,13 @@ import java.util.regex.Pattern;
  * Handles all requests requiring the camera ID.
  */
 public abstract class CameraRequestHandler extends RequestHandler {
+
+
+  /**
+   * Defines if a camera is allowed to be used with this handler.
+   * @param cam a Camera object.
+   */
+  abstract boolean isAllowed(Camera cam);
 
   /**
    * Fetches camera id from http exchange.

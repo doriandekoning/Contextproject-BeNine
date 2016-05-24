@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.FocussingCamera;
 import org.eclipse.jetty.server.Request;
@@ -46,5 +47,10 @@ public class CameraFocusHandler extends CameraRequestHandler {
     }
 
     request.setHandled(true);
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam instanceof FocussingCamera;
   }
 }

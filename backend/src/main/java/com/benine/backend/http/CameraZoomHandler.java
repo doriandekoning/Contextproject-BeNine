@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
 import org.eclipse.jetty.server.Request;
@@ -58,5 +59,10 @@ public class CameraZoomHandler extends CameraRequestHandler {
     } else {
       throw new MalformedURIException("Invalid Zoom parameters");
     }
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam instanceof ZoomingCamera;
   }
 }

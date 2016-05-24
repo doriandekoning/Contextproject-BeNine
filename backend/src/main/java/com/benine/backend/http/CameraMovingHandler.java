@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
@@ -78,5 +79,10 @@ public class CameraMovingHandler extends CameraRequestHandler {
         throw new MalformedURIException("Invalid value for moveType");
       }
     }
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam instanceof MovingCamera;
   }
 }

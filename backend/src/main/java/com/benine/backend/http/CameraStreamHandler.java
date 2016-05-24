@@ -2,10 +2,12 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
+import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
 import java.io.BufferedInputStream;
@@ -84,5 +86,10 @@ public class CameraStreamHandler extends CameraRequestHandler {
     httpServletResponse.setHeader("Pragma", "no-cache");
     httpServletResponse.setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");
     httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam.getStreamType() == StreamType.MJPEG;
   }
 }
