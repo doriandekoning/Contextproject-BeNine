@@ -2,11 +2,14 @@ package com.benine.backend.database;
 
 import com.benine.backend.Preset;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  * Interface for communication with the database.
+ *
+ * @author Ege
  */
 public interface Database {
 
@@ -91,8 +94,27 @@ public interface Database {
   void addCamera(int id, String ip) throws SQLException;
 
   /**
+   * Checks if cameras are correct in database.
+   * @throws SQLException Wrong connection to database
+   */
+  void checkCameras() throws SQLException;
+
+  /**
+   * deletes a camera from the database.
+   * @param cameraID the camera to be deleted
+   * @throws SQLException Wrong connecton to database
+   */
+  void deleteCamera(int cameraID) throws SQLException;
+
+  /**
    * Makes sure the right database is used.
    * @throws SQLException No right connection found
    */
   void useDatabase() throws SQLException;
+
+  /**
+   * Setter for the connection.
+   * @param connection The new connection
+   */
+  void setConnection(Connection connection);
 }

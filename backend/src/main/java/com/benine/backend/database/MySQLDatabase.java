@@ -4,35 +4,23 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.ibatis.common.jdbc.ScriptRunner;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created on 4-5-2016.
+ * Class for communicating with the MySQL Database.
  */
 public class MySQLDatabase implements Database {
   private Connection connection;
   private String user;
   private String password;
   private int presetID;
-
 
   /**
    * Constructor of a MySQL Database.
@@ -48,6 +36,11 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
+  public void setConnection(Connection connect) {
+    connection = connect;
+  }
+
+  @Override
   public boolean isConnected() throws SQLException {
     return connection != null && !connection.isClosed();
   }
@@ -60,7 +53,6 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       preset.setId(presetID);
       presetID++;
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -74,7 +66,6 @@ public class MySQLDatabase implements Database {
     try {
       String sql = "DELETE FROM presets WHERE ID = " + presetID;
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -85,11 +76,10 @@ public class MySQLDatabase implements Database {
   @Override
   public void updatePreset(Preset preset) throws SQLException {
     Statement statement = connection.createStatement();
-    deletePreset(preset.getId());
     try {
+      deletePreset(preset.getId());
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -110,7 +100,6 @@ public class MySQLDatabase implements Database {
         list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -132,7 +121,6 @@ public class MySQLDatabase implements Database {
         list.add(getPresetsFromResultSet(resultset));
       }
       resultset.close();
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -148,12 +136,14 @@ public class MySQLDatabase implements Database {
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
           + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
       connection = DriverManager.getConnection(connect, user, password);
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
     try {
       return !connection.isClosed();
-    } catch (Exception e) {
+    } catch (SQLException e) {
       getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
@@ -191,7 +181,7 @@ public class MySQLDatabase implements Database {
       sr.runScript(reader);
       presetID = 1;
     } catch (Exception e) {
-      getLogger().log("Database is not reseted.", LogEvent.Type.CRITICAL);
+      getLogger().log("Database is not reset.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     }
   }
@@ -216,7 +206,6 @@ public class MySQLDatabase implements Database {
       final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
           id, macAddress);
       statement.executeUpdate(sql);
-      statement.close();
     } catch (SQLException e) {
       e.printStackTrace();
       getLogger().log("Camera couldn't be added", LogEvent.Type.CRITICAL);
@@ -232,12 +221,99 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
+  public void checkCameras() throws SQLException {
+    ArrayList<Camera> cameras = ServerController.getInstance().getCameraController().getCameras();
+    ArrayList<String> macs = new ArrayList<String>();
+    ResultSet resultset = null;
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT ID, MACAddress FROM camera";
+      resultset = statement.executeQuery(sql);
+      checkOldCameras(resultset, cameras, macs);
+      checkNewCameras(cameras, macs);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      getLogger().log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
+    } catch (CameraConnectionException e) {
+      e.printStackTrace();
+    } finally {
+      if (statement != null) {
+        statement.close();
+        resultset.close();
+      }
+    }
+  }
+
+  /**
+   * Cheks if there are cameras in the database to be deleted.
+   * @param result The resultset from the query
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws SQLException No right connection to the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
+  public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws SQLException, CameraConnectionException {
+    while (result.next()) {
+      boolean contains = false;
+      String mac = result.getString("MACAddress");
+      macs.add(mac);
+      for (Camera camera : cameras) {
+        if (camera.getMacAddress().equals(mac)) {
+          contains = true;
+          break;
+        }
+      }
+      if (!contains) {
+        deleteCamera(result.getInt("ID"));
+      }
+    }
+  }
+
+  /**
+   * Checks if there are new cameras to be added to the database.
+   * @param cameras The cameras
+   * @param macs The MACAddresses of the cameras in the database
+   * @throws CameraConnectionException Not able to connect to the camera
+   */
+  public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
+      throws CameraConnectionException {
+    boolean contains = false;
+    for (Camera camera : cameras) {
+      for (String mac : macs) {
+        if (mac.equals(camera.getMacAddress())) {
+          contains = true;
+          break;
+        }
+      }
+      if (!contains) {
+        addCamera(camera.getId(), camera.getMacAddress());
+      }
+    }
+  }
+
+  @Override
+  public void deleteCamera(int cameraID) throws SQLException {
+    Statement statement = connection.createStatement();
+    try {
+      String sql = "DELETE FROM presets WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM camera WHERE ID = " + cameraID;
+      statement.executeUpdate(sql);
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
+    }
+  }
+
+  @Override
   public void useDatabase() throws SQLException {
     Statement statement = connection.createStatement();
     try {
       String sql = "USE presetsdatabase";
       statement.executeUpdate(sql);
-      statement.close();
     } finally {
       if (statement != null) {
         statement.close();
@@ -294,7 +370,6 @@ public class MySQLDatabase implements Database {
         + preset.getTiltspeed() + "," + autoir + ",'" + preset.getImage() + "',"
         + preset.getCameraId() + ")";
   }
-  
 
   /**
    * Get the logger of the single servercontroller.
@@ -303,5 +378,4 @@ public class MySQLDatabase implements Database {
   private Logger getLogger() {
     return ServerController.getInstance().getLogger();
   }
-
 }
