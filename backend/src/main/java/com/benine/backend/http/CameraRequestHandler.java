@@ -26,16 +26,12 @@ public abstract class CameraRequestHandler extends RequestHandler {
    */
   public int getCameraId(Request request) {
     // Get path
-    Pattern pattern = Pattern.compile(".*/(\\d*)/.*");
+    Pattern pattern = Pattern.compile("/camera/(\\d*)/.*");
     String path = request.getPathInfo();
 
     Matcher m = pattern.matcher(path);
 
-    if (m.matches()) {
-      return Integer.parseInt(m.group(1));
-    } else {
-      return -1;
-    }
+    return m.matches() ? Integer.parseInt(m.group(1)) : -1;
   }
 
   /**
