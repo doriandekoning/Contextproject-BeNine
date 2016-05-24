@@ -77,7 +77,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @param httpServletResponse   The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
-    httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents() + reader.getBoundary());
+    httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents()
+            + reader.getBoundary());
     httpServletResponse.setHeader("Cache-Control", MJPEGHeader.CACHE_CONTROL.getContents());
     httpServletResponse.setHeader("Connection", MJPEGHeader.CONNECTION.getContents());
     httpServletResponse.setHeader("Pragma", MJPEGHeader.PRAGMA.getContents());

@@ -20,7 +20,6 @@ public class CameraFocusHandler extends CameraRequestHandler {
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
     int camID = getCameraId(request);
-
     FocussingCamera focusCam = (FocussingCamera) getCameraController().getCameraById(camID);
 
     String autoOn = request.getParameter("autoFocusOn");
@@ -28,15 +27,7 @@ public class CameraFocusHandler extends CameraRequestHandler {
     String speed = request.getParameter("speed");
 
     try {
-      if (autoOn != null) {
-        boolean autoOnBool = Boolean.parseBoolean(autoOn);
-        focusCam.setAutoFocusOn(autoOnBool);
-      }
-      if (setPos != null) {
-        focusCam.setFocusPosition(Integer.parseInt(setPos));
-      } else if (speed != null) {
-        focusCam.moveFocus(Integer.parseInt(speed));
-      }
+      setFocus(focusCam, autoOn, setPos, speed);
       respondSuccess(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + focusCam.getId(), LogEvent.Type.WARNING);
@@ -47,6 +38,28 @@ public class CameraFocusHandler extends CameraRequestHandler {
     }
 
     request.setHandled(true);
+  }
+
+  /**
+   * Sets the focus of the supplied camera.
+   * @param focusCam  A Focussingcamera
+   * @param autoOn    The autoOn parameter
+   * @param setPos    The setPos parameter
+   * @param speed     The speed of the focus movement.
+   * @throws CameraConnectionException If the camera cannot be reached.
+   */
+  private void setFocus(FocussingCamera focusCam,
+                        String autoOn, String setPos, String speed)
+          throws CameraConnectionException {
+    if (autoOn != null) {
+      boolean autoOnBool = Boolean.parseBoolean(autoOn);
+      focusCam.setAutoFocusOn(autoOnBool);
+    }
+    if (setPos != null) {
+      focusCam.setFocusPosition(Integer.parseInt(setPos));
+    } else if (speed != null) {
+      focusCam.moveFocus(Integer.parseInt(speed));
+    }
   }
 
   @Override
