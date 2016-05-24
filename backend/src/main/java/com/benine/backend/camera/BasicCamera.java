@@ -4,7 +4,6 @@ import com.benine.backend.video.StreamType;
 
 /**
  * Interface for communication with remote camera's.
- * @author Bryan
  */
 public abstract class BasicCamera implements Camera {
 

@@ -72,7 +72,7 @@ public class CameraController {
   }
 
   /**
-   * Returns the single instance of the logger.
+   * Returns the singleton instance of the logger.
    * @return logger object.
    */
   private Logger getLogger() {
