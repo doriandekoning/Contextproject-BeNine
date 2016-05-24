@@ -15,6 +15,7 @@ public abstract class CameraRequestHandler extends RequestHandler {
   /**
    * Defines if a camera is allowed to be used with this handler.
    * @param cam a Camera object.
+   * @return boolean if the camera type is allowed for this handler.
    */
   abstract boolean isAllowed(Camera cam);
 
