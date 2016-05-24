@@ -41,11 +41,9 @@ public class PresetsCreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      System.out.println(ServerController.getInstance().getCameraController().getCameraById(1));
 
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
-        System.out.println(ipcam);
         setPreset(ipcam);
         respondSuccess(request, res);
       } else {

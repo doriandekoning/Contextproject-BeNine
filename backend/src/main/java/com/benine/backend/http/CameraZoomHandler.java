@@ -25,9 +25,6 @@ public class CameraZoomHandler extends CameraRequestHandler {
     String zoomType = request.getParameter("zoomType");
     String zoom = request.getParameter("zoom");
 
-    System.out.println(zoomType);
-    System.out.println(zoom);
-
     try {
       zoom(zoomingCam, zoomType, zoom);
     } catch (MalformedURIException e) {

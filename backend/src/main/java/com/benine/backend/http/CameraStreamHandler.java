@@ -33,8 +33,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     try {
       streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
-      e.printStackTrace();
-      getLogger().log(e.toString(), LogEvent.Type.WARNING);
+      getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
     }
 
     // We need an MJPEG streamreader to stream MJPEG.
