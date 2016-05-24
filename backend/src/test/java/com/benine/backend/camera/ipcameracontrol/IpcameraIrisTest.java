@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.benine.backend.camera.CameraConnectionException;
 
@@ -22,143 +23,90 @@ public class IpcameraIrisTest {
   
   @Before
   public final void setUp(){
-    camera = new IPCamera("test");
+    camera = Mockito.spy(new IPCamera("test"));
   }
   
-//  @Test
-//  public final void testSetAutoIrisOff() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#D30"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
-//
-//    camera.setAutoIrisOn(false);
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//  }
-//  
-//  @Test
-//  public final void testSetAutoIrisOn() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#D31"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
-//
-//    camera.setAutoIrisOn(true);
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//  }
-//  
-//  @Test
-//  public final void testIsAutoIrisOff() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#D3"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("d30"));
-//
-//    boolean res = camera.isAutoIrisOn();
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//    assertFalse(res);
-//  }
-//  
-//  @Test
-//  public final void testIsAutoIrisOn() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#D3"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("d31"));
-//
-//    boolean res = camera.isAutoIrisOn();
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//    assertTrue(res);
-//  }
-//  
-//  @Test(expected = IpcameraConnectionException.class)
-//  public final void testIsAutoIrisOnException() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#D3"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("p31"));
-//
-//    camera.isAutoIrisOn();
-//  }
-//  
-//  @Test
-//  public final void testSetIrisPosition() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#I80"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC80"));
-//
-//    camera.setIrisPosition(80);
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//  }
-//  
-//  @Test
-//  public final void testSetIrisPosition2() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#I02"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC02"));
-//
-//    camera.setIrisPosition(2);
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//  }
-//  
-//  @Test
-//  public final void testGetIrisPosition() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#GI"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//                                  .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("giD421"));
-//
-//    int res = camera.getIrisPosition();
-//    
-//    mockServerClient.verify(request, VerificationTimes.once());
-//    
-//    assertEquals(res, 3394, 0.000001);
-//  }
-//
-//  @Test
-//  public final void testMoveIris() throws CameraConnectionException {
-//    parameterList = new ArrayList<Parameter>();
-//    parameterList.add(new Parameter("res", "1"));
-//    parameterList.add(new Parameter("cmd", "#I40"));
-//
-//    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-//            .withQueryStringParameters(parameterList);
-//    mockServerClient.when(request).respond(HttpResponse.response().withBody("iC40"));
-//
-//    camera.moveIris(40);
-//
-//    mockServerClient.verify(request, VerificationTimes.once());
-//  }
+  public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
+    Mockito.doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
+  }
+  
+  @Test
+  public final void testSetAutoIrisOff() throws CameraConnectionException {
+    setCameraBehaviour("D30", "d30");
+
+    camera.setAutoIrisOn(false);
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23D30&res=1");
+  }
+  
+  @Test
+  public final void testSetAutoIrisOn() throws CameraConnectionException {
+    setCameraBehaviour("D31", "d31");
+
+    camera.setAutoIrisOn(true);
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23D31&res=1");
+  }
+  
+  @Test
+  public final void testIsAutoIrisOff() throws CameraConnectionException {
+    setCameraBehaviour("D3", "d30");
+    boolean res = camera.isAutoIrisOn();
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23D3&res=1");
+    assertFalse(res);
+  }
+  
+  @Test
+  public final void testIsAutoIrisOn() throws CameraConnectionException {
+    setCameraBehaviour("D3", "d31");
+
+    boolean res = camera.isAutoIrisOn();
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23D3&res=1");
+    assertTrue(res);
+  }
+  
+  @Test(expected = IpcameraConnectionException.class)
+  public final void testIsAutoIrisOnException() throws CameraConnectionException {
+    setCameraBehaviour("D3", "p31");
+    camera.isAutoIrisOn();
+  }
+  
+  @Test
+  public final void testSetIrisPosition() throws CameraConnectionException {
+    setCameraBehaviour("I80", "iC80");
+
+    camera.setIrisPosition(80);
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I80&res=1");
+  }
+  
+  @Test
+  public final void testSetIrisPosition2() throws CameraConnectionException {
+    setCameraBehaviour("I02", "iC02");
+
+    camera.setIrisPosition(2);
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I02&res=1");
+  }
+  
+  @Test
+  public final void testGetIrisPosition() throws CameraConnectionException {
+    setCameraBehaviour("GI", "giD421");
+    int res = camera.getIrisPosition();
+    
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23GI&res=1");
+    
+    assertEquals(res, 3394, 0.000001);
+  }
+
+  @Test
+  public final void testMoveIris() throws CameraConnectionException {
+    setCameraBehaviour("I40", "iC40");
+
+    camera.moveIris(40);
+
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I40&res=1");
+  }
 }
