@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
-public class PresetsRecallPresetTest extends RequestHandlerTest {
+public class RecallPresetTest extends RequestHandlerTest {
 
   private IPCamera ipcamera;
   private Preset preset;
@@ -27,7 +27,7 @@ public class PresetsRecallPresetTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new PresetsRecallPresetHandler();
+    return new RecallPresetHandler();
   }
 
   @Before

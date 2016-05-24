@@ -23,12 +23,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PresetsCreatePresetHandler extends RequestHandler {
+public class CreatePresetHandler extends RequestHandler {
 
   /**
-   * Constructor for a new PresetsCreatePresetHandler, handling the /presets/createpreset request.
+   * Constructor for a new CreatePresetHandler, handling the /presets/createpreset request.
    */
-  public PresetsCreatePresetHandler() {}
+  public CreatePresetHandler() {}
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)

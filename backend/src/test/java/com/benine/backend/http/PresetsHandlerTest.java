@@ -14,9 +14,9 @@ import static org.mockito.Mockito.*;
 
 public class PresetsHandlerTest extends RequestHandlerTest {
 
-  private PresetsCreatePresetHandler createHandler;
+  private CreatePresetHandler createHandler;
 
-  private PresetsRecallPresetHandler recallHandler;
+  private RecallPresetHandler recallHandler;
 
   @Override
   public RequestHandler supplyHandler() {
@@ -27,8 +27,8 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   public void initialize() throws IOException {
     super.initialize();
 
-    createHandler = mock(PresetsCreatePresetHandler.class);
-    recallHandler = mock(PresetsRecallPresetHandler.class);
+    createHandler = mock(CreatePresetHandler.class);
+    recallHandler = mock(RecallPresetHandler.class);
     ((PresetsHandler) getHandler()).setHandlers(createHandler, recallHandler);
 
     Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);

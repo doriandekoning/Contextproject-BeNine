@@ -16,12 +16,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PresetsRecallPresetHandler extends RequestHandler {
+public class RecallPresetHandler extends RequestHandler {
 
   /**
-   * Constructor for a new CameraInfoHandler, handling the /camera/ request.
+   * Constructor for a new RecallPresetHandler, handling the /presets/recallpreset request.
    */
-  public PresetsRecallPresetHandler() {}
+  public RecallPresetHandler() {}
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
