@@ -27,8 +27,8 @@ public class CameraInfoHandler extends CameraRequestHandler {
 
     addHandler("mjpeg", new CameraStreamHandler());
     addHandler("focus", new CameraFocusHandler());
-    addHandler("move", new CameraIrisHandler());
-    addHandler("iris", new CameraMovingHandler());
+    addHandler("move", new CameraMovingHandler());
+    addHandler("iris", new CameraIrisHandler());
     addHandler("zoom", new CameraZoomHandler());
   }
 
