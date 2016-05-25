@@ -29,7 +29,8 @@ public class PresetsHandlerTest extends RequestHandlerTest {
 
     createHandler = mock(CreatePresetHandler.class);
     recallHandler = mock(RecallPresetHandler.class);
-    ((PresetsHandler) getHandler()).setHandlers(createHandler, recallHandler);
+    ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
+    ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
     Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
     ArrayList<String> keywords = new ArrayList<>();
