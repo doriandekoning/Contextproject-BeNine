@@ -4,6 +4,7 @@ import com.benine.backend.Preset;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Interface for communication with the database.
@@ -95,4 +96,25 @@ public interface Database {
    * @throws SQLException No right connection found
    */
   void useDatabase() throws SQLException;
+
+  /**
+   * Adds a tag to the database.
+   * @param name The tag
+   * @throws SQLException No right connection found
+   */
+  void addTag(String name) throws SQLException;
+
+  /**
+   * Deletes a tag from the database.
+   * @param name The tag
+   * @throws SQLException No right connection found
+   */
+  void deleteTag(String name) throws SQLException;
+
+  /**
+   * Adds a tag to the database.
+   * @return The tags in a list
+   * @throws SQLException No right connection found
+   */
+  Collection<String> getTags() throws SQLException;
 }

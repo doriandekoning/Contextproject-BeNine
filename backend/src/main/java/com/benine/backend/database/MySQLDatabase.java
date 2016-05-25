@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created on 4-5-2016.
@@ -243,6 +244,71 @@ public class MySQLDatabase implements Database {
         statement.close();
       }
     }
+  }
+
+  @Override
+  public void addTag(String name) throws SQLException {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      final String sql = String.format("INSERT INTO presetsdatabase.tag VALUES(%s)",
+          name);
+      statement.executeUpdate(sql);
+      statement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      getLogger().log("Tag couldn't be added", LogEvent.Type.CRITICAL);
+    } finally {
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  @Override
+  public void deleteTag(String name) throws SQLException {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "DELETE FROM tag WHERE name = " + name;
+      statement.executeUpdate(sql);
+      statement.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  @Override
+  public Collection<String> getTags() throws SQLException {
+    Collection<String> list = new ArrayList<String>();
+    Statement statement = connection.createStatement();
+    try {
+      String sql = "SELECT name FROM tag";
+      ResultSet resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        list.add(resultset.getString("name"));
+      }
+      resultset.close();
+      statement.close();
+    } finally {
+      if (statement != null) {
+        statement.close();
+      }
+    }
+    return list;
   }
 
   /**
