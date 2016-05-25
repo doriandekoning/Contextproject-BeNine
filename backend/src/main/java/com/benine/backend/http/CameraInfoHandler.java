@@ -44,7 +44,7 @@ public class CameraInfoHandler extends CameraRequestHandler {
         routed = true;
       }
     }
-
+    
     if (!routed) {
       String cameraInfo = getCameraController().getCamerasJSON();
       respond(request, res, cameraInfo);
