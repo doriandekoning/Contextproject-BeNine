@@ -55,9 +55,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`keyword`
+-- Table `presetsDatabase`.`tag`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`keyword` (
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tag` (
   `ID` INT NOT NULL,
   `Name` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -65,21 +65,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`keywordPresets`
+-- Table `presetsDatabase`.`tagPresets`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`keywordPresets` (
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPresets` (
   `presets_ID` INT(11) NOT NULL,
-  `keyword_ID` INT NOT NULL,
-  PRIMARY KEY (`presets_ID`, `keyword_ID`),
-  INDEX `fk_keywordPresets_keyword1_idx` (`keyword_ID` ASC),
-  CONSTRAINT `fk_keywordPresets_presets`
+  `tag_ID` INT NOT NULL,
+  PRIMARY KEY (`presets_ID`, `tag_ID`),
+  INDEX `fk_tagPresets_tag1_idx` (`tag_ID` ASC),
+  CONSTRAINT `fk_tagPresets_presets`
     FOREIGN KEY (`presets_ID`)
     REFERENCES `presetsDatabase`.`presets` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_keywordPresets_keyword1`
-    FOREIGN KEY (`keyword_ID`)
-    REFERENCES `presetsDatabase`.`keyword` (`ID`)
+  CONSTRAINT `fk_tagPresets_tag1`
+    FOREIGN KEY (`tag_ID`)
+    REFERENCES `presetsDatabase`.`tag` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
