@@ -133,16 +133,8 @@ public class ServerController {
     if (!database.checkDatabase()) {
       database.resetDatabase();
     } else {
-      try {
-        database.useDatabase();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    try {
+      database.useDatabase();
       database.checkCameras();
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
   }
 
