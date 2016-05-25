@@ -193,10 +193,9 @@ public class PresetControllerTest {
     PresetController controller = new PresetController();
     HashSet<String> tags = new HashSet<>();
     tags.add("tag1");
-    tags.add("tag2");
+    controller.addTag("tag2");
     controller.addAllTags(tags);
-    controller.removeTag("tag1");
-
+    controller.removeTag("tag2");
     Assert.assertEquals(tags, controller.getTags());
   }
 
