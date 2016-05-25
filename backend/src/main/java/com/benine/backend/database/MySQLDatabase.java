@@ -78,7 +78,7 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void updatePreset(Preset preset){
+  public void updatePreset(Preset preset) {
     Statement statement = null;
     try {
       statement = connection.createStatement();
@@ -131,7 +131,7 @@ public class MySQLDatabase implements Database {
         list.add(getPresetsFromResultSet(resultset));
       }
     } catch (Exception e) {
-      getLogger().log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+      getLogger().log("Presets could not be gotten from camera.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
     } finally {
       close(statement, resultset);
@@ -146,8 +146,9 @@ public class MySQLDatabase implements Database {
       String connect = "jdbc:mysql://localhost:3306?useUnicode=true&useJDBCCompliantTimezoneShift="
           + "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
       connection = DriverManager.getConnection(connect, user, password);
-      return !connection.isClosed();
-    } catch (Exception e){
+      boolean connected = !connection.isClosed();
+      return connected;
+    } catch (Exception e) {
       getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
       return false;
@@ -295,7 +296,7 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       sql = "DELETE FROM camera WHERE ID = " + cameraID;
       statement.executeUpdate(sql);
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
       getLogger().log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
     } finally {
@@ -304,15 +305,15 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void useDatabase(){
+  public void useDatabase() {
     Statement statement = null;
     try {
       statement = connection.createStatement();
       String sql = "USE presetsdatabase";
       statement.executeUpdate(sql);
     } catch (Exception e) {
-        e.printStackTrace();
-        getLogger().log("Database could not be found.", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
+      getLogger().log("Database could not be found.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -368,20 +369,21 @@ public class MySQLDatabase implements Database {
         + preset.getCameraId() + ")";
   }
 
+  /**
+   * Closes the resultset and statement.
+   * @param statement the statement to be closed
+   * @param resultset the resultset to be closed
+   */
   private void close(Statement statement, ResultSet resultset) {
-    if (statement != null) {
-      try {
+    try {
+      if (statement != null) {
         statement.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
       }
-    }
-    if (resultset != null) {
-      try {
+      if (resultset != null) {
         resultset.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
 

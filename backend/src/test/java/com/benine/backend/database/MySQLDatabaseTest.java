@@ -1,30 +1,29 @@
 package com.benine.backend.database;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
-import static org.mockito.Mockito.mock;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
 
+import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by Ege on 4-5-2016.
@@ -33,6 +32,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     private MySQLDatabase database;
     StatementResultSetHandler statementHandler;
+    Logger logger = mock(Logger.class);
+    CameraController cameraController = mock(CameraController.class);
 
     @Before
     public void prepareEmptyResultSet() {
@@ -42,6 +43,10 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root");
         database.connectToDatabaseServer();
+        ServerController controller = ServerController.getInstance();
+        controller.setDatabase(database);
+        controller.setLogger(logger);
+        controller.setCameraController(cameraController);
     }
 
     @Test
@@ -74,6 +79,16 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
+    public final void testAddNullPreset() throws SQLException {
+        database.resetDatabase();
+        database.addPreset(null);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("insert into presets");
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
     public final void testDeletePreset() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
@@ -97,6 +112,16 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifySQLStatementExecuted("DELETE FROM presets WHERE ID = 1");
         verifySQLStatementExecuted("insert into presets");
         verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testUpdateNullPreset() throws SQLException {
+        database.resetDatabase();
+        database.updatePreset(null);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("insert into presets");
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
     }
@@ -204,9 +229,60 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetFailedPresetsFromResultSet() {
+    public final void testGetFailedPresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
         assertNull(database.getPresetsFromResultSet(result));
+    }
+
+    @Test
+    public final void testFailedDeleteCamera() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteCamera(1);
+        verify(logger).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeletePreset() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deletePreset(1);
+        verify(logger).log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedGetPresets() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getAllPresets();
+        database.getAllPresetsCamera(1);
+        verify(logger).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+        verify(logger).log("Presets could not be gotten from camera.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedConnectionClose() throws SQLException {
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).close();
+        database.setConnection(connection);
+        database.closeConnection();
+        verify(logger).log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedCheckCameras() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.checkCameras();
+        verify(logger).log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     }
 
     @Test
@@ -235,4 +311,15 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.checkOldCameras(result, list, macs);
         verifySQLStatementExecuted("DELETE FROM");
     }
+
+    @Test
+    public final void testFailedUseDatabase() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.useDatabase();
+        verify(logger).log("Database could not be found.", LogEvent.Type.CRITICAL);
+    }
+
 }
