@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
  * Created by dorian on 18-5-16.
  */
 public class PresetControllerTest {
-  
+
   @Test
   public void testAddPreset() throws Exception {
     PresetController controller = new PresetController();
