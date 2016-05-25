@@ -8,12 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockserver.client.server.MockServerClient;
-import org.mockserver.junit.MockServerRule;
-import org.mockserver.model.HttpRequest;
-import org.mockserver.model.HttpResponse;
-import org.mockserver.model.Parameter;
-import org.mockserver.verify.VerificationTimes;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,135 +24,76 @@ import static org.junit.Assert.assertNotEquals;
  */
 public class IpcameraTest {
 
-  @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, false);
-
-  private MockServerClient mockServerClient;
   private IPCamera camera;
-
-  private ArrayList<Parameter> parameterList;
   
   @Before
-  public final void setUp() throws InvalidCameraTypeException{
-	  camera = new IPCamera("127.0.0.1:" + mockServerRule.getPort());
-	  mockServerClient.reset();
+  public final void setUp() throws InvalidCameraTypeException {
+    camera = Mockito.spy(new IPCamera("test"));
+  }
+  
+  public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
+    Mockito.doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
   }
   
   @Test
   public final void testGetMACAddress() throws CameraConnectionException, IOException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("FILE", "1"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
-                                    .withQueryStringParameters(parameterList);
-
     String ipcameraInfo = IOUtils.toString(new FileInputStream("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
-    mockServerClient.when(request).respond(HttpResponse.response().withBody(ipcameraInfo));
-    
+    Mockito.doReturn(ipcameraInfo).when(camera).sendCommand("getinfo?FILE=1");   
     String actual = camera.getMacAddress();
-    mockServerClient.verify(request, VerificationTimes.once());
     assertEquals("8C-C1-21-F0-46-C9", actual);
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetMACAddressFails() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("FILE", "1"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/getinfo")
-                                    .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody(""));
-    
+    Mockito.doReturn("").when(camera).sendCommand("getinfo?FILE=1");      
     camera.getMacAddress();
   }
 
 
   @Test
   public final void testMoveToHomePosition() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#APS80008000111"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                    .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPS80008000111"));
+    setCameraBehaviour("APS80008000111", "aPS80008000111");
     
-    //move with pan speed 17 and tilt speed 1
     Position pos = new Position(0, 180);
     camera.moveTo(pos, 17, 1);
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23APS80008000111&res=1");
   }
   
   @Test
   public final void testMoveToWithSpeed1() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#APS80008000011"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                    .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPS80008000011"));
+    setCameraBehaviour("APS80008000011", "aPS80008000011");
     
-    //move with pan speed 17 and tilt speed 1
     Position pos = new Position(0, 180);
     camera.moveTo(pos, 1, 1);
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23APS80008000011&res=1");
   }
   
   @Test
   public final void testMoveWithSpecifiedSpeed() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#PTS0199"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("pTS0199"));
-
-    //move camera with max speed to top left.
+    setCameraBehaviour("PTS0199", "pTS0199");
     camera.move(01, 99);
-
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23PTS0199&res=1");
   }
   
   @Test
   public final void testGetPosition() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#APC"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPC80008000"));
-
+    setCameraBehaviour("APC", "aPC80008000");
     Position res = camera.getPosition();
     
-    mockServerClient.verify(request, VerificationTimes.once());
     assertEquals(0, res.getPan(), 0.000001);
     assertEquals(180, res.getTilt(), 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetPositionException() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#APC"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("aPP80008000"));
-
+    setCameraBehaviour("APC", "aPP80008000");
     camera.getPosition();
   }
    
   @Test
   public final void testGetStreamLink() {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#D30"));
-
     String res = camera.getStreamLink();
-    assertEquals(res, "http://127.0.0.1:" + mockServerRule.getPort() + "/cgi-bin/mjpeg");
+    assertEquals(res, "http://test" + "/cgi-bin/mjpeg");
   }
   
   @Test(expected = IpcameraConnectionException.class)

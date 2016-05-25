@@ -82,7 +82,7 @@ public class CreatePresetHandler extends RequestHandler {
             + cameraID + "_" + presetID + ".jpg");
 
     ImageIO.write(bufferedImage, "jpg", path);
-    preset.setImage(path.toString());
+    preset.setImage(File.separator + path.toString());
   }
 
   /**
