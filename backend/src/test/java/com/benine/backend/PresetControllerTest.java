@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -184,6 +185,33 @@ public class PresetControllerTest {
     controller.addAllTags(tags);
 
     Assert.assertEquals(tags, controller.getTags());
+  }
+
+
+  @Test
+  public void testRemoveTag() throws SQLException {
+    PresetController controller = new PresetController();
+    HashSet<String> tags = new HashSet<>();
+    tags.add("tag1");
+    tags.add("tag2");
+    controller.addAllTags(tags);
+    controller.removeTag("tag1");
+
+    Assert.assertEquals(tags, controller.getTags());
+  }
+
+  @Test
+  public void testRemoveTagFromPreset() throws SQLException {
+    PresetController controller = new PresetController();
+    Preset preset1 = mock(Preset.class);
+    controller.addPreset(preset1);
+    HashSet<String> tags = new HashSet<>();
+    tags.add("tag1");
+    tags.add("tag2");
+    controller.addAllTags(tags);
+    controller.removeTag("tag1");
+
+    verify(preset1).removeTag("tag1");
   }
 
 }
