@@ -1,82 +1,77 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomingCamera;
-import com.sun.net.httpserver.HttpExchange;
-
+import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.net.URI;
+import java.io.IOException;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created on 4-5-16.
  */
-public class CameraZoomHandlerTest {
-  
-  HttpExchange exchange = mock(HttpExchange.class);
-  OutputStream out = mock(OutputStream.class);
+public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
+
   ZoomingCamera cam = mock(ZoomingCamera.class);
-  ServerController serverController = mock(ServerController.class);
-  CameraController camController;
-  ZoomingHandler zHandler;
-  
+
+  @Override
+  public CameraRequestHandler supplyHandler() {
+    return new CameraZoomHandler();
+  }
+
   @Before
-  public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
-    ServerController serverController = ServerController.getInstance();
-    
-    CameraController camController = new CameraController();
-    serverController.setCameraController(camController);
-    camController.addCamera(cam);
-    when(exchange.getResponseBody()).thenReturn(out);
-    zHandler = new ZoomingHandler();
+  public void initialize() throws IOException {
+    super.initialize();
+    when(cameracontroller.getCameraById(42)).thenReturn(cam);
   }
 
   @Test
-  public void testZoomAbsolute() throws Exception {  
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=absolute&zoom=2");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      zHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  public void testZoomAbsolute() throws Exception {
+    setPath("/42/zoom?zoomType=absolute&zoom=2");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("zoomType", "absolute");
+    parameters.add("zoom", "2");
+
+    setParameters(parameters);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
     verify(cam).zoomTo(2);
+    verify(requestMock).setHandled(true);
   }
 
   @Test
   public void testZoomRelative() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+"/zoom?zoomType=relative&zoom=2");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      zHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    setPath("/42/zoom?zoomType=relative&zoom=2");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("zoomType", "relative");
+    parameters.add("zoom", "2");
+
+    setParameters(parameters);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
     verify(cam).zoom(2);
-  }
-  
-  @Test
-  public void testMalformedURI() throws Exception {
-    URI uri = new  URI("http://localhost/camera/"+cam.getId()+ "/zoom?soom=5");
-    when(exchange.getRequestURI()).thenReturn(uri);
-    try {
-      zHandler.handle(exchange);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    String response = "{\"succes\":\"false\"}"; 
-    verify(out).write(response.getBytes());
+    verify(requestMock).setHandled(true);
   }
 
-  
- 
+  @Test
+  public void testZoomMalformedURI() throws Exception {
+    setPath("/camera/42/zoom?zoomType=relative&soom=2");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("zoomType", "relative");
+    parameters.add("soom", "2");
+
+    setParameters(parameters);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
+  }
+
+
 }

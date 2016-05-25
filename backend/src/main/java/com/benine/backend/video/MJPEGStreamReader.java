@@ -5,7 +5,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -16,7 +17,10 @@ import javax.imageio.ImageIO;
 public class MJPEGStreamReader extends StreamReader {
 
   private BufferedInputStream bufferedStream;
-  private byte[] snapShot;
+
+  private String boundary;
+
+  private byte[] snapshot;
 
   /**
    * Creates a new MJPEGStreamReader.
@@ -36,6 +40,9 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+    this.snapshot = new byte[0];
+
+    setMJPEGBoundary();
     processStream();
   }
 
@@ -47,16 +54,45 @@ public class MJPEGStreamReader extends StreamReader {
   }
 
   /**
+   * Sets the MJPEG boundary by parsing the first header.
+   */
+  private void setMJPEGBoundary() {
+    try {
+      this.boundary = getMJPEGBoundary(new String(getHeader(), StandardCharsets.UTF_8));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * Processes a stream by fetching an image
    * from the stream and updating the snapshot if possible.
    */
   public void processStream() {
     try {
-      snapShot = getImage();
+      byte[] headerByte = getHeader();
+      String header = new String(headerByte, StandardCharsets.UTF_8);
+      byte[] imageByte = getImage(header);
+
+      sendToDistributers(headerByte, imageByte);
+
+      snapshot = imageByte;
 
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Notify the observers about the header and the image.
+   * @param headerByte    The header in byte array format.
+   * @param imageByte     The image in byte array format.
+   */
+  private void sendToDistributers(byte[] headerByte, byte[] imageByte) {
+    setChanged();
+    notifyObservers(headerByte);
+    setChanged();
+    notifyObservers(imageByte);
   }
 
   /**
@@ -102,11 +138,11 @@ public class MJPEGStreamReader extends StreamReader {
 
   /**
    * Fetches the header and gets the jpeg file according to the content length.
+   * @param   header A string representation of the header belonging to the image.
    * @return  a byte[] representing the image.
    * @throws IOException when an error occurs fetching the header or reading the jpeg image.
    */
-  private byte[] getImage() throws IOException {
-    String header = getHeader();
+  private byte[] getImage(String header) throws IOException {
     int contentLength = getContentLength(header);
 
     if (contentLength != -1) {
@@ -153,19 +189,19 @@ public class MJPEGStreamReader extends StreamReader {
   }
 
   /**
-   * Returns a string representation of the header.
+   * Returns a byte representation of the header.
    *
-   * @return String representation of the header.
+   * @return Byte representation of the header.
    * @throws IOException if the header cannot be read from the buffered stream.
    */
-  private String getHeader() throws IOException {
-    StringWriter header = new StringWriter(128);
+  private byte[] getHeader() throws IOException {
+    ByteArrayOutputStream header = new ByteArrayOutputStream();
 
     while (!isJPEGHeader()) {
       header.write(bufferedStream.read());
     }
 
-    return header.toString();
+    return header.toByteArray();
   }
 
   /**
@@ -186,8 +222,39 @@ public class MJPEGStreamReader extends StreamReader {
     }
   }
 
+  /**
+   * Finds the mjpeg boundary starting with --
+   * @param header The header.
+   * @return  The mjpeg boundary.
+   */
+  private String getMJPEGBoundary(String header) {
+    Pattern boundary = Pattern.compile("--[a-zA-Z]+");
+    Matcher matcher = boundary.matcher(header);
+
+    if (matcher.find()) {
+      return matcher.group();
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Returns the MJPEG boundary.
+   * @return a boundary of preferably of format '--[BOUNDARY]'
+   */
+  public String getBoundary() {
+    return boundary;
+  }
+
   @Override
   public BufferedImage getSnapShot() throws IOException {
-    return ImageIO.read(new ByteArrayInputStream(this.snapShot));
+    return ImageIO.read(new ByteArrayInputStream(this.snapshot));
   }
+
+  @Override
+  public byte[] getSnapShotBytes() {
+    return Arrays.copyOf(snapshot, snapshot.length);
+  }
+
 }
+

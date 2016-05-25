@@ -26,12 +26,27 @@ function loadCameras() {
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
-			camera_div.find('img').attr("src", cameras[c].streamlink);
+			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
 		}
 	});
+}
+
+/**
+* Reload the camera info and update the controls.
+*/
+function getCameraInfo() {
+	$.get("/api/backend/camera/", function(data) {
+		var obj = JSON.parse(data);
+		// put the information of every camera in cameras.
+		for (var c in obj.cameras) {
+      if ( c !== undefined) {
+		cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
+      }
+		}
+	}).done(loadControls);
 }
 
 /**
@@ -43,39 +58,46 @@ function setCurrentCamera(id) {
 	currentcamera = id;
 	// Show the current camera in the editing view.
 	camera_div = $('#current_camera');
-	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
+	camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
 	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
 	$('#createPreset').prop('disabled', false);
 
+	getCameraInfo();
+	loadPresets(currentcamera);
+}
+
+/**
+* Load all the right controls
+*/
+function loadControls() {
 	//determine which elements of the UI to show
 	zoom = $('#zoom');
 	iris = $('#iris');
 	focus = $('#focus');
-	if (cameras[id].zoom === undefined) {
+	if (cameras[currentcamera].zoom === undefined) {
 		zoom.hide();
 	} else {
 		zoom.show();
 	}
-	if  (cameras[id].tilt === undefined) {
+	if  (cameras[currentcamera].tilt === undefined) {
 		$('.joystick_zone').hide();
 	} else {
 		$('.joystick_zone').show();
 	}
-	if  (cameras[id].iris === undefined) {
+	if  (cameras[currentcamera].iris === undefined) {
 		iris.hide();
 	} else {
 		iris.show();
-		setButton(iris.find("#auto_iris"), cameras[id].autoiris);
+		setButton(iris.find("#auto_iris"), cameras[currentcamera].autoiris);
 	}
-	if  (cameras[id].focus === undefined) {
+	if  (cameras[currentcamera].focus === undefined) {
 		focus.hide();
 	} else {
 		focus.show();
-		setButton(focus.find("#auto_focus"), cameras[id].autofocus);
+		setButton(focus.find("#auto_focus"), cameras[currentcamera].autofocus);
 	}
-	loadPresets(currentcamera);
 }
 
 /**
@@ -350,8 +372,9 @@ function presetcall(t) {
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
-		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
+		$.get("/api/backend/presets/recallpreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
 		console.log(t.attr("presetid"));
+		getCameraInfo();
 	}
 }
 
@@ -373,6 +396,9 @@ function createPreset() {
 	var presetTag = preset_create_div.find('#preset_tag').val();
 	console.log(presetTag + " " + presetName);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
-	}
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera, function (data) {
+			console.log(data);
+			loadPresets(currentcamera);
+		});
+	};
 }

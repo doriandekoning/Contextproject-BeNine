@@ -67,6 +67,7 @@ public class Logger {
   public void log(String description, Exception exception) {
     log(new LogEvent(new Date().toString(), description, LogEvent.Type.WARNING, exception));
   }
+
   /**
    * Logs logevent.
    * @param event event to log.

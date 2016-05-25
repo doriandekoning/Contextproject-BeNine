@@ -3,7 +3,7 @@ package com.benine.backend;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
-import com.benine.backend.http.HttpController;
+import com.benine.backend.http.HTTPServer;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
@@ -13,11 +13,11 @@ import java.sql.SQLException;
  * Class containing the elements to make the server work.
  */
 public class ServerController {
-  
-  private static ServerController serverController;
-  
+
+  private static volatile ServerController serverController;
+
   private static String mainConfigPath = "configs" + File.separator + "main.conf";
-  
+
   private Logger logger;
 
   private Config config;
@@ -27,16 +27,17 @@ public class ServerController {
   private StreamController streamController;
 
   private Database database;
-  
+
   private boolean running;
 
-  private HttpController httpController;
+  private HTTPServer httpServer;
 
   private PresetController presetController;
-  
+
   /**
    * Constructor of the server controller.
    * Sets up everything needed to run the server.
+   *
    * @param configPath path to the main config file.
    */
   private ServerController(String configPath) {
@@ -49,45 +50,52 @@ public class ServerController {
     cameraController = new CameraController();
 
     presetController = new PresetController();
-    
+
     streamController = new StreamController();
   }
-  
+
   /**
    * Get the unique instance of the servercontroller.
    * If it does not yet exists create one.
+   *
    * @return unique instance of the servercontroller.
    */
-  public static synchronized ServerController getInstance() {
+  public static ServerController getInstance() {
     if (serverController == null) {
-      serverController = new ServerController(mainConfigPath);
+      synchronized (ServerController.class) {
+        if (serverController == null) {
+          serverController = new ServerController(mainConfigPath);
+        }
+      }
     }
     return serverController;
   }
-  
-  
+
+
   /**
    * Start the server.
+   *
+   * @throws Exception If the server cannot be started.
    */
-  public void start() {
+  public void start() throws Exception {
     startupDatabase();
     cameraController.loadConfigCameras();
-    
-    httpController = new HttpController(config.getValue("serverip"),
-                        Integer.parseInt(config.getValue("serverport"))); 
-    
+    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
+
     loadPresets();
-    
+
     running = true;
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
-  
+
   /**
    * Stop the server.
+   *
+   * @throws Exception If the server cannot be stopped.
    */
-  public void stop() {
+  public void stop() throws Exception {
     if (running) {
-      httpController.destroy();
+      httpServer.destroy();
       database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
@@ -107,6 +115,7 @@ public class ServerController {
 
   /**
    * Read the login information from the database and create database object..
+   *
    * @return database object
    */
   private Database loadDatabase() {
@@ -114,7 +123,7 @@ public class ServerController {
     String password = config.getValue("sqlpassword");
     return new MySQLDatabase(user, password);
   }
-  
+
   /**
    * Create database if non exists and make the connection.
    */
@@ -131,7 +140,7 @@ public class ServerController {
       }
     }
   }
-  
+
   /**
    * Setup a new logger.
    */
@@ -142,9 +151,10 @@ public class ServerController {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Read the main config file.
+   *
    * @param configPath to the main config file.
    * @return config object.
    */
@@ -156,9 +166,10 @@ public class ServerController {
     }
     return null;
   }
-  
+
   /**
    * Returns the cameraController.
+   *
    * @return the cameracontroller
    */
   public CameraController getCameraController() {
@@ -167,6 +178,7 @@ public class ServerController {
 
   /**
    * Returns the streamController.
+   *
    * @return the streamController
    */
   public StreamController getStreamController() {
@@ -176,14 +188,21 @@ public class ServerController {
 
   /**
    * Sets the cameraController.
+   *
    * @param cameraController the cameracontroller
    */
   public void setCameraController(CameraController cameraController) {
     this.cameraController = cameraController;
   }
-  
+
+  public void setStreamController(StreamController streamController) {
+    this.streamController = streamController;
+  }
+
+
   /**
    * Getter for the database.
+   *
    * @return the database
    */
   public Database getDatabase() {
@@ -192,6 +211,7 @@ public class ServerController {
 
   /**
    * Setter for the database also updates the presets and cameras according to new database.
+   *
    * @param newDatabase the new database
    */
   public void setDatabase(Database newDatabase) {
@@ -203,22 +223,25 @@ public class ServerController {
 
   /**
    * Getter for the logger.
+   *
    * @return the logger.
    */
   public Logger getLogger() {
     return logger;
   }
-  
+
   /**
    * Getter for the logger.
+   *
    * @param logger object to set.
    */
   public void setLogger(Logger logger) {
     this.logger = logger;
   }
-  
+
   /**
    * Test if the server is running.
+   *
    * @return true if server is running.
    */
   public Boolean isServerRunning() {
@@ -227,6 +250,7 @@ public class ServerController {
 
   /**
    * Getter for presetController
+   *
    * @return Returns the presetController.
    */
   public PresetController getPresetController() {
@@ -239,14 +263,16 @@ public class ServerController {
 
   /**
    * Get the main config file.
+   *
    * @return the config file.
    */
   public Config getConfig() {
     return config;
   }
-  
+
   /**
    * Sets the main config path used on creation of the server controller.
+   *
    * @param configPath to the main config file.
    */
   public static void setConfigPath(String configPath) {

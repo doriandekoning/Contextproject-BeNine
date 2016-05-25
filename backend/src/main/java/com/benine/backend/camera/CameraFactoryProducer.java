@@ -15,7 +15,7 @@ public class CameraFactoryProducer {
   static final Map<String, CameraFactory> CAMERA_TYPES;
   
   static {
-    CAMERA_TYPES = new HashMap<String, CameraFactory>();
+    CAMERA_TYPES = new HashMap<>();
     CAMERA_TYPES.put("simplecamera", new SimpleCameraFactory());
     CAMERA_TYPES.put("ipcamera", new IPCameraFactory());
   }
