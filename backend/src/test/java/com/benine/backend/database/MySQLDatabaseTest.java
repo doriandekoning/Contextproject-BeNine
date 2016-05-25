@@ -41,11 +41,11 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         statementHandler =
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root");
+        database.connectToDatabaseServer();
     }
 
     @Test
     public final void testConnection() throws SQLException {
-        database.connectToDatabaseServer();
         assertTrue(database.isConnected());
         database.closeConnection();
         verifyConnectionClosed();
@@ -53,7 +53,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testResetDatabase() {
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.closeConnection();
         verifySQLStatementExecuted("CREATE SCHEMA IF NOT EXISTS `presetsDatabase`");
@@ -65,7 +64,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testAddPreset() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
@@ -78,7 +76,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testDeletePreset() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
         database.deletePreset(1);
@@ -107,8 +104,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testGetAllPreset() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
-        ;
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);
         ArrayList<Preset> result = database.getAllPresets();
@@ -121,7 +116,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddCamera() throws SQLException {
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.closeConnection();
@@ -134,7 +128,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testGetPresetsCamera() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.addPreset(preset);
@@ -148,7 +141,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testCheckCameras() throws SQLException {
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.checkCameras();
@@ -161,7 +153,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeleteCamera() throws SQLException {
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.deleteCamera(1);
@@ -175,7 +166,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testUseDatabase() throws SQLException {
-        database.connectToDatabaseServer();
         database.resetDatabase();
         database.useDatabase();
         database.closeConnection();
@@ -186,7 +176,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testCheckDatabase() throws SQLException {
-        database.connectToDatabaseServer();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
         Assert.assertFalse(database.checkDatabase());
@@ -199,7 +188,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testGetPresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
-        database.connectToDatabaseServer();
         result.addColumn("pan", new Object[]{1});
         result.addColumn("tilt", new Object[]{1});
         result.addColumn("zoom", new Object[]{1});
@@ -218,7 +206,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testGetFailedPresetsFromResultSet() {
         MockResultSet result = statementHandler.createResultSet();
-        database.connectToDatabaseServer();
         assertNull(database.getPresetsFromResultSet(result));
     }
 
@@ -226,7 +213,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testCheckNewCameras() throws CameraConnectionException {
         Camera camera = mock(Camera.class);
         when(camera.getMacAddress()).thenReturn("mas");
-        database.connectToDatabaseServer();
         ArrayList<Camera> list = new ArrayList<Camera>();
         ArrayList<String> macs = new ArrayList<String>();
         list.add(camera);
@@ -239,7 +225,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testOldCameras() throws CameraConnectionException, SQLException {
         Camera camera = mock(Camera.class);
         when(camera.getMacAddress()).thenReturn("mas");
-        database.connectToDatabaseServer();
         ArrayList<Camera> list = new ArrayList<Camera>();
         ArrayList<String> macs = new ArrayList<String>();
         list.add(camera);
