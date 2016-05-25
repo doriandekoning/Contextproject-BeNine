@@ -175,4 +175,15 @@ public class PresetControllerTest {
 
   }
 
+  @Test
+  public void testAddAllTags() throws SQLException {
+    PresetController controller = new PresetController();
+    HashSet<String> tags = new HashSet<>();
+    tags.add("tag1");
+    tags.add("tag2");
+    controller.addAllTags(tags);
+
+    Assert.assertEquals(tags, controller.getTags());
+  }
+
 }

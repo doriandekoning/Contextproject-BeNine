@@ -65,6 +65,7 @@ public class PresetController {
    */
   public void addPreset(Preset preset) throws SQLException {
     presets.add(preset);
+    addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
     serverContr.getDatabase().addPreset(preset);
   }
@@ -91,7 +92,7 @@ public class PresetController {
 
   /**
    * Adds a tag.
-   * @string tag the name of the tag to add.
+   * @param tag the name of the tag to add.
    */
   public void addTag(String tag) {
     tags.add(tag);
@@ -103,5 +104,13 @@ public class PresetController {
    */
   public Collection<String> getTags() {
     return tags;
+  }
+
+  /**
+   * Adds a collection of tags.
+   * @param tags a collection of tags to add.
+   */
+  public void addAllTags(Collection<String> tags) {
+    this.tags.addAll(tags);
   }
 }
