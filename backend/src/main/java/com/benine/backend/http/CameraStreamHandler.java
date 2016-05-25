@@ -56,7 +56,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
           os.write(bytes, 0, bytesRead);
         }
       } catch (IOException e) {
-        System.out.println("ENDED");
+        // Outputstream closed, connection with client ended.
       } finally {
         os.close();
         in.close();
