@@ -1,6 +1,30 @@
 var localTags = [{name: "test"}];
 
 /**
+* Function loads the presets of this camera in the preset window.
+* @param presets object
+*/
+function loadPresetsOnTag(obj) {
+	var preset_div, presets, place, preset, preset_area;
+	preset_area = $('#preset_area');
+	preset_area.find('div').removeAttr("presetID");
+	preset_area.find('img').removeAttr("src");
+	preset_area.find('h5').removeClass();
+	Holder.run({images:"#preset_area img"});
+	presets = obj.presets;
+	place = 1;
+	for (var p in presets) {
+		if ($('#preset_'+ place) !== undefined) {
+			preset = JSON.parse(presets[p]);
+			preset_div = $('#preset_' + place);
+			preset_div.find('img').attr("src", "/api/backend" + preset.image);
+			preset_div.attr("presetID", preset.id);
+			place++;
+		}
+	}
+}
+
+/**
 * Load everyting to create a preset.
 */
 function loadCreatePreset() {
@@ -21,6 +45,7 @@ function createPreset() {
 	console.log(presetTag + " " + presetName);
 	if (currentcamera !== undefined) {
 		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
+		loadPresets(currentcamera);
 	}
 }
 
@@ -105,12 +130,39 @@ $('#preset_create_div .tags_input').tagsinput('input').keypress(function (e) {
 function tagSearchInput(t) {
 	if(currentcamera !== undefined) {
 		if (!t.val()) {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?bla=5" , function(data) {loadPresetsOnTag(JSON.parse(data));});
+			$.get("/api/backend/presets/getpresets" , function(data) {loadPresetsOnTag(JSON.parse(data));});
 		} else {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
-			
+			$.get("/api/backend/presets?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
 		}
 	}
+}
+
+/**
+* Function loads the presets of this camera in the preset window.
+* @param cameraID the presets of this camera are loaded.
+*/
+function loadPresets(cameraID) {
+	var preset_div, obj, presets, place, preset, preset_area;
+	preset_area = $('#preset_area');
+	preset_area.find('div').removeAttr("presetID");
+	preset_area.find('img').removeAttr("src");
+	preset_area.find('h5').removeClass();
+	Holder.run({images:"#preset_area img"});
+	$.get("/api/backend/presets/getpresets", function(data) {
+		obj = JSON.parse(data);
+		console.log(obj);
+		presets = obj.presets;
+		place = 1;
+		for (var p in presets) {
+			if ($('#preset_'+ place) !== undefined) {
+				preset = JSON.parse(presets[p]);
+				preset_div = $('#preset_' + place);
+				preset_div.find('img').attr("src", "/api/backend" + preset.image);
+				preset_div.attr("presetID", preset.id);
+				place++;
+			}
+		}
+	});
 }
 
 /**
@@ -133,7 +185,7 @@ $('#tagsearch input').typeahead({
 * When a suggestion is selected
 */
 $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
-	$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + datum.name , function(data) {loadPresetsOnTag(JSON.parse(data));});
+	$.get("/api/backend/presets?tag=" + datum.name , function(data) {loadPresetsOnTag(JSON.parse(data));});
 });
 
 /**
@@ -149,7 +201,8 @@ function presetcall(t) {
 		}
 		selectedPreset = t.attr("id");
 		title.addClass("selected");
-		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
+		$.get("/api/backend/presets/recallpreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
 		console.log(t.attr("presetid"));
+		getCameraInfo();
 	}
 }

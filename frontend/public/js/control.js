@@ -26,12 +26,27 @@ function loadCameras() {
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
-			camera_div.find('img').attr("src", cameras[c].streamlink);
+			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
 		}
 	});
+}
+
+/**
+* Reload the camera info and update the controls.
+*/
+function getCameraInfo() {
+	$.get("/api/backend/camera/", function(data) {
+		var obj = JSON.parse(data);
+		// put the information of every camera in cameras.
+		for (var c in obj.cameras) {
+      if ( c !== undefined) {
+		cameras[JSON.parse(obj.cameras[c]).id] = JSON.parse(obj.cameras[c]);
+      }
+		}
+	}).done(loadControls);
 }
 
 /**
@@ -44,70 +59,60 @@ function setCurrentCamera(id) {
 		currentcamera = id;
 		// Show the current camera in the editing view.
 		camera_div = $('#current_camera');
-		camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
+		camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
 		camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(cameras[currentcamera].id);
 		selectedPreset = undefined;
 		$('#createPreset').prop('disabled', false);
-
-		//determine which elements of the UI to show
-		zoom = $('#zoom');
-		iris = $('#iris');
-		focus = $('#focus');
-		if (cameras[id].zoom === undefined) {
-			zoom.hide();
-		} else {
-			zoom.show();
-			zoom.val(cameras[id].zoom);
-		}
-		if  (cameras[id].tilt === undefined) {
-			$('.joystick_zone').hide();
-		} else {
-			$('.joystick_zone').show();
-		}
-		if  (cameras[id].iris === undefined) {
-			iris.hide();
-		} else {
-			iris.show();
-		}
-		if  (cameras[id].focus === undefined) {
-			focus.hide();
-		} else {
-			focus.show();
-		}
 		$('#preset_create_div .tags_input').tagsinput('removeAll');
+		loadPresets(currentcamera);
+
+		getCameraInfo();
 		loadPresets(currentcamera);
 	}
 }
 
-
+/**
+* Load all the right controls
+*/
+function loadControls() {
+	//determine which elements of the UI to show
+	zoom = $('#zoom');
+	iris = $('#iris');
+	focus = $('#focus');
+	if (cameras[currentcamera].zoom === undefined) {
+		zoom.hide();
+	} else {
+		zoom.show();
+	}
+	if  (cameras[currentcamera].tilt === undefined) {
+		$('.joystick_zone').hide();
+	} else {
+		$('.joystick_zone').show();
+	}
+	if  (cameras[currentcamera].iris === undefined) {
+		iris.hide();
+	} else {
+		iris.show();
+		setButton(iris.find("#auto_iris"), cameras[currentcamera].autoiris);
+	}
+	if  (cameras[currentcamera].focus === undefined) {
+		focus.hide();
+	} else {
+		focus.show();
+		setButton(focus.find("#auto_focus"), cameras[currentcamera].autofocus);
+	}
+}
 
 /**
-* Function loads the presets of this camera in the preset window.
-* @param cameraID the presets of this camera are loaded.
+* Set the button specified to the boolean value bool.
 */
-function loadPresets(cameraID) {
-	var preset_div, obj, presets, place, preset, preset_area;
-	preset_area = $('#preset_area');
-	preset_area.find('div').removeAttr("presetID");
-	preset_area.find('img').removeAttr("src");
-	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"})
-	$.get("/api/backend/presets/getpresets", function(data) {
-		obj = JSON.parse(data);
-		console.log(obj);
-		presets = obj.presets;
-		place = 1;
-		for (var p in presets) {
-			if ($('#preset_'+ place) !== undefined) {
-				preset = JSON.parse(presets[p]);
-				preset_div = $('#preset_' + place);
-				preset_div.find('img').attr("src", "/api/backend" + preset.image);
-				preset_div.attr("presetID", preset.id);
-				place++;
-			}
-		}
-	});
+function setButton(btn, bool) {
+	if (bool === true) {
+		btn.removeClass( "btn-danger" ).addClass("btn-success");
+	} else {
+		btn.removeClass( "btn-success" ).addClass("btn-danger");
+	}
 }
 
 /**
@@ -127,8 +132,9 @@ var joystickoptions = {
 /* variables used for the joystick movements */
 var joystick = nipplejs.create(joystickoptions);
 var distance = 0;
-var angle = 0
+var angle = 0;
 var moveSend = false;
+var lastSend = {distance: 0, angle:0};
 
 /**
 * When the joystick is moved send a new move command.
@@ -138,7 +144,7 @@ joystick.on('move', function(evt, data){
 	distance = data.distance;
 	if (moveSend === false) {
 		moveSend = true;
-		setTimeout(function(){ sendMove(); moveSend = false;  }, 130)
+		setTimeout(function(){ sendMove(); moveSend = false;  }, 130);
 		sendMove();
 	} 
 });
@@ -155,15 +161,19 @@ joystick.on('end', function(){
 * Method to send a move to the current camera.
 */
 function sendMove(){
-	var tilt, pan;
-	tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 50 ) + 50);
-	$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
-	console.log(pan + " - " + tilt);
+	if (lastSend.distance !== distance || lastSend.angle !== angle) {
+		var tilt, pan;
+		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
+		lastSend.distance = distance;
+		lastSend.angle = angle;
+		console.log(pan + " - " + tilt);
+	}
 }
 
 /* Variable used for the zoom slider */
-var zoomInput = {value:0, send:false};
+var zoomInput = {value:0, send:false, lastSend: 0};
 
 /**
 * Method is called when the inputslider value changes.
@@ -174,14 +184,19 @@ function inputzoomslider(z) {
 
 /**
 * Method to send a command to the backend to change the zoom.
+* values send to the backend are between 1 and 99
 */
 function sendZoom() {
-	$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + parseInt(49.5  + (4.95 * parseInt(zoomInput.value))), function(data) {});
-	console.log("Zoom: " + parseInt(zoomInput.value));
+	if (zoomInput.value !== zoomInput.lastSend) {
+		var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
+		$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
+		zoomInput.lastSend = zoomInput.value;
+		console.log("Zoom: " + zoom);
+	}
 }
 
 /* Variable used for the focus slider */
-var focusInput = {value:0, send:false};
+var focusInput = {value:0, send:false, lastSend: 0};
 
 /**
 * Method to send the new input value of the focus slider to the currently selected camera.
@@ -196,14 +211,19 @@ function inputfocusslider(f) {
 
 /**
 * Method to send a command to the backend to change the focus.
+* values send to the backend are between 1 and 99
 */
 function sendFocus() {
-	$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + parseInt(49.5  + (4.95*parseInt(focusInput.value))) , function(data) {});
-	console.log("Focus: " + parseInt(focusInput.value));
+	if (focusInput.value != focusInput.lastSend) {
+		var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
+		$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
+		focusInput.lastSend = focusInput.value;
+		console.log("Focus: " + focus);
+	}
 }
 
 /* Variables used for the iris slider */
-var irisInput = {value:0, send:false};
+var irisInput = {value:0, send:false, lastSend: 0};
 
 
 /**
@@ -219,10 +239,15 @@ function inputirisslider(i) {
 
 /**
 * Function to send a command to the backend to change the iris.
+* values send to the backend are between 1 and 99
 */
 function sendIris() {
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + parseInt(49.5 + (4.95*parseInt(irisInput.value))) , function(data) {});
-	console.log("Iris: " + parseInt(irisInput.value));
+	if (irisInput.value !== irisInput.lastSend) {
+		var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
+		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
+		irisInput.lastSend = irisInput.value;
+		console.log("Iris: " + iris);
+	}
 }
 
 /**
@@ -249,11 +274,11 @@ function releaseSlider(fun, input) {
 * And send the http request to change to auto focus.
 */
 $('#auto_focus').click(function() {
-	toggleButton($(this));
-	var on = true;
+	var on = false;
 	if($(this).hasClass("btn-danger")){
-		on = false;
+		on = true;
 	}
+	setButton($(this), on);
 	$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
 });
 
@@ -262,11 +287,11 @@ $('#auto_focus').click(function() {
 * And send the http request to change to auto iris.
 */
 $('#auto_iris').click(function() {
-	toggleButton($(this));
-	var on = true;
+	var on = false;
 	if($(this).hasClass("btn-danger")){
-		on = false;
+		on = true;
 	}
+	setButton($(this), on);
 	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
 });
 
@@ -281,29 +306,5 @@ function toggleButton(btn){
 	} else {
 		btn.addClass("btn-success");
 		btn.removeClass("btn-danger");
-	}
-}
-
-/**
-* Function loads the presets of this camera in the preset window.
-* @param presets object
-*/
-function loadPresetsOnTag(obj) {
-	var preset_div, obj, presets, place, preset, preset_area;
-	preset_area = $('#preset_area');
-	preset_area.find('div').removeAttr("presetID");
-	preset_area.find('img').removeAttr("src");
-	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"})
-	presets = obj.presets;
-	place = 1;
-	for (var p in presets) {
-		if ($('#preset_'+ place) !== undefined) {
-			preset = JSON.parse(presets[p]);
-			preset_div = $('#preset_' + place);
-			preset_div.find('img').attr("src", "/api/backend" + preset.image);
-			preset_div.attr("presetID", preset.id);
-			place++;
-		}
 	}
 }
