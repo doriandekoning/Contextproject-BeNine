@@ -164,13 +164,14 @@ public class PresetControllerTest {
   }
 
   @Test
-  public void testAddPresetNonExistentTags() {
+  public void testAddPresetNonExistentTags() throws SQLException {
     PresetController controller = new PresetController();
     Preset preset = mock(Preset.class);
     HashSet<String> tags = new HashSet<>();
     tags.add("tag1");
     when(preset.getTags()).thenReturn((Set)tags);
-    Assert.assertEquals(controller.getPresets(), tags);
+    controller.addPreset(preset);
+    Assert.assertEquals(controller.getTags(), tags);
 
   }
 
