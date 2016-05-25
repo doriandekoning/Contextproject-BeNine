@@ -48,15 +48,15 @@ public class CameraStreamHandler extends CameraRequestHandler {
       PipedInputStream in = new PipedInputStream(distributer.getStream());
       OutputStream os = res.getOutputStream();
 
-      byte[] bytes = new byte[4096];
+      byte[] bytes = new byte[16384];
       int bytesRead;
 
       try {
         while ((bytesRead = in.read(bytes)) != -1) {
           os.write(bytes, 0, bytesRead);
         }
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (IOException e) {
+        System.out.println("ENDED");
       } finally {
         os.close();
         in.close();
@@ -66,7 +66,6 @@ public class CameraStreamHandler extends CameraRequestHandler {
       res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
-    System.out.println("TEST");
     request.setHandled(true);
   }
 
