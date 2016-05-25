@@ -8,14 +8,6 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
 -- Schema presetsDatabase
 -- -----------------------------------------------------
 
@@ -23,7 +15,6 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- Schema presetsDatabase
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `presetsDatabase` ;
-USE `mydb` ;
 
 -- -----------------------------------------------------
 -- Table `presetsDatabase`.`camera`
@@ -74,9 +65,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`keywordPresets`
+-- Table `presetsDatabase`.`keywordPresets`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`keywordPresets` (
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`keywordPresets` (
   `presets_ID` INT(11) NOT NULL,
   `keyword_ID` INT NOT NULL,
   PRIMARY KEY (`presets_ID`, `keyword_ID`),
