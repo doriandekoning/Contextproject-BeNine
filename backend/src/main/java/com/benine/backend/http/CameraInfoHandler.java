@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -23,10 +24,14 @@ public class CameraInfoHandler extends CameraRequestHandler {
   public CameraInfoHandler() {
     this.handlers = new HashMap<>();
 
-    setHandlers(new CameraStreamHandler(), new CameraFocusHandler(),
-            new CameraIrisHandler(), new CameraMovingHandler(),
-            new CameraZoomHandler());
+
+    addHandler("mjpeg", new CameraStreamHandler());
+    addHandler("focus", new CameraFocusHandler());
+    addHandler("move", new CameraIrisHandler());
+    addHandler("iris", new CameraMovingHandler());
+    addHandler("zoom", new CameraZoomHandler()));
   }
+
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -83,6 +88,16 @@ public class CameraInfoHandler extends CameraRequestHandler {
     handlers.put("iris", irisHandler);
     handlers.put("zoom", zoomHandler);
   }
+
+  /**
+   * Adds a handler to this cameraInfoHandler.
+   * @param uri The endpoint location to add the handler.
+   * @param handler a handler object.
+   */
+  public void addHandler(String uri, CameraRequestHandler handler) {
+    handlers.put(uri, handler);
+  }
+
 
   @Override
   boolean isAllowed(Camera cam) {
