@@ -59,7 +59,11 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     when(cameracontroller.getCameraById(43)).thenReturn(null);
     when(cameracontroller.getCameraById(44)).thenReturn(mock(BasicCamera.class));
 
-    ((CameraInfoHandler) getHandler()).setHandlers(streamHandler, focusHandler, irisHandler, moveHandler, zoomHandler);
+    ((CameraInfoHandler) getHandler()).addHandler("mjpeg", streamHandler);
+    ((CameraInfoHandler) getHandler()).addHandler("focus", focusHandler);
+    ((CameraInfoHandler) getHandler()).addHandler("iris", irisHandler);
+    ((CameraInfoHandler) getHandler()).addHandler("move", moveHandler);
+    ((CameraInfoHandler) getHandler()).addHandler("zoom", zoomHandler);
   }
 
   @Test

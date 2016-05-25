@@ -29,7 +29,7 @@ public class CameraInfoHandler extends CameraRequestHandler {
     addHandler("focus", new CameraFocusHandler());
     addHandler("move", new CameraIrisHandler());
     addHandler("iris", new CameraMovingHandler());
-    addHandler("zoom", new CameraZoomHandler()));
+    addHandler("zoom", new CameraZoomHandler());
   }
 
 
@@ -67,26 +67,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
     Camera camera = getCameraController().getCameraById(id);
 
     return id > 0 && camera != null;
-  }
-
-  /**
-   * Sets the handlers of this cameraInfoHandler
-   * @param streamHandler A StreamHandler object.
-   * @param focusHandler A FocusHandler object.
-   * @param irisHandler An IrisHandler object.
-   * @param movingHandler A MovingHandler object.
-   * @param zoomHandler A ZoomHandler object.
-   */
-  public void setHandlers(CameraStreamHandler streamHandler,  CameraFocusHandler focusHandler,
-                     CameraIrisHandler irisHandler,
-                     CameraMovingHandler movingHandler,
-                     CameraZoomHandler zoomHandler) {
-
-    handlers.put("mjpeg", streamHandler);
-    handlers.put("focus", focusHandler);
-    handlers.put("move", movingHandler);
-    handlers.put("iris", irisHandler);
-    handlers.put("zoom", zoomHandler);
   }
 
   /**
