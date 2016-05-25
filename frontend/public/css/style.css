@@ -143,7 +143,7 @@ input[type=range]:focus {
 .modal img {
     width: 100%;
 }
-.bootstrap-tagsinput {
+#preset_create_div .bootstrap-tagsinput {
 	position: absolute;
 	left: 10px;
 	font-size: 17px;
@@ -243,6 +243,10 @@ input[type=range]:focus {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;    
 	box-sizing: border-box;
+	background-color: white;
+}
+#tagsearch .twitter-typeahead {
+	width: 100%;
 }
 
 #preset_area {

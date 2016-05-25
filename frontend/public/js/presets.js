@@ -98,3 +98,58 @@ $('#preset_create_div .tags_input').tagsinput('input').keypress(function (e) {
 		$(this).val('');
 	}
 });
+
+/**
+* Handles input on the tag search field.
+*/
+function tagSearchInput(t) {
+	if(currentcamera !== undefined) {
+		if (!t.val()) {
+			$.get("/api/backend/camera/"+ currentcamera + "/preset?bla=5" , function(data) {loadPresetsOnTag(JSON.parse(data));});
+		} else {
+			$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
+			
+		}
+	}
+}
+
+/**
+* Display type ahead in the search input.
+*/
+$('#tagsearch input').typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1,
+	autoselect: true
+},
+{
+	name: 'tags',
+	source: tagnames,
+	displayKey: 'name',
+	valueKey: 'name'
+});
+
+/**
+* When a suggestion is selected
+*/
+$('#tagsearch_input').on('typeahead:selected', function(e, datum) {
+	$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + datum.name , function(data) {loadPresetsOnTag(JSON.parse(data));});
+});
+
+/**
+* Function to handle a click on a preset.
+* @param t is the div on which is clicked.
+*/
+function presetcall(t) {
+	var presetID = t.attr("presetid");
+	if (presetID !== undefined) {
+		var title = t.find('h5');
+		if(selectedPreset != undefined){
+			$('#' + selectedPreset).find('h5').removeClass("selected");
+		}
+		selectedPreset = t.attr("id");
+		title.addClass("selected");
+		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
+		console.log(t.attr("presetid"));
+	}
+}

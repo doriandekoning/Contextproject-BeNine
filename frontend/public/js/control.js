@@ -285,21 +285,6 @@ function toggleButton(btn){
 }
 
 /**
-* Handles input on the tag search field.
-*/
-function tagSearchInput(t) {
-	if(currentcamera !== undefined) {
-		if (!t.val()) {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?bla=5" , function(data) {loadPresetsOnTag(JSON.parse(data));});
-		} else {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
-			
-		}
-		//console.log(t.val());
-	}
-}
-
-/**
 * Function loads the presets of this camera in the preset window.
 * @param presets object
 */
@@ -320,23 +305,5 @@ function loadPresetsOnTag(obj) {
 			preset_div.attr("presetID", preset.id);
 			place++;
 		}
-	}
-}
-
-/**
-* Function to handle a click on a preset.
-* @param t is the div on which is clicked.
-*/
-function presetcall(t) {
-	var presetID = t.attr("presetid");
-	if (presetID !== undefined) {
-		var title = t.find('h5');
-		if(selectedPreset != undefined){
-			$('#' + selectedPreset).find('h5').removeClass("selected");
-		}
-		selectedPreset = t.attr("id");
-		title.addClass("selected");
-		$.get("/api/backend/presets/recallPreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
-		console.log(t.attr("presetid"));
 	}
 }
