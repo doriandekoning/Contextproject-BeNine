@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -159,6 +160,17 @@ public class PresetControllerTest {
     expectedSet.add("tag");
     expectedSet.add("tag1");
     Assert.assertEquals(expectedSet, new HashSet<String>(controller.getTags()));
+
+  }
+
+  @Test
+  public void testAddPresetNonExistentTags() {
+    PresetController controller = new PresetController();
+    Preset preset = mock(Preset.class);
+    HashSet<String> tags = new HashSet<>();
+    tags.add("tag1");
+    when(preset.getTags()).thenReturn((Set)tags);
+    Assert.assertEquals(controller.getPresets(), tags);
 
   }
 
