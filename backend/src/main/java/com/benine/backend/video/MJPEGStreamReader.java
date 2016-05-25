@@ -36,7 +36,6 @@ public class MJPEGStreamReader extends StreamReader {
    * Creates a new MJPEGStreamReader.
    *
    * @param stream A stream object.
-   * @throws IOException If the inputstream cannot be read.
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
@@ -179,13 +178,14 @@ public class MJPEGStreamReader extends StreamReader {
    * @throws IOException If the bufferedstream cannot be read.
    */
   private byte[] readJPEG() throws IOException {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
 
     while (!isJPEGTrailer()) {
-      baos.write(bufferedStream.read());
+      jpeg.write(bufferedStream.read());
     }
 
-    return baos.toByteArray();
+    jpeg.close();
+    return jpeg.toByteArray();
   }
 
   /**
@@ -201,6 +201,7 @@ public class MJPEGStreamReader extends StreamReader {
       header.write(bufferedStream.read());
     }
 
+    header.close();
     return header.toByteArray();
   }
 
