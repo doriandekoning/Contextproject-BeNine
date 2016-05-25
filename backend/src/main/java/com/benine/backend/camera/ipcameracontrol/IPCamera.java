@@ -380,8 +380,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
-      con.setConnectTimeout(1000);
-      con.setReadTimeout(1000);
+      con.setConnectTimeout(10000);
+      con.setReadTimeout(10000);
       InputStream in = con.getInputStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 

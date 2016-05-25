@@ -26,7 +26,7 @@ function loadCameras() {
 		for (var c in cameras) {
 			camera_div = camera_area.find('#camera_' + place);
 			camera_div.attr("camera_number", cameras[c].id);
-			camera_div.find('img').attr("src", cameras[c].streamlink);
+			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
 			place++;
@@ -43,7 +43,7 @@ function setCurrentCamera(id) {
 	currentcamera = id;
 	// Show the current camera in the editing view.
 	camera_div = $('#current_camera');
-	camera_div.find('img').attr("src", cameras[currentcamera].streamlink);
+	camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
 	camera_title = camera_div.find('.camera_title');
 	camera_title.find('#camera_title').text(cameras[currentcamera].id);
 	selectedPreset = undefined;
@@ -357,6 +357,8 @@ function createPreset() {
 	var presetTag = preset_create_div.find('#preset_tag').val();
 	console.log(presetTag + " " + presetName);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
-	}
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera, function (data) {
+			console.log(data);
+		});
+	};
 }

@@ -1,20 +1,12 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.camera.CameraConnectionException;
+
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockserver.client.server.MockServerClient;
-import org.mockserver.junit.MockServerRule;
-import org.mockserver.model.HttpRequest;
-import org.mockserver.model.HttpResponse;
-import org.mockserver.model.Parameter;
-import org.mockserver.verify.VerificationTimes;
-
-import com.benine.backend.camera.CameraConnectionException;
+import org.mockito.Mockito;
 
 /**
  * Test class to test the IP Camera zoom functions class.
@@ -22,91 +14,55 @@ import com.benine.backend.camera.CameraConnectionException;
  */
 public class IpcameraZoomTest {
   
-  @Rule
-  public MockServerRule mockServerRule = new MockServerRule(this, 9001);
-
-  private MockServerClient mockServerClient;
-  private IPCamera camera = new IPCamera("127.0.0.1:9001");
-
-  private ArrayList<Parameter> parameterList;
+  private IPCamera camera;
   
   @Before
   public final void setUp(){
-    mockServerClient.reset();
+    camera = Mockito.spy(new IPCamera("test"));
+  }
+  
+  public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
+    Mockito.doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
   }
   
   @Test
   public final void testGetZoomPosition() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#GZ"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("gz655"));
+    setCameraBehaviour("GZ", "gz655");
 
     int res = camera.getZoomPosition();
     
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23GZ&res=1");
     assertEquals(res, 1621, 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetZoomPositionException() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#GZ"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("gs655"));
-
+    setCameraBehaviour("GZ", "gs655");
     camera.getZoomPosition();
   }
   
   @Test
   public final void testZoomTo() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#AXZB84"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("axzBAB"));
-
+    setCameraBehaviour("AXZB84", "axzBAB");
     camera.zoomTo(58);
     
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXZB84&res=1");
   }
   
   @Test
   public final void testZoom() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#Z80"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("zS80"));
-
+    setCameraBehaviour("Z80", "zS80");
     camera.zoom(80);
     
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23Z80&res=1");
   }
   
   @Test
   public final void testZoom2() throws CameraConnectionException {
-    parameterList = new ArrayList<Parameter>();
-    parameterList.add(new Parameter("res", "1"));
-    parameterList.add(new Parameter("cmd", "#Z02"));
-
-    final HttpRequest request = HttpRequest.request("/cgi-bin/aw_ptz")
-                                  .withQueryStringParameters(parameterList);
-    mockServerClient.when(request).respond(HttpResponse.response().withBody("zS02"));
-
+    setCameraBehaviour("Z02", "zS02");
     camera.zoom(2);
     
-    mockServerClient.verify(request, VerificationTimes.once());
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23Z02&res=1");
   }
   
 }

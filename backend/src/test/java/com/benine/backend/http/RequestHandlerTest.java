@@ -1,103 +1,136 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Logger;
+import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
-import com.sun.net.httpserver.HttpExchange;
-import org.junit.Assert;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.video.StreamController;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.jar.Attributes;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
 /**
  * Created on 4-5-16.
  */
-public class RequestHandlerTest {
-  
-  private PresetCreationHandler handler;
-  private HttpExchange exchangeMock;
-  private OutputStream out;
+public abstract class RequestHandlerTest {
+
   private ServerController serverController;
-  private Logger logger = mock(Logger.class);
-  
+  Logger logger;
+  private RequestHandler handler;
+
+  PrintWriter out;
+  String target;
+  Request requestMock;
+  CameraController cameracontroller;
+  StreamController streamController;
+  PresetController presetController;
+  HttpServletResponse httpresponseMock;
+  HttpServletRequest httprequestMock;
+
+
+  public abstract RequestHandler supplyHandler();
+
   @Before
-  public void initialize(){
+  public void initialize() throws IOException {
+    handler = supplyHandler();
+    cameracontroller = mock(CameraController.class);
+    streamController = mock(StreamController.class);
+    presetController = mock(PresetController.class);
+    logger = mock(Logger.class);
+
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setLogger(logger);
-    handler = new PresetCreationHandler();
-    exchangeMock = mock(HttpExchange.class);
-    out = mock(OutputStream.class);
-    when(exchangeMock.getResponseBody()).thenReturn(out);
+    serverController.setCameraController(cameracontroller);
+    serverController.setStreamController(streamController);
+    serverController.setPresetController(presetController);
+
+    out = mock(PrintWriter.class);
+    target = "target";
+
+    requestMock = mock(Request.class);
+    httpresponseMock = mock(HttpServletResponse.class);
+    httprequestMock = mock(HttpServletRequest.class);
+
+    when(httpresponseMock.getWriter()).thenReturn(out);
+  }
+
+  public RequestHandler getHandler() {
+    return handler;
+  }
+
+  public void setPath(String path) {
+    when(requestMock.getPathInfo()).thenReturn(path);
+  }
+
+  public void setParameters(MultiMap<String> parameters) {
+    requestMock.setParameters(parameters);
+
+    for (String s : parameters.keySet()) {
+      when(requestMock.getParameter(s)).thenReturn(parameters.getString(s));
+    }
+
+    when(requestMock.getParameters()).thenReturn(parameters);
+
   }
 
   @Test
-  public final void testDecodeCorrectURI() throws MalformedURIException {
-    Attributes expected = new Attributes();
-    expected.putValue("id", "4");
-    expected.putValue("Hello", "World!");
-    Attributes actual = new testRequestHandler().parseURI("id=4&Hello=World!");
-    Assert.assertEquals(expected, actual);
-  }
-  
-  @Test(expected=MalformedURIException.class)
-  public final void testDecodeMalformedURI() throws MalformedURIException {
-    new testRequestHandler().parseURI("id=3&id=4");
-  }
-
-  @Test
-  public final void testRespond() throws Exception {
-    RequestHandler handler = new testRequestHandler();
+  public final void testRespondStatus() throws IOException {
     String response = "response";
-    handler.respond(exchangeMock, response);
-    verify(exchangeMock).sendResponseHeaders(200, response.length());
-    verify(out).write(any());
+    handler.respond(requestMock, httpresponseMock, response);
+    verify(httpresponseMock).setStatus(200);
+  }
+
+  @Test
+  public final void testRespondStatusError() throws IOException {
+    String response = "response";
+    when(httpresponseMock.getWriter()).thenThrow(new IOException());
+
+    handler.respond(requestMock, httpresponseMock, response);
+    verify(httpresponseMock).setStatus(500);
+  }
+
+  @Test
+  public final void testRespond() throws IOException {
+    String response = "response";
+    handler.respond(requestMock, httpresponseMock, response);
+    verify(out).write(response);
     verify(out).close();
   }
 
   @Test
-  public void testResponseMessageTrue() throws Exception {
-    String response = "{\"succes\":\"true\"}"; 
-    handler.respondSuccess(exchangeMock);
-    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  public void testResponseMessageTrueStatus() throws Exception {
+    handler.respondSuccess(requestMock, httpresponseMock);
+    verify(httpresponseMock).setStatus(200);
   }
   
   @Test
-  public void testResponseMessageFalse() throws Exception {
-    String response = "{\"succes\":\"false\"}"; 
-    handler.respondFailure(exchangeMock);
-    verify(exchangeMock).sendResponseHeaders(200, response.length());
+  public void testResponseMessageFalseStatus() throws Exception {
+    handler.respondFailure(requestMock, httpresponseMock);
+    verify(httpresponseMock).setStatus(200);
   }
-  
+
   @Test
-  public void testGetLogger(){
-    assertEquals(logger, handler.getLogger());
+  public void testResponseMessageTrueMessage() throws Exception {
+    String response = "{\"succes\":\"true\"}";
+    handler.respondSuccess(requestMock, httpresponseMock);
+    verify(out).write(response);
   }
-  
-  
+
   @Test
-  public void testGetCameraByID() throws URISyntaxException {
-    when(exchangeMock.getRequestURI()).thenReturn(new URI("http://localhost/camera/1/zoom?position=4"));
-    assertTrue(handler.getCameraId(exchangeMock) == 1);
+  public void testResponseMessageFalseMessage() throws Exception {
+    String response = "{\"succes\":\"false\"}";
+    handler.respondFailure(requestMock, httpresponseMock);
+    verify(out).write(response);
   }
-
-
-  // Test used to be able to instantiate RequestHandler
-  private class testRequestHandler extends RequestHandler {
-
-    public void handle(HttpExchange e) {
-      // Do nothing
-    }
-  }
-
 }

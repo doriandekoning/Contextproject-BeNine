@@ -4,65 +4,73 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
 import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.sun.net.httpserver.HttpExchange;
+import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
-import java.util.jar.Attributes;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Class to handle the recalling of a preset.
- */
 public class RecallPresetHandler extends RequestHandler {
-  
+
   /**
-  * Handles a request of making a new preset. 
-  * @param exchange the exchange containing data about the request.
-  * @throws IOException when an error occurs with responding to the request.
-  */
-  public void handle(HttpExchange exchange) throws IOException {
-    Attributes parsedURI;
+   * Constructor for a new RecallPresetHandler, handling the /presets/recallpreset request.
+   */
+  public RecallPresetHandler() {}
+
+  @Override
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
     try {
-      parsedURI = parseURI(exchange.getRequestURI().getQuery());
+      int cameraID = Integer.parseInt(request.getParameter("currentcamera"));
+      int presetID = Integer.parseInt(request.getParameter("presetid"));
 
-      int cameraID = Integer.parseInt(parsedURI.getValue("currentcamera"));
-
-      int presetID = Integer.parseInt(parsedURI.getValue("presetid"));
       PresetController presetController = ServerController.getInstance().getPresetController();
       Preset preset = presetController.getPresetById(presetID);
-      IPCamera ipcamera = (IPCamera)getCameraController().getCameraById(cameraID);
-      
-      moveCamera(ipcamera,preset);
-      respondSuccess(exchange);
-      
-    } catch (MalformedURIException e) {
-      respondFailure(exchange);
-      getLogger().log("Wrong URI", LogEvent.Type.CRITICAL);
+
+      CameraController cameraController = ServerController.getInstance().getCameraController();
+      Camera camera = cameraController.getCameraById(cameraID);
+
+      moveCamera(camera, preset);
+      respondSuccess(request, res);
 
     } catch (CameraConnectionException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
-
-      respondFailure(exchange);
+      respondFailure(request, res);
+    } catch (MalformedURIException | NumberFormatException e) {
+      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
+      respondFailure(request, res);
     }
+
+    request.setHandled(true);
   }
-  
+
   /**
-   * Method that moves the camera to the correct position.
-   * @param ipcamera the camera to be moved
-   * @param preset the preset used with the values for moving the camera.
-   * @throws CameraConnectionException exception thrown when camera cannot connect.
+   * Moves the camera
+   * @param camera  A Camera object.
+   * @param preset  The preset to move the camera to.
+   * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws MalformedURIException      If the request contains an error.
    */
-  public void moveCamera(IPCamera ipcamera, Preset preset) throws CameraConnectionException {
-    Position position = preset.getPosition();
-    ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
-    ipcamera.zoomTo(preset.getZoom());
-    ipcamera.moveFocus(preset.getFocus());
-    ipcamera.setAutoFocusOn(preset.isAutofocus());
-    ipcamera.setIrisPosition(preset.getIris());
-    ipcamera.setAutoIrisOn(preset.isAutoiris());
-  
+  public void moveCamera(Camera camera, Preset preset)
+          throws CameraConnectionException, MalformedURIException {
+    if (camera instanceof IPCamera) {
+      IPCamera ipcamera = (IPCamera) camera;
+
+      Position position = preset.getPosition();
+      ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
+      ipcamera.zoomTo(preset.getZoom());
+      ipcamera.moveFocus(preset.getFocus());
+      ipcamera.setAutoFocusOn(preset.isAutofocus());
+      ipcamera.setIrisPosition(preset.getIris());
+      ipcamera.setAutoIrisOn(preset.isAutoiris());
+    } else {
+      throw new MalformedURIException("Camera cannot be controller over IP");
+    }
   }
 }

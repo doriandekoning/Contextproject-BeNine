@@ -1,0 +1,93 @@
+package com.benine.backend.http;
+
+import com.benine.backend.LogEvent;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.video.MJPEGStreamReader;
+import com.benine.backend.video.StreamDistributer;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
+import com.benine.backend.video.StreamType;
+import org.eclipse.jetty.server.Request;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PipedInputStream;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Class responsible for handling the /camera/ route.
+ */
+public class CameraStreamHandler extends CameraRequestHandler {
+
+  @Override
+  public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
+          throws IOException, ServletException {
+
+    int camID = getCameraId(request);
+
+    StreamReader streamReader = null;
+    try {
+      streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
+    } catch (StreamNotAvailableException e) {
+      getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
+    }
+
+    // We need an MJPEG streamreader to stream MJPEG.
+    if (streamReader instanceof MJPEGStreamReader) {
+      MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
+      StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
+
+      // Set the headers
+      setHeaders(streamReaderMJPEG, res);
+
+      // Get an inputstream from the distributer.
+
+      PipedInputStream in = new PipedInputStream(distributer.getStream());
+      BufferedInputStream bs = new BufferedInputStream(in);
+      OutputStream os = res.getOutputStream();
+
+      boolean sending = true;
+      while (bs.available() > -1 && sending) {
+        try {
+          os.write(bs.read());
+        } catch (IOException e) {
+          // An exception occured, this means the browser cannot be reached.
+          sending = false;
+        }
+      }
+
+      os.close();
+      bs.close();
+      in.close();
+
+    } else {
+      res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    request.setHandled(true);
+  }
+
+  /**
+   * Sets the HTTP Headers so the browser detects MJPEG.
+   * @param reader                The MJPEG stream reader containing the boundary.
+   * @param httpServletResponse   The response for which the headers should be set.
+   */
+  private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
+    httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents()
+            + reader.getBoundary());
+    httpServletResponse.setHeader("Cache-Control", MJPEGHeader.CACHE_CONTROL.getContents());
+    httpServletResponse.setHeader("Connection", MJPEGHeader.CONNECTION.getContents());
+    httpServletResponse.setHeader("Pragma", MJPEGHeader.PRAGMA.getContents());
+    httpServletResponse.setHeader("Expires", MJPEGHeader.EXPIRES.getContents());
+    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+  }
+
+  @Override
+  boolean isAllowed(Camera cam) {
+    return cam.getStreamType() == StreamType.MJPEG;
+  }
+}
