@@ -16,7 +16,7 @@ public class SimpleCameraFactory implements CameraFactory {
     String address = config.getValue("camera_" + index + "_address");
     String mACaddress = config.getValue("camera_" + index + "_macaddress");
     if (address == null || mACaddress ==  null) {
-      CameraController.logger.log("Can't create simplecamera"
+      ServerController.getInstance().getLogger().log("Can't create simplecamera"
           + " object with specified info of camera " + index,
           LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("The right information for "

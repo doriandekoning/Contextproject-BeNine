@@ -75,20 +75,20 @@ public class IpcameraIrisTest {
   
   @Test
   public final void testSetIrisPosition() throws CameraConnectionException {
-    setCameraBehaviour("I80", "iC80");
+    setCameraBehaviour("AXI5A5", "axi5A5");
 
     camera.setIrisPosition(80);
     
-    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I80&res=1");
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXI5A5&res=1");
   }
   
   @Test
   public final void testSetIrisPosition2() throws CameraConnectionException {
-    setCameraBehaviour("I02", "iC02");
+    setCameraBehaviour("AXI557", "axi557");
 
     camera.setIrisPosition(2);
     
-    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I02&res=1");
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXI557&res=1");
   }
   
   @Test
@@ -98,15 +98,15 @@ public class IpcameraIrisTest {
     
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23GI&res=1");
     
-    assertEquals(res, 3394, 0.000001);
+    assertEquals(res, 2029, 0.000001);
   }
 
   @Test
   public final void testMoveIris() throws CameraConnectionException {
-    setCameraBehaviour("I40", "iC40");
-
+    setCameraBehaviour("AXIC34", "axiC34");
+    setCameraBehaviour("GI", "giD421");
     camera.moveIris(40);
 
-    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23I40&res=1");
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXIC34&res=1");
   }
 }

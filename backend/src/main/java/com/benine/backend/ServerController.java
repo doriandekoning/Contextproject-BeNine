@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class ServerController {
 
-  private volatile static ServerController serverController;
+  private static volatile ServerController serverController;
 
   private static String mainConfigPath = "configs" + File.separator + "main.conf";
 

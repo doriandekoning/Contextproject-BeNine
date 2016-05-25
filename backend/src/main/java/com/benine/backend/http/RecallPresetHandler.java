@@ -65,10 +65,10 @@ public class RecallPresetHandler extends RequestHandler {
       Position position = preset.getPosition();
       ipcamera.moveTo(position, preset.getPanspeed(), preset.getTiltspeed());
       ipcamera.zoomTo(preset.getZoom());
-      ipcamera.moveFocus(preset.getFocus());
       ipcamera.setAutoFocusOn(preset.isAutofocus());
-      ipcamera.setIrisPosition(preset.getIris());
       ipcamera.setAutoIrisOn(preset.isAutoiris());
+      ipcamera.moveFocus(preset.getFocus());  
+      ipcamera.setIrisPosition(preset.getIris());
     } else {
       throw new MalformedURIException("Camera cannot be controller over IP");
     }
