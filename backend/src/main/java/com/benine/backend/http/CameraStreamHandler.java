@@ -10,7 +10,6 @@ import com.benine.backend.video.StreamReader;
 import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
@@ -47,27 +46,27 @@ public class CameraStreamHandler extends CameraRequestHandler {
       // Get an inputstream from the distributer.
 
       PipedInputStream in = new PipedInputStream(distributer.getStream());
-      BufferedInputStream bs = new BufferedInputStream(in);
       OutputStream os = res.getOutputStream();
 
-      boolean sending = true;
-      while (bs.available() > -1 && sending) {
-        try {
-          os.write(bs.read());
-        } catch (IOException e) {
-          // An exception occured, this means the browser cannot be reached.
-          sending = false;
-        }
-      }
+      byte[] bytes = new byte[4096];
+      int bytesRead;
 
-      os.close();
-      bs.close();
-      in.close();
+      try {
+        while ((bytesRead = in.read(bytes)) != -1) {
+          os.write(bytes, 0, bytesRead);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
+        os.close();
+        in.close();
+      }
 
     } else {
       res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
+    System.out.println("TEST");
     request.setHandled(true);
   }
 
