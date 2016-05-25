@@ -1,11 +1,17 @@
 package com.benine.backend;
 
+import com.benine.backend.database.MySQLDatabase;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,7 +19,7 @@ import static org.mockito.Mockito.when;
  * Created by dorian on 18-5-16.
  */
 public class PresetControllerTest {
-
+  
   @Test
   public void testAddPreset() throws Exception {
     PresetController controller = new PresetController();
@@ -143,5 +149,17 @@ public class PresetControllerTest {
       Assert.assertEquals(null, controller.getPresetById(3));
     }
 
+
+  @Test
+  public void testGetSetTags() {
+    PresetController controller = new PresetController();
+    controller.addTag("tag");
+    controller.addTag("tag1");
+    HashSet<String> expectedSet = new HashSet<>();
+    expectedSet.add("tag");
+    expectedSet.add("tag1");
+    Assert.assertEquals(expectedSet, new HashSet<String>(controller.getTags()));
+
+  }
 
 }

@@ -5,6 +5,8 @@ import com.benine.backend.database.Database;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by dorian on 18-5-16.
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 public class PresetController {
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
+
+  private HashSet<String> tags = new HashSet<>();
 
 
   /**
@@ -84,4 +88,20 @@ public class PresetController {
     return presets;
   }
 
+
+  /**
+   * Adds a tag.
+   * @string tag the name of the tag to add.
+   */
+  public void addTag(String tag) {
+    tags.add(tag);
+  }
+
+  /**
+   * Returns a collection with all tags.
+   * @return a collection with all tags
+   */
+  public Collection<String> getTags() {
+    return tags;
+  }
 }
