@@ -114,6 +114,14 @@ public class SimpleCameraTest {
     SimpleCamera camera2 = new SimpleCamera();
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
-  
+
+  @Test
+  public void testIsSetInUse() {
+    SimpleCamera camera1 = new SimpleCamera();
+    Assert.assertFalse(camera1.isInUse());
+    camera1.setInUse(true);
+    Assert.assertTrue(camera1.isInUse());
+  }
+
 }
 

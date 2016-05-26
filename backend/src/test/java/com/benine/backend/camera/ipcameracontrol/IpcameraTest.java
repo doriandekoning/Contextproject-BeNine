@@ -186,4 +186,12 @@ public class IpcameraTest {
   public final void testGetIPAddress() {
     assertEquals("test", camera.getIpaddress());
   }
+
+  @Test
+  public void testIsSetInUse() {
+    IPCamera camera1 = new IPCamera("ip");
+    Assert.assertFalse(camera1.isInUse());
+    camera1.setInUse(true);
+    Assert.assertTrue(camera1.isInUse());
+  }
 }
