@@ -25,7 +25,7 @@ import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
 
 
-public class PresetCreationHandlerTest extends RequestHandlerTest {
+public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   private IPCamera ipcamera;
   private Preset preset;
