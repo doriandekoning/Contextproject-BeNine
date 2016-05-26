@@ -63,5 +63,8 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
+#Tag suggestions
+!tagnames.json
+
 #Images added for presets
 /presets/*
