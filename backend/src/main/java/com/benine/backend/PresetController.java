@@ -3,8 +3,9 @@ package com.benine.backend;
 import com.benine.backend.database.Database;
 
 import java.sql.SQLException;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by dorian on 18-5-16.
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public class PresetController {
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
+
+  private HashSet<String> tags = new HashSet<>();
 
 
   /**
@@ -61,6 +64,7 @@ public class PresetController {
    */
   public void addPreset(Preset preset) throws SQLException {
     presets.add(preset);
+    addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
     serverContr.getDatabase().addPreset(preset);
   }
@@ -84,4 +88,28 @@ public class PresetController {
     return presets;
   }
 
+
+  /**
+   * Adds a tag.
+   * @param tag the name of the tag to add.
+   */
+  public void addTag(String tag) {
+    tags.add(tag);
+  }
+
+  /**
+   * Returns a collection with all tags.
+   * @return a collection with all tags
+   */
+  public Collection<String> getTags() {
+    return tags;
+  }
+
+  /**
+   * Adds a collection of tags.
+   * @param tags a collection of tags to add.
+   */
+  public void addAllTags(Collection<String> tags) {
+    this.tags.addAll(tags);
+  }
 }

@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Request;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +24,14 @@ public class CameraInfoHandler extends CameraRequestHandler {
   public CameraInfoHandler() {
     this.handlers = new HashMap<>();
 
-    setHandlers(new CameraStreamHandler(), new CameraFocusHandler(),
-            new CameraIrisHandler(), new CameraMovingHandler(),
-            new CameraZoomHandler());
+
+    addHandler("mjpeg", new CameraStreamHandler());
+    addHandler("focus", new CameraFocusHandler());
+    addHandler("move", new CameraMovingHandler());
+    addHandler("iris", new CameraIrisHandler());
+    addHandler("zoom", new CameraZoomHandler());
   }
+
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -65,24 +70,14 @@ public class CameraInfoHandler extends CameraRequestHandler {
   }
 
   /**
-   * Sets the handlers of this cameraInfoHandler
-   * @param streamHandler A StreamHandler object.
-   * @param focusHandler A FocusHandler object.
-   * @param irisHandler An IrisHandler object.
-   * @param movingHandler A MovingHandler object.
-   * @param zoomHandler A ZoomHandler object.
+   * Adds a handler to this cameraInfoHandler.
+   * @param uri The endpoint location to add the handler.
+   * @param handler a handler object.
    */
-  public void setHandlers(CameraStreamHandler streamHandler,  CameraFocusHandler focusHandler,
-                     CameraIrisHandler irisHandler,
-                     CameraMovingHandler movingHandler,
-                     CameraZoomHandler zoomHandler) {
-
-    handlers.put("mjpeg", streamHandler);
-    handlers.put("focus", focusHandler);
-    handlers.put("move", movingHandler);
-    handlers.put("iris", irisHandler);
-    handlers.put("zoom", zoomHandler);
+  public void addHandler(String uri, CameraRequestHandler handler) {
+    handlers.put(uri, handler);
   }
+
 
   @Override
   boolean isAllowed(Camera cam) {
