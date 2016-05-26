@@ -79,7 +79,6 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(presetController).addPreset(preset);
     verify(requestMock).setHandled(true);
   }
 
