@@ -108,7 +108,6 @@ function addCameraRow(block) {
     		camera_element.click(function() {
     			var camera_nr = $(this).attr('camera_number');
     			if ( camera_nr != undefined) {
-					console.log("test");
     				setCurrentCamera(camera_nr);
     			}
     		});
