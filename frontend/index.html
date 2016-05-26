@@ -54,12 +54,17 @@
                         PolyCast WebInterface
                     </a>
                 </div>
-                <div class="label-container hidden-xs">
 
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active" ><a data-toggle="modal" data-target=".settings-modal">Settings</a></li>
+                    </ul>
+                    <div class="label-container hidden-xs">
                     <span id="server_status" class="label label-warning">
                         <span>Server Status</span>
                         <span class="glyphicon glyphicon-dashboard"></span>
                     </span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -149,7 +154,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
                 </div>
                 <div class="modal-body">
 					<div>
@@ -177,7 +182,26 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Defines the modal used for settings editing -->
+    <div class="modal fade settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Settings</h4>
                 </div>
                 <div class="modal-body">
                     ...
@@ -201,6 +225,7 @@
     <!-- Holder JS for placeholders -->
     <script src="bower_components/holderjs/holder.js"></script>
 
+    <script src="public/js/settings.js"></script>
     <script src="public/js/generator.js"></script>
     <script src="public/js/control.js"></script>
     <script src="public/js/touch.js"></script>
