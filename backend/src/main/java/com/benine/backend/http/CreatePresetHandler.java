@@ -47,12 +47,12 @@ public class CreatePresetHandler extends RequestHandler {
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
       String tags= request.getParameter("tags");
-      if (tags == null) {
-        throw new MalformedURIException("No tag specified.");
-      } 
-      
-      List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
-      
+      List<String> tagList = null;
+      if (tags != null) {
+      tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+      } else {
+        tagList = Arrays.asList("none");
+      }
       
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
@@ -61,6 +61,7 @@ public class CreatePresetHandler extends RequestHandler {
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
       }
+      
 
     } catch (MalformedURIException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
@@ -115,6 +116,7 @@ public class CreatePresetHandler extends RequestHandler {
 
     Preset preset = createPreset(camera, tagList);
     createImage(preset, camera.getId(), preset.getId());
+    
     presetController.addPreset(preset);
   }
 
