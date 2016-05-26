@@ -49,12 +49,13 @@ public class CreatePresetHandler extends RequestHandler {
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
       List<String> tagList = null;
+      
       if (tags != null) {
         tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
       } else {
         tagList = new ArrayList<String>();
       }
-      
+      getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
         setPreset(ipcam, tagList);
