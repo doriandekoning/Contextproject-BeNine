@@ -33,6 +33,8 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
+
+    verify(out).write("{\"succes\":\"true\"}");
     verify(cam).setInUse(true);
     verify(requestMock).setHandled(true);
   }
@@ -46,6 +48,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
+    verify(out).write("{\"succes\":\"false\"}");
     verify(cam, never()).setInUse(true);
     verify(requestMock).setHandled(true);
   }
@@ -62,6 +65,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
+    verify(out).write("{\"succes\":\"false\"}");
     verify(cam, never()).setInUse(true);
     verify(requestMock).setHandled(true);
     //cleanup
