@@ -44,13 +44,13 @@ public class CameraStreamHandler extends CameraRequestHandler {
       setHeaders(streamReaderMJPEG, res);
 
       // Get an inputstream from the distributer.
-      PipedInputStream in = new PipedInputStream(distributer.getStream());
-      ServletOutputStream os = res.getOutputStream();
 
       byte[] bytes = new byte[16384];
       int bytesRead;
 
-      try {
+      try (PipedInputStream in = new PipedInputStream(distributer.getStream());
+           ServletOutputStream os = res.getOutputStream()) {
+
         while ((bytesRead = in.read(bytes)) != -1) {
           os.write(bytes, 0, bytesRead);
           os.flush();
@@ -60,9 +60,6 @@ public class CameraStreamHandler extends CameraRequestHandler {
                 + request.getRemoteAddr()
                 + " disconnected from MJPEG stream "
                 + camID, LogEvent.Type.INFO);
-      } finally {
-        os.close();
-        in.close();
       }
 
     } else {
