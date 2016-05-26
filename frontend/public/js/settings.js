@@ -3,10 +3,10 @@ function getSettings() {
 
     // Check if there are settings set, if not generate defaults.
     if ($.isEmptyObject(settings)) {
-		setSetting("zoom", 1);
+		setSetting("zoom", 5);
 		setSetting("iris", 5);
-		setSetting("focus", 3);
-		setSetting("joystick", 5);
+		setSetting("focus", 5);
+		setSetting("joystick", 7);
     }
 
     return settings;
@@ -42,18 +42,24 @@ function loadSettings() {
 	$('#joysticksense').val(joystick);
 }
 
+function changeValue(input, name){
+	var newValue = input.val();
+    $('#' + name + 'sense_lbl').text(newValue);
+	setSetting(name, newValue);
+}
+
 $('#zoomsense').on('input', function () {
-    $('#zoomsense_lbl').text($(this).val());
+	changeValue($(this), "zoom");
 });
 
 $('#irissense').on('input', function () {
-    $('#irissense_lbl').text($(this).val());
+	changeValue($(this), "iris");
 });
 
 $('#focussense').on('input', function () {
-    $('#focussense_lbl').text($(this).val());
+	changeValue($(this), "focus");
 });
 
 $('#joysticksense').on('input', function () {
-    $('#joysticksense_lbl').text($(this).val());
+	changeValue($(this), "joystick");
 });
