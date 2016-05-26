@@ -38,7 +38,7 @@ public class CreatePresetHandler extends RequestHandler {
       if (camID == null) {
         throw new MalformedURIException("No Camera ID Specified.");
       }
-
+      
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
 
@@ -54,6 +54,8 @@ public class CreatePresetHandler extends RequestHandler {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (SQLException e) {
+      e.printStackTrace();
+      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
@@ -65,13 +67,12 @@ public class CreatePresetHandler extends RequestHandler {
 
   /**
    * Creates an image for a preset.
-   * @param preset        A Preset object.
    * @param cameraID      The id of the camera to take the image from.
    * @param presetID      The id of the preset used for naming.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    */
-  private void createImage(Preset preset, int cameraID, int presetID) throws
+  private void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
@@ -82,7 +83,9 @@ public class CreatePresetHandler extends RequestHandler {
             + cameraID + "_" + presetID + ".jpg");
 
     ImageIO.write(bufferedImage, "jpg", path);
-    preset.setImage(File.separator + path.toString());
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    
+    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
   }
 
   /**
@@ -98,10 +101,10 @@ public class CreatePresetHandler extends RequestHandler {
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
-
-    Preset preset = createPreset(camera);
-    createImage(preset, camera.getId(), preset.getId());
-    presetController.addPreset(preset);
+    getLogger().log("test cameraID + " +camera.getId() , LogEvent.Type.WARNING);
+    int presetID = presetController.addPreset(createPreset(camera));
+    getLogger().log("test + " +presetID , LogEvent.Type.WARNING);
+    createImage(camera.getId(), presetID);
   }
 
   /**

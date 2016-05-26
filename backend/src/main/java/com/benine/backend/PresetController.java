@@ -11,6 +11,8 @@ import java.util.HashSet;
  * Created by dorian on 18-5-16.
  */
 public class PresetController {
+  
+  private static int newID = 1;
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
@@ -60,13 +62,17 @@ public class PresetController {
   /**
    * Adds a preset.
    * @param preset the preset to add.
+   * @return ID of the preset just created.
    * @throws SQLException when an error occures in the database.
    */
-  public void addPreset(Preset preset) throws SQLException {
+  public int addPreset(Preset preset) throws SQLException {
+    preset.setId(newID);
+    newID++;
     presets.add(preset);
     addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
     serverContr.getDatabase().addPreset(preset);
+    return preset.getId();
   }
 
   /**

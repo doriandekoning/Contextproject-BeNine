@@ -31,7 +31,6 @@ public class MySQLDatabase implements Database {
   private Connection connection;
   private String user;
   private String password;
-  private int presetID;
 
 
   /**
@@ -44,7 +43,6 @@ public class MySQLDatabase implements Database {
     connection = null;
     this.user = user;
     this.password = password;
-    presetID = 1;
   }
 
   @Override
@@ -58,8 +56,6 @@ public class MySQLDatabase implements Database {
     try {
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      preset.setId(presetID);
-      presetID++;
       statement.close();
     } finally {
       if (statement != null) {
@@ -189,7 +185,6 @@ public class MySQLDatabase implements Database {
           new InputStreamReader(new FileInputStream("database" + File.separator
               + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
-      presetID = 1;
     } catch (Exception e) {
       getLogger().log("Database is not reseted.", LogEvent.Type.CRITICAL);
       e.printStackTrace();
@@ -287,7 +282,7 @@ public class MySQLDatabase implements Database {
     if (preset.isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + presetID + ","
+    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getCameraId() + ","
         + preset.getPosition().getPan() + "," + preset.getPosition().getTilt()
         + "," + preset.getZoom() + "," + preset.getFocus()
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
