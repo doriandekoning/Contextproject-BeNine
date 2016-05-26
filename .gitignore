@@ -67,4 +67,4 @@ jspm_packages
 !tagnames.json
 
 #Images added for presets
-/presets/*
+backend/static/presets/*
