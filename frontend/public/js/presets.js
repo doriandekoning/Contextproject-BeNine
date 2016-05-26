@@ -135,9 +135,29 @@ $('#preset_create_div .tags_input').tagsinput('input').blur(function(){
 });
 
 /**
+* Called when the tags input losses focus in edit.
+*/
+$('#preset_edit_div .tags_input').tagsinput('input').blur(function(){
+	if ($(this).val()) {
+		newTag($(this).val());
+		$(this).val('');
+	}
+});
+
+/**
 * Called on enter in the tags input.
 */
 $('#preset_create_div .tags_input').tagsinput('input').keypress(function (e) {
+	if (e.which == 13 && $(this).val()) {
+		newTag($(this).val());
+		$(this).val('');
+	}
+});
+
+/**
+* Called on enter in the tags input in edit.
+*/
+$('#preset_edit_div .tags_input').tagsinput('input').keypress(function (e) {
 	if (e.which == 13 && $(this).val()) {
 		newTag($(this).val());
 		$(this).val('');
@@ -242,8 +262,19 @@ function presetedit(t) {
 
 
 function loadPresetEditModal(presetID, image) {
-	console.log(image);
+	var preset, obj, preset_div;
 	$('.preset-edit-modal').find('img').attr("src", image);
+	$.get("/api/backend/presets/getpresets", function(data) {
+		obj = JSON.parse(data);
+		presets = obj.presets;
+		for (var p in presets) {
+			preset = JSON.parse(presets[p]);
+			if (preset.id === presetID) {
+				for(var tag in preset.tags) {
+					$('#preset_edit_div .tags_input').tagsinput('add', {name: tag});
+				}
+			}
+		}
+	});
 	$('.preset-edit-modal').modal('show');
-	
 }
