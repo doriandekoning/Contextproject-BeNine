@@ -134,8 +134,8 @@ public class ServerController {
       database.resetDatabase();
     } else {
       database.useDatabase();
-      database.checkCameras();
     }
+    database.checkCameras();
   }
 
   /**
