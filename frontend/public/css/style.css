@@ -141,11 +141,11 @@ input[type=range]:focus {
 
 /* modals */
 .modal img {
-    position: relative;
-	left: 500px;
-	bottom: 100px;
-    height: 250px;
-    width: 350px;
+    width: 100%;
+}
+
+.tt-menu {
+	text-align: left;
 }
 
 /* Top block consisting of the camera views, and the editing camera view.*/
@@ -239,6 +239,10 @@ input[type=range]:focus {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;    
 	box-sizing: border-box;
+	background-color: white;
+}
+#tagsearch .twitter-typeahead {
+	width: 100%;
 }
 
 #preset_area {
@@ -273,4 +277,14 @@ input[type=range]:focus {
 
 #preset_area .none {
     background-color: #666666;
+}
+
+#preset_create_div img {
+    width: 100%;
+    position: relative;
+}
+
+#preset_create_div .modal-body {
+    position: relative;
+    height: 300px;
 }
