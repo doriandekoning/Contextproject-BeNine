@@ -1,9 +1,6 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.FocussingCamera;
 import org.eclipse.jetty.server.Request;
 
 import javax.servlet.ServletException;
@@ -24,7 +21,7 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
 
     String autoOn = request.getParameter("inuse");
 
-    if (autoOn != null && !cam.isInUse()) {
+    if (isAllowed(cam) && autoOn != null && !cam.isInUse()) {
       cam.setInUse(Boolean.parseBoolean(autoOn));
       respondSuccess(request, res);
     } else {
@@ -37,6 +34,6 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
 
   @Override
   boolean isAllowed(Camera cam) {
-    return cam instanceof Camera;
+    return cam != null;
   }
 }

@@ -1,5 +1,6 @@
 package com.benine.backend.http;//TODO add Javadoc comment
 
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
@@ -21,6 +22,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
   public void initialize() throws IOException {
     super.initialize();
     when(cameracontroller.getCameraById(42)).thenReturn(cam);
+    when(cameracontroller.getCameraById(43)).thenReturn(null);
   }
 
   @Test
@@ -70,6 +72,22 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     verify(requestMock).setHandled(true);
     //cleanup
     when(cam.isInUse()).thenReturn(false);
+  }
+
+  @Test
+  public void testCameraNull() throws IOException, ServletException {
+    setPath("/43/inuse?inuse=true");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("inuse", "true");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(cam, never()).setInUse(true);
+    verify(requestMock).setHandled(true);
   }
 
   @Override
