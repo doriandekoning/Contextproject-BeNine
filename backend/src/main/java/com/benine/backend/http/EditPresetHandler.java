@@ -1,20 +1,19 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
+import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 
 public class EditPresetHandler extends RequestHandler {
@@ -29,20 +28,36 @@ public class EditPresetHandler extends RequestHandler {
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
     
-    try {
-      String camID = request.getParameter("camera");
-      Boolean overwrite = false;
-      if (camID == null) {
-        throw new MalformedURIException("No Camera ID Specified.");
-      }
-
-    } catch (MalformedURIException e) {
-      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+    Boolean overwrite = false;
+    
+    String tags = request.getParameter("tags");
+    List<String> tagList = null;
+    if (tags != null) {
+    tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+    } else {
+      tagList = Arrays.asList("none");
+    }
+    
+    int presetID = Integer.parseInt(request.getParameter("presetid"));
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    Preset preset = presetController.getPresetById(presetID);
+    
+    if (overwrite == false) {
+      updateTag(preset, tagList);
     }
 
     request.setHandled(true);
     
   
+  }
+  
+  /**
+   * Updating the tag only.
+   * @param preset the preset to be changed
+   * @param tagList the tag to be added
+   */
+  public void updateTag(Preset preset, List<String> tagList) {
+    preset.removeTags();
+    preset.addTags(tagList);
   }
 }
