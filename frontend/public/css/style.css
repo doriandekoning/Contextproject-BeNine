@@ -193,7 +193,7 @@ input[type=range]:focus {
 }
 
 /* Camera block carousel */
-#current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner * {
+#current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner, #camera_area img, #camera_area .col-xs-6, #camera_area .row, #camera_area .item {
 	border: 0;
     padding: 0;
     margin: 0;
@@ -274,3 +274,21 @@ input[type=range]:focus {
 #preset_area .none {
     background-color: #666666;
 }
+
+.camera_status.unavailable {
+    background-color: #d9534f;
+}
+
+.camera_status.selected {
+    background-color: #f0ad4e;
+}
+
+.camera_status {
+    bottom: 0px;
+    left: 0px;
+    height: 7px;
+    width: 100%;
+    background-color: #5cb85c;
+    position: absolute;
+}
+
