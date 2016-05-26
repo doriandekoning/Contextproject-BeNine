@@ -13,6 +13,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Class for communicating with the MySQL Database.
@@ -39,6 +40,58 @@ public class MySQLDatabase implements Database {
   @Override
   public void setConnection(Connection connect) {
     connection = connect;
+  }
+
+  @Override
+  public List<String> getTagsFromPreset(Preset preset) {
+    ArrayList<String> list = new ArrayList<String>();
+    Statement statement = null;
+    ResultSet resultset = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT name FROM tagpresets WHERE presets_ID = "
+          + preset.getId();
+      resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        list.add(resultset.getString("name"));
+      }
+    } catch (Exception e) {
+      getLogger().log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, resultset);
+    }
+    return list;
+  }
+
+  @Override
+  public void addTagToPreset(String tag, Preset preset) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "INSERT INTO tagPresets VALUES(" + preset.getId() + "," + tag + ")";
+      statement.executeUpdate(sql);
+      preset.setId(presetID);
+      presetID++;
+    } catch (Exception e) {
+      getLogger().log("Tag could not be added.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public void deleteTagToPreset(String tag, Preset preset) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "DELETE FROM tagPresets WHERE tag_Name = " + tag + "AND preset_ID = "
+          + preset.getId();
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      getLogger().log("Tag could not be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
   }
 
   @Override

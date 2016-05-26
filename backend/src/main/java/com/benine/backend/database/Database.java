@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface for communication with the database.
@@ -135,4 +136,28 @@ public interface Database {
    * @param connection The new connection
    */
   void setConnection(Connection connection);
+
+  /**
+   * Get the tags from a preset.
+   *
+   * @param preset The preset
+   * @return The list of tags
+   */
+  List<String> getTagsFromPreset(Preset preset);
+
+  /**
+   * Adds a tag to a preset.
+   *
+   * @param tag The tag
+   * @param preset The preset
+   */
+  void addTagToPreset(String tag, Preset preset);
+
+  /**
+   * Deletes a tag to a preset.
+   *
+   * @param tag The tag
+   * @param preset The preset
+   */
+  void deleteTagToPreset(String tag, Preset preset);
 }
