@@ -1,8 +1,8 @@
 var localTags = [{name: "test"}];
 
 /**
-* Function loads the presets of this camera in the preset window.
-* @param presets object
+* Function loads the presets in this object
+* @param presets object containting presets
 */
 function loadPresetsOnTag(obj) {
 	var preset_div, presets, place, preset, preset_area;
@@ -56,6 +56,7 @@ var tagnames = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	prefetch: {
+		//ToDo should be the tags from the backend
 		url: 'public/tagnames.json',
 		transform: function(list) {
 			return $.map(list, function(tagname) {
@@ -98,6 +99,7 @@ $('#preset_create_div .tags_input').change(function(){
 * Function adds a new tag to the tag list.
 */
 function newTag(val) {
+	//todo should be sending the new tag to the backend.
 	localTags.push({name: val});
 	$('#preset_create_div .tags_input').tagsinput('add', {name: val});
 	tagnames.clearPrefetchCache();
