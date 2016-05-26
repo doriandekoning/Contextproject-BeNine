@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,14 +18,35 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by dorian on 18-5-16.
+ * Created on 18-5-16.
  */
 public class PresetControllerTest {
+  
+  private ServerController serverController;
+  
+  @Before
+  public void setup() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    serverController = ServerController.getInstance();
+    serverController.setDatabase(mock(MySQLDatabase.class));
+  }
+  
 
   @Test
   public void testAddPreset() throws Exception {
     PresetController controller = new PresetController();
     Preset preset = mock(Preset.class);
+    controller.addPreset(preset);
+    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
+    expectedPresets.add(preset);
+    Assert.assertEquals(expectedPresets, controller.getPresets());
+  }
+  
+  @Test
+  public void testAddPresetWithoutID() throws Exception {
+    PresetController controller = new PresetController();
+    Preset preset = mock(Preset.class);
+    when(preset.getId()).thenReturn(-1);
     controller.addPreset(preset);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(preset);

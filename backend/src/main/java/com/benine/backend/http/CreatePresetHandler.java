@@ -101,9 +101,8 @@ public class CreatePresetHandler extends RequestHandler {
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
-    getLogger().log("test cameraID + " +camera.getId() , LogEvent.Type.WARNING);
+    
     int presetID = presetController.addPreset(createPreset(camera));
-    getLogger().log("test + " +presetID , LogEvent.Type.WARNING);
     createImage(camera.getId(), presetID);
   }
 
@@ -123,8 +122,7 @@ public class CreatePresetHandler extends RequestHandler {
     int tiltspeed = 1;
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
-    // TODO get cameraId from db
-    int cameraId = 0;
+    int cameraId = camera.getId();
 
     Position position = new Position(pan, tilt);
     return new Preset(

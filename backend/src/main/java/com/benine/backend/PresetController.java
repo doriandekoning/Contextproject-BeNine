@@ -12,7 +12,7 @@ import java.util.HashSet;
  */
 public class PresetController {
   
-  private static int newID = 1;
+  private static volatile int newID = 1;
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
@@ -58,16 +58,30 @@ public class PresetController {
     Database db = ServerController.getInstance().getDatabase();
     db.deletePreset(preset.getId());
   }
-
+  
+  /**
+   * Adds the right id to this preset.
+   * @param preset to add the id to.
+   * @return Preset with right ID.
+   */
+  private static Preset addPresetID(Preset preset) {
+    if (preset.getId() == -1) {
+      preset.setId(PresetController.newID);
+      PresetController.newID++;
+    } else {
+      PresetController.newID = Math.max(PresetController.newID - 1, preset.getId()) + 1;
+    }
+    return preset;
+  }
+ 
   /**
    * Adds a preset.
    * @param preset the preset to add.
    * @return ID of the preset just created.
    * @throws SQLException when an error occures in the database.
    */
-  public int addPreset(Preset preset) throws SQLException {
-    preset.setId(newID);
-    newID++;
+  public int addPreset(Preset preset) throws SQLException {   
+    preset = addPresetID(preset);
     presets.add(preset);
     addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
