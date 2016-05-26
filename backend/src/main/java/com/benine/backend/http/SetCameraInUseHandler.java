@@ -22,17 +22,12 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
     Camera cam = getCameraController().getCameraById(camID);
 
-    boolean autoOn = Boolean.parseBoolean(request.getParameter("inuse"));
+    String autoOn = request.getParameter("inuse");
 
-    try {
-      if(!cam.isInUse()) {
-        cam.setInUse(autoOn);
-        respondSuccess(request, res);
-      } else {
-        respondFailure(request, res);
-      }
-    }  catch (NumberFormatException e) {
-      getLogger().log(e.toString(), LogEvent.Type.WARNING);
+    if (autoOn != null && !cam.isInUse()) {
+      cam.setInUse(Boolean.parseBoolean(autoOn));
+      respondSuccess(request, res);
+    } else {
       respondFailure(request, res);
     }
 
