@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -60,19 +61,26 @@ public class PresetsHandler extends RequestHandler {
 
     ArrayList<Preset> presets;
     PresetController controller = ServerController.getInstance().getPresetController();
+    JSONObject jsonObject = new JSONObject();
+
+
     if (tag == null) {
       presets = controller.getPresets();
+
+      // Add tags to json
+      JSONArray tagsJSON = new JSONArray();
+      Collection<String> tags = controller.getTags();
+      tags.forEach(t -> tagsJSON.add(t));
+      jsonObject.put("tags", tags);
     } else {
       presets = controller.getPresetsByTag(tag);
     }
 
-    JSONArray json = new JSONArray();
-    for (Preset preset : presets) {
-      json.add(preset.toJSON());
-    }
+    // Add presets to json
+    JSONArray presetsJSON = new JSONArray();
+    presets.forEach(p -> presetsJSON.add(p.toJSON()));
+    jsonObject.put("presets", presetsJSON);
 
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("presets", json);
     return jsonObject.toString();
   }
 
