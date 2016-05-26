@@ -8,6 +8,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jetty.util.MultiMap;
@@ -29,7 +31,7 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
   private Preset preset;
   private Stream stream;
   private MJPEGStreamReader streamReader;
-  //private List<String> tags;
+  private List<String> tags;
 
   @Override
   public RequestHandler supplyHandler() {
@@ -45,8 +47,8 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
     streamReader = new MJPEGStreamReader(stream);
+    tags = Arrays.asList("violin", "piano");
     
-    //tags.add("none");
 
     try {
       when(streamController.getStreamReader(1)).thenReturn(streamReader);
@@ -58,7 +60,7 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
       
-      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0);
+      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();
