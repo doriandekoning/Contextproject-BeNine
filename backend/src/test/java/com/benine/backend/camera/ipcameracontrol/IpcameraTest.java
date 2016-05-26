@@ -3,8 +3,7 @@ package com.benine.backend.camera.ipcameracontrol;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
@@ -154,15 +153,16 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetJSONFails() throws CameraConnectionException, JSONException {
+  public final void testGetJSONFails() throws CameraConnectionException {
     IPCamera camera = new IPCamera("12");
     JSONObject json = new JSONObject();
     json.put("id", -1);
+    json.put("inuse", false);
     assertEquals(json.toString(), camera.toJSON());
   }
   
   @Test
-  public final void testGetJSON() throws CameraConnectionException, JSONException{
+  public final void testGetJSON() throws CameraConnectionException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");
@@ -181,7 +181,7 @@ public class IpcameraTest {
     json.put("autoiris", true);
     json.put("streamlink", "http://test/cgi-bin/mjpeg");
     
-    assertEquals(json.toString(), new JSONObject(camera.toJSON()));
+    assertEquals(json.toString(), camera.toJSON());
   }
   
   @Test
