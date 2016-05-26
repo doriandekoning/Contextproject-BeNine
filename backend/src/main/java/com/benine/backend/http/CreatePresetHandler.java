@@ -12,16 +12,21 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
+
 import org.eclipse.jetty.server.Request;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 public class CreatePresetHandler extends RequestHandler {
 
@@ -41,11 +46,11 @@ public class CreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      String tag = request.getParameter("tags");
+      List<String> tagList = Arrays.asList(request.getParameter("tags").split("\\s*,\\s*"));
       
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
-        setPreset(ipcam, tag);
+        setPreset(ipcam, tagList);
         respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
@@ -90,19 +95,19 @@ public class CreatePresetHandler extends RequestHandler {
   /**
    * Sets a preset.
    * @param camera                        A Camera object.
-   * @param tag                           The tag belonging to the preset. 
+   * @param tagList                           The tag belonging to the preset. 
    * @throws IOException                  If the image cannot be created.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  private void setPreset(IPCamera camera, String tag)
+  private void setPreset(IPCamera camera, List<String> tagList)
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
 
-    Preset preset = createPreset(camera, tag);
+    Preset preset = createPreset(camera, tagList);
     createImage(preset, camera.getId(), preset.getId());
     presetController.addPreset(preset);
   }
@@ -110,11 +115,12 @@ public class CreatePresetHandler extends RequestHandler {
   /**
    * Creates a preset from a camera.
    * @param camera    The camera to create the preset from.
-   * @param tag       The tag belonging to the preset. 
+   * @param tagList   The tag belonging to the preset. 
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  private Preset createPreset(IPCamera camera, String tag) throws CameraConnectionException {
+  private Preset createPreset(IPCamera camera, List<String> tagList) 
+      throws CameraConnectionException {
     int zoom = camera.getZoomPosition();
     double pan = camera.getPosition().getPan();
     double tilt = camera.getPosition().getTilt();
@@ -124,14 +130,9 @@ public class CreatePresetHandler extends RequestHandler {
     int tiltspeed = 1;
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
-    // TODO get cameraId from db
-    int cameraId = 0;
+    int cameraId = camera.getId();
 
-    Position position = new Position(pan, tilt);
-    return new Preset(
-            position, zoom, focus,
-            iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId
-    );
+    return new Preset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
+            tiltspeed, autoiris, cameraId, tagList);
   }
 }
