@@ -13,7 +13,7 @@ function getSettings() {
 		setSetting("joystick", 7);
     }
 
-    return settings;
+    return Cookies.getJSON();
 }
 
 /**
@@ -34,7 +34,17 @@ function clearCookies() {
 
     for(var i = 0; i < keys.length; i++) {
         Cookies.remove(keys[i]);
+		console.log(keys[i]);
     }
+
+}
+
+/**
+ * Resets the default values.
+ */
+function defaults() {
+	clearCookies();
+	loadSettings();
 }
 
 //Below is the javascript for the settings modal
