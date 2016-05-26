@@ -134,10 +134,14 @@ public class CameraController {
     }
   }
 
+  /**
+   * Returns a list of the cameras which are in use.
+   * @return a list of the cameras in use
+   */
   public List<Camera> camerasInUse() {
     ArrayList<Camera> list = new ArrayList<Camera>();
-    for(Camera camera : getCameras()) {
-      if(camera.isInUse()) {
+    for (Camera camera : getCameras()) {
+      if (camera.isInUse()) {
         list.add(camera);
       }
     }
