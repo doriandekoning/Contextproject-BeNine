@@ -71,7 +71,7 @@ public class PresetsHandler extends RequestHandler {
       JSONArray tagsJSON = new JSONArray();
       Collection<String> tags = controller.getTags();
       tags.forEach(t -> tagsJSON.add(t));
-      jsonObject.put("tags", tags);
+      jsonObject.put("tags", tagsJSON);
     } else {
       presets = controller.getPresetsByTag(tag);
     }

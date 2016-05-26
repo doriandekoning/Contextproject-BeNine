@@ -41,10 +41,10 @@ function loadCreatePreset() {
 function createPreset() {
 	var preset_create_div = $('#preset_create_div');
 	var presetName = preset_create_div.find('#preset_name').val();
-	var presetTag = preset_create_div.find('#preset_tag').val();
-	console.log(presetTag + " " + presetName);
+	var presetTag = $('#preset_create_div .tags_input').val();
+	console.log(presetTag);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);});
 		loadPresets(currentcamera);
 	}
 }
