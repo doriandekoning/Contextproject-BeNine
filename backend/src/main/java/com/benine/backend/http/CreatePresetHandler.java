@@ -41,10 +41,11 @@ public class CreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-
+      String tag = request.getParameter("tags");
+      
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
-        setPreset(ipcam);
+        setPreset(ipcam, tag);
         respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
@@ -54,6 +55,7 @@ public class CreatePresetHandler extends RequestHandler {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (SQLException e) {
+      getLogger().log("Cannot connect to database ", LogEvent.Type.CRITICAL);
       respondFailure(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
@@ -88,18 +90,19 @@ public class CreatePresetHandler extends RequestHandler {
   /**
    * Sets a preset.
    * @param camera                        A Camera object.
+   * @param tag                           The tag belonging to the preset. 
    * @throws IOException                  If the image cannot be created.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  private void setPreset(IPCamera camera)
+  private void setPreset(IPCamera camera, String tag)
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
 
-    Preset preset = createPreset(camera);
+    Preset preset = createPreset(camera, tag);
     createImage(preset, camera.getId(), preset.getId());
     presetController.addPreset(preset);
   }
@@ -107,10 +110,11 @@ public class CreatePresetHandler extends RequestHandler {
   /**
    * Creates a preset from a camera.
    * @param camera    The camera to create the preset from.
+   * @param tag       The tag belonging to the preset. 
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  private Preset createPreset(IPCamera camera) throws CameraConnectionException {
+  private Preset createPreset(IPCamera camera, String tag) throws CameraConnectionException {
     int zoom = camera.getZoomPosition();
     int pan = (int) camera.getPosition().getPan();
     int tilt = (int) camera.getPosition().getTilt();
