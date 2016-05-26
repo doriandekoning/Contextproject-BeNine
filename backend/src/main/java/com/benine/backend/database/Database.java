@@ -103,7 +103,7 @@ public interface Database {
   /**
    * Makes sure the right database is used.
    */
-  void useDatabase() throws SQLException;
+  void useDatabase();
 
   /**
    * Adds a tag to the database.
@@ -111,7 +111,7 @@ public interface Database {
    * @param name The tag
    * @throws SQLException No right connection found
    */
-  void addTag(String name) throws SQLException;
+  void addTag(String name);
 
   /**
    * Deletes a tag from the database.
@@ -119,7 +119,7 @@ public interface Database {
    * @param name The tag
    * @throws SQLException No right connection found
    */
-  void deleteTag(String name) throws SQLException;
+  void deleteTag(String name);
 
   /**
    * Adds a tag to the database.
@@ -127,7 +127,7 @@ public interface Database {
    * @return The tags in a list
    * @throws SQLException No right connection found
    */
-  Collection<String> getTags() throws SQLException;
+  Collection<String> getTags();
 
   /**
    * Setter for the connection.
