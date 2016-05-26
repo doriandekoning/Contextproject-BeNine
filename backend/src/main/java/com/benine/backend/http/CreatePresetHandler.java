@@ -46,10 +46,13 @@ public class CreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      List<String> tagList = Arrays.asList(request.getParameter("tags").split("\\s*,\\s*"));
-      if (tagList == null) {
+      String tags= request.getParameter("tags");
+      if (tags == null) {
         throw new MalformedURIException("No tag specified.");
-      }
+      } 
+      
+      List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
+      
       
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
