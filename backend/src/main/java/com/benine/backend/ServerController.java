@@ -78,8 +78,8 @@ public class ServerController {
    * @throws Exception If the server cannot be started.
    */
   public void start() throws Exception {
-    startupDatabase();
     cameraController.loadConfigCameras();
+    startupDatabase();
     httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
 
     loadPresets();
@@ -133,11 +133,8 @@ public class ServerController {
     if (!database.checkDatabase()) {
       database.resetDatabase();
     } else {
-      try {
-        database.useDatabase();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      database.useDatabase();
+      database.checkCameras();
     }
   }
 

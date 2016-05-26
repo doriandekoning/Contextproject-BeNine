@@ -2,6 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.Preset;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,42 +22,39 @@ public interface Database {
 
   /**
    * Add a preset to the database.
-   * @param preset             The preset to be added
-   * @throws SQLException No right connection found
+   *
+   * @param preset The preset to be added
    */
-  void addPreset(Preset preset) throws SQLException;
+  void addPreset(Preset preset);
 
   /**
    * Delete a preset from the database.
+   *
    * @param presetID ID of the camera
-   * @throws SQLException No right connection found
    */
-  void deletePreset(int presetID) throws SQLException;
+  void deletePreset(int presetID);
 
   /**
    * Update a preset to the database.
    *
-   * @param preset             The preset to be updated
-   * @throws SQLException No right connection found
+   * @param preset The preset to be updated
    */
-  void updatePreset(Preset preset) throws SQLException;
+  void updatePreset(Preset preset);
 
   /**
    * Returns all the presets.
    *
    * @return all the presets
-   * @throws SQLException No right connection found
    */
-  ArrayList<Preset> getAllPresets() throws SQLException;
+  ArrayList<Preset> getAllPresets();
 
   /**
    * Returns all the presets of the camera.
    *
    * @param cameraId ID of the camera
    * @return the presets of the given camera
-   * @throws SQLException No right connection found
    */
-  ArrayList<Preset> getAllPresetsCamera(int cameraId) throws SQLException;
+  ArrayList<Preset> getAllPresetsCamera(int cameraId);
 
   /**
    * Tries to connect to database server.
@@ -87,18 +85,29 @@ public interface Database {
    *
    * @param id The ID of the camera
    * @param ip The IP of the camera
-   * @throws SQLException No right connection found
    */
-  void addCamera(int id, String ip) throws SQLException;
+  void addCamera(int id, String ip);
+
+  /**
+   * Checks if cameras are correct in database.
+   */
+  void checkCameras();
+
+  /**
+   * deletes a camera from the database.
+   *
+   * @param cameraID the camera to be deleted
+   */
+  void deleteCamera(int cameraID);
 
   /**
    * Makes sure the right database is used.
-   * @throws SQLException No right connection found
    */
   void useDatabase() throws SQLException;
 
   /**
    * Adds a tag to the database.
+   *
    * @param name The tag
    * @throws SQLException No right connection found
    */
@@ -106,6 +115,7 @@ public interface Database {
 
   /**
    * Deletes a tag from the database.
+   *
    * @param name The tag
    * @throws SQLException No right connection found
    */
@@ -113,8 +123,16 @@ public interface Database {
 
   /**
    * Adds a tag to the database.
+   *
    * @return The tags in a list
    * @throws SQLException No right connection found
    */
   Collection<String> getTags() throws SQLException;
+
+  /**
+   * Setter for the connection.
+   *
+   * @param connection The new connection
+   */
+  void setConnection(Connection connection);
 }
