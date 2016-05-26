@@ -28,6 +28,7 @@ public class SimpleCamera extends BasicCamera {
     JSONObject object = new JSONObject();
     object.put("id", getId());
     object.put("streamlink", getStreamLink());
+    object.put("inuse", isInUse());
     return object.toString();
   }
 
