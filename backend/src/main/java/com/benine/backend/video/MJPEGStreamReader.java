@@ -195,7 +195,7 @@ public class MJPEGStreamReader extends StreamReader {
    * @throws IOException if the header cannot be read from the buffered stream.
    */
   private byte[] getHeader() throws IOException {
-    ByteArrayOutputStream header = new ByteArrayOutputStream();
+    ByteArrayOutputStream header = new ByteArrayOutputStream(128);
 
     while (!isJPEGHeader()) {
       header.write(bufferedStream.read());
