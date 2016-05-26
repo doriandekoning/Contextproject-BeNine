@@ -43,24 +43,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
       // Set the headers
       setHeaders(streamReaderMJPEG, res);
 
-      // Get an inputstream from the distributer.
-
-      byte[] bytes = new byte[16384];
-      int bytesRead;
-
-      try (PipedInputStream in = new PipedInputStream(distributer.getStream());
-           ServletOutputStream os = res.getOutputStream()) {
-
-        while ((bytesRead = in.read(bytes)) != -1) {
-          os.write(bytes, 0, bytesRead);
-          os.flush();
-        }
-      } catch (IOException e) {
-        getLogger().log("Client "
-                + request.getRemoteAddr()
-                + " disconnected from MJPEG stream "
-                + camID, LogEvent.Type.INFO);
-      }
+      // Stream to the client
+      stream(request, res, distributer);
 
     } else {
       res.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -88,5 +72,32 @@ public class CameraStreamHandler extends CameraRequestHandler {
   @Override
   boolean isAllowed(Camera cam) {
     return cam.getStreamType() == StreamType.MJPEG;
+  }
+
+  /**
+   * Streams to the response.
+   * @param request       The request object.
+   * @param res           The response to write to.
+   * @param distributer   The streamdistributer delivering the stream.
+   */
+  private void stream(Request request, HttpServletResponse res, StreamDistributer distributer) {
+    int camID = getCameraId(request);
+
+    byte[] bytes = new byte[16384];
+    int bytesRead;
+
+    try (PipedInputStream in = new PipedInputStream(distributer.getStream());
+         ServletOutputStream os = res.getOutputStream()) {
+
+      while ((bytesRead = in.read(bytes)) != -1) {
+        os.write(bytes, 0, bytesRead);
+        os.flush();
+      }
+    } catch (IOException e) {
+      getLogger().log("Client "
+              + request.getRemoteAddr()
+              + " disconnected from MJPEG stream "
+              + camID, LogEvent.Type.INFO);
+    }
   }
 }
