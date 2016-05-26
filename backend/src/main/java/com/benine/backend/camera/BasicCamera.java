@@ -83,7 +83,12 @@ public abstract class BasicCamera implements Camera {
   }
 
   @Override
-  public void setInUse(boolean using) {
-    this.inUse = using;
+  public void setInUse() {
+    this.inUse = true;
+  }
+
+  @Override
+  public void setNotInUse() {
+    this.inUse = false;
   }
 }

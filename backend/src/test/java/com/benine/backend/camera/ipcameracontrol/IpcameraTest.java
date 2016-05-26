@@ -193,7 +193,7 @@ public class IpcameraTest {
   public void testIsSetInUse() {
     IPCamera camera1 = new IPCamera("ip");
     Assert.assertFalse(camera1.isInUse());
-    camera1.setInUse(true);
+    camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());
   }
 }
