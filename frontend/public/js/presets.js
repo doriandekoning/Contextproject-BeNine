@@ -29,7 +29,7 @@ function loadPresetsOnTag(obj) {
 */
 function loadCreatePreset() {
 	if (currentcamera !== undefined) {
-		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
+		$('.preset-create-modal').find('img').attr("src", "/api/backend/camera/" + cameras[currentcamera].id + "/mjpeg");
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
 	}
