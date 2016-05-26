@@ -54,7 +54,6 @@ public class CreatePresetHandler extends RequestHandler {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (SQLException e) {
-      e.printStackTrace();
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (CameraConnectionException e) {

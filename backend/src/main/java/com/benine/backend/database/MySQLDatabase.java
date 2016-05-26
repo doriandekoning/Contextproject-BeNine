@@ -282,7 +282,7 @@ public class MySQLDatabase implements Database {
     if (preset.isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getCameraId() + ","
+    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getId() + ","
         + preset.getPosition().getPan() + "," + preset.getPosition().getTilt()
         + "," + preset.getZoom() + "," + preset.getFocus()
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
