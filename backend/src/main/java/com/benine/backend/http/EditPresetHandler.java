@@ -31,12 +31,10 @@ public class EditPresetHandler extends RequestHandler {
     Boolean overwrite = false;
     
     String tags = request.getParameter("tags");
-    List<String> tagList = null;
+    List<String> tagList = Arrays.asList("none");
     if (tags != null) {
-    tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-    } else {
-      tagList = Arrays.asList("none");
-    }
+      tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+    } 
     
     int presetID = Integer.parseInt(request.getParameter("presetid"));
     PresetController presetController = ServerController.getInstance().getPresetController();
