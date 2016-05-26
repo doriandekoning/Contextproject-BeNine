@@ -57,7 +57,7 @@ function toggleCamSelected(camid, inuse) {
 	if (inuse === true) {
 		camera.find('.camera_status').attr('class', 'camera_status selected');
 	} else {
-		camera.find('.camera_status').attr('class', 'camera_status');
+		camera.find('.camera_status').attr('class', 'camera_status available');
 	}
 }
 
@@ -73,7 +73,7 @@ function toggleCamInuse(camid, inuse) {
 	if (inuse === true) {
 		camera.find('.camera_status').attr('class', 'camera_status unavailable');
 	} else {
-		camera.find('.camera_status').attr('class', 'camera_status');
+		camera.find('.camera_status').attr('class', 'camera_status available');
 	}
 }
 
