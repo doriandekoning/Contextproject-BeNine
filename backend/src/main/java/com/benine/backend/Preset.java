@@ -218,6 +218,10 @@ public class Preset {
   public void removeTag(String tag) {
     tags.remove(tag);
   }
+  
+  public void removeTags() {
+    this.tags.removeAll(getTags());
+  }
 
 
   @Override
