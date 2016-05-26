@@ -22,7 +22,11 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
     String autoOn = request.getParameter("inuse");
 
     if (isAllowed(cam) && autoOn != null && !cam.isInUse()) {
-      cam.setInUse(Boolean.parseBoolean(autoOn));
+      if(Boolean.parseBoolean(autoOn)) {
+        cam.setInUse();
+      } else {
+        cam.setNotInUse();
+      }
       respondSuccess(request, res);
     } else {
       respondFailure(request, res);

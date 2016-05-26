@@ -37,10 +37,26 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
 
     verify(out).write("{\"succes\":\"true\"}");
-    verify(cam).setInUse(true);
+    verify(cam).setInUse();
     verify(requestMock).setHandled(true);
   }
 
+  @Test
+  public void testSetNotInUse() throws IOException, ServletException {
+    setPath("/42/inuse?inuse=false");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("inuse", "false");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+
+    verify(out).write("{\"succes\":\"true\"}");
+    verify(cam).setNotInUse();
+    verify(requestMock).setHandled(true);
+  }
+  
   @Test
   public void testInuseNoParam() throws IOException, ServletException {
     setPath("/42/inuse");
@@ -51,7 +67,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(out).write("{\"succes\":\"false\"}");
-    verify(cam, never()).setInUse(true);
+    verify(cam, never()).setInUse();
     verify(requestMock).setHandled(true);
   }
 
@@ -68,7 +84,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(out).write("{\"succes\":\"false\"}");
-    verify(cam, never()).setInUse(true);
+    verify(cam, never()).setInUse();
     verify(requestMock).setHandled(true);
     //cleanup
     when(cam.isInUse()).thenReturn(false);
@@ -86,7 +102,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
 
     verify(out).write("{\"succes\":\"false\"}");
-    verify(cam, never()).setInUse(true);
+    verify(cam, never()).setInUse();
     verify(requestMock).setHandled(true);
   }
 
