@@ -188,8 +188,9 @@ joystick.on('end', function(){
 function sendMove(){
 	if (lastSend.distance !== distance || lastSend.angle !== angle) {
 		var tilt, pan;
-		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
-		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		var settings = getSettings();
+		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * settings.joystick * 5 ) + 50);
+		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * settings.joystick * 5 ) + 50);
 		$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 		lastSend.distance = distance;
 		lastSend.angle = angle;
@@ -213,7 +214,8 @@ function inputzoomslider(z) {
 */
 function sendZoom() {
 	if (zoomInput.value !== zoomInput.lastSend) {
-		var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
+		var settings = getSettings();
+		var zoom = parseInt(50  + (settings.zoom - 0.1) * parseInt(zoomInput.value));
 		$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
 		zoomInput.lastSend = zoomInput.value;
 		console.log("Zoom: " + zoom);
@@ -240,7 +242,8 @@ function inputfocusslider(f) {
 */
 function sendFocus() {
 	if (focusInput.value != focusInput.lastSend) {
-		var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
+		var settings = getSettings();
+		var focus = parseInt(50  + (settings.focus - 0.1) * parseInt(focusInput.value));
 		$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
 		focusInput.lastSend = focusInput.value;
 		console.log("Focus: " + focus);
@@ -268,7 +271,8 @@ function inputirisslider(i) {
 */
 function sendIris() {
 	if (irisInput.value !== irisInput.lastSend) {
-		var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
+		var settings = getSettings();
+		var iris = parseInt(50 + (settings.iris - 0.1) * parseInt(irisInput.value));
 		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
 		irisInput.lastSend = irisInput.value;
 		console.log("Iris: " + iris);
