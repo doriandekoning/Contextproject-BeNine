@@ -317,7 +317,7 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       statement.close();
     } catch (SQLException e) {
-      getLogger().log("Tag couldn't be added", LogEvent.Type.CRITICAL);
+      getLogger().log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }

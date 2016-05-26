@@ -357,4 +357,34 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyConnectionClosed();
     }
 
+    @Test
+    public final void testFailedAddTag() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addTag("tag1");
+        verify(logger).log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeleteTag() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteTag("tag1");
+        verify(logger).log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedGetTags() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getTags();
+        verify(logger).log("Tag couldn't be gotten.", LogEvent.Type.CRITICAL);
+    }
+
 }
