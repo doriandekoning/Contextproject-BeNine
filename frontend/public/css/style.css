@@ -143,11 +143,7 @@ input[type=range]:focus {
 .modal img {
     width: 100%;
 }
-#preset_create_div .bootstrap-tagsinput {
-	position: absolute;
-	left: 10px;
-	font-size: 17px;
-}
+
 .tt-menu {
 	text-align: left;
 }
@@ -281,4 +277,14 @@ input[type=range]:focus {
 
 #preset_area .none {
     background-color: #666666;
+}
+
+#preset_create_div img {
+    width: 100%;
+    position: relative;
+}
+
+#preset_create_div .modal-body {
+    position: relative;
+    height: 300px;
 }
