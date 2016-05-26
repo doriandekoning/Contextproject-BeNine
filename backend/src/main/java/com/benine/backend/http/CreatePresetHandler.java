@@ -46,10 +46,10 @@ public class CreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      String tags= request.getParameter("tags");
+      String tags = request.getParameter("tags");
       List<String> tagList = null;
       if (tags != null) {
-      tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
       } else {
         tagList = Arrays.asList("none");
       }
