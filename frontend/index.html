@@ -183,7 +183,7 @@
     </div>
 
     <!-- Defines the modal used for preset editing -->
-    <div class="modal fade preset-edit-modal" tabindex="-1" role="dialog" aria-labelledby="preset-edit-modal">
+    <div id="preset_edit_div" class="modal fade preset-edit-modal" tabindex="-1" role="dialog" aria-labelledby="preset-edit-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -210,6 +210,9 @@
 					</div>	
                 </div>
                 <div class="modal-footer">
+					<div class="tags_input">
+						<input type="text" data-role="tagsinput"  />
+					</div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save changes</button>
                 </div>

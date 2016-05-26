@@ -71,9 +71,27 @@ tagnames.clearPrefetchCache();
 tagnames.initialize();
 
 /**
-* What to display in the type ahead of the tags input
+* What to display in the type ahead of the tags input of create preset.
 */
 $('#preset_create_div .tags_input').tagsinput({
+	itemValue: function(item) {
+		if (item['name'] !== undefined) {
+			return item['name']; 
+		} else {
+			return item;
+		}
+	},
+	typeaheadjs: {
+		displayKey: 'name',
+		valueKey: 'name',
+		source: tagnames.ttAdapter()
+	}
+});
+
+/**
+* What to display in the type ahead of the tags input of edit preset.
+*/
+$('#preset_edit_div .tags_input').tagsinput({
 	itemValue: function(item) {
 		if (item['name'] !== undefined) {
 			return item['name']; 
@@ -217,7 +235,15 @@ function presetedit(t) {
 	var parent = t.parent( "h5" ).parent("div");
 	var presetID = parent.attr("presetid");
 	//if (presetID !== undefined) {
-		$('.preset-edit-modal').modal('show');
+		loadPresetEditModal(presetID, parent.find('img').attr("src"));
 		console.log(presetID);
 	//}
+}
+
+
+function loadPresetEditModal(presetID, image) {
+	console.log(image);
+	$('.preset-edit-modal').find('img').attr("src", image);
+	$('.preset-edit-modal').modal('show');
+	
 }
