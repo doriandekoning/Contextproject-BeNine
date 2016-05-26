@@ -29,6 +29,7 @@ function loadCameras() {
 			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
+			camera_div.find('.camera_status').attr('class', 'camera_status available');
 			place++;
 		}
 	});
@@ -49,6 +50,34 @@ function getCameraInfo() {
 	}).done(loadControls);
 }
 
+function toggleCamSelected(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status selected');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+/**
+ * Method used to toggle if the camera is in use.
+ * @param camid		The id of the camera to toggle.
+ * @param inuse		Boolean, true if in use, false otherwise.
+ */
+function toggleCamInuse(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+	
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status unavailable');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+
 /**
 * Method to change the currently selected camera.
 * It changes the visible controls and displays the camera stream in the editing view.
@@ -56,7 +85,10 @@ function getCameraInfo() {
 function setCurrentCamera(id) {
 	if (id !== currentcamera) {
 		var camera_div, camera_title, zoomslider, iris, focus;
+		toggleCamSelected(currentcamera, false);
 		currentcamera = id;
+
+		toggleCamSelected(currentcamera, true);
 		// Show the current camera in the editing view.
 		camera_div = $('#current_camera');
 		camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
@@ -65,7 +97,6 @@ function setCurrentCamera(id) {
 		selectedPreset = undefined;
 		$('#createPreset').prop('disabled', false);
 		$('#preset_create_div .tags_input').tagsinput('removeAll');
-		loadPresets(currentcamera);
 
 		getCameraInfo();
 		loadPresets(currentcamera);
