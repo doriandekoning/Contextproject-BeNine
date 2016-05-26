@@ -11,9 +11,9 @@ import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PipedInputStream;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,19 +44,20 @@ public class CameraStreamHandler extends CameraRequestHandler {
       setHeaders(streamReaderMJPEG, res);
 
       // Get an inputstream from the distributer.
-
       PipedInputStream in = new PipedInputStream(distributer.getStream());
-      OutputStream os = res.getOutputStream();
+      ServletOutputStream os = res.getOutputStream();
 
       byte[] bytes = new byte[16384];
       int bytesRead;
+      boolean running = true;
 
       try {
-        while ((bytesRead = in.read(bytes)) != -1) {
-          os.write(bytes, 0, bytesRead);
+        while ((bytesRead = in.read(bytes)) != -1 && running) {
+            os.write(bytes, 0, bytesRead);
+            os.flush();
         }
       } catch (IOException e) {
-        // Outputstream closed, connection with client ended.
+        getLogger().log("Client " + request.getRemoteAddr() + " disconnected from MJPEG stream " + camID, LogEvent.Type.INFO);
       } finally {
         os.close();
         in.close();
