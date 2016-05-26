@@ -104,6 +104,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testUpdatePreset() throws SQLException {
         Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        preset.setId(1);
+
         database.connectToDatabaseServer();
         database.resetDatabase();
         database.addPreset(preset);

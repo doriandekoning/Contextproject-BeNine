@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -76,7 +78,9 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
     setParameters(parameters);
-
+    PresetController presetController = mock(PresetController.class);
+    when(presetController.getPresetById(0)).thenReturn(preset);
+    ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(requestMock).setHandled(true);
