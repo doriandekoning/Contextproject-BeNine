@@ -119,7 +119,7 @@ public class SimpleCameraTest {
   public void testIsSetInUse() {
     SimpleCamera camera1 = new SimpleCamera();
     Assert.assertFalse(camera1.isInUse());
-    camera1.setInUse(true);
+    camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());
   }
 

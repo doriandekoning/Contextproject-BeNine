@@ -50,10 +50,14 @@ public interface Camera {
   boolean isInUse();
 
   /**
-   * Sets if the camera is in use.
-   * @param using True if the camera is in use, false otherwise
+   * Sets that the camera is in use.
    */
-  void setInUse(boolean using);
+  void setInUse();
+
+  /**
+   * Sets that the camera is not in use.
+   */
+  void setNotInUse();
 
 }
 
