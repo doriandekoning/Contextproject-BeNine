@@ -304,12 +304,16 @@ input[type=range]:focus {
     background-color: #f0ad4e;
 }
 
+.camera_status.available {
+    background-color: #5cb85c;
+}
+
 .camera_status {
     bottom: 0px;
     left: 0px;
     height: 7px;
     width: 100%;
-    background-color: #5cb85c;
+    background-color: #666666;
     position: absolute;
 }
 

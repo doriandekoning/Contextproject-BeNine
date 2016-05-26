@@ -29,6 +29,7 @@ function loadCameras() {
 			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
+			camera_div.find('.camera_status').attr('class', 'camera_status available');
 			place++;
 		}
 	});
