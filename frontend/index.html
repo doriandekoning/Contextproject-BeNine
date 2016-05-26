@@ -57,7 +57,7 @@
 
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active" ><a data-toggle="modal" data-target=".settings-modal">Settings</a></li>
+                        <li class="active" onclick="loadSettings()" ><a data-toggle="modal" data-target=".settings-modal">Settings</a></li>
                     </ul>
                     <div class="label-container hidden-xs">
                     <span id="server_status" class="label label-warning">
@@ -204,7 +204,30 @@
                     <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Settings</h4>
                 </div>
                 <div class="modal-body">
-                    ...
+					<div class="modal-body row">
+						<div class="col-xs-1 col-dm-1">
+							<div class="settings_sense">
+								<span>Zoom</span>
+								<input type="range" class="slider" id="zoomsense" min="0" max="10" value="5">
+								<label id="zoomsense_lbl">5</label>
+							</div>
+						</div>
+						<div class="col-xs-1 col-dm-1">
+							<span>Iris</span>
+							<input type="range" class="slider" id="irissense" min="0" max="10" value="5">
+							<label id="irissense_lbl">5</label>
+						</div>	
+						<div class="col-xs-1 col-dm-1">
+							<span>Focus</span>
+							<input type="range" class="slider" id="focussense" min="0" max="10" value="5">
+							<label id="focussense_lbl">5</label>
+						</div>	
+						<div class="col-xs-1 col-dm-1">
+							<span>Joystick</span>
+							<input type="range" class="slider" id="joysticksense" min="0" max="10" value="5">
+							<label id="joysticksense_lbl">5</label>
+						</div>	
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
