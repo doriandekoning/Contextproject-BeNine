@@ -181,7 +181,12 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
 
     while (!isJPEGTrailer()) {
-      jpeg.write(bufferedStream.read());
+      int b = bufferedStream.read();
+
+      // If stream has not ended, add to header stream.
+      if (b != -1) {
+        jpeg.write(bufferedStream.read());
+      }
     }
 
     jpeg.close();
@@ -198,7 +203,12 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream header = new ByteArrayOutputStream(128);
 
     while (!isJPEGHeader()) {
-      header.write(bufferedStream.read());
+      int b = bufferedStream.read();
+
+      // If stream has not ended, add to header stream.
+      if (b != -1) {
+        header.write(bufferedStream.read());
+      }
     }
 
     header.close();
