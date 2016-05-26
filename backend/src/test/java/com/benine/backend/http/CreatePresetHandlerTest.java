@@ -1,5 +1,21 @@
 package com.benine.backend.http;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jetty.util.MultiMap;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.benine.backend.Preset;
 import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
@@ -9,24 +25,15 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
-import org.eclipse.jetty.util.MultiMap;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import static org.mockito.Mockito.*;
 
 
-public class PresetCreationHandlerTest extends RequestHandlerTest {
+public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   private IPCamera ipcamera;
   private Preset preset;
   private Stream stream;
   private MJPEGStreamReader streamReader;
+  private List<String> tags;
 
   @Override
   public RequestHandler supplyHandler() {
@@ -42,6 +49,8 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
     streamReader = new MJPEGStreamReader(stream);
+    tags = Arrays.asList("violin", "piano");
+    
 
     try {
       when(streamController.getStreamReader(1)).thenReturn(streamReader);
@@ -52,8 +61,8 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
       when(ipcamera.isAutoFocusOn()).thenReturn(true);
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
-
-      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0);
+      
+      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();
@@ -74,7 +83,6 @@ public class PresetCreationHandlerTest extends RequestHandlerTest {
     ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(presetController).addPreset(preset);
     verify(requestMock).setHandled(true);
   }
 
