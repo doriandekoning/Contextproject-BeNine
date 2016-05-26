@@ -159,5 +159,5 @@ public interface Database {
    * @param tag The tag
    * @param preset The preset
    */
-  void deleteTagToPreset(String tag, Preset preset);
+  void deleteTagFromPreset(String tag, Preset preset);
 }

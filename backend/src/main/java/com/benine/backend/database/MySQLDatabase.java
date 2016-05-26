@@ -49,7 +49,7 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT name FROM tagpresets WHERE presets_ID = "
+      String sql = "SELECT name FROM tagPresets WHERE presets_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
@@ -68,19 +68,20 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "INSERT INTO tagPresets VALUES(" + preset.getId() + "," + tag + ")";
+      final String sql = String.format("INSERT INTO tagPresets VALUES(%s,'%s')",
+          preset.getId(), tag);
       statement.executeUpdate(sql);
       preset.setId(presetID);
       presetID++;
     } catch (Exception e) {
-      getLogger().log("Tag could not be added.", LogEvent.Type.CRITICAL);
+      getLogger().log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
   }
 
   @Override
-  public void deleteTagToPreset(String tag, Preset preset) {
+  public void deleteTagFromPreset(String tag, Preset preset) {
     Statement statement = null;
     try {
       statement = connection.createStatement();
@@ -88,7 +89,7 @@ public class MySQLDatabase implements Database {
           + preset.getId();
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Tag could not be deleted.", LogEvent.Type.CRITICAL);
+      getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -365,7 +366,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO tag VALUES(%s)",
+      final String sql = String.format("INSERT INTO tag VALUES('%s')",
           name);
       statement.executeUpdate(sql);
       statement.close();

@@ -327,7 +327,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO tag VALUES(tag1)");
+        verifySQLStatementExecuted("INSERT INTO tag VALUES('tag1')");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -385,6 +385,74 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.setConnection(connection);
         database.getTags();
         verify(logger).log("Tag couldn't be gotten.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testAddTagToPreset() throws SQLException {
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        database.resetDatabase();
+        database.addTagToPreset("tag1", preset);
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO tagPresets VALUES(");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeleteTagFromPreset() throws SQLException {
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        database.resetDatabase();
+        database.addTagToPreset("tag1", preset);
+        database.deleteTagFromPreset("tag1", preset);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM tagPresets WHERE tag_name = tag1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetTagsFromPreset() throws SQLException {
+        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        database.resetDatabase();
+        database.getTagsFromPreset(preset);
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT name FROM tagPresets");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testFailedAddTagToPreset() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addTagToPreset("tag1", null);
+        verify(logger).log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeleteTagFromPreset() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteTagFromPreset("tag1", null);
+        verify(logger).log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedGetTagsFromPreset() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getTagsFromPreset(null);
+        verify(logger).log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
 }
