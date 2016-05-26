@@ -43,5 +43,17 @@ public interface Camera {
    */
   String getMacAddress() throws CameraConnectionException;
 
+  /**
+   * Checks if the camera is in use.
+   * @return True of the camera is in use, false otherwise
+   */
+  boolean isInUse();
+
+  /**
+   * Sets if the camera is in use.
+   * @param using True if the camera is in use, false otherwise
+   */
+  void setInUse(boolean using);
+
 }
 
