@@ -312,7 +312,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO presetsdatabase.tag VALUES(%s)",
+      final String sql = String.format("INSERT INTO tag VALUES(%s)",
           name);
       statement.executeUpdate(sql);
       statement.close();
@@ -344,6 +344,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     ResultSet resultset = null;
     try {
+      statement = connection.createStatement();
       String sql = "SELECT name FROM tag";
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {

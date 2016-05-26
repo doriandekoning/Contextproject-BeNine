@@ -322,4 +322,39 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verify(logger).log("Database could not be found.", LogEvent.Type.CRITICAL);
     }
 
+    @Test
+    public final void testAddTag() throws SQLException {
+        database.resetDatabase();
+        database.addTag("tag1");
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO tag VALUES(tag1)");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeleteTag() throws SQLException {
+        database.resetDatabase();
+        database.addTag("tag1");
+        database.deleteTag("tag1");
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM tag WHERE name = tag1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetTags() throws SQLException {
+        database.resetDatabase();
+        database.getTags();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT name FROM tag");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
 }
