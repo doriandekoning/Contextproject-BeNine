@@ -208,3 +208,16 @@ function presetcall(t) {
 		getCameraInfo();
 	}
 }
+
+
+/**
+* Function is called when edit icon is clicked.
+*/
+function presetedit(t) {
+	var parent = t.parent( "h5" ).parent("div");
+	var presetID = parent.attr("presetid");
+	//if (presetID !== undefined) {
+		$('.preset-edit-modal').modal('show');
+		console.log(presetID);
+	//}
+}

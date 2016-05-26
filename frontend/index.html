@@ -107,7 +107,6 @@
             <div class="control_buttons">
                 <div class="btn-group">
                     <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target=".preset-edit-modal"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</button>
                 </div>
             </div>
             <div id="control_area">
@@ -191,8 +190,24 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body row">
+                   <div class="col-xs-4 col-dm-4">
+						<div>
+							Preset name:<br>
+							<input id="preset_name" type="text">
+						</div>
+						<br>
+						<div>
+							Description:<br>
+							<input id="description" type="text">
+						</div>
+					</div>
+					<div class="col-xs-3 col-dm-3">
+						
+					</div>	
+					<div class="col-xs-5 col-dm-5">
+						<img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+					</div>	
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
