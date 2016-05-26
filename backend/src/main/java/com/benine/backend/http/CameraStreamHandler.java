@@ -49,15 +49,17 @@ public class CameraStreamHandler extends CameraRequestHandler {
 
       byte[] bytes = new byte[16384];
       int bytesRead;
-      boolean running = true;
 
       try {
-        while ((bytesRead = in.read(bytes)) != -1 && running) {
-            os.write(bytes, 0, bytesRead);
-            os.flush();
+        while ((bytesRead = in.read(bytes)) != -1) {
+          os.write(bytes, 0, bytesRead);
+          os.flush();
         }
       } catch (IOException e) {
-        getLogger().log("Client " + request.getRemoteAddr() + " disconnected from MJPEG stream " + camID, LogEvent.Type.INFO);
+        getLogger().log("Client "
+                + request.getRemoteAddr()
+                + " disconnected from MJPEG stream "
+                + camID, LogEvent.Type.INFO);
       } finally {
         os.close();
         in.close();
@@ -72,8 +74,9 @@ public class CameraStreamHandler extends CameraRequestHandler {
 
   /**
    * Sets the HTTP Headers so the browser detects MJPEG.
-   * @param reader                The MJPEG stream reader containing the boundary.
-   * @param httpServletResponse   The response for which the headers should be set.
+   *
+   * @param reader              The MJPEG stream reader containing the boundary.
+   * @param httpServletResponse The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
     httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents()
