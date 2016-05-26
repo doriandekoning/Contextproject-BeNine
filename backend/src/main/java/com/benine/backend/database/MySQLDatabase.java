@@ -144,7 +144,7 @@ public class MySQLDatabase implements Database {
       connection = DriverManager.getConnection(connect, user, password);
       boolean connected = !connection.isClosed();
       return connected;
-    } catch (Exception e) {
+    } catch (SQLException | ClassNotFoundException e) {
       getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
       return false;
     }
@@ -179,7 +179,7 @@ public class MySQLDatabase implements Database {
               + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
       presetID = 1;
-    } catch (Exception e) {
+    } catch (SQLException | IOException e) {
       getLogger().log("Database is not reset.", LogEvent.Type.CRITICAL);
     }
   }
@@ -222,7 +222,7 @@ public class MySQLDatabase implements Database {
       resultset = statement.executeQuery(sql);
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
-    } catch (Exception e) {
+    } catch (SQLException | CameraConnectionException e) {
       getLogger().log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
