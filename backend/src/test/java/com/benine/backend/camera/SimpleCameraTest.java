@@ -43,12 +43,11 @@ public class SimpleCameraTest {
     SimpleCamera simpleCamera = new SimpleCamera();
     simpleCamera.setId(3);
     simpleCamera.setStreamLink("something");
-    JSONObject actualJSON = new JSONObject(simpleCamera.toJSON());
     JSONObject expectedJSON = new JSONObject();
     expectedJSON.put("streamlink", "something");
     expectedJSON.put("id", 3);
-    Assert.assertEquals(expectedJSON.get("streamlink"), actualJSON.get("streamlink"));
-    Assert.assertEquals(expectedJSON.get("id"), actualJSON.get("id"));
+    expectedJSON.put("inuse", false);
+    Assert.assertEquals(expectedJSON.toString(), simpleCamera.toJSON());
   }
   
   @Test
@@ -114,6 +113,14 @@ public class SimpleCameraTest {
     SimpleCamera camera2 = new SimpleCamera();
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
-  
+
+  @Test
+  public void testIsSetInUse() {
+    SimpleCamera camera1 = new SimpleCamera();
+    Assert.assertFalse(camera1.isInUse());
+    camera1.setInUse();
+    Assert.assertTrue(camera1.isInUse());
+  }
+
 }
 
