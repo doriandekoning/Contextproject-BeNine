@@ -28,10 +28,11 @@ public class PresetsHandler extends RequestHandler {
    */
   public PresetsHandler() {
     this.handlers = new HashMap<>();
+
     addHandler("createpreset", new CreatePresetHandler());
     addHandler("recallpreset", new RecallPresetHandler());
+    addHandler("addtag", new AddTagHandler());
     addHandler("removetag", new RemoveTagHandler());
-
   }
 
   @Override
@@ -100,11 +101,12 @@ public class PresetsHandler extends RequestHandler {
   }
 
   /**
-   * Adds a handler handler where this handler routes to.
-   * @param route  a CreatePresetHandler.
-   * @param handler  a RecallPresetHandler.
+   * Adds a handler.
+   * @param route The route use this handler for.
+   * @param handler the handler to add.
    */
   public void addHandler(String route, RequestHandler handler) {
     handlers.put(route, handler);
   }
+
 }
