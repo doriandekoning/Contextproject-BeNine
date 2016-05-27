@@ -98,6 +98,7 @@ function addCameraRow(block) {
         camera_element.attr("id", "camera_" + cameracounter);
 
         camera_title = $('<div class="camera_title"></div>');
+        camera_status = $('<div class="camera_status"></div>');
         camera_icon = $('<span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>');
         camera_title_text = $('<span id="camera_title">' + cameracounter + '</span>');
 
@@ -112,7 +113,7 @@ function addCameraRow(block) {
     			}
     		});
 
-        camera_element.append(camera_image, camera_title);
+        camera_element.append(camera_image, camera_title, camera_status);
         row.append(camera_element);
     }
 

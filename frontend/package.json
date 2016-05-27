@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "istanbul cover _mocha -- -u tdd",
-    "postinstall": "bower install bootstrap && bower install holderjs && bower install nipplejs && bower install hammerjs"
+    "postinstall": "bower install bootstrap && bower install holderjs && bower install nipplejs && bower install hammerjs && bower install bootstrap-tagsinput && bower install typeahead.js"
   },
   "engines": {
     "node": ">=4.0.0"

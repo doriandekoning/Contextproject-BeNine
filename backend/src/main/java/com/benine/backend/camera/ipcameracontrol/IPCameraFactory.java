@@ -3,7 +3,6 @@ package com.benine.backend.camera.ipcameracontrol;
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraFactory;
 import com.benine.backend.camera.InvalidCameraTypeException;
 
@@ -24,11 +23,11 @@ public class IPCameraFactory implements CameraFactory {
     Config config = ServerController.getInstance().getConfig();
     String address = config.getValue("camera_" + index + "_address");
     if ( address == null) {
-      CameraController.logger.log("Camera: " + index + " has no address specified in the config",
-                                                                  LogEvent.Type.CRITICAL);
+      ServerController.getInstance().getLogger().log("Camera: " + index 
+              + " has no address specified in the config", LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
-    CameraController.logger.log("Create IP camera object", LogEvent.Type.INFO);
+    ServerController.getInstance().getLogger().log("Create IP camera object", LogEvent.Type.INFO);
     return createIpcamera(address);
   }
   

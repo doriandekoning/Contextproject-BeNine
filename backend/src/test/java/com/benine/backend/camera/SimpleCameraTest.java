@@ -1,15 +1,11 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created on 5-5-16.
@@ -83,26 +79,6 @@ public class SimpleCameraTest {
     SimpleCamera camera1 = new SimpleCamera();
     camera1.setStreamLink("test");
     String camera2 = "test";
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
-  public void testEqualsPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setPresets(presets);
-    camera2.setStreamLink("test");
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
-  public void testEqualsNotPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
     assertNotEquals(camera1, camera2);
   }
   

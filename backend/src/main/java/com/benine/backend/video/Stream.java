@@ -33,7 +33,7 @@ public class Stream {
    */
   private void openConnection(URL streamURL) throws IOException {
     URLConnection conn = streamURL.openConnection();
-    conn.setConnectTimeout(1000);
+    conn.setConnectTimeout(5000);
 
     this.connection = conn;
   }
