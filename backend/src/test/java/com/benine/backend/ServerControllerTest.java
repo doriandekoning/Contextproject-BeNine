@@ -1,17 +1,13 @@
 package com.benine.backend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.database.Database;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
+import java.io.File;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 
@@ -37,7 +33,7 @@ public class ServerControllerTest {
   }
   
   @Test
-  public void testStartServer() {
+  public void testStartServer() throws Exception {
     serverController.setDatabase(mock(Database.class));
     serverController.start();  
     assertTrue(serverController.isServerRunning());
@@ -45,7 +41,7 @@ public class ServerControllerTest {
   }
   
   @Test
-  public void testStopServer() {
+  public void testStopServer() throws Exception {
     serverController.stop();
     assertFalse(serverController.isServerRunning());
   }

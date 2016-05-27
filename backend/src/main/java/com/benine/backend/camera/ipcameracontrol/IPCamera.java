@@ -1,10 +1,10 @@
 package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.LogEvent;
-
+import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 
 /**
- * Class to communicate with an IP Camera.
+ * Class to communicate with an IP Camera from .
  */
 public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
@@ -58,13 +58,13 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   @Override
   public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
                                                                 throws CameraConnectionException {
-    CameraController.logger.log("Move IP camera", LogEvent.Type.INFO);
     String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
     panSp = ("00" + panSp).substring(panSp.length());
-    sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
+    String res = sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
                     + convertTiltToHex(pos.getTilt()).toUpperCase()
                     + panSp
                     + convertTiltSpeed(tiltSpeed));
+    verifyResponse(res, "aPS");
   }
   
   /**
@@ -77,26 +77,21 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   @Override
   public void move(int pan, int tilt) throws CameraConnectionException {
-    CameraController.logger.log("Move IP camera with specified speed.", LogEvent.Type.INFO);
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
     tilt = Math.min(99, tilt);
     NumberFormat formatter = new DecimalFormat("00");
-    sendControlCommand("%23PTS" + formatter.format(pan) + formatter.format(tilt));
+    String res = sendControlCommand("%23PTS" + formatter.format(pan) + formatter.format(tilt));
+    verifyResponse(res, "pTS");
   }
 
   @Override
   public Position getPosition() throws CameraConnectionException {
-    CameraController.logger.log("Get the position of the IP camera.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23APC");
-    if (res.substring(0, 3).equals("aPC")) {
-      return new Position(convertPanToDouble(res.substring(3, 7)),
-                                  convertTiltToDouble(res.substring(7)));
-    } else {
-      throw new IpcameraConnectionException(
-              "Getting the position of the camera failed.", this.getId());
-    }
+    res = verifyResponse(res, "aPC");
+    return new Position(convertPanToDouble(res.substring(0, 4)),
+                                  convertTiltToDouble(res.substring(4)));
   }
   
   /**
@@ -171,14 +166,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   public int getFocusPosition() throws CameraConnectionException {
     String res = sendControlCommand("%23GF");
-    if (res.substring(0, 2).equals("gf")) {
-      CameraController.logger.log("Get focus position of the IP Camera.", LogEvent.Type.INFO);
-      return Integer.valueOf(res.substring(2), 16);
-    } else {
-      CameraController.logger.log("Getting the focus position failed", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Sending command to get focus position failed",
-                                                                                      getId());
-    }
+    res = verifyResponse(res, "gf");
+    return Integer.valueOf(res, 16) - 1365;
   }
 
   /**
@@ -187,10 +176,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setFocusPosition(int pos) throws CameraConnectionException {
-    CameraController.logger.log("Set focus position camera.", LogEvent.Type.INFO);
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
-    sendControlCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
+    String res = sendControlCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
+    verifyResponse(res, "axf");
   }
 
   /**
@@ -202,26 +191,11 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void moveFocus(int speed) throws CameraConnectionException {
-    CameraController.logger.log("Move focus IP camera.", LogEvent.Type.INFO);
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     NumberFormat formatter = new DecimalFormat("00");
-    sendControlCommand("%23F" + formatter.format(speed));
-  }
-
-  /**
-   * Move the iris in the specified direction.
-   * Values between 1 and 99 where 50 is stop moving.
-   * 1 is iris nearer with max speed
-   * 99 is iris further with max speed
-   * @param speed value with which speed iris is changing.
-   * @throws CameraConnectionException when command can not be completed.
-   */
-  public void moveIris(int speed) throws CameraConnectionException {
-    CameraController.logger.log("Change iris IP camera", LogEvent.Type.INFO);
-    speed = Math.max(1, speed);
-    speed = Math.min(99, speed);
-    sendControlCommand("%23I" + speed);
+    String res = sendControlCommand("%23F" + formatter.format(speed));
+    verifyResponse(res, "fS");
   }
 
   /**
@@ -230,12 +204,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setAutoFocusOn(boolean on) throws CameraConnectionException {
-    CameraController.logger.log("Set auto focus: " + on, LogEvent.Type.INFO);
-    if (on) {
-      sendControlCommand("%23D11");
-    } else {
-      sendControlCommand("%23D10");
-    }
+    String response = sendControlCommand("%23D1" + Boolean.compare(on, false));
+    verifyResponse(response, "d1");
   }
   
   /**
@@ -244,14 +214,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoFocusOn() throws CameraConnectionException {
-    CameraController.logger.log("Checking autofocus failed.", LogEvent.Type.INFO);
-    String res = sendControlCommand("%23D1");
-    if (res.substring(0, 2).equals("d1")) {
-      return res.substring(2).equals("1");
-    } else {
-      CameraController.logger.log("Changing auto focus failed.", LogEvent.Type.CRITICAL);
-      throw new CameraConnectionException("Sending command to test autofocus failed", getId());
-    }
+    String response = sendControlCommand("%23D1");
+    response = verifyResponse(response, "d1");
+    return Integer.parseInt(response) == 1;
   }
   
   /**
@@ -260,12 +225,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public void setAutoIrisOn(boolean on) throws CameraConnectionException {
-    CameraController.logger.log("Changing auto iris.", LogEvent.Type.INFO);
-    if (on) {
-      sendControlCommand("%23D31");
-    } else {
-      sendControlCommand("%23D30");
-    }
+    String response = sendControlCommand("%23D3" + Boolean.compare(on, false));
+    verifyResponse(response, "d3");
   }
 
   /**
@@ -274,33 +235,24 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException {
-    CameraController.logger.log("Checking auto iris.", LogEvent.Type.INFO);
-    String res = sendControlCommand("%23D3");
-    if (res.substring(0, 2).equals("d3")) {
-      if (res.substring(2).equals("1")) {
-        return true;
-      }
-    } else {
-      CameraController.logger.log("Changing auto iris.", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException(
-          "Sending the message to test if auto iris is on to camera failed", getId());
-    }
-    return false;
+    String response = sendControlCommand("%23D3");
+    response = verifyResponse(response, "d3");
+    return Integer.parseInt(response) == 1;
   }
   
   /**
   * Set the iris position.
-  * Values between 1 and 99.
-  * 1 is closed iris.
-  * 99 is open iris.
+  * Values between 0 and 2730.
+  * 0 is closed iris.
+  * 2730 is open iris.
   * @param pos to set the iris to.
   * @throws CameraConnectionException when command can not be completed.
   */
   public void setIrisPosition(int pos) throws CameraConnectionException {
-    pos = Math.max(1, pos);
-    pos = Math.min(99, pos);
-    NumberFormat formatter = new DecimalFormat("00");
-    sendControlCommand("%23I" + formatter.format(pos));
+    pos = Math.max(0, pos);
+    pos = Math.min(2730, pos);
+    String response = sendControlCommand("%23AXI" + Integer.toHexString(pos + 1365).toUpperCase());
+    verifyResponse(response , "axi");
   }
 
   /**
@@ -309,9 +261,25 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getIrisPosition() throws CameraConnectionException {
-    CameraController.logger.log("Get iris position.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23GI");
-    return Integer.valueOf(res.substring(2, 5), 16);
+    res = verifyResponse(res, "gi");
+    return Integer.valueOf(res.substring(0, 3), 16) - 1365;
+  }
+  
+  /**
+   * Move the iris in the specified direction.
+   * Values between 1 and 99 where 50 is stop moving.
+   * 1 is close iris with max speed
+   * 99 is open iris with max speed
+   * @param speed value with which speed iris is changing.
+   * @throws CameraConnectionException when command can not be completed.
+   */
+  public void moveIris(int speed) throws CameraConnectionException {
+    speed = Math.max(1, speed);
+    speed = Math.min(99, speed);
+    speed = speed - 50;
+    int pos = getIrisPosition() + speed * 27;
+    setIrisPosition(pos);
   }
   
   /**
@@ -320,28 +288,23 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getZoomPosition() throws CameraConnectionException {
-    CameraController.logger.log("Get zoom position.", LogEvent.Type.INFO);
     String res = sendControlCommand("%23GZ");
-    if (res.substring(0, 2).equals("gz")) {
-      return Integer.valueOf(res.substring(2), 16);
-    } else {
-      CameraController.logger.log("Changing zoom position failed.", LogEvent.Type.CRITICAL);
-      throw new IpcameraConnectionException("Getting the Zoom position of the camera failed.",
-                                                                                        getId());
-    }
+    res = verifyResponse(res, "gz");
+    return Integer.valueOf(res, 16) - 1365;
   }
   
   /**
    * Zoom to a specified position.
+   * Value must be between 0 and 2730.
+   * Where 0 is completely zoomed out.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws CameraConnectionException {
-    CameraController.logger.log("Zoom to " + zpos + " position.", LogEvent.Type.INFO);
-    zpos = (int) ((zpos / 100.0) * 2730.0);
     zpos = Math.max(0, zpos);
     zpos = Math.min(2730, zpos);
-    sendControlCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
+    String res = sendControlCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
+    verifyResponse(res, "axz");
   }
 
   /**
@@ -356,7 +319,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
     NumberFormat formatter = new DecimalFormat("00");
-    sendControlCommand("%23Z" + formatter.format(dir));
+    String res = sendControlCommand("%23Z" + formatter.format(dir));
+    verifyResponse(res, "zS");
   }
   
   /**
@@ -374,19 +338,22 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws IpcameraConnectionException when the request fails.
    */
   public String sendCommand(String cmd) throws IpcameraConnectionException {
-    String res = null;
-    CameraController.logger.log("Send command: " + cmd + " to camera: " + getId(),
-                                                                        LogEvent.Type.INFO);
+    String res = "";
+    Logger logger = ServerController.getInstance().getLogger();
+    logger.log("Send command: " + cmd + " to camera: " + getId(), LogEvent.Type.INFO);
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
-      con.setConnectTimeout(1000);
-      con.setReadTimeout(1000);
+      con.setConnectTimeout(10000);
+      con.setReadTimeout(10000);
       InputStream in = con.getInputStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
-        res = buf.readLine();
-      } catch (IOException excep) {
+        while (buf.ready()) {
+          res = res.concat(buf.readLine()).concat(" ");
+        }
+        res = res.substring(0, res.length() - 1);
+      } catch (IOException | StringIndexOutOfBoundsException excep) {
         throw 
           new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
@@ -398,7 +365,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       throw new IpcameraConnectionException("Sending command to camera at " + ipaddress 
                                                                       + " failed", getId());
     }
-    
     return res;
   }
   
@@ -418,6 +384,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   @Override
   public String toJSON() throws CameraConnectionException {
+    Logger logger = ServerController.getInstance().getLogger();
+    logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     try {
@@ -430,8 +398,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       json.put("autoiris", isAutoIrisOn());
       json.put("streamlink", getStreamLink());
     } catch (Exception e) {
-      //TODO log not possible yet because logger acts funny when used in multiple threads (httpha
-      System.out.println(e.toString());
+      logger.log("Failed to get the JSON representation of camera: " 
+                                                  + getId(), LogEvent.Type.CRITICAL);
     }
     return  json.toString();
     
@@ -459,8 +427,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     if (obj instanceof IPCamera) {
       IPCamera that = (IPCamera) obj;
       if (super.equals(that)
-          && (this.ipaddress != null && this.ipaddress.equals(that.ipaddress)
-              || this.ipaddress == null && that.ipaddress == null)
+          && this.ipaddress.equals(that.ipaddress)
           ) {
         return true;
       }
@@ -470,13 +437,11 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   @Override
   public String getMacAddress() throws CameraConnectionException {
-    CameraController.logger.log("Send command: getInfo command to camera: " 
-        + getId(), LogEvent.Type.INFO);
     String res = sendCommand("getinfo?FILE=1");
     HashMap<String, String> cameraInfo = new HashMap<String, String>();
     if (res != null) {
       cameraInfo = parseCameraInfo(res);
-    } 
+    }    
     if (cameraInfo.get("MAC") == null) {
       throw new IpcameraConnectionException("Getting the info of the camera at " 
                                                           + ipaddress + " failed", getId());
@@ -500,8 +465,30 @@ public class IPCamera extends BasicCamera implements MovingCamera,
         value = pair[1];
       }
       valuesmap.put(name, value);
-    }
-    
+    }  
     return valuesmap;
+  }
+  
+  /**
+   * Verify response from  IP camera.
+   * @param response received from camera.
+   * @param expected prefix of the response.
+   * @return data of the response.
+   * @throws IpcameraConnectionException when response is not as expected.
+   */
+  private String verifyResponse(String response, String expected)
+                                                  throws IpcameraConnectionException {
+    if (response.startsWith(expected)) {
+      ServerController.getInstance().getLogger().log(
+                          "Camera responded correctly: "
+                          + response, LogEvent.Type.INFO);
+      return response.substring(expected.length());
+    } else {
+      ServerController.getInstance().getLogger().log(
+          "Camera response is not correct, expected: "
+           + expected + ", but it was : " + response, LogEvent.Type.CRITICAL);
+      throw new IpcameraConnectionException("Response of camera is not correct expected: " 
+          + expected + ", but it was : " + response, getId());
+    }
   }
 }
