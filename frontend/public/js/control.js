@@ -29,6 +29,7 @@ function loadCameras() {
 			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
+			camera_div.find('.camera_status').attr('class', 'camera_status available');
 			place++;
 		}
 	});
@@ -49,23 +50,57 @@ function getCameraInfo() {
 	}).done(loadControls);
 }
 
+function toggleCamSelected(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status selected');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+/**
+ * Method used to toggle if the camera is in use.
+ * @param camid		The id of the camera to toggle.
+ * @param inuse		Boolean, true if in use, false otherwise.
+ */
+function toggleCamInuse(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+	
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status unavailable');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+
 /**
 * Method to change the currently selected camera.
 * It changes the visible controls and displays the camera stream in the editing view.
 */
 function setCurrentCamera(id) {
-	var camera_div, camera_title, zoomslider, iris, focus;
-	currentcamera = id;
-	// Show the current camera in the editing view.
-	camera_div = $('#current_camera');
-	camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
-	camera_title = camera_div.find('.camera_title');
-	camera_title.find('#camera_title').text(cameras[currentcamera].id);
-	selectedPreset = undefined;
-	$('#createPreset').prop('disabled', false);
+	if (id !== currentcamera) {
+		var camera_div, camera_title, zoomslider, iris, focus;
+		toggleCamSelected(currentcamera, false);
+		currentcamera = id;
 
-	getCameraInfo();
-	loadPresets(currentcamera);
+		toggleCamSelected(currentcamera, true);
+		// Show the current camera in the editing view.
+		camera_div = $('#current_camera');
+		camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
+		camera_title = camera_div.find('.camera_title');
+		camera_title.find('#camera_title').text(cameras[currentcamera].id);
+		selectedPreset = undefined;
+		$('#createPreset').prop('disabled', false);
+		$('#preset_create_div .tags_input').tagsinput('removeAll');
+
+		getCameraInfo();
+		loadPresets(currentcamera);
+	}
 }
 
 /**
@@ -104,40 +139,11 @@ function loadControls() {
 * Set the button specified to the boolean value bool.
 */
 function setButton(btn, bool) {
-	console.log(bool);
 	if (bool === true) {
 		btn.removeClass( "btn-danger" ).addClass("btn-success");
 	} else {
 		btn.removeClass( "btn-success" ).addClass("btn-danger");
 	}
-}
-
-/**
-* Function loads the presets of this camera in the preset window.
-* @param cameraID the presets of this camera are loaded.
-*/
-function loadPresets(cameraID) {
-	var preset_div, obj, presets, place, preset, preset_area;
-	preset_area = $('#preset_area');
-	preset_area.find('div').removeAttr("presetID");
-	preset_area.find('img').removeAttr("src");
-	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"});
-	$.get("/api/backend/presets/getpresets", function(data) {
-		obj = JSON.parse(data);
-		console.log(obj);
-		presets = obj.presets;
-		place = 1;
-		for (var p in presets) {
-			if ($('#preset_'+ place) !== undefined) {
-				preset = JSON.parse(presets[p]);
-				preset_div = $('#preset_' + place);
-				preset_div.find('img').attr("src", "/api/backend" + preset.image);
-				preset_div.attr("presetID", preset.id);
-				place++;
-			}
-		}
-	});
 }
 
 /**
@@ -325,84 +331,15 @@ $('#auto_iris').click(function() {
 });
 
 /**
-* Handles input on the tag search field.
+* Toggle the color of the button between green and red.
+* @param btn the button to change.
 */
-function tagSearchInput(t) {
-	if(currentcamera !== undefined) {
-		if (!t.val()) {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?bla=5" , function(data) {loadPresetsOnTag(JSON.parse(data));});
-		} else {
-			$.get("/api/backend/camera/"+ currentcamera + "/preset?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
-			
-		}
-		//console.log(t.val());
+function toggleButton(btn){
+	if(btn.attr("class") === "btn btn-success") {
+		btn.addClass("btn-danger");
+		btn.removeClass("btn-success");
+	} else {
+		btn.addClass("btn-success");
+		btn.removeClass("btn-danger");
 	}
-}
-
-/**
-* Function loads the presets of this camera in the preset window.
-* @param presets object
-*/
-function loadPresetsOnTag(obj) {
-	var preset_div, presets, place, preset, preset_area;
-	preset_area = $('#preset_area');
-	preset_area.find('div').removeAttr("presetID");
-	preset_area.find('img').removeAttr("src");
-	preset_area.find('h5').removeClass();
-	Holder.run({images:"#preset_area img"});
-	presets = obj.presets;
-	place = 1;
-	for (var p in presets) {
-		if ($('#preset_'+ place) !== undefined) {
-			preset = JSON.parse(presets[p]);
-			preset_div = $('#preset_' + place);
-			preset_div.find('img').attr("src", "/api/backend" + preset.image);
-			preset_div.attr("presetID", preset.id);
-			place++;
-		}
-	}
-}
-
-/**
-* Function to handle a click on a preset.
-* @param t is the div on which is clicked.
-*/
-function presetcall(t) {
-	var presetID = t.attr("presetid");
-	if (presetID !== undefined) {
-		var title = t.find('h5');
-		if(selectedPreset !== undefined){
-			$('#' + selectedPreset).find('h5').removeClass("selected");
-		}
-		selectedPreset = t.attr("id");
-		title.addClass("selected");
-		$.get("/api/backend/presets/recallpreset?presetid=" + t.attr("presetid") + "&currentcamera=" + currentcamera  , function(data) {});
-		console.log(t.attr("presetid"));
-		getCameraInfo();
-	}
-}
-
-/**
-* Load everyting to create a preset.
-*/
-function loadCreatePreset() {
-	if (currentcamera !== undefined) {
-		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
-	}
-}
-
-/**
-* Create a preset of the current camera view.
-*/
-function createPreset() {
-	var preset_create_div = $('#preset_create_div');
-	var presetName = preset_create_div.find('#preset_name').val();
-	var presetTag = preset_create_div.find('#preset_tag').val();
-	console.log(presetTag + " " + presetName);
-	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera, function (data) {
-			console.log(data);
-			loadPresets(currentcamera);
-		});
-	};
 }
