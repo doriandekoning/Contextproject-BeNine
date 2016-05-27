@@ -132,4 +132,13 @@ public class PresetController {
   public void addAllTags(Collection<String> tags) {
     this.tags.addAll(tags);
   }
+
+  /**
+   * Removes a tag from a presetcontroller object and all its presets.
+   * @param tag the tag to remove.
+   */
+  public void removeTag(String tag) {
+    tags.remove(tag);
+    presets.forEach(p -> p.removeTag(tag));
+  }
 }
