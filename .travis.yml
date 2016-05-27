@@ -17,7 +17,7 @@ before_install:
 # (for example for the test of the node)
 script:  
   - cd ../backend
-  - mvn install
+  - mvn install coveralls:report
   - cd ../frontend
   - npm test
 env:
