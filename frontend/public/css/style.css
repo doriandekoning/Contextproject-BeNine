@@ -72,14 +72,24 @@ nav img {
 }
 
 /* slider styling */
-input[type=range] {
-    display: block;
-    -webkit-appearance: none;
-    background-color: #848484;
+#control_area input[type=range] {
     width: 200px;
     height: 55px;
-    position: absolute;
-    top:250px;
+   	top:250px;
+}
+
+.settings-modal input[type=range] {
+    width: 100px;
+    height: 15px;
+	top: 150px;
+}
+
+input[type=range] {	
+	position: absolute;
+	z-index: 0;
+	display: block;
+    -webkit-appearance: none;
+    background-color: #848484;
 
     -webkit-transform:rotate(90deg);
     -webkit-transform-origin: 0 0;
@@ -94,13 +104,21 @@ input[type=range] {
     transform-origin: 0 0;
 
     border-radius: 8px;
-    z-index: 0;
 }
+
+#control_area input[type="range"]::-webkit-slider-thumb {
+    width: 35px;
+    height: 55px;
+}
+
+.settings-modal input[type="range"]::-webkit-slider-thumb {
+    width: 15px;
+    height: 15px;
+}
+
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: #585858;
-    width: 35px;
-    height: 55px;
 	border-radius: 8px;
 }
 
@@ -108,7 +126,17 @@ input[type="range"]::-ms-tooltip {
 	visibility: hidden;
 }
 
-.slider {
+.settings-modal .slider {
+	width: 10px;
+    height: 50px;
+}
+
+.settings-modal .settings_sense {
+    height: 200px;
+    position: relative;
+}
+
+#control_area .slider {
     width: 55px;
     height: 290px;
     margin-left: 20px;
