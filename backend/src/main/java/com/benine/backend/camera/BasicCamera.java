@@ -1,15 +1,9 @@
 package com.benine.backend.camera;
 
-
-import com.benine.backend.Preset;
 import com.benine.backend.video.StreamType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Interface for communication with remote camera's.
- * @author Bryan
  */
 public abstract class BasicCamera implements Camera {
 
@@ -17,7 +11,7 @@ public abstract class BasicCamera implements Camera {
 
   private StreamType streamtype;
 
-  private Preset[] presetsFromCamera;
+  private boolean inUse;
 
   /**
    * Constructor for a Basic Camera.
@@ -26,7 +20,7 @@ public abstract class BasicCamera implements Camera {
   public BasicCamera(StreamType type) {
     this.id = -1;
     this.streamtype = type;
-    this.presetsFromCamera = new Preset[16];
+    this.inUse = false;
   }
 
   /**
@@ -61,45 +55,11 @@ public abstract class BasicCamera implements Camera {
     return this.streamtype;
   }
 
-  /**
-   * Get the list of presets from this camera.
-   * @return The preset array
-   */
-  public Preset[] getPresets() {
-    Preset[] copyPresets = new Preset[presetsFromCamera.length];
-    System.arraycopy(presetsFromCamera, 0, copyPresets, 0, presetsFromCamera.length);
-    return copyPresets;
-  }
-
-  /**
-   * Set the list of presets from this camera.
-   * @param presets The preset array
-   */
-  public void setPresets(Preset[] presets) {
-    Preset[] copyPresets = new Preset[presets.length];
-    System.arraycopy(presets, 0, copyPresets, 0, presets.length);
-    presetsFromCamera = copyPresets;
-  }
-
-  /**
-   * Set the list of presets from this camera of an arraylist.
-   * @param presets The ArrayList of presets
-   */
-  public void setPresetsFromArrayList(ArrayList<Preset> presets) {
-    presetsFromCamera = new Preset[16];
-    int i = 0;
-    for (Preset preset : presets) {
-      presetsFromCamera[i] = preset;
-      i++;
-    }
-  }
-
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + id;
-    result = prime * result + Arrays.hashCode(presetsFromCamera);
     result = prime * result + ((streamtype == null) ? 0 : streamtype.hashCode());
     return result;
   }
@@ -110,11 +70,25 @@ public abstract class BasicCamera implements Camera {
       BasicCamera that = (BasicCamera) obj;
       if (this.getId() == that.getId()
           && this.streamtype.equals(that.streamtype)
-          && Arrays.equals(this.presetsFromCamera, that.presetsFromCamera)
           ) {
         return true;
       }
     }
     return false;
+  }
+
+  @Override
+  public boolean isInUse() {
+    return inUse;
+  }
+
+  @Override
+  public void setInUse() {
+    this.inUse = true;
+  }
+
+  @Override
+  public void setNotInUse() {
+    this.inUse = false;
   }
 }

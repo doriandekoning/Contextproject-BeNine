@@ -1,5 +1,6 @@
 # Contextproject-BeNine
-
+[![Coverage Status](https://coveralls.io/repos/github/Kingdorian/Contextproject-BeNine/badge.svg?branch=setupCoveralls)](https://coveralls.io/github/Kingdorian/Contextproject-BeNine?branch=setupCoveralls)
+[![Build Status](https://travis-ci.org/Kingdorian/Contextproject-BeNine.svg?branch=master)](https://travis-ci.org/Kingdorian/Contextproject-BeNine)
 ## Installation
 ### Front End
 Installing the front-end server:

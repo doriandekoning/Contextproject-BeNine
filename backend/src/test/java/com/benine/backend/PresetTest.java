@@ -297,27 +297,6 @@ public class PresetTest {
   }
 
   @Test
-  public void testAddKeyWord() {
-    Preset.addKeyword("foo");
-    // Since this is static and we don't know what other test cases will do
-    // we'll just check if it contains foo instead of comparing it to an expected set
-    Assert.assertTrue(Preset.getKeywords().contains("foo"));
-  }
-
-  @Test
-  public void testRemoveKeyWord() {
-    Preset.addKeyword("bar");
-    Preset.removeKeyword("bar");
-    Assert.assertFalse(Preset.getKeywords().contains("bar"));
-  }
-
-  @Test
-  public void testGetCameraId() {
-    Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 42);
-    Assert.assertEquals(42, preset.getCameraId());
-  }
-
-  @Test
   public void testSetCameraId() {
     Preset preset = new Preset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, -1);
     // Actual method to test

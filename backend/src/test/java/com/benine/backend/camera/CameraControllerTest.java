@@ -1,22 +1,19 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 /**
@@ -82,6 +79,19 @@ public class CameraControllerTest {
     obj.put("cameras", ar);
     String expectedJSON = obj.toString();
     Assert.assertEquals(actualJSON, expectedJSON);
+  }
+
+  @Test
+  public void testGetCamerasInUse() {
+    Camera cam1 = mock(SimpleCamera.class);
+    when(cam1.isInUse()).thenReturn(true);
+    Camera cam2 = mock(SimpleCamera.class);
+    when(cam2.isInUse()).thenReturn(false);
+    controller.addCamera(cam1);
+    controller.addCamera(cam2);
+    List<Camera> expected = new ArrayList<Camera>();
+    expected.add(cam1);
+    Assert.assertEquals(expected, controller.camerasInUse());
   }
 
 }

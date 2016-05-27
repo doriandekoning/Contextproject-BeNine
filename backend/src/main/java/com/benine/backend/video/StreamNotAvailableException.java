@@ -17,7 +17,7 @@ public class StreamNotAvailableException extends Exception {
 
   /**
    * Should be thrown if a stream is not available.
-   * @param camid camera for which the stream is not available
+   * @param camid camera for which the stream is not available.
    * @param message reason for exception.
    */
   public StreamNotAvailableException(int camid, String message) {

@@ -22,9 +22,8 @@ public class Preset {
   private int tiltspeed;
   private boolean autoiris;
   private String image;
-  private int presetid;
+  private int presetid = -1;
   private Set<String> tags = new HashSet<String>();
-  private static Set<String> keywords = new HashSet<String>();
   private int cameraId;
 
   /**
@@ -52,6 +51,7 @@ public class Preset {
     this.autoiris = autoiris;
     this.cameraId = cameraId;
   }
+
   /**
    * Constructs a preset.
    *
@@ -193,9 +193,6 @@ public class Preset {
     return tags;
   }
 
-  public static Set<String> getKeywords() {
-    return keywords;
-  }
 
   /**
    * Adds a new tag to this object.
@@ -222,22 +219,6 @@ public class Preset {
     tags.remove(tag);
   }
 
-
-  /**
-   * Removes a keyword.
-   * @param keyword the keyword to remove
-   */
-  public static void removeKeyword(String keyword) {
-    keywords.remove(keyword);
-  }
-
-  /**
-   * Adds a new keyword.
-   * @param keyword keyword to add
-   */
-  public static void addKeyword(String keyword) {
-    keywords.add(keyword);
-  }
 
   @Override
   public int hashCode() {

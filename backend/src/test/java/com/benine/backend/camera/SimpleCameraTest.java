@@ -1,15 +1,11 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created on 5-5-16.
@@ -47,12 +43,11 @@ public class SimpleCameraTest {
     SimpleCamera simpleCamera = new SimpleCamera();
     simpleCamera.setId(3);
     simpleCamera.setStreamLink("something");
-    JSONObject actualJSON = new JSONObject(simpleCamera.toJSON());
     JSONObject expectedJSON = new JSONObject();
     expectedJSON.put("streamlink", "something");
     expectedJSON.put("id", 3);
-    Assert.assertEquals(expectedJSON.get("streamlink"), actualJSON.get("streamlink"));
-    Assert.assertEquals(expectedJSON.get("id"), actualJSON.get("id"));
+    expectedJSON.put("inuse", false);
+    Assert.assertEquals(expectedJSON.toString(), simpleCamera.toJSON());
   }
   
   @Test
@@ -83,26 +78,6 @@ public class SimpleCameraTest {
     SimpleCamera camera1 = new SimpleCamera();
     camera1.setStreamLink("test");
     String camera2 = "test";
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
-  public void testEqualsPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
-    camera2.setPresets(presets);
-    camera2.setStreamLink("test");
-    assertNotEquals(camera1, camera2);
-  }
-  
-  @Test
-  public void testEqualsNotPreset() {
-    SimpleCamera camera1 = new SimpleCamera();
-    Preset[] presets = {};
-    camera1.setPresets(presets);
-    SimpleCamera camera2 = new SimpleCamera();
     assertNotEquals(camera1, camera2);
   }
   
@@ -138,6 +113,14 @@ public class SimpleCameraTest {
     SimpleCamera camera2 = new SimpleCamera();
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
-  
+
+  @Test
+  public void testIsSetInUse() {
+    SimpleCamera camera1 = new SimpleCamera();
+    Assert.assertFalse(camera1.isInUse());
+    camera1.setInUse();
+    Assert.assertTrue(camera1.isInUse());
+  }
+
 }
 
