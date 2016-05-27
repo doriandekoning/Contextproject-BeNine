@@ -155,6 +155,7 @@ function addPresetRow() {
     $("#preset_area").append(preset_row);
 }
 
+
 /**
  * Adds a preset to the specified preset element row.
  * @param elem  A preset_row element.
@@ -162,9 +163,13 @@ function addPresetRow() {
 function addPreset(elem) {
     var preset_image, preset_caption;
 
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
+    preset_image = $('<img onclick="presetcall($(this))" data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
 
-    preset_caption = $('<h5>Preset ' + presetcounter + '</h5>');
+    preset_caption = $('<h5>Preset ' + presetcounter + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
+	
+	preset_edit = $('<span id="preset_edit" class="glyphicon glyphicon-pencil" style="cursor:pointer" aria-hidden="true" onclick="presetedit($(this))"></span>');
+			
+	preset_caption.append(preset_edit);
 
     $(elem).append(preset_image, preset_caption);
 }

@@ -1,4 +1,4 @@
-var localTags = [{name: "test"}];
+var localTags = [{name: "Trumpet"}, {name: "Guitar"}, {name: "Bass"}, {name: "Violin"},{name: "Trombone"},{name: "Piano"},{name: "Banjo"}];
 
 /**
 * Function loads the presets in this object
@@ -42,11 +42,14 @@ function createPreset() {
 	var preset_create_div = $('#preset_create_div');
 	var presetName = preset_create_div.find('#preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
-	console.log(presetTag);
+	console.log(presetTag + "--" + currentcamera);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);});
-		loadPresets(currentcamera);
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);}).done(function() {
+			$.get("/api/backend/presets/getpresets" , function(data) {loadPresetsOnTag(JSON.parse(data));});
+		});
+		
 	}
+	
 }
 
 /**
@@ -55,6 +58,7 @@ function createPreset() {
 var tagnames = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	/*
 	prefetch: {
 		//ToDo should be the tags from the backend
 		url: 'public/tagnames.json',
@@ -64,6 +68,7 @@ var tagnames = new Bloodhound({
 			});
 		}
 	},
+	*/
 	local: localTags
 });
 
@@ -71,9 +76,27 @@ tagnames.clearPrefetchCache();
 tagnames.initialize();
 
 /**
-* What to display in the type ahead of the tags input
+* What to display in the type ahead of the tags input of create preset.
 */
 $('#preset_create_div .tags_input').tagsinput({
+	itemValue: function(item) {
+		if (item['name'] !== undefined) {
+			return item['name']; 
+		} else {
+			return item;
+		}
+	},
+	typeaheadjs: {
+		displayKey: 'name',
+		valueKey: 'name',
+		source: tagnames.ttAdapter()
+	}
+});
+
+/**
+* What to display in the type ahead of the tags input of edit preset.
+*/
+$('#preset_edit_div .tags_input').tagsinput({
 	itemValue: function(item) {
 		if (item['name'] !== undefined) {
 			return item['name']; 
@@ -117,9 +140,29 @@ $('#preset_create_div .tags_input').tagsinput('input').blur(function(){
 });
 
 /**
+* Called when the tags input losses focus in edit.
+*/
+$('#preset_edit_div .tags_input').tagsinput('input').blur(function(){
+	if ($(this).val()) {
+		newTag($(this).val());
+		$(this).val('');
+	}
+});
+
+/**
 * Called on enter in the tags input.
 */
 $('#preset_create_div .tags_input').tagsinput('input').keypress(function (e) {
+	if (e.which == 13 && $(this).val()) {
+		newTag($(this).val());
+		$(this).val('');
+	}
+});
+
+/**
+* Called on enter in the tags input in edit.
+*/
+$('#preset_edit_div .tags_input').tagsinput('input').keypress(function (e) {
 	if (e.which == 13 && $(this).val()) {
 		newTag($(this).val());
 		$(this).val('');
@@ -207,4 +250,36 @@ function presetcall(t) {
 		console.log(t.attr("presetid"));
 		getCameraInfo();
 	}
+}
+
+
+/**
+* Function is called when edit icon is clicked.
+*/
+function presetedit(t) {
+	var parent = t.parent( "h5" ).parent("div");
+	var presetID = parent.attr("presetid");
+	//if (presetID !== undefined) {
+		loadPresetEditModal(presetID, parent.find('img').attr("src"));
+		console.log(presetID);
+	//}
+}
+
+
+function loadPresetEditModal(presetID, image) {
+	var preset, obj, preset_div;
+	$('.preset-edit-modal').find('img').attr("src", image);
+	$.get("/api/backend/presets/getpresets", function(data) {
+		obj = JSON.parse(data);
+		presets = obj.presets;
+		for (var p in presets) {
+			preset = JSON.parse(presets[p]);
+			if (preset.id === presetID) {
+				for(var tag in preset.tags) {
+					$('#preset_edit_div .tags_input').tagsinput('add', {name: tag});
+				}
+			}
+		}
+	});
+	$('.preset-edit-modal').modal('show');
 }

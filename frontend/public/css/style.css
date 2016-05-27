@@ -172,6 +172,18 @@ input[type=range]:focus {
     width: 100%;
 }
 
+#preset_create_div .bootstrap-tagsinput {
+	position: absolute;
+	left: 10px;
+	font-size: 17px;
+}
+
+#preset_edit_div .bootstrap-tagsinput {
+	position: absolute;
+	left: 10px;
+	font-size: 17px;
+}
+
 .tt-menu {
 	text-align: left;
 }
