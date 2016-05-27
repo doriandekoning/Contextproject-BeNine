@@ -10,9 +10,6 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.util.log.StdErrLog;
-
-import java.util.Properties;
 
 /**
  * Class responsible for starting and mutating the HTTP Stream Server.
@@ -27,11 +24,6 @@ public class HTTPServer {
    * @throws Exception  If the server cannot be started, thus rendering the application useless.
    */
   public HTTPServer(int port) throws Exception {
-    // Disables Jetty Logging to a minimum.
-    Properties p = new Properties();
-    p.setProperty("org.eclipse.jetty.LEVEL", "WARN");
-    StdErrLog.setProperties(p);
-
     //The Jetty server object.
     this.server = new Server(port);
     setUpHandlers();

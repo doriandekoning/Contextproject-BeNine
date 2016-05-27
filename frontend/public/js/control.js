@@ -29,6 +29,7 @@ function loadCameras() {
 			camera_div.find('img').attr("src", "/api/backend/camera/" + cameras[c].id + "/mjpeg");
 			camera_title = camera_div.find('.camera_title');
 			camera_title.find('#camera_title').text(cameras[c].id);
+			camera_div.find('.camera_status').attr('class', 'camera_status available');
 			place++;
 		}
 	});
@@ -49,6 +50,34 @@ function getCameraInfo() {
 	}).done(loadControls);
 }
 
+function toggleCamSelected(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status selected');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+/**
+ * Method used to toggle if the camera is in use.
+ * @param camid		The id of the camera to toggle.
+ * @param inuse		Boolean, true if in use, false otherwise.
+ */
+function toggleCamInuse(camid, inuse) {
+	camera_area = $('#camera_area');
+	camera = camera_area.find('#camera_' + camid);
+	
+	if (inuse === true) {
+		camera.find('.camera_status').attr('class', 'camera_status unavailable');
+	} else {
+		camera.find('.camera_status').attr('class', 'camera_status available');
+	}
+}
+
+
 /**
 * Method to change the currently selected camera.
 * It changes the visible controls and displays the camera stream in the editing view.
@@ -56,7 +85,10 @@ function getCameraInfo() {
 function setCurrentCamera(id) {
 	if (id !== currentcamera) {
 		var camera_div, camera_title, zoomslider, iris, focus;
+		toggleCamSelected(currentcamera, false);
 		currentcamera = id;
+
+		toggleCamSelected(currentcamera, true);
 		// Show the current camera in the editing view.
 		camera_div = $('#current_camera');
 		camera_div.find('img').attr("src", "/api/backend/camera/" + currentcamera + "/mjpeg");
@@ -65,7 +97,6 @@ function setCurrentCamera(id) {
 		selectedPreset = undefined;
 		$('#createPreset').prop('disabled', false);
 		$('#preset_create_div .tags_input').tagsinput('removeAll');
-		loadPresets(currentcamera);
 
 		getCameraInfo();
 		loadPresets(currentcamera);
@@ -163,8 +194,9 @@ joystick.on('end', function(){
 function sendMove(){
 	if (lastSend.distance !== distance || lastSend.angle !== angle) {
 		var tilt, pan;
-		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
-		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * 40 ) + 50);
+		var settings = getSettings();
+		tilt = Math.round((Math.sin(angle) * (distance / (0.5 * joysticksize)) * settings.joystick * 5 ) + 50);
+		pan = Math.round((Math.cos(angle) * (distance / (0.5 * joysticksize)) * settings.joystick * 5 ) + 50);
 		$.get("/api/backend/camera/" + currentcamera + "/move?moveType=relative&pan=" + pan + "&tilt=" + tilt + "&panSpeed=0&tiltSpeed=0", function(data) {});
 		lastSend.distance = distance;
 		lastSend.angle = angle;
@@ -188,7 +220,8 @@ function inputzoomslider(z) {
 */
 function sendZoom() {
 	if (zoomInput.value !== zoomInput.lastSend) {
-		var zoom = parseInt(50  + (4.9 * parseInt(zoomInput.value)));
+		var settings = getSettings();
+		var zoom = parseInt(50  + (settings.zoom - 0.1) * parseInt(zoomInput.value));
 		$.get("/api/backend/camera/" + currentcamera + "/zoom?zoomType=relative&zoom=" + zoom, function(data) {});
 		zoomInput.lastSend = zoomInput.value;
 		console.log("Zoom: " + zoom);
@@ -215,7 +248,8 @@ function inputfocusslider(f) {
 */
 function sendFocus() {
 	if (focusInput.value != focusInput.lastSend) {
-		var focus = parseInt(50  + (4.9 * parseInt(focusInput.value)));
+		var settings = getSettings();
+		var focus = parseInt(50  + (settings.focus - 0.1) * parseInt(focusInput.value));
 		$.get("/api/backend/camera/" + currentcamera + "/focus?autoFocusOn=false&speed=" + focus, function(data) {});
 		focusInput.lastSend = focusInput.value;
 		console.log("Focus: " + focus);
@@ -243,7 +277,8 @@ function inputirisslider(i) {
 */
 function sendIris() {
 	if (irisInput.value !== irisInput.lastSend) {
-		var iris = parseInt(50 + (4.9 * parseInt(irisInput.value)));
+		var settings = getSettings();
+		var iris = parseInt(50 + (settings.iris - 0.1) * parseInt(irisInput.value));
 		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=false&speed=" + iris, function(data) {});
 		irisInput.lastSend = irisInput.value;
 		console.log("Iris: " + iris);

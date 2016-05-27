@@ -3,15 +3,20 @@ package com.benine.backend;
 import com.benine.backend.database.Database;
 
 import java.sql.SQLException;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by dorian on 18-5-16.
  */
 public class PresetController {
+  
+  private static volatile int newID = 1;
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
+
+  private HashSet<String> tags = new HashSet<>();
 
 
   /**
@@ -53,16 +58,35 @@ public class PresetController {
     Database db = ServerController.getInstance().getDatabase();
     db.deletePreset(preset.getId());
   }
-
+  
+  /**
+   * Adds the right id to this preset.
+   * @param preset to add the id to.
+   * @return Preset with right ID.
+   */
+  private static Preset addPresetID(Preset preset) {
+    if (preset.getId() == -1) {
+      preset.setId(PresetController.newID);
+      PresetController.newID++;
+    } else {
+      PresetController.newID = Math.max(PresetController.newID - 1, preset.getId()) + 1;
+    }
+    return preset;
+  }
+ 
   /**
    * Adds a preset.
    * @param preset the preset to add.
+   * @return ID of the preset just created.
    * @throws SQLException when an error occures in the database.
    */
-  public void addPreset(Preset preset) throws SQLException {
+  public int addPreset(Preset preset) throws SQLException {   
+    preset = addPresetID(preset);
     presets.add(preset);
+    addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
     serverContr.getDatabase().addPreset(preset);
+    return preset.getId();
   }
 
   /**
@@ -84,4 +108,28 @@ public class PresetController {
     return presets;
   }
 
+
+  /**
+   * Adds a tag.
+   * @param tag the name of the tag to add.
+   */
+  public void addTag(String tag) {
+    tags.add(tag);
+  }
+
+  /**
+   * Returns a collection with all tags.
+   * @return a collection with all tags
+   */
+  public Collection<String> getTags() {
+    return tags;
+  }
+
+  /**
+   * Adds a collection of tags.
+   * @param tags a collection of tags to add.
+   */
+  public void addAllTags(Collection<String> tags) {
+    this.tags.addAll(tags);
+  }
 }

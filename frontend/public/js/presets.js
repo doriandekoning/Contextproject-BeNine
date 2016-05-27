@@ -1,4 +1,4 @@
-var localTags = [{name: "test"}];
+var localTags = [{name: "Trumpet"}, {name: "Guitar"}, {name: "Bass"}, {name: "Violin"},{name: "Trombone"},{name: "Piano"},{name: "Banjo"}];
 
 /**
 * Function loads the presets in this object
@@ -29,7 +29,7 @@ function loadPresetsOnTag(obj) {
 */
 function loadCreatePreset() {
 	if (currentcamera !== undefined) {
-		$('.preset-create-modal').find('img').attr("src", cameras[currentcamera].streamlink);
+		$('.preset-create-modal').find('img').attr("src", "/api/backend/camera/" + cameras[currentcamera].id + "/mjpeg");
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
 	}
@@ -41,10 +41,10 @@ function loadCreatePreset() {
 function createPreset() {
 	var preset_create_div = $('#preset_create_div');
 	var presetName = preset_create_div.find('#preset_name').val();
-	var presetTag = preset_create_div.find('#preset_tag').val();
-	console.log(presetTag + " " + presetName);
+	var presetTag = $('#preset_create_div .tags_input').val();
+	console.log(presetTag + "--" + currentcamera);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera , function(data) {console.log(data);});
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);});
 		loadPresets(currentcamera);
 	}
 }
@@ -55,6 +55,7 @@ function createPreset() {
 var tagnames = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	/*
 	prefetch: {
 		//ToDo should be the tags from the backend
 		url: 'public/tagnames.json',
@@ -64,6 +65,7 @@ var tagnames = new Bloodhound({
 			});
 		}
 	},
+	*/
 	local: localTags
 });
 
