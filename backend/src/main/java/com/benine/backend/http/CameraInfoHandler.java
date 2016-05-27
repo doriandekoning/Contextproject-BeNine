@@ -6,7 +6,6 @@ import org.eclipse.jetty.server.Request;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
    */
   public CameraInfoHandler() {
     this.handlers = new HashMap<>();
-
 
     addHandler("mjpeg", new CameraStreamHandler());
     addHandler("focus", new CameraFocusHandler());

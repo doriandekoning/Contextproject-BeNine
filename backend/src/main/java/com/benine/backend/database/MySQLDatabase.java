@@ -22,7 +22,6 @@ public class MySQLDatabase implements Database {
   private Connection connection;
   private String user;
   private String password;
-  private int presetID;
 
   /**
    * Constructor of a MySQL Database.
@@ -34,7 +33,6 @@ public class MySQLDatabase implements Database {
     connection = null;
     this.user = user;
     this.password = password;
-    presetID = 1;
   }
 
   @Override
@@ -71,8 +69,6 @@ public class MySQLDatabase implements Database {
       final String sql = String.format("INSERT INTO tagPresets VALUES(%s,'%s')",
           preset.getId(), tag);
       statement.executeUpdate(sql);
-      preset.setId(presetID);
-      presetID++;
     } catch (Exception e) {
       getLogger().log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
     } finally {
@@ -107,8 +103,6 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = createAddSqlQuery(preset);
       statement.executeUpdate(sql);
-      preset.setId(presetID);
-      presetID++;
     } catch (Exception e) {
       getLogger().log("Presets could not be added.", LogEvent.Type.CRITICAL);
     } finally {
@@ -232,7 +226,6 @@ public class MySQLDatabase implements Database {
           new InputStreamReader(new FileInputStream("database" + File.separator
               + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
-      presetID = 1;
     } catch (SQLException | IOException e) {
       getLogger().log("Database is not reset.", LogEvent.Type.CRITICAL);
     }
@@ -453,7 +446,7 @@ public class MySQLDatabase implements Database {
     if (preset.isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + presetID + ","
+    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getId() + ","
         + preset.getPosition().getPan() + "," + preset.getPosition().getTilt()
         + "," + preset.getZoom() + "," + preset.getFocus()
         + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","

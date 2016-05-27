@@ -28,7 +28,11 @@ public class PresetsHandler extends RequestHandler {
    */
   public PresetsHandler() {
     this.handlers = new HashMap<>();
-    setHandlers(new CreatePresetHandler(), new RecallPresetHandler());
+
+    addHandler("createpreset", new CreatePresetHandler());
+    addHandler("recallpreset", new RecallPresetHandler());
+    addHandler("addtag", new AddTagHandler());
+    addHandler("removetag", new RemoveTagHandler());
   }
 
   @Override
@@ -71,7 +75,7 @@ public class PresetsHandler extends RequestHandler {
       JSONArray tagsJSON = new JSONArray();
       Collection<String> tags = controller.getTags();
       tags.forEach(t -> tagsJSON.add(t));
-      jsonObject.put("tags", tags);
+      jsonObject.put("tags", tagsJSON);
     } else {
       presets = controller.getPresetsByTag(tag);
     }
@@ -97,15 +101,12 @@ public class PresetsHandler extends RequestHandler {
   }
 
   /**
-   * Sets the handlers where this handler routes to.
-   * @param createPreset  a CreatePresetHandler.
-   * @param recallPreset  a RecallPresetHandler.
+   * Adds a handler.
+   * @param route The route use this handler for.
+   * @param handler the handler to add.
    */
-  public void setHandlers(CreatePresetHandler createPreset,
-                          RecallPresetHandler recallPreset) {
-
-    handlers.put("createpreset", createPreset);
-    handlers.put("recallpreset", recallPreset);
-
+  public void addHandler(String route, RequestHandler handler) {
+    handlers.put(route, handler);
   }
+
 }
