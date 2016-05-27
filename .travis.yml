@@ -11,7 +11,7 @@ before_install:
 - npm install
 script:
 - cd ../backend
-- mvn install cobertura:cobertura coveralls:report -DrepoToken=COVERALLSTOKEN -DTRAVIS_JOB_ID=$TRAVIS_JOB_ID
+- mvn install cobertura:cobertura coveralls:report -DrepoToken=COVERALLSTOKEN
 - cd ../frontend
 - npm test
 env:
