@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class CameraInfoHandler extends CameraRequestHandler {
 
   /**
@@ -23,7 +22,6 @@ public class CameraInfoHandler extends CameraRequestHandler {
    */
   public CameraInfoHandler() {
     this.handlers = new HashMap<>();
-
 
     addHandler("mjpeg", new CameraStreamHandler());
     addHandler("focus", new CameraFocusHandler());

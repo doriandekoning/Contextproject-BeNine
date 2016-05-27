@@ -27,12 +27,11 @@ public class IpcameraFocusTest {
     Mockito.doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
   }
   
-  
   @Test
   public final void testGetFocusPosition() throws CameraConnectionException {
     setCameraBehaviour("GF", "gfA42");
     int res = camera.getFocusPosition();    
-    assertEquals(res, 2626, 0.000001);
+    assertEquals(res, 1261, 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -43,21 +42,21 @@ public class IpcameraFocusTest {
   
   @Test
   public final void testSetFocus() throws CameraConnectionException {
-    setCameraBehaviour("AXFFFF", "axFFFF");
+    setCameraBehaviour("AXFFFF", "axfFFF");
     camera.setFocusPosition(2882);
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXFFFF&res=1");
   }
   
   @Test
   public final void testMoveFocus() throws CameraConnectionException {
-    setCameraBehaviour("F80", "fs80");
+    setCameraBehaviour("F80", "fS80");
     camera.moveFocus(80);   
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23F80&res=1");
   }
   
   @Test
   public final void testMoveFocus2() throws CameraConnectionException {
-    setCameraBehaviour("F02", "fs02");
+    setCameraBehaviour("F02", "fS02");
     camera.moveFocus(2);
     
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23F02&res=1");

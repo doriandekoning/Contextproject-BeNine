@@ -1,22 +1,22 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import org.json.simple.JSONObject;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 import org.apache.commons.io.IOUtils;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * Test class to test the IP Camera class.
@@ -93,7 +93,7 @@ public class IpcameraTest {
   @Test
   public final void testGetStreamLink() {
     String res = camera.getStreamLink();
-    assertEquals(res, "http://test" + "/cgi-bin/mjpeg");
+    assertEquals(res, "http://test/cgi-bin/mjpeg");
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -150,5 +150,40 @@ public class IpcameraTest {
     IPCamera camera1 = new IPCamera("12");
     IPCamera camera2 = new IPCamera("12");
     assertEquals(camera1.hashCode(), camera2.hashCode());
+  }
+  
+  @Test
+  public final void testGetJSONFails() throws CameraConnectionException {
+    IPCamera camera = new IPCamera("12");
+    JSONObject json = new JSONObject();
+    json.put("id", -1);
+    assertEquals(json.toString(), camera.toJSON());
+  }
+  
+  @Test
+  public final void testGetJSON() throws CameraConnectionException {
+    setCameraBehaviour("APC", "aPC80008000");
+    setCameraBehaviour("GZ", "gz655");
+    setCameraBehaviour("GF", "gfA42");
+    setCameraBehaviour("D1", "d11");
+    setCameraBehaviour("D3", "d31");
+    setCameraBehaviour("GI", "giD421");
+    JSONObject json = new JSONObject();
+    json.put("id", -1);
+    json.put("pan", 0.0);
+    json.put("tilt", 180.0);
+    json.put("zoom", 256);
+    json.put("focus", 1261);
+    json.put("autofocus", true);
+    json.put("iris", 2029);
+    json.put("autoiris", true);
+    json.put("streamlink", "http://test/cgi-bin/mjpeg");
+    
+    assertEquals(json.toString(), camera.toJSON());
+  }
+  
+  @Test
+  public final void testGetIPAddress() {
+    assertEquals("test", camera.getIpaddress());
   }
 }

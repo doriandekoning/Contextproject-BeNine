@@ -78,8 +78,8 @@ public class ServerController {
    * @throws Exception If the server cannot be started.
    */
   public void start() throws Exception {
-    startupDatabase();
     cameraController.loadConfigCameras();
+    startupDatabase();
     httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
 
     loadPresets();
@@ -108,6 +108,9 @@ public class ServerController {
   private void loadPresets() {
     try {
       presetController.addPresets(database.getAllPresets());
+      for (Preset preset : presetController.getPresets()) {
+        preset.addTags(database.getTagsFromPreset(preset));
+      }
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
     }
@@ -133,12 +136,9 @@ public class ServerController {
     if (!database.checkDatabase()) {
       database.resetDatabase();
     } else {
-      try {
-        database.useDatabase();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      database.useDatabase();
     }
+    database.checkCameras();
   }
 
   /**

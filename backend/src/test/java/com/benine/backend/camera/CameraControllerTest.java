@@ -1,22 +1,17 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.io.File;
-import java.sql.SQLException;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 /**

@@ -74,13 +74,13 @@ public abstract class RequestHandlerTest {
   }
 
   public void setParameters(MultiMap<String> parameters) {
-    requestMock.setParameters(parameters);
+    requestMock.setQueryParameters(parameters);
 
     for (String s : parameters.keySet()) {
       when(requestMock.getParameter(s)).thenReturn(parameters.getString(s));
     }
 
-    when(requestMock.getParameters()).thenReturn(parameters);
+    when(requestMock.getQueryParameters()).thenReturn(parameters);
 
   }
 

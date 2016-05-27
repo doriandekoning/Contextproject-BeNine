@@ -30,9 +30,9 @@ public class IpcameraZoomTest {
     setCameraBehaviour("GZ", "gz655");
 
     int res = camera.getZoomPosition();
-    
+
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23GZ&res=1");
-    assertEquals(res, 1621, 0.000001);
+    assertEquals(res, 256, 0.000001);
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -43,10 +43,10 @@ public class IpcameraZoomTest {
   
   @Test
   public final void testZoomTo() throws CameraConnectionException {
-    setCameraBehaviour("AXZB84", "axzBAB");
+    setCameraBehaviour("AXZ58F", "axz58F");
     camera.zoomTo(58);
     
-    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXZB84&res=1");
+    Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXZ58F&res=1");
   }
   
   @Test
