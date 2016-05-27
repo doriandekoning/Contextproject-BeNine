@@ -38,6 +38,9 @@ public class CameraFocusHandlerTest extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
+
+
+
     verify(cam).setAutoFocusOn(true);
     verify(requestMock).setHandled(true);
   }

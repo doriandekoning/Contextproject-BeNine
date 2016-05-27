@@ -157,11 +157,12 @@ public class IpcameraTest {
     IPCamera camera = new IPCamera("12");
     JSONObject json = new JSONObject();
     json.put("id", -1);
+    json.put("inuse", false);
     assertEquals(json.toString(), camera.toJSON());
   }
   
   @Test
-  public final void testGetJSON() throws CameraConnectionException {
+  public final void testGetJSON() throws CameraConnectionException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");
@@ -170,6 +171,7 @@ public class IpcameraTest {
     setCameraBehaviour("GI", "giD421");
     JSONObject json = new JSONObject();
     json.put("id", -1);
+    json.put("inuse", false);
     json.put("pan", 0.0);
     json.put("tilt", 180.0);
     json.put("zoom", 256);
