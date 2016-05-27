@@ -1,33 +1,32 @@
 language: java
-
 jdk:
-  - oraclejdk8
-
-notifications:
+- oraclejdk8
+notifications: 
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - cd frontend
-  - nvm install v4
-  - nvm use v4
-  - npm install
-
-#Add other test runs here by adding && and running commands
-# to change to the correct dir and run the tests
-# (for example for the test of the node)
-script:  
-  - cd ../backend
-  - mvn install
-  - cd ../frontend
-  - npm test
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- cd frontend
+- nvm install v4
+- nvm use v4
+- npm install
+script:
+- cd ../backend
+- mvn install coveralls:report -DrepoToken=COVERALLSTOKEN
+- cd ../frontend
+- npm test
 env:
+  matrix:
   - BUILD_PR_BRANCH=true
   - BUILD_PR_BRANCH=false
+  global:
+    secure: nWv94oaW8GsadUpi3JgpJlbCzVTUggym/f5CfmYFJlMxIuKa30CdKFG72B1Z4hiQ6tS0nGctjnKYKzX32AhW/SYr7Ea+nnlbUkC4S/H3oXEi+YMcnwrvNc5WyhFtGgq5UIRwUO7kJsvvRvhP0sdxfT4FbyTaQww0CgWve7cHTj3sFwb8S/pWY/KEuWbbTHIsa1jidgrzJYGSNqmhVlarzedO2Ldmdxea1wSmOc2h3e5CKbxoVXnFhCo46Rll7biQDlnAYiQJUqwzHc1bfU6ePIH3/P2Asa7LQKn9KCbBiFJ1iliC2msXwTZaOY9zse0OSml10rkxmsa+hZhOsw76cj28aQqgAh52roOyjBNMgYIcW57VtXN5liKr/fSGINI+iYhDDqZsF0cTeAjEZ/hiIpUxtlw5L4C/QK/yqL0yW8CXlryTjrGqFiGEawFA17MeR/v69wKJoooEv6thXC8iGWTLWoqNpzUmgBPxaJOcb+Fet7aOQbZcy9BY5Ll2kqO1FzCdYdhEN7miULOcYYM274J8am53jIeslAW9SOCJ3r2reiPkhqleTUvapYNf8UuKZqAJR+dMOrAntZJQX/9RS32YOe0j+sF76NcnoWDZknbY7EuCK5+el/Ns5zcKraHEiZSptcS6IbfaQeNz31RE8LNAO+kRkLkcC44YDtrEErM=
 matrix:
   allow_failures:
-    - env:
-      - BUILD_PR_BRANCH=true
+  - env:
+    - BUILD_PR_BRANCH=true
 after_script:
-  - echo "== CHECKSTYLE_RESULT ==" && cat "target/checkstyle-result.xml" && echo "== END_CHECKSTYLE_RESULT =="
-  - echo "== PMD_RESULT ==" && cat "target/pmd.xml" && echo "== END_PMD_RESULT =="
-  - echo "== FINDBUGS_RESULT ==" && cat "target/findbugsXml.xml" && echo "== END_FINDBUGS_RESULT =="
+- echo "== CHECKSTYLE_RESULT ==" && cat "target/checkstyle-result.xml" && echo "==
+  END_CHECKSTYLE_RESULT =="
+- echo "== PMD_RESULT ==" && cat "target/pmd.xml" && echo "== END_PMD_RESULT =="
+- echo "== FINDBUGS_RESULT ==" && cat "target/findbugsXml.xml" && echo "== END_FINDBUGS_RESULT
+  =="
