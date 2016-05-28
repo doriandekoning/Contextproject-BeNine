@@ -151,6 +151,7 @@ function loadPresets(cameraID) {
 	preset_area.find('h5').removeClass();
 	Holder.run({images:"#preset_area img"});
 	$.get("/api/backend/presets/getpresets", function(data) {
+		console.log(data);
 		obj = JSON.parse(data);
 		console.log(obj);
 		presets = obj.presets;

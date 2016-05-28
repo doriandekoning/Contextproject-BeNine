@@ -43,6 +43,20 @@ public class PresetControllerTest {
   }
   
   @Test
+  public void testUpdatePreset() throws Exception {
+    PresetController controller = new PresetController();
+    Preset preset = mock(Preset.class);
+    when(preset.getId()).thenReturn(1);
+    Preset newpreset = mock(Preset.class);
+    when(newpreset.getId()).thenReturn(1);
+    controller.addPreset(preset);
+    controller.updatePreset(newpreset);
+    ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
+    expectedPresets.add(newpreset);
+    Assert.assertEquals(expectedPresets, controller.getPresets());
+  }
+  
+  @Test
   public void testAddPresetWithoutID() throws Exception {
     PresetController controller = new PresetController();
     Preset preset = mock(Preset.class);

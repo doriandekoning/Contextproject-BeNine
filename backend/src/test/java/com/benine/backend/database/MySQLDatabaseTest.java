@@ -225,9 +225,12 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("tiltspeed", new Object[]{1});
         result.addColumn("autoiris", new Object[]{1});
         result.addColumn("camera_ID", new Object[]{1});
+        result.addColumn("image", new Object[]{1});
         result.next();
         Preset preset = database.getPresetsFromResultSet(result);
-        assertEquals(preset, new Preset(new Position(1,1),1,1,1,true,1,1,true,1));
+        Preset expected = new Preset(new Position(1,1),1,1,1,true,1,1,true,1);
+        expected.setImage("1");
+        assertEquals(expected, preset);
     }
 
     @Test

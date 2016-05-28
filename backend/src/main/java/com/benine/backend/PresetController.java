@@ -88,6 +88,20 @@ public class PresetController {
     serverContr.getDatabase().addPreset(preset);
     return preset.getId();
   }
+  
+  /**
+   * Updates a preset in preset list and database.
+   * @param preset the preset to update.
+   * @throws SQLException when an error occurs in the database.
+   */
+  public void updatePreset(Preset preset) throws SQLException {
+    Preset old = getPresetById(preset.getId());
+    presets.remove(old);
+    presets.add(preset);
+    addAllTags(preset.getTags());
+    ServerController serverContr = ServerController.getInstance();
+    serverContr.getDatabase().updatePreset(preset);
+  }
 
   /**
    * Adds a list of presets to be controllerd.
