@@ -47,13 +47,13 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT name FROM tagPresets WHERE presets_ID = "
+      String sql = "SELECT tag_name FROM tagPresets WHERE presets_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
         list.add(resultset.getString("name"));
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       getLogger().log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
@@ -265,7 +265,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT ID, MACAddress FROM camera";
+      String sql = "SELECT ID, MACaddress FROM camera";
       resultset = statement.executeQuery(sql);
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
