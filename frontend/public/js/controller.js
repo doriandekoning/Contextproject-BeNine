@@ -1,4 +1,5 @@
 var cameras = [];
+var presets = [];
 var currentcamera;
 
 // Document is ready, we can now manipulate it.
@@ -10,15 +11,18 @@ $(document).ready(function() {
 	// Load the available cameras.
 	cameras = loadCameras();
 	
-
-    // Generate the camera block area.
+	// Generate the camera block area.
     generateCameraArea(cameras.map(function(item){
 		return item.id;
 	}));
-
+		
 	cameras.forEach(function(item) {
 		item.smallView();
 	});
+	
+	// Load the available presets from the backend.
+	presets = loadPresets();
+	displayPresets(presets);
 
     // Generate the presets area.
     generatePresets();
@@ -36,10 +40,8 @@ function loadCameras() {
 	return cameras;
 }
 
-function switchCurrentView() {
-    var camera_div, id, camera;
-	camera_div = $(this);
-	id = camera_div.attr("camera_number");
+function switchCurrentView(id) {
+    var camera;
 	if(id !== currentcamera) {
 		toggleCamSelected(currentcamera, false);
 		currentcamera = id;

@@ -99,33 +99,32 @@ function addCameraRow(block, cameras) {
 /**
  * Generates the presets area of the app.
  */
-function generatePresets() {
-    for (var i = 0; i < 4; i++) {
-        addPresetRow();
+function generatePresets(presets) {
+	var length = Math.ceil(presets.length / 4);
+    for (var i = 0; i < length; i++) {
+        addPresetRow(presets.slice(i * 4, (i + 1) * 4));
     }
 }
 
 /**
  * Adds a row to the presets area of the app.
  */
-function addPresetRow() {
+function addPresetRow(presets) {
     var preset_row, preset_column;
 
     preset_row = $('<div class="row"></div>');
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div onclick="presetcall($(this))"></div>');
+		if (presets[i] !== undefined) {
+			preset_column = $('<div id="preset_' + presets[i] + '" class="col-xs-3 none"></div>');
+			addPreset(preset_column, presets[i]);
+		} else {
+			preset_column = $('<div class="col-xs-3 none"></div>');
+			addPreset(preset_column, "-");
+		}
         preset_row.append(preset_column);
     }
-
-    // Now for each column add the preset block.
-    preset_row.children().each( function(index, elem) {
-        presetcounter++;
-        $(elem).attr("class", "col-xs-3 none");
-		$(elem).attr("id", "preset_" + presetcounter);
-        addPreset(elem);
-    });
 
     // Now append the preset row.
     $("#preset_area").append(preset_row);
@@ -136,16 +135,12 @@ function addPresetRow() {
  * Adds a preset to the specified preset element row.
  * @param elem  A preset_row element.
  */
-function addPreset(elem) {
+function addPreset(elem, id) {
     var preset_image, preset_caption;
 
-    preset_image = $('<img onclick="presetcall($(this))" data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + id + '&bg=8b8b8b">').get(0);
 
-    preset_caption = $('<h5>Preset ' + presetcounter + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
-	
-	preset_edit = $('<span id="preset_edit" class="glyphicon glyphicon-pencil" style="cursor:pointer" aria-hidden="true" onclick="presetedit($(this))"></span>');
-			
-	preset_caption.append(preset_edit);
+    preset_caption = $('<h5>Preset ' + id + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
 
     $(elem).append(preset_image, preset_caption);
 }

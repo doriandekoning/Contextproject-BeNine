@@ -6,10 +6,7 @@ function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.zoom = zoom;
 	this.move = move;
 	this.presets = [];
-	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" onerror="imgNotLoaded(event)">');
-}
-function imgNotLoaded(event) {
-	$(event.srcElement).replaceWith($('<img data-src="holder.js/246x144?auto=yes&text=Load error&bg=8b8b8b" onerror="imgNotLoaded(event)" >'));
+	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
 	smallView: function() {
@@ -24,7 +21,7 @@ Camera.prototype = {
 			if ($(this).attr("alt") !== undefined) {
 				camera_div.find('.camera_status').attr('class', 'camera_status unavailable');
 			} else {
-				camera_div.click(switchCurrentView);	
+				camera_div.attr("onclick", 'switchCurrentView($(this).attr("camera_number"))');	
 			}
 		});
 		camera_title = camera_div.find('.camera_title');
@@ -34,9 +31,9 @@ Camera.prototype = {
 		camera_div = $('#current_camera');
 		//camera_div.find('img').attr("src", "/api/backend/camera/" + this.id + "/mjpeg");
 		camera_div.find('img').replaceWith(this.img);
-
+		Holder.run({images: "#current_camera img"});
 		camera_title = camera_div.find('.camera_title');
-		camera_title.find('#camera_title').text(cameras[currentcamera].id);
+		camera_title.find('#camera_title').text(this.id);
 	},
 	displayControls: function () {
 		zoom = $('#zoom');

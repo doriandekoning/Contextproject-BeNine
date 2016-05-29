@@ -92,6 +92,7 @@ public class Preset {
     json.put("autoiris", autoiris);
     json.put("image", image);
     json.put("id", presetid);
+    json.put("cameraid", cameraId);
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
