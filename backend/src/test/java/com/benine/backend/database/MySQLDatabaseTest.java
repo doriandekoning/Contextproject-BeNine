@@ -423,7 +423,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.getTagsFromPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT name FROM tagPresets");
+        verifySQLStatementExecuted("SELECT tag_name FROM tagPresets");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
