@@ -69,7 +69,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets/unknownroute");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"id\\\":-1,\\\"pan\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[]}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"id\\\":-1,\\\"pan\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"]}\"],\"tags\":[]}");
+    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"],\"tags\":[]}");
     verify(requestMock).setHandled(true);
   }
 
@@ -77,8 +77,8 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   public void testRouteDefault() throws IOException, ServletException {
     setPath("/presets");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"id\\\":-1,\\\"pan\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[]}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"id\\\":-1,\\\"pan\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"]}\"],\"tags\":[]}");
+    
+    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"],\"tags\":[]}");
     verify(requestMock).setHandled(true);
   }
 
@@ -92,7 +92,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"id\\\":-1,\\\"pan\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"]}\"]}");
+    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"]}");
     verify(requestMock).setHandled(true);
   }
 }
