@@ -47,9 +47,7 @@ function createPreset() {
 		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);}).done(function() {
 			$.get("/api/backend/presets/getpresets" , function(data) {loadPresetsOnTag(JSON.parse(data));});
 		});
-		
-	}
-	
+	}	
 }
 
 /**
