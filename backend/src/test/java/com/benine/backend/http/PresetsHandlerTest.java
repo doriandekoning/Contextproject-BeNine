@@ -3,11 +3,15 @@ package com.benine.backend.http;
 import com.benine.backend.Preset;
 import com.benine.backend.camera.Position;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
@@ -69,7 +73,14 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets/unknownroute");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"],\"tags\":[]}");
+    JSONArray tagsJSON = new JSONArray();
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("tags", tagsJSON);
+
+    JSONArray presetsJSON = new JSONArray();
+    presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
+    jsonObject.put("presets", presetsJSON);
+    verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }
 
@@ -78,7 +89,14 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\",\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"],\"tags\":[]}");
+    JSONArray tagsJSON = new JSONArray();
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("tags", tagsJSON);
+
+    JSONArray presetsJSON = new JSONArray();
+    presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
+    jsonObject.put("presets", presetsJSON);
+    verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }
 
@@ -91,8 +109,12 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setParameters(parameters);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(out).write("{\"presets\":[\"{\\\"image\\\":null,\\\"iris\\\":1,\\\"autoiris\\\":true,\\\"focus\\\":1,\\\"zoom\\\":1,\\\"tilt\\\":1.0,\\\"autofocus\\\":true,\\\"tags\\\":[\\\"Violin\\\"],\\\"tiltspeed\\\":1,\\\"panspeed\\\":1,\\\"cameraid\\\":0,\\\"id\\\":-1,\\\"pan\\\":1.0}\"]}");
+    
+    JSONObject jsonObject = new JSONObject();
+    JSONArray presetsJSON = new JSONArray();
+    presetController.getPresetsByTag("Violin").forEach(p -> presetsJSON.add(p.toJSON()));
+    jsonObject.put("presets", presetsJSON);
+    verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }
 }

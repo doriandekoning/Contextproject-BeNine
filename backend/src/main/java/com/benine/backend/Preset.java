@@ -78,7 +78,7 @@ public class Preset {
    *
    * @return JSON representation of this object.
    */
-  public String toJSON() {
+  public JSONObject toJSON() {
     JSONObject json = new JSONObject();
 
     json.put("pan", position.getPan());
@@ -99,7 +99,7 @@ public class Preset {
     }
     json.put("tags", tagsJSON);
 
-    return json.toString();
+    return json;
   }
 
   public Position getPosition() {

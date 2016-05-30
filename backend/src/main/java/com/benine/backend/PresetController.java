@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by dorian on 18-5-16.
+ * Created on 18-5-16.
  */
 public class PresetController {
   
