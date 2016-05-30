@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -43,13 +42,6 @@ public class MJPEGStreamReader extends StreamReader {
 
     setMJPEGBoundary();
     processStream();
-  }
-
-  @Override
-  public void run() {
-    while (!Thread.interrupted()) {
-      processStream();
-    }
   }
 
   /**
@@ -257,11 +249,5 @@ public class MJPEGStreamReader extends StreamReader {
   public BufferedImage getSnapShot() throws IOException {
     return ImageIO.read(new ByteArrayInputStream(this.snapshot));
   }
-
-  @Override
-  public byte[] getSnapShotBytes() {
-    return Arrays.copyOf(snapshot, snapshot.length);
-  }
-
 }
 

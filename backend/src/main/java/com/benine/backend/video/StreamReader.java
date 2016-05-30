@@ -6,6 +6,8 @@ import java.util.Observable;
 
 public abstract class StreamReader extends Observable implements Runnable {
 
+  private boolean streamDisconnected;
+
   /**
    * Should return a valid image snapshot.
    * @return a BufferedImage containing the image.
@@ -14,9 +16,24 @@ public abstract class StreamReader extends Observable implements Runnable {
   public abstract BufferedImage getSnapShot() throws IOException;
 
   /**
-   * Returns the snapshot frame in byte array form.
-   * @return  A byte array containing header + jpeg.
+   * Returns true if the stream is disconnected, false otherwise.
+   * @return  A boolean representing disconnected or note.
    */
-  abstract byte[] getSnapShotBytes();
+  public boolean isStreamDisconnected() {
+    return streamDisconnected;
+  }
+
+  @Override
+  public void run() {
+    while (!Thread.interrupted()) {
+      processStream();
+    }
+  }
+
+  /**
+   * Processes the stream.
+   */
+  public abstract void processStream();
+
 
 }
