@@ -24,14 +24,7 @@ Preset.prototype = {
 		preset_div.attr("id", this.id);
 		var preset_img = preset_div.find('img');
 		preset_img.replaceWith(this.img);
-		preset_div.click(function() {
-			var preset = findPresetOnID($(this).attr("id"));
-			if ($(this).hasClass("preset-overlay")) {
-				preset.loadEdit();
-			} else {
-				preset.callPreset();
-			}
-		});
+		preset_div.click(presetClick);
 	}, 
 	callPreset: function() {
 		var title = $('#preset_area #preset_' + this.id).find('h5');
@@ -39,5 +32,14 @@ Preset.prototype = {
 		$.get("/api/backend/presets/recallpreset?presetid=" + this.id + "&currentcamera=" + currentcamera  , function(data) {});
 		switchCurrentView(this.cameraid);
 		console.log(this.id);
+	}
+}
+
+function presetClick() {
+	var preset = findPresetOnID($(this).attr("id"));
+	if ($(this).hasClass("preset-overlay")) {
+		preset.loadEdit();
+	} else {
+		preset.callPreset();
 	}
 }

@@ -5,10 +5,10 @@ function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.autoIris = autoIris;
 	this.zoom = zoom;
 	this.move = move;
-	this.presets = [];
 	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
+	
 	smallView: function() {
 		var camera_div, camera_title;
 		camera_div = $('#camera_area #camera_' + this.id);
@@ -27,6 +27,12 @@ Camera.prototype = {
 		camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(this.id);
 	},
+	createView: function() {
+		camera_div = $('#preset_create_div');
+		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
+		//Holder.run({images: "#preset_create_div img"});
+	},
+	
 	bigView: function() {
 		camera_div = $('#current_camera');
 		//camera_div.find('img').attr("src", "/api/backend/camera/" + this.id + "/mjpeg");
@@ -61,9 +67,6 @@ Camera.prototype = {
 			focus.show();
 			setButton(focus.find("#auto_focus"), this.autofocus);
 		}
-	},
-	presetDisplay: function () {
-		
 	}
 }
 
