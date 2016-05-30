@@ -1,12 +1,23 @@
 package com.benine.backend.video;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Observable;
 
 public abstract class StreamReader extends Observable implements Runnable {
 
   private boolean streamDisconnected;
+
+  private BufferedInputStream bufferedStream;
+
+  /**
+   * Constructor for a new StreamReader object.
+   */
+  public StreamReader(Stream stream) {
+    this.streamDisconnected = false;
+    this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+  }
 
   /**
    * Should return a valid image snapshot.
@@ -35,5 +46,9 @@ public abstract class StreamReader extends Observable implements Runnable {
    */
   public abstract void processStream();
 
+
+  public BufferedInputStream getBufferedStream() {
+    return this.bufferedStream;
+  }
 
 }

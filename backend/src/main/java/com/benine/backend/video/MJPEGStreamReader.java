@@ -15,8 +15,6 @@ import javax.imageio.ImageIO;
  */
 public class MJPEGStreamReader extends StreamReader {
 
-  private BufferedInputStream bufferedStream;
-
   private String boundary;
 
   private byte[] snapshot;
@@ -37,7 +35,8 @@ public class MJPEGStreamReader extends StreamReader {
    * @param stream A stream object.
    */
   public MJPEGStreamReader(Stream stream) {
-    this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+    super(stream);
+
     this.snapshot = new byte[0];
 
     setMJPEGBoundary();
@@ -95,6 +94,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private int[] checkNextBytes(int amount) throws IOException {
     int[] byteArray = new int[amount];
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     bufferedStream.mark(amount);
     for (int i = 0; i < amount; i++) {
@@ -157,7 +157,7 @@ public class MJPEGStreamReader extends StreamReader {
     int readByte;
 
     for (int i = 0; i < contentLength; i++) {
-      readByte = bufferedStream.read(image, offset, contentLength - offset);
+      readByte = getBufferedStream().read(image, offset, contentLength - offset);
       offset += readByte;
     }
 
@@ -171,6 +171,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private byte[] readJPEG() throws IOException {
     ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     while (!isJPEGTrailer()) {
       // If stream has not ended, add to jpeg stream.
@@ -191,6 +192,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private byte[] getHeader() throws IOException {
     ByteArrayOutputStream header = new ByteArrayOutputStream(128);
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     while (!isJPEGHeader()) {
       // If stream has not ended, add to header stream.
