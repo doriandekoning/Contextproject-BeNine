@@ -16,7 +16,6 @@ Camera.prototype = {
 		camera_div.find('.camera_status').attr('class', 'camera_status available');
 		camera_img = camera_div.find('img');
 		camera_img.attr('src', '/api/backend/camera/' + this.id + '/mjpeg');
-		camera_img.attr("data-src", "holder.js/246x144?auto=yes&text=Camera " + this.id + " unavailable&bg=8b8b8b");
 		camera_img.load(function() {
 			if ($(this).attr("alt") !== undefined) {
 				camera_div.find('.camera_status').attr('class', 'camera_status unavailable');
@@ -30,14 +29,11 @@ Camera.prototype = {
 	createView: function() {
 		camera_div = $('#preset_create_div');
 		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
-		//Holder.run({images: "#preset_create_div img"});
 	},
 	
 	bigView: function() {
 		camera_div = $('#current_camera');
-		//camera_div.find('img').attr("src", "/api/backend/camera/" + this.id + "/mjpeg");
 		camera_div.find('img').replaceWith(this.img);
-		Holder.run({images: "#current_camera img"});
 		camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(this.id);
 	},

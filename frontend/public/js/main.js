@@ -4,21 +4,9 @@ var currentcamera;
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
-
-    // Update server status every 10 seconds.
-    // setInterval(setServerStatus, 10 * 1000);
 	
 	// Load the available cameras.
-	cameras = loadCameras();
-	
-	// Generate the camera block area.
-    generateCameraArea(cameras.map(function(item){
-		return item.id;
-	}));
-		
-	cameras.forEach(function(item) {
-		item.smallView();
-	});
+	loadCameras();
 	
 	// Load the available presets from the backend.
 	presets = loadPresets();
@@ -28,16 +16,21 @@ $(document).ready(function() {
 });
 
 function loadCameras() {
-	var cameras = [];
 	$.get("/api/backend/camera", function(data) {
-		console.log(JSON.parse(data));
+		var obj = JSON.parse(data)
+		for(var c in obj.cameras) {
+			var cam = obj.cameras[c];
+			cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.pan));
+		}
+	}).done(function() {
+		// Generate the camera block area.
+		generateCameraArea(cameras.map(function(item){
+			return item.id;
+		}));
+		cameras.forEach(function(item) {
+			item.smallView();
+		});
 	});
-	cameras.push(new Camera(1, true, undefined, undefined, undefined, undefined));
-	cameras.push(new Camera(2, true, true, true, true, true));
-	cameras.push(new Camera(3, true, true, true, true, true));
-	cameras.push(new Camera(4, true, true, true, true, true));
-	cameras.push(new Camera(5, true, true, true, true, true));
-	return cameras;
 }
 
 function switchCurrentView(id) {
