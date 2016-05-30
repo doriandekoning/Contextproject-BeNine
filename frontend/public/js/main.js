@@ -24,14 +24,14 @@ $(document).ready(function() {
 	presets = loadPresets();
 	displayPresets(presets);
 
-    // Generate the presets area.
-    generatePresets();
-
     console.log('Page has loaded successfully.');
 });
 
 function loadCameras() {
 	var cameras = [];
+	$.get("/api/backend/camera", function(data) {
+		console.log(JSON.parse(data));
+	});
 	cameras.push(new Camera(1, true, undefined, undefined, undefined, undefined));
 	cameras.push(new Camera(2, true, true, true, true, true));
 	cameras.push(new Camera(3, true, true, true, true, true));

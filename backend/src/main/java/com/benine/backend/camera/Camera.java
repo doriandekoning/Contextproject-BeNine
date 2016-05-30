@@ -1,5 +1,7 @@
 package com.benine.backend.camera;
 
+import org.json.simple.JSONObject;
+
 import com.benine.backend.video.StreamType;
 
 
@@ -14,7 +16,7 @@ public interface Camera {
    * @return Json object in the form of a string.
    * @throws CameraConnectionException When the information can not be retrieved.
    */
-  String toJSON() throws CameraConnectionException;
+  JSONObject toJSON() throws CameraConnectionException;
 
   /**
    * Get the ID of this camera.

@@ -115,7 +115,7 @@ public class CameraController {
       array.add(getCameraJSON(camera));
     }
     json.put("cameras", array);
-    return json.toString();
+    return json.toJSONString();
   }
   
   /**
@@ -124,13 +124,13 @@ public class CameraController {
    * @param camera object to create a JSON of.
    * @return String representation of the JSON.
    */
-  private String getCameraJSON(Camera camera) {
+  private JSONObject getCameraJSON(Camera camera) {
     try {
       return camera.toJSON();
     } catch (CameraConnectionException e) {
       JSONObject json = new JSONObject();
       json.put("id", Integer.valueOf(camera.getId()));
-      return json.toString();
+      return json;
     }
   }
 

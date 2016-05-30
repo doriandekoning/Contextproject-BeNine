@@ -11,10 +11,10 @@ function loadPresets() {
 	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/1_0.jpg", 3, "Guitar,Piano,Trompet", 3));
 	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/4_0.jpg", 4, "Guitar,Piano,Trompet", 2));
 	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/1_0.jpg", 5, "Guitar,Piano,Trompet", 5));
-	//$.get("/api/backend/presets/getpresets", function(data) {
-	//	obj = JSON.parse(data);
-	//	presets = obj.presets;
-	//});
+	$.get("/api/backend/presets/getpresets", function(data) {
+		obj = JSON.parse(data);
+		console.log(obj);
+	});
 	return presets;
 }
 

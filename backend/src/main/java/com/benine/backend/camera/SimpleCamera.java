@@ -24,12 +24,12 @@ public class SimpleCamera extends BasicCamera {
    * @throws CameraConnectionException thrown when the connection with the camera can't be used.
    */
   @Override
-  public String toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException {
     JSONObject object = new JSONObject();
     object.put("id", getId());
     object.put("streamlink", getStreamLink());
     object.put("inuse", isInUse());
-    return object.toString();
+    return object;
   }
 
   /**

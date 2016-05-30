@@ -158,7 +158,7 @@ public class IpcameraTest {
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
-    assertEquals(json.toString(), camera.toJSON());
+    assertEquals(json, camera.toJSON());
   }
   
   @Test
@@ -181,7 +181,7 @@ public class IpcameraTest {
     json.put("autoiris", true);
     json.put("streamlink", "http://test/cgi-bin/mjpeg");
     
-    assertEquals(json.toString(), camera.toJSON());
+    assertEquals(json, camera.toJSON());
   }
   
   @Test

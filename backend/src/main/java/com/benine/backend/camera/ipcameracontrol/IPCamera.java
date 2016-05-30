@@ -383,7 +383,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public String toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException {
     Logger logger = ServerController.getInstance().getLogger();
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
@@ -402,7 +402,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       logger.log("Failed to get the JSON representation of camera: " 
                                                   + getId(), LogEvent.Type.CRITICAL);
     }
-    return  json.toString();
+    return  json;
     
   }
 
