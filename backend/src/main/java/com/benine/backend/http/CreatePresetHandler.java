@@ -8,6 +8,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
@@ -60,11 +61,15 @@ public class CreatePresetHandler extends RequestHandler {
         IPCamera ipcam = (IPCamera) camera;
         setPreset(ipcam, tagList);
         respondSuccess(request, res);
+      } else if (camera instanceof SimpleCamera) {
+        SimpleCamera simplecam = (SimpleCamera) camera;
+        PresetController presetController = ServerController.getInstance().getPresetController();
+        int presetID = presetController.addPreset(createSimplePreset(simplecam, tagList));
+        createImage(camera.getId(), presetID);
+        respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
       }
-      
-
     } catch (MalformedURIException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
@@ -119,6 +124,20 @@ public class CreatePresetHandler extends RequestHandler {
     
     int presetID = presetController.addPreset(createPreset(camera, tagList));
     createImage(camera.getId(), presetID);
+  }
+  
+  /**
+   * Creates a preset from a camera.
+   * @param camera    The camera to create the preset from.
+   * @param tagList   The tag belonging to the preset. 
+   * @return          A Preset object.
+   * @throws CameraConnectionException If the camera cannot be reached.
+   */
+  private Preset createSimplePreset(SimpleCamera camera, List<String> tagList) 
+      throws CameraConnectionException {
+    int cameraId = camera.getId();
+    return new Preset(new Position(-1, -1), -1, -1, -1, false, -1,
+            -1, false, cameraId, tagList);
   }
 
   /**
