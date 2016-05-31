@@ -1,3 +1,4 @@
+// Local variable to store the available tags locally.
 var localTags = [];
 
 /**
@@ -49,7 +50,19 @@ function displayPresets() {
 }
 
 /**
-* Activates the presets to be editable.
+* Function called when clicked on a preset.
+*/
+function presetClick() {
+	var preset = findPresetOnID($(this).attr("id"));
+	if ($(this).hasClass("preset-overlay")) {
+		preset.loadEdit();
+	} else {
+		preset.callPreset();
+	}
+}
+
+/**
+* Activates the presets to be editable with the edit preset button is clicked.
 */
 function loadEditablePresets() {
 	var activepresets = $("#preset_area div:has(img:not([alt]))");
@@ -89,6 +102,7 @@ function tagsWithDefaults(q, sync) {
 
 /**
 * Function adds a new tag to the tag list.
+* @param val value of the tag to add.
 */
 function newTag(val) {
 	localTags.push(val);
@@ -112,18 +126,17 @@ function loadCreatePreset() {
 * What to display in the type ahead of the tags input of create preset.
 */
 $('#preset_create_div .tags_input').tagsinput({
-	typeaheadjs:( 
-	{
-		hint: true,
-		highlight: true,
-		minLength: 0,
-		autoselect: true
-	},
-	{
-		name: 'tags',
-		source: tagsWithDefaults, 
-		limit:25
-	}
+	typeaheadjs:( {
+			hint: true,
+			highlight: true,
+			minLength: 0,
+			autoselect: true
+		},
+		{
+			name: 'tags',
+			source: tagsWithDefaults, 
+			limit:25
+		}
 	)
 });
 
@@ -168,15 +181,15 @@ function createPreset() {
 * What to display in the type ahead of the tags input of edit preset.
 */
 $('#preset_edit_div .tags_input').tagsinput({
-	typeaheadjs:( 
-	{	highlight: true,
-		minLength: 0
-	},
-	{
-		name: 'tags',
-		source: tagnames,
-		limit:25
-	}
+	typeaheadjs:( {	
+			highlight: true,
+			minLength: 0
+		},
+		{
+			name: 'tags',
+			source: tagnames,
+			limit:25
+		}
 	)
 });
 
@@ -203,7 +216,7 @@ $('#preset_edit_div .tags_input').tagsinput('input').keypress(function (e) {
 	}
 });
 
-//// Below is for the search input.
+//// Below is for the search input in the preset area.
 
 /**
 * Handles input on the tag search field.
@@ -241,6 +254,9 @@ function findPresetOnID(id){
 	return res[0];
 }
 
+/**
+* Function is called when the save button of the edit window is clicked.
+*/
 function editPreset() {
 	//TODO should be the new values from the edit window
 	// And the new preset values should be send to the backend.

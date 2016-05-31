@@ -1,6 +1,7 @@
 var cameras = [];
 var presets = [];
 var currentcamera;
+var editingpreset;
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
@@ -14,6 +15,9 @@ $(document).ready(function() {
     console.log('Page has loaded successfully.');
 });
 
+/**
+* Load all the cameras from the backend and display them.
+*/
 function loadCameras() {
 	$.get("/api/backend/camera", function(data) {
 		var obj = JSON.parse(data)
@@ -32,6 +36,10 @@ function loadCameras() {
 	});
 }
 
+/**
+* Switch the currentview to the camera with id.
+* @param id of the camera to switch to.
+*/
 function switchCurrentView(id) {
     var camera;
 	if(id !== currentcamera) {
@@ -46,6 +54,10 @@ function switchCurrentView(id) {
 	}
 }
 
+/**
+* Search all camera's to find the camera with ID
+* @param id of the camera to search for.
+*/
 function findCameraOnID(id){
 	var res = $.grep(cameras, function(item, n) {
 		return parseInt(item.id) === parseInt(id);
@@ -53,11 +65,14 @@ function findCameraOnID(id){
 	return res[0];
 }
 
-
+/**
+* Change the camera inuse color below an image.
+* @param camid the id of the camera to change the status of.
+* @param inuse boolean to switch between in use.
+*/
 function toggleCamSelected(camid, inuse) {
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
-
 	if (inuse === true) {
 		camera.find('.camera_status').attr('class', 'camera_status selected');
 	} else {

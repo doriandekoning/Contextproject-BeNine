@@ -1,3 +1,6 @@
+/**
+* Camera object containing all information the client knows about a camera.
+*/
 function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.id = id;
 	this.inuse = inuse;
@@ -8,7 +11,9 @@ function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
-	
+	/**
+	* Show this camera in the small display on the screen.
+	*/
 	smallView: function() {
 		var camera_div, camera_title;
 		camera_div = $('#camera_area #camera_' + this.id);
@@ -26,17 +31,28 @@ Camera.prototype = {
 		camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(this.id);
 	},
+	
+	/**
+	* Display the camera view in the create window.
+	*/
 	createView: function() {
 		camera_div = $('#preset_create_div');
 		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
 	},
 	
+	/**
+	* Display the camera view in the current view window.
+	*/
 	bigView: function() {
 		camera_div = $('#current_camera');
 		camera_div.find('img').replaceWith(this.img);
 		camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(this.id);
 	},
+	
+	/**
+	* Show the controls of this camera.
+	*/
 	displayControls: function () {
 		zoom = $('#zoom');
 		iris = $('#iris');

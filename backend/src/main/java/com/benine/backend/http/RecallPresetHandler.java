@@ -27,14 +27,13 @@ public class RecallPresetHandler extends RequestHandler {
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
     try {
-      int cameraID = Integer.parseInt(request.getParameter("currentcamera"));
       int presetID = Integer.parseInt(request.getParameter("presetid"));
 
       PresetController presetController = ServerController.getInstance().getPresetController();
       Preset preset = presetController.getPresetById(presetID);
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
-      Camera camera = cameraController.getCameraById(cameraID);
+      Camera camera = cameraController.getCameraById(preset.getCameraId());
 
       moveCamera(camera, preset);
       respondSuccess(request, res);

@@ -1,4 +1,9 @@
-var joysticksize = 150; //size of joystick in pixels.
+/**
+* This class contains everything concerning the camera control buttons.
+*/
+
+//size of joystick in pixels.
+var joysticksize = 150; 
 
 /**
 * Set the button specified to the boolean value bool.
