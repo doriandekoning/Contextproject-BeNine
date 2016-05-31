@@ -143,4 +143,5 @@ function addPreset(elem, id) {
     preset_caption = $('<h5>Preset ' + id + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
 
     $(elem).append(preset_image, preset_caption);
+
 }

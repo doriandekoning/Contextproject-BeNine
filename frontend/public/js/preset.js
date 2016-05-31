@@ -11,7 +11,7 @@ function Preset(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, au
 	this.image = image;
 	this.id = id;
 	this.img = $('<img src="/api/backend' + image + '" >');
-	this.tags = tags.split(",");
+	this.tags = tags;
 	this.cameraid = cameraid;
 }
 

@@ -1,21 +1,60 @@
-var localTags = ["Trumpet", "Guitar", "Bass", "Violin", "Trombone", "Piano", "Banjo"];
+var localTags = [];
+//["Trumpet", "Guitar", "Bass", "Violin", "Trombone", "Piano", "Banjo"];
 
 /**
 * Function loads all the presets from the backend.
 * @param cameraID the presets of this camera are loaded.
 */
 function loadPresets() {
-	var presets = [];
-	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/1_0.jpg", 1, "Guitar,Piano,Trompet", 1));
-	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/4_0.jpg", 2, "Guitar,Piano,Trompet", 2));
-	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/1_0.jpg", 3, "Guitar,Piano,Trompet", 3));
-	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/4_0.jpg", 4, "Guitar,Piano,Trompet", 2));
-	presets.push(new Preset(50, 180, 30, 20, 60, true, 40, 30, true, "/static/presets/1_0.jpg", 5, "Guitar,Piano,Trompet", 5));
 	$.get("/api/backend/presets/getpresets", function(data) {
 		obj = JSON.parse(data);
 		console.log(obj);
+		for (var p in obj.presets) {
+			var preset = obj.presets[p];
+			updatePreset(preset);
+		}
+		for (var t in obj.tags) {
+			if (localTags.indexOf(t) === -1) {
+				localTags.push(obj.tags[t]);
+			}
+		}
+	}).done(displayPresets);
+}
+
+function updatePreset(preset) {
+	var exists = findPresetOnID(preset.id);
+	if (exists === undefined) {
+		presets.push(new Preset(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,
+			preset.panspeed, preset.tiltspeed, preset.autoiris, preset.image, preset.id, preset.tags, preset.cameraid));
+	} else {
+		exists.pan = preset.pan;
+		exists.tilt =preset.tilt;
+		exists.zoom =preset.zoom;
+		exists.focus = preset.focus;
+		exists.iris = preset.iris;
+		exists.autofocus = preset.autofocus;
+		exists.panspeed = preset.panspeed;
+		exists.tiltspeed = preset.tiltspeed;
+		exists.autoiris = preset.autoiris;
+		exists.tags = preset.tags;
+	}
+}
+
+/**
+* Display all the presets.
+* @param presets to display.
+*/
+function displayPresets() {
+	console.log(presets);
+	$("#preset_area").children().not('#tagsearch').empty();
+	generatePresets(presets.map(function(item){
+		return item.id;
+	}));
+	presets.forEach(function(item) {
+		item.displayPreview();
 	});
-	return presets;
+	
+	Holder.run({images: "#preset_area img"});
 }
 
 /**
@@ -30,19 +69,7 @@ function loadEditablePresets() {
 	}
 }	
 
-/**
-* Display all the presets.
-* @param presets to display.
-*/
-function displayPresets(presets) {
-	$("#preset_area").children().not('#tagsearch').empty();
-	generatePresets(presets.map(function(item){
-		return item.id;
-	}));
-	presets.forEach(function(item) {
-		item.displayPreview();
-	});
-}
+
 
 /**
 * Initialize the tag list for type ahead.
@@ -53,6 +80,9 @@ var tagnames = new Bloodhound({
 	local: localTags
 });
 
+/**
+* Return all tags when input is empty
+*/
 function tagsWithDefaults(q, sync) {
   if (q === '') {
     sync(localTags);
@@ -68,6 +98,7 @@ function tagsWithDefaults(q, sync) {
 */
 function newTag(val) {
 	//todo should be sending the new tag to the backend.
+	//$.get("/api/backend/presets/getpresets", function(data) {
 	localTags.push(val);
 }
 
@@ -87,16 +118,18 @@ function loadCreatePreset() {
 * What to display in the type ahead of the tags input of create preset.
 */
 $('#preset_create_div .tags_input').tagsinput({
-	typeaheadjs:( {
-	hint: true,
-	highlight: true,
-	minLength: 1,
-	autoselect: true
-},
-{
-	name: 'tags',
-	source: tagnames
-})
+	typeaheadjs:( 
+	{
+		hint: true,
+		highlight: true,
+		minLength: 0,
+		autoselect: true
+	},
+	{
+		name: 'tags',
+		source: tagsWithDefaults
+	}
+	)
 });
 
 /**
@@ -130,9 +163,8 @@ function createPreset() {
 	var presetTag = $('#preset_create_div .tags_input').val();
 	console.log(presetTag + "--" + currentcamera);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);}).done(function() {
-			$.get("/api/backend/presets/getpresets" , function(data) {loadPresetsOnTag(JSON.parse(data));});
-		});
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);})
+		.done(loadPresets);
 	}	
 }
 
@@ -142,16 +174,15 @@ function createPreset() {
 * What to display in the type ahead of the tags input of edit preset.
 */
 $('#preset_edit_div .tags_input').tagsinput({
-	typeaheadjs:( {
-	hint: true,
-	highlight: true,
-	minLength: 1,
-	autoselect: true
-},
-{
-	name: 'tags',
-	source: tagnames
-})
+	typeaheadjs:( 
+	{	highlight: true,
+		minLength: 0
+	},
+	{
+		name: 'tags',
+		source: tagsWithDefaults
+	}
+	)
 });
 
 

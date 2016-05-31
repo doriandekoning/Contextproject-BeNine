@@ -9,8 +9,7 @@ $(document).ready(function() {
 	loadCameras();
 	
 	// Load the available presets from the backend.
-	presets = loadPresets();
-	displayPresets(presets);
+	loadPresets();
 
     console.log('Page has loaded successfully.');
 });
