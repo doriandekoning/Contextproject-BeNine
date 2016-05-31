@@ -59,22 +59,17 @@ public class MJPEGStreamReader extends StreamReader {
    * from the stream and updating the snapshot if possible.
    */
   public void processStream() {
-    if (!getStream().isConnected()) {
-      getStream().openConnection();
-      setBufferedStream(new BufferedInputStream(getStream().getInputStream()));
-    } else {
-      try {
-        byte[] headerByte = getHeader();
-        String header = new String(headerByte, StandardCharsets.UTF_8);
-        byte[] imageByte = getImage(header);
+    try {
+      byte[] headerByte = getHeader();
+      String header = new String(headerByte, StandardCharsets.UTF_8);
+      byte[] imageByte = getImage(header);
 
-        sendToDistributers(headerByte, imageByte);
+      sendToDistributers(headerByte, imageByte);
 
-        snapshot = imageByte;
+      snapshot = imageByte;
 
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -178,13 +173,8 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
     BufferedInputStream bufferedStream = getBufferedStream();
 
-    while (!isJPEGTrailer() && getStream().isConnected()) {
-      // If stream has not ended, add to header stream.
-      if (bufferedStream.available() != 0) {
-        jpeg.write(bufferedStream.read());
-      } else {
-        getStream().setConnected(false);
-      }
+    while (!isJPEGTrailer()) {
+      jpeg.write(bufferedStream.read());
     }
 
     jpeg.close();
@@ -201,12 +191,12 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream header = new ByteArrayOutputStream(128);
     BufferedInputStream bufferedStream = getBufferedStream();
 
-    while (!isJPEGHeader() && getStream().isConnected()) {
+    while (!isJPEGHeader()) {
       // If stream has not ended, add to header stream.
       if (bufferedStream.available() != 0) {
         header.write(bufferedStream.read());
       } else {
-        getStream().setConnected(false);
+        System.out.println("THIS IS VERY WRONG.");
       }
     }
 
