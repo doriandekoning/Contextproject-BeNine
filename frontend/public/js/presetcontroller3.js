@@ -1,4 +1,5 @@
-var localTags = ["Trumpet", "Guitar", "Bass", "Violin", "Trombone", "Piano", "Banjo"];
+var localTags = [];
+//["Trumpet", "Guitar", "Bass", "Violin", "Trombone", "Piano", "Banjo"];
 
 /**
 * Function loads all the presets from the backend.
@@ -99,8 +100,6 @@ function newTag(val) {
 	//todo should be sending the new tag to the backend.
 	//$.get("/api/backend/presets/getpresets", function(data) {
 	localTags.push(val);
-	tagnames.clearPrefetchCache();
- 	tagnames.initialize(true);
 }
 
 
@@ -181,7 +180,7 @@ $('#preset_edit_div .tags_input').tagsinput({
 	},
 	{
 		name: 'tags',
-		source: tagnames
+		source: tagsWithDefaults
 	}
 	)
 });
