@@ -59,8 +59,9 @@ public class MJPEGStreamReader extends StreamReader {
    * from the stream and updating the snapshot if possible.
    */
   public void processStream() {
-    if (isStreamDisconnected()) {
-      // TODO getStream()...
+    if (!getStream().isConnected()) {
+      getStream().openConnection();
+      setBufferedStream(new BufferedInputStream(getStream().getInputStream()));
     } else {
       try {
         byte[] headerByte = getHeader();
@@ -177,10 +178,12 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
     BufferedInputStream bufferedStream = getBufferedStream();
 
-    while (!isJPEGTrailer()) {
-      // If stream has not ended, add to jpeg stream.
+    while (!isJPEGTrailer() && getStream().isConnected()) {
+      // If stream has not ended, add to header stream.
       if (bufferedStream.available() != 0) {
         jpeg.write(bufferedStream.read());
+      } else {
+        getStream().setConnected(false);
       }
     }
 
@@ -198,10 +201,12 @@ public class MJPEGStreamReader extends StreamReader {
     ByteArrayOutputStream header = new ByteArrayOutputStream(128);
     BufferedInputStream bufferedStream = getBufferedStream();
 
-    while (!isJPEGHeader()) {
+    while (!isJPEGHeader() && getStream().isConnected()) {
       // If stream has not ended, add to header stream.
       if (bufferedStream.available() != 0) {
         header.write(bufferedStream.read());
+      } else {
+        getStream().setConnected(false);
       }
     }
 

@@ -16,6 +16,7 @@ public class Stream {
   private URLConnection connection;
   private InputStream inputstream;
   private URL url;
+  private boolean connected;
 
   /**
    * Constructor for a new stream object.
@@ -26,6 +27,7 @@ public class Stream {
   public Stream(String streamurl) throws IOException {
     URL url = new URL(streamurl);
     this.url = url;
+    this.connected = false;
 
     openConnection();
 
@@ -36,8 +38,9 @@ public class Stream {
    * Opens a connection to the stream.
    * @throws IOException If an error occurs opening the connection.
    */
-  private void openConnection() throws IOException {
-    boolean connected = false;
+  public void openConnection() {
+    ServerController controller = ServerController.getInstance();
+
     while(!connected) {
       try {
         URLConnection conn = url.openConnection();
@@ -45,9 +48,11 @@ public class Stream {
         conn.connect();
 
         this.connection = conn;
-        connected = true;
-      } catch (Exception e) {
-        ServerController controller = ServerController.getInstance();
+        this.connected = true;
+
+        controller.getLogger().log("Succesfully connected to stream " + url.toString(),
+                LogEvent.Type.INFO);
+      } catch (IOException e) {
         controller.getLogger().log("Could not connect to stream " + url.toString()
                 + ", attempting to reestablish.", LogEvent.Type.WARNING);
       }
@@ -69,5 +74,13 @@ public class Stream {
    */
   public InputStream getInputStream() {
     return this.inputstream;
+  }
+
+  public boolean isConnected() {
+    return this.connected;
+  }
+
+  public void setConnected(boolean connected) {
+    this.connected = connected;
   }
 }

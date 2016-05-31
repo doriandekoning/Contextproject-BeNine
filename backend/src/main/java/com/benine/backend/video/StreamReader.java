@@ -53,6 +53,10 @@ public abstract class StreamReader extends Observable implements Runnable {
     return this.bufferedStream;
   }
 
+  public void setBufferedStream(BufferedInputStream bufferedStream) {
+    this.bufferedStream = bufferedStream;
+  }
+
   /**
    * Returns the stream to which this streamreader is connected.
    * @return  a Stream object.
