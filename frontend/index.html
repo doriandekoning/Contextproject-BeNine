@@ -202,13 +202,10 @@
                 <div class="modal-body row">
                    <div class="col-xs-4 col-dm-4">
 						<div>
-							Preset name:<br>
-							<input id="preset_name" type="text">
+							Preset ID: <span id="presetID"></span>
 						</div>
-						<br>
 						<div>
-							Description:<br>
-							<input id="description" type="text">
+							Pan: <span id="pan"></span>
 						</div>
 					</div>
 					<div class="col-xs-3 col-dm-3">
@@ -223,7 +220,7 @@
 						<input type="text" data-role="tagsinput"  />
 					</div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+                    <button type="button" class="btn btn-success" onclick="editPreset()" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
                 </div>
             </div>
         </div>

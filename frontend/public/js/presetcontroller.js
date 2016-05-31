@@ -8,7 +8,7 @@ function loadPresets() {
 		obj = JSON.parse(data);
 		for (var p in obj.presets) {
 			var preset = obj.presets[p];
-			updatePreset(preset);
+			checkPreset(preset);
 		}
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
@@ -22,22 +22,14 @@ function loadPresets() {
 * Checks if the preset already exists if true the preset is updated otherwise it is added.
 * @param preset array with the presets to add.
 */
-function updatePreset(preset) {
+function checkPreset(preset) {
 	var exists = findPresetOnID(preset.id);
 	if (exists === undefined) {
 		presets.push(new Preset(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,
 			preset.panspeed, preset.tiltspeed, preset.autoiris, preset.image, preset.id, preset.tags, preset.cameraid));
 	} else {
-		exists.pan = preset.pan;
-		exists.tilt =preset.tilt;
-		exists.zoom =preset.zoom;
-		exists.focus = preset.focus;
-		exists.iris = preset.iris;
-		exists.autofocus = preset.autofocus;
-		exists.panspeed = preset.panspeed;
-		exists.tiltspeed = preset.tiltspeed;
-		exists.autoiris = preset.autoiris;
-		exists.tags = preset.tags;
+		exists.update(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,preset.panspeed, 
+																			preset.tiltspeed, preset.autoiris, preset.tags);
 	}
 }
 
@@ -88,7 +80,7 @@ function tagsWithDefaults(q, sync) {
 	tagnames.clearPrefetchCache();
 	tagnames.initialize(true);
 	if (q === '') {
-		sync(localTags);
+		sync(tagnames.local);
 	}	
 	else {
 		tagnames.search(q, sync);
@@ -129,7 +121,8 @@ $('#preset_create_div .tags_input').tagsinput({
 	},
 	{
 		name: 'tags',
-		source: tagsWithDefaults
+		source: tagsWithDefaults, 
+		limit:25
 	}
 	)
 });
@@ -181,7 +174,8 @@ $('#preset_edit_div .tags_input').tagsinput({
 	},
 	{
 		name: 'tags',
-		source: tagnames
+		source: tagnames,
+		limit:25
 	}
 	)
 });
@@ -232,7 +226,7 @@ $('#tagsearch_input').typeahead({
 	{
 		name: 'tags',
 		source: tagsWithDefaults,
-		limit:10
+		limit:25
 	}
 );
 
@@ -247,12 +241,23 @@ function findPresetOnID(id){
 	return res[0];
 }
 
+function editPreset() {
+	//TODO should be the new values from the edit window
+	// And the new preset values should be send to the backend.
+	var tags = $('#preset_edit_div .tags_input').val();
+	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
+																		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
+}
+
 /**
 * Load for the specified preset the edit modal.
 * @preset to load the edit window for.
 */
 function loadPresetEditModal(preset) {
-	$('.preset-edit-modal').find('img').replaceWith(preset.img.clone());
+	editingpreset = preset;
+	var edit_div = $('.preset-edit-modal');
+	edit_div.find('#presetID').text(preset.id);
+	edit_div.find('img').replaceWith(preset.img.clone());
 	var tags_input = $('#preset_edit_div .tags_input');
 	tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {

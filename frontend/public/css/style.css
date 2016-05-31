@@ -186,6 +186,8 @@ input[type=range]:focus {
 
 .tt-menu {
 	text-align: left;
+	max-height: 200px;  
+	overflow-y: auto;
 }
 
 /* Top block consisting of the camera views, and the editing camera view.*/

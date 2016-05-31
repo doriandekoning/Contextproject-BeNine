@@ -32,6 +32,18 @@ Preset.prototype = {
 		$.get("/api/backend/presets/recallpreset?presetid=" + this.id + "&currentcamera=" + currentcamera  , function(data) {});
 		switchCurrentView(this.cameraid);
 		console.log(this.id);
+	},
+	update: function(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, tags) {
+		this.pan = pan;
+		this.tilt = tilt;
+		this.zoom = zoom;
+		this.focus = focus;
+		this.iris = iris;
+		this.autofocus = autofocus;
+		this.panspeed = panspeed;
+		this.tiltspeed = tiltspeed;
+		this.autoIris = autoiris;
+		this.tags = tags;
 	}
 }
 
