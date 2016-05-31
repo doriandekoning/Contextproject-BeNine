@@ -1,6 +1,7 @@
 package com.benine.backend.video;
 
 import com.benine.backend.LogEvent;
+import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class Stream {
   private InputStream inputstream;
   private URL url;
   private boolean connected;
+  private Logger logger;
 
   /**
    * Constructor for a new stream object.
@@ -25,9 +27,9 @@ public class Stream {
    *      rendering the stream useless.
    */
   public Stream(String streamurl) throws IOException {
-    URL url = new URL(streamurl);
-    this.url = url;
+    this.url = new URL(streamurl);
     this.connected = false;
+    this.logger = ServerController.getInstance().getLogger();
 
     openConnection();
 
@@ -36,11 +38,8 @@ public class Stream {
 
   /**
    * Opens a connection to the stream.
-   * @throws IOException If an error occurs opening the connection.
    */
   public void openConnection() {
-    ServerController controller = ServerController.getInstance();
-
     while(!connected) {
       try {
         URLConnection conn = url.openConnection();
@@ -50,10 +49,10 @@ public class Stream {
         this.connection = conn;
         this.connected = true;
 
-        controller.getLogger().log("Succesfully connected to stream " + url.toString(),
+        logger.log("Succesfully connected to stream " + url.toString(),
                 LogEvent.Type.INFO);
       } catch (IOException e) {
-        controller.getLogger().log("Could not connect to stream " + url.toString()
+        logger.log("Could not connect to stream " + url.toString()
                 + ", attempting to reestablish.", LogEvent.Type.WARNING);
       }
     }
