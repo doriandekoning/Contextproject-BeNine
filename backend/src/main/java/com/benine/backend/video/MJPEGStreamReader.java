@@ -59,17 +59,21 @@ public class MJPEGStreamReader extends StreamReader {
    * from the stream and updating the snapshot if possible.
    */
   public void processStream() {
-    try {
-      byte[] headerByte = getHeader();
-      String header = new String(headerByte, StandardCharsets.UTF_8);
-      byte[] imageByte = getImage(header);
+    if (isStreamDisconnected()) {
+      // TODO getStream()...
+    } else {
+      try {
+        byte[] headerByte = getHeader();
+        String header = new String(headerByte, StandardCharsets.UTF_8);
+        byte[] imageByte = getImage(header);
 
-      sendToDistributers(headerByte, imageByte);
+        sendToDistributers(headerByte, imageByte);
 
-      snapshot = imageByte;
+        snapshot = imageByte;
 
-    } catch (IOException e) {
-      e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 

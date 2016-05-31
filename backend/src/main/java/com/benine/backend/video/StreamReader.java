@@ -11,10 +11,13 @@ public abstract class StreamReader extends Observable implements Runnable {
 
   private BufferedInputStream bufferedStream;
 
+  private Stream stream;
+
   /**
    * Constructor for a new StreamReader object.
    */
   public StreamReader(Stream stream) {
+    this.stream = stream;
     this.streamDisconnected = false;
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
   }
@@ -46,9 +49,16 @@ public abstract class StreamReader extends Observable implements Runnable {
    */
   public abstract void processStream();
 
-
   public BufferedInputStream getBufferedStream() {
     return this.bufferedStream;
+  }
+
+  /**
+   * Returns the stream to which this streamreader is connected.
+   * @return  a Stream object.
+   */
+  public Stream getStream() {
+    return this.stream;
   }
 
 }
