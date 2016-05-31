@@ -16,7 +16,7 @@ function loadPresets() {
 				localTags.push(obj.tags[t]);
 			}
 		}
-	}).done(displayPresets);
+	}).done(function () { displayPresets(presets); });
 }
 
 /**
@@ -36,8 +36,9 @@ function checkPreset(preset) {
 
 /**
 * Display all the presets.
+* @param preset to display.
 */
-function displayPresets() {
+function displayPresets(presets) {
 	$("#preset_area").children().not('#tagsearch').empty();
 	generatePresets(presets.map(function(item){
 		return item.id;
@@ -170,7 +171,7 @@ function createPreset() {
 	var presetName = preset_create_div.find('#preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log(data);})
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log("create preset respone: " + data);})
 		.done(loadPresets);
 	}	
 }
@@ -221,12 +222,37 @@ $('#preset_edit_div .tags_input').tagsinput('input').keypress(function (e) {
 /**
 * Handles input on the tag search field.
 */
-function tagSearchInput(t) {
-	if (!t.val()) {
-		//$.get("/api/backend/presets/getpresets" , function(data) {loadPresetsOnTag(JSON.parse(data));});
+function tagSearchInput(val) {
+	if (val !== '') {
+		var matchingpresets = matchingPresets(val);
+		displayPresets(matchingpresets);
 	} else {
-		//$.get("/api/backend/presets?tag=" + t.val() , function(data) {loadPresetsOnTag(JSON.parse(data));});
+		displayPresets(presets);
 	}
+}
+
+/**
+* When a tags suggestion is selected cal the tagSearchInput function.
+*/
+$('#tagsearch_input').on('typeahead:selected',function (e, val) {
+	tagSearchInput(val);
+});
+
+/**
+* Returns all presets that contain tags which contain val.
+*/
+function matchingPresets(val) {
+	var matchpresets = [];
+	for(var p in presets) {
+		var preset = presets[p];
+		if(preset.tags != undefined) {
+			var tags = preset.tags.filter(function(tag) { return tag.indexOf(val) > -1;});
+			if (tags.length > 0) {
+				matchpresets.push(preset);
+			}
+		}
+	}
+	return matchpresets;
 }
 
 /**
