@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
+import com.benine.backend.video.ResizableStreamDistributer;
 import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
@@ -27,6 +28,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
           throws IOException, ServletException {
 
     int camID = getCameraId(request);
+    String width = request.getParameter("width");
+    String height = request.getParameter("height");
 
     StreamReader streamReader = null;
     try {
@@ -38,7 +41,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
       MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
-      StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
+      StreamDistributer distributer = selectDistributer(streamReader, width, height);
 
       // Set the headers
       setHeaders(streamReaderMJPEG, res);
@@ -51,6 +54,45 @@ public class CameraStreamHandler extends CameraRequestHandler {
     }
 
     request.setHandled(true);
+  }
+
+  /**
+   * Select a stream distributer based on if
+   *
+   * @param reader  The streamreader.
+   * @param width   The width of the image.
+   * @param height  The height of the image.
+   * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
+   */
+  private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
+    if (ServerController.getInstance().getConfig().getValue("stream_compression").equals("true")
+            && validateResizeArguments(width, height)) {
+
+      int w = Integer.parseInt(width);
+      int h = Integer.parseInt(height);
+
+      return new ResizableStreamDistributer(reader, w, h);
+    } else {
+      return new StreamDistributer(reader);
+    }
+
+  }
+
+  /**
+   * Validates the resize arguments.
+   * @param width   Width argument.
+   * @param height  Height argument.
+   * @return True if valid, false otherwise.
+   */
+  private boolean validateResizeArguments(String width, String height) {
+    try {
+      int w = Integer.parseInt(width);
+      int h = Integer.parseInt(height);
+
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 
   /**

@@ -34,10 +34,11 @@ public class StreamDistributerTest {
 
   @Test
   public void testUpdate() throws IOException {
-    byte[] test = {1, 2, 3, 4};
+    byte[] image = {1, 2, 3, 4};
+    VideoFrame test = new VideoFrame(new MJPEGFrameHeader(image), image);
     distributer.update(reader, test);
 
-    Mockito.verify(testStream).write(test);
+    Mockito.verify(testStream).write(image);
   }
 
   @Test
