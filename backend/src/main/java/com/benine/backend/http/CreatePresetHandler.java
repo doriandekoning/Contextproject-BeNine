@@ -106,7 +106,7 @@ public class CreatePresetHandler extends RequestHandler {
   /**
    * Sets a preset.
    * @param camera                        A Camera object.
-   * @param tagList                           The tag belonging to the preset. 
+   * @param tagList                       The tag belonging to the preset. 
    * @return preset                       The preset created. 
    * @throws IOException                  If the image cannot be created.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
