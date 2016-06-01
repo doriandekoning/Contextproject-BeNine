@@ -107,19 +107,22 @@ public class CreatePresetHandler extends RequestHandler {
    * Sets a preset.
    * @param camera                        A Camera object.
    * @param tagList                           The tag belonging to the preset. 
+   * @return preset                       The preset created. 
    * @throws IOException                  If the image cannot be created.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  public static void setPreset(IPCamera camera, List<String> tagList)
+  public static Preset setPreset(IPCamera camera, List<String> tagList)
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
     
-    int presetID = presetController.addPreset(createPreset(camera, tagList));
+    Preset preset = createPreset(camera,tagList);
+    int presetID = presetController.addPreset(preset);
     createImage(camera.getId(), presetID);
+    return preset;
   }
 
   /**
