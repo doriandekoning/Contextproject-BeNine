@@ -51,7 +51,11 @@ public class MJPEGFrameResizer {
    */
   private byte[] rescaleImage(byte[] image) {
     try {
-      BufferedImage img = ImageIO.read(new ByteArrayInputStream(image));
+      BufferedImage inputimg = ImageIO.read(new ByteArrayInputStream(image));
+
+      // Convert input image to a faster color model.
+      BufferedImage img = new BufferedImage(inputimg.getWidth(), inputimg.getHeight(), BufferedImage.TYPE_INT_RGB);
+      img.getGraphics().drawImage(inputimg, 0, 0, null);
 
       BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
       Graphics2D graphics = resized.createGraphics();
