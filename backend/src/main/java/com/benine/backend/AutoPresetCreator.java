@@ -16,6 +16,6 @@ public interface AutoPresetCreator {
    * @param cam the camera to create presets for.
    * @return A collection of the created presets.
    */
-  Collection<Preset> createPresets(IPCamera cam) throws CameraConnectionException;
+  Collection<Preset> createPresets(IPCamera cam) throws CameraConnectionException, InterruptedException;
 
 }

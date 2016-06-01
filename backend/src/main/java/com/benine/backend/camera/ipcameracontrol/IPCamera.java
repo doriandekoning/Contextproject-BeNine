@@ -34,6 +34,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   private String ipaddress;
 
+  private static final int MOVE_WAIT_DURATION = 200;
+
 
   /**
    *  Create a new IP Camera object.
@@ -491,5 +493,24 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       throw new IpcameraConnectionException("Response of camera is not correct expected: " 
           + expected + ", but it was : " + response, getId());
     }
+  }
+
+  /**
+   * Waits until the camera has arrived at a location or the timeout has expired.
+   * @param pos The position the camera should be at.
+   * @param zoom the zoom of the camera
+   * @param timeout the timeout after which to give up waiting
+   * @return true if the camera is at the specified location false otherwise
+   */
+  public boolean waitUntilAtPosition(Position pos, int zoom, long timeout)
+          throws InterruptedException, CameraConnectionException {
+    long timedOutTime = System.currentTimeMillis() + timeout;
+    while(System.currentTimeMillis() < timedOutTime ) {
+      if (getPosition().equals(pos) && zoom == getZoomPosition()) {
+        return true;
+      }
+      Thread.sleep(MOVE_WAIT_DURATION);
+    }
+    return false;
   }
 }
