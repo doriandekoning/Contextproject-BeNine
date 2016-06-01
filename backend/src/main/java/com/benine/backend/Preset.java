@@ -219,6 +219,9 @@ public class Preset {
     tags.remove(tag);
   }
   
+  /**
+   * Remove all the tags from this preset. 
+   */
   public void removeTags() {
     this.tags.removeAll(getTags());
   }
