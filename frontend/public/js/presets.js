@@ -233,6 +233,22 @@ $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
 	$.get("/api/backend/presets?tag=" + datum.name , function(data) {loadPresetsOnTag(JSON.parse(data));});
 });
 
+$(".fill-tags").append(getTags());
+
+function getTags() {
+	var result = "";
+	for(i = 0; i < localTags.length; i++) {
+		result += "<span class='tag'>" + localTags[i].name + "</span><br>";
+	}
+	return result;
+}
+
+$(".tag").click(function(e){
+        e.preventDefault();
+        var tag = $(".tag").html();
+        $(this).replaceWith("<input value='" + tag + "' />");
+    });
+
 /**
 * Function to handle a click on a preset.
 * @param t is the div on which is clicked.
