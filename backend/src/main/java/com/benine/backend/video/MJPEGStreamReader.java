@@ -5,10 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 /**
@@ -57,7 +54,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private void setMJPEGBoundary() {
     try {
-      this.boundary = getMJPEGBoundary(new String(getHeader(), StandardCharsets.UTF_8));
+      this.boundary = new MJPEGFrameHeader(getHeader()).getBoundary();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -69,13 +66,11 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public void processStream() {
     try {
-      byte[] headerByte = getHeader();
-      String header = new String(headerByte, StandardCharsets.UTF_8);
-      byte[] imageByte = getImage(header);
+      MJPEGFrameHeader header = new MJPEGFrameHeader(getHeader());
+      MJPEGVideoFrame frame = new MJPEGVideoFrame(header, getImage(header));
 
-      sendToDistributers(headerByte, imageByte);
-
-      snapshot = imageByte;
+      sendToDistributers(frame);
+      snapshot = frame.getImage();
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -84,14 +79,10 @@ public class MJPEGStreamReader extends StreamReader {
 
   /**
    * Notify the observers about the header and the image.
-   * @param headerByte    The header in byte array format.
-   * @param imageByte     The image in byte array format.
    */
-  private void sendToDistributers(byte[] headerByte, byte[] imageByte) {
+  private void sendToDistributers(MJPEGVideoFrame frame) {
     setChanged();
-    notifyObservers(headerByte);
-    setChanged();
-    notifyObservers(imageByte);
+    notifyObservers(frame);
   }
 
   /**
@@ -141,8 +132,8 @@ public class MJPEGStreamReader extends StreamReader {
    * @return  a byte[] representing the image.
    * @throws IOException when an error occurs fetching the header or reading the jpeg image.
    */
-  private byte[] getImage(String header) throws IOException {
-    int contentLength = getContentLength(header);
+  private byte[] getImage(MJPEGFrameHeader header) throws IOException {
+    int contentLength = header.getContentlength();
 
     if (contentLength != -1) {
       return readJPEG(contentLength);
@@ -209,40 +200,6 @@ public class MJPEGStreamReader extends StreamReader {
 
     header.close();
     return header.toByteArray();
-  }
-
-  /**
-   * Looks for the Content-Length: tag in the header, and extracts the value.
-   *
-   * @param header A header string.
-   * @return 0 if content-length not found, else content length.
-   */
-  private int getContentLength(String header) {
-    Pattern contentLength = Pattern.compile("Content-Length: \\d+");
-    Matcher matcher = contentLength.matcher(header);
-
-    // On a match, remove all non-digits and parse it to an integer.
-    if (matcher.find()) {
-      return Integer.parseInt(matcher.group().replaceAll("[^0-9]", ""));
-    } else {
-      return -1;
-    }
-  }
-
-  /**
-   * Finds the mjpeg boundary starting with --
-   * @param header The header.
-   * @return  The mjpeg boundary.
-   */
-  private String getMJPEGBoundary(String header) {
-    Pattern boundary = Pattern.compile("--[a-zA-Z]+");
-    Matcher matcher = boundary.matcher(header);
-
-    if (matcher.find()) {
-      return matcher.group();
-    } else {
-      return null;
-    }
   }
 
   /**

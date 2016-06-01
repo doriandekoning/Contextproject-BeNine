@@ -30,9 +30,10 @@ public class StreamDistributer implements Observer {
 
   @Override
   public void update(Observable o, Object arg) {
-    if (arg instanceof byte[]) {
+    if (arg instanceof MJPEGVideoFrame) {
       try {
-        outputStream.write((byte[]) arg);
+        outputStream.write(((MJPEGVideoFrame) arg).getHeaderBytes());
+        outputStream.write(((MJPEGVideoFrame) arg).getImage());
       } catch (IOException e) {
         deregister();
       }
