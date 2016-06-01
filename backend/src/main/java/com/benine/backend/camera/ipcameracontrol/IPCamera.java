@@ -37,6 +37,14 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   private static final int MOVE_WAIT_DURATION = 200;
 
+  public static final double HORIZONTAL_FOV_MIN = 3.3;
+  public static final double HORIZONTAL_FOV_MAX = 60.3;
+  public static final double VERTICAL_FOV_MIN = 1.9;
+  public static final double VERTICAL_FOV_MAX = 36.2;
+
+  public static final int MIN_ZOOM = 0;
+  public static final int MAX_ZOOM = 2730;
+
 
   /**
    *  Create a new IP Camera object.
@@ -298,14 +306,14 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   
   /**
    * Zoom to a specified position.
-   * Value must be between 0 and 2730.
+   * Value must be between 0 and MAX_ZOOM (2730).
    * Where 0 is completely zoomed out.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
    */
   public void zoomTo(int zpos) throws CameraConnectionException {
-    zpos = Math.max(0, zpos);
-    zpos = Math.min(2730, zpos);
+    zpos = Math.max(MIN_ZOOM, zpos);
+    zpos = Math.min(MAX_ZOOM, zpos);
     String res = sendControlCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
     verifyResponse(res, "axz");
   }

@@ -5,6 +5,7 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.util.Collection;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -16,6 +17,6 @@ public interface AutoPresetCreator {
    * @param cam the camera to create presets for.
    * @return A collection of the created presets.
    */
-  Collection<Preset> createPresets(IPCamera cam) throws CameraConnectionException, InterruptedException;
+  Collection<Preset> createPresets(IPCamera cam) throws CameraConnectionException, InterruptedException, TimeoutException;
 
 }

@@ -1,5 +1,6 @@
 package com.benine.backend;//TODO add Javadoc comment
 
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -13,12 +14,18 @@ import java.util.concurrent.TimeoutException;
  */
 public class PresetPyramidCreator implements AutoPresetCreator {
 
+  private static final int HORIZONTAL_FOV = 120;
+  private static final int VERTICAL_FOV = 90;
+  private static final double OVERLAP = 0.1;
+
   private int rows;
   private int columns;
   private int levels;
 
 
   public PresetPyramidCreator(int rows, int columns, int levels) {
+    assert rows > 0;
+    assert columns > 0;
     this.rows = rows;
     this.columns = columns;
     this.levels = levels;
@@ -26,32 +33,19 @@ public class PresetPyramidCreator implements AutoPresetCreator {
 
   @Override
   public Collection<Preset> createPresets(IPCamera cam)
-          throws CameraConnectionException, InterruptedException {
+          throws CameraConnectionException, InterruptedException, TimeoutException {
     Position camStartPos = cam.getPosition();
     ArrayList<Preset> presets = new ArrayList<Preset>();
     for (int level = 0; level < levels; level++ ) {
-      for (int row = 0; row < rows; row++ ) {
-        for (int column = 0; column < columns; column++ ) {
-          try {
-            presets.add(createPresetAtGridPos(cam, column, row));
-          } catch (TimeoutException e) {
-            ServerController.getInstance().getLogger()
-                .log("Unable to move camera when auto generating presets.", LogEvent.Type.WARNING);
-          }
-        }
+      int zoom = cam.getZoomPosition();
+      for (Position pos : generatePositionsLayer(zoom)) {
+        cam.moveTo(pos, 30, 2);
+        cam.waitUntilAtPosition(pos, zoom, 2000);
       }
-      cam.moveTo(camStartPos, 30, 2);
-      // TODO Zoom by constant value
 
-      int newZoomPos = cam.getZoomPosition() + 500;
+      int newZoomPos = cam.getZoomPosition() + ((IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM)* (level/levels);
       cam.zoomTo(newZoomPos);
-      try {
-        cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
-      } catch (TimeoutException e) {
-        ServerController.getInstance().getLogger()
-            .log("Unable to move camera when auto generating presets.", LogEvent.Type.WARNING);
-      }
-
+      cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
     }
     return presets;
   }
@@ -67,12 +61,35 @@ public class PresetPyramidCreator implements AutoPresetCreator {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     // TODO Determine position to move to
     int startZoom = cam.getZoomPosition();
-    Position pos = new Position(-60, -30);
+    Position pos = new Position(-90 + (90*column), (180- 30) + (30*row));
     cam.moveTo(pos, startZoom, 2);
     cam.waitUntilAtPosition(pos, startZoom, 2000);
     // TODO Check if cam is at correct location
     return new PresetFactory().createPreset(cam, 30, 2);
   }
 
+
+  private ArrayList<Position> generatePositionsLayer(int zoomlevel) {
+    ArrayList<Position> positions = new ArrayList<>();
+
+    // 1 is completely zoomed out, 0 completely zoomed in
+
+    final double zoomCoefficient =  1 - ((zoomlevel - IPCamera.MIN_ZOOM)/(IPCamera.MAX_ZOOM));
+    final double curHorFov = (IPCamera.HORIZONTAL_FOV_MAX - IPCamera.HORIZONTAL_FOV_MIN) * zoomCoefficient;
+    final double curVerFov = (IPCamera.VERTICAL_FOV_MAX - IPCamera.VERTICAL_FOV_MIN) * zoomCoefficient;
+    double betweenVer = (curVerFov/columns) - (OVERLAP*curVerFov);
+    double betweenHor = (curHorFov/columns) - (OVERLAP*curHorFov);
+    // Calculate start positions
+    double startPan = 0 - ((columns/2)*betweenHor);
+    double startTilt = 180 - ((rows/2)*betweenVer);
+
+    for (int row = 0; row < rows; row++) {
+      for (int column = 0; column < columns; column++) {
+        positions.add(new Position(startPan + (betweenVer * column), startTilt + (betweenHor * row)));
+      }
+    }
+
+    return positions;
+  }
 
 }
