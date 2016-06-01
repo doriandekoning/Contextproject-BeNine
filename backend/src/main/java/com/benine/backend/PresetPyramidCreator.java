@@ -41,9 +41,10 @@ public class PresetPyramidCreator implements AutoPresetCreator {
       for (Position pos : generatePositionsLayer(zoom)) {
         cam.moveTo(pos, 30, 2);
         cam.waitUntilAtPosition(pos, zoom, 2000);
+        presets.add(new PresetFactory().createPreset(cam, 2, 30));
       }
 
-      int newZoomPos = cam.getZoomPosition() + ((IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM)* (level/levels);
+      int newZoomPos = cam.getZoomPosition() + ((IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM)* (level/levels));
       cam.zoomTo(newZoomPos);
       cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
     }

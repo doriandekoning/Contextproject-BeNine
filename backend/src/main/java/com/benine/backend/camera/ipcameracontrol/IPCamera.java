@@ -45,6 +45,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public static final int MIN_ZOOM = 0;
   public static final int MAX_ZOOM = 2730;
 
+  public static final int HOME_TILT = 180;
+  public static final int HOME_PAN = 0;
+
 
   /**
    *  Create a new IP Camera object.
