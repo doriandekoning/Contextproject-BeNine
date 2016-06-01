@@ -1,9 +1,6 @@
 package com.benine.backend.database;
 
-import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
-import com.benine.backend.Preset;
-import com.benine.backend.ServerController;
+import com.benine.backend.*;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -423,7 +420,8 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       // String image = resultset.getString("image");
       int id = resultset.getInt("camera_ID");
-      return new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
+      PresetFactory factory = new PresetFactory();
+      return factory.createPreset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
           autoIris, id);
     } catch (Exception e) {
       getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);

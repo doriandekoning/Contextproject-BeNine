@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.Preset;
+import com.benine.backend.PresetFactory;
 import com.benine.backend.camera.Position;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
@@ -32,10 +33,10 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
+    Preset preset = new PresetFactory().createPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
     ArrayList<String> keywords = new ArrayList<>();
     keywords.add("Violin");
-    Preset presetKeywords = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0, keywords);
+    Preset presetKeywords = new PresetFactory().createPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0, keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();
     allList.add(preset);

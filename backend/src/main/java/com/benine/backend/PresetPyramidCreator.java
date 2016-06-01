@@ -46,12 +46,12 @@ public class PresetPyramidCreator implements AutoPresetCreator {
    * @return the preset at the specified position
    */
   public Preset createPreset(MovingCamera cam, int level, int column, int row) {
-    try {
-      cam.moveTo(new Position(-60, -30), 30, 2);
-    } catch (CameraConnectionException e) {
-      ServerController.getInstance().getLogger()
-              .log("Cannot connect to camera with id: " + cam.getId(), e);
-    }
+//    try {
+////      cam.moveTo(new Position(-60, -30), 30, 2);
+//    } catch (CameraConnectionException e) {
+//      ServerController.getInstance().getLogger()
+//              .log("Cannot connect to camera with id: " + cam.getId(), e);
+//    }
     return null;
   }
 

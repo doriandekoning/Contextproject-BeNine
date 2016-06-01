@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.benine.backend.PresetFactory;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
       
-      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
+      preset = new PresetFactory().createPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();

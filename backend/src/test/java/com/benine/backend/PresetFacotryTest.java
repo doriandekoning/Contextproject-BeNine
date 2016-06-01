@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.mockito.Mockito.mock;
@@ -54,7 +55,8 @@ public class PresetFacotryTest {
   @Test
   public final void testCreatePresetByParamsWithTags() {
     Preset expectedP = getDefaultPreset();
-    Collection<String> tags = mock(Collection.class);
+    Collection<String> tags = new ArrayList<String>();
+    tags.add("Tag1");
     expectedP.addTags(tags);
 
     Preset actualP = factory.createPreset(pos, zoom, focus, iris,

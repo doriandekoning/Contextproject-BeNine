@@ -231,6 +231,9 @@ public class Preset {
     if (autofocus != preset.autofocus) {
       return false;
     }
+    if (cameraId != preset.getCameraId()) {
+      return false;
+    }
     if (!tags.equals(preset.getTags())) {
       return false;
     }
