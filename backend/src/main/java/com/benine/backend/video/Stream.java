@@ -25,7 +25,7 @@ public class Stream extends Observable {
   private PipedOutputStream out;
   private Thread streamThread;
 
-  private final int BUFFERSPACE = (int) Math.pow(2, 13);
+  private final int BUFFER= (int) Math.pow(2, 13);
 
   /**
    * Constructor for a new stream object.
@@ -42,7 +42,7 @@ public class Stream extends Observable {
 
     this.streamThread = new Thread() {
       public void run() {
-        provideStream();
+        process();
       }
     };
 
@@ -50,25 +50,35 @@ public class Stream extends Observable {
 
   }
 
-  public void provideStream() {
+  /**
+   * Processes the stream, and maintains the connection.
+   */
+  public void process() {
     while (true) {
       if (!connected) {
         openConnection();
       }
 
       try {
-        processStream();
+        streamToOutputstream();
       } catch (IOException e) {
         connected = false;
       }
     }
   }
 
-  public void processStream() throws IOException {
-    byte[] bytes = new byte[BUFFERSPACE];
+  /**
+   * Reads the stream and adds it to the outputstream of this instance.
+   * This prevents the stream from ending if the connection to the
+   * stream ends, because it does not send the '-1' termination symbol to
+   * the stream.
+   * @throws IOException If the stream cannot be read.
+   */
+  public void streamToOutputstream() throws IOException {
+    byte[] bytes = new byte[BUFFER];
     int bytesRead;
 
-    if ((bytesRead = in.read(bytes)) != -1) {
+    if ((bytesRead = in.read(bytes)) > 0) {
       out.write(bytes, 0, bytesRead);
     } else {
       throw new IOException();
@@ -76,7 +86,7 @@ public class Stream extends Observable {
   }
 
   /**
-   * Opens a connection to the stream.
+   * Opens a connection to the stream and reconnects on failure.
    */
   public void openConnection() {
     try {
@@ -89,8 +99,7 @@ public class Stream extends Observable {
       this.connected = true;
       this.in = conn.getInputStream();
 
-      logger.log("Successfully connected to stream " + url.toString(),
-              LogEvent.Type.INFO);
+      logger.log("Connected to stream " + url.toString(), LogEvent.Type.INFO);
     } catch (IOException e) {
       logger.log("Could not connect to stream " + url.toString()
               + ", attempting to reestablish.", LogEvent.Type.WARNING);
@@ -98,16 +107,11 @@ public class Stream extends Observable {
   }
 
   /**
-   * Returns the inputstream of this Stream.
-   *
-   * @return An inputstream which can be read.
+   * Returns a readable inputstream of this Stream.
+   * @return A PipedInputStream which can be read.
+   * @throws IOException if the stream cannot be sent to the outputstream.
    */
-  public InputStream getInputStream() {
-    try {
+  public InputStream getInputStream() throws IOException {
       return new PipedInputStream(out);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 }

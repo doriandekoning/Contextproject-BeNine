@@ -22,19 +22,10 @@ public class MJPEGStreamReader extends StreamReader {
   /**
    * Creates a new MJPEGStreamReader.
    *
-   * @param url The url fo the stream.
-   * @throws IOException if the inputstream cannot be read.
-   */
-  public MJPEGStreamReader(String url) throws IOException {
-      this(new Stream(url));
-  }
-
-  /**
-   * Creates a new MJPEGStreamReader.
-   *
    * @param stream A stream object.
+   * @throws IOException StreamReader does not have a valid stream, rendering the object useless.
    */
-  public MJPEGStreamReader(Stream stream) {
+  public MJPEGStreamReader(Stream stream) throws IOException {
     super(stream);
 
     this.snapshot = new byte[0];
@@ -195,8 +186,6 @@ public class MJPEGStreamReader extends StreamReader {
       // If stream has not ended, add to header stream.
       if (bufferedStream.available() != 0) {
         header.write(bufferedStream.read());
-      } else {
-        System.out.println("THIS IS VERY WRONG.");
       }
     }
 

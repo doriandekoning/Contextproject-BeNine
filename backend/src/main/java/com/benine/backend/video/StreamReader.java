@@ -15,8 +15,9 @@ public abstract class StreamReader extends Observable implements Runnable {
 
   /**
    * Constructor for a new StreamReader object.
+   * @throws IOException if there is an error getting the stream, rendering the object useless.
    */
-  public StreamReader(Stream stream) {
+  public StreamReader(Stream stream) throws IOException {
     this.stream = stream;
     this.streamDisconnected = false;
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
