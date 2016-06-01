@@ -11,7 +11,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
 
@@ -52,35 +51,19 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
     }
   }
 
-  public void testHandleWithThread() throws InterruptedException {
-    Thread test = new Thread() {
-      public void run() {
-        try {
-          getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-        } catch (IOException | ServletException e) {
-          e.printStackTrace();
-        }
-      }
-    };
-    test.start();
-    Thread.sleep(100);
-    streamReaderThread.interrupt();
-    test.interrupt();
-  }
-
   @Test
   public void testMJPEGContentType() throws Exception {
     setPath("/42/mjpeg");
-    testHandleWithThread();
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock).setContentType("multipart/x-mixed-replace;boundary=" + streamReader.getBoundary());
   }
 
   @Test
   public void testMJPEGCacheControl() throws Exception {
     setPath("/42/mjpeg");
-    testHandleWithThread();
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock).setHeader("Cache-Control", "no-store, "
             + "no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0");
   }
@@ -88,24 +71,24 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
   @Test
   public void testMJPEGConnection() throws Exception {
     setPath("/42/mjpeg");
-    testHandleWithThread();
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock).setHeader("Connection", "close");
   }
 
   @Test
   public void testMJPEGPragma() throws Exception {
     setPath("/42/mjpeg");
-    testHandleWithThread();
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock).setHeader("Pragma", "no-cache");
   }
 
   @Test
   public void testMJPEGExpires() throws Exception {
     setPath("/42/mjpeg");
-    testHandleWithThread();
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(httpresponseMock).setHeader("Expires", "Thu, 01 Dec 1994 16:00:00 GMT");
   }
 

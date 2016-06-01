@@ -11,6 +11,8 @@ public abstract class BasicCamera implements Camera {
 
   private StreamType streamtype;
 
+  private boolean inUse;
+
   /**
    * Constructor for a Basic Camera.
    * @param type The streamType of this camera.
@@ -18,6 +20,7 @@ public abstract class BasicCamera implements Camera {
   public BasicCamera(StreamType type) {
     this.id = -1;
     this.streamtype = type;
+    this.inUse = false;
   }
 
   /**
@@ -72,5 +75,20 @@ public abstract class BasicCamera implements Camera {
       }
     }
     return false;
+  }
+
+  @Override
+  public boolean isInUse() {
+    return inUse;
+  }
+
+  @Override
+  public void setInUse() {
+    this.inUse = true;
+  }
+
+  @Override
+  public void setNotInUse() {
+    this.inUse = false;
   }
 }

@@ -46,15 +46,17 @@ public class CreatePresetHandler extends RequestHandler {
       if (camID == null) {
         throw new MalformedURIException("No Camera ID Specified.");
       }
-
+      
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
+
       List<String> tagList = new ArrayList<String>();
       if (tags != null) {
         tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
       } 
-      
+      getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
+
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
         setPreset(ipcam, tagList);
@@ -68,7 +70,7 @@ public class CreatePresetHandler extends RequestHandler {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (SQLException e) {
-      getLogger().log("Cannot connect to database ", LogEvent.Type.CRITICAL);
+      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
@@ -80,13 +82,12 @@ public class CreatePresetHandler extends RequestHandler {
 
   /**
    * Creates an image for a preset.
-   * @param preset        A Preset object.
    * @param cameraID      The id of the camera to take the image from.
    * @param presetID      The id of the preset used for naming.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    */
-  private void createImage(Preset preset, int cameraID, int presetID) throws
+  private void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
@@ -97,7 +98,9 @@ public class CreatePresetHandler extends RequestHandler {
             + cameraID + "_" + presetID + ".jpg");
 
     ImageIO.write(bufferedImage, "jpg", path);
-    preset.setImage(File.separator + path.toString());
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    
+    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
   }
 
   /**
@@ -114,11 +117,9 @@ public class CreatePresetHandler extends RequestHandler {
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
-
-    Preset preset = createPreset(camera, tagList);
-    createImage(preset, camera.getId(), preset.getId());
     
-    presetController.addPreset(preset);
+    int presetID = presetController.addPreset(createPreset(camera, tagList));
+    createImage(camera.getId(), presetID);
   }
 
   /**
@@ -140,7 +141,6 @@ public class CreatePresetHandler extends RequestHandler {
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
     int cameraId = camera.getId();
-
     return new Preset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
             tiltspeed, autoiris, cameraId, tagList);
   }

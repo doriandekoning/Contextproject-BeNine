@@ -11,6 +11,8 @@ import java.util.HashSet;
  * Created by dorian on 18-5-16.
  */
 public class PresetController {
+  
+  private static volatile int newID = 1;
 
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
@@ -56,17 +58,35 @@ public class PresetController {
     Database db = ServerController.getInstance().getDatabase();
     db.deletePreset(preset.getId());
   }
-
+  
+  /**
+   * Adds the right id to this preset.
+   * @param preset to add the id to.
+   * @return Preset with right ID.
+   */
+  private static Preset addPresetID(Preset preset) {
+    if (preset.getId() == -1) {
+      preset.setId(PresetController.newID);
+      PresetController.newID++;
+    } else {
+      PresetController.newID = Math.max(PresetController.newID - 1, preset.getId()) + 1;
+    }
+    return preset;
+  }
+ 
   /**
    * Adds a preset.
    * @param preset the preset to add.
+   * @return ID of the preset just created.
    * @throws SQLException when an error occures in the database.
    */
-  public void addPreset(Preset preset) throws SQLException {
+  public int addPreset(Preset preset) throws SQLException {   
+    preset = addPresetID(preset);
     presets.add(preset);
     addAllTags(preset.getTags());
     ServerController serverContr = ServerController.getInstance();
     serverContr.getDatabase().addPreset(preset);
+    return preset.getId();
   }
 
   /**
@@ -111,5 +131,14 @@ public class PresetController {
    */
   public void addAllTags(Collection<String> tags) {
     this.tags.addAll(tags);
+  }
+
+  /**
+   * Removes a tag from a presetcontroller object and all its presets.
+   * @param tag the tag to remove.
+   */
+  public void removeTag(String tag) {
+    tags.remove(tag);
+    presets.forEach(p -> p.removeTag(tag));
   }
 }

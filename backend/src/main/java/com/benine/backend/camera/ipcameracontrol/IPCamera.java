@@ -388,6 +388,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
+    json.put("inuse", isInUse());
     try {
       json.put("pan", getPosition().getPan());
       json.put("tilt", getPosition().getTilt());

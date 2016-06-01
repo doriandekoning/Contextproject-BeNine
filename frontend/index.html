@@ -37,6 +37,8 @@
     <!-- Bootstrap -->
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css" rel="stylesheet">
     <!-- Bootstrap CSS overwrites -->
     <link href="public/css/style.css" rel="stylesheet">
 </head>
@@ -54,12 +56,17 @@
                         PolyCast WebInterface
                     </a>
                 </div>
-                <div class="label-container hidden-xs">
 
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active" onclick="loadSettings()" ><a data-toggle="modal" data-target=".settings-modal"><span class="glyphicon glyphicon-cog"></span></a></li>
+                    </ul>
+                    <div class="label-container hidden-xs">
                     <span id="server_status" class="label label-warning">
                         <span>Server Status</span>
                         <span class="glyphicon glyphicon-dashboard"></span>
                     </span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -96,8 +103,9 @@
         <div id="left_area" class="col-xs-6">
             <!-- Area in which the presets will be generated -->
 			<div id="preset_area">
-				<div id='tagsearch' class="input-group">
-					<input oninput='tagSearchInput($(this))' type="text" class="form-control" placeholder="Tag" aria-describedby="sizing-addon2">
+				<div id='tagsearch'>
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input id="tagsearch_input" oninput='tagSearchInput($(this))' type="text" class="form-control typeahead" placeholder="Search a tag..." aria-describedby="sizing-addon2">
 				</div>
             </div>
         </div>
@@ -105,7 +113,6 @@
             <div class="control_buttons">
                 <div class="btn-group">
                     <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target=".preset-edit-modal"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</button>
                 </div>
             </div>
             <div id="control_area">
@@ -149,42 +156,117 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-picture"></span> Create Preset</h4>
                 </div>
                 <div class="modal-body">
-					<div>
-						Preset name:<br>
-						<input id="preset_name" type="text">
+                    <div class="row">
+					<div class="col-xs-8">
+						<div class="form-group">
+							<label for="preset_name">Preset name</label>
+							<input id="preset_name" class="form-control" type="text">
+						</div>
+						<br>
+						<div class="form-group">
+                            <label for="description"> Description</label>
+							<input id="description" class="form-control" type="text">
+						</div>
+                        <div class="form-group preset-create-tagsinput">
+                            <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
+                            <div class="tags_input">
+                                <input id="preset-create-tagsinput" class="form-control" type="text" data-role="tagsinput"/>
+                            </div>
+                        </div>
 					</div>
-					<div>
-						Tag:<br>
-						<input id="preset_tag" type="text">
+					<div class="col-xs-4">
+						<img class="img-responsive img-thumbnail" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
 					</div>
-					
-                    <img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createPreset()"><span class="glyphicon glyphicon-floppy-disk"></span> Save </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="createPreset()"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Defines the modal used for preset editing -->
-    <div class="modal fade preset-edit-modal" tabindex="-1" role="dialog" aria-labelledby="preset-edit-modal">
+    <div id="preset_edit_div" class="modal fade preset-edit-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body row">
+                   <div class="col-xs-4 col-dm-4">
+						<div>
+							Preset name:<br>
+							<input id="preset_name" type="text">
+						</div>
+						<br>
+						<div>
+							Description:<br>
+							<input id="description" type="text">
+						</div>
+					</div>
+					<div class="col-xs-3 col-dm-3">
+						
+					</div>	
+					<div class="col-xs-5 col-dm-5">
+						<img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+					</div>	
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save changes</button>
+					<div class="tags_input">
+						<input type="text" data-role="tagsinput"  />
+					</div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Defines the modal used for settings editing -->
+    <div class="modal fade settings-modal" tabindex="-1" role="dialog" aria-labelledby="settings-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Settings</h4>
+                </div>
+                <div class="modal-body">
+					<div class="modal-body row">
+                        <h4><span class="glyphicon glyphicon-flash"></span> Control Sensitivity</h4>
+                        <div class="col-xs-1 col-dm-1">
+							<div class="settings_sense">
+								<span>Zoom</span>
+								<input type="range" class="slider" id="zoomsense" min="0" max="10" value="5">
+								<label id="zoomsense_lbl"></label>
+							</div>
+						</div>
+						<div class="col-xs-1 col-dm-1">
+							<span>Iris</span>
+							<input type="range" class="slider" id="irissense" min="0" max="10" value="5">
+							<label id="irissense_lbl"></label>
+						</div>	
+						<div class="col-xs-1 col-dm-1">
+							<span>Focus</span>
+							<input type="range" class="slider" id="focussense" min="0" max="10" value="5">
+							<label id="focussense_lbl"></label>
+						</div>	
+						<div class="col-xs-1 col-dm-1">
+							<span>Joystick</span>
+							<input type="range" class="slider" id="joysticksense" min="0" max="10" value="5">
+							<label id="joysticksense_lbl"></label>
+						</div>	
+					</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" onclick="defaults()">Reset to Defaults</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
                 </div>
             </div>
         </div>
@@ -197,13 +279,23 @@
 
     <!-- HammerJS for supporting touch actions -->
     <script src="bower_components/hammerjs/hammer.min.js"></script>
+	
+	<!-- Bootstrap tagsinput for supporting tags display -->
+	<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+	
+	<!-- Type Ahead input -->
+	<script src="bower_components/typeahead.js/dist/typeahead.bundle.min.js"></script>
 
     <!-- Holder JS for placeholders -->
     <script src="bower_components/holderjs/holder.js"></script>
 
+    <!-- Cookie JS for cookie management -->
+    <script src="bower_components/js-cookie/src/js.cookie.js"></script>
+
+    <script src="public/js/settings.js"></script>
+    <script src="public/js/presets.js"></script>
     <script src="public/js/generator.js"></script>
     <script src="public/js/control.js"></script>
     <script src="public/js/touch.js"></script>
-
 </body>
 </html>

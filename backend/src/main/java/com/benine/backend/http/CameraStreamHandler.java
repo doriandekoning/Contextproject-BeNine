@@ -10,11 +10,10 @@ import com.benine.backend.video.StreamReader;
 import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PipedInputStream;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,25 +43,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
       // Set the headers
       setHeaders(streamReaderMJPEG, res);
 
-      // Get an inputstream from the distributer.
-
-      PipedInputStream in = new PipedInputStream(distributer.getStream());
-      BufferedInputStream bs = new BufferedInputStream(in);
-      OutputStream os = res.getOutputStream();
-
-      boolean sending = true;
-      while (bs.available() > -1 && sending) {
-        try {
-          os.write(bs.read());
-        } catch (IOException e) {
-          // An exception occured, this means the browser cannot be reached.
-          sending = false;
-        }
-      }
-
-      os.close();
-      bs.close();
-      in.close();
+      // Stream to the client
+      stream(request, res, distributer);
 
     } else {
       res.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -73,8 +55,9 @@ public class CameraStreamHandler extends CameraRequestHandler {
 
   /**
    * Sets the HTTP Headers so the browser detects MJPEG.
-   * @param reader                The MJPEG stream reader containing the boundary.
-   * @param httpServletResponse   The response for which the headers should be set.
+   *
+   * @param reader              The MJPEG stream reader containing the boundary.
+   * @param httpServletResponse The response for which the headers should be set.
    */
   private void setHeaders(MJPEGStreamReader reader, HttpServletResponse httpServletResponse) {
     httpServletResponse.setContentType(MJPEGHeader.CONTENT_TYPE.getContents()
@@ -89,5 +72,32 @@ public class CameraStreamHandler extends CameraRequestHandler {
   @Override
   boolean isAllowed(Camera cam) {
     return cam.getStreamType() == StreamType.MJPEG;
+  }
+
+  /**
+   * Streams to the response.
+   * @param request       The request object.
+   * @param res           The response to write to.
+   * @param distributer   The streamdistributer delivering the stream.
+   */
+  private void stream(Request request, HttpServletResponse res, StreamDistributer distributer) {
+    int camID = getCameraId(request);
+
+    byte[] bytes = new byte[16384];
+    int bytesRead;
+
+    try (PipedInputStream in = new PipedInputStream(distributer.getStream());
+         ServletOutputStream os = res.getOutputStream()) {
+
+      while ((bytesRead = in.read(bytes)) != -1) {
+        os.write(bytes, 0, bytesRead);
+        os.flush();
+      }
+    } catch (IOException e) {
+      getLogger().log("Client "
+              + request.getRemoteAddr()
+              + " disconnected from MJPEG stream "
+              + camID, LogEvent.Type.INFO);
+    }
   }
 }

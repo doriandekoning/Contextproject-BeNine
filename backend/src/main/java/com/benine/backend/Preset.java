@@ -22,7 +22,7 @@ public class Preset {
   private int tiltspeed;
   private boolean autoiris;
   private String image;
-  private int presetid;
+  private int presetid = -1;
   private Set<String> tags = new HashSet<String>();
   private int cameraId;
 

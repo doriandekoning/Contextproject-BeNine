@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to control the camera's.
@@ -131,5 +132,19 @@ public class CameraController {
       json.put("id", Integer.valueOf(camera.getId()));
       return json.toString();
     }
+  }
+
+  /**
+   * Returns a list of the cameras which are in use.
+   * @return a list of the cameras in use
+   */
+  public List<Camera> camerasInUse() {
+    ArrayList<Camera> list = new ArrayList<Camera>();
+    for (Camera camera : getCameras()) {
+      if (camera.isInUse()) {
+        list.add(camera);
+      }
+    }
+    return list;
   }
 }
