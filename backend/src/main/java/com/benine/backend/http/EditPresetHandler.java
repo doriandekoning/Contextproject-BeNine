@@ -1,6 +1,18 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamNotAvailableException;
+
+import org.eclipse.jetty.server.Request;
+
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,14 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
-import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 
 
@@ -33,17 +37,8 @@ public class EditPresetHandler extends RequestHandler {
           throws IOException, ServletException {
     
     Boolean overwriteTag = true;
-    Boolean overwritePreset = true;
-    
+        
     String camID = request.getParameter("camera");
-    if (camID == null) {
-      try {
-        throw new MalformedURIException("No Camera ID Specified.");
-      } catch (MalformedURIException e) {
-        getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-        respondFailure(request, res);
-      }
-    }
     CameraController cameraController = ServerController.getInstance().getCameraController();
     IPCamera ipcam = (IPCamera) cameraController.getCameraById(Integer.parseInt(camID));
     
@@ -56,15 +51,29 @@ public class EditPresetHandler extends RequestHandler {
     int presetID = Integer.parseInt(request.getParameter("presetid"));
     PresetController presetController = ServerController.getInstance().getPresetController();
     Preset preset = presetController.getPresetById(presetID);
+   
     
     if (overwriteTag == true) {
       updateTag(preset, tagList);
     }
     
+    Boolean overwritePreset = true;
     if (overwritePreset == true) {
-     // CreatePresetHandler.setPreset(ipcam, tagList);
+      try {
+        CreatePresetHandler.setPreset(ipcam, tagList);
+      } catch (StreamNotAvailableException e) {
+        e.printStackTrace();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } catch (CameraConnectionException e) {
+        e.printStackTrace();
+      } catch (MalformedURIException e) {
+        e.printStackTrace();
+      }
       
     }
+    
+    preset.setId(presetID);
     
     respondSuccess(request, res);
     request.setHandled(true);
