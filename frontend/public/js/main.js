@@ -23,7 +23,7 @@ function loadCameras() {
 		var obj = JSON.parse(data)
 		for(var c in obj.cameras) {
 			var cam = obj.cameras[c];
-			cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.pan));
+			cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.move));
 		}
 	}).done(function() {
 		// Generate the camera block area.

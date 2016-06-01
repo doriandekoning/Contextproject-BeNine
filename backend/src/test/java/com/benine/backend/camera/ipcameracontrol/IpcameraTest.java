@@ -158,28 +158,26 @@ public class IpcameraTest {
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
+    json.put("move", true);
+    json.put("iris", true);
+    json.put("zoom", true);
+    json.put("focus", true);
     assertEquals(json, camera.toJSON());
   }
   
   @Test
   public final void testGetJSON() throws CameraConnectionException{
-    setCameraBehaviour("APC", "aPC80008000");
-    setCameraBehaviour("GZ", "gz655");
-    setCameraBehaviour("GF", "gfA42");
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
-    setCameraBehaviour("GI", "giD421");
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
-    json.put("pan", 0.0);
-    json.put("tilt", 180.0);
-    json.put("zoom", 256);
-    json.put("focus", 1261);
+    json.put("move", true);
+    json.put("zoom", true);
+    json.put("focus", true);
     json.put("autofocus", true);
-    json.put("iris", 2029);
+    json.put("iris", true);
     json.put("autoiris", true);
-    json.put("streamlink", "http://test/cgi-bin/mjpeg");
     
     assertEquals(json, camera.toJSON());
   }

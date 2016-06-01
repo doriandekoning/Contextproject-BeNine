@@ -344,8 +344,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
-      con.setConnectTimeout(10000);
-      con.setReadTimeout(10000);
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(1000);
       InputStream in = con.getInputStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
@@ -390,20 +390,17 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     json.put("id", this.getId());
     json.put("inuse", isInUse());
     try {
-      json.put("pan", getPosition().getPan());
-      json.put("tilt", getPosition().getTilt());
-      json.put("zoom", getZoomPosition());
-      json.put("focus", getFocusPosition());
+      json.put("move", true);
+      json.put("zoom", true);
+      json.put("focus", true);
+      json.put("iris", true);
       json.put("autofocus", isAutoFocusOn());
-      json.put("iris", getIrisPosition());
       json.put("autoiris", isAutoIrisOn());
-      json.put("streamlink", getStreamLink());
     } catch (Exception e) {
       logger.log("Failed to get the JSON representation of camera: " 
                                                   + getId(), LogEvent.Type.CRITICAL);
     }
-    return  json;
-    
+    return  json; 
   }
 
   /**
