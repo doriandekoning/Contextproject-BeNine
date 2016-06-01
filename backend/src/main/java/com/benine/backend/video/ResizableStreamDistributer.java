@@ -21,8 +21,8 @@ public class ResizableStreamDistributer extends StreamDistributer {
 
   @Override
   public void update(Observable o, Object arg) {
-    if (arg instanceof MJPEGVideoFrame) {
-      MJPEGVideoFrame frame = (MJPEGVideoFrame) arg;
+    if (arg instanceof VideoFrame) {
+      VideoFrame frame = (VideoFrame) arg;
 
       frame = resizer.resize(frame);
       writeVideoFrame(frame);

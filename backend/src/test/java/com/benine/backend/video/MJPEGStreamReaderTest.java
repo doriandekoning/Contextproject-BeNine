@@ -5,8 +5,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import javax.imageio.ImageIO;
-import java.io.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,7 +46,7 @@ public class MJPEGStreamReaderTest {
     baos.close();
 
     baos = new ByteArrayOutputStream();
-    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(mjpegstream.getSnapShot().getImage())), "jpg", baos);
     baos.flush();
     byte[] actual = baos.toByteArray();
     baos.close();
@@ -62,7 +67,7 @@ public class MJPEGStreamReaderTest {
     mjpegstream.processStream();
 
     baos = new ByteArrayOutputStream();
-    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(mjpegstream.getSnapShot().getImage())), "jpg", baos);
     baos.flush();
     byte[] actual = baos.toByteArray();
     baos.close();
@@ -82,7 +87,7 @@ public class MJPEGStreamReaderTest {
     baos.close();
 
     baos = new ByteArrayOutputStream();
-    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(mjpegstream.getSnapShot().getImage())), "jpg", baos);
     baos.flush();
     byte[] actual = baos.toByteArray();
     baos.close();
@@ -104,7 +109,7 @@ public class MJPEGStreamReaderTest {
     mjpegstream.processStream();
 
     baos = new ByteArrayOutputStream();
-    ImageIO.write(mjpegstream.getSnapShot(), "jpg", baos);
+    ImageIO.write(ImageIO.read(new ByteArrayInputStream(mjpegstream.getSnapShot().getImage())), "jpg", baos);
     baos.flush();
     byte[] actual = baos.toByteArray();
     baos.close();

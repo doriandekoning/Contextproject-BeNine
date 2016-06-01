@@ -3,7 +3,7 @@ package com.benine.backend.video;
 /**
  * Created on 01-06-16.
  */
-public class MJPEGVideoFrame {
+public class VideoFrame {
 
   /**
    * Header as a byte stream.
@@ -20,7 +20,7 @@ public class MJPEGVideoFrame {
    * @param header The HTTP header.
    * @param image  The Image in bytes.
    */
-  public MJPEGVideoFrame(MJPEGFrameHeader header, byte[] image) {
+  public VideoFrame(MJPEGFrameHeader header, byte[] image) {
     this.header = header;
     this.image = image;
   }
@@ -32,7 +32,6 @@ public class MJPEGVideoFrame {
   public byte[] getImage() {
     return this.image;
   }
-
 
   public byte[] getHeaderBytes() {
     return header.getString().getBytes();

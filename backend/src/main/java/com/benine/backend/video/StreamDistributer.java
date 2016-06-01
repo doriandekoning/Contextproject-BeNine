@@ -30,8 +30,8 @@ public class StreamDistributer implements Observer {
 
   @Override
   public void update(Observable o, Object arg) {
-    if (arg instanceof MJPEGVideoFrame) {
-      writeVideoFrame((MJPEGVideoFrame) arg);
+    if (arg instanceof VideoFrame) {
+      writeVideoFrame((VideoFrame) arg);
     }
   }
 
@@ -39,7 +39,7 @@ public class StreamDistributer implements Observer {
    * Writes a videoframe to the outputstream.
    * @param frame A VideoFrame object.
    */
-  public void writeVideoFrame(MJPEGVideoFrame frame) {
+  public void writeVideoFrame(VideoFrame frame) {
     try {
       outputStream.write(frame.getHeaderBytes());
       outputStream.write(frame.getImage());

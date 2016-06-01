@@ -37,7 +37,7 @@ public class MJPEGFrameResizer {
    * @param frame An MJPEGVideoFrame.
    * @return The updated MJPEGVideoFrame.
    */
-  public MJPEGVideoFrame resize(MJPEGVideoFrame frame) {
+  public VideoFrame resize(VideoFrame frame) {
     frame.setImage(rescaleImage(frame.getImage()));
     frame.getHeader().setContentLength(frame.getImage().length);
 

@@ -1,12 +1,8 @@
 package com.benine.backend.video;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import javax.imageio.ImageIO;
 
 /**
  * StreamReader for Motion JPEG streams.
@@ -17,7 +13,7 @@ public class MJPEGStreamReader extends StreamReader {
 
   private String boundary;
 
-  private byte[] snapshot;
+  private VideoFrame snapshot;
 
   /**
    * Creates a new MJPEGStreamReader.
@@ -36,7 +32,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   public MJPEGStreamReader(Stream stream) {
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
-    this.snapshot = new byte[0];
+    this.snapshot = null;
 
     setMJPEGBoundary();
     processStream();
@@ -67,10 +63,10 @@ public class MJPEGStreamReader extends StreamReader {
   public void processStream() {
     try {
       MJPEGFrameHeader header = new MJPEGFrameHeader(getHeader());
-      MJPEGVideoFrame frame = new MJPEGVideoFrame(header, getImage(header));
+      VideoFrame frame = new VideoFrame(header, getImage(header));
 
       sendToDistributers(frame);
-      snapshot = frame.getImage();
+      snapshot = frame;
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -80,7 +76,7 @@ public class MJPEGStreamReader extends StreamReader {
   /**
    * Notify the observers about the header and the image.
    */
-  private void sendToDistributers(MJPEGVideoFrame frame) {
+  private void sendToDistributers(VideoFrame frame) {
     setChanged();
     notifyObservers(frame);
   }
@@ -211,14 +207,8 @@ public class MJPEGStreamReader extends StreamReader {
   }
 
   @Override
-  public BufferedImage getSnapShot() throws IOException {
-    return ImageIO.read(new ByteArrayInputStream(this.snapshot));
+  public VideoFrame getSnapShot() throws IOException {
+    return this.snapshot;
   }
-
-  @Override
-  public byte[] getSnapShotBytes() {
-    return Arrays.copyOf(snapshot, snapshot.length);
-  }
-
 }
 
