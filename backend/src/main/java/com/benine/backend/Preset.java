@@ -27,53 +27,6 @@ public class Preset {
   private int cameraId;
 
   /**
-   * Constructs a preset.
-   *
-   * @param pos       The position of this preset.
-   * @param zoom      The zoom of the preset
-   * @param focus     The focus of the prest
-   * @param iris      The iris of the preset
-   * @param autofocus The autofocus of the preset
-   * @param autoiris  The autoiris of the preset
-   * @param tiltspeed The tiltspeed of the preset
-   * @param panspeed  The panspeed of the preset
-   * @param cameraId  The id of the camera associated with this preset.
-   */
-  public Preset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
-    this.position = pos;
-    this.zoom = zoom;
-    this.focus = focus;
-    this.iris = iris;
-    this.autofocus = autofocus;
-    this.panspeed = panspeed;
-    this.tiltspeed = tiltspeed;
-    this.autoiris = autoiris;
-    this.cameraId = cameraId;
-  }
-
-  /**
-   * Constructs a preset.
-   *
-   * @param pos       The position of this preset.
-   * @param zoom      The zoom of the preset
-   * @param focus     The focus of the prest
-   * @param iris      The iris of the presetz
-   * @param autofocus The autofocus of the preset
-   * @param autoiris  The autoiris of the preset
-   * @param tiltspeed The tiltspeed of the preset
-   * @param panspeed  The panspeed of the preset
-   * @param cameraId  The id of the camera associated with this preset.
-   * @param keyWords  The keywords of this preset
-   */
-  public Preset(Position pos, int zoom, int focus, int iris,
-                boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, List<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
-    this.tags.addAll(keyWords);
-  }
-
-  /**
    * Returns a JSON representation of this object.
    *
    * @return JSON representation of this object.
