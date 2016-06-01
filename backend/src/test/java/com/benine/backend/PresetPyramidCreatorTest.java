@@ -47,10 +47,20 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   public final void testCreatePositionsOneOne()
           throws InterruptedException, CameraConnectionException, TimeoutException {
     PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1);
-    Collection<Preset> presets =  (Collection)ppc.createPresets(cam);
+    Collection<Preset> actualPresets =  (Collection)ppc.createPresets(cam);
     Collection<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(new PresetFactory().createPreset(cam, 2, 30));
-    Assert.assertEquals(expectedPresets, presets);
+    Assert.assertEquals(expectedPresets, actualPresets);
+  }
+
+  @Test
+  public final void testCreatePositionsTwoByOne()
+          throws InterruptedException, CameraConnectionException, TimeoutException {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(2, 1, 1);
+    Collection<Preset> actualPresets =  (Collection)ppc.createPresets(cam);
+    Collection<Preset> expectedPresets = new ArrayList<Preset>();
+    Assert.assertEquals(expectedPresets, actualPresets);
+
   }
 
 }
