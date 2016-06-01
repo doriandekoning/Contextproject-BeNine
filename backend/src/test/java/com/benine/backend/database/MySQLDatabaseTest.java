@@ -225,14 +225,14 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("autoiris", new Object[]{1});
         result.addColumn("camera_ID", new Object[]{1});
         result.next();
-        Preset preset = database.getPresetsFromResultSet(result);
+        Preset preset = database.getIPCameraPresetFromResultSet(result);
         assertEquals(preset, new IPCameraPreset(new Position(1,1),1,1,1,true,1,1,true,1));
     }
 
     @Test
     public final void testGetFailedPresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
-        assertNull(database.getPresetsFromResultSet(result));
+        assertNull(database.getIPCameraPresetFromResultSet(result));
     }
 
     @Test
@@ -264,7 +264,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.getAllPresets();
         database.getAllPresetsCamera(1);
         verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
-        verify(logger).log("Presets could not be gotten from camera.", LogEvent.Type.CRITICAL);
     }
 
     @Test

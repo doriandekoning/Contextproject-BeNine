@@ -27,7 +27,7 @@ public class SimplePreset extends Preset {
    * @param tags of this preset
    */
   public SimplePreset(int cameraId, List<String> tags) {
-    super(cameraId);
+    this(cameraId);
     super.addTags(tags);
   }
 

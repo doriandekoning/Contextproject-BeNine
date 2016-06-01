@@ -104,7 +104,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = createAddSqlQuery(preset);
+      String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
     } catch (Exception e) {
       getLogger().log("Presets could not be added.", LogEvent.Type.CRITICAL);
@@ -133,7 +133,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       deletePreset(preset.getId());
-      String sql = createAddSqlQuery(preset);
+      String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
     } catch (Exception e) {
       getLogger().log("Presets could not be updated.", LogEvent.Type.CRITICAL);
@@ -166,7 +166,11 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(getSimplePresetsFromResultSet(resultset));
+        if (sql.contains("simplepresets")) {
+          list.add(getSimplePresetsFromResultSet(resultset));
+        } else {
+          list.add(getIPCameraPresetFromResultSet(resultset));
+        }
       }
     } catch (Exception e) {
       getLogger().log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
@@ -415,7 +419,7 @@ public class MySQLDatabase implements Database {
    * @param resultset the list with all the presets
    * @return The preset from the resultset
    */
-  public Preset getPresetsFromResultSet(ResultSet resultset) {
+  public Preset getIPCameraPresetFromResultSet(ResultSet resultset) {
     try {
       Position pos = new Position(resultset.getInt("pan"), resultset.getInt("tilt"));
       int zoom = resultset.getInt("zoom");
@@ -450,16 +454,6 @@ public class MySQLDatabase implements Database {
       getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
-  }
-
-  /**
-   * Creates a sql query to insert a preset in the database.
-   *
-   * @param preset The preset to insert
-   * @return The query
-   */
-  public String createAddSqlQuery(Preset preset) {
-    return preset.createAddSqlQuery();
   }
 
   /**
