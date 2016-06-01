@@ -6,12 +6,16 @@ import com.benine.backend.ServerController;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 
 
@@ -31,7 +35,7 @@ public class EditPresetHandler extends RequestHandler {
     Boolean overwrite = false;
     
     String tags = request.getParameter("tags");
-    List<String> tagList = Arrays.asList("none");
+    List<String> tagList = new ArrayList<String>();
     if (tags != null) {
       tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
     } 
