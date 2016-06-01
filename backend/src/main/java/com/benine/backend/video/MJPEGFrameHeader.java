@@ -78,4 +78,7 @@ public class MJPEGFrameHeader {
     return this.boundary;
   }
 
+  public void setContentLength(int length) {
+    this.contentlength = length;
+  }
 }

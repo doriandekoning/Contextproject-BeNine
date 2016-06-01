@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
+import com.benine.backend.video.ResizableStreamDistributer;
 import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
@@ -38,7 +39,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
       MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
-      StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
+      StreamDistributer distributer = new ResizableStreamDistributer(streamReaderMJPEG, 640, 480);
 
       // Set the headers
       setHeaders(streamReaderMJPEG, res);

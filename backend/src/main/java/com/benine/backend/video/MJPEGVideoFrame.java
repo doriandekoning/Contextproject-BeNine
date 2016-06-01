@@ -37,4 +37,8 @@ public class MJPEGVideoFrame {
   public byte[] getHeaderBytes() {
     return header.getString().getBytes();
   }
+
+  public void setImage(byte[] image) {
+    this.image = image;
+  }
 }
