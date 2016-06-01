@@ -2,10 +2,8 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.StreamNotAvailableException;
 
@@ -20,9 +18,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
-
 
 public class EditPresetHandler extends RequestHandler {
   
@@ -39,20 +34,17 @@ public class EditPresetHandler extends RequestHandler {
     Boolean overwriteTag = true;
         
     String camID = request.getParameter("camera");
-    CameraController cameraController = ServerController.getInstance().getCameraController();
-    IPCamera ipcam = (IPCamera) cameraController.getCameraById(Integer.parseInt(camID));
-    
+    IPCamera ipcam = (IPCamera) ServerController.getInstance().getCameraController()
+        .getCameraById(Integer.parseInt(camID));
+        
+    int presetID = Integer.parseInt(request.getParameter("presetid"));
+    Preset preset = ServerController.getInstance().getPresetController().getPresetById(presetID);
+   
     String tags = request.getParameter("tags");
     List<String> tagList = new ArrayList<String>();
     if (tags != null) {
       tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-    } 
-    
-    int presetID = Integer.parseInt(request.getParameter("presetid"));
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    Preset preset = presetController.getPresetById(presetID);
-   
-    
+    }
     if (overwriteTag == true) {
       updateTag(preset, tagList);
     }
@@ -60,16 +52,16 @@ public class EditPresetHandler extends RequestHandler {
     Boolean overwritePreset = true;
     if (overwritePreset == true) {
       try {
-        CreatePresetHandler.setPreset(ipcam, tagList);
-      } catch (StreamNotAvailableException e) {
-        e.printStackTrace();
-      } catch (SQLException e) {
-        e.printStackTrace();
+        Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
+        newPreset.setId(presetID);
+        ServerController.getInstance().getDatabase().updatePreset(newPreset);
+      } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
+        getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
+        respondFailure(request,res);
       } catch (CameraConnectionException e) {
-        e.printStackTrace();
-      } catch (MalformedURIException e) {
-        e.printStackTrace();
-      }
+        getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
+        respondFailure(request,res);
+      } 
       
     }
     
