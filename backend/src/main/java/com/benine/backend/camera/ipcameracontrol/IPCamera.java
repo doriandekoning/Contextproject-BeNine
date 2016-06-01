@@ -115,7 +115,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       timeStamps.put(command, date.getTime());
       attributes.put(command, res);
     }
-    return attributes.get("%23APC");
+    return attributes.get(command);
   }
   
   /**
@@ -189,8 +189,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getFocusPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GF");
-    res = verifyResponse(res, "gf");
+    String res = getValue("%23GF", "gf");
     return Integer.valueOf(res, 16) - 1365;
   }
 
@@ -238,8 +237,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoFocusOn() throws CameraConnectionException {
-    String response = sendControlCommand("%23D1");
-    response = verifyResponse(response, "d1");
+    String response = getValue("%23D1", "d1");
     return Integer.parseInt(response) == 1;
   }
   
@@ -259,8 +257,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException {
-    String response = sendControlCommand("%23D3");
-    response = verifyResponse(response, "d3");
+    String response = getValue("%23D3", "d3");
     return Integer.parseInt(response) == 1;
   }
   
@@ -285,9 +282,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getIrisPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GI");
-    res = verifyResponse(res, "gi");
-    return Integer.valueOf(res.substring(0, 3), 16) - 1365;
+    String response = getValue("%23GI", "gi");
+    return Integer.valueOf(response.substring(0, 3), 16) - 1365;
   }
   
   /**
@@ -312,9 +308,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getZoomPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GZ");
-    res = verifyResponse(res, "gz");
-    return Integer.valueOf(res, 16) - 1365;
+    String response = getValue("%23GZ", "gz");
+    return Integer.valueOf(response, 16) - 1365;
   }
   
   /**
