@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 
 public class CreatePresetHandler extends RequestHandler {
@@ -46,13 +49,11 @@ public class CreatePresetHandler extends RequestHandler {
 
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
-      String tags= request.getParameter("tags");
-      List<String> tagList = null;
+      String tags = request.getParameter("tags");
+      List<String> tagList = new ArrayList<String>();
       if (tags != null) {
-      tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-      } else {
-        tagList = Arrays.asList("none");
-      }
+        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+      } 
       
       if (camera instanceof IPCamera) {
         IPCamera ipcam = (IPCamera) camera;
