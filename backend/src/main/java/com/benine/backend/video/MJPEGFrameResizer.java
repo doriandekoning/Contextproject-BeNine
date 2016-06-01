@@ -54,13 +54,17 @@ public class MJPEGFrameResizer {
       BufferedImage inputimg = ImageIO.read(new ByteArrayInputStream(image));
 
       // Convert input image to a faster color model.
-      BufferedImage img = new BufferedImage(inputimg.getWidth(), inputimg.getHeight(), BufferedImage.TYPE_INT_RGB);
+      BufferedImage img = new BufferedImage(inputimg.getWidth(), inputimg.getHeight(),
+              BufferedImage.TYPE_INT_RGB);
+
       img.getGraphics().drawImage(inputimg, 0, 0, null);
 
       BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
       Graphics2D graphics = resized.createGraphics();
 
-      graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+      graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+              RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
       graphics.drawImage(img, 0, 0, width, height, 0, 0, img.getWidth(), img.getHeight(), null);
       graphics.dispose();
 

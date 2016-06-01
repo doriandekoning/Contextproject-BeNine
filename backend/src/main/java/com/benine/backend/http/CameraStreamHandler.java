@@ -68,7 +68,10 @@ public class CameraStreamHandler extends CameraRequestHandler {
     if (ServerController.getInstance().getConfig().getValue("stream_compression").equals("true")
             && validateResizeArguments(width, height)) {
 
-      return new ResizableStreamDistributer(reader, Integer.parseInt(width), Integer.parseInt(height));
+      int w = Integer.parseInt(width);
+      int h = Integer.parseInt(height);
+
+      return new ResizableStreamDistributer(reader, w, h);
     } else {
       return new StreamDistributer(reader);
     }

@@ -13,6 +13,8 @@ public class ResizableStreamDistributer extends StreamDistributer {
    * Creates a new StreamDistributer object from a StreamReader.
    * It provides an outputstream and registrers the distributer to the reader.
    * @param reader  A StreamReader object.
+   * @param width   The width to resize to.
+   * @param height  The height to resize to.
    */
   public ResizableStreamDistributer(StreamReader reader, int width, int height) {
     super(reader);

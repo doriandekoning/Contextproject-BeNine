@@ -75,6 +75,7 @@ public class MJPEGStreamReader extends StreamReader {
 
   /**
    * Notify the observers about the header and the image.
+   * @param frame The VideoFrame to send to the distributers.
    */
   private void sendToDistributers(VideoFrame frame) {
     setChanged();
