@@ -31,7 +31,8 @@ public class EditPresetHandler extends RequestHandler {
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
     
-    Boolean overwriteTag = true;
+    String overwriteTag = request.getParameter("overwriteTag");
+    String overwritePosition = request.getParameter("overwriteposition");
         
     String camID = request.getParameter("camera");
     IPCamera ipcam = (IPCamera) ServerController.getInstance().getCameraController()
@@ -45,16 +46,13 @@ public class EditPresetHandler extends RequestHandler {
     if (tags != null) {
       tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
     }
-    if (overwriteTag == true) {
+    if (overwriteTag.equals("true")) {
       updateTag(preset, tagList);
     }
     
-    Boolean overwritePreset = true;
-    if (overwritePreset == true) {
+    if (overwritePosition.equals("true")) {
       try {
-        Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
-        newPreset.setId(presetID);
-        ServerController.getInstance().getDatabase().updatePreset(newPreset);
+        updatePosition(ipcam,tagList,presetID);
       } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
         getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
         respondFailure(request,res);
@@ -64,8 +62,6 @@ public class EditPresetHandler extends RequestHandler {
       } 
       
     }
-    
-    preset.setId(presetID);
     
     respondSuccess(request, res);
     request.setHandled(true);
@@ -82,4 +78,25 @@ public class EditPresetHandler extends RequestHandler {
     preset.removeTags();
     preset.addTags(tagList);
   }
+  
+  /**
+   * 
+   * @param ipcam                         The camera object. 
+   * @param tagList                       The tags belonging to the preset.
+   * @param presetID                      The id of the preset. 
+   * @throws IOException                  If the image cannot be created.
+   * @throws StreamNotAvailableException  If the camera does not have a stream.
+   * @throws SQLException                 If the preset cannot be written to the database.
+   * @throws CameraConnectionException    If the camera cannot be reached.
+   * @throws MalformedURIException        If there is an error in the request.
+   */
+  public void updatePosition(IPCamera ipcam, List<String> tagList, int presetID) throws 
+  IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
+  MalformedURIException {
+    Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
+    newPreset.setId(presetID);
+    ServerController.getInstance().getDatabase().updatePreset(newPreset);
+  }
+  
+  
 }
