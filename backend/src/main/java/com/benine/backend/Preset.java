@@ -4,8 +4,8 @@ import com.benine.backend.camera.Position;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -160,7 +160,7 @@ public class Preset {
    * Adds a list of keywords to this class.
    * @param tags a list of keywords
    */
-  public void addTags(List<String> tags) {
+  public void addTags(Collection<String> tags) {
     this.tags.addAll(tags);
   }
 

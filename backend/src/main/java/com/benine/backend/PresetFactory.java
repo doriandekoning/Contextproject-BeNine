@@ -1,6 +1,8 @@
 package com.benine.backend;//TODO add Javadoc comment
 
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.util.Collection;
 
@@ -35,6 +37,7 @@ public class PresetFactory {
     preset.setCameraId(cameraId);
     return preset;
   }
+
   /**
    * Creates a new preset based on the parameters supplied.
    * @param pos       The position of this preset.
@@ -52,6 +55,26 @@ public class PresetFactory {
                              boolean autoiris, int cameraId, Collection<String> tags) {
     Preset preset = createPreset(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
     preset.addTags(tags);
+    return preset;
+  }
+
+  /**
+   * Creates a preset using the current camera parameters.
+   * @param cam IPCamera to create the preset of
+   * @param panSpeed the panspeed for the preset
+   * @param tiltSpeed the tiltspeed of the preset
+   */
+  public Preset createPreset(IPCamera cam, int panSpeed, int tiltSpeed) throws CameraConnectionException {
+    Preset preset = new Preset();
+    preset.setCameraId(cam.getId());
+    preset.setPosition(cam.getPosition());
+    preset.setZoom(cam.getZoomPosition());
+    preset.setFocus(cam.getFocusPosition());
+    preset.setIris(cam.getIrisPosition());
+    preset.setPanspeed(2);
+    preset.setTiltspeed(15);
+    preset.setAutoiris(cam.isAutoIrisOn());
+    preset.setAutofocus(cam.isAutoFocusOn());
     return preset;
   }
 
