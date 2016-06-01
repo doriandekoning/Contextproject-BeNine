@@ -1,6 +1,6 @@
 package com.benine.backend;
 
-import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.MovingCamera;
 
 import java.util.Collection;
 
@@ -14,6 +14,6 @@ public interface AutoPresetCreator {
    * @param cam the camera to create presets for.
    * @return A collection of the created presets.
    */
-  Collection<Preset> createPresets(Camera cam);
+  Collection<Preset> createPresets(MovingCamera cam);
 
 }
