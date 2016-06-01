@@ -62,7 +62,7 @@ public class EditPresetHandler extends RequestHandler {
     }
     
     if (overwritePreset == true) {
-      CreatePresetHandler.setPreset(ipcam, tagList);
+     // CreatePresetHandler.setPreset(ipcam, tagList);
       
     }
     
