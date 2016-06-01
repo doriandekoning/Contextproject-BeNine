@@ -373,18 +373,20 @@ input[type=range]:focus {
     height: 300px;
 }
 .preset-overlay {
-  position: relative;
-  float: left;
-  cursor: pointer;
+	position: relative;
+
+	cursor: pointer;
 }
 
-.preset-overlay:before {
-  content: "Editing";
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255,255,255, 0.4);
+.preset-overlay:after {
+	font-family: "Glyphicons Halflings";
+	content:"\270f";
+	display: block;
+	font-size: 300%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255,255,255, 0.3);
 }
