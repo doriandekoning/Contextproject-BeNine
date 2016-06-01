@@ -7,8 +7,6 @@ import java.util.Observable;
 
 public abstract class StreamReader extends Observable implements Runnable {
 
-  private boolean streamDisconnected;
-
   private BufferedInputStream bufferedStream;
 
   private Stream stream;
@@ -19,7 +17,6 @@ public abstract class StreamReader extends Observable implements Runnable {
    */
   public StreamReader(Stream stream) throws IOException {
     this.stream = stream;
-    this.streamDisconnected = false;
     this.bufferedStream = new BufferedInputStream(stream.getInputStream());
   }
 
@@ -29,14 +26,6 @@ public abstract class StreamReader extends Observable implements Runnable {
    * @throws IOException when the image cannot be read from a buffer.
    */
   public abstract BufferedImage getSnapShot() throws IOException;
-
-  /**
-   * Returns true if the stream is disconnected, false otherwise.
-   * @return  A boolean representing disconnected or note.
-   */
-  public boolean isStreamDisconnected() {
-    return streamDisconnected;
-  }
 
   @Override
   public void run() {

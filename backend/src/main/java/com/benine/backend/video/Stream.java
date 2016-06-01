@@ -23,9 +23,10 @@ public class Stream extends Observable {
   private Logger logger;
   private InputStream in;
   private PipedOutputStream out;
+  private PipedInputStream pipedInputStream;
   private Thread streamThread;
 
-  private final int BUFFER= (int) Math.pow(2, 13);
+  private final int BUFFER = 8192;
 
   /**
    * Constructor for a new stream object.
@@ -39,6 +40,7 @@ public class Stream extends Observable {
     this.connected = false;
     this.logger = ServerController.getInstance().getLogger();
     this.out = new PipedOutputStream();
+    this.pipedInputStream = new PipedInputStream(out);
 
     this.streamThread = new Thread() {
       public void run() {
@@ -57,12 +59,12 @@ public class Stream extends Observable {
     while (true) {
       if (!connected) {
         openConnection();
-      }
-
-      try {
-        streamToOutputstream();
-      } catch (IOException e) {
-        connected = false;
+      } else {
+        try {
+          streamToOutputstream();
+        } catch (IOException e) {
+          connected = false;
+        }
       }
     }
   }
@@ -88,12 +90,11 @@ public class Stream extends Observable {
   /**
    * Opens a connection to the stream and reconnects on failure.
    */
-  public void openConnection() {
+  private void openConnection() {
     try {
       URLConnection conn = url.openConnection();
       this.connection = conn;
 
-      conn.setConnectTimeout(5000);
       conn.connect();
 
       this.connected = true;
@@ -103,6 +104,17 @@ public class Stream extends Observable {
     } catch (IOException e) {
       logger.log("Could not connect to stream " + url.toString()
               + ", attempting to reestablish.", LogEvent.Type.WARNING);
+
+      // Only retry once every 5 seconds.
+      wait(5000);
+    }
+  }
+
+  private void wait(int duration) {
+    try {
+      Thread.sleep(duration);
+    } catch (InterruptedException e) {
+      logger.log("Stream thread interrupted while sleeping", LogEvent.Type.INFO);
     }
   }
 
@@ -112,6 +124,6 @@ public class Stream extends Observable {
    * @throws IOException if the stream cannot be sent to the outputstream.
    */
   public InputStream getInputStream() throws IOException {
-      return new PipedInputStream(out);
+      return pipedInputStream;
   }
 }
