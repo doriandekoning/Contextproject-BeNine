@@ -67,21 +67,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
      }
    }
    
-   @Test
-   public void testUpdateTag() throws Exception{
-     setPath("/presets/createpreset?camera=1");
-
-     MultiMap<String> parameters = new MultiMap<>();
-     parameters.add("camera", "1");
-     setParameters(parameters);
-     PresetController presetController = mock(PresetController.class);
-     when(presetController.getPresetById(0)).thenReturn(preset);
-     ServerController.getInstance().setPresetController(presetController);
-     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-     verify(requestMock).setHandled(true);
-     
-   }
+  
    
    
    
