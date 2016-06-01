@@ -17,18 +17,15 @@ import java.util.Observable;
  */
 public class Stream extends Observable {
 
-  private URLConnection connection;
   private URL url;
   private boolean connected;
   private Logger logger;
   private InputStream in;
   private PipedOutputStream out;
   private PipedInputStream pipedInputStream;
-  private Thread streamThread;
 
-  private final int BUFFER = 8192;
-  private final int RECONNECT_DELAY = 5000;
-
+  private static final int BUFFER = 8192;
+  private static final int RECONNECT_DELAY = 5000;
 
   /**
    * Constructor for a new stream object.
@@ -44,7 +41,9 @@ public class Stream extends Observable {
     this.out = new PipedOutputStream();
     this.pipedInputStream = new PipedInputStream(out);
 
-    this.streamThread = new Thread() {
+    Thread streamThread = new Thread() {
+
+      @Override
       public void run() {
         process();
       }
@@ -57,8 +56,8 @@ public class Stream extends Observable {
   /**
    * Processes the stream, and maintains the connection.
    */
-  public void process() {
-    while (true) {
+  private void process() {
+    while (!Thread.interrupted()) {
       if (!connected) {
         openConnection();
       } else {
@@ -78,7 +77,7 @@ public class Stream extends Observable {
    * the stream.
    * @throws IOException If the stream cannot be read.
    */
-  public void streamToOutputstream() throws IOException {
+  private void streamToOutputstream() throws IOException {
     byte[] bytes = new byte[BUFFER];
     int bytesRead;
 
@@ -95,8 +94,6 @@ public class Stream extends Observable {
   private void openConnection() {
     try {
       URLConnection conn = url.openConnection();
-      this.connection = conn;
-
       conn.connect();
 
       this.connected = true;
