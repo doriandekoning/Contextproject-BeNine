@@ -84,6 +84,25 @@ public class IpcameraTest {
     assertEquals(180, res.getTilt(), 0.000001);
   }
   
+  @Test
+  public final void testGetPositionTwice() throws CameraConnectionException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    res = camera.getPosition();
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
+  @Test
+  public final void testGetPositionTwice3Seconds() throws CameraConnectionException, InterruptedException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    Thread.sleep(2100); 
+    res = camera.getPosition();
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetPositionException() throws CameraConnectionException {
     setCameraBehaviour("APC", "aPP80008000");

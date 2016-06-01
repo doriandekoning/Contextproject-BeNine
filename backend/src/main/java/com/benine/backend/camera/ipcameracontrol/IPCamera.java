@@ -23,7 +23,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -33,7 +35,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera {
 
   private String ipaddress;
-
+  
+  private Map<String, String> attributes = new HashMap<>();
+  private Map<String, Long> timeStamps = new HashMap<>();
 
   /**
    *  Create a new IP Camera object.
@@ -88,10 +92,30 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   @Override
   public Position getPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23APC");
-    res = verifyResponse(res, "aPC");
+    String res = getValue("%23APC", "aPC");
     return new Position(convertPanToDouble(res.substring(0, 4)),
                                   convertTiltToDouble(res.substring(4)));
+  }
+  
+  /**
+   * Checks if the requested value is already request from the camera in the last 2 seconds.
+   * Otherwise it requests the value from the camera and saves it.
+   * @param command for the requested value.
+   * @param verifyResponse to verify the response from the camera.
+   * @return the requested value
+   * @throws IpcameraConnectionException when the requested value can not be retrieved.
+   */
+  private String getValue(String command, String verifyResponse)
+                                                      throws IpcameraConnectionException {
+    Date date = new Date();
+
+    if (timeStamps.get(command) == null || date.getTime() - timeStamps.get(command) > 2000) {
+      String res = sendControlCommand(command);
+      res = verifyResponse(res, verifyResponse);
+      timeStamps.put(command, date.getTime());
+      attributes.put(command, res);
+    }
+    return attributes.get("%23APC");
   }
   
   /**
