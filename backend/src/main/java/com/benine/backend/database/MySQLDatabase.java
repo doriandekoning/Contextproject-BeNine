@@ -2,11 +2,14 @@ package com.benine.backend.database;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
+
+import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.*;
@@ -142,16 +145,28 @@ public class MySQLDatabase implements Database {
   @Override
   public ArrayList<Preset> getAllPresets() {
     ArrayList<Preset> list = new ArrayList<Preset>();
+    list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
+          + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
+          + " FROM presetsDatabase.presets"));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
+          + " FROM presetsDatabase.simplepresets"));
+    return list;
+  }
+  
+  /**
+   * Method to get all presets based on a SQL statement
+   * @param sql statement to retrieve the presets.
+   * @return Presets from the database.
+   */
+  private ArrayList<Preset> getAllPresetsSQL(String sql) {
+    ArrayList<Preset> list = new ArrayList<Preset>();
     Statement statement = null;
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT id, pan, tilt, zoom, focus,"
-          + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets";
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(getPresetsFromResultSet(resultset));
+        list.add(getSimplePresetsFromResultSet(resultset));
       }
     } catch (Exception e) {
       getLogger().log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
@@ -164,22 +179,11 @@ public class MySQLDatabase implements Database {
   @Override
   public ArrayList<Preset> getAllPresetsCamera(int cameraId) {
     ArrayList<Preset> list = new ArrayList<Preset>();
-    Statement statement = null;
-    ResultSet resultset = null;
-    try {
-      statement = connection.createStatement();
-      String sql = "SELECT id, pan, tilt, zoom, focus, iris,"
+    list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus, iris,"
           + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets WHERE camera_ID = " + cameraId;
-      resultset = statement.executeQuery(sql);
-      while (resultset.next()) {
-        list.add(getPresetsFromResultSet(resultset));
-      }
-    } catch (Exception e) {
-      getLogger().log("Presets could not be gotten from camera.", LogEvent.Type.CRITICAL);
-    } finally {
-      close(statement, resultset);
-    }
+          + " FROM presetsDatabase.presets WHERE camera_ID = " + cameraId));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
+          + " FROM presetsDatabase.simplepresets WHERE camera_ID = " + cameraId));
     return list;
   }
 
@@ -423,8 +427,25 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       // String image = resultset.getString("image");
       int id = resultset.getInt("camera_ID");
-      return new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
+      return new IPCameraPreset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
           autoIris, id);
+    } catch (Exception e) {
+      getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      return null;
+    }
+  }
+  
+  /**
+   * Getter for the simple presets from the list of presets.
+   *
+   * @param resultset the list with all the presets
+   * @return The preset from the resultset
+   */
+  private Preset getSimplePresetsFromResultSet(ResultSet resultset) {
+    try {
+      // String image = resultset.getString("image");
+      int id = resultset.getInt("camera_ID");
+      return new SimplePreset(id);
     } catch (Exception e) {
       getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
@@ -438,20 +459,7 @@ public class MySQLDatabase implements Database {
    * @return The query
    */
   public String createAddSqlQuery(Preset preset) {
-    int auto = 0;
-    if (preset.isAutofocus()) {
-      auto = 1;
-    }
-    int autoir = 0;
-    if (preset.isAutoiris()) {
-      autoir = 1;
-    }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + preset.getId() + ","
-        + preset.getPosition().getPan() + "," + preset.getPosition().getTilt()
-        + "," + preset.getZoom() + "," + preset.getFocus()
-        + "," + preset.getIris() + "," + auto + "," + preset.getPanspeed() + ","
-        + preset.getTiltspeed() + "," + autoir + ",'" + preset.getImage() + "',"
-        + preset.getCameraId() + ")";
+    return preset.createAddSqlQuery();
   }
 
   /**

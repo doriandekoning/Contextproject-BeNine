@@ -2,6 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
@@ -67,7 +68,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
@@ -89,7 +90,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeletePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addPreset(preset);
         database.deletePreset(1);
@@ -102,7 +103,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testUpdatePreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         preset.setId(1);
 
         database.connectToDatabaseServer();
@@ -129,10 +130,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetAllPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addPreset(preset);
-        ArrayList<Preset> result = database.getAllPresets();
         database.closeConnection();
         verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
@@ -153,7 +153,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetPresetsCamera() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.addPreset(preset);
@@ -226,7 +226,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("camera_ID", new Object[]{1});
         result.next();
         Preset preset = database.getPresetsFromResultSet(result);
-        assertEquals(preset, new Preset(new Position(1,1),1,1,1,true,1,1,true,1));
+        assertEquals(preset, new IPCameraPreset(new Position(1,1),1,1,1,true,1,1,true,1));
     }
 
     @Test
@@ -263,7 +263,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.setConnection(connection);
         database.getAllPresets();
         database.getAllPresetsCamera(1);
-        verify(logger).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+        verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
         verify(logger).log("Presets could not be gotten from camera.", LogEvent.Type.CRITICAL);
     }
 
@@ -390,7 +390,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddTagToPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addTagToPreset("tag1", preset);
         database.closeConnection();
@@ -402,7 +402,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testDeleteTagFromPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addTagToPreset("tag1", preset);
         database.deleteTagFromPreset("tag1", preset);
@@ -415,7 +415,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testGetTagsFromPreset() throws SQLException {
-        Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.getTagsFromPreset(preset);
         database.closeConnection();

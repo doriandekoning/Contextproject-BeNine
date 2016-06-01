@@ -1,9 +1,8 @@
 package com.benine.backend.camera;
 
-import org.json.simple.JSONObject;
-
 import com.benine.backend.video.StreamType;
 
+import org.json.simple.JSONObject;
 
 /**
  * Interface for communication with remote camera's.
