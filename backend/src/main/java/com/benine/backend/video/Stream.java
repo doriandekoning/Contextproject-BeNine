@@ -17,15 +17,14 @@ import java.util.Observable;
  */
 public class Stream extends Observable {
 
+  private static final int BUFFER = 8192;
+  private static final int RECONNECT_DELAY = 5000;
   private URL url;
   private boolean connected;
   private Logger logger;
   private InputStream in;
   private PipedOutputStream out;
   private PipedInputStream pipedInputStream;
-
-  private static final int BUFFER = 8192;
-  private static final int RECONNECT_DELAY = 5000;
 
   /**
    * Constructor for a new stream object.
@@ -75,6 +74,7 @@ public class Stream extends Observable {
    * This prevents the stream from ending if the connection to the
    * stream ends, because it does not send the '-1' termination symbol to
    * the stream.
+   *
    * @throws IOException If the stream cannot be read.
    */
   private void streamToOutputstream() throws IOException {
@@ -109,6 +109,10 @@ public class Stream extends Observable {
     }
   }
 
+  /**
+   * Halts a thread for a specified duration and logs it to the logger.
+   * @param duration  Duration in milliseconds.
+   */
   private void wait(int duration) {
     try {
       Thread.sleep(duration);
@@ -123,6 +127,6 @@ public class Stream extends Observable {
    * @throws IOException if the stream cannot be sent to the outputstream.
    */
   public InputStream getInputStream() throws IOException {
-      return pipedInputStream;
+    return pipedInputStream;
   }
 }

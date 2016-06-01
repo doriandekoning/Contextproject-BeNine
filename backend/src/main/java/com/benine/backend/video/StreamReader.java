@@ -13,6 +13,7 @@ public abstract class StreamReader extends Observable implements Runnable {
 
   /**
    * Constructor for a new StreamReader object.
+   * @param stream The stream to create the streamreader for.
    * @throws IOException if there is an error getting the stream, rendering the object useless.
    */
   public StreamReader(Stream stream) throws IOException {
