@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
  */
 public class MJPEGFrameHeader {
 
-  private String headerString;
   private int contentlength;
   private String boundary;
   private String contenttype;
@@ -19,7 +18,7 @@ public class MJPEGFrameHeader {
    * @param header Header in bytes.
    */
   public MJPEGFrameHeader(byte[] header) {
-    this.headerString = new String(header, StandardCharsets.UTF_8);
+    String headerString = new String(header, StandardCharsets.UTF_8);
 
     this.boundary = "--polycast";
     this.contenttype = "image/jpeg";
@@ -45,6 +44,10 @@ public class MJPEGFrameHeader {
     }
   }
 
+  /**
+   * Returns a string formatted mjpeg header.
+   * @return a String representation of the header.
+   */
   public String getString() {
     StringBuilder builder = new StringBuilder(128);
 
@@ -59,11 +62,20 @@ public class MJPEGFrameHeader {
     return builder.toString();
   }
 
+  /**
+   * Returns the content length of this header.
+   * @return  Integer value representing content length.
+   */
   public int getContentlength() {
     return this.contentlength;
   }
 
+  /**
+   * Returns the boundary of this header.
+   * @return  A String representation of the boundary.
+   */
   public String getBoundary() {
     return this.boundary;
+  }
 
 }

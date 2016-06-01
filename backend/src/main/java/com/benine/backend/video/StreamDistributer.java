@@ -31,12 +31,20 @@ public class StreamDistributer implements Observer {
   @Override
   public void update(Observable o, Object arg) {
     if (arg instanceof MJPEGVideoFrame) {
-      try {
-        outputStream.write(((MJPEGVideoFrame) arg).getHeaderBytes());
-        outputStream.write(((MJPEGVideoFrame) arg).getImage());
-      } catch (IOException e) {
-        deregister();
-      }
+      writeVideoFrame((MJPEGVideoFrame) arg);
+    }
+  }
+
+  /**
+   * Writes a videoframe to the outputstream.
+   * @param frame A VideoFrame object.
+   */
+  public void writeVideoFrame(MJPEGVideoFrame frame) {
+    try {
+      outputStream.write(frame.getHeaderBytes());
+      outputStream.write(frame.getImage());
+    } catch (IOException e) {
+      deregister();
     }
   }
 
