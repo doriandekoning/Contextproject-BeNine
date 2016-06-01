@@ -1,6 +1,6 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Preset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.camera.Position;
 import org.eclipse.jetty.util.MultiMap;
 import org.json.simple.JSONArray;

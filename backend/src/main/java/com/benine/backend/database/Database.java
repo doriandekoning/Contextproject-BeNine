@@ -1,6 +1,6 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Preset;
+import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
 import java.sql.SQLException;

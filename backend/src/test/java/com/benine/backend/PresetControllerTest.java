@@ -1,6 +1,9 @@
 package com.benine.backend;
 
 import com.benine.backend.database.MySQLDatabase;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

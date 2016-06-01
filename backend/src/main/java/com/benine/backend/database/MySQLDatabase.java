@@ -2,7 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.Preset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;

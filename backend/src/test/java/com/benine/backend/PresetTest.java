@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.benine.backend.camera.Position;
+import com.benine.backend.preset.Preset;
 
 import java.util.ArrayList;
 import java.util.HashSet;

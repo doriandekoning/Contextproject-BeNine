@@ -1,8 +1,8 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;

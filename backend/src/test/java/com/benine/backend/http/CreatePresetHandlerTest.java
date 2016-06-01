@@ -8,7 +8,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,8 +15,8 @@ import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -26,7 +25,6 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
 
 
 public class CreatePresetHandlerTest extends RequestHandlerTest {
