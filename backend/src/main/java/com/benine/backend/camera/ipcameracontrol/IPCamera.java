@@ -24,6 +24,7 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -502,15 +503,15 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @param timeout the timeout after which to give up waiting
    * @return true if the camera is at the specified location false otherwise
    */
-  public boolean waitUntilAtPosition(Position pos, int zoom, long timeout)
-          throws InterruptedException, CameraConnectionException {
+  public void waitUntilAtPosition(Position pos, int zoom, long timeout)
+          throws InterruptedException, CameraConnectionException, TimeoutException {
     long timedOutTime = System.currentTimeMillis() + timeout;
-    while(System.currentTimeMillis() < timedOutTime ) {
+    do {
       if (getPosition().equals(pos) && zoom == getZoomPosition()) {
-        return true;
+        return;
       }
       Thread.sleep(MOVE_WAIT_DURATION);
-    }
-    return false;
+    } while (System.currentTimeMillis() < timedOutTime );
+    throw new TimeoutException();
   }
 }

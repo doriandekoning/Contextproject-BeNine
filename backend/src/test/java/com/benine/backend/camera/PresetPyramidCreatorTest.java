@@ -2,6 +2,7 @@ package com.benine.backend.camera;//TODO add Javadoc comment
 
 import com.benine.backend.AutoPresetCreatorTest;
 import com.benine.backend.Preset;
+import com.benine.backend.PresetFactory;
 import com.benine.backend.PresetPyramidCreator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,14 +16,9 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
 
   @Test
   public final void testCreate() {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 3);
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1);
     ArrayList<Preset> expected = new ArrayList<>();
-    expected.add(null);
-    expected.add(null);
-    expected.add(null);
-    expected.add(null);
-    expected.add(null);
-    expected.add(null);
-    Assert.assertEquals(expected, ppc.createPresets(null));
+    //expected.add(new PresetFactory().createPreset(0, 180), )
+
   }
 }

@@ -2,6 +2,7 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.*;
 
 import org.json.simple.JSONObject;
 import com.benine.backend.camera.CameraConnectionException;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Test class to test the IP Camera class.
@@ -28,24 +30,24 @@ public class IpcameraTest {
   
   @Before
   public final void setUp() throws InvalidCameraTypeException {
-    camera = Mockito.spy(new IPCamera("test"));
+    camera = spy(new IPCamera("test"));
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
-    Mockito.doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
+    doReturn(response).when(camera).sendCommand("aw_ptz?cmd=%23" + cmd + "&res=1");
   }
   
   @Test
   public final void testGetMACAddress() throws CameraConnectionException, IOException {
     String ipcameraInfo = IOUtils.toString(new FileInputStream("resources" + File.separator + "test" + File.separator + "ipcameraInfoTest.txt"));
-    Mockito.doReturn(ipcameraInfo).when(camera).sendCommand("getinfo?FILE=1");   
+    doReturn(ipcameraInfo).when(camera).sendCommand("getinfo?FILE=1");
     String actual = camera.getMacAddress();
     assertEquals("8C-C1-21-F0-46-C9", actual);
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetMACAddressFails() throws CameraConnectionException {
-    Mockito.doReturn("").when(camera).sendCommand("getinfo?FILE=1");      
+    doReturn("").when(camera).sendCommand("getinfo?FILE=1");
     camera.getMacAddress();
   }
 
@@ -195,5 +197,56 @@ public class IpcameraTest {
     Assert.assertFalse(camera1.isInUse());
     camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());
+  }
+
+  @Test
+  public void testWaitUntilAlreadyAtPos()
+          throws CameraConnectionException, InterruptedException, TimeoutException {
+    IPCamera cam  = spy(new IPCamera("12"));
+    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
+    doReturn(30).when(cam).getZoomPosition();
+
+    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 300);
+  }
+
+  @Test
+  public void testWaitUntilTimeOutSmallAlreadyAtLoc()
+          throws CameraConnectionException, InterruptedException, TimeoutException {
+    IPCamera cam  = spy(new IPCamera("12"));
+    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
+    doReturn(30).when(cam).getZoomPosition();
+
+    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 1);
+  }
+
+  @Test (expected =TimeoutException.class)
+  public void testWaitUntillNotAtZoom()
+          throws CameraConnectionException, InterruptedException, TimeoutException {
+    IPCamera cam  = spy(new IPCamera("12"));
+    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
+    doReturn(30).when(cam).getZoomPosition();
+
+    cam.waitUntilAtPosition(new Position(10.0, 1.0), 0, 1);
+  }
+
+  @Test (expected =TimeoutException.class)
+  public void testWaitUntilTimeOutNotAtLocSmallTimeout()
+          throws CameraConnectionException, InterruptedException, TimeoutException {
+    IPCamera cam  = spy(new IPCamera("12"));
+    doReturn(new Position(2, -1)).when(cam).getPosition();
+    doReturn(30).when(cam).getZoomPosition();
+
+    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 1);
+  }
+
+
+  @Test
+  public void testWaitUntilAlreadyAtAfterMultipleTimeouts()
+          throws CameraConnectionException, InterruptedException, TimeoutException {
+    IPCamera cam  = spy(new IPCamera("12"));
+    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
+    doReturn(0, 10, 30).when(cam).getZoomPosition();
+
+    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 700);
   }
 }

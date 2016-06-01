@@ -6,6 +6,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Creates presets according to a pyramid model.
@@ -31,7 +32,12 @@ public class PresetPyramidCreator implements AutoPresetCreator {
     for (int level = 0; level < levels; level++ ) {
       for (int row = 0; row < rows; row++ ) {
         for (int column = 0; column < columns; column++ ) {
-          presets.add(createPresetAtGridPos(cam, column, row));
+          try {
+            presets.add(createPresetAtGridPos(cam, column, row));
+          } catch (TimeoutException e) {
+            ServerController.getInstance().getLogger()
+                .log("Unable to move camera when auto generating presets.", LogEvent.Type.WARNING);
+          }
         }
       }
       cam.moveTo(camStartPos, 30, 2);
@@ -39,7 +45,12 @@ public class PresetPyramidCreator implements AutoPresetCreator {
 
       int newZoomPos = cam.getZoomPosition() + 500;
       cam.zoomTo(newZoomPos);
-      cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
+      try {
+        cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
+      } catch (TimeoutException e) {
+        ServerController.getInstance().getLogger()
+            .log("Unable to move camera when auto generating presets.", LogEvent.Type.WARNING);
+      }
 
     }
     return presets;
@@ -53,7 +64,7 @@ public class PresetPyramidCreator implements AutoPresetCreator {
    * @return the preset at the specified position
    */
   public Preset createPresetAtGridPos(IPCamera cam, int column, int row)
-          throws CameraConnectionException, InterruptedException {
+          throws CameraConnectionException, InterruptedException, TimeoutException {
     // TODO Determine position to move to
     int startZoom = cam.getZoomPosition();
     Position pos = new Position(-60, -30);
