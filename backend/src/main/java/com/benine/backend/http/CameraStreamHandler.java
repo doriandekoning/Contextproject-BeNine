@@ -65,13 +65,30 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
    */
   private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
+    if (ServerController.getInstance().getConfig().getValue("stream_compression").equals("true")
+            && validateResizeArguments(width, height)) {
+
+      return new ResizableStreamDistributer(reader, Integer.parseInt(width), Integer.parseInt(height));
+    } else {
+      return new StreamDistributer(reader);
+    }
+
+  }
+
+  /**
+   * Validates the resize arguments.
+   * @param width   Width argument.
+   * @param height  Height argument.
+   * @return True if valid, false otherwise.
+   */
+  private boolean validateResizeArguments(String width, String height) {
     try {
       int w = Integer.parseInt(width);
       int h = Integer.parseInt(height);
 
-      return new ResizableStreamDistributer(reader, w, h);
-    } catch (NumberFormatException | NullPointerException e) {
-      return new StreamDistributer(reader);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
     }
   }
 
