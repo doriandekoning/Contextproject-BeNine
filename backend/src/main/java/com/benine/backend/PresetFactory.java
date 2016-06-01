@@ -18,9 +18,9 @@ public class PresetFactory {
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
    * @param autofocus The autofocus of the preset
+   * @param panspeed  The panspeed of the preset
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
-   * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
    */
   public Preset createPreset(Position pos, int zoom, int focus, int iris,
@@ -71,8 +71,8 @@ public class PresetFactory {
     preset.setZoom(cam.getZoomPosition());
     preset.setFocus(cam.getFocusPosition());
     preset.setIris(cam.getIrisPosition());
-    preset.setPanspeed(2);
-    preset.setTiltspeed(15);
+    preset.setPanspeed(panSpeed);
+    preset.setTiltspeed(tiltSpeed);
     preset.setAutoiris(cam.isAutoIrisOn());
     preset.setAutofocus(cam.isAutoFocusOn());
     return preset;
