@@ -49,6 +49,18 @@ public class Position {
   public double getTilt() {
     return tilt;
   }
+
+  /**
+   * Returns a string representation of this position
+   * @return string representation of this positon
+   */
+  public String toString() {
+    return "Position{"
+            + "pan=" + pan
+            + ", tilt=" + tilt + '}';
+  }
+
+
   
   @Override
   public int hashCode() {

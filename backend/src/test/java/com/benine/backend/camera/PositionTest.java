@@ -61,7 +61,13 @@ public class PositionTest {
     Position position2 = new Position(1, 2.95);
     assertNotEquals(position1.hashCode(), position2.hashCode());
   }
-    
+
+
+  @Test
+  public void testToString() {
+    Position pos = new Position(42.42, 4.2);
+    Assert.assertEquals("Position{pan=42.42, tilt=4.2}", pos.toString());
+  }
     
 
 }
