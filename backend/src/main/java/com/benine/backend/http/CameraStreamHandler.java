@@ -28,6 +28,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
           throws IOException, ServletException {
 
     int camID = getCameraId(request);
+    String width = request.getParameter("width");
+    String height = request.getParameter("height");
 
     StreamReader streamReader = null;
     try {
@@ -39,7 +41,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
       MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
-      StreamDistributer distributer = new ResizableStreamDistributer(streamReaderMJPEG, 640, 480);
+      StreamDistributer distributer = selectDistributer(streamReader, width, height);
 
       // Set the headers
       setHeaders(streamReaderMJPEG, res);
@@ -52,6 +54,25 @@ public class CameraStreamHandler extends CameraRequestHandler {
     }
 
     request.setHandled(true);
+  }
+
+  /**
+   * Select a stream distributer based on if
+   *
+   * @param reader  The streamreader.
+   * @param width   The width of the image.
+   * @param height  The height of the image.
+   * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
+   */
+  private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
+    try {
+      int w = Integer.parseInt(width);
+      int h = Integer.parseInt(height);
+
+      return new ResizableStreamDistributer(reader, w, h);
+    } catch (NumberFormatException | NullPointerException e) {
+      return new StreamDistributer(reader);
+    }
   }
 
   /**
