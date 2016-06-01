@@ -27,6 +27,8 @@ public class Stream extends Observable {
   private Thread streamThread;
 
   private final int BUFFER = 8192;
+  private final int RECONNECT_DELAY = 5000;
+
 
   /**
    * Constructor for a new stream object.
@@ -106,7 +108,7 @@ public class Stream extends Observable {
               + ", attempting to reestablish.", LogEvent.Type.WARNING);
 
       // Only retry once every 5 seconds.
-      wait(5000);
+      wait(RECONNECT_DELAY);
     }
   }
 
