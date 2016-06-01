@@ -408,17 +408,12 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     json.put("inuse", isInUse());
-    try {
-      json.put("move", true);
-      json.put("zoom", true);
-      json.put("focus", true);
-      json.put("iris", true);
-      json.put("autofocus", isAutoFocusOn());
-      json.put("autoiris", isAutoIrisOn());
-    } catch (Exception e) {
-      logger.log("Failed to get the JSON representation of camera: " 
-                                                  + getId(), LogEvent.Type.CRITICAL);
-    }
+    json.put("move", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    json.put("iris", true);
+    json.put("autofocus", isAutoFocusOn());
+    json.put("autoiris", isAutoIrisOn());
     return  json; 
   }
 

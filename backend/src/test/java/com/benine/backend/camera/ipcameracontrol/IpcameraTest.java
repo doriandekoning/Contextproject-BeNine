@@ -171,7 +171,7 @@ public class IpcameraTest {
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
   
-  @Test
+  @Test(expected = IpcameraConnectionException.class)
   public final void testGetJSONFails() throws CameraConnectionException {
     IPCamera camera = new IPCamera("12");
     JSONObject json = new JSONObject();
@@ -181,7 +181,7 @@ public class IpcameraTest {
     json.put("iris", true);
     json.put("zoom", true);
     json.put("focus", true);
-    assertEquals(json, camera.toJSON());
+    camera.toJSON();
   }
   
   @Test

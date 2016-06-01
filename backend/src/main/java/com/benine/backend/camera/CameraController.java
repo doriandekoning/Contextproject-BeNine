@@ -128,8 +128,11 @@ public class CameraController {
     try {
       return camera.toJSON();
     } catch (CameraConnectionException e) {
+      getLogger().log("Failed to get the JSON representation of camera: " 
+          + camera.getId(), LogEvent.Type.CRITICAL);
       JSONObject json = new JSONObject();
-      json.put("id", Integer.valueOf(camera.getId()));
+      json.put("id", camera.getId());
+      json.put("unavailable", true);
       return json;
     }
   }
