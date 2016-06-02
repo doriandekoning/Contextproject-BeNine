@@ -40,6 +40,7 @@ public class ZoomPosition extends Position {
     return zoom;
   }
 
+  @Override
   public boolean equals(Object o) {
     if(super.equals(o)) {
       if ( o instanceof ZoomPosition ) {

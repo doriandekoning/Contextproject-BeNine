@@ -58,12 +58,12 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     double betweenHor = (curHorFov/(2*columns)) - ((columns-1)*(overlap*curHorFov));
     // Calculate start positions
 
-    double startPan = curPos.getPan() - ((columns-1)*betweenVer);
-    double startTilt = curPos.getTilt() - ((rows-1)*betweenHor);
+    double startPan = curPos.getPan() - ((columns-1)*betweenHor);
+    double startTilt = curPos.getTilt() - ((rows-1)*betweenVer);
 
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        positions.add(new Position(startPan + (betweenHor * column), startTilt + (betweenVer * row)));
+        positions.add(new Position(startPan + (2 * betweenHor * column), startTilt + (2 * betweenVer * row)));
       }
     }
 

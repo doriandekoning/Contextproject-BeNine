@@ -79,6 +79,13 @@ public class PositionTest {
   }
 
   @Test
+  public void testEqualsEqualDelta() {
+    Position pos1 = new Position(42.42, 2.3);
+    Position pos2 = new Position(42.42, 2.3003);
+    Assert.assertEquals(pos1, pos2);
+  }
+
+  @Test
   public void testEqualsPanNotEqual() {
     Position pos1 = new Position(2, 2.3);
     Position pos2 = new Position(42.42, 2.3);

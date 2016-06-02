@@ -14,6 +14,8 @@ import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import static org.mockito.Matchers.any;
@@ -73,41 +75,68 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions2x2x1()
           throws CameraConnectionException {
-    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 2, 1, 0).generatePositions(cam);
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(2, 2, 1, 0).generatePositions(cam);
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
-    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/2),
-            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/2),
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
+            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
             cam.getZoomPosition()));
-    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/2),
-            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/2),
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
+            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
             cam.getZoomPosition()));
-    Assert.assertEquals(expectedPositions, actualPositons);
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/4),
+            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
+            cam.getZoomPosition()));
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/4),
+            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
+            cam.getZoomPosition()));
+    Assert.assertTrue(expectedPositions.containsAll(actualPositons));
+    Assert.assertTrue(actualPositons.containsAll(expectedPositions));
   }
 
   @Test
   public void testCreatePositions3x3x1()
           throws CameraConnectionException {
     ArrayList<ZoomPosition> actualPositons =  new ArrayList<>(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
+    ArrayList<ZoomPosition> expectedPositions = new ArrayList<>();
 
-    ZoomPosition expectedPos0 = new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX),
-            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX),
-            cam.getZoomPosition());
-    Assert.assertEquals(expectedPos0, actualPositons.get(0));
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
+            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
 
-    ZoomPosition expectedPos3 = new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX),
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
+            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
+
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
+            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
+
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
+            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
+
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt(),
-            cam.getZoomPosition());
-    Assert.assertEquals(expectedPos3, actualPositons.get(3));
+            cam.getZoomPosition()));
 
-    ZoomPosition expectedPos4 = new ZoomPosition(cam.getPosition().getPan(),
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt(),
-            cam.getZoomPosition());
-    Assert.assertEquals(expectedPos4, actualPositons.get(4));
+            cam.getZoomPosition()));
 
-    ZoomPosition expectedPos8 = new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX),
-            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX),
-            cam.getZoomPosition());
-    Assert.assertEquals(expectedPos8, actualPositons.get(8));
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
+            cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
+
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
+            cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
+            cam.getZoomPosition()));
+
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
+            cam.getPosition().getTilt(),
+            cam.getZoomPosition()));
+
+    Assert.assertTrue(expectedPositions.containsAll(actualPositons));
+    Assert.assertTrue(actualPositons.containsAll(expectedPositions));
   }
 
   @Override
