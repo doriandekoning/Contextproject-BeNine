@@ -12,7 +12,6 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamType;
 
 import org.json.simple.JSONObject;
