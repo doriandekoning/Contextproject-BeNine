@@ -12,6 +12,8 @@ import java.util.Set;
  * A moving preset to be able to add to the database.
  */
 public class Preset {
+  
+  static String imagePath = ServerController.getInstance().getConfig().getValue("imagepath");
 
   private Position position;
   private int zoom;
@@ -90,7 +92,7 @@ public class Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
-    json.put("image", image);
+    json.put("image", imagePath + image);
     json.put("id", presetid);
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {

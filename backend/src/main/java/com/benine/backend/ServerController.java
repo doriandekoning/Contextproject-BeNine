@@ -85,6 +85,7 @@ public class ServerController {
     loadPresets();
 
     running = true;
+
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
 

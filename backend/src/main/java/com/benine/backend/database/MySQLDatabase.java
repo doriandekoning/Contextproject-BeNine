@@ -47,13 +47,13 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT name FROM tagPresets WHERE presets_ID = "
+      String sql = "SELECT tag_name FROM tagPresets WHERE presets_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
         list.add(resultset.getString("name"));
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       getLogger().log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
@@ -265,7 +265,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT ID, MACAddress FROM camera";
+      String sql = "SELECT ID, MACaddress FROM camera";
       resultset = statement.executeQuery(sql);
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
@@ -310,8 +310,8 @@ public class MySQLDatabase implements Database {
    */
   public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
       throws CameraConnectionException {
-    boolean contains = false;
     for (Camera camera : cameras) {
+      boolean contains = false;
       for (String mac : macs) {
         if (mac.equals(camera.getMacAddress())) {
           contains = true;
@@ -423,8 +423,10 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       // String image = resultset.getString("image");
       int id = resultset.getInt("camera_ID");
-      return new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
+      Preset preset = new Preset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
           autoIris, id);
+      preset.setImage(resultset.getString("image"));
+      return preset;
     } catch (Exception e) {
       getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
