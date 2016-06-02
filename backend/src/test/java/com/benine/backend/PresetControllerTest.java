@@ -23,167 +23,141 @@ import static org.mockito.Mockito.when;
 public class PresetControllerTest {
   
   private ServerController serverController;
+  private PresetController presetController;
+  private Preset preset;
+  private Preset preset2;
   
   @Before
-  public void setup() {
+  public void setup() throws SQLException {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     serverController = ServerController.getInstance();
     serverController.setDatabase(mock(MySQLDatabase.class));
+    presetController = new PresetController();
+    preset = mock(Preset.class);
+    preset2 = mock(Preset.class);
+    when(preset.getId()).thenReturn(1);
   }
   
 
   @Test
-  public void testAddPreset() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset = mock(Preset.class);
-    controller.addPreset(preset);
+  public void testAddPreset() throws Exception {   
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(preset);
-    Assert.assertEquals(expectedPresets, controller.getPresets());
+    presetController.addPreset(preset);
+    Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
   
   @Test
   public void testUpdatePreset() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset = mock(Preset.class);
-    when(preset.getId()).thenReturn(1);
     Preset newpreset = mock(Preset.class);
     when(newpreset.getId()).thenReturn(1);
-    controller.addPreset(preset);
-    controller.updatePreset(newpreset);
+    presetController.addPreset(preset);
+    presetController.updatePreset(newpreset);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(newpreset);
-    Assert.assertEquals(expectedPresets, controller.getPresets());
+    Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
   
   @Test
   public void testAddPresetWithoutID() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset = mock(Preset.class);
     when(preset.getId()).thenReturn(-1);
-    controller.addPreset(preset);
+    presetController.addPreset(preset);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(preset);
-    Assert.assertEquals(expectedPresets, controller.getPresets());
+    Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
 
   @Test
   public void testAddPresetList() throws Exception  {
-    PresetController controller = new PresetController();
     ArrayList<Preset> presets = new ArrayList<Preset>();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
-    presets.add(preset1);
+    presets.add(preset);
     presets.add(preset2);
-    controller.addPresets(presets);
+    presetController.addPresets(presets);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
-    expectedPresets.add(preset1);
+    expectedPresets.add(preset);
     expectedPresets.add(preset2);
-    Assert.assertEquals(expectedPresets, controller.getPresets());
+    Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
 
   @Test
   public void testRemovePreset() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
-    controller.addPreset(preset1);
-    controller.addPreset(preset2);
-
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
-    expectedPresets.add(preset1);
-    // The actual method call to test.
-    controller.removePreset(preset2);
-    Assert.assertEquals(expectedPresets, controller.getPresets());
+    expectedPresets.add(preset);
+    presetController.addPreset(preset);
+    presetController.addPreset(preset2);
+    presetController.removePreset(preset2);
+    Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
 
   @Test
   public void testGetPresetsByTag() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
     HashSet<String> preset1Tags = new HashSet<>();
     preset1Tags.add("Piano");
     HashSet<String> preset2Tags = new HashSet<>();
     preset2Tags.add("Violin");
-    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset.getTags()).thenReturn(preset1Tags);
     when(preset2.getTags()).thenReturn(preset2Tags);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
 
+    presetController.addPreset(preset);
+    presetController.addPreset(preset2);
+    expectedPresets.add(preset);
 
-    controller.addPreset(preset1);
-    controller.addPreset(preset2);
-    expectedPresets.add(preset1);
-
-    Assert.assertEquals(expectedPresets, controller.getPresetsByTag("Piano"));
+    Assert.assertEquals(expectedPresets, presetController.getPresetsByTag("Piano"));
   }
 
   @Test
   public void testGetPresetsByTagNoMatch() throws Exception  {
-    PresetController controller = new PresetController();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
     HashSet<String> preset1Tags = new HashSet<>();
     preset1Tags.add("Piano");
     HashSet<String> preset2Tags = new HashSet<>();
     preset2Tags.add("Violin");
-    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset.getTags()).thenReturn(preset1Tags);
     when(preset2.getTags()).thenReturn(preset2Tags);
 
-    controller.addPreset(preset1);
-    controller.addPreset(preset2);
+    presetController.addPreset(preset);
+    presetController.addPreset(preset2);
 
-    Assert.assertEquals(new ArrayList<Preset>(), controller.getPresetsByTag("Overview"));
+    Assert.assertEquals(new ArrayList<Preset>(), presetController.getPresetsByTag("Overview"));
   }
 
   @Test
   public void testGetPresetsByTagMultiple() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
     HashSet<String> preset1Tags = new HashSet<>();
     preset1Tags.add("Piano");
     preset1Tags.add("Violin");
     HashSet<String> preset2Tags = new HashSet<>();
     preset2Tags.add("Violin");
-    when(preset1.getTags()).thenReturn(preset1Tags);
+    when(preset.getTags()).thenReturn(preset1Tags);
     when(preset2.getTags()).thenReturn(preset2Tags);
-    Assert.assertEquals(controller.getPresets(), controller.getPresetsByTag("Piano"));
+    Assert.assertEquals(presetController.getPresets(), presetController.getPresetsByTag("Piano"));
   }
 
   @Test
   public void testGetPresetsById() throws Exception {
-    PresetController controller = new PresetController();
-    Preset preset1 = mock(Preset.class);
-    Preset preset2 = mock(Preset.class);
-
-    when(preset1.getId()).thenReturn(1);
+    when(preset.getId()).thenReturn(1);
     when(preset2.getId()).thenReturn(2);
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
 
 
-    controller.addPreset(preset1);
-    controller.addPreset(preset2);
-    expectedPresets.add(preset1);
+    presetController.addPreset(preset);
+    presetController.addPreset(preset2);
+    expectedPresets.add(preset);
 
-    Assert.assertEquals(preset2, controller.getPresetById(2));
+    Assert.assertEquals(preset2, presetController.getPresetById(2));
   }
 
   @Test
   public void testGetPresetsByIdNoMatch() throws Exception {
-      PresetController controller = new PresetController();
-      Preset preset1 = mock(Preset.class);
-      Preset preset2 = mock(Preset.class);
-
-      when(preset1.getId()).thenReturn(1);
+      when(preset.getId()).thenReturn(1);
       when(preset2.getId()).thenReturn(2);
       ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
 
 
-      controller.addPreset(preset1);
-      controller.addPreset(preset2);
+      presetController.addPreset(preset);
+      presetController.addPreset(preset2);
 
-      Assert.assertEquals(null, controller.getPresetById(3));
+      Assert.assertEquals(null, presetController.getPresetById(3));
     }
 
 
@@ -213,13 +187,12 @@ public class PresetControllerTest {
 
   @Test
   public void testAddAllTags() throws SQLException {
-    PresetController controller = new PresetController();
     HashSet<String> tags = new HashSet<>();
     tags.add("tag1");
     tags.add("tag2");
-    controller.addAllTags(tags);
+    presetController.addAllTags(tags);
 
-    Assert.assertEquals(tags, controller.getTags());
+    Assert.assertEquals(tags, presetController.getTags());
   }
 
 }
