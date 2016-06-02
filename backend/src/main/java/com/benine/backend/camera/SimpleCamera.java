@@ -32,7 +32,6 @@ public class SimpleCamera extends BasicCamera implements PresetCamera {
   public JSONObject toJSON() throws CameraConnectionException {
     JSONObject object = new JSONObject();
     object.put("id", getId());
-    object.put("streamlink", getStreamLink());
     object.put("inuse", isInUse());
     return object;
   }
