@@ -21,6 +21,8 @@ function loadPresets() {
 	}).done(function () { displayPresets(presets); });
 }
 
+console.log(presets);
+
 /**
 * Checks if the preset already exists if true the preset is updated otherwise it is added.
 * @param preset array with the presets to add.
