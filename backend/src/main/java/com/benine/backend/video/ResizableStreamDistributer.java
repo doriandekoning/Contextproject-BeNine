@@ -24,9 +24,9 @@ public class ResizableStreamDistributer extends StreamDistributer {
   @Override
   public void update(Observable o, Object arg) {
     if (arg instanceof VideoFrame) {
-      VideoFrame frame = (VideoFrame) arg;
+      VideoFrame argument = (VideoFrame) arg;
 
-      frame = resizer.resize(frame);
+      VideoFrame frame = resizer.resize(argument);
       writeVideoFrame(frame);
     }
   }

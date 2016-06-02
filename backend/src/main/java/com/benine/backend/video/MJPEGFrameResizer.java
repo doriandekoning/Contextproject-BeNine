@@ -38,10 +38,11 @@ public class MJPEGFrameResizer {
    * @return The updated MJPEGVideoFrame.
    */
   public VideoFrame resize(VideoFrame frame) {
-    frame.setImage(rescaleImage(frame.getImage()));
-    frame.getHeader().setContentLength(frame.getImage().length);
+    byte[] resizedImage = rescaleImage(frame.getImage());
+    MJPEGFrameHeader resizedHeader = new MJPEGFrameHeader(frame.getHeaderBytes());
+    resizedHeader.setContentLength(resizedImage.length);
 
-    return frame;
+    return new VideoFrame(resizedHeader, resizedImage);
   }
 
   /**
