@@ -139,6 +139,21 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Assert.assertTrue(actualPositons.containsAll(expectedPositions));
   }
 
+  @Test(expected = AssertionError.class)
+  public final void testAssertRows() {
+    new PresetPyramidCreator(-1, 2, 3, 0.5);
+  }
+
+  @Test(expected = AssertionError.class)
+  public final void testAssertColumns() {
+    new PresetPyramidCreator(1, -2, 3, 0.5);
+  }
+
+  @Test(expected = AssertionError.class)
+  public final void testAssertLevels() {
+    new PresetPyramidCreator(1, 2, -5, 0.5);
+  }
+
   @Override
   public void testCreate() {
 

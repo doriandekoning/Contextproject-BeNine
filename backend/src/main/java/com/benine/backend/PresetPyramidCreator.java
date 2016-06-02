@@ -27,6 +27,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   public PresetPyramidCreator(int rows, int columns, int levels, double overlap) {
     assert rows > 0;
     assert columns > 0;
+    assert levels > 0;
     this.rows = rows;
     this.columns = columns;
     this.levels = levels;
