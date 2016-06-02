@@ -1,6 +1,8 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
 import com.benine.backend.PresetPyramidCreator;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
@@ -9,7 +11,8 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletException;
@@ -31,9 +34,11 @@ public class AutoPresetCreationHandler extends RequestHandler  {
         .getCameraById(Integer.parseInt(camID));
    
     try {
-      Collection<Preset> preset = creator.createPresets(camera);
-    } catch (CameraConnectionException | InterruptedException | TimeoutException e) {
-      e.printStackTrace();
+      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(camera));
+      PresetController presetController = ServerController.getInstance().getPresetController();
+      presetController.addPresets(presets);
+    } catch (CameraConnectionException | InterruptedException | TimeoutException | SQLException e) {
+      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
     }
 
    
