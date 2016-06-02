@@ -307,6 +307,8 @@ function loadPresetEditModal(preset) {
 	$('.preset-edit-modal').modal('show');
 }
 
+var newId = 0;
+
 /**
 * Load the tags modal en fill in the tags.
 */
@@ -316,6 +318,7 @@ function loadTags() {
 	newTag({name: 'Trumpet'});
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
+	newId = localTags.length;
 	readyTags();
 }
 
@@ -328,7 +331,7 @@ function readyTags() {
         var tag = $(this).html();
         $(this).replaceWith(appendEditable(tag, false));
 		editTags($(this).attr('id'));
-    });
+	});
 }
 
 /**
@@ -401,7 +404,8 @@ function deleteTag(index) {
 */
 function addTag() {
 	$(".fill-tags").append(appendEditable("new", true));
-	editTags(localTags.length);
+	editTags(newId);
+	newId++;
 }
 
 /**
