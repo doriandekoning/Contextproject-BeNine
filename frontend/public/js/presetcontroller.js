@@ -1,22 +1,25 @@
 // Local variable to store the available tags locally.
 var localTags = [];
+// true if the client is in preset editing mode.
+var editing = false;
 
 /**
 * Function loads all the presets from the backend.
 */
 function loadPresets() {
 	$.get("/api/backend/presets/getpresets", function(data) {
-		obj = JSON.parse(data);
+		var obj = JSON.parse(data);
 		for (var p in obj.presets) {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
+		displayPresets(presets);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				localTags.push(obj.tags[t]);
 			}
 		}
-	}).done(function () { displayPresets(presets); });
+	});
 }
 
 /**
@@ -33,7 +36,7 @@ function checkPreset(preset) {
 																			preset.tiltspeed, preset.autoiris, preset.tags);
 	}
 }
-var editing = false;
+
 /**
 * Display all the presets.
 * @param presets to display.

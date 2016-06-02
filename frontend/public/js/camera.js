@@ -11,6 +11,7 @@ function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
+	
 	/**
 	* Show this camera in the small display on the screen.
 	*/
