@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presets` (
   `Autoiris` INT(11) NULL DEFAULT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`ID`),
   INDEX `fk_presets_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_presets_camera`
     FOREIGN KEY (`camera_ID`)
@@ -59,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepresets` (
   `ID` INT(11) NOT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`ID`),
   INDEX `fk_simplepresets_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_simplepresets_camera`
     FOREIGN KEY (`camera_ID`)
