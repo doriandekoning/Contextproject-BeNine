@@ -419,7 +419,7 @@ public class MySQLDatabase implements Database {
    * @param resultset the list with all the presets
    * @return The preset from the resultset
    */
-  public Preset getIPCameraPresetFromResultSet(ResultSet resultset) {
+  public IPCameraPreset getIPCameraPresetFromResultSet(ResultSet resultset) {
     try {
       Position pos = new Position(resultset.getInt("pan"), resultset.getInt("tilt"));
       int zoom = resultset.getInt("zoom");
@@ -429,12 +429,16 @@ public class MySQLDatabase implements Database {
       int panspeed = resultset.getInt("panspeed");
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
-      // String image = resultset.getString("image");
+      String image = resultset.getString("image");
+      int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("camera_ID");
-      return new IPCameraPreset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
-          autoIris, id);
+      IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
+                                          panspeed, tiltspeed, autoIris, cameraId);
+      preset.setId(id);
+      preset.setImage(image);
+      return preset;
     } catch (Exception e) {
-      getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      getLogger().log("IPCamerapresets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
@@ -445,13 +449,17 @@ public class MySQLDatabase implements Database {
    * @param resultset the list with all the presets
    * @return The preset from the resultset
    */
-  private Preset getSimplePresetsFromResultSet(ResultSet resultset) {
+  public SimplePreset getSimplePresetsFromResultSet(ResultSet resultset) {
     try {
-      // String image = resultset.getString("image");
-      int id = resultset.getInt("camera_ID");
-      return new SimplePreset(id);
+      String image = resultset.getString("image");
+      int cameraId = resultset.getInt("camera_ID");
+      SimplePreset preset = new SimplePreset(cameraId);
+      int id = resultset.getInt("id");
+      preset.setId(id);
+      preset.setImage(image);
+      return preset;
     } catch (Exception e) {
-      getLogger().log("Presets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      getLogger().log("Simple preset couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }

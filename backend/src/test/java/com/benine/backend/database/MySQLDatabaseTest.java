@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.SimplePreset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
@@ -224,15 +225,41 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("tiltspeed", new Object[]{1});
         result.addColumn("autoiris", new Object[]{1});
         result.addColumn("camera_ID", new Object[]{1});
+        result.addColumn("id", new Object[]{1});
+        result.addColumn("image", new Object[]{"test"});
         result.next();
-        Preset preset = database.getIPCameraPresetFromResultSet(result);
-        assertEquals(preset, new IPCameraPreset(new Position(1,1),1,1,1,true,1,1,true,1));
+        IPCameraPreset preset = database.getIPCameraPresetFromResultSet(result);
+        IPCameraPreset expected =new IPCameraPreset(new Position(1,1),1,1,1,true,1,1,true,1);
+        expected.setImage("test");
+        expected.setId(1);
+        assertEquals(expected, preset);
+    }
+    
+    @Test
+    public final void testGetSimplePresetsFromResultSet() throws SQLException {
+        MockResultSet result = statementHandler.createResultSet();
+        statementHandler.prepareGlobalResultSet(result);
+        result.addColumn("camera_ID", new Object[]{1});
+        result.addColumn("id", new Object[]{1});
+        result.addColumn("image", new Object[]{"test"});
+        result.next();
+        SimplePreset preset = database.getSimplePresetsFromResultSet(result);
+        SimplePreset expected =new SimplePreset(1);
+        expected.setImage("test");
+        expected.setId(1);
+        assertEquals(expected, preset);
     }
 
     @Test
     public final void testGetFailedPresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
         assertNull(database.getIPCameraPresetFromResultSet(result));
+    }
+    
+    @Test
+    public final void testGetFailedSimplePresetsFromResultSet() throws SQLException {
+        MockResultSet result = statementHandler.createResultSet();
+        assertNull(database.getSimplePresetsFromResultSet(result));
     }
 
     @Test
