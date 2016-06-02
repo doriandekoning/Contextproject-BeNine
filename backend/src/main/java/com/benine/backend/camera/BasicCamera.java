@@ -2,6 +2,8 @@ package com.benine.backend.camera;
 
 import com.benine.backend.video.StreamType;
 
+import org.json.simple.JSONObject;
+
 /**
  * Interface for communication with remote camera's.
  */
@@ -28,7 +30,7 @@ public abstract class BasicCamera implements Camera {
    * @return Json object in the form of a string.
    * @throws CameraConnectionException When the information can not be retrieved.
    */
-  public abstract String toJSON() throws CameraConnectionException;
+  public abstract JSONObject toJSON() throws CameraConnectionException;
 
   /**
    * Set the ID of this camera.
