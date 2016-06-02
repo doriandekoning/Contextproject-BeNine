@@ -8,7 +8,7 @@ function Camera(id, inuse, autoFocus, autoIris, zoom, move) {
 	this.autoIris = autoIris;
 	this.zoom = zoom;
 	this.move = move;
-	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
+	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg?width=640&height=360" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
 	/**
@@ -20,7 +20,7 @@ Camera.prototype = {
 		camera_div.attr("camera_number", this.id);
 		camera_div.find('.camera_status').attr('class', 'camera_status available');
 		camera_img = camera_div.find('img');
-		camera_img.attr('src', '/api/backend/camera/' + this.id + '/mjpeg');
+		camera_img.attr('src', '/api/backend/camera/' + this.id + '/mjpeg?width=320&height=180');
 		camera_img.load(function() {
 			if ($(this).attr("alt") !== undefined) {
 				camera_div.find('.camera_status').attr('class', 'camera_status unavailable');
@@ -37,7 +37,7 @@ Camera.prototype = {
 	*/
 	createView: function() {
 		camera_div = $('#preset_create_div');
-		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
+		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg?width=320&height=180');
 	},
 	
 	/**
