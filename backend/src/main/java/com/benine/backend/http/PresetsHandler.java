@@ -36,7 +36,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("recallpreset", new RecallPresetHandler());
     addHandler("addtag", new AddTagHandler());
     addHandler("removetag", new RemoveTagHandler());
-    addHandler("createautopreset", new AutoPresetCreationHandler());
+    addHandler("autocreatepresets", new AutoPresetCreationHandler());
   }
 
   @Override

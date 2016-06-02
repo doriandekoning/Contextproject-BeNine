@@ -69,7 +69,7 @@ function toggleCamSelected(camid, inuse) {
 function toggleCamInuse(camid, inuse) {
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
-	
+
 	if (inuse === true) {
 		camera.find('.camera_status').attr('class', 'camera_status unavailable');
 	} else {
@@ -96,6 +96,7 @@ function setCurrentCamera(id) {
 		camera_title.find('#camera_title').text(cameras[currentcamera].id);
 		selectedPreset = undefined;
 		$('#createPreset').prop('disabled', false);
+		$('#autoCreatePresets').prop('disabled', false);
 		$('#preset_create_div .tags_input').tagsinput('removeAll');
 
 		getCameraInfo();
@@ -177,7 +178,7 @@ joystick.on('move', function(evt, data){
 		moveSend = true;
 		setTimeout(function(){ sendMove(); moveSend = false;  }, 130);
 		sendMove();
-	} 
+	}
 });
 
 /**
@@ -202,6 +203,13 @@ function sendMove(){
 		lastSend.angle = angle;
 		console.log(pan + " - " + tilt);
 	}
+}
+
+/**
+*	Method to auto create presets.
+*/
+function autoCreatePresets() {
+	$.get("/api/backend/presets/autocreatepresets?camera=" + currentcamera);
 }
 
 /* Variable used for the zoom slider */
