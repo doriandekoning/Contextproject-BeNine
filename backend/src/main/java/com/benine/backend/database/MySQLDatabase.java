@@ -50,13 +50,13 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT name FROM tagPresets WHERE presets_ID = "
+      String sql = "SELECT tag_name FROM tagPresets WHERE presets_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
         list.add(resultset.getString("name"));
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       getLogger().log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
@@ -114,11 +114,11 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void deletePreset(int presetID) {
+  public void deletePreset(Preset preset) {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM presets WHERE ID = " + presetID;
+      String sql = preset.createDeleteSQL();
       statement.executeUpdate(sql);
     } catch (Exception e) {
       getLogger().log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
@@ -132,10 +132,11 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      deletePreset(preset.getId());
+      deletePreset(preset);
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
     } catch (Exception e) {
+      e.printStackTrace();
       getLogger().log("Presets could not be updated.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
@@ -273,7 +274,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT ID, MACAddress FROM camera";
+      String sql = "SELECT ID, MACaddress FROM camera";
       resultset = statement.executeQuery(sql);
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
@@ -318,8 +319,8 @@ public class MySQLDatabase implements Database {
    */
   public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
       throws CameraConnectionException {
-    boolean contains = false;
     for (Camera camera : cameras) {
+      boolean contains = false;
       for (String mac : macs) {
         if (mac.equals(camera.getMacAddress())) {
           contains = true;
@@ -429,13 +430,12 @@ public class MySQLDatabase implements Database {
       int panspeed = resultset.getInt("panspeed");
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
-      String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("camera_ID");
       IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
                                           panspeed, tiltspeed, autoIris, cameraId);
       preset.setId(id);
-      preset.setImage(image);
+      preset.setImage(resultset.getString("image"));
       return preset;
     } catch (Exception e) {
       getLogger().log("IPCamerapresets couldn't be retrieved.", LogEvent.Type.CRITICAL);

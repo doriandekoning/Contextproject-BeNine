@@ -94,9 +94,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         database.resetDatabase();
         database.addPreset(preset);
-        database.deletePreset(1);
+        database.deletePreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM presets WHERE ID = 1");
+        verifySQLStatementExecuted("DELETE FROM presets WHERE ID = -1");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -247,6 +247,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         SimplePreset expected =new SimplePreset(1);
         expected.setImage("test");
         expected.setId(1);
+        result.addColumn("image", new Object[]{1});
+        result.next();
+        expected.setImage("1");
         assertEquals(expected, preset);
     }
 
@@ -278,7 +281,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         Connection connection = mock(Connection.class);
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
-        database.deletePreset(1);
+        Preset preset = mock(Preset.class);
+        database.deletePreset(preset);
         verify(logger).log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
     }
 
@@ -445,7 +449,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.getTagsFromPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT name FROM tagPresets");
+        verifySQLStatementExecuted("SELECT tag_name FROM tagPresets");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();

@@ -110,7 +110,6 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setParameters(parameters);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-    
     JSONObject jsonObject = new JSONObject();
     JSONArray presetsJSON = new JSONArray();
     presetController.getPresetsByTag("Violin").forEach(p -> presetsJSON.add(p.toJSON()));

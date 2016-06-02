@@ -14,7 +14,7 @@ import java.util.List;
  * IPCamera preset which stores the data to recall this preset position.
  */
 public class IPCameraPreset extends Preset {
-  
+
   private Position position;
   private int zoom;
   private int focus;
@@ -84,9 +84,9 @@ public class IPCameraPreset extends Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
-    json.put("image", getImage());
     json.put("id", getId());
     json.put("cameraid", getCameraId());
+    json.put("image", imagePath + getImage());
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -259,6 +259,11 @@ public class IPCameraPreset extends Preset {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public String createDeleteSQL() {
+    return "DELETE FROM presets WHERE ID = " + getId();
   }
 
 }

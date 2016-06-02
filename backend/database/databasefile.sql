@@ -83,7 +83,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPresets` (
   `presets_ID` INT(11) NOT NULL,
-  `tag_Name` VARCHAR(45) NOT NULL,
+  `tag_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`presets_ID`, `tag_name`),
   INDEX `fk_tagPresets_tag1_idx` (`tag_name` ASC),
   CONSTRAINT `fk_tagPresets_presets`

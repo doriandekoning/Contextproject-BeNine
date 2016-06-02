@@ -34,7 +34,7 @@ public class SimplePreset extends Preset {
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
-    json.put("image", getImage());
+    json.put("image", imagePath + getImage());
     json.put("id", getId());
     json.put("cameraid", getCameraId());
     JSONArray tagsJSON = new JSONArray();
@@ -55,5 +55,10 @@ public class SimplePreset extends Preset {
   @Override
   public void excecutePreset(Camera camera) throws CameraConnectionException {
     
+  }
+  
+  @Override
+  public String createDeleteSQL() {
+    return "DELETE FROM simplepresets WHERE ID = " + getId();
   }
 }

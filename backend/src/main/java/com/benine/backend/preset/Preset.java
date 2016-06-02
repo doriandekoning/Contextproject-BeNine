@@ -1,5 +1,6 @@
 package com.benine.backend.preset;
 
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import org.json.simple.JSONObject;
@@ -12,6 +13,8 @@ import java.util.Set;
  * an abstract preset class containing the basics for a preset.
  */
 public abstract class Preset {
+
+  static String imagePath = ServerController.getInstance().getConfig().getValue("imagepath");
 
   private String image;
   private int presetid = -1;
@@ -138,4 +141,10 @@ public abstract class Preset {
    * @return The query
    */
   public abstract String createAddSqlQuery();
+  
+  /**
+   * Creates a sql query to delete a preset in the database.
+   * @return the query.
+   */
+  public abstract String createDeleteSQL();
 }

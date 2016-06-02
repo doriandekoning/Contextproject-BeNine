@@ -31,9 +31,9 @@ public interface Database {
   /**
    * Delete a preset from the database.
    *
-   * @param presetID ID of the camera
+   * @param preset to delete.
    */
-  void deletePreset(int presetID);
+  void deletePreset(Preset preset);
 
   /**
    * Update a preset to the database.
