@@ -117,7 +117,7 @@ public class Stream extends Observable {
     try {
       Thread.sleep(duration);
     } catch (InterruptedException e) {
-      logger.log("Stream thread interrupted while sleeping", LogEvent.Type.INFO);
+      logger.log("Stream thread interrupted while sleeping", e);
     }
   }
 
