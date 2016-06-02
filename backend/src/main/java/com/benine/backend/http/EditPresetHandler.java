@@ -25,7 +25,8 @@ public class EditPresetHandler extends RequestHandler {
    * Constructor for a new editPresetHandler that handles editing a preset.
    */
   public EditPresetHandler() {}
- 
+    
+  private ServerController control;
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -33,13 +34,13 @@ public class EditPresetHandler extends RequestHandler {
     
     String overwriteTag = request.getParameter("overwriteTag");
     String overwritePosition = request.getParameter("overwriteposition");
-        
+    
+    control = ServerController.getInstance();
     String camID = request.getParameter("camera");
-    IPCamera ipcam = (IPCamera) ServerController.getInstance().getCameraController()
-        .getCameraById(Integer.parseInt(camID));
+    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(Integer.parseInt(camID));
         
     int presetID = Integer.parseInt(request.getParameter("presetid"));
-    Preset preset = ServerController.getInstance().getPresetController().getPresetById(presetID);
+    Preset preset = control.getPresetController().getPresetById(presetID);
    
     String tags = request.getParameter("tags");
     List<String> tagList = new ArrayList<String>();
@@ -95,7 +96,7 @@ public class EditPresetHandler extends RequestHandler {
   MalformedURIException {
     Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
     newPreset.setId(presetID);
-    ServerController.getInstance().getDatabase().updatePreset(newPreset);
+    control.getDatabase().updatePreset(newPreset);
   }
   
   
