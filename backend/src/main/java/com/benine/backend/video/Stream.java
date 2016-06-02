@@ -93,7 +93,10 @@ public class Stream extends Observable {
    */
   private void openConnection() {
     try {
+      logger.log("Began connecting to stream " + url.toString(), LogEvent.Type.INFO);
       URLConnection conn = url.openConnection();
+
+      conn.setConnectTimeout(5000);
       conn.connect();
 
       this.connected = true;
