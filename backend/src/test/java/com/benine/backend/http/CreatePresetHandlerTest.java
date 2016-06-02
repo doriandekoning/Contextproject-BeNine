@@ -8,7 +8,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,8 +15,9 @@ import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -26,7 +26,6 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
 
 
 public class CreatePresetHandlerTest extends RequestHandlerTest {
@@ -69,7 +68,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
       
-      preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();

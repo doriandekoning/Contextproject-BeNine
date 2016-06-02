@@ -33,13 +33,13 @@ function checkPreset(preset) {
 																			preset.tiltspeed, preset.autoiris, preset.tags);
 	}
 }
-
+var editing = false;
 /**
 * Display all the presets.
 * @param preset to display.
 */
 function displayPresets(presets) {
-	$("#preset_area").children().not('#tagsearch').empty();
+	$("#preset_area").children().not('#tagsearch').remove();
 	generatePresets(presets.map(function(item){
 		return item.id;
 	}));
@@ -48,6 +48,9 @@ function displayPresets(presets) {
 	});
 	setButton($('#editPresets'), false);
 	Holder.run({images: "#preset_area img"});
+	if (editing) {
+		loadEditablePresets();
+	}
 }
 
 /**
@@ -68,12 +71,15 @@ function presetClick() {
 function loadEditablePresets() {
 	var activepresets = $("#preset_area div:has(img:not([alt]))");
 	var editButton = $('#editPresets');
+
 	if (activepresets.hasClass("preset-overlay")) {
 		activepresets.removeClass("preset-overlay");
 		setButton(editButton, false);
+		editing = false;
 	} else {
 		activepresets.addClass("preset-overlay");
 		setButton(editButton, true);
+			editing = true;
 	}
 }	
 
@@ -299,7 +305,7 @@ function loadPresetEditModal(preset) {
 	editingpreset = preset;
 	var edit_div = $('.preset-edit-modal');
 	edit_div.find('#presetID').text(preset.id);
-	edit_div.find('img').replaceWith(preset.img.clone());
+	edit_div.find('img').attr("src", "/api/backend" + preset.image);
 	var tags_input = $('#preset_edit_div .tags_input');
 	tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {

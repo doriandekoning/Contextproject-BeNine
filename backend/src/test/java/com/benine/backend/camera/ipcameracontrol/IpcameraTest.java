@@ -9,6 +9,8 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.preset.IPCameraPreset;
+
 import org.apache.commons.io.IOUtils;
 
 import org.junit.Assert;
@@ -19,6 +21,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Test class to test the IP Camera class.
@@ -202,6 +205,19 @@ public class IpcameraTest {
     json.put("autoiris", true);
     
     assertEquals(json, camera.toJSON());
+  }
+  
+  @Test
+  public final void testCreatePreset() throws CameraConnectionException{
+    setCameraBehaviour("APC", "aPC80008000");
+    setCameraBehaviour("GZ", "gz655");
+    setCameraBehaviour("GF", "gfA42");
+    setCameraBehaviour("D1", "d11");
+    setCameraBehaviour("D3", "d31");
+    setCameraBehaviour("GI", "giD421");
+    IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1);
+    
+    assertEquals(expected, camera.createPreset(new ArrayList<String>()));
   }
   
   @Test

@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Preset;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.camera.Position;
 import org.eclipse.jetty.util.MultiMap;
 import org.json.simple.JSONArray;
@@ -36,10 +37,10 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
+    Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
     ArrayList<String> keywords = new ArrayList<>();
     keywords.add("Violin");
-    Preset presetKeywords = new Preset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0, keywords);
+    Preset presetKeywords = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0, keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();
     allList.add(preset);
@@ -109,7 +110,6 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setParameters(parameters);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-    
     JSONObject jsonObject = new JSONObject();
     JSONArray presetsJSON = new JSONArray();
     presetController.getPresetsByTag("Violin").forEach(p -> presetsJSON.add(p.toJSON()));

@@ -35,6 +35,7 @@ function loadCameras() {
 		cameras.forEach(function(item) {
 			item.smallView();
 		});
+		Holder.run({images:"#camera_area img"});
 	});
 }
 
@@ -61,7 +62,7 @@ function switchCurrentView(id) {
 * @param id of the camera to search for.
 */
 function findCameraOnID(id){
-	var res = $.grep(cameras, function(item, n) {
+	var res = $.grep(cameras, function(item) {
 		return parseInt(item.id) === parseInt(id);
 	});
 	return res[0];

@@ -1,12 +1,17 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.SimplePreset;
 import com.benine.backend.video.StreamType;
+
 import org.json.simple.JSONObject;
+
+import java.util.List;
 
 /**
  * Created on 5-5-16.
  */
-public class SimpleCamera extends BasicCamera {
+public class SimpleCamera extends BasicCamera implements PresetCamera {
 
   private String streamLink;
   private String mACAddress;
@@ -45,6 +50,12 @@ public class SimpleCamera extends BasicCamera {
    */
   public void setStreamLink(String streamLink) {
     this.streamLink = streamLink;
+  }
+  
+  @Override
+  public Preset createPreset(List<String> tagList) throws CameraConnectionException {
+    int cameraId = getId();
+    return new SimplePreset(cameraId, tagList);
   }
   
   @Override

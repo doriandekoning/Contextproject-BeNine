@@ -43,9 +43,26 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presets` (
   `Autoiris` INT(11) NULL DEFAULT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
-  PRIMARY KEY (`ID`, `camera_ID`),
+  PRIMARY KEY (`ID`),
   INDEX `fk_presets_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_presets_camera`
+    FOREIGN KEY (`camera_ID`)
+    REFERENCES `presetsDatabase`.`camera` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+-- -----------------------------------------------------
+-- Table `presetsDatabase`.`simplepresets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepresets` (
+  `ID` INT(11) NOT NULL,
+  `Image` CHAR(50) NULL DEFAULT '',
+  `camera_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_simplepresets_camera_idx` (`camera_ID` ASC),
+  CONSTRAINT `fk_simplepresets_camera`
     FOREIGN KEY (`camera_ID`)
     REFERENCES `presetsDatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
@@ -58,7 +75,7 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `presetsDatabase`.`tag`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tag` (
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`name`))
 ENGINE = InnoDB;
 
@@ -68,16 +85,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPresets` (
   `presets_ID` INT(11) NOT NULL,
-  `tag_Name` INT NOT NULL,
-  PRIMARY KEY (`presets_ID`, `tag_Name`),
-  INDEX `fk_tagPresets_tag1_idx` (`tag_Name` ASC),
+  `tag_name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`presets_ID`, `tag_name`),
+  INDEX `fk_tagPresets_tag1_idx` (`tag_name` ASC),
   CONSTRAINT `fk_tagPresets_presets`
     FOREIGN KEY (`presets_ID`)
     REFERENCES `presetsDatabase`.`presets` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tagPresets_tag1`
-    FOREIGN KEY (`tag_Name`)
+    FOREIGN KEY (`tag_name`)
     REFERENCES `presetsDatabase`.`tag` (`name`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
