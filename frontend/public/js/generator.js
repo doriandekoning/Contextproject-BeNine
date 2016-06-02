@@ -1,25 +1,5 @@
-var address;
-var cameracounter = 0;
-var blockcounter = 0;
 var presetcounter = 0;
-
-// Document is ready, we can now manipulate it.
-$(document).ready(function() {
-
-    // Update server status every 10 seconds.
-    setInterval(setServerStatus, 10 * 1000);
-
-    // Generate the camera block area.
-    generateCameraArea();
-
-	// Load the available cameras.
-	loadCameras();
-
-    // Generate the presets area.
-    generatePresets();
-
-    console.log('Page has loaded successfully.');
-});
+var blockcounter = 0;
 
 /**
  * Sets the backend server status.
@@ -45,13 +25,13 @@ function setServerStatus() {
 /**
  * Generates the camera area of the app.
  */
-function generateCameraArea() {
+function generateCameraArea(cameras) {
     var carousel;
     carousel = $('#carousel');
+	var length = Math.ceil(cameras.length / 4);
 
-
-    for (var i = 0; i < 4; i++) {
-        addCameraBlock();
+    for (var i = 0; i < length; i++) {
+        addCameraBlock(cameras.slice(i * 4, (i + 1) * 4));
     }
 
     // This part is the carousel initialization.
@@ -65,7 +45,7 @@ function generateCameraArea() {
 /**
  * Adds a block of 4 camera's to select to the app.
  */
-function addCameraBlock() {
+function addCameraBlock(cameras) {
     var carousel, indicators, block;
 
     carousel = $('#carousel');
@@ -76,7 +56,7 @@ function addCameraBlock() {
     blockcounter++;
 
     for (var i = 0; i < 2; i++) {
-        addCameraRow(block);
+        addCameraRow(block, cameras.slice(i * 2, (i + 1) * 2));
     }
 
     $('.carousel-inner').append(block);
@@ -87,32 +67,28 @@ function addCameraBlock() {
  * Adds a row of two camera's to a block.
  * @param block
  */
-function addCameraRow(block) {
+function addCameraRow(block, cameras) {
     var row, camera_image, camera_element, camera_title;
 
     row = $('<div class="row">');
 
     for (var i = 0; i < 2; i++) {
-        cameracounter++;
         camera_element = $('<div class="col-xs-6"></div>');
-        camera_element.attr("id", "camera_" + cameracounter);
-
+        
         camera_title = $('<div class="camera_title"></div>');
         camera_status = $('<div class="camera_status"></div>');
         camera_icon = $('<span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>');
-        camera_title_text = $('<span id="camera_title">' + cameracounter + '</span>');
-
+       
+		if (cameras[i] !== undefined) {
+			camera_element.attr("id", "camera_" + cameras[i]);
+			camera_title_text = $('<span id="camera_title">' + cameras[i] + '</span>');
+			camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Loading camera ' + cameras[i] + '&bg=8b8b8b" >').get(0);
+		} else {
+			camera_element.attr("id", "camera_-1");
+			camera_title_text = $('<span id="camera_title">-</span>');
+			camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera -&bg=8b8b8b" >').get(0);
+		}
         camera_title.append(camera_icon, camera_title_text);
-
-        camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera ' + cameracounter + '&bg=8b8b8b" >').get(0);
-
-    		camera_element.click(function() {
-    			var camera_nr = $(this).attr('camera_number');
-    			if ( camera_nr != undefined) {
-    				setCurrentCamera(camera_nr);
-    			}
-    		});
-
         camera_element.append(camera_image, camera_title, camera_status);
         row.append(camera_element);
     }
@@ -123,33 +99,32 @@ function addCameraRow(block) {
 /**
  * Generates the presets area of the app.
  */
-function generatePresets() {
-    for (var i = 0; i < 4; i++) {
-        addPresetRow();
+function generatePresets(presets) {
+	var length = Math.ceil(presets.length / 4);
+    for (var i = 0; i < length; i++) {
+        addPresetRow(presets.slice(i * 4, (i + 1) * 4));
     }
 }
 
 /**
  * Adds a row to the presets area of the app.
  */
-function addPresetRow() {
+function addPresetRow(presets) {
     var preset_row, preset_column;
 
     preset_row = $('<div class="row"></div>');
 
     // Generate four columns.
     for (var i = 0; i < 4; i++) {
-        preset_column = $('<div onclick="presetcall($(this))"></div>');
+		if (presets[i] !== undefined) {
+			preset_column = $('<div id="preset_' + presets[i] + '" class="col-xs-3 none"></div>');
+			addPreset(preset_column, presets[i]);
+		} else {
+			preset_column = $('<div class="col-xs-3 none"></div>');
+			addPreset(preset_column, "-");
+		}
         preset_row.append(preset_column);
     }
-
-    // Now for each column add the preset block.
-    preset_row.children().each( function(index, elem) {
-        presetcounter++;
-        $(elem).attr("class", "col-xs-3 none");
-		$(elem).attr("id", "preset_" + presetcounter);
-        addPreset(elem);
-    });
 
     // Now append the preset row.
     $("#preset_area").append(preset_row);
@@ -160,16 +135,13 @@ function addPresetRow() {
  * Adds a preset to the specified preset element row.
  * @param elem  A preset_row element.
  */
-function addPreset(elem) {
+function addPreset(elem, id) {
     var preset_image, preset_caption;
 
-    preset_image = $('<img onclick="presetcall($(this))" data-src="holder.js/128x77?auto=yes&text=Preset ' + presetcounter + '&bg=8b8b8b">').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + id + '&bg=8b8b8b">').get(0);
 
-    preset_caption = $('<h5>Preset ' + presetcounter + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
-	
-	preset_edit = $('<span id="preset_edit" class="glyphicon glyphicon-pencil" style="cursor:pointer" aria-hidden="true" onclick="presetedit($(this))"></span>');
-			
-	preset_caption.append(preset_edit);
+    preset_caption = $('<h5>Preset ' + id + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
 
     $(elem).append(preset_image, preset_caption);
+
 }

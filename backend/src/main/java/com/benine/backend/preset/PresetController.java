@@ -1,5 +1,6 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
+import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
 
 import java.sql.SQLException;
@@ -8,7 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by dorian on 18-5-16.
+ * Created on 18-5-16.
  */
 public class PresetController {
   
@@ -56,7 +57,7 @@ public class PresetController {
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
     Database db = ServerController.getInstance().getDatabase();
-    db.deletePreset(preset.getId());
+    db.deletePreset(preset);
   }
   
   /**

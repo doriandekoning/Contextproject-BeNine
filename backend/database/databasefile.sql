@@ -43,9 +43,26 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presets` (
   `Autoiris` INT(11) NULL DEFAULT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
-  PRIMARY KEY (`ID`, `camera_ID`),
+  PRIMARY KEY (`ID`),
   INDEX `fk_presets_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_presets_camera`
+    FOREIGN KEY (`camera_ID`)
+    REFERENCES `presetsDatabase`.`camera` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+-- -----------------------------------------------------
+-- Table `presetsDatabase`.`simplepresets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepresets` (
+  `ID` INT(11) NOT NULL,
+  `Image` CHAR(50) NULL DEFAULT '',
+  `camera_ID` INT(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_simplepresets_camera_idx` (`camera_ID` ASC),
+  CONSTRAINT `fk_simplepresets_camera`
     FOREIGN KEY (`camera_ID`)
     REFERENCES `presetsDatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
