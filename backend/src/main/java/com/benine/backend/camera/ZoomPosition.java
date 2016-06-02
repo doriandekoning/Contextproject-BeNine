@@ -1,7 +1,4 @@
-package com.benine.backend.camera.ipcameracontrol;//TODO add Javadoc comment
-
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ZoomingCamera;
+package com.benine.backend.camera;
 
 /**
  *
