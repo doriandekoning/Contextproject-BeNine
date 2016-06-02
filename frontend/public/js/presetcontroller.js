@@ -328,17 +328,17 @@ function readyTags() {
 	$(".tag").click(function(e){
         e.preventDefault();
         var tag = $(this).html();
-        $(this).replaceWith("<input class='new' value='" + tag + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
+        $(this).replaceWith(appendEditable(tag, false));
 		editTags($(this).attr('id'));
     });
 }
 
 function editTags(id) {
 	$(".edit").click(function(e){
-			e.preventDefault();
-			var tag = $('.new').val();
-			$(this).parent().replaceWith("<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + id + "> " + tag + "</button></div>");
-			updatedTags.push({index: id, name: tag});
+		e.preventDefault();
+		var tag = $('.new').val();
+		$(this).parent().replaceWith(appendTag(id, tag));
+		updatedTags.push({index: id, name: tag});
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
@@ -365,14 +365,30 @@ function updateTags() {
 }
 
 function addTag() {
-	$(".fill-tags").append("<div><input class='new' value='new' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
+	$(".fill-tags").append(appendEditable("new", true));
 	editTags(localTags.length);
 }
 
 function getTags() {
 	var result = "";
 	for(i = 0; i < localTags.length; i++) {
-		result += "<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + i + "> " + localTags[i].name + "</button><br></div>";
+		result += appendTag(i, localTags[i].name);
 	}
 	return result;
+}
+
+function appendTag(id, name) {
+	return "<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
+}
+
+function appendEditable(input, add) {
+	var result = "";
+	if(add){
+		result += "<div>"
+	}
+	result += "<input class='new' value='" + input + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
+	if(add) {
+		result += "</div>"
+	}
+	return result
 }
