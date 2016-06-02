@@ -2,9 +2,11 @@ package com.benine.backend;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
+import com.benine.backend.video.StreamNotAvailableException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeoutException;
@@ -25,7 +27,7 @@ public abstract class AutoPresetCreator {
    * @throws TimeoutException exception thrown when there's a timeout.
    */
   public Collection<Preset> createPresets(IPCamera cam)
-    throws CameraConnectionException, InterruptedException, TimeoutException {
+          throws CameraConnectionException, InterruptedException, TimeoutException, IOException, StreamNotAvailableException {
     Position camStartPos = cam.getPosition();
     ArrayList<Preset> presets = new ArrayList<Preset>();
     for (ZoomPosition pos : generatePositions(cam)) {

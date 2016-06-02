@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
+import com.benine.backend.camera.ZoomPosition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,7 +90,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions3x3x1()
           throws CameraConnectionException {
-    ArrayList<ZoomPosition> actualPositons =  new ArrayList<>(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
+    ArrayList<ZoomPosition> actualPositons =  new ArrayList(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
     ArrayList<ZoomPosition> expectedPositions = new ArrayList<>();
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),

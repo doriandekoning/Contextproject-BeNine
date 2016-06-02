@@ -3,7 +3,15 @@ package com.benine.backend;//TODO add Javadoc comment
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamController;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
+import com.sun.corba.se.spi.activation.Server;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -64,7 +72,8 @@ public class PresetFactory {
    * @param panSpeed the panspeed for the preset
    * @param tiltSpeed the tiltspeed of the preset
    */
-  public Preset createPreset(IPCamera cam, int panSpeed, int tiltSpeed) throws CameraConnectionException {
+  public Preset createPreset(IPCamera cam, int panSpeed, int tiltSpeed)
+          throws CameraConnectionException, IOException, StreamNotAvailableException {
     Preset preset = new Preset();
     preset.setCameraId(cam.getId());
     preset.setPosition(cam.getPosition());
@@ -75,7 +84,35 @@ public class PresetFactory {
     preset.setTiltspeed(tiltSpeed);
     preset.setAutoiris(cam.isAutoIrisOn());
     preset.setAutofocus(cam.isAutoFocusOn());
+    try {
+      createImage(cam, preset.getId());
+    } catch (Exception e) {
+      ServerController.getInstance().getLogger().log("Error creating preset image", e);
+    }
     return preset;
+  }
+
+  /**
+   * Creates an image for a preset.
+   * @param cam      The camera to take the image from.
+   * @param presetID      The id of the preset used for naming.
+   * @throws StreamNotAvailableException  If the camera does not have a stream.
+   * @throws IOException  If the image cannot be written.
+   */
+  private void createImage(IPCamera cam, int presetID) throws
+          StreamNotAvailableException, IOException {
+    StreamController streamController = ServerController.getInstance().getStreamController();
+
+    StreamReader streamReader = streamController.getStreamReader(cam.getId());
+    BufferedImage bufferedImage = streamReader.getSnapShot();
+
+    File path = new File("static" + File.separator + "presets" + File.separator
+            + cam.getId() + "_" + presetID + ".jpg");
+
+    ImageIO.write(bufferedImage, "jpg", path);
+    PresetController presetController = ServerController.getInstance().getPresetController();
+
+    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
   }
 
 }

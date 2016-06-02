@@ -1,6 +1,5 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
 import org.junit.Assert;
 import org.junit.Test;
 

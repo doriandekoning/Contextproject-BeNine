@@ -8,6 +8,7 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
+import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -37,11 +38,10 @@ public class AutoPresetCreationHandler extends RequestHandler  {
       ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(camera));
       PresetController presetController = ServerController.getInstance().getPresetController();
       presetController.addPresets(presets);
-    } catch (CameraConnectionException | InterruptedException | TimeoutException | SQLException e) {
-      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
+    } catch (CameraConnectionException | InterruptedException | TimeoutException | StreamNotAvailableException | SQLException e ) {
+      getLogger().log("Exception occured while trying to auto create presets", e);
     }
 
-   
 
   }
   
