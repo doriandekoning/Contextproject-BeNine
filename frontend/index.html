@@ -163,13 +163,13 @@
                     <div class="row">
 					<div class="col-xs-8">
 						<div class="form-group">
-							<label for="preset_name">Preset name</label>
-							<input id="preset_name" class="form-control" type="text">
+							<label for="create_preset_name">Preset name</label>
+							<input id="create_preset_name" class="form-control" type="text">
 						</div>
 						<br>
 						<div class="form-group">
-                            <label for="description"> Description</label>
-							<input id="description" class="form-control" type="text">
+                            <label for="create_description"> Description</label>
+							<input id="create_description" class="form-control" type="text">
 						</div>
                         <div class="form-group preset-create-tagsinput">
                             <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
@@ -196,29 +196,34 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
                 </div>
-                <div class="modal-body row">
-                   <div class="col-xs-4 col-dm-4">
-						<div>
-							Preset ID: <span id="presetID"></span>
-						</div>
-						<div>
-							Pan: <span id="pan"></span>
-						</div>
-					</div>
-					<div class="col-xs-3 col-dm-3">
-						
-					</div>	
-					<div class="col-xs-5 col-dm-5">
-						<img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
-					</div>	
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label for="edit_preset_name">Preset name</label>
+                                <input id="edit_preset_name" class="form-control" type="text">
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="edit_description"> Description</label>
+                                <input id="edit_description" class="form-control" type="text">
+                            </div>
+                            <div class="form-group preset-create-tagsinput">
+                                <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
+                                <div class="tags_input">
+                                    <input id="preset-edit-tagsinput" class="form-control" type="text" data-role="tagsinput"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <img class="img-responsive img-thumbnail" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-					<div class="tags_input">
-						<input type="text" data-role="tagsinput"  />
-					</div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" onclick="editPreset()" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
                 </div>

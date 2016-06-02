@@ -299,7 +299,7 @@ function loadPresetEditModal(preset) {
 	editingpreset = preset;
 	var edit_div = $('.preset-edit-modal');
 	edit_div.find('#presetID').text(preset.id);
-	edit_div.find('img').replaceWith(preset.img.clone());
+	edit_div.find('img').attr("src", "/api/backend" + preset.image);
 	var tags_input = $('#preset_edit_div .tags_input');
 	tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {

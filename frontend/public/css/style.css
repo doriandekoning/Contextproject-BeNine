@@ -368,7 +368,7 @@ input[type=range]:focus {
     position: relative;
 }
 
-#preset_create_div .modal-body {
+.modal-body {
     position: relative;
     height: 300px;
 }
