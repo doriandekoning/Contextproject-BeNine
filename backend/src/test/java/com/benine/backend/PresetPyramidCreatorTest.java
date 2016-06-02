@@ -47,7 +47,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
 
   @Test
   public final void testCreate() {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1);
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1, 0);
     ArrayList<Preset> expected = new ArrayList<>();
     //expected.add(new PresetFactory().createPreset(0, 180), )
 
@@ -56,24 +56,31 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public final void testCreatePositionsOneOne()
           throws InterruptedException, CameraConnectionException, TimeoutException {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1);
-    Collection<Preset> actualPresets =  (Collection)ppc.createPresets(cam);
-    Collection<Preset> expectedPresets = new ArrayList<Preset>();
-    expectedPresets.add(new PresetFactory().createPreset(cam, 2, 30));
-    Assert.assertEquals(expectedPresets, actualPresets);
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1, 0);
+    ppc.createPresets(cam);
+    verify(cam).moveTo(eq(new Position(0, 180.0)), anyInt(), anyInt());
   }
 
   @Test
   public final void testCreatePositionsTwoByOne()
           throws InterruptedException, CameraConnectionException, TimeoutException {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(2, 1, 1);
-    when(cam.getPosition()).thenReturn(new Position(1, 2)).thenReturn(new Position(3, 3));
-    Collection<Preset> actualPresets =  (Collection)ppc.createPresets(cam);
-    Collection<Preset> expectedPresets = new ArrayList<Preset>();
+    PresetPyramidCreator ppc = new PresetPyramidCreator(2, 1, 1, 0);
+    ppc.createPresets(cam);
 
 
-    verify(cam).moveTo(eq(new Position(-26.65, 149.12)), anyInt(), anyInt());
-    verify(cam).moveTo(eq(new Position(26.65, 149.12)), anyInt(), anyInt());
+    verify(cam).moveTo(eq(new Position(0, 180-(IPCamera.HORIZONTAL_FOV_MAX/2))), anyInt(), anyInt());
+    verify(cam).moveTo(eq(new Position(0, 180+(IPCamera.HORIZONTAL_FOV_MAX/2))), anyInt(), anyInt());
+  }
+
+
+  @Test
+  public final void testCreatePositionsOneByTwo()
+          throws InterruptedException, CameraConnectionException, TimeoutException {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 1, 0);
+    ppc.createPresets(cam);
+
+    verify(cam).moveTo(eq(new Position(-60.3, 180.0)), anyInt(), anyInt());
+    verify(cam).moveTo(eq(new Position(60.3, 180.0)), anyInt(), anyInt());
   }
 
 }

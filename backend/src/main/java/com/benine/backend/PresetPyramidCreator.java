@@ -16,19 +16,20 @@ public class PresetPyramidCreator implements AutoPresetCreator {
 
   private static final int HORIZONTAL_FOV = 120;
   private static final int VERTICAL_FOV = 90;
-  private static final double OVERLAP = 0.1;
+  private static double overlap;
 
   private int rows;
   private int columns;
   private int levels;
 
 
-  public PresetPyramidCreator(int rows, int columns, int levels) {
+  public PresetPyramidCreator(int rows, int columns, int levels, double overlap) {
     assert rows > 0;
     assert columns > 0;
     this.rows = rows;
     this.columns = columns;
     this.levels = levels;
+    this.overlap = overlap;
   }
 
   @Override
@@ -78,17 +79,18 @@ public class PresetPyramidCreator implements AutoPresetCreator {
     final double zoomCoefficient =  1 - ((zoomlevel - IPCamera.MIN_ZOOM)/(IPCamera.MAX_ZOOM));
     final double curHorFov = (IPCamera.HORIZONTAL_FOV_MAX - IPCamera.HORIZONTAL_FOV_MIN) * zoomCoefficient;
     final double curVerFov = (IPCamera.VERTICAL_FOV_MAX - IPCamera.VERTICAL_FOV_MIN) * zoomCoefficient;
-    double betweenVer = (curVerFov/columns) - (OVERLAP*curVerFov);
-    double betweenHor = (curHorFov/columns) - (OVERLAP*curHorFov);
+    double betweenVer = (curVerFov/columns) - (overlap*curVerFov);
+    double betweenHor = (curHorFov/columns) - (overlap*curHorFov);
     // Calculate start positions
-    double startPan = 0 - (columns*(betweenHor/2));
-    double startTilt = 180 - ((rows/2)*betweenVer);
+    double startPan = 0 - ((columns-1)*(betweenHor/2));
+    double startTilt = 180 - ((rows-1)*(betweenVer/2));
 
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        positions.add(new Position(startPan + (betweenVer * column), startTilt + (betweenHor * row)));
+        positions.add(new Position(startPan + (betweenHor * column), startTilt + (betweenVer * row)));
       }
     }
+
 
     return positions;
   }
