@@ -58,6 +58,7 @@ public class Stream extends Observable {
   private void process() {
     while (!Thread.interrupted()) {
       if (!connected) {
+        logger.log("Not connected to stream " + url.toString(), LogEvent.Type.INFO);
         openConnection();
       } else {
         try {
