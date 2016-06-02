@@ -86,7 +86,7 @@ function addCameraRow(block, cameras) {
 		} else {
 			camera_element.attr("id", "camera_-1");
 			camera_title_text = $('<span id="camera_title">-</span>');
-			camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=Camera -&bg=8b8b8b" >').get(0);
+			camera_image = $('<img data-src="holder.js/246x144?auto=yes&text=No Camera&bg=8b8b8b" >').get(0);
 		}
         camera_title.append(camera_icon, camera_title_text);
         camera_element.append(camera_image, camera_title, camera_status);
@@ -121,7 +121,7 @@ function addPresetRow(presets) {
 			addPreset(preset_column, presets[i]);
 		} else {
 			preset_column = $('<div class="col-xs-3 none"></div>');
-			addPreset(preset_column, "-");
+			addPreset(preset_column, "");
 		}
         preset_row.append(preset_column);
     }
@@ -138,7 +138,7 @@ function addPresetRow(presets) {
 function addPreset(elem, id) {
     var preset_image, preset_caption;
 
-    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=Preset ' + id + '&bg=8b8b8b">').get(0);
+    preset_image = $('<img data-src="holder.js/128x77?auto=yes&text=No preset ' + id + '&bg=8b8b8b">').get(0);
 
     preset_caption = $('<h5>Preset ' + id + '&nbsp;&nbsp;&nbsp;&nbsp;</h5>');
 

@@ -33,6 +33,7 @@ function loadCameras() {
 		cameras.forEach(function(item) {
 			item.smallView();
 		});
+		Holder.run({images:"#camera_area img"});
 	});
 }
 
