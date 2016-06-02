@@ -1,6 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;//TODO add Javadoc comment
 
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomingCamera;
 
 /**
  *
@@ -37,5 +38,16 @@ public class ZoomPosition extends Position {
 
   public int getZoom() {
     return zoom;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(super.equals(o)) {
+      if ( o instanceof ZoomPosition ) {
+        ZoomPosition other = (ZoomPosition)o;
+        return other.getZoom() == this.getZoom();
+      }
+    }
+    return false;
   }
 }

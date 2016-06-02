@@ -5,8 +5,8 @@ package com.benine.backend.camera;
  */
 public class Position {
 
-  double pan;
-  double tilt;
+  private double pan;
+  private double tilt;
 
   /**
    * Constructor of a position object used for camera positions.
@@ -74,13 +74,14 @@ public class Position {
     return result;
   }
 
+
   @Override
   public boolean equals(Object o) {
     final double delta = 0.05;
     if (o instanceof Position) {
       Position that = (Position) o;
       if (Math.abs(this.tilt - that.tilt)  < delta
-                && Math.abs(this.tilt - that.tilt) < delta ) {
+                && Math.abs(this.pan - that.pan) < delta ) {
         return true;
       }
     }
