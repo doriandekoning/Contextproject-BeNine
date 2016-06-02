@@ -1,6 +1,7 @@
 package com.benine.backend.camera;
 
 import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,5 +21,12 @@ public class ZoomPositionTest {
     ZoomPosition pos = new ZoomPosition(10, 20, 50);
     pos.setZoom(60);
     Assert.assertEquals(60, pos.getZoom());
+  }
+
+  @Test
+  public final void testPositionConstructor() {
+    ZoomPosition actualPos = new ZoomPosition(new Position(50, 20), 50);
+    ZoomPosition expectedPos = new ZoomPosition(50, 20, 50);
+    Assert.assertEquals(actualPos, expectedPos);
   }
 }
