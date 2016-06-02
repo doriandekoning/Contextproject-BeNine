@@ -26,48 +26,42 @@ public class EditPresetHandler extends RequestHandler {
    */
   public EditPresetHandler() {}
     
-  private ServerController control;
+  private ServerController control = ServerController.getInstance();
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
     
-    String overwriteTag = request.getParameter("overwriteTag");
-    String overwritePosition = request.getParameter("overwriteposition");
-    
-    control = ServerController.getInstance();
-    String camID = request.getParameter("camera");
-    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(Integer.parseInt(camID));
-        
-    int presetID = Integer.parseInt(request.getParameter("presetid"));
-    Preset preset = control.getPresetController().getPresetById(presetID);
-   
-    String tags = request.getParameter("tags");
-    List<String> tagList = new ArrayList<String>();
-    if (tags != null) {
-      tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-    }
-    if (overwriteTag.equals("true")) {
-      updateTag(preset, tagList);
-    }
-    
-    if (overwritePosition.equals("true")) {
-      try {
-        updatePosition(ipcam,tagList,presetID);
-      } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
-        getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-        respondFailure(request,res);
-      } catch (CameraConnectionException e) {
-        getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
-        respondFailure(request,res);
-      } 
+    try {
+      String overwriteTag = request.getParameter("overwriteTag");
+      String overwritePosition = request.getParameter("overwriteposition");
+      String camID = request.getParameter("camera");
+      int presetID = Integer.parseInt(request.getParameter("presetid"));
+      String tags = request.getParameter("tags");
       
-    }
-    
+      Preset preset = control.getPresetController().getPresetById(presetID);
+     
+      List<String> tagList = new ArrayList<String>();
+      if (tags != null) {
+        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+      }
+      if (overwriteTag.equals("true")) {
+        updateTag(preset, tagList);
+      }
+      
+      if (overwritePosition.equals("true")) {
+        updatePosition(camID,tagList,presetID);
+      }
+    } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
+      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
+      respondFailure(request,res);
+    } catch (CameraConnectionException e) {
+      getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
+      respondFailure(request,res);
+    } 
+        
     respondSuccess(request, res);
-    request.setHandled(true);
-    
-  
+    request.setHandled(true);  
   }
   
   /**
@@ -82,7 +76,7 @@ public class EditPresetHandler extends RequestHandler {
   
   /**
    * 
-   * @param ipcam                         The camera object. 
+   * @param camID                         The id of the camera object. 
    * @param tagList                       The tags belonging to the preset.
    * @param presetID                      The id of the preset. 
    * @throws IOException                  If the image cannot be created.
@@ -91,9 +85,11 @@ public class EditPresetHandler extends RequestHandler {
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  public void updatePosition(IPCamera ipcam, List<String> tagList, int presetID) throws 
+  public void updatePosition(String camID, List<String> tagList, int presetID) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
+    IPCamera ipcam = (IPCamera)control.getCameraController()
+        .getCameraById(Integer.parseInt(camID));   
     Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
     newPreset.setId(presetID);
     control.getDatabase().updatePreset(newPreset);
