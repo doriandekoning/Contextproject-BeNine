@@ -13,7 +13,7 @@ public class MJPEGFrameHeader {
   private String boundary;
   private String contenttype;
 
-  private static final String MJPEG_BOUNDARY = "--polycast";
+  private static final String MJPEG_BOUNDARY = "--BOUNDARY";
   private static final String CONTENT_TYPE = "image/jpeg";
 
   /**
