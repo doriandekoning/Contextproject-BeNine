@@ -6,6 +6,12 @@ var editingpreset;
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 	
+	// Update server status ever 10 seconds
+	setInterval(updateServerStatus, 10 * 1000);
+	
+	// Reload presets every 5 seconds.
+	setInterval(loadPresets, 5 * 1000);
+	
 	// Load the available cameras.
 	loadCameras();
 	
@@ -16,11 +22,28 @@ $(document).ready(function() {
 });
 
 /**
+* Check if the server is still online and display this.
+*/
+function updateServerStatus() {
+	var statuslabel = $('#server_status');
+	$.get('/api/getinfo', function(data) {
+		var status = data.backend.status;
+		if (status === "online") {
+			statuslabel.attr("class", "label label-success");
+		} else {
+			statuslabel.attr("class", "label label-danger");
+		}
+	}).fail(function() { 
+		statuslabel.attr("class", "label label-danger");
+	});
+}
+
+/**
 * Load all the cameras from the backend and display them.
 */
 function loadCameras() {
 	$.get("/api/backend/camera", function(data) {
-		var obj = JSON.parse(data)
+		var obj = JSON.parse(data);
 		for(var c in obj.cameras) {
 			var cam = obj.cameras[c];
 			if (cam.unavailable === undefined) {
@@ -53,7 +76,8 @@ function switchCurrentView(id) {
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);
-		$('#preset_create_div .tags_input').tagsinput('removeAll');
+		var preset_create_div = $('#preset_create_div');
+		preset_create_div.find('.tags_input').tagsinput('removeAll');
 	}
 }
 

@@ -29,7 +29,8 @@ Preset.prototype = {
 	* Show this preset in the preset area.
 	*/
 	displayPreview: function() {
-		var preset_div = $('#preset_area #preset_' + this.id);
+		var preset_area = $('#preset_area');
+		var preset_div = preset_area.find('#preset_' + this.id);
 		preset_div.attr("id", this.id);
 		var preset_img = preset_div.find('img');
 		preset_img.replaceWith(this.img);
@@ -40,7 +41,9 @@ Preset.prototype = {
 	* Recall this preset.
 	*/
 	callPreset: function() {
-		var title = $('#preset_area #preset_' + this.id).find('h5');
+		var preset_area = $('#preset_area');
+		var preset_div = preset_area.find('#preset_' + this.id);
+		var title = preset_div.find('h5');
 		title.addClass("selected");
 		$.get("/api/backend/presets/recallpreset?presetid=" + this.id  , function(data) {});
 		switchCurrentView(this.cameraid);
@@ -62,4 +65,4 @@ Preset.prototype = {
 		this.autoIris = autoiris;
 		this.tags = tags;
 	}
-}
+};
