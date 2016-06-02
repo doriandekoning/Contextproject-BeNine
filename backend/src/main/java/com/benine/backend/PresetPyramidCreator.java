@@ -81,7 +81,7 @@ public class PresetPyramidCreator implements AutoPresetCreator {
     double betweenVer = (curVerFov/columns) - (OVERLAP*curVerFov);
     double betweenHor = (curHorFov/columns) - (OVERLAP*curHorFov);
     // Calculate start positions
-    double startPan = 0 - ((columns/2)*betweenHor);
+    double startPan = 0 - (columns*(betweenHor/2));
     double startTilt = 180 - ((rows/2)*betweenVer);
 
     for (int row = 0; row < rows; row++) {

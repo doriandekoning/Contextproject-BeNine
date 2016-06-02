@@ -76,10 +76,11 @@ public class Position {
 
   @Override
   public boolean equals(Object o) {
+    final double delta = 0.05;
     if (o instanceof Position) {
       Position that = (Position) o;
-      if (Double.compare(this.pan, that.pan) == 0
-                && Double.compare(this.tilt, that.tilt) == 0 ) {
+      if (Math.abs(this.tilt - that.tilt)  < delta
+                && Math.abs(this.tilt - that.tilt) < delta ) {
         return true;
       }
     }
