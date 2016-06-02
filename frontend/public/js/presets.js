@@ -233,21 +233,28 @@ $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
 	$.get("/api/backend/presets?tag=" + datum.name , function(data) {loadPresetsOnTag(JSON.parse(data));});
 });
 
-$(".fill-tags").append(getTags());
+function loadTags() {
+	$(".fill-tags").empty();
+	$(".fill-tags").append(getTags());
+	$(".tag").click(function(e){
+        e.preventDefault();
+        var tag = $(this).html();
+        $(this).replaceWith("<input id='new' value='" + tag + "' /><button id='edit' type='button' class='btn btn-success'>test</button>");
+		$("#edit").click(function(e){
+			e.preventDefault();
+			var tag = $('#new').val();
+			$(this).parent().replaceWith("<span class='tag'>" + tag + "</span>");
+		});
+    });
+}
 
 function getTags() {
 	var result = "";
 	for(i = 0; i < localTags.length; i++) {
-		result += "<span class='tag'>" + localTags[i].name + "</span><br>";
+		result += "<div><span class='tag'>" + localTags[i].name + "</span><br></div>";
 	}
 	return result;
 }
-
-$(".tag").click(function(e){
-        e.preventDefault();
-        var tag = $(".tag").html();
-        $(this).replaceWith("<input value='" + tag + "' />");
-    });
 
 /**
 * Function to handle a click on a preset.
