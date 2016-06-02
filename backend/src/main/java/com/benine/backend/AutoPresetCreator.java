@@ -13,6 +13,8 @@ import java.util.concurrent.TimeoutException;
  */
 public abstract class AutoPresetCreator {
 
+  private static long timeout = 2000;
+
   /**
    * Automatically creates presets for the selected camera.
    * Calll generatePositions to get the positions of the presets.
@@ -28,7 +30,7 @@ public abstract class AutoPresetCreator {
     for (ZoomPosition pos : generatePositions(cam)) {
       cam.moveTo(pos, 30, 2);
       // TODO softcode timeout
-      cam.waitUntilAtPosition(pos, pos.getZoom(), 2000);
+      cam.waitUntilAtPosition(pos, pos.getZoom(), timeout);
       presets.add(new PresetFactory().createPreset(cam, 2, 30));
     }
     return presets;
@@ -43,5 +45,14 @@ public abstract class AutoPresetCreator {
    */
   protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam)
           throws CameraConnectionException;
+
+
+  /**
+   * Setter for timeout.
+   * @param timeout the new timeout.
+   */
+  public void setTimeout(long timeout) {
+    this.timeout = timeout;
+  }
 
 }
