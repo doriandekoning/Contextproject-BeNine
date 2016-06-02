@@ -1,4 +1,5 @@
 var localTags = [{name: "Trumpet"}, {name: "Guitar"}, {name: "Bass"}, {name: "Violin"},{name: "Trombone"},{name: "Piano"},{name: "Banjo"}];
+var deleteTags = [];
 
 /**
 * Function loads the presets in this object
@@ -234,6 +235,7 @@ $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
 });
 
 function loadTags() {
+	deleteTags = [];
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
 	readyTags();
@@ -244,39 +246,34 @@ function readyTags() {
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith("<input class='new' value='" + tag + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
-		editTags();
-		deleteTags();
+		editTags($(this).attr('id'));
     });
 }
 
-function editTags() {
+function editTags(id) {
 	$(".edit").click(function(e){
 			e.preventDefault();
 			var tag = $('.new').val();
-			$(this).parent().replaceWith("<div><span class='tag'>" + tag + "</span></div>");
-			readyTags();
+			$(this).parent().replaceWith("<div><span id=" + id + " class='tag'>" + tag + "</span></div>");
 	});
-}
-
-function deleteTags() {
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		readyTags();
+		deleteTags.push(id);
+		//localTags.splice(id,1);
 	});
 }
 
 function addTag() {
 	$(".fill-tags").append("<div><input class='new' value='new' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
-	editTags();
-	deleteTags();
+	editTags(localTags.length);
 }
 
 function getTags() {
 	var result = "";
 	for(i = 0; i < localTags.length; i++) {
-		result += "<div><span class='tag'>" + localTags[i].name + "</span><br></div>";
+		result += "<div><span id=" + i + " class='tag'>" + localTags[i].name + "</span><br></div>";
 	}
 	return result;
 }
