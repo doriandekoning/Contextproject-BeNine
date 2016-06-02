@@ -1,5 +1,6 @@
 var localTags = [{name: "Trumpet"}, {name: "Guitar"}, {name: "Bass"}, {name: "Violin"},{name: "Trombone"},{name: "Piano"},{name: "Banjo"}];
 var deleteTags = [];
+var updatedTags = [];
 
 /**
 * Function loads the presets in this object
@@ -235,6 +236,7 @@ $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
 });
 
 function loadTags() {
+	updatedTags = [];
 	deleteTags = [];
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
@@ -255,14 +257,32 @@ function editTags(id) {
 			e.preventDefault();
 			var tag = $('.new').val();
 			$(this).parent().replaceWith("<div><span id=" + id + " class='tag'>" + tag + "</span></div>");
+			updatedTags.push({index: id, name: tag});
+			console.log(updatedTags[0].name);
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
 		deleteTags.push(id);
-		//localTags.splice(id,1);
 	});
+}
+
+function updateTags() {
+	for(i = 0; i < updatedTags.length; i++) {
+		if(localTags[updatedTags[i].index] != undefined){
+			localTags[updatedTags[i].index].name = updatedTags[i].name;
+		}
+		else {
+			console.log(i);
+			localTags.push({name: updatedTags[i].name});
+		}
+	}
+	for(i = 0; i < deleteTags.length; i++) {
+		localTags.splice(deleteTags[i],1);
+	}
+	tagnames.clearPrefetchCache();
+	tagnames.initialize();
 }
 
 function addTag() {
