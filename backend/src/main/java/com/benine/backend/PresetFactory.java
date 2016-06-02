@@ -1,4 +1,4 @@
-package com.benine.backend;//TODO add Javadoc comment
+package com.benine.backend;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
@@ -6,7 +6,6 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
-import com.sun.corba.se.spi.activation.Server;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- *
+ * Class used to create presets.
  */
 public class PresetFactory {
 
@@ -30,6 +29,7 @@ public class PresetFactory {
    * @param autoiris  The autoiris of the preset
    * @param tiltspeed The tiltspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
+   * @return the created preset.
    */
   public Preset createPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
@@ -57,11 +57,14 @@ public class PresetFactory {
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
+   * @param tags      The tags for the preset
+   * @return the created preset
    */
   public Preset createPreset(Position pos, int zoom, int focus, int iris,
                              boolean autofocus, int panspeed, int tiltspeed,
                              boolean autoiris, int cameraId, Collection<String> tags) {
-    Preset preset = createPreset(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
+    Preset preset = createPreset(pos, zoom, focus, iris,
+            autofocus, panspeed, tiltspeed, autoiris, cameraId);
     preset.addTags(tags);
     return preset;
   }
@@ -71,6 +74,8 @@ public class PresetFactory {
    * @param cam IPCamera to create the preset of
    * @param panSpeed the panspeed for the preset
    * @param tiltSpeed the tiltspeed of the preset
+   * @return the created preset.
+   * @throws CameraConnectionException when camera cannot be reached.
    */
   public Preset createPreset(IPCamera cam, int panSpeed, int tiltSpeed)
           throws CameraConnectionException, IOException, StreamNotAvailableException {

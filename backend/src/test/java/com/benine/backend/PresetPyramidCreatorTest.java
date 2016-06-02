@@ -1,19 +1,18 @@
 package com.benine.backend;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -45,10 +44,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
-                                           cam.getZoomPosition()));
+            cam.getZoomPosition()));
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
-                                           cam.getZoomPosition()));
+            cam.getZoomPosition()));
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 
@@ -90,7 +89,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions3x3x1()
           throws CameraConnectionException {
-    ArrayList<ZoomPosition> actualPositons =  new ArrayList(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
+    ArrayList<ZoomPosition> actualPositons =  new ArrayList<>(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
     ArrayList<ZoomPosition> expectedPositions = new ArrayList<>();
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
