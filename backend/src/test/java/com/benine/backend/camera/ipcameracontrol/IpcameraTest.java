@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.json.simple.JSONObject;
+
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
@@ -29,6 +31,7 @@ public class IpcameraTest {
   @Before
   public final void setUp() throws InvalidCameraTypeException {
     camera = Mockito.spy(new IPCamera("test"));
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
@@ -97,7 +100,7 @@ public class IpcameraTest {
   public final void testGetPositionTwice3Seconds() throws CameraConnectionException, InterruptedException {
     setCameraBehaviour("APC", "aPC80008000");
     Position res = camera.getPosition();
-    Thread.sleep(2100); 
+    Thread.sleep(1); 
     res = camera.getPosition();
     assertEquals(0, res.getPan(), 0.000001);
     assertEquals(180, res.getTilt(), 0.000001);
