@@ -52,14 +52,14 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     // 1 is completely zoomed out, 0 completely zoomed in
 
     final double zoomCoefficient =  1 - ((curPos.getZoom() - IPCamera.MIN_ZOOM)/(IPCamera.MAX_ZOOM));
-    final double curHorFov = (IPCamera.HORIZONTAL_FOV_MAX - IPCamera.HORIZONTAL_FOV_MIN) * zoomCoefficient;
-    final double curVerFov = (IPCamera.VERTICAL_FOV_MAX - IPCamera.VERTICAL_FOV_MIN) * zoomCoefficient;
-    double betweenVer = (curVerFov/columns) - (overlap*curVerFov);
-    double betweenHor = (curHorFov/columns) - (overlap*curHorFov);
+    final double curHorFov = IPCamera.HORIZONTAL_FOV_MAX * zoomCoefficient;
+    final double curVerFov = IPCamera.VERTICAL_FOV_MAX * zoomCoefficient;
+    double betweenVer = (curVerFov/(2*rows)) - ((rows-1)*(overlap*curVerFov));
+    double betweenHor = (curHorFov/(2*columns)) - ((columns-1)*(overlap*curHorFov));
     // Calculate start positions
-    // TODO Change to current cam locations as starting point
-    double startPan = curPos.getPan() - ((columns-1)*(betweenHor/2));
-    double startTilt = curPos.getTilt() - ((rows-1)*(betweenVer/2));
+
+    double startPan = curPos.getPan() - ((columns-1)*betweenVer);
+    double startTilt = curPos.getTilt() - ((rows-1)*betweenHor);
 
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {

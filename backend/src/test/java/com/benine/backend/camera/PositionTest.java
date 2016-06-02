@@ -3,6 +3,7 @@ package com.benine.backend.camera;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,40 @@ public class PositionTest {
     Position pos = new Position(42.42, 4.2);
     Assert.assertEquals("Position{pan=42.42, tilt=4.2}", pos.toString());
   }
-    
+
+
+  @Test
+  public void testEqualsEqual() {
+    Position pos1 = new Position(42.42, 2.3);
+    Position pos2 = new Position(42.42, 2.3);
+    Assert.assertEquals(pos1, pos2);
+  }
+
+  @Test
+  public void testEqualsPanNotEqual() {
+    Position pos1 = new Position(2, 2.3);
+    Position pos2 = new Position(42.42, 2.3);
+    Assert.assertNotEquals(pos1, pos2);
+  }
+
+  @Test
+  public void testEqualsTiltNotEqual() {
+    Position pos1 = new Position(2, 2.3);
+    Position pos2 = new Position(2, 1);
+    Assert.assertNotEquals(pos1, pos2);
+  }
+
+  @Test
+  public void testEqualsNotEqualNull() {
+    Position pos1 = new Position(2, 2.3);
+    Assert.assertNotEquals(pos1, null);
+  }
+
+  @Test
+  public void testEqualsZoomPositionNotEqual() {
+    Position pos1 = new Position(2, 2.3);
+    Position pos2 = new ZoomPosition(2, 1, 3);
+    Assert.assertNotEquals(pos1, pos2);
+  }
 
 }
