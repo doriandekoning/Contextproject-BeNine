@@ -13,6 +13,9 @@ public class MJPEGFrameHeader {
   private String boundary;
   private String contenttype;
 
+  private static final String MJPEG_BOUNDARY = "--polycast";
+  private static final String CONTENT_TYPE = "image/jpeg";
+
   /**
    * Creates a frameheader object from a bytestream header.
    * @param header Header in bytes.
@@ -20,8 +23,8 @@ public class MJPEGFrameHeader {
   public MJPEGFrameHeader(byte[] header) {
     String headerString = new String(header, StandardCharsets.UTF_8);
 
-    this.boundary = "--polycast";
-    this.contenttype = "image/jpeg";
+    this.boundary = MJPEG_BOUNDARY;
+    this.contenttype = CONTENT_TYPE;
     this.contentlength = getContentLength(headerString);
 
   }
