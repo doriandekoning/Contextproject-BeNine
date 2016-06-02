@@ -3,6 +3,7 @@ package com.benine.backend.http;
 import com.benine.backend.Preset;
 import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
+
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,9 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 public class PresetsHandler extends RequestHandler {
 
@@ -33,6 +36,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("recallpreset", new RecallPresetHandler());
     addHandler("addtag", new AddTagHandler());
     addHandler("removetag", new RemoveTagHandler());
+    addHandler("createautopreset", new AutoPresetCreationHandler());
   }
 
   @Override

@@ -44,10 +44,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
-                                           cam.getZoomPosition()));
+            cam.getZoomPosition()));
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
-                                           cam.getZoomPosition()));
+            cam.getZoomPosition()));
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 

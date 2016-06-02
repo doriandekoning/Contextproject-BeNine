@@ -76,28 +76,7 @@ public class CreatePresetHandler extends RequestHandler {
     request.setHandled(true);
   }
 
-  /**
-   * Creates an image for a preset.
-   * @param cameraID      The id of the camera to take the image from.
-   * @param presetID      The id of the preset used for naming.
-   * @throws StreamNotAvailableException  If the camera does not have a stream.
-   * @throws IOException  If the image cannot be written.
-   */
-  private void createImage(int cameraID, int presetID) throws
-          StreamNotAvailableException, IOException {
-    StreamController streamController = ServerController.getInstance().getStreamController();
 
-    StreamReader streamReader = streamController.getStreamReader(cameraID);
-    BufferedImage bufferedImage = streamReader.getSnapShot();
-
-    File path = new File("static" + File.separator + "presets" + File.separator
-            + cameraID + "_" + presetID + ".jpg");
-
-    ImageIO.write(bufferedImage, "jpg", path);
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    
-    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
-  }
 
   /**
    * Sets a preset.
@@ -115,7 +94,6 @@ public class CreatePresetHandler extends RequestHandler {
     PresetController presetController = ServerController.getInstance().getPresetController();
     
     int presetID = presetController.addPreset(createPreset(camera, tagList));
-    createImage(camera.getId(), presetID);
   }
 
   /**
