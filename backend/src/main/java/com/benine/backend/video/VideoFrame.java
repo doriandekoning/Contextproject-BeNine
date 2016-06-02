@@ -1,5 +1,8 @@
 package com.benine.backend.video;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 /**
  * Created on 01-06-16.
  */
@@ -22,7 +25,7 @@ public class VideoFrame {
    */
   public VideoFrame(MJPEGFrameHeader header, byte[] image) {
     this.header = header;
-    this.image = image;
+    this.image = Arrays.copyOf(image, image.length);
   }
 
   public MJPEGFrameHeader getHeader() {
@@ -30,14 +33,14 @@ public class VideoFrame {
   }
 
   public byte[] getImage() {
-    return this.image;
+    return Arrays.copyOf(image, image.length);
   }
 
   public byte[] getHeaderBytes() {
-    return header.getString().getBytes();
+    return header.getString().getBytes(StandardCharsets.UTF_8);
   }
 
   public void setImage(byte[] image) {
-    this.image = image;
+    this.image = Arrays.copyOf(image, image.length);
   }
 }

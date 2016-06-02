@@ -9,8 +9,6 @@ import java.io.IOException;
  */
 public class MJPEGStreamReader extends StreamReader {
 
-  private BufferedInputStream bufferedStream;
-
   private String boundary;
 
   private VideoFrame snapshot;
@@ -18,31 +16,16 @@ public class MJPEGStreamReader extends StreamReader {
   /**
    * Creates a new MJPEGStreamReader.
    *
-   * @param url The url fo the stream.
-   * @throws IOException if the inputstream cannot be read.
-   */
-  public MJPEGStreamReader(String url) throws IOException {
-      this(new Stream(url));
-  }
-
-  /**
-   * Creates a new MJPEGStreamReader.
-   *
    * @param stream A stream object.
+   * @throws IOException StreamReader does not have a valid stream, rendering the object useless.
    */
-  public MJPEGStreamReader(Stream stream) {
-    this.bufferedStream = new BufferedInputStream(stream.getInputStream());
+  public MJPEGStreamReader(Stream stream) throws IOException {
+    super(stream);
+
     this.snapshot = null;
 
     setMJPEGBoundary();
     processStream();
-  }
-
-  @Override
-  public void run() {
-    while (!Thread.interrupted()) {
-      processStream();
-    }
   }
 
   /**
@@ -91,6 +74,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private int[] checkNextBytes(int amount) throws IOException {
     int[] byteArray = new int[amount];
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     bufferedStream.mark(amount);
     for (int i = 0; i < amount; i++) {
@@ -153,7 +137,7 @@ public class MJPEGStreamReader extends StreamReader {
     int readByte;
 
     for (int i = 0; i < contentLength; i++) {
-      readByte = bufferedStream.read(image, offset, contentLength - offset);
+      readByte = getBufferedStream().read(image, offset, contentLength - offset);
       offset += readByte;
     }
 
@@ -167,12 +151,10 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private byte[] readJPEG() throws IOException {
     ByteArrayOutputStream jpeg = new ByteArrayOutputStream();
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     while (!isJPEGTrailer()) {
-      // If stream has not ended, add to jpeg stream.
-      if (bufferedStream.available() != 0) {
-        jpeg.write(bufferedStream.read());
-      }
+      jpeg.write(bufferedStream.read());
     }
 
     jpeg.close();
@@ -187,6 +169,7 @@ public class MJPEGStreamReader extends StreamReader {
    */
   private byte[] getHeader() throws IOException {
     ByteArrayOutputStream header = new ByteArrayOutputStream(128);
+    BufferedInputStream bufferedStream = getBufferedStream();
 
     while (!isJPEGHeader()) {
       // If stream has not ended, add to header stream.

@@ -86,8 +86,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
    */
   private boolean validateResizeArguments(String width, String height) {
     try {
-      int w = Integer.parseInt(width);
-      int h = Integer.parseInt(height);
+      Integer.parseInt(width);
+      Integer.parseInt(height);
 
       return true;
     } catch (NumberFormatException e) {
