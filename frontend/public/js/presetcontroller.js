@@ -315,24 +315,17 @@ var newId = 0;
 function loadTags() {
 	updatedTags = [];
 	deleteTags = [];
-	newTag({name: 'Trumpet'});
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
 	newId = localTags.length;
-	readyTags();
 }
 
-/**
-* Make the tags ready for clicking.
-*/
-function readyTags() {
-	$(".tag").click(function(e){
+$(".fill-tags").on('click', '.tag', function(e){
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith(appendEditable(tag, false));
 		editTags($(this).attr('id'));
 	});
-}
 
 /**
 * Edit or delete a clicked on tag.
