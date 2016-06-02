@@ -1,7 +1,5 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 

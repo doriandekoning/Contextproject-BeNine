@@ -1,23 +1,19 @@
 package com.benine.backend;
 
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.TimeoutException;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 /**
  *
