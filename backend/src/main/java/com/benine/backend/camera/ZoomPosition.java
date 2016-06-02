@@ -1,7 +1,7 @@
 package com.benine.backend.camera;
 
 /**
- *
+ * Contains a position and a zoom level.
  */
 public class ZoomPosition extends Position {
 
@@ -39,12 +39,21 @@ public class ZoomPosition extends Position {
 
   @Override
   public boolean equals(Object o) {
-    if(super.equals(o)) {
-      if ( o instanceof ZoomPosition ) {
-        ZoomPosition other = (ZoomPosition)o;
-        return other.getZoom() == this.getZoom();
-      }
+    if (super.equals(o) && o instanceof ZoomPosition ) {
+      ZoomPosition other = (ZoomPosition)o;
+      return other.getZoom() == this.getZoom();
     }
     return false;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp = super.hashCode();
+    temp = Double.doubleToLongBits(zoom);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
 }

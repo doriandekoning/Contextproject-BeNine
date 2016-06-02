@@ -51,7 +51,7 @@ public class Position {
   }
 
   /**
-   * Returns a string representation of this position
+   * Returns a string representation of this position.
    * @return string representation of this positon
    */
   public String toString() {

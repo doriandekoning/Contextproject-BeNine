@@ -62,4 +62,12 @@ public class ZoomPositionTest {
     Position pos2 = new Position(50, 20);
     Assert.assertNotEquals(pos1, pos2);
   }
+
+  @Test
+  public final void testHashCode() {
+    int pos1Hash = new ZoomPosition(new Position(3, 20), 50).hashCode();
+    int pos2Hash = new ZoomPosition(new Position(3, 20), 50).hashCode();
+    Assert.assertEquals(pos1Hash, pos1Hash);
+
+  }
 }

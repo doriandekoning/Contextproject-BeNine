@@ -512,7 +512,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @param pos The position the camera should be at.
    * @param zoom the zoom of the camera
    * @param timeout the timeout after which to give up waiting
-   * @return true if the camera is at the specified location false otherwise
+   * @throws InterruptedException when interupted when waiting to arrive at position.
+   * @throws CameraConnectionException when connection to camera is lost.
+   * @throws TimeoutException when camera moves to slow or does not move at all.
    */
   public void waitUntilAtPosition(Position pos, int zoom, long timeout)
           throws InterruptedException, CameraConnectionException, TimeoutException {
