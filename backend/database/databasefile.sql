@@ -58,7 +58,7 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `presetsDatabase`.`tag`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tag` (
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`name`))
 ENGINE = InnoDB;
 
@@ -68,16 +68,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPresets` (
   `presets_ID` INT(11) NOT NULL,
-  `tag_Name` INT NOT NULL,
-  PRIMARY KEY (`presets_ID`, `tag_Name`),
-  INDEX `fk_tagPresets_tag1_idx` (`tag_Name` ASC),
+  `tag_name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`presets_ID`, `tag_name`),
+  INDEX `fk_tagPresets_tag1_idx` (`tag_name` ASC),
   CONSTRAINT `fk_tagPresets_presets`
     FOREIGN KEY (`presets_ID`)
     REFERENCES `presetsDatabase`.`presets` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tagPresets_tag1`
-    FOREIGN KEY (`tag_Name`)
+    FOREIGN KEY (`tag_name`)
     REFERENCES `presetsDatabase`.`tag` (`name`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
