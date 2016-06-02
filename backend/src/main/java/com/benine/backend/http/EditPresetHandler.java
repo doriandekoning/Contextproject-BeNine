@@ -75,7 +75,9 @@ public class EditPresetHandler extends RequestHandler {
   }
   
   /**
-   * 
+   * Editing an already existing preset by removing the old preset and creating a new 
+   * preset with the same preset and camera id. It also creates a new image that belongs to the 
+   * preset and updates the database.
    * @param camID                         The id of the camera object. 
    * @param tagList                       The tags belonging to the preset.
    * @param presetID                      The id of the preset. 
