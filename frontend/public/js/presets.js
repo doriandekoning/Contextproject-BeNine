@@ -236,16 +236,30 @@ $('#tagsearch_input').on('typeahead:selected', function(e, datum) {
 function loadTags() {
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
+	readyTags();
+}
+
+function readyTags() {
 	$(".tag").click(function(e){
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith("<input id='new' value='" + tag + "' /><button id='edit' type='button' class='btn btn-success'>test</button>");
-		$("#edit").click(function(e){
+		editTags();
+    });
+}
+
+function editTags() {
+	$("#edit").click(function(e){
 			e.preventDefault();
 			var tag = $('#new').val();
-			$(this).parent().replaceWith("<span class='tag'>" + tag + "</span>");
-		});
-    });
+			$(this).parent().replaceWith("<div><span class='tag'>" + tag + "</span></div>");
+			readyTags();
+	});
+}
+
+function addTag() {
+	$(".fill-tags").append("<div><input id='new' value='new' /><button id='edit' type='button' class='btn btn-success'>test</button></div>");
+	editTags();
 }
 
 function getTags() {
