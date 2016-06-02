@@ -4,6 +4,7 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Creates presets according to a pyramid model.
  */
-public class PresetPyramidCreator implements AutoPresetCreator {
+public class PresetPyramidCreator extends AutoPresetCreator {
 
   private static final int HORIZONTAL_FOV = 120;
   private static final int VERTICAL_FOV = 90;
@@ -33,45 +34,19 @@ public class PresetPyramidCreator implements AutoPresetCreator {
   }
 
   @Override
-  public Collection<Preset> createPresets(IPCamera cam)
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    Position camStartPos = cam.getPosition();
-    ArrayList<Preset> presets = new ArrayList<Preset>();
+  protected Collection<ZoomPosition> generatePositions(IPCamera cam)
+          throws CameraConnectionException {
+    ArrayList<ZoomPosition> positions = new ArrayList<>();
     for (int level = 0; level < levels; level++ ) {
-      int zoom = cam.getZoomPosition();
-      for (Position pos : generatePositionsLayer(zoom)) {
-        cam.moveTo(pos, 30, 2);
-        cam.waitUntilAtPosition(pos, zoom, 2000);
-        presets.add(new PresetFactory().createPreset(cam, 2, 30));
-      }
-
-      int newZoomPos = cam.getZoomPosition() + ((IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM)* (level/levels));
-      cam.zoomTo(newZoomPos);
-      cam.waitUntilAtPosition(camStartPos, newZoomPos, 2000);
+      int zoomlevel = (IPCamera.MAX_ZOOM - cam.getZoomPosition())* (level/levels);
+      Collection<Position> positionsInLayer =  generatePositionsLayer(zoomlevel);
+      positionsInLayer.forEach( p -> positions.add(new ZoomPosition(p, zoomlevel)));
     }
-    return presets;
-  }
-
-  /**
-   * Creates a preset for the specified position in the pyramid.
-   * @param cam the camera to create the preset for.
-   * @param column column within the level
-   * @param row the row within the level
-   * @return the preset at the specified position
-   */
-  public Preset createPresetAtGridPos(IPCamera cam, int column, int row)
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    // TODO Determine position to move to
-    int startZoom = cam.getZoomPosition();
-    Position pos = new Position(-90 + (90*column), (180- 30) + (30*row));
-    cam.moveTo(pos, startZoom, 2);
-    cam.waitUntilAtPosition(pos, startZoom, 2000);
-    // TODO Check if cam is at correct location
-    return new PresetFactory().createPreset(cam, 30, 2);
+    return positions;
   }
 
 
-  private ArrayList<Position> generatePositionsLayer(int zoomlevel) {
+  private Collection<Position> generatePositionsLayer(int zoomlevel) {
     ArrayList<Position> positions = new ArrayList<>();
 
     // 1 is completely zoomed out, 0 completely zoomed in
@@ -82,6 +57,7 @@ public class PresetPyramidCreator implements AutoPresetCreator {
     double betweenVer = (curVerFov/columns) - (overlap*curVerFov);
     double betweenHor = (curHorFov/columns) - (overlap*curHorFov);
     // Calculate start positions
+    // TODO Change to current cam locations as starting point
     double startPan = 0 - ((columns-1)*(betweenHor/2));
     double startTilt = 180 - ((rows-1)*(betweenVer/2));
 
@@ -94,5 +70,6 @@ public class PresetPyramidCreator implements AutoPresetCreator {
 
     return positions;
   }
+
 
 }

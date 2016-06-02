@@ -37,6 +37,6 @@ public abstract class AutoPresetCreator {
 
 
 
-  public abstract Collection<ZoomPosition> generatePositions(IPCamera cam);
+  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam) throws CameraConnectionException;
 
 }
