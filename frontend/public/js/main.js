@@ -20,7 +20,7 @@ $(document).ready(function() {
 */
 function loadCameras() {
 	$.get("/api/backend/camera", function(data) {
-		var obj = JSON.parse(data)
+		var obj = JSON.parse(data);
 		for(var c in obj.cameras) {
 			var cam = obj.cameras[c];
 			cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.pan));
@@ -51,7 +51,8 @@ function switchCurrentView(id) {
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);
-		$('#preset_create_div .tags_input').tagsinput('removeAll');
+		var preset_create_div = $('#preset_create_div');
+		preset_create_div.find('.tags_input').tagsinput('removeAll');
 	}
 }
 

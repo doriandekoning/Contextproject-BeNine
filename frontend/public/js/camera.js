@@ -15,20 +15,20 @@ Camera.prototype = {
 	* Show this camera in the small display on the screen.
 	*/
 	smallView: function() {
-		var camera_div, camera_title;
-		camera_div = $('#camera_area #camera_' + this.id);
+		var camera_area = $('#camera_area');
+		var camera_div = camera_area.find('#camera_' + this.id);
 		camera_div.attr("camera_number", this.id);
 		camera_div.find('.camera_status').attr('class', 'camera_status available');
 		camera_img = camera_div.find('img');
 		camera_img.attr('src', '/api/backend/camera/' + this.id + '/mjpeg');
 		camera_img.load(function() {
-			if ($(this).attr("alt") !== undefined) {
-				camera_div.find('.camera_status').attr('class', 'camera_status unavailable');
+			if ($(this).attr("alt") === undefined) {
+				camera_div.attr("onclick", 'switchCurrentView($(this).attr("camera_number"))');
 			} else {
-				camera_div.attr("onclick", 'switchCurrentView($(this).attr("camera_number"))');	
+				camera_div.find('.camera_status').attr('class', 'camera_status unavailable');
 			}
 		});
-		camera_title = camera_div.find('.camera_title');
+		var camera_title = camera_div.find('.camera_title');
 		camera_title.find('#camera_title').text(this.id);
 	},
 	
@@ -54,9 +54,9 @@ Camera.prototype = {
 	* Show the controls of this camera.
 	*/
 	displayControls: function () {
-		zoom = $('#zoom');
-		iris = $('#iris');
-		focus = $('#focus');
+		var zoom = $('#zoom');
+		var iris = $('#iris');
+		var focus = $('#focus');
 		if (this.zoom === undefined) {
 			zoom.hide();
 		} else {
@@ -71,14 +71,14 @@ Camera.prototype = {
 			iris.hide();
 		} else {
 			iris.show();
-			setButton(iris.find("#auto_iris"), this.autoiris);
+			setButton(iris.find("#auto_iris"), this.autoIris);
 		}
-		if  (this.autoFocus === undefined) {
+		if (this.autoFocus === undefined) {
 			focus.hide();
 		} else {
 			focus.show();
 			setButton(focus.find("#auto_focus"), this.autofocus);
 		}
 	}
-}
+};
 
