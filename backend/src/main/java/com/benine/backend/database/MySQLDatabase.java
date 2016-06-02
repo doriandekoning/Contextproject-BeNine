@@ -118,8 +118,10 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = preset.createDeleteSQL();
-      statement.executeUpdate(sql);
+      if (preset != null) {
+        String sql = preset.createDeleteSQL();
+        statement.executeUpdate(sql);
+      }
     } catch (Exception e) {
       getLogger().log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
