@@ -337,9 +337,8 @@ function editTags(id) {
 	$(".edit").click(function(e){
 			e.preventDefault();
 			var tag = $('.new').val();
-			$(this).parent().replaceWith("<div><span id=" + id + " class='tag'>" + tag + "</span></div>");
+			$(this).parent().replaceWith("<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + id + "> " + tag + "</button></div>");
 			updatedTags.push({index: id, name: tag});
-			console.log(updatedTags[0].name);
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
@@ -355,7 +354,6 @@ function updateTags() {
 			localTags[updatedTags[i].index].name = updatedTags[i].name;
 		}
 		else {
-			console.log(i);
 			localTags.push({name: updatedTags[i].name});
 		}
 	}
@@ -374,7 +372,7 @@ function addTag() {
 function getTags() {
 	var result = "";
 	for(i = 0; i < localTags.length; i++) {
-		result += "<div><span id=" + i + " class='tag'>" + localTags[i].name + "</span><br></div>";
+		result += "<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + i + "> " + localTags[i].name + "</button><br></div>";
 	}
 	return result;
 }
