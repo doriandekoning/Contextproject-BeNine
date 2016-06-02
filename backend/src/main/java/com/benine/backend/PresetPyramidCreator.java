@@ -1,14 +1,12 @@
 package com.benine.backend;//TODO add Javadoc comment
 
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Creates presets according to a pyramid model.

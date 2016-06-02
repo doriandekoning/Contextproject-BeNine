@@ -3,7 +3,6 @@ package com.benine.backend.camera;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import com.benine.backend.camera.ipcameracontrol.ZoomPosition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
