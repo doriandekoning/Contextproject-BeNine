@@ -243,23 +243,34 @@ function readyTags() {
 	$(".tag").click(function(e){
         e.preventDefault();
         var tag = $(this).html();
-        $(this).replaceWith("<input id='new' value='" + tag + "' /><button id='edit' type='button' class='btn btn-success'>test</button>");
+        $(this).replaceWith("<input class='new' value='" + tag + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
 		editTags();
+		deleteTags();
     });
 }
 
 function editTags() {
-	$("#edit").click(function(e){
+	$(".edit").click(function(e){
 			e.preventDefault();
-			var tag = $('#new').val();
+			var tag = $('.new').val();
 			$(this).parent().replaceWith("<div><span class='tag'>" + tag + "</span></div>");
 			readyTags();
 	});
 }
 
+function deleteTags() {
+	$(".delete").click(function(e){
+		e.preventDefault();
+		var tag = $('.new').val();
+		$(this).parent().remove();
+		readyTags();
+	});
+}
+
 function addTag() {
-	$(".fill-tags").append("<div><input id='new' value='new' /><button id='edit' type='button' class='btn btn-success'>test</button></div>");
+	$(".fill-tags").append("<div><input class='new' value='new' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>");
 	editTags();
+	deleteTags();
 }
 
 function getTags() {
