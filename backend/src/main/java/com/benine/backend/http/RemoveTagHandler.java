@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by dorian on 25-5-16.
+ * Created by BeNine on 25-5-16.
  */
 public class RemoveTagHandler extends RequestHandler {
   @Override
