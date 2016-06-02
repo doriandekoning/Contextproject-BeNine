@@ -1,6 +1,5 @@
 package com.benine.backend;//TODO add Javadoc comment
 
-import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.junit.Assert;
@@ -16,7 +15,7 @@ import static org.mockito.Mockito.when;
 /**
  *
  */
-public class PresetFacotryTest {
+public class PresetFactoryTest {
 
   int zoom, focus, iris, panspeed, tiltspeed, cameraId;
   Position pos;
