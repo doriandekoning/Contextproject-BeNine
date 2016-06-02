@@ -9,8 +9,9 @@ import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.camera.ZoomingCamera;
-
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.video.StreamType;
 
 import org.json.simple.JSONObject;
@@ -24,13 +25,14 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
  * Class to communicate with an IP Camera from .
  */
 public class IPCamera extends BasicCamera implements MovingCamera,
-        IrisCamera, ZoomingCamera, FocussingCamera {
+        IrisCamera, ZoomingCamera, FocussingCamera, PresetCamera {
 
   private String ipaddress;
 
@@ -383,7 +385,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public String toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException {
     Logger logger = ServerController.getInstance().getLogger();
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
@@ -402,7 +404,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       logger.log("Failed to get the JSON representation of camera: " 
                                                   + getId(), LogEvent.Type.CRITICAL);
     }
-    return  json.toString();
+    return  json;
     
   }
 
@@ -491,5 +493,21 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       throw new IpcameraConnectionException("Response of camera is not correct expected: " 
           + expected + ", but it was : " + response, getId());
     }
+  }
+
+  @Override
+  public IPCameraPreset createPreset(List<String> tagList) throws CameraConnectionException {
+    int zoom = getZoomPosition();
+    double pan = getPosition().getPan();
+    double tilt = getPosition().getTilt();
+    int focus = getFocusPosition();
+    int iris = getIrisPosition();
+    int panspeed = 15;
+    int tiltspeed = 1;
+    boolean autoiris = isAutoIrisOn();
+    boolean autofocus = isAutoFocusOn();
+    int cameraId = getId();
+    return new IPCameraPreset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
+            tiltspeed, autoiris, cameraId, tagList);
   }
 }
