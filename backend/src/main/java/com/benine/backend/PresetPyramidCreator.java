@@ -57,6 +57,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @param curPos the current camera position.
    * @return A collection of positions
    */
+  @SuppressWarnings("PMD.UselessParentheses")
   private Collection<Position> generatePositionsLayer(ZoomPosition curPos) {
     ArrayList<Position> positions = new ArrayList<>();
 
