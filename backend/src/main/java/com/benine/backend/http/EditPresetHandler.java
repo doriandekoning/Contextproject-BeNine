@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
@@ -57,10 +56,10 @@ public class EditPresetHandler extends RequestHandler {
         updatePosition(camID,tagList,presetID);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
-      getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
+      getLogger().log(e.getMessage(), e);
       respondFailure(request,res);
     } catch (CameraConnectionException e) {
-      getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
+      getLogger().log("Cannot connect to camera.", e);
       respondFailure(request,res);
     } 
         
