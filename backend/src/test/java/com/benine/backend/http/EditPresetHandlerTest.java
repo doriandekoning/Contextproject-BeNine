@@ -52,7 +52,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     streamReader = new MJPEGStreamReader(stream);
     tags = Arrays.asList("violin", "piano");
 
-    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
+    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags);
     when(presetController.getPresetById(1)).thenReturn(preset);
     try {
       when(streamController.getStreamReader(1)).thenReturn(streamReader);
@@ -107,7 +107,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
         
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    Preset preset2= new Preset(new Position(0,0), 50, 33,50,true,15,1,true, 0, tags);
+    Preset preset2= new Preset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags);
     Assert.assertEquals(preset.getZoom(),preset2.getZoom());
   }
 }
