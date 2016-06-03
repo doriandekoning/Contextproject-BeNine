@@ -5,13 +5,11 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
-
-import com.benine.backend.video.MJPEGFrameResizer;
-import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
-
+import com.benine.backend.video.MJPEGFrameResizer;
+import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.VideoFrame;
