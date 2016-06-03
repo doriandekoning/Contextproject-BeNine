@@ -83,7 +83,7 @@ public class EditPresetHandler extends RequestHandler {
    * @param tagList the tag to be added
    * @return the tag added to the preset
    */
-  public Set<String> updateTag(Preset preset, List<String> tagList) {
+  private Set<String> updateTag(Preset preset, List<String> tagList) {
     preset.removeTags();
     preset.addTags(tagList);
     return preset.getTags();
@@ -101,7 +101,7 @@ public class EditPresetHandler extends RequestHandler {
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  public void updatePosition(Preset preset, int presetID) throws 
+  private void updatePosition(Preset preset, int presetID) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
     IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(preset.getCameraId());   
@@ -121,7 +121,7 @@ public class EditPresetHandler extends RequestHandler {
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    */
-  public void createImage(int cameraID, int presetID) throws
+  private void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
@@ -143,7 +143,7 @@ public class EditPresetHandler extends RequestHandler {
    * @param preset    The preset to be updated.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  public void updatePreset(Preset preset, IPCamera camera) 
+  private void updatePreset(Preset preset, IPCamera camera) 
       throws CameraConnectionException {
     
     preset.setZoom(camera.getZoomPosition());
