@@ -22,7 +22,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   IPCamera cam = mock(IPCamera.class);
 
   @Before
-  public void setup() throws CameraConnectionException {
+  public void initialize() throws CameraConnectionException {
     when(cam.getPosition()).thenReturn(new Position(0, 180));
     when(cam.getZoomPosition()).thenReturn(0);
   }
@@ -150,6 +150,11 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Override
   public void testCreate() {
 
+  }
+
+  @Override
+  public AutoPresetCreator getCreator() {
+    return new PresetPyramidCreator(2, 2, 2, 0);
   }
 
 }

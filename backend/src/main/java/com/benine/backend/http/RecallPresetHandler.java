@@ -4,10 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Preset;
 import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.Position;
+import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.eclipse.jetty.server.Request;
 
@@ -40,7 +37,9 @@ public class RecallPresetHandler extends RequestHandler {
       respondSuccess(request, res);
 
     } catch (CameraConnectionException e) {
-      e.printStackTrace();
+      getLogger().log("Error connectiong to camera", e);
+    } catch (CameraBusyException e) {
+      getLogger().log("Camera is busy", e);
       respondFailure(request, res);
     } catch (MalformedURIException | NumberFormatException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
@@ -56,9 +55,10 @@ public class RecallPresetHandler extends RequestHandler {
    * @param preset  The preset to move the camera to.
    * @throws CameraConnectionException  If the camera cannot be reached.
    * @throws MalformedURIException      If the request contains an error.
+   * @throws CameraBusyException if camera is busy.
    */
   public void moveCamera(Camera camera, Preset preset)
-          throws CameraConnectionException, MalformedURIException {
+          throws CameraConnectionException, MalformedURIException, CameraBusyException {
     if (camera instanceof IPCamera) {
       IPCamera ipcamera = (IPCamera) camera;
 

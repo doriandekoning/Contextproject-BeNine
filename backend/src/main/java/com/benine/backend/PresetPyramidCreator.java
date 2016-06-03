@@ -57,6 +57,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @param curPos the current camera position.
    * @return A collection of positions
    */
+  @SuppressWarnings("PMD.UselessParentheses")
   private Collection<Position> generatePositionsLayer(ZoomPosition curPos) {
     ArrayList<Position> positions = new ArrayList<>();
 
@@ -66,8 +67,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
             / (IPCamera.MAX_ZOOM));
     final double curHorFov = IPCamera.HORIZONTAL_FOV_MAX * zoomCoefficient;
     final double curVerFov = IPCamera.VERTICAL_FOV_MAX * zoomCoefficient;
-    double betweenVer = curVerFov;// (curVerFov / (2 * rows)) - ((rows - 1) * (overlap * curVerFov));
-    double betweenHor = curVerFov;//(curHorFov / (2 * columns)) - ((columns - 1) * (overlap * curHorFov));
+    double betweenVer = (curVerFov / (2 * rows)) - ((rows - 1) * (overlap * curVerFov));
+    double betweenHor = (curHorFov / (2 * columns)) - ((columns - 1) * (overlap * curHorFov));
     // Calculate start positions
 
     double startPan = curPos.getPan() - ((columns - 1) * betweenHor);
