@@ -1,5 +1,19 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Preset;
+import com.benine.backend.PresetController;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamController;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
+
+import org.eclipse.jetty.server.Request;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,17 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
 
-import com.benine.backend.Preset;
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.video.StreamNotAvailableException;
+
 
 
 /**
@@ -53,7 +63,7 @@ public class EditPresetHandler extends RequestHandler {
       }
       
       if (overwritePosition.equals("true")) {
-        updatePosition(preset.getId(),tagList,presetID);
+        updatePosition(preset,presetID);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
@@ -83,24 +93,66 @@ public class EditPresetHandler extends RequestHandler {
    * Editing an already existing preset by removing the old preset and creating a new 
    * preset with the same preset and camera id. It also creates a new image that belongs to the 
    * preset and updates the database.
-   * @param camID                         The id of the camera object. 
-   * @param tagList                       The tags belonging to the preset.
    * @param presetID                      The id of the preset. 
+   * @param preset                        The preset to be updated.
    * @throws IOException                  If the image cannot be created.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  public void updatePosition(int camID, List<String> tagList, int presetID) throws 
+  public void updatePosition(Preset preset, int presetID) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
-    IPCamera ipcam = (IPCamera)control.getCameraController()
-        .getCameraById(camID);   
-    CreatePresetHandler handler = new CreatePresetHandler();
-    Preset newPreset = handler.setPreset(ipcam, tagList);
-    newPreset.setId(presetID);
-    control.getDatabase().updatePreset(newPreset);
+    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(preset.getId());   
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    
+    updatePreset(preset, ipcam);
+    
+    presetController.addPreset(preset);
+    createImage(preset.getId(), presetID);
+    control.getDatabase().updatePreset(preset);
+  }
+  
+  /**
+   * Creates an image for a preset.
+   * @param cameraID      The id of the camera to take the image from.
+   * @param presetID      The id of the preset used for naming.
+   * @throws StreamNotAvailableException  If the camera does not have a stream.
+   * @throws IOException  If the image cannot be written.
+   */
+  public void createImage(int cameraID, int presetID) throws
+          StreamNotAvailableException, IOException {
+    StreamController streamController = ServerController.getInstance().getStreamController();
+
+    StreamReader streamReader = streamController.getStreamReader(cameraID);
+    BufferedImage bufferedImage = streamReader.getSnapShot();
+
+    File path = new File("static" + File.separator + "presets" + File.separator
+            + cameraID + "_" + presetID + ".jpg");
+
+    ImageIO.write(bufferedImage, "jpg", path);
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    
+    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
+  }
+  
+  /**
+   * Updates a preset from a camera.
+   * @param camera    The camera to create the preset from.
+   * @param preset    The preset to be updated.
+   * @throws CameraConnectionException If the camera cannot be reached.
+   */
+  public void updatePreset(Preset preset, IPCamera camera) 
+      throws CameraConnectionException {
+    
+    preset.setZoom(camera.getZoomPosition());
+    preset.setPosition(new Position(camera.getPosition().getPan(), camera.getPosition().getTilt()));
+    preset.setFocus(camera.getFocusPosition());
+    preset.setIris(camera.getIrisPosition());
+    preset.setAutofocus(camera.isAutoFocusOn());
+    preset.setAutoiris(camera.isAutoIrisOn());
+    
   }
   
   
