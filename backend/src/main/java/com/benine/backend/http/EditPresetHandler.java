@@ -37,7 +37,7 @@ public class EditPresetHandler extends RequestHandler {
           throws IOException, ServletException {
     
     try {
-      String overwriteTag = request.getParameter("overwriteTag");
+      String overwriteTag = request.getParameter("overwritetag");
       String overwritePosition = request.getParameter("overwriteposition");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
