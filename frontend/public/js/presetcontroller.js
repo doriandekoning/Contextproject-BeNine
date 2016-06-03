@@ -15,7 +15,7 @@ function loadPresets() {
 		}
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
-				newTag(obj.tags[t]);
+				newTag({name: obj.tags[t]});
 			}
 		}
 	}).done(function () { displayPresets(presets); });
@@ -373,7 +373,7 @@ function newTag(val) {
 	localTags.push(val);
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
-	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+	$.get("/api/backend/presets/addtag?name=" + val.name, function(data) {
 				console.log("create tag respone: " + data);
 	}).done();
 }

@@ -139,6 +139,8 @@ public class PresetController {
    * @return a collection with all tags
    */
   public Collection<String> getTags() {
+    Database db = ServerController.getInstance().getDatabase();
+    this.addAllTags(db.getTags());
     return tags;
   }
 
