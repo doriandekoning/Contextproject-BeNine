@@ -104,13 +104,13 @@ public class EditPresetHandler extends RequestHandler {
   public void updatePosition(Preset preset, int presetID) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
-    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(preset.getId());   
+    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(preset.getCameraId());   
     PresetController presetController = ServerController.getInstance().getPresetController();
     
     updatePreset(preset, ipcam);
     
     presetController.addPreset(preset);
-    createImage(preset.getId(), presetID);
+    createImage(preset.getCameraId(), presetID);
     control.getDatabase().updatePreset(preset);
   }
   
