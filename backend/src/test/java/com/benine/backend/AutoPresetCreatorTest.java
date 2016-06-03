@@ -1,43 +1,56 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.*;
 
 /**
  *
  */
 public abstract class AutoPresetCreatorTest {
 
+  private IPCamera camera;
+  private AutoPresetCreator apc;
+
+  @Before
+  public final void setup() throws CameraConnectionException {
+    camera = spy(new IPCamera("test"));
+    doReturn(new ZoomPosition(4, 4, 0)).when(camera).getPosition();
+    doReturn(IPCamera.MAX_ZOOM).when(camera).getZoomPosition();
+    apc = spy(getCreator());
+  }
+
   @Test
   public abstract void testCreate();
 
   @Test
   public void testSetCamBusy() throws Exception {
-    IPCamera cam = spy(new IPCamera("test"));
-    AutoPresetCreator apc = getCreator();
-    apc.createPresets(cam);
-    Mockito.verify(cam).setBusy(true);
+    doReturn(new ArrayList<ZoomPosition>()).when(apc).generatePositions(any(IPCamera.class));
+    apc.createPresets(camera);
+    Mockito.verify(camera).setBusy(true);
   }
 
   @Test
   public void testCamNotBusyAfterwards() throws Exception {
-    IPCamera cam = spy(new IPCamera("test"));
     AutoPresetCreator apc = getCreator();
-    apc.createPresets(cam);
-    Assert.assertFalse(cam.isBusy());
+    apc.createPresets(camera);
+    Assert.assertFalse(camera.isBusy());
   }
 
   @Test (expected = CameraBusyException.class)
   public void testCamBusyExceptionThrown() throws Exception {
-    IPCamera cam = spy(new IPCamera("test"));
     AutoPresetCreator apc = getCreator();
-    apc.createPresets(cam);
+    apc.createPresets(camera);
   }
 
 
