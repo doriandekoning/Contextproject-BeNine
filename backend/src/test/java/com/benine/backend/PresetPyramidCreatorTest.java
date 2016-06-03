@@ -152,4 +152,9 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
 
   }
 
+  @Override
+  public AutoPresetCreator getCreator() {
+    return new PresetPyramidCreator(2, 2, 2, 0);
+  }
+
 }
