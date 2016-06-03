@@ -56,7 +56,7 @@ public class IpcameraTest {
 
 
   @Test
-  public final void testMoveToHomePosition() throws CameraConnectionException {
+  public final void testMoveToHomePosition() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("APS80008000111", "aPS80008000111");
     
     Position pos = new Position(0, 180);
@@ -65,7 +65,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testMoveToWithSpeed1() throws CameraConnectionException {
+  public final void testMoveToWithSpeed1() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("APS80008000011", "aPS80008000011");
     
     Position pos = new Position(0, 180);
@@ -74,7 +74,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testMoveWithSpecifiedSpeed() throws CameraConnectionException {
+  public final void testMoveWithSpecifiedSpeed() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("PTS0199", "pTS0199");
     camera.move(01, 99);
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23PTS0199&res=1");
@@ -102,7 +102,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testNonExcistingIpAdres() throws CameraConnectionException {
+  public final void testNonExcistingIpAdres() throws CameraConnectionException, CameraBusyException {
     IPCamera camera = new IPCamera("1.300.3.4");
     camera.move(180, 50);
   }

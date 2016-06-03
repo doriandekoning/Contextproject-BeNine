@@ -5,6 +5,8 @@ package com.benine.backend.camera;
  */
 public class CameraBusyException extends Exception {
 
+  private int camId = -1;
+
   /**
    * Create camera busy exception.
    * @param message to give extra information with exception.
@@ -12,8 +14,13 @@ public class CameraBusyException extends Exception {
    */
   public CameraBusyException(String message, int camId) {
     super(message);
+    this.camId = camId;
   }
 
+
+  public int getCamId() {
+    return camId;
+  }
   /**
    * Serial version ID.
    */

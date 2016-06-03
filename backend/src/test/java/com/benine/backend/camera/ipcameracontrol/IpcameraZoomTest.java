@@ -1,5 +1,6 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 
 import static org.junit.Assert.assertEquals;
@@ -42,7 +43,7 @@ public class IpcameraZoomTest {
   }
   
   @Test
-  public final void testZoomTo() throws CameraConnectionException {
+  public final void testZoomTo() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("AXZ58F", "axz58F");
     camera.zoomTo(58);
     
@@ -50,7 +51,7 @@ public class IpcameraZoomTest {
   }
   
   @Test
-  public final void testZoom() throws CameraConnectionException {
+  public final void testZoom() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("Z80", "zS80");
     camera.zoom(80);
     
@@ -58,7 +59,7 @@ public class IpcameraZoomTest {
   }
   
   @Test
-  public final void testZoom2() throws CameraConnectionException {
+  public final void testZoom2() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("Z02", "zS02");
     camera.zoom(2);
     

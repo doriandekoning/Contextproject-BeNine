@@ -1,5 +1,6 @@
 package com.benine.backend;
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
@@ -29,7 +30,8 @@ public abstract class AutoPresetCreator {
    * @throws TimeoutException if the camera is moving too slow or not at all.
    */
   public Collection<Preset> createPresets(IPCamera cam)
-          throws CameraConnectionException, InterruptedException, TimeoutException, IOException, StreamNotAvailableException {
+          throws CameraConnectionException, CameraBusyException, InterruptedException,
+          TimeoutException, IOException, StreamNotAvailableException {
     Position camStartPos = cam.getPosition();
 
     ArrayList<Preset> presets = new ArrayList<Preset>();

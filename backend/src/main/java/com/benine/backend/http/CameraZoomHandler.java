@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
 import org.eclipse.jetty.server.Request;
@@ -33,6 +34,8 @@ public class CameraZoomHandler extends CameraRequestHandler {
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + zoomingCam.getId(), LogEvent.Type.WARNING);
       respondFailure(request, res);
+    } catch (CameraBusyException e) {
+      getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
     }
 
     request.setHandled(true);
@@ -47,7 +50,7 @@ public class CameraZoomHandler extends CameraRequestHandler {
    * @throws CameraConnectionException  If the camera cannot be reached.
    */
   private void zoom(ZoomingCamera zoomingCam, String zoomType, String zoom)
-          throws MalformedURIException, CameraConnectionException {
+          throws MalformedURIException, CameraConnectionException, CameraBusyException {
 
     if (zoom != null && zoomType.equals("relative")) {
       zoomingCam.zoom(Integer.parseInt(zoom));

@@ -1,5 +1,6 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 
 import static org.junit.Assert.assertEquals;
@@ -41,21 +42,21 @@ public class IpcameraFocusTest {
   }
   
   @Test
-  public final void testSetFocus() throws CameraConnectionException {
+  public final void testSetFocus() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("AXFFFF", "axfFFF");
     camera.setFocusPosition(2882);
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23AXFFFF&res=1");
   }
   
   @Test
-  public final void testMoveFocus() throws CameraConnectionException {
+  public final void testMoveFocus() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("F80", "fS80");
     camera.moveFocus(80);   
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23F80&res=1");
   }
   
   @Test
-  public final void testMoveFocus2() throws CameraConnectionException {
+  public final void testMoveFocus2() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("F02", "fS02");
     camera.moveFocus(2);
     
@@ -87,7 +88,7 @@ public class IpcameraFocusTest {
   }
   
   @Test
-  public final void testSetAutoFocusOff() throws CameraConnectionException {
+  public final void testSetAutoFocusOff() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D10", "d10");
     camera.setAutoFocusOn(false);
     
@@ -95,7 +96,7 @@ public class IpcameraFocusTest {
   }
   
   @Test
-  public final void testSetAutoFocusOn() throws CameraConnectionException {
+  public final void testSetAutoFocusOn() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D11", "d11");
     camera.setAutoFocusOn(true);
     
