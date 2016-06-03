@@ -17,7 +17,7 @@ public interface FocussingCamera extends ControllableCamera {
    * @param pos position of the focus to move to.
    * @throws CameraConnectionException when command can not be completed.
    */
-  void setFocusPosition(int pos) throws CameraConnectionException;
+  void setFocusPosition(int pos) throws CameraConnectionException, CameraBusyException;
 
   /**
    * Move the focus in the specified direction.
@@ -27,14 +27,14 @@ public interface FocussingCamera extends ControllableCamera {
    * @param speed value with which speed is focusing.
    * @throws CameraConnectionException when command can not be completed.
    */
-  void moveFocus(int speed) throws CameraConnectionException;
+  void moveFocus(int speed) throws CameraConnectionException, CameraBusyException;
 
   /**
    * Turn auto focus on or off.
    * @param on true for auto focus on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  void setAutoFocusOn(boolean on) throws CameraConnectionException;
+  void setAutoFocusOn(boolean on) throws CameraConnectionException, CameraBusyException;
   
   /**
    * Request if the auto focus is on.

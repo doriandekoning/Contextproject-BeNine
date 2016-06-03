@@ -3,7 +3,7 @@ package com.benine.backend.camera;
 /**
  * Exception class used to throw when camera is busy but move methods are called.
  */
-public class CameraBusyException extends CameraConnectionException {
+public class CameraBusyException extends Exception {
 
   /**
    * Create camera busy exception.
@@ -11,7 +11,7 @@ public class CameraBusyException extends CameraConnectionException {
    * @param camId Camera that causes this exception.
    */
   public CameraBusyException(String message, int camId) {
-    super(message, camId);
+    super(message);
   }
 
   /**

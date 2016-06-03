@@ -15,7 +15,7 @@ public interface MovingCamera extends ControllableCamera {
    * @throws CameraConnectionException when command can not be completed.
    */
   void moveTo(Position pos, int panSpeed, int tiltSpeed)
-                                                     throws CameraConnectionException;
+                                                     throws CameraConnectionException, CameraBusyException;
 
   /**
     * Move the camera with the specified speed.
@@ -26,7 +26,7 @@ public interface MovingCamera extends ControllableCamera {
     * @param tilt movement direction over vertical axis.
     * @throws CameraConnectionException when command can not be completed.
     */
-  void move(int pan, int tilt) throws CameraConnectionException;
+  void move(int pan, int tilt) throws CameraConnectionException, CameraBusyException;
 
   /**
     * Get the absolute position of the camera at this moment.

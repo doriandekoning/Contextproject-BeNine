@@ -315,5 +315,5 @@ public class IpcameraTest {
   public void testBusyZoomTo() throws CameraBusyException, CameraConnectionException {
     busyCamera.zoomTo(30);
   }
-  
+
 }
