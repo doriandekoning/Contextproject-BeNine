@@ -114,6 +114,9 @@
                 <div class="btn-group">
                     <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
                 </div>
+                <div class="btn-group">
+                  <button disabled id="autoCreatePresets" type="button" class="btn btn-primary" onclick="autoCreatePresets()"><span class="glyphicon glyphicon-move"></span> Auto create presets</button>
+                </div>
             </div>
             <div id="control_area">
                 <div class="row">
@@ -211,11 +214,11 @@
 						</div>
 					</div>
 					<div class="col-xs-3 col-dm-3">
-						
-					</div>	
+
+					</div>
 					<div class="col-xs-5 col-dm-5">
 						<img data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
-					</div>	
+					</div>
                 </div>
                 <div class="modal-footer">
 					<div class="tags_input">
@@ -250,17 +253,17 @@
 							<span>Iris</span>
 							<input type="range" class="slider" id="irissense" min="0" max="10" value="5">
 							<label id="irissense_lbl"></label>
-						</div>	
+						</div>
 						<div class="col-xs-1 col-dm-1">
 							<span>Focus</span>
 							<input type="range" class="slider" id="focussense" min="0" max="10" value="5">
 							<label id="focussense_lbl"></label>
-						</div>	
+						</div>
 						<div class="col-xs-1 col-dm-1">
 							<span>Joystick</span>
 							<input type="range" class="slider" id="joysticksense" min="0" max="10" value="5">
 							<label id="joysticksense_lbl"></label>
-						</div>	
+						</div>
 					</div>
                 </div>
                 <div class="modal-footer">
@@ -279,10 +282,10 @@
 
     <!-- HammerJS for supporting touch actions -->
     <script src="bower_components/hammerjs/hammer.min.js"></script>
-	
+
 	<!-- Bootstrap tagsinput for supporting tags display -->
 	<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-	
+
 	<!-- Type Ahead input -->
 	<script src="bower_components/typeahead.js/dist/typeahead.bundle.min.js"></script>
 

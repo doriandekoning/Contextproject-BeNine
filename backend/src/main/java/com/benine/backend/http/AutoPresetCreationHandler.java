@@ -5,6 +5,7 @@ import com.benine.backend.Preset;
 import com.benine.backend.PresetController;
 import com.benine.backend.PresetPyramidCreator;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
@@ -30,12 +31,17 @@ public class AutoPresetCreationHandler extends RequestHandler  {
     
     PresetPyramidCreator creator = new PresetPyramidCreator(3,3,3,0.1);
     
-    String camID = request.getParameter("camera"); 
-    IPCamera camera = (IPCamera)ServerController.getInstance().getCameraController()
+    String camID = request.getParameter("camera");
+    Camera cam = ServerController.getInstance().getCameraController()
         .getCameraById(Integer.parseInt(camID));
+    if (!(cam instanceof IPCamera )) {
+      respondFailure(request, httpServletResponse);
+      return;
+    }
+    IPCamera ipcam = (IPCamera) cam;
    
     try {
-      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(camera));
+      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam));
       PresetController presetController = ServerController.getInstance().getPresetController();
       presetController.addPresets(presets);
     } catch (CameraConnectionException | InterruptedException | TimeoutException | StreamNotAvailableException | SQLException e ) {
