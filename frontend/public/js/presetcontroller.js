@@ -342,7 +342,7 @@ function editTags(id) {
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		if(id < localTags.length){
+		if(id < newId){
 			deleteTags.push(id);
 		}
 	});

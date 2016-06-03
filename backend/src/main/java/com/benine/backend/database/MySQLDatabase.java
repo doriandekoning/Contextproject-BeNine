@@ -386,7 +386,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM tag WHERE name = " + name;
+      String sql = "DELETE FROM tag WHERE name = '" + name + "'";
       statement.executeUpdate(sql);
       statement.close();
     } catch (SQLException e) {
