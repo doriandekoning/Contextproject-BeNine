@@ -1,22 +1,23 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Preset;
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.video.StreamNotAvailableException;
-
-import org.eclipse.jetty.server.Request;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.server.Request;
+
+import com.benine.backend.Preset;
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.video.StreamNotAvailableException;
 
 
 /**
@@ -71,10 +72,12 @@ public class EditPresetHandler extends RequestHandler {
    * Updating the tag only.
    * @param preset the preset to be changed
    * @param tagList the tag to be added
+   * @return the tag added to the preset
    */
-  public void updateTag(Preset preset, List<String> tagList) {
+  public Set<String> updateTag(Preset preset, List<String> tagList) {
     preset.removeTags();
     preset.addTags(tagList);
+    return preset.getTags();
   }
   
   /**
