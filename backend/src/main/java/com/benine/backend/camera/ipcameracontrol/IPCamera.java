@@ -427,6 +427,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
       json.put("iris", getIrisPosition());
       json.put("autoiris", isAutoIrisOn());
       json.put("streamlink", getStreamLink());
+      json.put("busy", isBusy());
     } catch (Exception e) {
       logger.log("Failed to get the JSON representation of camera: " 
                                                   + getId(), LogEvent.Type.CRITICAL);

@@ -185,6 +185,7 @@ public class IpcameraTest {
     json.put("iris", 2029);
     json.put("autoiris", true);
     json.put("streamlink", "http://test/cgi-bin/mjpeg");
+    json.put("busy", false);
     
     assertEquals(json.toString(), camera.toJSON());
   }
