@@ -29,6 +29,9 @@ public abstract class AutoPresetCreator {
   public Collection<Preset> createPresets(IPCamera cam)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException {
+    if (cam.isBusy()) {
+      throw new CameraBusyException("The camera is busy.", cam.getId());
+    }
     cam.setBusy(true);
     Position camStartPos = cam.getPosition();
 
