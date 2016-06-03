@@ -73,7 +73,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testCameraID() throws Exception{
-    setPath("/presets/createpreset?camera=1");
+    setPath("/presets/createpreset");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
