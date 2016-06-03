@@ -113,9 +113,10 @@ public class EditPresetHandler extends RequestHandler {
    * @param presetID      The id of the preset used for naming.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
+   * @throws SQLException when preset can't be updated
    */
   private void createImage(int cameraID, int presetID) throws
-          StreamNotAvailableException, IOException {
+          StreamNotAvailableException, IOException, SQLException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
     MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
@@ -129,7 +130,10 @@ public class EditPresetHandler extends RequestHandler {
             + cameraID + "_" + presetID + ".jpg");
 
     ImageIO.write(bufferedImage, "jpg", path);
+    
     PresetController presetController = ServerController.getInstance().getPresetController();
-    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
+    Preset preset = presetController.getPresetById(presetID);
+    preset.setImage(cameraID + "_" + presetID + ".jpg");
+    presetController.updatePreset(preset);
   }  
 }

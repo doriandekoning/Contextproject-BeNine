@@ -100,7 +100,10 @@ public class CreatePresetHandler extends RequestHandler {
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
     ImageIO.write(bufferedImage, "jpg", path);
-    PresetController presetController = serverController.getPresetController();    
-    presetController.getPresetById(presetID).setImage(File.separator + path.toString());
+    
+    PresetController presetController = ServerController.getInstance().getPresetController();
+    Preset preset = presetController.getPresetById(presetID);
+    preset.setImage(cameraID + "_" + presetID + ".jpg");
+    presetController.updatePreset(preset);
   }
 }
