@@ -15,7 +15,7 @@ function loadPresets() {
 		}
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
-				newTag({name: obj.tags[t]});
+				newTag(obj.tags[t]);
 			}
 		}
 	}).done(function () { displayPresets(presets); });
@@ -358,7 +358,7 @@ function updateTags() {
 			deleteTag(updatedTags[i].index);
 		}
 		//update/add tags
-		newTag({name: updatedTags[i].name});
+		newTag(updatedTags[i].name);
 	}
 	//delete tags
 	for(i = 0; i < deleteTags.length; i++) {
@@ -375,7 +375,7 @@ function newTag(val) {
 	localTags.push(val);
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
-	$.get("/api/backend/presets/addtag?name=" + val.name, function(data) {
+	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
 				console.log("create tag respone: " + data);
 	}).done();
 }
@@ -409,7 +409,7 @@ function addTag() {
 function getTags() {
 	var result = "";
 	for(i = 0; i < localTags.length; i++) {
-		result += appendTag(i, localTags[i].name);
+		result += appendTag(i, localTags[i]);
 	}
 	return result;
 }
