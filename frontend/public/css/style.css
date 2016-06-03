@@ -392,3 +392,8 @@ input[type=range]:focus {
 	bottom: 20px;
     background: rgba(78,78,78, 0.6);
 }
+
+.fill-tags {
+    height: 280px;
+    overflow: auto;
+}
