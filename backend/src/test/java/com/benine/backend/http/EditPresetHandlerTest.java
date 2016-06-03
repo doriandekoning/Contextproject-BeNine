@@ -74,11 +74,11 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testUpdateTags() throws Exception{
-    setPath("/presets/editpreset");
+    setPath("/presets/edit");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
-    parameters.add("overwriteTag", "true");
+    parameters.add("overwritetag", "true");
     parameters.add("overwriteposition", "false");
     parameters.add("presetid", "1");
     parameters.add("tags", "test");
@@ -89,5 +89,25 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     Set<String> tags = new HashSet<String>();
     tags.add("test");
     Assert.assertEquals(tags, preset.getTags());
-  } 
+  }
+  
+  @Test
+  public void testUpdatePosition() throws Exception{
+    when(ipcamera.getZoomPosition()).thenReturn(50);
+    
+    setPath("/presets/edit");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("overwritetag", "false");
+    parameters.add("overwriteposition", "true");
+    parameters.add("presetid", "1");
+    parameters.add("tags", "test");
+    setParameters(parameters);
+        
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    
+    Preset preset2= new Preset(new Position(0,0), 50, 33,50,true,15,1,true, 0, tags);
+    Assert.assertEquals(preset.getZoom(),preset2.getZoom());
+  }
 }
