@@ -3,13 +3,7 @@ package com.benine.backend.camera.ipcameracontrol;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.BasicCamera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.FocussingCamera;
-import com.benine.backend.camera.IrisCamera;
-import com.benine.backend.camera.MovingCamera;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ZoomingCamera;
+import com.benine.backend.camera.*;
 
 import com.benine.backend.video.StreamType;
 
@@ -72,8 +66,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   @Override
-  public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
-                                                                throws CameraConnectionException {
+  public void moveTo(Position pos, int panSpeed, int tiltSpeed)
+          throws CameraConnectionException, CameraBusyException {
     String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
     panSp = ("00" + panSp).substring(panSp.length());
     String res = sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
@@ -82,7 +76,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
                     + convertTiltSpeed(tiltSpeed));
     verifyResponse(res, "aPS");
   }
-  
+
   /**
    * Values must be between 1 and 99 otherwise they will be rounded.
    * Hereby is 1 max speed to left or downward.
@@ -542,6 +536,16 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   public boolean isBusy() {
     return busy;
+  }
+
+  /**
+   * Checks if the camera is busy and throws an exception if it is.
+   * @throws CameraBusyException when the camera is busy.
+   */
+  private void checkBusy() throws CameraBusyException {
+    if (isBusy()) {
+      throw new CameraBusyException("Tried to move the camera while its busy.", getId());
+    }
   }
 
 }

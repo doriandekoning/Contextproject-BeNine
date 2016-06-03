@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.*;
 
+import com.benine.backend.camera.CameraBusyException;
 import org.json.simple.JSONObject;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
@@ -26,11 +27,13 @@ import java.util.concurrent.TimeoutException;
  */
 public class IpcameraTest {
 
-  private IPCamera camera;
+  private IPCamera camera, busyCamera;
   
   @Before
   public final void setUp() throws InvalidCameraTypeException {
     camera = spy(new IPCamera("test"));
+    busyCamera = spy(new IPCamera("test"));
+    busyCamera.setBusy(true);
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
@@ -262,4 +265,55 @@ public class IpcameraTest {
     cam.setBusy(true);
     Assert.assertTrue(cam.isBusy());
   }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyMoveTo() throws CameraBusyException, CameraConnectionException {
+    busyCamera.moveTo(new Position(3.0, 4.0), 2, 2);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyMoveFocus() throws CameraBusyException, CameraConnectionException {
+    busyCamera.moveFocus(40);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyMoveIris() throws CameraBusyException, CameraConnectionException {
+    busyCamera.moveIris(40);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyMove() throws CameraBusyException, CameraConnectionException {
+    busyCamera.move(3, 3);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyAutoFocusOn() throws CameraBusyException, CameraConnectionException {
+    busyCamera.setAutoFocusOn(true);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyAutoIrisOn() throws CameraBusyException, CameraConnectionException {
+    busyCamera.setAutoIrisOn(true);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusySetFocusPosition() throws CameraBusyException, CameraConnectionException {
+    busyCamera.setFocusPosition(30);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusySetIrisPosition() throws CameraBusyException, CameraConnectionException {
+    busyCamera.setIrisPosition(30);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyZoom() throws CameraBusyException, CameraConnectionException {
+    busyCamera.zoom(30);
+  }
+
+  @Test (expected = CameraBusyException.class)
+  public void testBusyZoomTo() throws CameraBusyException, CameraConnectionException {
+    busyCamera.zoomTo(30);
+  }
+  
 }
