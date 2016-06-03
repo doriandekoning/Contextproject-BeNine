@@ -87,7 +87,7 @@ public class CreatePresetHandler extends RequestHandler {
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    */
-  private void createImage(int cameraID, int presetID) throws
+  public void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
@@ -132,7 +132,7 @@ public class CreatePresetHandler extends RequestHandler {
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  private Preset createPreset(IPCamera camera, List<String> tagList) 
+  public Preset createPreset(IPCamera camera, List<String> tagList) 
       throws CameraConnectionException {
     int zoom = camera.getZoomPosition();
     double pan = camera.getPosition().getPan();
