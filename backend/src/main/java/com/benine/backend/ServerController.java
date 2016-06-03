@@ -4,6 +4,8 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.http.HTTPServer;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
@@ -85,6 +87,7 @@ public class ServerController {
     loadPresets();
 
     running = true;
+
     getLogger().log("Server started", LogEvent.Type.INFO);
   }
 

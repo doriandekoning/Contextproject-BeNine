@@ -1,5 +1,6 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
@@ -9,8 +10,9 @@ import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.camera.ZoomingCamera;
-
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.video.StreamType;
 
 import org.json.simple.JSONObject;
@@ -23,17 +25,22 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.HashMap;
-
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Class to communicate with an IP Camera from .
  */
 public class IPCamera extends BasicCamera implements MovingCamera,
-        IrisCamera, ZoomingCamera, FocussingCamera {
+        IrisCamera, ZoomingCamera, FocussingCamera, PresetCamera {
 
   private String ipaddress;
-
+  
+  private Map<String, String> attributes = new HashMap<>();
+  private Map<String, Long> timeStamps = new HashMap<>();
+  private Logger logger;
 
   /**
    *  Create a new IP Camera object.
@@ -42,6 +49,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public IPCamera(String ip) {
     super(StreamType.MJPEG);
     ipaddress = ip;
+    logger = ServerController.getInstance().getLogger();
   }
   
   /**
@@ -88,10 +96,31 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   @Override
   public Position getPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23APC");
-    res = verifyResponse(res, "aPC");
+    String res = getValue("%23APC", "aPC");
     return new Position(convertPanToDouble(res.substring(0, 4)),
                                   convertTiltToDouble(res.substring(4)));
+  }
+  
+  /**
+   * Checks if the requested value is already request from the camera in the last 2 seconds.
+   * Otherwise it requests the value from the camera and saves it.
+   * @param command for the requested value.
+   * @param verifyResponse to verify the response from the camera.
+   * @return the requested value
+   * @throws IpcameraConnectionException when the requested value can not be retrieved.
+   */
+  private String getValue(String command, String verifyResponse)
+                                                      throws IpcameraConnectionException {
+    Date date = new Date();
+    Config config = ServerController.getInstance().getConfig();
+    int timeout = Integer.parseInt(config.getValue("IPCameraTimeOut"));
+    if (timeStamps.get(command) == null || date.getTime() - timeStamps.get(command) > timeout) {
+      String res = sendControlCommand(command);
+      res = verifyResponse(res, verifyResponse);
+      timeStamps.put(command, date.getTime());
+      attributes.put(command, res);
+    }
+    return attributes.get(command);
   }
   
   /**
@@ -165,8 +194,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getFocusPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GF");
-    res = verifyResponse(res, "gf");
+    String res = getValue("%23GF", "gf");
     return Integer.valueOf(res, 16) - 1365;
   }
 
@@ -214,8 +242,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoFocusOn() throws CameraConnectionException {
-    String response = sendControlCommand("%23D1");
-    response = verifyResponse(response, "d1");
+    String response = getValue("%23D1", "d1");
     return Integer.parseInt(response) == 1;
   }
   
@@ -235,8 +262,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException {
-    String response = sendControlCommand("%23D3");
-    response = verifyResponse(response, "d3");
+    String response = getValue("%23D3", "d3");
     return Integer.parseInt(response) == 1;
   }
   
@@ -261,9 +287,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getIrisPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GI");
-    res = verifyResponse(res, "gi");
-    return Integer.valueOf(res.substring(0, 3), 16) - 1365;
+    String response = getValue("%23GI", "gi");
+    return Integer.valueOf(response.substring(0, 3), 16) - 1365;
   }
   
   /**
@@ -288,9 +313,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @throws CameraConnectionException when command can not be completed.
    */
   public int getZoomPosition() throws CameraConnectionException {
-    String res = sendControlCommand("%23GZ");
-    res = verifyResponse(res, "gz");
-    return Integer.valueOf(res, 16) - 1365;
+    String response = getValue("%23GZ", "gz");
+    return Integer.valueOf(response, 16) - 1365;
   }
   
   /**
@@ -339,13 +363,12 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   public String sendCommand(String cmd) throws IpcameraConnectionException {
     String res = "";
-    Logger logger = ServerController.getInstance().getLogger();
     logger.log("Send command: " + cmd + " to camera: " + getId(), LogEvent.Type.INFO);
     try {
       URL url = new URL("http://" + ipaddress + "/cgi-bin/" + cmd);
       URLConnection con = url.openConnection();
-      con.setConnectTimeout(10000);
-      con.setReadTimeout(10000);
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(1000);
       InputStream in = con.getInputStream();
       BufferedReader buf = new BufferedReader(new InputStreamReader(in, "UTF8"));
       try { 
@@ -383,27 +406,18 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public String toJSON() throws CameraConnectionException {
-    Logger logger = ServerController.getInstance().getLogger();
+  public JSONObject toJSON() throws CameraConnectionException {
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     json.put("inuse", isInUse());
-    try {
-      json.put("pan", getPosition().getPan());
-      json.put("tilt", getPosition().getTilt());
-      json.put("zoom", getZoomPosition());
-      json.put("focus", getFocusPosition());
-      json.put("autofocus", isAutoFocusOn());
-      json.put("iris", getIrisPosition());
-      json.put("autoiris", isAutoIrisOn());
-      json.put("streamlink", getStreamLink());
-    } catch (Exception e) {
-      logger.log("Failed to get the JSON representation of camera: " 
-                                                  + getId(), LogEvent.Type.CRITICAL);
-    }
-    return  json.toString();
-    
+    json.put("move", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    json.put("iris", true);
+    json.put("autofocus", isAutoFocusOn());
+    json.put("autoiris", isAutoIrisOn());
+    return  json; 
   }
 
   /**
@@ -480,16 +494,29 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private String verifyResponse(String response, String expected)
                                                   throws IpcameraConnectionException {
     if (response.startsWith(expected)) {
-      ServerController.getInstance().getLogger().log(
-                          "Camera responded correctly: "
-                          + response, LogEvent.Type.INFO);
+      logger.log("Camera responded correctly: " + response, LogEvent.Type.INFO);
       return response.substring(expected.length());
     } else {
-      ServerController.getInstance().getLogger().log(
-          "Camera response is not correct, expected: "
+      logger.log("Camera response is not correct, expected: "
            + expected + ", but it was : " + response, LogEvent.Type.CRITICAL);
       throw new IpcameraConnectionException("Response of camera is not correct expected: " 
           + expected + ", but it was : " + response, getId());
     }
+  }
+
+  @Override
+  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
+    int zoom = getZoomPosition();
+    double pan = getPosition().getPan();
+    double tilt = getPosition().getTilt();
+    int focus = getFocusPosition();
+    int iris = getIrisPosition();
+    int panspeed = 15;
+    int tiltspeed = 1;
+    boolean autoiris = isAutoIrisOn();
+    boolean autofocus = isAutoFocusOn();
+    int cameraId = getId();
+    return new IPCameraPreset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
+            tiltspeed, autoiris, cameraId, tagList);
   }
 }

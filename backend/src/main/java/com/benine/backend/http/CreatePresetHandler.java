@@ -1,35 +1,33 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.PresetCamera;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
+import com.benine.backend.video.MJPEGFrameResizer;
+import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
-
+import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
-
 
 public class CreatePresetHandler extends RequestHandler {
 
@@ -51,21 +49,21 @@ public class CreatePresetHandler extends RequestHandler {
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
 
-      List<String> tagList = new ArrayList<String>();
+      Set<String> tagList = new HashSet<>();
       if (tags != null) {
-        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
+        tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       } 
       getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
-
-      if (camera instanceof IPCamera) {
-        IPCamera ipcam = (IPCamera) camera;
-        setPreset(ipcam, tagList);
+      if (camera instanceof PresetCamera) {
+        PresetCamera presetCamera = (PresetCamera) camera;
+        Preset preset = presetCamera.createPreset(tagList);
+        PresetController presetController = ServerController.getInstance().getPresetController();
+        int presetID = presetController.addPreset(preset);
+        createImage(camera.getId(), presetID);
         respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
       }
-      
-
     } catch (MalformedURIException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
@@ -86,65 +84,23 @@ public class CreatePresetHandler extends RequestHandler {
    * @param presetID      The id of the preset used for naming.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
+   * @throws SQLException if the image can not be saved in the database.
    */
   private void createImage(int cameraID, int presetID) throws
-          StreamNotAvailableException, IOException {
-    StreamController streamController = ServerController.getInstance().getStreamController();
-
-    StreamReader streamReader = streamController.getStreamReader(cameraID);
-    BufferedImage bufferedImage = streamReader.getSnapShot();
-
+          StreamNotAvailableException, IOException, SQLException {
+    ServerController serverController = ServerController.getInstance();
+    StreamController streamController = serverController.getStreamController();
     File path = new File("static" + File.separator + "presets" + File.separator
-            + cameraID + "_" + presetID + ".jpg");
+        + cameraID + "_" + presetID + ".jpg");
+    
+    MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
+    VideoFrame snapShot = streamReader.getSnapShot();
+    MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
+    snapShot = resizer.resize(snapShot);
 
+    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
     ImageIO.write(bufferedImage, "jpg", path);
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    
+    PresetController presetController = serverController.getPresetController();    
     presetController.getPresetById(presetID).setImage(File.separator + path.toString());
-  }
-
-  /**
-   * Sets a preset.
-   * @param camera                        A Camera object.
-   * @param tagList                       The tag belonging to the preset. 
-   * @return preset                       The preset created. 
-   * @throws IOException                  If the image cannot be created.
-   * @throws StreamNotAvailableException  If the camera does not have a stream.
-   * @throws SQLException                 If the preset cannot be written to the database.
-   * @throws CameraConnectionException    If the camera cannot be reached.
-   * @throws MalformedURIException        If there is an error in the request.
-   */
-  private Preset setPreset(IPCamera camera, List<String> tagList)
-          throws IOException, StreamNotAvailableException, SQLException,
-          CameraConnectionException, MalformedURIException {
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    
-    Preset preset = createPreset(camera,tagList);
-    int presetID = presetController.addPreset(preset);
-    createImage(camera.getId(), presetID);
-    return preset;
-  }
-
-  /**
-   * Creates a preset from a camera.
-   * @param camera    The camera to create the preset from.
-   * @param tagList   The tag belonging to the preset. 
-   * @return          A Preset object.
-   * @throws CameraConnectionException If the camera cannot be reached.
-   */
-  private Preset createPreset(IPCamera camera, List<String> tagList) 
-      throws CameraConnectionException {
-    int zoom = camera.getZoomPosition();
-    double pan = camera.getPosition().getPan();
-    double tilt = camera.getPosition().getTilt();
-    int focus = camera.getFocusPosition();
-    int iris = camera.getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
-    boolean autoiris = camera.isAutoIrisOn();
-    boolean autofocus = camera.isAutoFocusOn();
-    int cameraId = camera.getId();
-    return new Preset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId, tagList);
   }
 }

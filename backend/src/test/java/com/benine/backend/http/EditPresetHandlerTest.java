@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jetty.util.MultiMap;
@@ -18,8 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.Preset;
-import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -30,10 +28,10 @@ import com.benine.backend.video.StreamNotAvailableException;
 public class EditPresetHandlerTest extends RequestHandlerTest {
 
   private IPCamera ipcamera= mock(IPCamera.class);
-  private Preset preset;
+  private IPCameraPreset preset;
   private Stream stream;
   private MJPEGStreamReader streamReader;
-  private List<String> tags;
+  private Set<String> tags;
   
   @Override
    public RequestHandler supplyHandler() {
@@ -50,23 +48,13 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
     streamReader = new MJPEGStreamReader(stream);
-    tags = Arrays.asList("violin", "piano");
+    tags = new HashSet<>(Arrays.asList("violin", "piano"));
 
-    preset = new Preset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags);
+    preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags);
+    preset.setId(1);
     when(presetController.getPresetById(1)).thenReturn(preset);
     try {
       when(streamController.getStreamReader(1)).thenReturn(streamReader);
-      when(ipcamera.getFocusPosition()).thenReturn(33);
-      when(ipcamera.getIrisPosition()).thenReturn(50);
-      when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
-      when(ipcamera.getZoomPosition()).thenReturn(100);
-      when(ipcamera.isAutoFocusOn()).thenReturn(true);
-      when(ipcamera.isAutoIrisOn()).thenReturn(true);
-      when(ipcamera.getId()).thenReturn(1);
-
-
-    } catch (CameraConnectionException e) {
-      e.printStackTrace();
     } catch (StreamNotAvailableException e) {
       e.printStackTrace();
     }
@@ -104,10 +92,13 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     parameters.add("presetid", "1");
     parameters.add("tags", "test");
     setParameters(parameters);
+    
+    IPCameraPreset preset2 = new IPCameraPreset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags);
+    when(ipcamera.createPreset(tags)).thenReturn(preset2);
         
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    Preset preset2= new Preset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags);
-    Assert.assertEquals(preset.getZoom(),preset2.getZoom());
+    verify(requestMock).setHandled(true);
+    verify(presetController).updatePreset(preset2);
   }
 }

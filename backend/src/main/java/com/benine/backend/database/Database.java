@@ -1,12 +1,12 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Preset;
+import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for communication with the database.
@@ -31,9 +31,9 @@ public interface Database {
   /**
    * Delete a preset from the database.
    *
-   * @param presetID ID of the camera
+   * @param preset to delete.
    */
-  void deletePreset(int presetID);
+  void deletePreset(Preset preset);
 
   /**
    * Update a preset to the database.
@@ -143,7 +143,7 @@ public interface Database {
    * @param preset The preset
    * @return The list of tags
    */
-  List<String> getTagsFromPreset(Preset preset);
+  Set<String> getTagsFromPreset(Preset preset);
 
   /**
    * Adds a tag to a preset.

@@ -1,17 +1,19 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
- * A moving preset to be able to add to the database.
+ * IPCamera preset which stores the data to recall this preset position.
  */
-public class Preset {
+public class IPCameraPreset extends Preset {
 
   private Position position;
   private int zoom;
@@ -21,11 +23,7 @@ public class Preset {
   private int panspeed;
   private int tiltspeed;
   private boolean autoiris;
-  private String image;
-  private int presetid = -1;
-  private Set<String> tags = new HashSet<String>();
-  private int cameraId;
-
+  
   /**
    * Constructs a preset.
    *
@@ -39,8 +37,9 @@ public class Preset {
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
    */
-  public Preset(Position pos, int zoom, int focus,int iris,
+  public IPCameraPreset(Position pos, int zoom, int focus,int iris,
                boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
+    super(cameraId);
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -49,7 +48,6 @@ public class Preset {
     this.panspeed = panspeed;
     this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
-    this.cameraId = cameraId;
   }
 
   /**
@@ -66,19 +64,15 @@ public class Preset {
    * @param cameraId  The id of the camera associated with this preset.
    * @param keyWords  The keywords of this preset
    */
-  public Preset(Position pos, int zoom, int focus, int iris,
+  public IPCameraPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, List<String> keyWords) {
+                boolean autoiris, int cameraId, Set<String> keyWords) {
     this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
-    this.tags.addAll(keyWords);
+    super.tags.addAll(keyWords);
   }
-
-  /**
-   * Returns a JSON representation of this object.
-   *
-   * @return JSON representation of this object.
-   */
-  public String toJSON() {
+  
+  @Override
+  public JSONObject toJSON() {
     JSONObject json = new JSONObject();
 
     json.put("pan", position.getPan());
@@ -90,17 +84,18 @@ public class Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
-    json.put("image", image);
-    json.put("id", presetid);
+    json.put("id", getId());
+    json.put("cameraid", getCameraId());
+    json.put("image", imagePath + getImage());
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
     }
     json.put("tags", tagsJSON);
 
-    return json.toString();
+    return json;
   }
-
+  
   public Position getPosition() {
     return position;
   }
@@ -164,132 +159,111 @@ public class Preset {
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
   }
-
-  public String getImage() {
-    return image;
-  }
-
-  public void setImage(String image) {
-    this.image = image;
-  }
-
-  public void setId(int id) {
-    this.presetid = id;
-  }
-
-  public int getId() {
-    return presetid;
-  }
-
-  public void setCameraId(int id) {
-    this.cameraId = id;
-  }
-
-  public int getCameraId() {
-    return cameraId;
-  }
-
-  public Set<String> getTags() {
-    return tags;
-  }
-
-
-  /**
-   * Adds a new tag to this object.
-   * @param tag the tag to add.
-   */
-  public void addTag(String tag) {
-    tags.add(tag);
-  }
-
-
-  /**
-   * Adds a list of keywords to this class.
-   * @param tags a list of keywords
-   */
-  public void addTags(List<String> tags) {
-    this.tags.addAll(tags);
-  }
-
-  /**
-   * Removes a keyword from this preset.
-   * @param tag the keyword to remove
-   */
-  public void removeTag(String tag) {
-    tags.remove(tag);
-  }
   
   /**
-   * Remove all the tags from this preset. 
+   * Creates a sql query to insert a preset in the database.
+   * @return The query
    */
-  public void removeTags() {
-    this.tags.removeAll(getTags());
+  public String createAddSqlQuery() {
+    int auto = 0;
+    if (isAutofocus()) {
+      auto = 1;
+    }
+    int autoir = 0;
+    if (isAutoiris()) {
+      autoir = 1;
+    }
+    return "INSERT INTO presetsdatabase.presets VALUES(" + getId() + ","
+        + getPosition().getPan() + "," + getPosition().getTilt()
+        + "," + getZoom() + "," + getFocus()
+        + "," + getIris() + "," + auto + "," + getPanspeed() + ","
+        + getTiltspeed() + "," + autoir + ",'" + getImage() + "',"
+        + getCameraId() + ")";
   }
 
+
+  /**
+   * Moves the camera
+   * @param camera  A Camera object.
+   * @throws CameraConnectionException  If the camera cannot be reached.
+   */
+  @Override
+  public void excecutePreset(Camera camera) throws CameraConnectionException {
+    if (camera instanceof IPCamera) {
+      IPCamera ipcamera = (IPCamera) camera;
+
+      ipcamera.moveTo(getPosition(), getPanspeed(), getTiltspeed());
+      ipcamera.zoomTo(getZoom());
+      ipcamera.setAutoFocusOn(isAutofocus());
+      ipcamera.setAutoIrisOn(isAutoiris());
+      ipcamera.moveFocus(getFocus());  
+      ipcamera.setIrisPosition(getIris());
+    } else {
+      throw new CameraConnectionException("Camera cannot be controller over IP: ", camera.getId());
+    }
+  }
 
   @Override
   public int hashCode() {
     final int prime = 31;
-    int result = 1;
+    int result = super.hashCode();
     result = prime * result + (autofocus ? 1231 : 1237);
     result = prime * result + (autoiris ? 1231 : 1237);
     result = prime * result + focus;
     result = prime * result + iris;
     result = prime * result + panspeed;
+    result = prime * result + ((position == null) ? 0 : position.hashCode());
     result = prime * result + tiltspeed;
     result = prime * result + zoom;
-    result = prime * result + tags.hashCode();
     return result;
   }
 
-  /**
-   * Checking if two presets are equal.
-   * @param o the object to be checked with.
-   * @return true if two presets are equal, false otherwise.
-   */
-  public boolean equals(Object o) {
-    if (this == o) {
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!super.equals(obj)) {
       return false;
     }
-
-    Preset preset = (Preset) o;
-    
-    if (presetid != preset.presetid) {
+    if (getClass() != obj.getClass()) {
       return false;
     }
-
-    if (!position.equals(preset.position)) {
+    IPCameraPreset other = (IPCameraPreset) obj;
+    if (autofocus != other.autofocus) {
       return false;
     }
-    if (zoom != preset.zoom) {
+    if (autoiris != other.autoiris) {
       return false;
     }
-    if (focus != preset.focus) { 
+    if (focus != other.focus) {
       return false;
     }
-    if (iris != preset.iris) {
+    if (iris != other.iris) {
       return false;
     }
-    if (tiltspeed != preset.tiltspeed) {
+    if (panspeed != other.panspeed) {
       return false;
     }
-    if (panspeed != preset.panspeed) {
+    if (position == null) {
+      if (other.position != null) {
+        return false;
+      }
+    } else if (!position.equals(other.position)) {
       return false;
     }
-    if (autoiris != preset.autoiris) {
+    if (tiltspeed != other.tiltspeed) {
       return false;
     }
-    if (autofocus != preset.autofocus) {
-      return false;
-    }
-    if (!tags.equals(preset.getTags())) {
+    if (zoom != other.zoom) {
       return false;
     }
     return true;
   }
 
+  @Override
+  public String createDeleteSQL() {
+    return "DELETE FROM presets WHERE ID = " + getId();
+  }
 
 }
