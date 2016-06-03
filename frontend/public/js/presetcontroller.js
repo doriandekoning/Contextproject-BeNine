@@ -2,23 +2,26 @@
 var localTags = [];
 var deleteTags = [];
 var updatedTags = [];
+// true if the client is in preset editing mode.
+var editing = false;
 
 /**
 * Function loads all the presets from the backend.
 */
 function loadPresets() {
 	$.get("/api/backend/presets/getpresets", function(data) {
-		obj = JSON.parse(data);
+		var obj = JSON.parse(data);
 		for (var p in obj.presets) {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
+		displayPresets(presets);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				newTag(obj.tags[t]);
 			}
 		}
-	}).done(function () { displayPresets(presets); });
+	});
 }
 
 /**
@@ -35,11 +38,10 @@ function checkPreset(preset) {
 																			preset.tiltspeed, preset.autoiris, preset.tags);
 	}
 }
-var editing = false;
 
 /**
 * Display all the presets.
-* @param preset to display.
+* @param presets to display.
 */
 function displayPresets(presets) {
 	$("#preset_area").children().not('#tagsearch').remove();
@@ -72,7 +74,8 @@ function presetClick() {
 * Activates the presets to be editable with the edit preset button is clicked.
 */
 function loadEditablePresets() {
-	var activepresets = $("#preset_area div:has(img:not([alt]))");
+	var preset_area = $('#preset_area');
+	var activepresets = preset_area.find("div:has(img:not([alt]))");
 	var editButton = $('#editPresets');
 
 	if (activepresets.hasClass("preset-overlay")) {
@@ -112,6 +115,8 @@ function tagsWithDefaults(q, sync) {
 
 
 //// Below is for the create preset modal
+var preset_create_div = $("#preset_create_div");
+var create_tags_input = preset_create_div.find(".tags_input");
 
 /**
 * Load everyting to create a preset.
@@ -125,7 +130,7 @@ function loadCreatePreset() {
 /**
 * What to display in the type ahead of the tags input of create preset.
 */
-$('#preset_create_div .tags_input').tagsinput({
+create_tags_input.tagsinput({
 	typeaheadjs:( {
 			hint: true,
 			highlight: true,
@@ -143,10 +148,10 @@ $('#preset_create_div .tags_input').tagsinput({
 /**
 * Called when the tags input losses focus in the create modal.
 */
-$('#preset_create_div .tags_input').tagsinput('input').blur(function(){
+create_tags_input.tagsinput('input').blur(function(){
 	if ($(this).val()) {
 		newTag($(this).val());
-		$('#preset_create_div .tags_input').tagsinput('add', $(this).val());
+		create_tags_input.tagsinput('add', $(this).val());
 		$(this).val('');
 	}
 });
@@ -154,10 +159,10 @@ $('#preset_create_div .tags_input').tagsinput('input').blur(function(){
 /**
 * Called on enter in the tags input in the create modal.
 */
-$('#preset_create_div .tags_input').tagsinput('input').keypress(function (e) {
+create_tags_input.tagsinput('input').keypress(function (e) {
 	if (e.which == 13 && $(this).val()) {
 		newTag($(this).val());
-		$('#preset_create_div .tags_input').tagsinput('add', $(this).val());
+		create_tags_input.tagsinput('add', $(this).val());
 		$(this).val('');
 	}
 });
@@ -176,11 +181,13 @@ function createPreset() {
 }
 
 //// Below is for the edit preset window
+var preset_edit_div = $("#preset_edit_div");
+var edit_tags_input = preset_edit_div.find(".tags_input");
 
 /**
 * What to display in the type ahead of the tags input of edit preset.
 */
-$('#preset_edit_div .tags_input').tagsinput({
+edit_tags_input.tagsinput({
 	typeaheadjs:( {	
 			highlight: true,
 			minLength: 0
@@ -197,10 +204,10 @@ $('#preset_edit_div .tags_input').tagsinput({
 /**
 * Called when the tags input losses focus in edit modal.
 */
-$('#preset_edit_div .tags_input').tagsinput('input').blur(function(){
+edit_tags_input.tagsinput('input').blur(function(){
 	if ($(this).val()) {
 		newTag($(this).val());
-		$('#preset_edit_div .tags_input').tagsinput('add', $(this).val());
+		edit_tags_input.tagsinput('add', $(this).val());
 		$(this).val('');
 	}
 });
@@ -208,16 +215,42 @@ $('#preset_edit_div .tags_input').tagsinput('input').blur(function(){
 /**
 * Called on enter in the tags input in edit.
 */
-$('#preset_edit_div .tags_input').tagsinput('input').keypress(function (e) {
+edit_tags_input.tagsinput('input').keypress(function (e) {
 	if (e.which == 13 && $(this).val()) {
 		newTag($(this).val());
-		$('#preset_edit_div .tags_input').tagsinput('add', $(this).val());
+		edit_tags_input.tagsinput('add', $(this).val());
 		$(this).val('');
 	}
 });
 
-//// Below is for the search input in the preset area.
+/**
+ * Function is called when the save button of the edit window is clicked.
+ */
+function editPreset() {
+	//TODO should be the new values from the edit window
+	// And the new preset values should be send to the backend.
+	var tags = edit_tags_input.val();
+	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
+		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
+}
 
+/**
+ * Load for the specified preset the edit modal.
+ * @preset to load the edit window for.
+ */
+function loadPresetEditModal(preset) {
+	editingpreset = preset;
+	preset_edit_div.find('#presetID').text(preset.id);
+	preset_edit_div.find('img').attr("src", "/api/backend" + preset.image);
+	edit_tags_input.tagsinput('removeAll');
+	preset.tags.forEach(function(item) {
+		edit_tags_input.tagsinput('add', item);
+	});
+	$('.preset-edit-modal').modal('show');
+}
+
+//// Below is for the search input in the preset area.
+var tag_search_input = $('#tagsearch_input');
 /**
 * Handles input on the tag search field.
 */
@@ -233,7 +266,7 @@ function tagSearchInput(val) {
 /**
 * When a tags suggestion is selected cal the tagSearchInput function.
 */
-$('#tagsearch_input').on('typeahead:selected',function (e, val) {
+tag_search_input.on('typeahead:selected',function (e, val) {
 	tagSearchInput(val);
 });
 
@@ -257,7 +290,7 @@ function matchingPresets(val) {
 /**
 * Display type ahead in the search input.
 */
-$('#tagsearch_input').typeahead({
+tag_search_input.typeahead({
 		highlight: true,
 		minLength: 0
 	},
@@ -279,34 +312,8 @@ function findPresetOnID(id){
 	return res[0];
 }
 
-/**
-* Function is called when the save button of the edit window is clicked.
-*/
-function editPreset() {
-	//TODO should be the new values from the edit window
-	// And the new preset values should be send to the backend.
-	var tags = $('#preset_edit_div .tags_input').val();
-	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
-																		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
-}
 
-/**
-* Load for the specified preset the edit modal.
-* @preset to load the edit window for.
-*/
-function loadPresetEditModal(preset) {
-	editingpreset = preset;
-	var edit_div = $('.preset-edit-modal');
-	edit_div.find('#presetID').text(preset.id);
-	edit_div.find('img').attr("src", "/api/backend" + preset.image);
-	var tags_input = $('#preset_edit_div .tags_input');
-	tags_input.tagsinput('removeAll');
-	preset.tags.forEach(function(item) {
-		tags_input.tagsinput('add', item);
-	});
-	$('.preset-edit-modal').modal('show');
-}
-
+//Below everything for the tag modal.
 var newId = 0;
 
 /**

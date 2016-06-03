@@ -45,7 +45,6 @@ public class SimpleCameraTest {
     simpleCamera.setId(3);
     simpleCamera.setStreamLink("something");
     JSONObject expectedJSON = new JSONObject();
-    expectedJSON.put("streamlink", "something");
     expectedJSON.put("id", 3);
     expectedJSON.put("inuse", false);
     Assert.assertEquals(expectedJSON, simpleCamera.toJSON());
