@@ -19,6 +19,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+/**
+ * Class that handles editing presets.
+ */
 public class EditPresetHandler extends RequestHandler {
   
   /**
@@ -92,7 +96,8 @@ public class EditPresetHandler extends RequestHandler {
   MalformedURIException {
     IPCamera ipcam = (IPCamera)control.getCameraController()
         .getCameraById(Integer.parseInt(camID));   
-    Preset newPreset = CreatePresetHandler.setPreset(ipcam, tagList);
+    CreatePresetHandler handler = new CreatePresetHandler();
+    Preset newPreset = handler.setPreset(ipcam, tagList);
     newPreset.setId(presetID);
     control.getDatabase().updatePreset(newPreset);
   }
