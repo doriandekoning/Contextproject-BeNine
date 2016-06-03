@@ -370,7 +370,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTag("tag1");
         database.deleteTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tag WHERE name = tag1");
+        verifySQLStatementExecuted("DELETE FROM tag WHERE name = 'tag1'");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();

@@ -130,6 +130,8 @@ public class PresetController {
    */
   public void addTag(String tag) {
     tags.add(tag);
+    Database db = ServerController.getInstance().getDatabase();
+    db.addTag(tag);
   }
 
   /**
@@ -137,6 +139,8 @@ public class PresetController {
    * @return a collection with all tags
    */
   public Collection<String> getTags() {
+    Database db = ServerController.getInstance().getDatabase();
+    this.addAllTags(db.getTags());
     return tags;
   }
 
@@ -155,5 +159,8 @@ public class PresetController {
   public void removeTag(String tag) {
     tags.remove(tag);
     presets.forEach(p -> p.removeTag(tag));
+    Database db = ServerController.getInstance().getDatabase();
+    presets.forEach(p -> db.deleteTagFromPreset(tag, p));
+    db.deleteTag(tag);
   }
 }

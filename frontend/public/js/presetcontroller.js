@@ -1,5 +1,7 @@
 // Local variable to store the available tags locally.
 var localTags = [];
+var deleteTags = [];
+var updatedTags = [];
 // true if the client is in preset editing mode.
 var editing = false;
 
@@ -16,7 +18,7 @@ function loadPresets() {
 		displayPresets(presets);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
-				localTags.push(obj.tags[t]);
+				newTag(obj.tags[t]);
 			}
 		}
 	});
@@ -109,16 +111,6 @@ function tagsWithDefaults(q, sync) {
 	else {
 		tagnames.search(q, sync);
 	}
-}
-
-/**
-* Function adds a new tag to the tag list.
-* @param val value of the tag to add.
-*/
-function newTag(val) {
-	localTags.push(val);
-	tagnames.clearPrefetchCache();
- 	tagnames.initialize(true);
 }
 
 
@@ -318,4 +310,139 @@ function findPresetOnID(id){
 		return parseInt(item.id) === parseInt(id);
 	});
 	return res[0];
+}
+
+
+//Below everything for the tag modal.
+var newId = 0;
+
+/**
+* Load the tags modal en fill in the tags.
+*/
+function loadTags() {
+	updatedTags = [];
+	deleteTags = [];
+	$(".fill-tags").empty();
+	$(".fill-tags").append(getTags());
+	newId = localTags.length;
+}
+
+$(".fill-tags").on('click', '.tag', function(e){
+        e.preventDefault();
+        var tag = $(this).html();
+        $(this).replaceWith(appendEditable(tag, false));
+		editTags($(this).attr('id'));
+	});
+
+/**
+* Edit or delete a clicked on tag.
+* @id The id of the tag to edit
+*/
+function editTags(id) {
+	$(".edit").click(function(e){
+		e.preventDefault();
+		var tag = $('.new').val();
+		$(this).parent().replaceWith(appendTag(id, tag));
+		updatedTags.push({index: id, name: tag});
+	});
+	$(".delete").click(function(e){
+		e.preventDefault();
+		var tag = $('.new').val();
+		$(this).parent().remove();
+		if(id < newId){
+			deleteTags.push(id);
+		}
+	});
+}
+
+/**
+* Save the new tags in de array.
+*/
+function updateTags() {
+	for(i = 0; i < updatedTags.length; i++) {
+		if(localTags[updatedTags[i].index] != undefined){
+			//update tags
+			deleteTag(updatedTags[i].index);
+		}
+		//update/add tags
+		newTag(updatedTags[i].name);
+	}
+	//delete tags
+	for(i = 0; i < deleteTags.length; i++) {
+		deleteTag(deleteTags[i]);
+	}
+}
+
+
+/**
+* Function adds a new tag to the tag list.
+* @param val value of the tag to add.
+*/
+function newTag(val) {
+	localTags.push(val);
+	tagnames.clearPrefetchCache();
+ 	tagnames.initialize(true);
+	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+				console.log("create tag respone: " + data);
+	}).done();
+}
+
+/**
+* Function deletes a new tag from the tag list.
+* @param val value of the tag to delete.
+*/
+function deleteTag(index) {
+	var remove = localTags[index];
+	localTags.splice(index,1);
+	tagnames.clearPrefetchCache();
+ 	tagnames.initialize(true);
+	$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
+				console.log("create tag respone: " + data);
+	}).done();
+}
+
+/**
+* Create a new tag.
+*/
+function addTag() {
+	$(".fill-tags").append(appendEditable("new", true));
+	editTags(newId);
+	newId++;
+}
+
+/**
+* Get the tags in the html-style.
+*/
+function getTags() {
+	var result = "";
+	for(i = 0; i < localTags.length; i++) {
+		result += appendTag(i, localTags[i]);
+	}
+	return result;
+}
+
+/**
+* Create a html-style for a new tag.
+* @id the id of the tag
+* @name the name of the tag
+*/
+function appendTag(id, name) {
+	return "<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
+}
+
+/**
+* Create a html-style for a editable tag.
+* @input What to prefill in the input box
+* @add Is it a new tag or not
+*/
+function appendEditable(input, add) {
+	var result = "";
+	if(add){
+		result += "<div>"
+	}
+	result += "<input class='new' value='" + input + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
+	if(add) {
+		result += "</div>"
+	}
+	return result
 }
