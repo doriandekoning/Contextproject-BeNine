@@ -39,7 +39,6 @@ public class EditPresetHandler extends RequestHandler {
     try {
       String overwriteTag = request.getParameter("overwriteTag");
       String overwritePosition = request.getParameter("overwriteposition");
-      String camID = request.getParameter("camera");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
       
@@ -54,7 +53,7 @@ public class EditPresetHandler extends RequestHandler {
       }
       
       if (overwritePosition.equals("true")) {
-        updatePosition(camID,tagList,presetID);
+        updatePosition(preset.getId(),tagList,presetID);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
@@ -93,11 +92,11 @@ public class EditPresetHandler extends RequestHandler {
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
    */
-  public void updatePosition(String camID, List<String> tagList, int presetID) throws 
+  public void updatePosition(int camID, List<String> tagList, int presetID) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
     IPCamera ipcam = (IPCamera)control.getCameraController()
-        .getCameraById(Integer.parseInt(camID));   
+        .getCameraById(camID);   
     CreatePresetHandler handler = new CreatePresetHandler();
     Preset newPreset = handler.setPreset(ipcam, tagList);
     newPreset.setId(presetID);
