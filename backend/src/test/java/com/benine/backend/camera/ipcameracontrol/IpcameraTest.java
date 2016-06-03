@@ -249,4 +249,17 @@ public class IpcameraTest {
 
     cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 700);
   }
+
+  @Test
+  public void testBusyInitializedFalse() {
+    IPCamera cam = spy(new IPCamera(("12")));
+    Assert.assertFalse(cam.isBusy());
+  }
+
+  @Test
+  public void testSetBusy() {
+    IPCamera cam = spy(new IPCamera(("12")));
+    cam.setBusy(true);
+    Assert.assertTrue(cam.isBusy());
+  }
 }

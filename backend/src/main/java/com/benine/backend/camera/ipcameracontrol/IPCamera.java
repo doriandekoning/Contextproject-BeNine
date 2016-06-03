@@ -35,6 +35,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   private String ipaddress;
 
+  private boolean busy = false;
+
   private static final int MOVE_WAIT_DURATION = 200;
 
   public static final double HORIZONTAL_FOV_MIN = 3.3;
@@ -511,7 +513,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Waits until the camera has arrived at a location or the timeout has expired.
    * @param pos The position the camera should be at.
    * @param zoom the zoom of the camera
-   * @param timeout the timeout after which to give up waiting
+   * @param timeout the timeout after which to give up waitingh
    * @throws InterruptedException when interupted when waiting to arrive at position.
    * @throws CameraConnectionException when connection to camera is lost.
    * @throws TimeoutException when camera moves to slow or does not move at all.
@@ -527,4 +529,19 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     } while (System.currentTimeMillis() < timedOutTime );
     throw new TimeoutException();
   }
+
+  /**
+   * Sets the camera busy.
+   */
+  public void setBusy(boolean busy) {
+    this.busy = busy;
+  }
+
+  /**
+   * Returns if the camera is busy.
+   */
+  public boolean isBusy() {
+    return busy;
+  }
+
 }
