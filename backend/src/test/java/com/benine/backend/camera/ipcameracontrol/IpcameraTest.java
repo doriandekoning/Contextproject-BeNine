@@ -4,9 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.json.simple.JSONObject;
+
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.preset.IPCameraPreset;
+
 import org.apache.commons.io.IOUtils;
 
 import org.junit.Assert;
@@ -17,6 +21,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Test class to test the IP Camera class.
@@ -29,6 +34,7 @@ public class IpcameraTest {
   @Before
   public final void setUp() throws InvalidCameraTypeException {
     camera = Mockito.spy(new IPCamera("test"));
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
@@ -80,6 +86,25 @@ public class IpcameraTest {
     setCameraBehaviour("APC", "aPC80008000");
     Position res = camera.getPosition();
     
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
+  @Test
+  public final void testGetPositionTwice() throws CameraConnectionException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    res = camera.getPosition();
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
+  @Test
+  public final void testGetPositionTwice3Seconds() throws CameraConnectionException, InterruptedException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    Thread.sleep(1); 
+    res = camera.getPosition();
     assertEquals(0, res.getPan(), 0.000001);
     assertEquals(180, res.getTilt(), 0.000001);
   }
@@ -152,36 +177,47 @@ public class IpcameraTest {
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
   
-  @Test
+  @Test(expected = IpcameraConnectionException.class)
   public final void testGetJSONFails() throws CameraConnectionException {
     IPCamera camera = new IPCamera("12");
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
-    assertEquals(json.toString(), camera.toJSON());
+    json.put("move", true);
+    json.put("iris", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    camera.toJSON();
   }
   
   @Test
   public final void testGetJSON() throws CameraConnectionException{
+    setCameraBehaviour("D1", "d11");
+    setCameraBehaviour("D3", "d31");
+    JSONObject json = new JSONObject();
+    json.put("id", -1);
+    json.put("inuse", false);
+    json.put("move", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    json.put("autofocus", true);
+    json.put("iris", true);
+    json.put("autoiris", true);
+    
+    assertEquals(json, camera.toJSON());
+  }
+  
+  @Test
+  public final void testCreatePreset() throws CameraConnectionException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    JSONObject json = new JSONObject();
-    json.put("id", -1);
-    json.put("inuse", false);
-    json.put("pan", 0.0);
-    json.put("tilt", 180.0);
-    json.put("zoom", 256);
-    json.put("focus", 1261);
-    json.put("autofocus", true);
-    json.put("iris", 2029);
-    json.put("autoiris", true);
-    json.put("streamlink", "http://test/cgi-bin/mjpeg");
+    IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1);
     
-    assertEquals(json.toString(), camera.toJSON());
+    assertEquals(expected, camera.createPreset(new ArrayList<String>()));
   }
   
   @Test
