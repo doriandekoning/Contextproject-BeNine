@@ -55,6 +55,7 @@ public class CameraMovingHandler extends CameraRequestHandler {
    * @param tiltSpeed     The tiltspeed value.
    * @throws MalformedURIException      If the url contains the wrong parameters.
    * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   public void move(MovingCamera movingCam, String moveType, String pan, String tilt,
                    String panSpeed, String tiltSpeed)

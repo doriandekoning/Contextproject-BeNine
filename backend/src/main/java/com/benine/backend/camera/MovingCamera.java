@@ -13,9 +13,10 @@ public interface MovingCamera extends ControllableCamera {
    * @param panSpeed integer to specify the speed of the pan movement.
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy.
    */
   void moveTo(Position pos, int panSpeed, int tiltSpeed)
-                                                     throws CameraConnectionException, CameraBusyException;
+          throws CameraConnectionException, CameraBusyException;
 
   /**
     * Move the camera with the specified speed.
@@ -25,6 +26,7 @@ public interface MovingCamera extends ControllableCamera {
     * @param pan movement direction over horizontal axis.
     * @param tilt movement direction over vertical axis.
     * @throws CameraConnectionException when command can not be completed.
+    * @throws CameraBusyException if the camera is busy.
     */
   void move(int pan, int tilt) throws CameraConnectionException, CameraBusyException;
 

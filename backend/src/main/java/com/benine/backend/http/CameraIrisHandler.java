@@ -50,6 +50,7 @@ public class CameraIrisHandler extends CameraRequestHandler {
    * @param setPos    The setPos parameter
    * @param speed     The speed of the focus movement.
    * @throws CameraConnectionException if the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   private void setIris(IrisCamera iriscam,
                        String autoOn, String setPos, String speed)

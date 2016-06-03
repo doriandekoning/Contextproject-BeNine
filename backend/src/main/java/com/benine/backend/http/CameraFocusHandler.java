@@ -50,6 +50,7 @@ public class CameraFocusHandler extends CameraRequestHandler {
    * @param setPos    The setPos parameter
    * @param speed     The speed of the focus movement.
    * @throws CameraConnectionException If the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   private void setFocus(FocussingCamera focusCam,
                         String autoOn, String setPos, String speed)

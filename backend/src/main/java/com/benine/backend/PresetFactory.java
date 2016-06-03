@@ -7,11 +7,11 @@ import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import javax.imageio.ImageIO;
 
 /**
  * Class used to create presets.
@@ -76,6 +76,9 @@ public class PresetFactory {
    * @param tiltSpeed the tiltspeed of the preset
    * @return the created preset.
    * @throws CameraConnectionException when camera cannot be reached.
+   * @throws com.benine.backend.camera.CameraBusyException if the camera is busy
+   * @throws IOException if the preset image cannot be stored.
+   * @throws StreamNotAvailableException if the camera stream cannot be reached.
    */
   public Preset createPreset(IPCamera cam, int panSpeed, int tiltSpeed)
           throws CameraConnectionException, IOException, StreamNotAvailableException {

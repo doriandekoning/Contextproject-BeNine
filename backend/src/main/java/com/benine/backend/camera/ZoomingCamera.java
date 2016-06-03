@@ -16,6 +16,7 @@ public interface ZoomingCamera extends ControllableCamera {
    * Zoom to a specified position.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy.
    */
   void zoomTo(int zpos) throws CameraConnectionException, CameraBusyException;
 
@@ -26,6 +27,7 @@ public interface ZoomingCamera extends ControllableCamera {
    * 1 is max speed in wide direction.
    * @param dir zoom direction.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy.
    */
   void zoom(int dir) throws CameraConnectionException, CameraBusyException;
 

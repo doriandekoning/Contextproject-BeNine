@@ -25,6 +25,9 @@ public abstract class AutoPresetCreator {
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interupted while waiting for cam to move.
    * @throws TimeoutException if the camera is moving too slow or not at all.
+   * @throws CameraBusyException if the camera is busy.
+   * @throws IOException if exception occurs when creating the preset image.
+   * @throws StreamNotAvailableException if a camera stream cannot be reached.
    */
   public Collection<Preset> createPresets(IPCamera cam)
           throws CameraConnectionException, CameraBusyException, InterruptedException,

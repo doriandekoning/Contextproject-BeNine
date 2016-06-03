@@ -6,24 +6,18 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
-
 import org.eclipse.jetty.server.Request;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 
 public class CreatePresetHandler extends RequestHandler {
@@ -92,8 +86,8 @@ public class CreatePresetHandler extends RequestHandler {
           throws IOException, StreamNotAvailableException, SQLException,
           CameraConnectionException, MalformedURIException {
     PresetController presetController = ServerController.getInstance().getPresetController();
-    
-    int presetID = presetController.addPreset(createPreset(camera, tagList));
+    presetController.addPreset(createPreset(camera, tagList));
+
   }
 
   /**

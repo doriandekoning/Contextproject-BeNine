@@ -45,10 +45,12 @@ public class AutoPresetCreationHandler extends RequestHandler  {
       ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam));
       PresetController presetController = ServerController.getInstance().getPresetController();
       presetController.addPresets(presets);
-    } catch (CameraConnectionException | InterruptedException | TimeoutException | StreamNotAvailableException | SQLException e ) {
+    } catch (CameraConnectionException | InterruptedException
+            | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);
     }  catch (CameraBusyException e) {
-      getLogger().log("Trying to auto create presets on busy camera with id: " + camID, LogEvent.Type.WARNING);
+      getLogger().log("Trying to auto create presets on busy camera with id: "
+              + camID, LogEvent.Type.WARNING);
     }
 
 

@@ -48,6 +48,7 @@ public class CameraZoomHandler extends CameraRequestHandler {
    * @param zoom        The zoom value.
    * @throws MalformedURIException      If there is an error in the request.
    * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   private void zoom(ZoomingCamera zoomingCam, String zoomType, String zoom)
           throws MalformedURIException, CameraConnectionException, CameraBusyException {

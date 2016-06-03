@@ -325,6 +325,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Where 0 is completely zoomed out.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException        If the camera is busy.
    */
   public void zoomTo(int zpos) throws CameraConnectionException, CameraBusyException {
     checkBusy();
@@ -546,6 +547,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   /**
    * Sets the camera busy.
+   * @param busy if the camera is busy.
    */
   public void setBusy(boolean busy) {
     this.busy = busy;
@@ -553,6 +555,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   /**
    * Returns if the camera is busy.
+   * @return true if the camera is busy false otherwise.
    */
   public boolean isBusy() {
     return busy;
