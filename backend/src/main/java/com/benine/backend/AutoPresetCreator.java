@@ -32,6 +32,7 @@ public abstract class AutoPresetCreator {
   public Collection<Preset> createPresets(IPCamera cam)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException {
+    cam.setBusy(true);
     Position camStartPos = cam.getPosition();
 
     ArrayList<Preset> presets = new ArrayList<Preset>();
@@ -40,6 +41,7 @@ public abstract class AutoPresetCreator {
       cam.waitUntilAtPosition(pos, pos.getZoom(), timeout);
       presets.add(new PresetFactory().createPreset(cam, 2, 30));
     }
+    cam.setBusy(false);
     return presets;
   }
 
