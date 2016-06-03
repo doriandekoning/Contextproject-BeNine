@@ -34,8 +34,10 @@ public abstract class AutoPresetCreator {
 
     ArrayList<Preset> presets = new ArrayList<Preset>();
     for (ZoomPosition pos : generatePositions(cam)) {
+      cam.setBusy(false);
       cam.moveTo(pos, 30, 2);
       cam.waitUntilAtPosition(pos, pos.getZoom(), timeout);
+      cam.setBusy(true);
       presets.add(new PresetFactory().createPreset(cam, 2, 30));
     }
     cam.setBusy(false);
