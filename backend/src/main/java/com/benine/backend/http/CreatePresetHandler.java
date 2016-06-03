@@ -5,23 +5,26 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
+
+import com.benine.backend.video.MJPEGFrameResizer;
+import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
+
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
-
+import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -90,8 +93,12 @@ public class CreatePresetHandler extends RequestHandler {
           StreamNotAvailableException, IOException, SQLException {
     StreamController streamController = ServerController.getInstance().getStreamController();
 
-    StreamReader streamReader = streamController.getStreamReader(cameraID);
-    BufferedImage bufferedImage = streamReader.getSnapShot();
+    MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
+    VideoFrame snapShot = streamReader.getSnapShot();
+    MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
+    snapShot = resizer.resize(snapShot);
+
+    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
 
     File path = new File("static" + File.separator + "presets" + File.separator
             + cameraID + "_" + presetID + ".jpg");
