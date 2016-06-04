@@ -34,7 +34,7 @@ public class SimplePreset extends Preset {
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
-    json.put("image", imagePath + getImage());
+    json.put("image", getImage());
     json.put("id", getId());
     json.put("cameraid", getCameraId());
     JSONArray tagsJSON = new JSONArray();

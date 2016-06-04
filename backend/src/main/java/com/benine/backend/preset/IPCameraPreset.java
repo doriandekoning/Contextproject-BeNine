@@ -86,7 +86,7 @@ public class IPCameraPreset extends Preset {
     json.put("autoiris", autoiris);
     json.put("id", getId());
     json.put("cameraid", getCameraId());
-    json.put("image", imagePath + getImage());
+    json.put("image", getImage());
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);

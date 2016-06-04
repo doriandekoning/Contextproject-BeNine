@@ -1,8 +1,11 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.LogEvent;
+import com.benine.backend.Config;
 import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,12 +25,44 @@ public class PresetController {
   
   private Database database;
   
+  private Config config;
+  
   /**
    * Constructor of the presetController.
    * @param serverController to interact with the rest of the system.
    */
   public PresetController(ServerController serverController) {
     database = serverController.getDatabaseController().getDatabase();
+    config = serverController.getConfig();
+  }
+  
+  /**
+   * Returns a json string of all the presets including available tags.
+   * @param tag the presets requested must contain.
+   * @return json string of all the presets.
+   */
+  public String getPresetsJSON(String tag) {
+    JSONObject jsonObject = new JSONObject();
+    String imagePath = config.getValue("imagepath");
+    ArrayList<Preset> resultPresets = getPresets();
+    if (tag == null) {
+      JSONArray tagsJSON = new JSONArray();
+      Collection<String> tags = getTags();
+      tags.forEach(t -> tagsJSON.add(t));
+      jsonObject.put("tags", tagsJSON);
+    } else {
+      resultPresets = getPresetsByTag(tag);
+    }
+
+    JSONArray presetsJSON = new JSONArray();
+    for (Preset p : resultPresets) {
+      JSONObject presetJson = p.toJSON();
+      presetJson.put("image", imagePath + presetJson.get("image"));
+      presetsJSON.add(presetJson);
+    }
+    jsonObject.put("presets", presetsJSON);
+    
+    return jsonObject.toString();
   }
 
 

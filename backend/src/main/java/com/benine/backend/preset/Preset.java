@@ -14,8 +14,6 @@ import java.util.Set;
  */
 public abstract class Preset {
 
-  static String imagePath = ServerController.getInstance().getConfig().getValue("imagepath");
-
   private String image;
   private int presetid = -1;
   protected Set<String> tags = new HashSet<String>();
