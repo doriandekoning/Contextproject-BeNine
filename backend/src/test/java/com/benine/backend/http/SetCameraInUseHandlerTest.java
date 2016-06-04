@@ -20,8 +20,8 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
   @Before
   public void initialize() throws IOException {
     super.initialize();
-    when(cameracontroller.getCameraById(42)).thenReturn(cam);
-    when(cameracontroller.getCameraById(43)).thenReturn(null);
+    when(cameraController.getCameraById(42)).thenReturn(cam);
+    when(cameraController.getCameraById(43)).thenReturn(null);
   }
 
   @Test
@@ -110,6 +110,6 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
   @Override
   public CameraRequestHandler supplyHandler() {
-    return new SetCameraInUseHandler();
+    return new SetCameraInUseHandler(httpserver);
   }
 }

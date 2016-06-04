@@ -26,7 +26,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new PresetsHandler();
+    return new PresetsHandler(httpserver);
   }
 
   @Before

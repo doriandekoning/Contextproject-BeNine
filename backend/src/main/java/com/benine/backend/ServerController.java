@@ -79,7 +79,7 @@ public class ServerController {
   public void start() throws Exception {
     cameraController.loadConfigCameras();
     databaseController.start();
-    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
+    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")), this);
 
     running = true;
 

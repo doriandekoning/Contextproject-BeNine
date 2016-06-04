@@ -18,14 +18,16 @@ public class PresetsHandler extends RequestHandler {
 
   /**
    * Constructor for a new PresetsHandler, handling the /presets/ request.
+   * @param httpserver to construct this handler for.
    */
-  public PresetsHandler() {
+  public PresetsHandler(HTTPServer httpserver) {
+    super(httpserver);
     this.handlers = new HashMap<>();
 
-    addHandler("createpreset", new CreatePresetHandler());
-    addHandler("recallpreset", new RecallPresetHandler());
-    addHandler("addtag", new AddTagHandler());
-    addHandler("removetag", new RemoveTagHandler());
+    addHandler("createpreset", new CreatePresetHandler(httpserver));
+    addHandler("recallpreset", new RecallPresetHandler(httpserver));
+    addHandler("addtag", new AddTagHandler(httpserver));
+    addHandler("removetag", new RemoveTagHandler(httpserver));
   }
 
   @Override

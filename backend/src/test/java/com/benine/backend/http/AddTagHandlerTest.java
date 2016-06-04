@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.ServerController;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
@@ -8,7 +7,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -17,11 +15,9 @@ import static org.mockito.Mockito.verifyZeroInteractions;
  */
 public class AddTagHandlerTest extends RequestHandlerTest {
 
-  private PresetController presetController = mock(PresetController.class);
-
   @Override
   public RequestHandler supplyHandler() {
-    return new AddTagHandler();
+    return new AddTagHandler(httpserver);
   }
 
   @Before
@@ -32,7 +28,7 @@ public class AddTagHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testAddTag() throws Exception{
-    setPath("/presets/addtag?name=tag1");
+    setPath("/presets/addtag");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("name", "tag1");

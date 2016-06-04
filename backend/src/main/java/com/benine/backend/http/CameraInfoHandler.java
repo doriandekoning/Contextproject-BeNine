@@ -19,16 +19,18 @@ public class CameraInfoHandler extends CameraRequestHandler {
 
   /**
    * Constructor for a new CameraInfoHandler, handling the /camera/ request.
+   * @param httpserver for this handler.
    */
-  public CameraInfoHandler() {
+  public CameraInfoHandler(HTTPServer httpserver) {
+    super(httpserver);
     this.handlers = new HashMap<>();
 
-    addHandler("mjpeg", new CameraStreamHandler());
-    addHandler("focus", new CameraFocusHandler());
-    addHandler("move", new CameraMovingHandler());
-    addHandler("iris", new CameraIrisHandler());
-    addHandler("zoom", new CameraZoomHandler());
-    addHandler("inuse", new SetCameraInUseHandler());
+    addHandler("mjpeg", new CameraStreamHandler(httpserver));
+    addHandler("focus", new CameraFocusHandler(httpserver));
+    addHandler("move", new CameraMovingHandler(httpserver));
+    addHandler("iris", new CameraIrisHandler(httpserver));
+    addHandler("zoom", new CameraZoomHandler(httpserver));
+    addHandler("inuse", new SetCameraInUseHandler(httpserver));
   }
 
 
