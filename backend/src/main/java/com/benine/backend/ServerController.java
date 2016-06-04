@@ -1,15 +1,12 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
-import com.benine.backend.database.MySQLDatabase;
+import com.benine.backend.database.DatabaseController;
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
-import java.sql.SQLException;
 
 /**
  * Class containing the elements to make the server work.
@@ -27,8 +24,8 @@ public class ServerController {
   private CameraController cameraController;
 
   private StreamController streamController;
-
-  private Database database;
+  
+  private DatabaseController databaseController;
 
   private boolean running;
 
@@ -47,11 +44,11 @@ public class ServerController {
     running = false;
     setupLogger();
 
-    database = loadDatabase();
+    databaseController = new DatabaseController(this);
 
     cameraController = new CameraController();
 
-    presetController = new PresetController();
+    presetController = new PresetController(this);
 
     streamController = new StreamController();
   }
@@ -81,10 +78,8 @@ public class ServerController {
    */
   public void start() throws Exception {
     cameraController.loadConfigCameras();
-    startupDatabase();
+    databaseController.start();
     httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
-
-    loadPresets();
 
     running = true;
 
@@ -99,49 +94,9 @@ public class ServerController {
   public void stop() throws Exception {
     if (running) {
       httpServer.destroy();
-      database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
-  }
-
-  /**
-   * Loads the presets from the database.
-   */
-  private void loadPresets() {
-    try {
-      presetController.addPresets(database.getAllPresets());
-      for (Preset preset : presetController.getPresets()) {
-        preset.addTags(database.getTagsFromPreset(preset));
-      }
-    } catch (SQLException e) {
-      logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
-    }
-  }
-
-  /**
-   * Read the login information from the database and create database object..
-   *
-   * @return database object
-   */
-  private Database loadDatabase() {
-    String user = config.getValue("sqluser");
-    String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password);
-  }
-
-  /**
-   * Create database if non exists and make the connection.
-   */
-  private void startupDatabase() {
-    database.connectToDatabaseServer();
-    //If the database does not exist yet, create a new one
-    if (!database.checkDatabase()) {
-      database.resetDatabase();
-    } else {
-      database.useDatabase();
-    }
-    database.checkCameras();
   }
 
   /**
@@ -201,27 +156,21 @@ public class ServerController {
   public void setStreamController(StreamController streamController) {
     this.streamController = streamController;
   }
-
-
+  
   /**
-   * Getter for the database.
-   *
-   * @return the database
+   * Sets the databaseController.
+   * @param databaseController the databaseController
    */
-  public Database getDatabase() {
-    return database;
+  public void setDatabaseController(DatabaseController databaseController) {
+    this.databaseController = databaseController;
   }
 
   /**
-   * Setter for the database also updates the presets and cameras according to new database.
-   *
-   * @param newDatabase the new database
+   * Returns the databaseController
+   * @return databaseController of this server.
    */
-  public void setDatabase(Database newDatabase) {
-    database = newDatabase;
-    loadDatabase();
-    cameraController.loadConfigCameras();
-    loadPresets();
+  public DatabaseController getDatabaseController() {
+    return databaseController;
   }
 
   /**

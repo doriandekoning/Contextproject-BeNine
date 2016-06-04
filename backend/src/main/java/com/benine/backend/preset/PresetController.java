@@ -1,5 +1,6 @@
 package com.benine.backend.preset;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
 
@@ -18,6 +19,16 @@ public class PresetController {
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
   private HashSet<String> tags = new HashSet<>();
+  
+  private Database database;
+  
+  /**
+   * Constructor of the presetController.
+   * @param serverController to interact with the rest of the system.
+   */
+  public PresetController(ServerController serverController) {
+    database = serverController.getDatabaseController().getDatabase();
+  }
 
 
   /**
@@ -49,6 +60,7 @@ public class PresetController {
     return returnList;
   }
 
+
   /**
    * Removes a preset from this presetcontroller.
    * @param preset the preset to remove.
@@ -56,8 +68,7 @@ public class PresetController {
    */
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
-    Database db = ServerController.getInstance().getDatabase();
-    db.deletePreset(preset);
+    database.deletePreset(preset);
   }
   
   /**
@@ -85,8 +96,7 @@ public class PresetController {
     preset = addPresetID(preset);
     presets.add(preset);
     addAllTags(preset.getTags());
-    ServerController serverContr = ServerController.getInstance();
-    serverContr.getDatabase().addPreset(preset);
+    database.addPreset(preset);
     return preset.getId();
   }
   
@@ -100,8 +110,7 @@ public class PresetController {
     presets.remove(old);
     presets.add(preset);
     addAllTags(preset.getTags());
-    ServerController serverContr = ServerController.getInstance();
-    serverContr.getDatabase().updatePreset(preset);
+    database.updatePreset(preset);
   }
 
   /**
@@ -130,8 +139,7 @@ public class PresetController {
    */
   public void addTag(String tag) {
     tags.add(tag);
-    Database db = ServerController.getInstance().getDatabase();
-    db.addTag(tag);
+    database.addTag(tag);
   }
 
   /**
@@ -139,8 +147,7 @@ public class PresetController {
    * @return a collection with all tags
    */
   public Collection<String> getTags() {
-    Database db = ServerController.getInstance().getDatabase();
-    this.addAllTags(db.getTags());
+    this.addAllTags(database.getTags());
     return tags;
   }
 
@@ -159,8 +166,7 @@ public class PresetController {
   public void removeTag(String tag) {
     tags.remove(tag);
     presets.forEach(p -> p.removeTag(tag));
-    Database db = ServerController.getInstance().getDatabase();
-    presets.forEach(p -> db.deleteTagFromPreset(tag, p));
-    db.deleteTag(tag);
+    presets.forEach(p -> database.deleteTagFromPreset(tag, p));
+    database.deleteTag(tag);
   }
 }

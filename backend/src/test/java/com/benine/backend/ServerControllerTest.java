@@ -2,6 +2,9 @@ package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.Database;
+import com.benine.backend.database.DatabaseController;
+import com.benine.backend.preset.PresetController;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,15 +29,22 @@ public class ServerControllerTest {
   }
   
   @Test
-  public void testGetDatabase() throws Exception {
-    Database database = mock(Database.class);
-    serverController.setDatabase(database);
-    assertEquals(database, serverController.getDatabase());
+  public void testGetDatabaseController() throws Exception {
+    DatabaseController database = mock(DatabaseController.class);
+    serverController.setDatabaseController(database);
+    assertEquals(database, serverController.getDatabaseController());
+  }
+  
+  @Test
+  public void testGetPresetController() throws Exception {
+    PresetController presetController = mock(PresetController.class);
+    serverController.setPresetController(presetController);
+    assertEquals(presetController, serverController.getPresetController());
   }
   
   @Test
   public void testStartServer() throws Exception {
-    serverController.setDatabase(mock(Database.class));
+    serverController.setDatabaseController(mock(DatabaseController.class));
     serverController.start();  
     assertTrue(serverController.isServerRunning());
     serverController.stop();
