@@ -1,8 +1,13 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import com.benine.backend.Config;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +20,16 @@ import org.mockito.Mockito;
 public class IpcameraZoomTest {
   
   private IPCamera camera;
+  private CameraController cameraController = mock(CameraController.class);
+  private Config config = mock(Config.class);
+  private Logger logger = mock(Logger.class);
   
   @Before
   public final void setUp(){
-    camera = Mockito.spy(new IPCamera("test"));
+    when(config.getValue("IPCameraTimeOut")).thenReturn("2");
+    when(cameraController.getConfig()).thenReturn(config);
+    when(cameraController.getLogger()).thenReturn(logger);
+    camera = Mockito.spy(new IPCamera("test", cameraController));
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {

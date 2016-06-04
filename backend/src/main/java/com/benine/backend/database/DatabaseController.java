@@ -24,7 +24,7 @@ public class DatabaseController {
   private Logger logger;
   
   /**
-   * Constructor for a databasecontroller.
+   * Constructor for a database controller.
    * @param serverController to interact with the rest of the system
    */
   public DatabaseController(ServerController serverController) {

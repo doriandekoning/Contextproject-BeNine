@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.Logger;
@@ -22,21 +23,20 @@ import com.benine.backend.Logger;
 public class DatabaseControllerTest {
   
   DatabaseController databaseController;
-  ServerController serverController;
-  PresetController presetController;
-  Logger logger;
-  Database database;
+  ServerController serverController = mock(ServerController.class);
+  PresetController presetController = mock(PresetController.class);
+  CameraController cameraController = mock(CameraController.class);
+  Logger logger = mock(Logger.class);
+  Database database = mock(Database.class);
   
   @Before
   public void setup() {
-    database = mock(Database.class);
+
     when(database.getAllPresets()).thenReturn(new ArrayList<>());
-    serverController = mock(ServerController.class);
     when(serverController.getConfig()).thenReturn(mock(Config.class));
-    logger = mock(Logger.class);
     when(serverController.getLogger()).thenReturn(logger);
-    presetController = mock(PresetController.class);
     when(serverController.getPresetController()).thenReturn(presetController);
+    when(serverController.getCameraController()).thenReturn(cameraController);
     databaseController = new DatabaseController(serverController);
     databaseController.setDatabase(database);
   }
