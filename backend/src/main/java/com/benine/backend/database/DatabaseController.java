@@ -42,7 +42,7 @@ public class DatabaseController {
   private Database loadDatabase() {
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password);
+    return new MySQLDatabase(user, password, logger);
   }
   
 
@@ -51,13 +51,12 @@ public class DatabaseController {
    */
   public void start() {
     database.connectToDatabaseServer();
-    //If the database does not exist yet, create a new one
     if (!database.checkDatabase()) {
       database.resetDatabase();
     } else {
       database.useDatabase();
     }
-    database.checkCameras();
+    database.checkCameras(serverController.getCameraController().getCameras());
     loadPresets();
   }
   

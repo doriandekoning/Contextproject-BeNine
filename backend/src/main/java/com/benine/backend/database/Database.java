@@ -1,5 +1,6 @@
 package com.benine.backend.database;
 
+import com.benine.backend.camera.Camera;
 import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
@@ -91,8 +92,9 @@ public interface Database {
 
   /**
    * Checks if cameras are correct in database.
+   * @param cameras list of cameras to verify with database.
    */
-  void checkCameras();
+  void checkCameras(ArrayList<Camera> cameras);
 
   /**
    * deletes a camera from the database.

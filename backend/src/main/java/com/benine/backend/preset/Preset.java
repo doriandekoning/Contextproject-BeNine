@@ -1,6 +1,5 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import org.json.simple.JSONObject;
