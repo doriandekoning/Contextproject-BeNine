@@ -46,7 +46,7 @@ public class ServerController {
 
     databaseController = new DatabaseController(this);
 
-    cameraController = new CameraController();
+    cameraController = new CameraController(this);
 
     presetController = new PresetController(this);
 

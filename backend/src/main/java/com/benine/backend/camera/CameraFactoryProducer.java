@@ -1,13 +1,24 @@
 package com.benine.backend.camera;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.ipcameracontrol.IPCameraFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CameraFactoryProducer {
+  
+  private CameraController cameraController;
+  
+  /**
+   * Constructs a camera factory producer.
+   * @param cameraController to interact with the rest of the system.
+   */
+  public CameraFactoryProducer(CameraController cameraController) {
+    this.cameraController = cameraController;
+    CAMERA_TYPES.put("simplecamera", new SimpleCameraFactory(cameraController));
+    CAMERA_TYPES.put("ipcamera", new IPCameraFactory(cameraController));
+  }
   
   /**
    * Map of string types to right factory.
@@ -16,8 +27,6 @@ public class CameraFactoryProducer {
   
   static {
     CAMERA_TYPES = new HashMap<>();
-    CAMERA_TYPES.put("simplecamera", new SimpleCameraFactory());
-    CAMERA_TYPES.put("ipcamera", new IPCameraFactory());
   }
   
   /**
@@ -28,7 +37,7 @@ public class CameraFactoryProducer {
    */
   public CameraFactory getFactory(String type) throws InvalidCameraTypeException {
     if (CAMERA_TYPES.get(type) == null) {
-      ServerController.getInstance().getLogger().log("The following type is not specified: " + type,
+      cameraController.getLogger().log("The following type is not specified: " + type,
           LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Camera type is not regonized");
     }
