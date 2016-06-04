@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/header %>
+</head>
+<body>
+<div class="body_container">
+    <% include ../partials/navbar %>
+
+    <div id="top_area" class="row">
+        <% include ../partials/camera-module %>
+    </div>
+
+    <div id="body_area">
+        <% include ../partials/presets-module %>
+        <% include ../partials/controls-module %>
+    </div>
+
+    <% include ../partials/modals/create-preset %>
+    <% include ../partials/modals/edit-preset %>
+    <% include ../partials/modals/edit-tags %>
+
+    <% include ../partials/js-includes %>
+</div>
+</body>
+</html>

@@ -7,13 +7,16 @@ var api = require('./modules/api');
 var express = require('express');
 var app = express();
 
+app.set('view engine', 'ejs');
+
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 // If a GET / request comes in,
 // return the index.html page.
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    //res.sendFile(path.join(__dirname + '/index.html'));
+    res.render('pages/camera-view');
 });
 
 // Use the api module for all /api calls.
