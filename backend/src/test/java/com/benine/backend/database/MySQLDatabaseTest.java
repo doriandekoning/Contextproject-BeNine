@@ -7,7 +7,6 @@ import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
@@ -47,10 +46,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         statementHandler =
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root", logger);
-        database.setConnection(connection);
         database.connectToDatabaseServer();
         database.setConnection(connection);
-        System.out.println(database.connection.equals(connection));
     }
 
     @Test
