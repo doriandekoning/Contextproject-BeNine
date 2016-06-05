@@ -98,9 +98,6 @@ public class DatabaseController {
    */
   public void setDatabase(Database newDatabase) {
     database = newDatabase;
-    loadDatabase();
-    //cameraController.loadConfigCameras();
-    loadPresets();
   }
 
 }
