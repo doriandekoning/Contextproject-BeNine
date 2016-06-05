@@ -1,12 +1,16 @@
 package com.benine.backend.database;
 
+import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -25,13 +29,16 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Created on 4-5-2016.
+ * Created by Ege on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     private MySQLDatabase database;
     StatementResultSetHandler statementHandler;
     Logger logger = mock(Logger.class);
+    Config config = mock(Config.class);
+    PresetController presetController = mock(PresetController.class);
+    CameraController cameraController = mock(CameraController.class);
 
     @Before
     public void prepareEmptyResultSet() {
@@ -41,6 +48,13 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root", logger);
         database.connectToDatabaseServer();
+        ServerController serverController = mock(ServerController.class);
+        when(serverController.getLogger()).thenReturn(logger);
+        when(serverController.getConfig()).thenReturn(config);
+        when(serverController.getPresetController()).thenReturn(presetController);
+        DatabaseController controller = new DatabaseController(serverController);
+        controller.setDatabase(database);
+        
     }
 
     @Test
@@ -128,7 +142,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO presetsdatabase.presets VALUES(-1,1.0,1.0,1,1,1,1,1,1,0,'null',0)");
+        verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -163,7 +177,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testCheckCameras() throws SQLException {
         database.resetDatabase();
         database.addCamera(1, "ip");
-        database.checkCameras(new ArrayList<Camera>());
+        database.checkCameras(new ArrayList<>());
         database.closeConnection();
         verifySQLStatementExecuted("SELECT ID, MACAddress FROM camera");
         verifyCommitted();
@@ -305,7 +319,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         Connection connection = mock(Connection.class);
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
-        database.checkCameras(new ArrayList<Camera>());
+        database.checkCameras(new ArrayList<>());
         verify(logger).log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     }
 

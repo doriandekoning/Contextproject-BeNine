@@ -45,7 +45,6 @@ public class PresetsHandler extends RequestHandler {
 
     if (!routed) {
       String tag = request.getParameter("tag");
-      System.out.println(tag);
       String presetInfo = getPresetController().getPresetsJSON(tag);
       respond(request, res, presetInfo);
       request.setHandled(true);

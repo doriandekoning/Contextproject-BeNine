@@ -114,7 +114,7 @@ public class HTTPServer {
   }
 
   /**
-   * Returns the presetController
+   * Returns the presetController.
    * @return presetController to change the presets
    */
   protected PresetController getPresetController() {

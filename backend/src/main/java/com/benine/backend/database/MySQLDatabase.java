@@ -107,7 +107,6 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
-      System.out.println(sql);
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
@@ -141,7 +140,6 @@ public class MySQLDatabase implements Database {
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      e.printStackTrace();
       logger.log("Presets could not be updated.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);

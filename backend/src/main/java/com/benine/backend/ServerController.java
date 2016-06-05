@@ -45,12 +45,12 @@ public class ServerController {
     setupLogger();
 
     databaseController = new DatabaseController(this);
+    
+    streamController = new StreamController();
 
     cameraController = new CameraController(this);
 
     presetController = new PresetController(this);
-
-    streamController = new StreamController();
   }
 
   /**
