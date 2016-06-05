@@ -35,9 +35,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     private MySQLDatabase database;
     StatementResultSetHandler statementHandler;
     Logger logger = mock(Logger.class);
-    Config config = mock(Config.class);
-    PresetController presetController = mock(PresetController.class);
-    CameraController cameraController = mock(CameraController.class);
 
     @Before
     public void prepareEmptyResultSet() {

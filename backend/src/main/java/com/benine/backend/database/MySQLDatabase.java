@@ -232,9 +232,7 @@ public class MySQLDatabase implements Database {
   public void resetDatabase() {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
-      Writer w = new OutputStreamWriter(new FileOutputStream("logs"
-          + File.separator + "database-presetsdatabase.log"), "UTF-8");
-      sr.setLogWriter(new PrintWriter(w));
+      sr.setLogWriter(null);
       Reader reader = new BufferedReader(
           new InputStreamReader(new FileInputStream("database" + File.separator
               + "databasefile.sql"), "UTF-8"));
