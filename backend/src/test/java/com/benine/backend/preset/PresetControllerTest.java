@@ -4,6 +4,7 @@ import com.benine.backend.Config;
 import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
 import com.benine.backend.database.DatabaseController;
+import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 
@@ -30,14 +31,14 @@ public class PresetControllerTest {
   
   private ServerController serverController;
   private PresetController presetController;
-  private Database database;
+  private MySQLDatabase database;
   private Preset preset;
   private Preset preset2;
   
   @Before
   public void setup() throws SQLException {
     serverController = mock(ServerController.class);
-    database = mock(Database.class);
+    database = mock(MySQLDatabase.class);
     DatabaseController databaseController = mock(DatabaseController.class);
     when(databaseController.getDatabase()).thenReturn(database);
     when(serverController.getDatabaseController()).thenReturn(databaseController);

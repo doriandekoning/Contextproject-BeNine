@@ -27,7 +27,7 @@ public class DatabaseControllerTest {
   PresetController presetController = mock(PresetController.class);
   CameraController cameraController = mock(CameraController.class);
   Logger logger = mock(Logger.class);
-  Database database = mock(Database.class);
+  MySQLDatabase database = mock(MySQLDatabase.class);
   
   @Before
   public void setup() {

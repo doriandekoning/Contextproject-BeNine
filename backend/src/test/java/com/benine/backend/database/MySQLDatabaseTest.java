@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by Ege on 4-5-2016.
+ * Created on 4-5-2016.
  */
 public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
@@ -48,13 +48,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root", logger);
         database.connectToDatabaseServer();
-        ServerController serverController = mock(ServerController.class);
-        when(serverController.getLogger()).thenReturn(logger);
-        when(serverController.getConfig()).thenReturn(config);
-        when(serverController.getPresetController()).thenReturn(presetController);
-        DatabaseController controller = new DatabaseController(serverController);
-        controller.setDatabase(database);
-        
+        database.setConnection(connection);
+        System.out.println(database.connection.equals(connection));
     }
 
     @Test
@@ -142,7 +137,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
+        verifySQLStatementExecuted("INSERT INTO presetsdatabase.presets VALUES(-1,1.0,1.0,1,1,1,1,1,1,0,'null',0)");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();

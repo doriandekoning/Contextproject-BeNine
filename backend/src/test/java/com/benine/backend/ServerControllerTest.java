@@ -71,7 +71,8 @@ public class ServerControllerTest {
   
   @Test
   public void testGetConfig() throws Exception {
-    assertEquals(ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "maintest.conf"), serverController.getConfig());
+	Config expected = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+	assertEquals(expected, serverController.getConfig());
   }
 
 }

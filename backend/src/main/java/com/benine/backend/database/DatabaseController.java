@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class DatabaseController {
   
-  private Database database;
+  private MySQLDatabase database;
   
   private ServerController serverController;
   
@@ -39,7 +39,7 @@ public class DatabaseController {
    *
    * @return database object
    */
-  private Database loadDatabase() {
+  private MySQLDatabase loadDatabase() {
     String user = config.getValue("sqluser");
     String password = config.getValue("sqlpassword");
     return new MySQLDatabase(user, password, logger);
@@ -87,7 +87,7 @@ public class DatabaseController {
    *
    * @return the database
    */
-  public Database getDatabase() {
+  public MySQLDatabase getDatabase() {
     return database;
   }
   
@@ -96,9 +96,9 @@ public class DatabaseController {
    *
    * @param newDatabase the new database
    */
-  public void setDatabase(Database newDatabase) {
+  public void setDatabase(MySQLDatabase newDatabase) {
     database = newDatabase;
-    loadDatabase();
+    //loadDatabase();
     //cameraController.loadConfigCameras();
     loadPresets();
   }
