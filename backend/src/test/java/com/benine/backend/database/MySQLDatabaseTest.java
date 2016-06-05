@@ -47,6 +47,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         statementHandler =
             connection.getStatementResultSetHandler();
         database = new MySQLDatabase("root", "root", logger);
+        database.setConnection(connection);
         database.connectToDatabaseServer();
         ServerController serverController = mock(ServerController.class);
         when(serverController.getLogger()).thenReturn(logger);
