@@ -9,7 +9,6 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -83,8 +82,8 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM tagPresets WHERE tag_Name = '" + tag + "' AND preset_ID = "
-          + preset.getId();
+      final String sql = String.format("DELETE FROM tagPresets WHERE tag_Name = '%s' AND preset_ID = %s",
+          tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
@@ -104,8 +103,8 @@ public class MySQLDatabase implements Database {
           + " ORDER BY Sequence";
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(ServerController.getInstance().getPresetController().
-            getPresetById(resultset.getInt("ID")));
+        list.add(ServerController.getInstance().getPresetController()
+            .getPresetById(resultset.getInt("ID")));
       }
     } catch (Exception e) {
       getLogger().log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
@@ -121,7 +120,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       int sequence = 0;
-      for(Preset preset : presets) {
+      for (Preset preset : presets) {
         sequence++;
         final String sql = String.format("INSERT INTO presetsList VALUES(%s,%s,%s)",
             sequence, queueID, preset.getId());
@@ -209,7 +208,7 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
-      for(String tag : preset.getTags()) {
+      for (String tag : preset.getTags()) {
         addTagToPreset(tag, preset);
       }
     } catch (Exception e) {
