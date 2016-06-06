@@ -86,8 +86,8 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' AND preset_ID = %s",
-          tag, preset.getId());
+      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' " +
+          "AND preset_ID = %s", tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
@@ -230,7 +230,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       if (preset != null) {
-        for(String tag : preset.getTags()) {
+        for (String tag : preset.getTags()) {
           deleteTagFromPreset(tag, preset);
         }
         String sql = preset.createDeleteSQL();
