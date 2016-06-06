@@ -48,7 +48,7 @@ public class SimplePreset extends Preset {
 
   @Override
   public String createAddSqlQuery() {
-    return "INSERT INTO presetsdatabase.simplepresets VALUES(" + getId() + ",'" + getImage() + "',"
+    return "INSERT INTO presetsdatabase.simplepreset VALUES(" + getId() + ",'" + getImage() + "',"
         + getCameraId() + ")";
   }
 
@@ -59,6 +59,6 @@ public class SimplePreset extends Preset {
   
   @Override
   public String createDeleteSQL() {
-    return "DELETE FROM simplepresets WHERE ID = " + getId();
+    return "DELETE FROM simplepreset WHERE ID = " + getId();
   }
 }

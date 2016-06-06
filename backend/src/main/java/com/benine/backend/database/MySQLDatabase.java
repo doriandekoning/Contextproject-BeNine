@@ -52,7 +52,7 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT tag_name FROM tagPresets WHERE presets_ID = "
+      String sql = "SELECT tag_name FROM tagPresets WHERE preset_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
@@ -71,7 +71,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO tagPresets VALUES(%s,'%s')",
+      final String sql = String.format("INSERT INTO tagPreset VALUES(%s,'%s')",
           preset.getId(), tag);
       statement.executeUpdate(sql);
     } catch (Exception e) {
@@ -86,7 +86,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("DELETE FROM tagPresets WHERE tag_Name = '%s' AND preset_ID = %s",
+      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' AND preset_ID = %s",
           tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
@@ -212,6 +212,8 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
+      sql = "INSERT INTO preset VALUES(" + preset.getId() + ")";
+      statement.executeUpdate(sql);
       for (String tag : preset.getTags()) {
         addTagToPreset(tag, preset);
       }
@@ -233,6 +235,8 @@ public class MySQLDatabase implements Database {
         }
         String sql = preset.createDeleteSQL();
         statement.executeUpdate(sql);
+        sql = "DELETE FROM preset WHERE ID = " + preset.getId();
+        statement.executeUpdate(sql);
       }
     } catch (Exception e) {
       logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
@@ -247,8 +251,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       deletePreset(preset);
-      String sql = preset.createAddSqlQuery();
-      statement.executeUpdate(sql);
+      addPreset(preset);
     } catch (Exception e) {
       logger.log("Presets could not be updated.", LogEvent.Type.CRITICAL);
     } finally {
@@ -261,9 +264,9 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
           + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets"));
+          + " FROM presetsDatabase.IPpreset"));
     list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepresets"));
+          + " FROM presetsDatabase.simplepreset"));
     for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
     }
@@ -283,7 +286,7 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        if (sql.contains("simplepresets")) {
+        if (sql.contains("simplepreset")) {
           list.add(getSimplePresetsFromResultSet(resultset));
         } else {
           list.add(getIPCameraPresetFromResultSet(resultset));
@@ -302,9 +305,9 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus, iris,"
           + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets WHERE camera_ID = " + cameraId));
+          + " FROM presetsDatabase.IPpreset WHERE camera_ID = " + cameraId));
     list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepresets WHERE camera_ID = " + cameraId));
+          + " FROM presetsDatabase.simplepreset WHERE camera_ID = " + cameraId));
     return list;
   }
 
@@ -370,7 +373,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
+      final String sql = String.format("INSERT INTO camera VALUES(%s,'%s')",
           id, macAddress);
       statement.executeUpdate(sql);
     } catch (SQLException e) {
@@ -451,7 +454,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM presets WHERE camera_ID = " + cameraID;
+      String sql = "DELETE FROM preset WHERE camera_ID = " + cameraID;
       statement.executeUpdate(sql);
       sql = "DELETE FROM camera WHERE ID = " + cameraID;
       statement.executeUpdate(sql);
