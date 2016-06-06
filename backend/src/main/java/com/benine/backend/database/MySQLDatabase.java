@@ -264,7 +264,7 @@ public class MySQLDatabase implements Database {
           + " FROM presetsDatabase.presets"));
     list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
           + " FROM presetsDatabase.simplepresets"));
-    for(Preset preset : list) {
+    for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
     }
     return list;
