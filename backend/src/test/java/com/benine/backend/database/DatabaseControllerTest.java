@@ -3,6 +3,7 @@ package com.benine.backend.database;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -11,6 +12,8 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.benine.backend.preset.Preset;
 import com.benine.backend.Logger;
@@ -54,19 +57,15 @@ public class DatabaseControllerTest {
   @Test
   public void testLoadPresets() {
     when(database.checkDatabase()).thenReturn(false);
+
     ArrayList<Preset> presets = new ArrayList<>();
-    ArrayList<String> tags = new ArrayList<>();
+    Set<String> tags = new HashSet<>();
     tags.add("test");
     Preset preset = mock(Preset.class);
     presets.add(preset);
-    when(database.getTagsFromPreset(preset)).thenReturn(tags);
-  }
-  
-  @Test
-  public void testLoadPresetsException() throws SQLException {
-    when(database.checkDatabase()).thenReturn(false);
-    Exception expected = new SQLException();
+    when(database.getAllPresets()).thenReturn(presets);
     databaseController.start();
+    Assert.assertTrue(ServerController.getInstance().getPresetController().getPresets().contains(preset));
   }
   
   @Test

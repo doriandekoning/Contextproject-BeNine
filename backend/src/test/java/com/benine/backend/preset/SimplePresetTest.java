@@ -1,6 +1,8 @@
 package com.benine.backend.preset;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.JSONException;
 import org.json.simple.JSONArray;
@@ -10,17 +12,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.ServerController;
+
 public class SimplePresetTest {
   
   SimplePreset preset;
   
   @Before
   public void setup() {
-    ArrayList<String> keywords = new ArrayList<String>();
+    Set<String> keywords = new HashSet<>();
     keywords.add("foo");
     preset = new SimplePreset(1, keywords);
     preset.setId(1);
     preset.setImage("test");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
   }
   
   @Test

@@ -5,9 +5,11 @@ import org.eclipse.jetty.server.Request;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 public class PresetsHandler extends RequestHandler {
 
@@ -28,6 +30,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("recallpreset", new RecallPresetHandler(httpserver));
     addHandler("addtag", new AddTagHandler(httpserver));
     addHandler("removetag", new RemoveTagHandler(httpserver));
+    addHandler("edit", new EditPresetHandler(httpserver));
   }
 
   @Override

@@ -16,14 +16,14 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class CreatePresetHandler extends RequestHandler {
 
@@ -46,13 +46,12 @@ public class CreatePresetHandler extends RequestHandler {
       
       Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
-      List<String> tagList = null;
-      
+
+      Set<String> tagList = new HashSet<>();
       if (tags != null) {
-        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-      } else {
-        tagList = new ArrayList<String>();
-      }
+        tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
+      } 
+      getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
         Preset preset = presetCamera.createPreset(tagList);
@@ -90,18 +89,18 @@ public class CreatePresetHandler extends RequestHandler {
 
     MJPEGStreamReader streamReader = (MJPEGStreamReader)
                                             getStreamController().getStreamReader(cameraID);
+    File path = new File("static" + File.separator + "presets" + File.separator
+        + cameraID + "_" + presetID + ".jpg");
+    
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
     snapShot = resizer.resize(snapShot);
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
-
-    File path = new File("static" + File.separator + "presets" + File.separator
-            + cameraID + "_" + presetID + ".jpg");
-
     ImageIO.write(bufferedImage, "jpg", path);
     
     Preset preset = getPresetController().getPresetById(presetID);
+
     preset.setImage(cameraID + "_" + presetID + ".jpg");
     getPresetController().updatePreset(preset);
   }

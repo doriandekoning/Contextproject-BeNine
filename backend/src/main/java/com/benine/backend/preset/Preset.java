@@ -5,7 +5,6 @@ import com.benine.backend.camera.CameraConnectionException;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,7 +68,7 @@ public abstract class Preset {
    * Adds a list of keywords to this class.
    * @param tags a list of keywords
    */
-  public void addTags(List<String> tags) {
+  public void addTags(Set<String> tags) {
     this.tags.addAll(tags);
   }
 
@@ -79,6 +78,13 @@ public abstract class Preset {
    */
   public void removeTag(String tag) {
     tags.remove(tag);
+  }
+  
+  /**
+   * Remove all the tags from this preset. 
+   */
+  public void removeTags() {
+    this.tags.removeAll(getTags());
   }
   
   /**

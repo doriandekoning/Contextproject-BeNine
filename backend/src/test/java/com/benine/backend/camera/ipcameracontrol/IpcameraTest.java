@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Test class to test the IP Camera class.
@@ -228,7 +229,7 @@ public class IpcameraTest {
     setCameraBehaviour("GI", "giD421");
     IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1);
     
-    assertEquals(expected, camera.createPreset(new ArrayList<String>()));
+    assertEquals(expected, camera.createPreset(new HashSet<>()));
   }
   
   @Test

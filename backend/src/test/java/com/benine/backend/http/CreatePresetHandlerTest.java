@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
@@ -17,8 +18,6 @@ import org.junit.Test;
 
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
@@ -35,7 +34,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
   private Preset preset;
   private Stream stream;
   private MJPEGStreamReader streamReader;
-  private List<String> tags;
+  private Set<String> tags;
 
   @Override
   public RequestHandler supplyHandler() {
@@ -53,7 +52,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
     streamReader = new MJPEGStreamReader(stream);
-    tags = Arrays.asList("violin", "piano");
+    tags = new HashSet<>(Arrays.asList("violin", "piano"));
     
 
     try {
@@ -79,7 +78,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testCameraID() throws Exception{
-    setPath("/presets/createpreset?camera=1");
+    setPath("/presets/createpreset");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");

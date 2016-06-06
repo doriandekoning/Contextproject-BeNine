@@ -15,7 +15,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class for communicating with the MySQL Database.
@@ -47,8 +48,8 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public List<String> getTagsFromPreset(Preset preset) {
-    ArrayList<String> list = new ArrayList<String>();
+  public Set<String> getTagsFromPreset(Preset preset) {
+    Set<String> list = new HashSet<>();
     Statement statement = null;
     ResultSet resultset = null;
     try {

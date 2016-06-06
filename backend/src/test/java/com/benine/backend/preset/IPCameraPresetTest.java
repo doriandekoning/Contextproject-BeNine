@@ -11,13 +11,13 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.camera.ipcameracontrol.IpcameraConnectionException;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -31,7 +31,7 @@ public class IPCameraPresetTest {
   
   @Before
   public void setup() {
-    ArrayList<String> keywords = new ArrayList<String>();
+    Set<String> keywords = new HashSet<>();
     keywords.add("foo");
     preset = new IPCameraPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
   }
@@ -146,7 +146,7 @@ public class IPCameraPresetTest {
   
   @Test
   public void testHashCodefalse() {
-    ArrayList<String> keywords = new ArrayList<String>();
+    Set<String> keywords = new HashSet<>();
     keywords.add("foo");
     Preset preset2 = new IPCameraPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
     Assert.assertEquals(preset.hashCode(), preset2.hashCode());
@@ -271,7 +271,7 @@ public class IPCameraPresetTest {
   public void testAddTagList() {
     IPCameraPreset preset1 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0);
     preset1.addTag("Overview");
-    List<String> keyWords = new ArrayList<String>();
+    Set<String> keyWords = new HashSet<>();
     keyWords.add("Violin");
     keyWords.add("Piano");
     preset1.addTags(keyWords);
@@ -280,7 +280,7 @@ public class IPCameraPresetTest {
   }
   @Test
   public void testTagsConstructor() {
-    List<String> keyWords = new ArrayList<String>();
+    Set<String> keyWords = new HashSet<String>();
     keyWords.add("Violin");
     keyWords.add("Piano");
     IPCameraPreset preset1 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, keyWords);

@@ -6,7 +6,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * A simple preset which just contains an image and tags.
@@ -26,7 +26,7 @@ public class SimplePreset extends Preset {
    * @param cameraId of the camera this preset belongs to.
    * @param tags of this preset
    */
-  public SimplePreset(int cameraId, List<String> tags) {
+  public SimplePreset(int cameraId, Set<String> tags) {
     this(cameraId);
     super.addTags(tags);
   }
