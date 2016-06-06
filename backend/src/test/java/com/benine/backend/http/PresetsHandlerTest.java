@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,10 +24,12 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   private CreatePresetHandler createHandler;
 
   private RecallPresetHandler recallHandler;
+  
+  private JSONObject jsonObject;
 
   @Override
   public RequestHandler supplyHandler() {
-    return new PresetsHandler();
+    return new PresetsHandler(httpserver);
   }
 
   @Before
@@ -52,6 +55,15 @@ public class PresetsHandlerTest extends RequestHandlerTest {
 
     when(presetController.getPresetsByTag("Violin")).thenReturn(tagList);
     when(presetController.getPresets()).thenReturn(allList);
+    jsonObject = new JSONObject();
+    JSONArray tagsJSON = new JSONArray();
+    jsonObject.put("tags", tagsJSON);
+
+    JSONArray presetsJSON = new JSONArray();
+    presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
+    jsonObject.put("presets", presetsJSON);
+    when(presetController.getPresetsJSON("Violin")).thenReturn(jsonObject.toJSONString());
+    when(presetController.getPresetsJSON(null)).thenReturn(jsonObject.toJSONString());
   }
 
   @Test
@@ -75,13 +87,6 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets/unknownroute");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    JSONArray tagsJSON = new JSONArray();
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("tags", tagsJSON);
-
-    JSONArray presetsJSON = new JSONArray();
-    presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
-    jsonObject.put("presets", presetsJSON);
     verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }
@@ -91,13 +96,6 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    JSONArray tagsJSON = new JSONArray();
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("tags", tagsJSON);
-
-    JSONArray presetsJSON = new JSONArray();
-    presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
-    jsonObject.put("presets", presetsJSON);
     verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }
@@ -111,10 +109,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setParameters(parameters);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-    JSONObject jsonObject = new JSONObject();
-    JSONArray presetsJSON = new JSONArray();
-    presetController.getPresetsByTag("Violin").forEach(p -> presetsJSON.add(p.toJSON()));
-    jsonObject.put("presets", presetsJSON);
+    
     verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
   }

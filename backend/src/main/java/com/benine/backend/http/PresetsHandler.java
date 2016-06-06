@@ -1,15 +1,8 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
-import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 import org.eclipse.jetty.server.Request;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,15 +20,17 @@ public class PresetsHandler extends RequestHandler {
 
   /**
    * Constructor for a new PresetsHandler, handling the /presets/ request.
+   * @param httpserver to construct this handler for.
    */
-  public PresetsHandler() {
+  public PresetsHandler(HTTPServer httpserver) {
+    super(httpserver);
     this.handlers = new HashMap<>();
 
-    addHandler("createpreset", new CreatePresetHandler());
-    addHandler("recallpreset", new RecallPresetHandler());
-    addHandler("addtag", new AddTagHandler());
-    addHandler("removetag", new RemoveTagHandler());
-    addHandler("edit", new EditPresetHandler());
+    addHandler("createpreset", new CreatePresetHandler(httpserver));
+    addHandler("recallpreset", new RecallPresetHandler(httpserver));
+    addHandler("addtag", new AddTagHandler(httpserver));
+    addHandler("removetag", new RemoveTagHandler(httpserver));
+    addHandler("edit", new EditPresetHandler(httpserver));
   }
 
   @Override
@@ -52,45 +47,13 @@ public class PresetsHandler extends RequestHandler {
     }
 
     if (!routed) {
-      String presetInfo = getPresetsInfo(request);
+      String tag = request.getParameter("tag");
+      String presetInfo = getPresetController().getPresetsJSON(tag);
       respond(request, res, presetInfo);
       request.setHandled(true);
     }
   }
-
-  /**
-   * Returns a JSON string about presets.
-   * @param request A request object.
-   * @return  JSON string with preset information.
-   */
-  private String getPresetsInfo(Request request) {
-    String tag = request.getParameter("tag");
-
-    ArrayList<Preset> presets;
-    PresetController controller = ServerController.getInstance().getPresetController();
-    JSONObject jsonObject = new JSONObject();
-
-
-    if (tag == null) {
-      presets = controller.getPresets();
-
-      // Add tags to json
-      JSONArray tagsJSON = new JSONArray();
-      Collection<String> tags = controller.getTags();
-      tags.forEach(t -> tagsJSON.add(t));
-      jsonObject.put("tags", tagsJSON);
-    } else {
-      presets = controller.getPresetsByTag(tag);
-    }
-
-    // Add presets to json
-    JSONArray presetsJSON = new JSONArray();
-    presets.forEach(p -> presetsJSON.add(p.toJSON()));
-    jsonObject.put("presets", presetsJSON);
-
-    return jsonObject.toString();
-  }
-
+  
   /**
    * Returns the route of the url, so we can select the next handler.
    *

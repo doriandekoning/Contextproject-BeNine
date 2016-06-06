@@ -28,14 +28,14 @@ public class RecallPresetTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new RecallPresetHandler();
+    return new RecallPresetHandler(httpserver);
   }
 
   @Before
   public void initialize() throws IOException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 

@@ -35,7 +35,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
   
   @Override
    public RequestHandler supplyHandler() {
-     return new EditPresetHandler();
+     return new EditPresetHandler(httpserver);
    }
  
    
@@ -43,7 +43,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
   public void initialize() throws IOException {
     super.initialize();
     
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 

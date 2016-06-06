@@ -22,13 +22,13 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
   @Override
   public CameraRequestHandler supplyHandler() {
-    return new CameraMovingHandler();
+    return new CameraMovingHandler(httpserver);
   }
 
   @Before
   public void initialize() throws IOException {
     super.initialize();
-    when(cameracontroller.getCameraById(42)).thenReturn(cam);
+    when(cameraController.getCameraById(42)).thenReturn(cam);
   }
 
   @Test

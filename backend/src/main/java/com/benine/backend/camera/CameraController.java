@@ -25,11 +25,21 @@ public class CameraController {
   
   private CameraFactoryProducer camFactoryProducer;
   
+  private Config config;
+  
+  private Logger logger;
+  
+  private StreamController streamController;
+  
   /**
    * Constructor of the camera controller which creates a camera factory producer.
    */
   public CameraController() {
-    camFactoryProducer = new CameraFactoryProducer();
+    ServerController serverController = ServerController.getInstance();
+    config = serverController.getConfig();
+    logger = serverController.getLogger();
+    streamController = serverController.getStreamController();
+    camFactoryProducer = new CameraFactoryProducer(this);
   }
 
   /**
@@ -41,14 +51,13 @@ public class CameraController {
     highestIdInUse++;
     cameras.add(camera);
 
-    getStreamController().addCamera(camera);
+    streamController.addCamera(camera);
   }
 
   /**
    * Loads all the camera's specified in the config in the camera controller.
    */
   public void loadConfigCameras() {
-    Config config = ServerController.getInstance().getConfig();
     int i = 1;
     String type =  config.getValue("camera_" + i + "_type");   
     while (type != null) {
@@ -57,7 +66,6 @@ public class CameraController {
       } catch (InvalidCameraTypeException e) {
         getLogger().log("Camera: " + i + " from the config can not be created.",
                                                                 LogEvent.Type.WARNING);
-        e.printStackTrace();
       }
       i++;
       type = config.getValue("camera_" + i + "_type");
@@ -65,19 +73,11 @@ public class CameraController {
   }
 
   /**
-   * Returns the streamcontroller.
-   * @return streamcontroller containing the streams.
-   */
-  private StreamController getStreamController() {
-    return ServerController.getInstance().getStreamController();
-  }
-
-  /**
    * Returns the singleton instance of the logger.
    * @return logger object.
    */
-  private Logger getLogger() {
-    return ServerController.getInstance().getLogger();
+  public Logger getLogger() {
+    return logger;
   }
 
   /**
@@ -149,5 +149,9 @@ public class CameraController {
       }
     }
     return list;
+  }
+
+  public Config getConfig() {
+    return config;
   }
 }

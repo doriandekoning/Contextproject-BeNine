@@ -1,10 +1,8 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.MJPEGFrameResizer;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamController;
@@ -34,10 +32,11 @@ public class EditPresetHandler extends RequestHandler {
   
   /**
    * Constructor for a new editPresetHandler that handles editing a preset.
+   * @param httpserver this handler is for.
    */
-  public EditPresetHandler() {}
-    
-  private ServerController control = ServerController.getInstance();
+  public EditPresetHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -49,7 +48,7 @@ public class EditPresetHandler extends RequestHandler {
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
       
-      Preset preset = control.getPresetController().getPresetById(presetID);
+      Preset preset = getPresetController().getPresetById(presetID);
      
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
@@ -98,13 +97,12 @@ public class EditPresetHandler extends RequestHandler {
   private void updatePosition(Preset preset) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
-    IPCamera ipcam = (IPCamera)control.getCameraController().getCameraById(preset.getCameraId());   
-    PresetController presetController = ServerController.getInstance().getPresetController();
+    IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags());
     newPreset.setId(preset.getId());
    
     createImage(preset.getCameraId(), newPreset.getId());
-    presetController.updatePreset(newPreset);
+    getPresetController().updatePreset(newPreset);
   }
   
   /**
@@ -117,7 +115,7 @@ public class EditPresetHandler extends RequestHandler {
    */
   private void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException, SQLException {
-    StreamController streamController = ServerController.getInstance().getStreamController();
+    StreamController streamController = getStreamController();
 
     MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
     VideoFrame snapShot = streamReader.getSnapShot();
@@ -131,9 +129,8 @@ public class EditPresetHandler extends RequestHandler {
 
     ImageIO.write(bufferedImage, "jpg", path);
     
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    Preset preset = presetController.getPresetById(presetID);
+    Preset preset = getPresetController().getPresetById(presetID);
     preset.setImage(cameraID + "_" + presetID + ".jpg");
-    presetController.updatePreset(preset);
+    getPresetController().updatePreset(preset);
   }  
 }

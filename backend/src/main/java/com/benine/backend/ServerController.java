@@ -1,15 +1,12 @@
 package com.benine.backend;
 
 import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
-import com.benine.backend.database.MySQLDatabase;
+import com.benine.backend.database.DatabaseController;
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
 import java.io.File;
-import java.sql.SQLException;
 
 /**
  * Class containing the elements to make the server work.
@@ -20,21 +17,21 @@ public class ServerController {
 
   private static String mainConfigPath = "configs" + File.separator + "main.conf";
 
-  private Logger logger;
+  private final Logger logger;
 
-  private Config config;
+  private final Config config;
 
-  private CameraController cameraController;
+  private static CameraController cameraController;
 
-  private StreamController streamController;
-
-  private Database database;
+  private static StreamController streamController;
+  
+  private static DatabaseController databaseController;
 
   private boolean running;
 
   private HTTPServer httpServer;
 
-  private PresetController presetController;
+  private static PresetController presetController;
 
   /**
    * Constructor of the server controller.
@@ -45,15 +42,20 @@ public class ServerController {
   private ServerController(String configPath) {
     config = setUpConfig(configPath);
     running = false;
-    setupLogger();
-
-    database = loadDatabase();
+    logger = setupLogger(); 
+  }
+  
+  /**
+   * Set the controllers.
+   */
+  private static void loadControllers() {
+    databaseController = new DatabaseController();
+    
+    streamController = new StreamController();
 
     cameraController = new CameraController();
 
     presetController = new PresetController();
-
-    streamController = new StreamController();
   }
 
   /**
@@ -67,6 +69,7 @@ public class ServerController {
       synchronized (ServerController.class) {
         if (serverController == null) {
           serverController = new ServerController(mainConfigPath);
+          loadControllers();
         }
       }
     }
@@ -81,10 +84,8 @@ public class ServerController {
    */
   public void start() throws Exception {
     cameraController.loadConfigCameras();
-    startupDatabase();
-    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")));
-
-    loadPresets();
+    databaseController.start();
+    httpServer = new HTTPServer(Integer.parseInt(config.getValue("serverport")), this);
 
     running = true;
 
@@ -99,60 +100,23 @@ public class ServerController {
   public void stop() throws Exception {
     if (running) {
       httpServer.destroy();
-      database.closeConnection();
       running = false;
       getLogger().log("Server stopped", LogEvent.Type.INFO);
     }
   }
 
   /**
-   * Loads the presets from the database.
-   */
-  private void loadPresets() {
-    try {
-      presetController.addPresets(database.getAllPresets());
-      for (Preset preset : presetController.getPresets()) {
-        preset.addTags(database.getTagsFromPreset(preset));
-      }
-    } catch (SQLException e) {
-      logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
-    }
-  }
-
-  /**
-   * Read the login information from the database and create database object..
-   *
-   * @return database object
-   */
-  private Database loadDatabase() {
-    String user = config.getValue("sqluser");
-    String password = config.getValue("sqlpassword");
-    return new MySQLDatabase(user, password);
-  }
-
-  /**
-   * Create database if non exists and make the connection.
-   */
-  private void startupDatabase() {
-    database.connectToDatabaseServer();
-    //If the database does not exist yet, create a new one
-    if (!database.checkDatabase()) {
-      database.resetDatabase();
-    } else {
-      database.useDatabase();
-    }
-    database.checkCameras();
-  }
-
-  /**
    * Setup a new logger.
+   * @return logger object at the configs log location.
    */
-  private void setupLogger() {
+  private Logger setupLogger() {
+    Logger logger = null;
     try {
       logger = new Logger(config.getValue("standardloglocation"));
     } catch (Exception e) {
       e.printStackTrace();
     }
+    return logger;
   }
 
   /**
@@ -188,40 +152,12 @@ public class ServerController {
     return streamController;
   }
 
-
   /**
-   * Sets the cameraController.
-   *
-   * @param cameraController the cameracontroller
+   * Returns the databaseController
+   * @return databaseController of this server.
    */
-  public void setCameraController(CameraController cameraController) {
-    this.cameraController = cameraController;
-  }
-
-  public void setStreamController(StreamController streamController) {
-    this.streamController = streamController;
-  }
-
-
-  /**
-   * Getter for the database.
-   *
-   * @return the database
-   */
-  public Database getDatabase() {
-    return database;
-  }
-
-  /**
-   * Setter for the database also updates the presets and cameras according to new database.
-   *
-   * @param newDatabase the new database
-   */
-  public void setDatabase(Database newDatabase) {
-    database = newDatabase;
-    loadDatabase();
-    cameraController.loadConfigCameras();
-    loadPresets();
+  public DatabaseController getDatabaseController() {
+    return databaseController;
   }
 
   /**
@@ -231,15 +167,6 @@ public class ServerController {
    */
   public Logger getLogger() {
     return logger;
-  }
-
-  /**
-   * Getter for the logger.
-   *
-   * @param logger object to set.
-   */
-  public void setLogger(Logger logger) {
-    this.logger = logger;
   }
 
   /**
@@ -258,10 +185,6 @@ public class ServerController {
    */
   public PresetController getPresetController() {
     return presetController;
-  }
-
-  public void setPresetController(PresetController newController) {
-    this.presetController = newController;
   }
 
   /**
