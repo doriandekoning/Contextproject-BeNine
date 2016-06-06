@@ -8,7 +8,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * IPCamera preset which stores the data to recall this preset position.
@@ -66,7 +66,7 @@ public class IPCameraPreset extends Preset {
    */
   public IPCameraPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, List<String> keyWords) {
+                boolean autoiris, int cameraId, Set<String> keyWords) {
     this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
     super.tags.addAll(keyWords);
   }

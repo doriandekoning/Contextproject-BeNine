@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 public class PresetsHandler extends RequestHandler {
 
@@ -33,6 +35,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("recallpreset", new RecallPresetHandler());
     addHandler("addtag", new AddTagHandler());
     addHandler("removetag", new RemoveTagHandler());
+    addHandler("edit", new EditPresetHandler());
   }
 
   @Override

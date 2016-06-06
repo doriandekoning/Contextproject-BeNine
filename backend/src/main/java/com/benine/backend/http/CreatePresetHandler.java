@@ -20,14 +20,14 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class CreatePresetHandler extends RequestHandler {
 
@@ -48,13 +48,12 @@ public class CreatePresetHandler extends RequestHandler {
       CameraController cameraController = ServerController.getInstance().getCameraController();
       Camera camera = cameraController.getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
-      List<String> tagList = null;
-      
+
+      Set<String> tagList = new HashSet<>();
       if (tags != null) {
-        tagList = Arrays.asList(tags.split("\\s*,\\s*")); 
-      } else {
-        tagList = new ArrayList<String>();
-      }
+        tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
+      } 
+      getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
         Preset preset = presetCamera.createPreset(tagList);
@@ -89,21 +88,20 @@ public class CreatePresetHandler extends RequestHandler {
    */
   private void createImage(int cameraID, int presetID) throws
           StreamNotAvailableException, IOException, SQLException {
-    StreamController streamController = ServerController.getInstance().getStreamController();
-
+    ServerController serverController = ServerController.getInstance();
+    StreamController streamController = serverController.getStreamController();
+    File path = new File("static" + File.separator + "presets" + File.separator
+        + cameraID + "_" + presetID + ".jpg");
+    
     MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
     snapShot = resizer.resize(snapShot);
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
-
-    File path = new File("static" + File.separator + "presets" + File.separator
-            + cameraID + "_" + presetID + ".jpg");
-
     ImageIO.write(bufferedImage, "jpg", path);
-    PresetController presetController = ServerController.getInstance().getPresetController();
     
+    PresetController presetController = ServerController.getInstance().getPresetController();
     Preset preset = presetController.getPresetById(presetID);
     preset.setImage(cameraID + "_" + presetID + ".jpg");
     presetController.updatePreset(preset);

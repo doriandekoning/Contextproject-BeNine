@@ -27,8 +27,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Class to communicate with an IP Camera from .
@@ -505,7 +505,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(List<String> tagList) throws CameraConnectionException {
+  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
     int zoom = getZoomPosition();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();

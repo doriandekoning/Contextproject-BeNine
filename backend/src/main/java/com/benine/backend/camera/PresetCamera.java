@@ -2,7 +2,7 @@ package com.benine.backend.camera;
 
 import com.benine.backend.preset.Preset;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Decorator of a camera with functions to create a preset of this camera.
@@ -15,6 +15,6 @@ public interface PresetCamera extends Camera {
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  Preset createPreset(List<String> tagList) throws CameraConnectionException;
+  Preset createPreset(Set<String> tagList) throws CameraConnectionException;
 
 }
