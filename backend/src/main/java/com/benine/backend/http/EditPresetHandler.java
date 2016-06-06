@@ -78,9 +78,10 @@ public class EditPresetHandler extends RequestHandler {
    * @param preset the preset to be changed
    * @param tagList the tag to be added
    */
-  private void updateTag(Preset preset, Set<String> tagList) {
+  private void updateTag(Preset preset, Set<String> tagList) throws SQLException {
     preset.removeTags();
     preset.addTags(tagList);
+    getPresetController().updatePreset(preset);
   }
   
   /**

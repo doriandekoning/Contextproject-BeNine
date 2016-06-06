@@ -14,6 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema presetsDatabase
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `presetsDatabase` ;
 CREATE SCHEMA IF NOT EXISTS `presetsDatabase` ;
 USE `presetsDatabase` ;
 
@@ -45,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`IPpreset` (
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `fk_presets_camera_idx` (`camera_ID` ASC),
-  CONSTRAINT `fk_presets_camera`
+  INDEX `fk_preset_camera_idx` (`camera_ID` ASC),
+  CONSTRAINT `fk_preset_camera`
     FOREIGN KEY (`camera_ID`)
     REFERENCES `presetsDatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
@@ -63,8 +64,8 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepreset` (
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `fk_simplepresets_camera_idx` (`camera_ID` ASC),
-  CONSTRAINT `fk_simplepresets_camera`
+  INDEX `fk_simplepreset_camera_idx` (`camera_ID` ASC),
+  CONSTRAINT `fk_simplepreset_camera`
     FOREIGN KEY (`camera_ID`)
     REFERENCES `presetsDatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
@@ -95,12 +96,12 @@ ENGINE = InnoDB;
 -- Table `presetsDatabase`.`tagPreset`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPreset` (
-  `tag_name` VARCHAR(45) NOT NULL,
   `preset_ID` INT(11) NOT NULL,
+  `tag_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`tag_name`, `preset_ID`),
-  INDEX `fk_tagPresets_tag1_idx` (`tag_name` ASC),
+  INDEX `fk_tagPreset_tag1_idx` (`tag_name` ASC),
   INDEX `fk_tagPreset_preset1_idx` (`preset_ID` ASC),
-  CONSTRAINT `fk_tagPresets_tag1`
+  CONSTRAINT `fk_tagPreset_tag1`
     FOREIGN KEY (`tag_name`)
     REFERENCES `presetsDatabase`.`tag` (`name`)
     ON DELETE NO ACTION
@@ -130,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presetsList` (
   `Sequence` INT(11) NOT NULL,
   `queue_ID` INT(11) NOT NULL,
   `preset_ID` INT(11) NOT NULL,
-  PRIMARY KEY (`queue_ID`, , `preset_ID`),
+  PRIMARY KEY (`queue_ID`, `preset_ID`),
   INDEX `fk_presetsList_preset1_idx` (`preset_ID` ASC),
   CONSTRAINT `fk_presetsList_queue1`
     FOREIGN KEY (`queue_ID`)

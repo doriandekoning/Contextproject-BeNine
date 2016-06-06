@@ -75,7 +75,7 @@ public class MySQLDatabase implements Database {
           preset.getId(), tag);
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      logger.log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
