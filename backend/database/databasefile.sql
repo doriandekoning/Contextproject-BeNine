@@ -90,11 +90,11 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPreset` (
   `tag_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`preset_ID`, `tag_name`),
   INDEX `fk_tagPresets_tag1_idx` (`tag_name` ASC),
---  CONSTRAINT `fk_tagPresets_presets`
---    FOREIGN KEY (`preset_ID`)
---    REFERENCES `presetsDatabase`.`preset` (`ID`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tagPresets_presets`
+    FOREIGN KEY (`preset_ID`)
+    REFERENCES `presetsDatabase`.`preset` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT `fk_tagPresets_tag1`
     FOREIGN KEY (`tag_name`)
     REFERENCES `presetsDatabase`.`tag` (`name`)
@@ -127,11 +127,11 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presetsList` (
     REFERENCES `presetsDatabase`.`queue` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
---  CONSTRAINT `fk_presetsList_preset1`
---    FOREIGN KEY (`preset_ID`)
---    REFERENCES `presetsDatabase`.`preset` (`ID`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
+  CONSTRAINT `fk_presetsList_preset1`
+    FOREIGN KEY (`preset_ID`)
+    REFERENCES `presetsDatabase`.`preset` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
