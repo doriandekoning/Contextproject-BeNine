@@ -594,7 +594,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.addTagToPreset("tag1", null);
-        verify(logger).log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+        verify(logger).log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
     }
 
     @Test
