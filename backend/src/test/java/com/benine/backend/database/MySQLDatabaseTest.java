@@ -22,6 +22,8 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -70,6 +72,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testAddPreset() throws SQLException {
         Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        preset.addTag("tag");
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
@@ -437,7 +440,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTagToPreset("tag1", preset);
         database.deleteTagFromPreset("tag1", preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tagPresets WHERE tag_name = tag1");
+        verifySQLStatementExecuted("DELETE FROM tagPresets WHERE tag_name = 'tag1'");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -454,6 +457,141 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetPresetsList() throws SQLException {
+        database.resetDatabase();
+        database.getPresetsList(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT preset_ID FROM presetsList WHERE queue_ID = 1 ORDER BY Sequence");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testAddPresetsList() throws SQLException {
+        Queue<Preset> presets = new LinkedList<Preset>();
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        presets.add(preset);
+        database.resetDatabase();
+        database.addPresetsList(presets, 2);
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO presetsList VALUES");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeletePresetsList() throws SQLException {
+        database.resetDatabase();
+        database.deletePresetsList(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM presetsList WHERE queue_ID = 1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetQueues() throws SQLException {
+        database.resetDatabase();
+        database.getQueues();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT ID FROM queue");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testAddQueue() throws SQLException {
+        database.resetDatabase();
+        database.addQueue(1, "name");
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO queue VALUES(1,'name')");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeleteQueue() throws SQLException {
+        database.resetDatabase();
+        database.deleteQueue(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM queue WHERE ID = 1");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testFailedGetPresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getPresetsList(1);
+        verify(logger).log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedAddPresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addPresetsList(null, 1);
+        verify(logger).log("List could not be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeletePresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deletePresetsList(1);
+        verify(logger).log("List could not be deleted.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedGetQueues() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getQueues();
+        verify(logger).log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedAddQueue() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addQueue(1, "name");
+        verify(logger).log("Queue could not be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeleteQueue() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteQueue(1);
+        verify(logger).log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
     }
 
     @Test
