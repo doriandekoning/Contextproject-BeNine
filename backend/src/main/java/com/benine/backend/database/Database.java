@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -160,4 +161,49 @@ public interface Database {
    * @param preset The preset
    */
   void deleteTagFromPreset(String tag, Preset preset);
+
+  /**
+   * Gets a list of presets belonging to the concert.
+   *
+   * @param queueID The ID of the concert to get the presets from
+   * @return The list of presets
+   */
+  Queue<Preset> getPresetsList(int queueID);
+
+  /**
+   * Adds a list of presets to an existing queue.
+   *
+   * @param presets The list which needs to be added
+   * @param queueID The id of the queue
+   */
+  void addPresetsList(Queue<Preset> presets, int queueID);
+
+  /**
+   * Deletes a list of presets of an existing queue.
+   *
+   * @param queueID The id of the queue
+   */
+  void deletePresetsList(int queueID);
+
+  /**
+   * Gets all the queue existing in the database.
+   *
+   * @return List of id's of the queues
+   */
+  ArrayList<Integer> getQueues();
+
+  /**
+   * Adds a queue to the database.
+   *
+   * @param ID The ID of the queue
+   * @param name The name of the queue
+   */
+  void addQueue(int ID, String name);
+
+  /**
+   * Deletes a queue from the database.
+   *
+   * @param ID The ID of the queue
+   */
+  void deleteQueue(int ID);
 }

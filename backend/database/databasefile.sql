@@ -104,9 +104,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`concert`
+-- Table `presetsDatabase`.`queue`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`concert` (
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`queue` (
   `ID` INT(11) NOT NULL,
   `Name` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -114,20 +114,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`concertPresets`
+-- Table `presetsDatabase`.`presetsList`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`concertPresets` (
-  `Timestamp` INT(11) NOT NULL,
-  `concert_ID` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presetsList` (
+  `Sequence` INT(11) NOT NULL,
+  `queue_ID` INT(11) NOT NULL,
   `preset_ID` INT(11) NULL,
-  PRIMARY KEY (`concert_ID`, `Timestamp`),
-  INDEX `fk_concertPresets_preset1_idx` (`preset_ID` ASC),
-  CONSTRAINT `fk_concertPresets_concert1`
-    FOREIGN KEY (`concert_ID`)
-    REFERENCES `presetsDatabase`.`concert` (`ID`)
+  PRIMARY KEY (`queue_ID`, `Timestamp`),
+  INDEX `fk_presetsList_preset1_idx` (`preset_ID` ASC),
+  CONSTRAINT `fk_presetsList_queue1`
+    FOREIGN KEY (`queue_ID`)
+    REFERENCES `presetsDatabase`.`queue` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_concertPresets_preset1`
+  CONSTRAINT `fk_presetsList_preset1`
     FOREIGN KEY (`preset_ID`)
     REFERENCES `presetsDatabase`.`preset` (`ID`)
     ON DELETE NO ACTION

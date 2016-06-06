@@ -9,15 +9,13 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class for communicating with the MySQL Database.
@@ -85,11 +83,115 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM tagPresets WHERE tag_Name = " + tag + "AND preset_ID = "
+      String sql = "DELETE FROM tagPresets WHERE tag_Name = '" + tag + "' AND preset_ID = "
           + preset.getId();
       statement.executeUpdate(sql);
     } catch (Exception e) {
       getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public Queue<Preset> getPresetsList(int queueID) {
+    Queue<Preset> list = new LinkedList<Preset>();
+    Statement statement = null;
+    ResultSet resultset = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT preset_ID FROM presetsList WHERE queue_ID = " + queueID
+          + " ORDER BY Sequence";
+      resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        list.add(ServerController.getInstance().getPresetController().
+            getPresetById(resultset.getInt("ID")));
+      }
+    } catch (Exception e) {
+      getLogger().log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, resultset);
+    }
+    return list;
+  }
+
+  @Override
+  public void addPresetsList(Queue<Preset> presets, int queueID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      int sequence = 0;
+      for(Preset preset : presets) {
+        sequence++;
+        final String sql = String.format("INSERT INTO presetsList VALUES(%s,%s,%s)",
+            sequence, queueID, preset.getId());
+        statement.executeUpdate(sql);
+      }
+    } catch (Exception e) {
+      getLogger().log("List could not be added.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public void deletePresetsList(int queueID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "DELETE FROM presetsList WHERE queue_ID = " + queueID;
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      getLogger().log("List could not be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public ArrayList<Integer> getQueues() {
+    ArrayList<Integer> list = new ArrayList<Integer>();
+    Statement statement = null;
+    ResultSet resultset = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT ID FROM queue";
+      resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        list.add(resultset.getInt("ID"));
+      }
+    } catch (Exception e) {
+      getLogger().log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, resultset);
+    }
+    return list;
+  }
+
+  @Override
+  public void addQueue(int ID, String name) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      final String sql = String.format("INSERT INTO queue VALUES(%s,'%s')",
+          ID, name);
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      getLogger().log("Queue could not be added.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public void deleteQueue(int ID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "DELETE FROM queue WHERE ID = " + ID;
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      getLogger().log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
