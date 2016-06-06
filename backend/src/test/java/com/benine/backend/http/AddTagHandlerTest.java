@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,6 @@ public class AddTagHandlerTest extends RequestHandlerTest {
   @Before
   public void initialize() throws IOException{
     super.initialize();
-    ServerController.getInstance().setPresetController(presetController);
   }
 
   @Test

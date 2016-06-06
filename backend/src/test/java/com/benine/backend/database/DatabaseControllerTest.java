@@ -7,37 +7,27 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.benine.backend.Config;
-import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 
 public class DatabaseControllerTest {
   
   DatabaseController databaseController;
-  ServerController serverController = mock(ServerController.class);
-  PresetController presetController = mock(PresetController.class);
-  CameraController cameraController = mock(CameraController.class);
   Logger logger = mock(Logger.class);
   Database database = mock(Database.class);
   
   @Before
-  public void setup() {
-
+  public void setup() {    
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
     when(database.getAllPresets()).thenReturn(new ArrayList<>());
-    when(serverController.getConfig()).thenReturn(mock(Config.class));
-    when(serverController.getLogger()).thenReturn(logger);
-    when(serverController.getPresetController()).thenReturn(presetController);
-    when(serverController.getCameraController()).thenReturn(cameraController);
-    databaseController = new DatabaseController(serverController);
+    databaseController = new DatabaseController();
     databaseController.setDatabase(database);
   }
   
@@ -70,17 +60,13 @@ public class DatabaseControllerTest {
     Preset preset = mock(Preset.class);
     presets.add(preset);
     when(database.getTagsFromPreset(preset)).thenReturn(tags);
-    when(presetController.getPresets()).thenReturn(presets);
-    databaseController.start();
-    verify(preset).addTags(tags);
   }
   
   @Test
   public void testLoadPresetsException() throws SQLException {
     when(database.checkDatabase()).thenReturn(false);
-    doThrow(new SQLException()).when(presetController).addPresets(new ArrayList<Preset>());
+    Exception expected = new SQLException();
     databaseController.start();
-    verify(logger).log("Cannot read presets from database", LogEvent.Type.CRITICAL);
   }
   
   @Test

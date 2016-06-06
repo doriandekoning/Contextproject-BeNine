@@ -1,24 +1,20 @@
 package com.benine.backend.camera;
 
-import com.benine.backend.Config;
-import com.benine.backend.LogEvent;
-import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
-import com.benine.backend.video.StreamController;
-
+import com.benine.backend.database.MySQLDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created on 5-5-16.
@@ -26,34 +22,19 @@ import static org.mockito.Mockito.verify;
 public class CameraControllerTest {
 
   private CameraController controller;
-  private ServerController serverController = mock(ServerController.class);
-  private Config config = mock(Config.class);
-  private Logger logger = mock(Logger.class);
-  private StreamController streamController = mock(StreamController.class);
 
   @Before
   public void setUp() {
-    when(config.getValue("camera_1_type")).thenReturn("simplecamera");
-    when(config.getValue("camera_1_address")).thenReturn("test");
-    when(config.getValue("camera_1_macaddress")).thenReturn("MacAddres");
-    when(serverController.getConfig()).thenReturn(config);
-    when(serverController.getLogger()).thenReturn(logger);
-    when(serverController.getStreamController()).thenReturn(streamController);
-    controller = new CameraController(serverController);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
+    ServerController.getInstance().getDatabaseController().setDatabase(mock(MySQLDatabase.class));
+    controller = new CameraController();
   }
   
   @Test
   public void testLoadConfigCameras() {
     controller.loadConfigCameras();
-    assertTrue(controller.getCameras().size() == 1);
-  }
-  
-  @Test
-  public void testLoadConfigCamerasExcpetion() {
-    when(config.getValue("camera_2_type")).thenReturn("simplecamera");
-    controller.loadConfigCameras();
-    verify(logger).log("Camera: 2 from the config can not be created.",
-        LogEvent.Type.WARNING);
+    assertEquals(2, controller.getCameras().size());
   }
 
   @Test

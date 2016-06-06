@@ -17,21 +17,21 @@ public class ServerController {
 
   private static String mainConfigPath = "configs" + File.separator + "main.conf";
 
-  private Logger logger;
+  private final Logger logger;
 
-  private Config config;
+  private final Config config;
 
-  private CameraController cameraController;
+  private static CameraController cameraController;
 
-  private StreamController streamController;
+  private static StreamController streamController;
   
-  private DatabaseController databaseController;
+  private static DatabaseController databaseController;
 
   private boolean running;
 
   private HTTPServer httpServer;
 
-  private PresetController presetController;
+  private static PresetController presetController;
 
   /**
    * Constructor of the server controller.
@@ -42,15 +42,20 @@ public class ServerController {
   private ServerController(String configPath) {
     config = setUpConfig(configPath);
     running = false;
-    setupLogger();
-
-    databaseController = new DatabaseController(this);
+    logger = setupLogger(); 
+  }
+  
+  /**
+   * Set the controllers.
+   */
+  private static void loadControllers() {
+    databaseController = new DatabaseController();
     
     streamController = new StreamController();
 
-    cameraController = new CameraController(this);
+    cameraController = new CameraController();
 
-    presetController = new PresetController(this);
+    presetController = new PresetController();
   }
 
   /**
@@ -64,6 +69,7 @@ public class ServerController {
       synchronized (ServerController.class) {
         if (serverController == null) {
           serverController = new ServerController(mainConfigPath);
+          loadControllers();
         }
       }
     }
@@ -101,13 +107,16 @@ public class ServerController {
 
   /**
    * Setup a new logger.
+   * @return logger object at the configs log location.
    */
-  private void setupLogger() {
+  private Logger setupLogger() {
+    Logger logger = null;
     try {
       logger = new Logger(config.getValue("standardloglocation"));
     } catch (Exception e) {
       e.printStackTrace();
     }
+    return logger;
   }
 
   /**
@@ -143,28 +152,6 @@ public class ServerController {
     return streamController;
   }
 
-
-  /**
-   * Sets the cameraController.
-   *
-   * @param cameraController the cameracontroller
-   */
-  public void setCameraController(CameraController cameraController) {
-    this.cameraController = cameraController;
-  }
-
-  public void setStreamController(StreamController streamController) {
-    this.streamController = streamController;
-  }
-  
-  /**
-   * Sets the databaseController.
-   * @param databaseController the databaseController
-   */
-  public void setDatabaseController(DatabaseController databaseController) {
-    this.databaseController = databaseController;
-  }
-
   /**
    * Returns the databaseController
    * @return databaseController of this server.
@@ -183,15 +170,6 @@ public class ServerController {
   }
 
   /**
-   * Getter for the logger.
-   *
-   * @param logger object to set.
-   */
-  public void setLogger(Logger logger) {
-    this.logger = logger;
-  }
-
-  /**
    * Test if the server is running.
    *
    * @return true if server is running.
@@ -207,10 +185,6 @@ public class ServerController {
    */
   public PresetController getPresetController() {
     return presetController;
-  }
-
-  public void setPresetController(PresetController newController) {
-    this.presetController = newController;
   }
 
   /**

@@ -33,9 +33,9 @@ public class CameraController {
   
   /**
    * Constructor of the camera controller which creates a camera factory producer.
-   * @param serverController this cameraController belongs to.
    */
-  public CameraController(ServerController serverController) {
+  public CameraController() {
+    ServerController serverController = ServerController.getInstance();
     config = serverController.getConfig();
     logger = serverController.getLogger();
     streamController = serverController.getStreamController();

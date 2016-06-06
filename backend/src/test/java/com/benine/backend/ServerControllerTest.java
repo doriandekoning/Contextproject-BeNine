@@ -6,8 +6,10 @@ import com.benine.backend.preset.PresetController;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -29,21 +31,16 @@ public class ServerControllerTest {
   
   @Test
   public void testGetDatabaseController() throws Exception {
-    DatabaseController database = mock(DatabaseController.class);
-    serverController.setDatabaseController(database);
-    assertEquals(database, serverController.getDatabaseController());
+    assertNotEquals(null, serverController.getDatabaseController());
   }
   
   @Test
   public void testGetPresetController() throws Exception {
-    PresetController presetController = mock(PresetController.class);
-    serverController.setPresetController(presetController);
-    assertEquals(presetController, serverController.getPresetController());
+    assertNotEquals(null, serverController.getPresetController());
   }
   
   @Test
   public void testStartServer() throws Exception {
-    serverController.setDatabaseController(mock(DatabaseController.class));
     serverController.start();  
     assertTrue(serverController.isServerRunning());
     serverController.stop();
@@ -57,16 +54,15 @@ public class ServerControllerTest {
   
   @Test
   public void testSetcameraController() {
-    CameraController camController = mock(CameraController.class);
-    serverController.setCameraController(camController);
-    assertEquals(camController, serverController.getCameraController());
+    assertNotEquals(null, serverController.getCameraController());
   }
   
   @Test
-  public void testGetLog() {  
-    Logger logger = mock(Logger.class);
-    serverController.setLogger(logger);
-    assertEquals(logger, serverController.getLogger());
+  public void testGetLog() throws IOException {  
+    Logger expected = mock(Logger.class);
+    ServerController spyServerController = Mockito.spy(serverController);
+    Mockito.doReturn(expected).when(spyServerController).getLogger();
+    assertEquals(expected, spyServerController.getLogger());
   }
   
   @Test

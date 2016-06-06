@@ -1,9 +1,6 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.Config;
 import com.benine.backend.ServerController;
-import com.benine.backend.database.Database;
-import com.benine.backend.database.DatabaseController;
 import com.benine.backend.database.MySQLDatabase;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
@@ -14,9 +11,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,23 +26,16 @@ import static org.mockito.Mockito.when;
  */
 public class PresetControllerTest {
   
-  private ServerController serverController;
   private PresetController presetController;
-  private MySQLDatabase database;
   private Preset preset;
   private Preset preset2;
   
   @Before
   public void setup() throws SQLException {
-    serverController = mock(ServerController.class);
-    database = mock(MySQLDatabase.class);
-    DatabaseController databaseController = mock(DatabaseController.class);
-    when(databaseController.getDatabase()).thenReturn(database);
-    when(serverController.getDatabaseController()).thenReturn(databaseController);
-    Config config = mock(Config.class);
-    when(config.getValue("imagepath")).thenReturn("static/presets/");
-    when(serverController.getConfig()).thenReturn(config);
-    presetController = new PresetController(serverController);
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
+    ServerController.getInstance().getDatabaseController().setDatabase(mock(MySQLDatabase.class));
+    presetController = new PresetController();
     preset = mock(Preset.class);
     preset2 = mock(Preset.class);
     when(preset.getId()).thenReturn(1);
@@ -59,7 +49,7 @@ public class PresetControllerTest {
     when(preset.toJSON()).thenReturn(jsonObject);
     presetController.addPreset(preset);
     String result = presetController.getPresetsJSON(null);
-    jsonObject.put("image", "static/presets/test");
+    jsonObject.put("image", "/static/presets/test");
     JSONObject expected = new JSONObject();
     JSONArray presetsJSON = new JSONArray();
     presetsJSON.add(jsonObject);
@@ -68,6 +58,7 @@ public class PresetControllerTest {
     expected.put("tags", tagsJSON);
     Assert.assertEquals(expected.toJSONString(), result);
   }
+  
 
   @Test
   public void testAddPreset() throws Exception {   
@@ -75,7 +66,6 @@ public class PresetControllerTest {
     expectedPresets.add(preset);
     presetController.addPreset(preset);
     Assert.assertEquals(expectedPresets, presetController.getPresets());
-    verify(database).addPreset(preset);
   }
   
   @Test
@@ -87,7 +77,6 @@ public class PresetControllerTest {
     ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
     expectedPresets.add(newpreset);
     Assert.assertEquals(expectedPresets, presetController.getPresets());
-    verify(database).updatePreset(newpreset);
   }
   
   @Test
@@ -119,7 +108,6 @@ public class PresetControllerTest {
     presetController.addPreset(preset2);
     presetController.removePreset(preset2);
     Assert.assertEquals(expectedPresets, presetController.getPresets());
-    verify(database).deletePreset(preset2);
   }
 
   @Test
@@ -186,7 +174,6 @@ public class PresetControllerTest {
       when(preset2.getId()).thenReturn(2);
       ArrayList<Preset> expectedPresets = new ArrayList<Preset>();
 
-
       presetController.addPreset(preset);
       presetController.addPreset(preset2);
 
@@ -196,6 +183,7 @@ public class PresetControllerTest {
 
   @Test
   public void testGetSetTags() {
+  
     presetController.addTag("tag");
     presetController.addTag("tag1");
     HashSet<String> expectedSet = new HashSet<>();
@@ -229,25 +217,26 @@ public class PresetControllerTest {
 
   @Test
   public void testRemoveTag() throws SQLException {
+    PresetController controller = new PresetController();
     HashSet<String> tags = new HashSet<>();
     tags.add("tag1");
-    presetController.addTag("tag2");
-    presetController.addAllTags(tags);
-    presetController.removeTag("tag2");
-    Assert.assertEquals(tags, presetController.getTags());
+    controller.addTag("tag2");
+    controller.addAllTags(tags);
+    controller.removeTag("tag2");
+    Assert.assertEquals(tags, controller.getTags());
   }
 
   @Test
   public void testRemoveTagFromPreset() throws SQLException {
+    PresetController controller = new PresetController();
     Preset preset1 = mock(Preset.class);
-    presetController.addPreset(preset1);
+    controller.addPreset(preset1);
     HashSet<String> tags = new HashSet<>();
     tags.add("tag1");
     tags.add("tag2");
-    presetController.addAllTags(tags);
-    presetController.removeTag("tag1");
+    controller.addAllTags(tags);
+    controller.removeTag("tag1");
 
     verify(preset1).removeTag("tag1");
   }
-
 }

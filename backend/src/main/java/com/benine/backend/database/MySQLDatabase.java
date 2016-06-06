@@ -21,7 +21,7 @@ import java.util.List;
  * Class for communicating with the MySQL Database.
  */
 public class MySQLDatabase implements Database {
-	
+
   private Connection connection;
   private String user;
   private String password;

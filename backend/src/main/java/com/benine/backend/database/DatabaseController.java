@@ -1,7 +1,6 @@
 package com.benine.backend.database;
 
 import com.benine.backend.Config;
-import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.preset.Preset;
@@ -25,10 +24,9 @@ public class DatabaseController {
   
   /**
    * Constructor for a database controller.
-   * @param serverController to interact with the rest of the system
    */
-  public DatabaseController(ServerController serverController) {
-    this.serverController = serverController;
+  public DatabaseController() {
+    this.serverController = ServerController.getInstance();
     this.config = serverController.getConfig();
     this.logger = serverController.getLogger();
     database = loadDatabase();
@@ -78,7 +76,7 @@ public class DatabaseController {
         preset.addTags(database.getTagsFromPreset(preset));
       }
     } catch (SQLException e) {
-      logger.log("Cannot read presets from database", LogEvent.Type.CRITICAL);
+      logger.log("Cannot read presets from database", e);
     }
   }
 

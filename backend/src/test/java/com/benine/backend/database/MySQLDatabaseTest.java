@@ -1,15 +1,12 @@
 package com.benine.backend.database;
 
-import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;

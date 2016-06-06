@@ -29,9 +29,9 @@ public class PresetController {
   
   /**
    * Constructor of the presetController.
-   * @param serverController to interact with the rest of the system.
    */
-  public PresetController(ServerController serverController) {
+  public PresetController() {
+    ServerController serverController = ServerController.getInstance();
     database = serverController.getDatabaseController().getDatabase();
     config = serverController.getConfig();
   }
