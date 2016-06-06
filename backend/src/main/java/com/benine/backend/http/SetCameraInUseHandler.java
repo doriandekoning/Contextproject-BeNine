@@ -14,6 +14,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SetCameraInUseHandler extends CameraRequestHandler {
 
+  /**
+   * Constructs the set camera in use handler for this server.
+   * @param httpserver this handler is created for.
+   */
+  public SetCameraInUseHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
+
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {

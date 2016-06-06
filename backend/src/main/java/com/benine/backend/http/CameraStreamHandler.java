@@ -1,7 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.ResizableStreamDistributer;
@@ -22,6 +21,14 @@ import javax.servlet.http.HttpServletResponse;
  * Class responsible for handling the /camera/ route.
  */
 public class CameraStreamHandler extends CameraRequestHandler {
+  
+  /**
+   * Constructs the handler for the streams /camera/id/mjpeg.
+   * @param httpserver to construct this handler for.
+   */
+  public CameraStreamHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -33,7 +40,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
 
     StreamReader streamReader = null;
     try {
-      streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
+      streamReader = getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
       getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
     }
@@ -65,7 +72,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
    */
   private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
-    if (ServerController.getInstance().getConfig().getValue("stream_compression").equals("true")
+    if (getConfig().getValue("stream_compression").equals("true")
             && validateResizeArguments(width, height)) {
 
       int w = Integer.parseInt(width);

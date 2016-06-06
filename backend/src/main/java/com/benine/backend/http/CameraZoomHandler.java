@@ -16,6 +16,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CameraZoomHandler extends CameraRequestHandler {
 
+  /**
+   * Constructs the camera zoom handler for this server.
+   * @param httpserver to create this handler for.
+   */
+  public CameraZoomHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {

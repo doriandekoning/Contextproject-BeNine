@@ -38,7 +38,7 @@ public class SimplePresetTest {
   public void testToJSON() throws JSONException {
     JSONObject jsonObject = preset.toJSON();
     Assert.assertEquals(1, jsonObject.get("id"));
-    Assert.assertEquals("testtest", jsonObject.get("image"));
+    Assert.assertEquals("test", jsonObject.get("image"));
     JSONArray expectedtagsJSON = new JSONArray();
     expectedtagsJSON.add("foo");
     Assert.assertEquals(expectedtagsJSON, jsonObject.get("tags"));
