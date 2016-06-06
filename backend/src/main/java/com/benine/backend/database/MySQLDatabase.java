@@ -2,12 +2,14 @@ package com.benine.backend.database;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -110,7 +112,7 @@ public class MySQLDatabase implements Database {
             .getPresetById(resultset.getInt("ID")));
       }
     } catch (Exception e) {
-      getLogger().log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
+      logger.log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -130,7 +132,7 @@ public class MySQLDatabase implements Database {
         statement.executeUpdate(sql);
       }
     } catch (Exception e) {
-      getLogger().log("List could not be added.", LogEvent.Type.CRITICAL);
+      logger.log("List could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -144,7 +146,7 @@ public class MySQLDatabase implements Database {
       String sql = "DELETE FROM presetsList WHERE queue_ID = " + queueID;
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("List could not be deleted.", LogEvent.Type.CRITICAL);
+      logger.log("List could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -163,7 +165,7 @@ public class MySQLDatabase implements Database {
         list.add(resultset.getInt("ID"));
       }
     } catch (Exception e) {
-      getLogger().log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
+      logger.log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -179,7 +181,7 @@ public class MySQLDatabase implements Database {
           ID, name);
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Queue could not be added.", LogEvent.Type.CRITICAL);
+      logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -193,7 +195,7 @@ public class MySQLDatabase implements Database {
       String sql = "DELETE FROM queue WHERE ID = " + ID;
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
+      logger.log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -227,6 +229,9 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       if (preset != null) {
+        for(String tag : preset.getTags()) {
+          deleteTagFromPreset(tag, preset);
+        }
         String sql = preset.createDeleteSQL();
         statement.executeUpdate(sql);
       }
