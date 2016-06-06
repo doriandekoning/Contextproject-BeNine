@@ -209,6 +209,9 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
+      for(String tag : preset.getTags()) {
+        addTagToPreset(tag, preset);
+      }
     } catch (Exception e) {
       getLogger().log("Presets could not be added.", LogEvent.Type.CRITICAL);
     } finally {

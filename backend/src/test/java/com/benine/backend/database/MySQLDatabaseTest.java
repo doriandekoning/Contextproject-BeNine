@@ -234,7 +234,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         expected.setId(1);
         assertEquals(expected, preset);
     }
-    
+
     @Test
     public final void testGetSimplePresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
@@ -258,7 +258,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         MockResultSet result = statementHandler.createResultSet();
         assertNull(database.getIPCameraPresetFromResultSet(result));
     }
-    
+
     @Test
     public final void testGetFailedSimplePresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
