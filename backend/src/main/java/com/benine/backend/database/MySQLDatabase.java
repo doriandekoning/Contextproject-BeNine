@@ -52,11 +52,11 @@ public class MySQLDatabase implements Database {
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT tag_name FROM tagPresets WHERE preset_ID = "
+      String sql = "SELECT tag_name FROM tagPreset WHERE preset_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(resultset.getString("name"));
+        list.add(resultset.getString("tag_name"));
       }
     } catch (SQLException e) {
       logger.log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
@@ -86,8 +86,8 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' " +
-          "AND preset_ID = %s", tag, preset.getId());
+      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' " 
+                                          + "AND preset_ID = %s", tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
@@ -230,9 +230,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       if (preset != null) {
-        for (String tag : preset.getTags()) {
-          deleteTagFromPreset(tag, preset);
-        }
+        deleteTagsFromPreset(preset);
         String sql = preset.createDeleteSQL();
         statement.executeUpdate(sql);
         sql = "DELETE FROM preset WHERE ID = " + preset.getId();
@@ -600,6 +598,21 @@ public class MySQLDatabase implements Database {
       }
     } catch (SQLException e) {
       logger.log("Statement or resultset could not be closed", LogEvent.Type.WARNING);
+    }
+  }
+
+  @Override
+  public void deleteTagsFromPreset(Preset preset) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      final String sql = String.format("DELETE FROM tagPreset WHERE preset_ID = %s",
+                                                                          preset.getId());
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      logger.log("All tags couldn't be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
     }
   }
 }

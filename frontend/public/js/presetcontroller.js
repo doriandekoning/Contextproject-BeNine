@@ -227,11 +227,11 @@ edit_tags_input.tagsinput('input').keypress(function (e) {
  * Function is called when the save button of the edit window is clicked.
  */
 function editPreset() {
-	//TODO should be the new values from the edit window
-	// And the new preset values should be send to the backend.
 	var tags = edit_tags_input.val();
 	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
 		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
+	$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
 }
 
 /**

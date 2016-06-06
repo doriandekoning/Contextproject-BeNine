@@ -69,6 +69,7 @@ public abstract class Preset {
    * @param tags a list of keywords
    */
   public void addTags(Set<String> tags) {
+    tags.remove("");
     this.tags.addAll(tags);
   }
 

@@ -51,7 +51,6 @@ public class CreatePresetHandler extends RequestHandler {
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       } 
-      getLogger().log(tagList.toString(), LogEvent.Type.CRITICAL);
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
         Preset preset = presetCamera.createPreset(tagList);

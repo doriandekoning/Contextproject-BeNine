@@ -163,6 +163,12 @@ public interface Database {
    * @param preset The preset
    */
   void deleteTagFromPreset(String tag, Preset preset);
+  
+  /**
+   * delete the tags from a preset.
+   * @param preset to delete the tags for.
+   */
+  void deleteTagsFromPreset(Preset preset);
 
   /**
    * Gets a list of presets belonging to the concert.
