@@ -456,6 +456,10 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = "DELETE FROM preset WHERE camera_ID = " + cameraID;
       statement.executeUpdate(sql);
+      sql = "DELETE FROM IPpreset WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM simplepreset WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
       sql = "DELETE FROM camera WHERE ID = " + cameraID;
       statement.executeUpdate(sql);
     } catch (SQLException e) {
