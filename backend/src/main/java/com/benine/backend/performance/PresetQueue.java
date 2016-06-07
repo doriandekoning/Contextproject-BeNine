@@ -37,11 +37,27 @@ public class PresetQueue {
   }
   
   /**
+   * Set the ID of the presetQueue.
+   * @param ID the id to be set to the queue.
+   */
+  public void setID(int ID) {
+    this.ID = ID;
+  }
+  
+  /**
    * Getter for the name of the queue.
    * @return string with the name of the queue. 
    */
   public String getName() {
     return name;
+  }
+  
+  /**
+   * Set the name of the presetQueue.
+   * @param name the name to be set to the queue.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
   
   /**
@@ -96,4 +112,41 @@ public class PresetQueue {
   public int getSize() {
     return queue.size();
   }
+  
+  /**
+   * Equals method for the presetQueue.
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    PresetQueue other = (PresetQueue) obj;
+    if (ID != other.ID) {
+      return false;
+    }
+    if (name == null) {
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
+    if (queue == null) {
+      if (other.queue != null) {
+        return false;
+      }
+    } else if (!queue.equals(other.queue)) {
+      return false;
+    }
+    return true;
+  }
+
+  
 }
