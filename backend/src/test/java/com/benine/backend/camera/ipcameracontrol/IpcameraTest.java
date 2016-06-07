@@ -1,20 +1,12 @@
 package com.benine.backend.camera.ipcameracontrol;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.*;
-
-import com.benine.backend.camera.*;
-import com.benine.backend.preset.IPCameraPresetFactory;
-import org.json.simple.JSONObject;
-
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-
 import org.apache.commons.io.IOUtils;
-
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +15,12 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.concurrent.TimeoutException;
 
-import java.util.HashSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class to test the IP Camera class.
@@ -232,7 +227,7 @@ public class IpcameraTest {
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    IPCameraPreset expected = new IPCameraPresetFactory().createPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, 15, 1, true, -1);
+    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, true, -1);
     
     assertEquals(expected, camera.createPreset(new HashSet<>()));
   }

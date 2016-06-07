@@ -2,7 +2,7 @@ package com.benine.backend;
 
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPresetFactory;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamNotAvailableException;
 
@@ -47,7 +47,7 @@ public abstract class AutoPresetCreator {
       System.out.println(pos);
       cam.waitUntilAtPosition(pos, timeout);
       cam.setBusy(true);
-      presets.add(new IPCameraPresetFactory().createPreset(cam, 2, 30));
+      presets.add(new IPCameraPreset(cam, 2, 30));
     }
     cam.setBusy(false);
     return presets;

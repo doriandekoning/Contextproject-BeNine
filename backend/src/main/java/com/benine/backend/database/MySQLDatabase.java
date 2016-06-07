@@ -6,7 +6,6 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.IPCameraPresetFactory;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
@@ -435,9 +434,9 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("camera_ID");
-      IPCameraPresetFactory factory = new IPCameraPresetFactory();
-      IPCameraPreset preset = factory.createPreset(pos, focus, iris, autoFocus, panspeed, tiltspeed,
-          autoIris, id);
+      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris, autoFocus, autoIris, id);
+      preset.setPanspeed(panspeed);
+      preset.setTiltspeed(tiltspeed);
       preset.setImage(resultset.getString("image"));
       return preset;
     } catch (Exception e) {

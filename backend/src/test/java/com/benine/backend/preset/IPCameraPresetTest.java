@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.mockito.Mockito.mock;
@@ -28,15 +27,15 @@ public class IPCameraPresetTest extends PresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new IPCameraPresetFactory()
-            .createPreset(new ZoomPosition(10, 12, 13), 40, 56, true, 1, 2, false, 0, keywords);
+    preset = new IPCameraPreset(new ZoomPosition(10, 12, 13), 40, 56, true, false, 0);
+    preset.addTags(keywords);
   }
   
   @Test
   public void testExcecutePresetMoveTo() throws CameraConnectionException, CameraBusyException {
     IPCamera camera = mock(IPCamera.class);
     preset.excecutePreset(camera);
-    verify(camera).moveTo(new Position(10, 12), 1, 2);
+    verify(camera).moveTo(new Position(10, 12), 15, 1);
   }
   
   @Test(expected = CameraConnectionException.class)
@@ -47,7 +46,7 @@ public class IPCameraPresetTest extends PresetTest {
   
   @Test
   public void testCreateSQL() throws CameraConnectionException {
-    Assert.assertEquals("INSERT INTO presetsdatabase.presets VALUES(-1,10.0,12.0,13,40,56,1,1,2,0,'null',0)", preset.createAddSqlQuery());
+    Assert.assertEquals("INSERT INTO presetsdatabase.presets VALUES(-1,10.0,12.0,13,40,56,1,15,1,0,'null',0)", preset.createAddSqlQuery());
   }
 
   @Test
@@ -64,7 +63,7 @@ public class IPCameraPresetTest extends PresetTest {
 
     Assert.assertEquals(preset.getPosition().getPan(), jsonObject.get("pan"));
     Assert.assertEquals(preset.getPosition().getTilt(), jsonObject.get("tilt"));
-    Assert.assertEquals(preset.getZoom(), jsonObject.get("zoom"));
+    Assert.assertEquals(preset.getPosition().getZoom(), jsonObject.get("zoom"));
     Assert.assertEquals(preset.getFocus(), jsonObject.get("focus"));
     Assert.assertEquals(preset.getIris(), jsonObject.get("iris"));
     Assert.assertEquals(preset.isAutofocus(), jsonObject.get("autofocus"));
@@ -84,8 +83,8 @@ public class IPCameraPresetTest extends PresetTest {
   @Test
   public void testSetPosition() {
     IPCameraPreset preset = getPreset();
-    preset.setPosition(new Position(1, 2));   
-    Position expected = new Position(1, 2);
+    preset.setPosition(new ZoomPosition(1, 2, 3));
+    ZoomPosition expected = new ZoomPosition(1, 2, 3);
     Assert.assertEquals(expected, preset.getPosition());
   }
   
@@ -132,16 +131,6 @@ public class IPCameraPresetTest extends PresetTest {
   }
   
   @Test
-  public void testSetZoom() {
-    IPCameraPreset preset = getPreset();
-
-    preset.setZoom(50);
-    Assert.assertEquals(50, preset.getZoom());
-  }
-  
-
-  
-  @Test
   public void testHashCode() {
     Preset preset = getPreset();
     Preset preset2 = getPreset();
@@ -155,16 +144,7 @@ public class IPCameraPresetTest extends PresetTest {
   public void testEqualsOtherPosition() {
     IPCameraPreset preset = getPreset();
     IPCameraPreset preset2 = getPreset();
-    preset2.setPosition(new Position(0, 0));
-    Assert.assertNotEquals(preset, preset2);
-  }
-  
-  @Test
-  public void testEqualsOtherZoom() {
-    IPCameraPreset preset = getPreset();
-    IPCameraPreset preset2 = getPreset();
-    preset2.setZoom(34);
-
+    preset2.setPosition(new ZoomPosition(0, 0, 0));
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -225,8 +205,7 @@ public class IPCameraPresetTest extends PresetTest {
 
 
   public final IPCameraPreset getPreset() {
-    IPCameraPreset preset = new IPCameraPresetFactory().createPreset(
-            new ZoomPosition(4.2, 42.42, 4), 2, 5, false, 1, 2, true, 34);
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(4.2, 42.42, 4), 2, 5, false, true, 34);
     return preset;
   }
 }

@@ -24,8 +24,8 @@ public class IPCameraPreset extends Preset {
   private int focus;
   private int iris;
   private boolean autofocus;
-  private int panspeed;
-  private int tiltspeed;
+  private int panspeed = 15;
+  private int tiltspeed = 1;
   private boolean autoiris;
   /**
    * Creates a new preset based on the parameters supplied.
@@ -33,23 +33,18 @@ public class IPCameraPreset extends Preset {
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
    * @param autofocus The autofocus of the preset
-   * @param panspeed  The panspeed of the preset
    * @param autoiris  The autoiris of the preset
-   * @param tiltspeed The tiltspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
    * @return the created preset.
    */
   public IPCameraPreset(ZoomPosition pos, int focus, int iris,
-                        boolean autofocus, int panspeed, int tiltspeed,
+                        boolean autofocus,
                         boolean autoiris, int cameraId) {
     super(cameraId);
     this.position = pos;
     this.focus = focus;
     this.iris = iris;
     this.autofocus = autofocus;
-    // TODO remove these two
-    this.panspeed = panspeed;
-    this.tiltspeed = tiltspeed;
     this.autoiris = autoiris;
   }
 

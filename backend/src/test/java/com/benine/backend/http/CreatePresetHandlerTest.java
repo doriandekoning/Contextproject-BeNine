@@ -5,7 +5,7 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPresetFactory;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
@@ -66,7 +66,8 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(0,0, 100), 33,50,true,15,1,true, 0, tags);
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0);
+      preset.addTags(tags);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();

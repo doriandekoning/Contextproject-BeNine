@@ -7,7 +7,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPresetFactory;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.MJPEGFrameResizer;
@@ -116,14 +116,12 @@ public class CreatePresetHandler extends RequestHandler {
     double tilt = camera.getPosition().getTilt();
     int focus = camera.getFocusPosition();
     int iris = camera.getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
     int cameraId = camera.getId();
 
-    return new IPCameraPresetFactory().createPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
-            autofocus, panspeed, tiltspeed, autoiris, cameraId, tagList);
+    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
+            autofocus, autoiris, cameraId);
   }
 
   /**
