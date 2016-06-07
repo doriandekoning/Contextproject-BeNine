@@ -10,10 +10,10 @@ import java.util.ArrayList;
  * Created by Team BeNine.
  */
 public class PresetQueue {
-  
+
   private ArrayList<Preset> queue = new ArrayList<Preset>();
   private String name;
-  private int ID;
+  private int ID = -1;
   
   /**
    * Constructor for the presetQueue with a name and ID.
@@ -112,7 +112,12 @@ public class PresetQueue {
   public int getSize() {
     return queue.size();
   }
-  
+
+  public Object toJSON() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   /**
    * Equals method for the presetQueue.
    */
@@ -147,6 +152,4 @@ public class PresetQueue {
     }
     return true;
   }
-
-  
 }

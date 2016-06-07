@@ -3,6 +3,7 @@ package com.benine.backend;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.database.DatabaseController;
 import com.benine.backend.http.HTTPServer;
+import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
@@ -26,6 +27,8 @@ public class ServerController {
   private static StreamController streamController;
   
   private static DatabaseController databaseController;
+  
+  private static PresetQueueController presetQueueController;
 
   private boolean running;
 
@@ -56,6 +59,8 @@ public class ServerController {
     cameraController = new CameraController();
 
     presetController = new PresetController();
+    
+    presetQueueController = new PresetQueueController();
   }
 
   /**
@@ -185,6 +190,15 @@ public class ServerController {
    */
   public PresetController getPresetController() {
     return presetController;
+  }
+  
+  /**
+   * Getter for presetQueueController
+   *
+   * @return Returns the presetQueueController.
+   */
+  public PresetQueueController getPresetQueueController() {
+    return presetQueueController;
   }
 
   /**
