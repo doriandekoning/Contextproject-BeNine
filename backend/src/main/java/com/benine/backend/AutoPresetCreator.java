@@ -39,12 +39,13 @@ public abstract class AutoPresetCreator {
     }
     cam.setBusy(true);
     Position camStartPos = cam.getPosition();
-
     ArrayList<Preset> presets = new ArrayList<Preset>();
+    System.out.println(generatePositions(cam));
     for (ZoomPosition pos : generatePositions(cam)) {
       cam.setBusy(false);
-      cam.moveTo(pos, 30, 2);
-      cam.waitUntilAtPosition(pos, pos.getZoom(), timeout);
+      cam.moveTo(pos, 2, 30);
+      System.out.println(pos);
+      cam.waitUntilAtPosition(pos, timeout);
       cam.setBusy(true);
       presets.add(new IPCameraPresetFactory().createPreset(cam, 2, 30));
     }

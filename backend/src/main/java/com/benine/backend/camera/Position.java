@@ -77,7 +77,8 @@ public class Position {
 
   @Override
   public boolean equals(Object o) {
-    final double delta = 0.05;
+    final double delta = 1
+            ;
     if (o instanceof Position) {
       Position that = (Position) o;
       if (Math.abs(this.tilt - that.tilt)  < delta

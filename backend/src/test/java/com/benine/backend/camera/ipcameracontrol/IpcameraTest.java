@@ -257,7 +257,7 @@ public class IpcameraTest {
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
-    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 300);
+    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 300);
   }
 
   @Test
@@ -267,7 +267,7 @@ public class IpcameraTest {
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
-    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 1);
+    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
   }
 
   @Test (expected =TimeoutException.class)
@@ -277,7 +277,7 @@ public class IpcameraTest {
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
-    cam.waitUntilAtPosition(new Position(10.0, 1.0), 0, 1);
+    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 0), 1);
   }
 
   @Test (expected =TimeoutException.class)
@@ -287,7 +287,7 @@ public class IpcameraTest {
     doReturn(new Position(2, -1)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
-    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 1);
+    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
   }
 
 
@@ -298,7 +298,7 @@ public class IpcameraTest {
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(0, 10, 30).when(cam).getZoomPosition();
 
-    cam.waitUntilAtPosition(new Position(10.0, 1.0), 30, 700);
+    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 700);
   }
 
   @Test

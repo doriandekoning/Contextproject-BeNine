@@ -539,21 +539,23 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   /**
    * Waits until the camera has arrived at a location or the timeout has expired.
    * @param pos The position the camera should be at.
-   * @param zoom the zoom of the camera
    * @param timeout the timeout after which to give up waiting
    * @throws InterruptedException when interupted when waiting to arrive at position.
    * @throws CameraConnectionException when connection to camera is lost.
    * @throws TimeoutException when camera moves to slow or does not move at all.
    */
-  public void waitUntilAtPosition(Position pos, int zoom, long timeout)
+  public void waitUntilAtPosition(ZoomPosition pos, long timeout)
           throws InterruptedException, CameraConnectionException, TimeoutException {
     long timedOutTime = System.currentTimeMillis() + timeout;
     do {
-      if (getPosition().equals(pos) && zoom == getZoomPosition()) {
+      System.out.println(getPosition().equals(pos));
+      if (getPosition().equals(pos)) {
         return;
       }
       Thread.sleep(MOVE_WAIT_DURATION);
     } while (System.currentTimeMillis() < timedOutTime );
+    System.out.println("Wanted:" + pos);
+    System.out.println("Got:" + getPosition());
     throw new TimeoutException();
   }
 
