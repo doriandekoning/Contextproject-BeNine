@@ -4,6 +4,7 @@ var deleteTags = [];
 var updatedTags = [];
 // true if the client is in preset editing mode.
 var editing = false;
+var searchTerm;
 
 /**
 * Function loads all the presets from the backend.
@@ -15,7 +16,7 @@ function loadPresets() {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
-		displayPresets(presets);
+		tagSearchInput(searchTerm);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				newTag(obj.tags[t]);
@@ -251,16 +252,18 @@ function loadPresetEditModal(preset) {
 
 //// Below is for the search input in the preset area.
 var tag_search_input = $('#tagsearch_input');
+
 /**
 * Handles input on the tag search field.
 */
 function tagSearchInput(val) {
-	if (val !== '') {
-		var matchingpresets = matchingPresets(val);
-		displayPresets(matchingpresets);
-	} else {
+	searchTerm = val;
+	if (val === undefined || val === '') {
 		displayPresets(presets);
-	}
+	}else {
+		var matchingpresets = matchingPresets(searchTerm);
+		displayPresets(matchingpresets);
+	} 
 }
 
 /**
@@ -383,7 +386,7 @@ function newTag(val) {
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
 	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
-				console.log("create tag respone: " + data);
+		console.log("create tag respone: " + data);
 	}).done();
 }
 
