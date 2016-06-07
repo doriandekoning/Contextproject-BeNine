@@ -196,6 +196,11 @@ input[type=range]:focus {
 	overflow: hidden;
 }
 
+#top_area.live-view{
+    height: 150px;
+    overflow: hidden;
+}
+
 /* Flex area to make the body area scale to the remaining viewpoint. */
 #body_area {
     display: flex;
