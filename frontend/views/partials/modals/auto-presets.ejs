@@ -1,5 +1,5 @@
 <!-- Defines the modal used for automatically creating presets -->
-<div id="auto_preses_div" class="modal fade auto-presets-modal" tabindex="-1" role="dialog">
+<div id="auto_presets_div" class="modal fade auto-presets-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-xs-8">
                         <div class="form-group">
-                            <label for="edit_preset_name">Preset name (will be appended by the number)</label>
+                            <label for="edit_preset_name">Preset name (will be appended with a number for each preset)</label>
                             <input id="edit_preset_name" class="form-control" type="text">
                         </div>
                         <br>
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="col-xs-4">
-                      <canvas class="previewCanvas img-responsive">
+                      <canvas id="previewCanvas" class="img-responsive">
                         Your browser does not support the HTML5 canvas tag.
                       </canvas>
                     </div>
