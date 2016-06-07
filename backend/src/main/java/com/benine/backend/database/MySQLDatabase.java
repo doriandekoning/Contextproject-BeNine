@@ -97,8 +97,8 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public Queue<Preset> getPresetsList(int queueID) {
-    Queue<Preset> list = new LinkedList<Preset>();
+  public LinkedList<Preset> getPresetsList(int queueID) {
+    LinkedList<Preset> list = new LinkedList<Preset>();
     Statement statement = null;
     ResultSet resultset = null;
     try {
@@ -119,7 +119,7 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void addPresetsList(Queue<Preset> presets, int queueID) {
+  public void addPresetsList(LinkedList<Preset> presets, int queueID) {
     Statement statement = null;
     try {
       statement = connection.createStatement();

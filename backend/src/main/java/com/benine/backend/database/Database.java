@@ -5,10 +5,7 @@ import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Interface for communication with the database.
@@ -176,7 +173,7 @@ public interface Database {
    * @param queueID The ID of the concert to get the presets from
    * @return The list of presets
    */
-  Queue<Preset> getPresetsList(int queueID);
+  LinkedList<Preset> getPresetsList(int queueID);
 
   /**
    * Adds a list of presets to an existing queue.
@@ -184,7 +181,7 @@ public interface Database {
    * @param presets The list which needs to be added
    * @param queueID The id of the queue
    */
-  void addPresetsList(Queue<Preset> presets, int queueID);
+  void addPresetsList(LinkedList<Preset> presets, int queueID);
 
   /**
    * Deletes a list of presets of an existing queue.
