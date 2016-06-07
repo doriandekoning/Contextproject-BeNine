@@ -7,6 +7,7 @@ import com.benine.backend.camera.CameraController;
 import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public abstract class RequestHandlerTest {
   public abstract RequestHandler supplyHandler();
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException {
     when(httpserver.getLogger()).thenReturn(logger);
     when(config.getValue("stream_compression")).thenReturn("true");
     when(httpserver.getConfig()).thenReturn(config);

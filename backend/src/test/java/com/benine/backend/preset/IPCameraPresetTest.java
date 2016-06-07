@@ -1,9 +1,6 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
@@ -31,7 +28,8 @@ public class IPCameraPresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new IPCameraPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
+    preset = new IPCameraPresetFactory()
+            .createPreset(new ZoomPosition(10, 12, 13), 40, 56, true, 1, 2, false, 0, keywords);
   }
   
   @Test
@@ -42,7 +40,7 @@ public class IPCameraPresetTest {
   }
   
   @Test(expected = CameraConnectionException.class)
-  public void testExcecutePresetException() throws CameraConnectionException {
+  public void testExcecutePresetException() throws CameraConnectionException, CameraBusyException {
     SimpleCamera camera = mock(SimpleCamera.class);
     preset.excecutePreset(camera);
   }
@@ -56,7 +54,7 @@ public class IPCameraPresetTest {
   public void testToJSON() throws JSONException {
     ArrayList<String> keywords = new ArrayList<String>();
     keywords.add("foo");
-    Preset preset = new IPCameraPresetFactory().createPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
+    Preset preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(10, 12, 13), 40, 56, true, 1, 2, false, 0, keywords);
 
     JSONObject jsonObject = preset.toJSON();
 
@@ -76,7 +74,7 @@ public class IPCameraPresetTest {
 
   @Test
   public void testGetMethods() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     Assert.assertEquals(new Position(4.2, 42.42), preset.getPosition());
     Assert.assertEquals(4, preset.getZoom());
     Assert.assertEquals(2, preset.getFocus());
@@ -89,7 +87,7 @@ public class IPCameraPresetTest {
 
   @Test
   public void testSetPosition() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setPosition(new Position(1, 2));   
     Position expected = new Position(1, 2);
     Assert.assertEquals(expected, preset.getPosition());
@@ -97,49 +95,49 @@ public class IPCameraPresetTest {
   
   @Test
   public void testSetPanSpeed() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setPanspeed(20);
     Assert.assertEquals(20, preset.getPanspeed());
   }
   
   @Test
   public void testSetTiltSpeed() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setTiltspeed(20);
     Assert.assertEquals(20, preset.getTiltspeed());
   }
   
   @Test
   public void testSetAutoFocus() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setAutofocus(true);
     Assert.assertEquals(true, preset.isAutofocus());
   }
   
   @Test
   public void testSetAutoIris() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setAutoiris(true);
     Assert.assertEquals(true, preset.isAutoiris());
   }
   
   @Test
   public void testSetIris() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setIris(60);
     Assert.assertEquals(60, preset.getIris());
   }
   
   @Test
   public void testSetFocus() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
     preset.setFocus(55);
     Assert.assertEquals(55, preset.getFocus());
   }
   
   @Test
   public void testSetZoom() {
-    Preset preset = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
 
     preset.setZoom(50);
     Assert.assertEquals(50, preset.getZoom());
@@ -195,16 +193,16 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherPosition() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setPosition(new Position(0, 0));
     Assert.assertNotEquals(preset, preset2);
   }
   
   @Test
   public void testEqualsOtherZoom() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setZoom(34);
 
     Assert.assertNotEquals(preset, preset2);
@@ -212,8 +210,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherFocus() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setFocus(12);
 
     Assert.assertNotEquals(preset, preset2);
@@ -221,8 +219,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherIris() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setIris(preset.getIris()+1);
 
     Assert.assertNotEquals(preset, preset2);
@@ -230,8 +228,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherPanspeed() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setPanspeed(preset.getPanspeed()+1);
 
     Assert.assertNotEquals(preset, preset2);
@@ -239,8 +237,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherTiltspeed() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setTiltspeed(preset.getTiltspeed()+1);
 
     Assert.assertNotEquals(preset, preset2);
@@ -248,8 +246,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherAutoFocus() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setAutofocus(!preset.isAutofocus());
 
     Assert.assertNotEquals(preset, preset2);
@@ -257,8 +255,8 @@ public class IPCameraPresetTest {
   
   @Test
   public void testEqualsOtherAutoIris() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
+    IPCameraPreset preset = getDefaultPreset();
+    IPCameraPreset preset2 = getDefaultPreset();
     preset2.setAutoiris(!preset.isAutoiris());
     Assert.assertNotEquals(preset, preset2);
   }
@@ -322,17 +320,6 @@ public class IPCameraPresetTest {
   }
 
   @Test
-  public void testTagsConstructor() {
-    Set<String> keyWords = new HashSet<String>();
-    keyWords.add("Violin");
-    keyWords.add("Piano");
-    IPCameraPreset preset1 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, keyWords);
-    keyWords.add("Overview");
-    preset1.addTag("Overview");
-    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
-  }
-
-  @Test
   public void testRemoveTag() {
     Preset preset1 = getDefaultPreset();
     preset1.addTag("Violin");
@@ -361,17 +348,9 @@ public class IPCameraPresetTest {
     Assert.assertEquals(42, preset.getCameraId());
   }
 
-  public final Preset getDefaultPreset() {
-    Preset preset = new IPCameraPresetFactory().createPreset();
-    preset.setCameraId(34);
-    preset.setPosition(new Position(4.2, 42.42));
-    preset.setZoom(4);
-    preset.setFocus(2);
-    preset.setIris(5);
-    preset.setPanspeed(1);
-    preset.setTiltspeed(2);
-    preset.setAutoiris(true);
-    preset.setAutofocus(false);
+  public final IPCameraPreset getDefaultPreset() {
+    IPCameraPreset preset = new IPCameraPresetFactory().createPreset(
+            new ZoomPosition(4.2, 42.42, 4), 2, 5, false, 1, 2, true, 34);
     return preset;
   }
 }

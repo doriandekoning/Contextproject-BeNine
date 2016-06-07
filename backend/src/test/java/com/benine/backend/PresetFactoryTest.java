@@ -1,7 +1,10 @@
 package com.benine.backend;//TODO add Javadoc comment
 
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.IPCameraPresetFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +23,12 @@ public class PresetFactoryTest {
   int zoom, focus, iris, panspeed, tiltspeed, cameraId;
   Position pos;
   boolean autoiris, autofocus;
-  PresetFactory factory;
+  IPCameraPresetFactory factory;
 
   @Before
   public final void initialize() {
 
-    factory = new PresetFactory();
+    factory = new IPCameraPresetFactory();
     zoom = 32;
     focus = 3;
     iris = 13;
@@ -41,10 +44,10 @@ public class PresetFactoryTest {
 
   @Test
   public final void testCreatePresetByParams() {
-    Preset expectedP = getDefaultPreset();
+    IPCameraPreset expectedP = getDefaultPreset();
 
-    PresetFactory presetFactory = new PresetFactory();
-    Preset actualP = presetFactory.createPreset(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
+    IPCameraPresetFactory presetFactory = new IPCameraPresetFactory();
+    IPCameraPreset actualP = presetFactory.createPreset(new ZoomPosition(pos,zoom), focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
 
     Assert.assertEquals(expectedP, actualP);
 
@@ -53,12 +56,12 @@ public class PresetFactoryTest {
 
   @Test
   public final void testCreatePresetByParamsWithTags() {
-    Preset expectedP = getDefaultPreset();
+    IPCameraPreset expectedP = getDefaultPreset();
     Collection<String> tags = new ArrayList<String>();
     tags.add("Tag1");
     expectedP.addTags(tags);
 
-    Preset actualP = factory.createPreset(pos, zoom, focus, iris,
+    IPCameraPreset actualP = factory.createPreset(new ZoomPosition(pos, zoom), focus, iris,
             autofocus, panspeed, tiltspeed, autoiris, cameraId, tags);
 
     Assert.assertEquals(expectedP, actualP);
@@ -67,7 +70,7 @@ public class PresetFactoryTest {
 
   @Test
   public final void testCreatePresetByCamera() throws Exception {
-    Preset expectedP = getDefaultPreset();
+    IPCameraPreset expectedP = getDefaultPreset();
     IPCamera cam = mock(IPCamera.class);
     when(cam.getPosition()).thenReturn(pos);
     when(cam.getId()).thenReturn(cameraId);
@@ -77,7 +80,7 @@ public class PresetFactoryTest {
     when(cam.isAutoFocusOn()).thenReturn(autofocus);
     when(cam.isAutoIrisOn()).thenReturn(autoiris);
 
-    Preset actualP = factory.createPreset(cam, panspeed, tiltspeed);
+    IPCameraPreset actualP = factory.createPreset(cam, panspeed, tiltspeed);
     Assert.assertEquals(expectedP, actualP);
 
   }
@@ -85,8 +88,8 @@ public class PresetFactoryTest {
 
 
 
-  public final Preset getDefaultPreset() {
-    Preset preset = new Preset();
+  public final IPCameraPreset getDefaultPreset() {
+    IPCameraPreset preset = new IPCameraPreset(cameraId);
     preset.setZoom(zoom);
     preset.setFocus(focus);
     preset.setIris(iris);

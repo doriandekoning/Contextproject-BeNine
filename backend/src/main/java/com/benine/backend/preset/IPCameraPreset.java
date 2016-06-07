@@ -9,8 +9,6 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * IPCamera preset which stores the data to recall this preset position.
@@ -25,58 +23,17 @@ public class IPCameraPreset extends Preset {
   private int panspeed;
   private int tiltspeed;
   private boolean autoiris;
-  
-  /**
-   * Returns a JSON representation of this object.
-   *
-   * @return JSON representation of this object.
-   *
-   * Constructs a preset.
-   *
-   * @param pos       The position of this preset.
-   * @param zoom      The zoom of the preset
-   * @param focus     The focus of the prest
-   * @param iris      The iris of the preset
-   * @param autofocus The autofocus of the preset
-   * @param autoiris  The autoiris of the preset
-   * @param tiltspeed The tiltspeed of the preset
-   * @param panspeed  The panspeed of the preset
-   * @param cameraId  The id of the camera associated with this preset.
-   */
-  public IPCameraPreset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
-    super(cameraId);
-    this.position = pos;
-    this.zoom = zoom;
-    this.focus = focus;
-    this.iris = iris;
-    this.autofocus = autofocus;
-    this.panspeed = panspeed;
-    this.tiltspeed = tiltspeed;
-    this.autoiris = autoiris;
-  }
 
   /**
    * Constructs a preset.
    *
-   * @param pos       The position of this preset.
-   * @param zoom      The zoom of the preset
-   * @param focus     The focus of the prest
-   * @param iris      The iris of the presetz
-   * @param autofocus The autofocus of the preset
-   * @param autoiris  The autoiris of the preset
-   * @param tiltspeed The tiltspeed of the preset
-   * @param panspeed  The panspeed of the preset
-   * @param cameraId  The id of the camera associated with this preset.
-   * @param keyWords  The keywords of this preset
+   * @param cameraId The id of the camera associated with this preset.
    */
-  public IPCameraPreset(Position pos, int zoom, int focus, int iris,
-                boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, Set<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
-    super.tags.addAll(keyWords);
+  public IPCameraPreset(int cameraId) {
+    super(cameraId);
   }
-  
+
+
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();

@@ -1,19 +1,13 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
-import com.benine.backend.ServerController;
-
-
 import org.eclipse.jetty.server.Request;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PresetsHandler extends RequestHandler {
@@ -31,19 +25,13 @@ public class PresetsHandler extends RequestHandler {
     super(httpserver);
     this.handlers = new HashMap<>();
 
-<<<<<<< HEAD
-    addHandler("createpreset", new CreatePresetHandler());
-    addHandler("recallpreset", new RecallPresetHandler());
-    addHandler("addtag", new AddTagHandler());
-    addHandler("removetag", new RemoveTagHandler());
-    addHandler("autocreatepresets", new AutoPresetCreationHandler());
-=======
+
     addHandler("createpreset", new CreatePresetHandler(httpserver));
     addHandler("recallpreset", new RecallPresetHandler(httpserver));
     addHandler("addtag", new AddTagHandler(httpserver));
     addHandler("removetag", new RemoveTagHandler(httpserver));
     addHandler("edit", new EditPresetHandler(httpserver));
->>>>>>> develop
+    addHandler("autocreatepresets", new AutoPresetCreationHandler(httpserver));
   }
 
   @Override

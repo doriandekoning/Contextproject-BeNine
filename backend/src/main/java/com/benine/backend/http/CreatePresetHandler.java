@@ -7,6 +7,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPresetFactory;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.MJPEGFrameResizer;
@@ -15,6 +16,10 @@ import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -24,10 +29,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -123,6 +124,7 @@ public class CreatePresetHandler extends RequestHandler {
 
     return new IPCameraPresetFactory().createPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
             autofocus, panspeed, tiltspeed, autoiris, cameraId, tagList);
+  }
 
   /**
    * Creates an image for a preset.
@@ -139,14 +141,14 @@ public class CreatePresetHandler extends RequestHandler {
                                             getStreamController().getStreamReader(cameraID);
     File path = new File("static" + File.separator + "presets" + File.separator
         + cameraID + "_" + presetID + ".jpg");
-    
+
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
     snapShot = resizer.resize(snapShot);
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
     ImageIO.write(bufferedImage, "jpg", path);
-    
+
     Preset preset = getPresetController().getPresetById(presetID);
 
     preset.setImage(cameraID + "_" + presetID + ".jpg");

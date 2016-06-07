@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class AddTagHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException{
+  public void initialize() throws IOException, JSONException {
     super.initialize();
   }
 

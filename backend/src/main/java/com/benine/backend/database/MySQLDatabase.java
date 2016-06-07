@@ -1,14 +1,13 @@
 package com.benine.backend.database;
 
-import com.benine.backend.*;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.IPCameraPresetFactory;
 import com.benine.backend.preset.Preset;
-
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -426,8 +425,8 @@ public class MySQLDatabase implements Database {
    */
   public IPCameraPreset getIPCameraPresetFromResultSet(ResultSet resultset) {
     try {
-      Position pos = new Position(resultset.getInt("pan"), resultset.getInt("tilt"));
-      int zoom = resultset.getInt("zoom");
+      ZoomPosition pos = new ZoomPosition(resultset.getInt("pan"),
+              resultset.getInt("tilt"), resultset.getInt("zoom"));
       int focus = resultset.getInt("focus");
       int iris = resultset.getInt("iris");
       boolean autoFocus = resultset.getInt("autofocus") == 1;
@@ -436,9 +435,11 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("camera_ID");
-      PresetFactory factory = new PresetFactory();
-      return factory.createPreset(pos, zoom, focus, iris, autoFocus, panspeed, tiltspeed,
-          autoIris, id, resultset.getString("image"));
+      IPCameraPresetFactory factory = new IPCameraPresetFactory();
+      IPCameraPreset preset = factory.createPreset(pos, focus, iris, autoFocus, panspeed, tiltspeed,
+          autoIris, id);
+      preset.setImage(resultset.getString("image"));
+      return preset;
     } catch (Exception e) {
       logger.log("IPCamerapresets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;

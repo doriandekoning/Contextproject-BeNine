@@ -1,11 +1,8 @@
 package com.benine.backend.camera.ipcameracontrol;
 
-<<<<<<< HEAD
 import com.benine.backend.camera.CameraBusyException;
-=======
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
->>>>>>> develop
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.CameraController;
 

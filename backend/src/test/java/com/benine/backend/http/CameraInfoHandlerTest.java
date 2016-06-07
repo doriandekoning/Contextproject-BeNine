@@ -8,6 +8,7 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.eclipse.jetty.server.Request;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException {
     super.initialize();
     caminfo = "testcaminfo";
 

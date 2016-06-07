@@ -1,8 +1,6 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.Preset;
-import com.benine.backend.PresetController;
 import com.benine.backend.PresetPyramidCreator;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
@@ -10,6 +8,8 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
 
@@ -25,7 +25,16 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AutoPresetCreationHandler extends RequestHandler  {
 
-  
+
+  /**
+   * Constructs a request handler.
+   *
+   * @param httpserver to interact with the rest of the system.
+   */
+  public AutoPresetCreationHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {

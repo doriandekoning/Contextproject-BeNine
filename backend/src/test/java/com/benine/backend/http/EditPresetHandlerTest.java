@@ -12,7 +12,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.preset.IPCameraPresetFactory;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +43,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
  
    
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException {
     super.initialize();
     
     when(cameraController.getCameraById(1)).thenReturn(ipcamera);
@@ -50,7 +53,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     streamReader = new MJPEGStreamReader(stream);
     tags = new HashSet<>(Arrays.asList("violin", "piano"));
 
-    preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags);
+    preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(0,0, 100), 33,50,true,15,1,true, 1, tags);
     preset.setId(1);
     when(presetController.getPresetById(1)).thenReturn(preset);
     try {
@@ -93,7 +96,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     parameters.add("tags", "test");
     setParameters(parameters);
     
-    IPCameraPreset preset2 = new IPCameraPreset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags);
+    IPCameraPreset preset2 = new IPCameraPresetFactory().createPreset(new ZoomPosition(0,0, 50), 33,50,true,15,1,true, 1, tags);
     when(ipcamera.createPreset(tags)).thenReturn(preset2);
         
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
