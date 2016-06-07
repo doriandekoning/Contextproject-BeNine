@@ -202,7 +202,7 @@ input[type=range]:focus {
 }
 
 #top_area.live-view{
-    height: 150px;
+    height: 175px;
     overflow: hidden;
 }
 
@@ -435,7 +435,7 @@ input[type=range]:focus {
     font-size: 50px;
     text-align: center;
     position: absolute;
-    padding-top: 40px;
+    padding-top: 50px;
     top: 0;
     left: 0;
     right: 0;
@@ -503,3 +503,6 @@ input[type=range]:focus {
     border-top: 1px solid #666666;
 }
 
+#queue_area {
+    overflow: scroll;
+}
