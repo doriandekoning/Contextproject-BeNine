@@ -64,4 +64,13 @@ public class PresetQueue {
   private int getLastValue() {
     return lastValue;
   }
+
+  public int getId() {
+    return 0;
+  }
+
+  public Object toJSON() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
