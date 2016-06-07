@@ -225,7 +225,7 @@ input[type=range]:focus {
     background-color: #666666;
 }
 
-#control_area, .control_wrapper, #right_area .row {
+#control_area, #queue_area, .control_wrapper, #right_area .row {
     width: 100%;
     display: flex;
     flex: 1;
@@ -491,3 +491,17 @@ input[type=range]:focus {
     top: 4px;
     text-align: center;
 }
+
+#queue_area thead {
+    background-color: #666666;
+    color: #999999;
+}
+#queue_area thead th, #queue_area thead td {
+    border-bottom: 2px solid #666666;
+
+}
+
+#queue_area tbody th, #queue_area tbody td {
+    border-top: 1px solid #666666;
+}
+
