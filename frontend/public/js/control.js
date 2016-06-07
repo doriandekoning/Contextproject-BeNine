@@ -78,7 +78,7 @@ function sendMove(){
 *	Method to auto create presets.
 */
 function autoCreatePresets() {
-	$.get("/api/backend/presets/autocreatepresets?camera=" + currentcamera);
+	
 }
 
 /* Variable used for the zoom slider */
