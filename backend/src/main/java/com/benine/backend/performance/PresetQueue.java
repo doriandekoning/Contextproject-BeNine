@@ -10,6 +10,7 @@ public class PresetQueue {
   
   private int lastValue = 0;
   private LinkedHashMap<Integer,Preset> queue = new LinkedHashMap<Integer,Preset>();
+  private int id = -1;
   
   /**
    * Returns the presetQueue.
@@ -67,6 +68,10 @@ public class PresetQueue {
 
   public int getId() {
     return 0;
+  }
+  
+  public void setId(int id) {
+    this.id = id;
   }
 
   public Object toJSON() {

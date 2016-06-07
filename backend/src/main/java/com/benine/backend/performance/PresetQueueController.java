@@ -35,10 +35,28 @@ public class PresetQueueController {
    * @param presetQueue to add to this controller.
    */
   public void addPresetQueue(PresetQueue presetQueue) {
-    //presetQeueu.setId(highestIdInUse);
+    presetQueue.setId(highestIdInUse);
     highestIdInUse++;
     presetQueues.add(presetQueue);
-    logger.log("Added a new presetQueu with id: " + (highestIdInUse - 1), LogEvent.Type.INFO);
+    logger.log("Added a new presetQueue with id: " + (highestIdInUse - 1), LogEvent.Type.INFO);
+  }
+  
+  /**
+   * removes the preset Queue from the list.
+   * @param presetQueue the presetQeueu to remove.
+   */
+  public void removePresetQueue(PresetQueue presetQueue) {
+    presetQueues.remove(presetQueue);
+  }
+  
+  /**
+   * Updates a presetQueue in the list.
+   * @param presetQueue the presetqueue to update.
+   */
+  public void updatePresetQueue(PresetQueue presetQueue) {
+    PresetQueue old = getPresetQueueById(presetQueue.getId());
+    presetQueues.remove(old);
+    presetQueues.add(presetQueue);
   }
   
   /**
