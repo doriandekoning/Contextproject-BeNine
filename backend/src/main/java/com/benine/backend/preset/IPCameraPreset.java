@@ -226,6 +226,13 @@ public class IPCameraPreset extends Preset {
     if (tiltspeed != other.tiltspeed) {
       return false;
     }
+    if (tags == null) {
+      if(other.getTags() == null ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     if (!tags.equals(other.getTags())) {
       return false;
     }
@@ -237,4 +244,17 @@ public class IPCameraPreset extends Preset {
     return "DELETE FROM presets WHERE ID = " + getId();
   }
 
+  @Override
+  public String toString() {
+    return "IPCameraPreset{" +
+            "position=" + position +
+            ", zoom=" + zoom +
+            ", focus=" + focus +
+            ", iris=" + iris +
+            ", autofocus=" + autofocus +
+            ", panspeed=" + panspeed +
+            ", tiltspeed=" + tiltspeed +
+            ", autoiris=" + autoiris +
+            '}';
+  }
 }

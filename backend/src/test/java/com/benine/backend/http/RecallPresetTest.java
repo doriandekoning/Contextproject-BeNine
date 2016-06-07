@@ -56,6 +56,7 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
 
       preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(0,0, 100), 33,50,true,15,1,true, 0);
+      preset.setCameraId(1);
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | StreamNotAvailableException e) {
       e.printStackTrace();
