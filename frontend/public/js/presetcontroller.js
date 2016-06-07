@@ -27,16 +27,14 @@ function loadPresets() {
 
 /**
 * Checks if the preset already exists if true the preset is updated otherwise it is added.
-* @param preset array with the presets to add.
+* @param object array with the presets to add.
 */
-function checkPreset(preset) {
-	var exists = findPresetOnID(preset.id);
+function checkPreset(object) {
+	var exists = findPresetOnID(object.id);
 	if (exists === undefined) {
-		presets.push(new Preset(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,
-			preset.panspeed, preset.tiltspeed, preset.autoiris, preset.image, preset.id, preset.tags, preset.cameraid));
+		presets.push(new Preset(object));
 	} else {
-		exists.update(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,preset.panspeed, 
-																			preset.tiltspeed, preset.autoiris, preset.tags);
+		exists.update(object);
 	}
 }
 
@@ -231,8 +229,7 @@ function editPreset() {
 	//TODO should be the new values from the edit window
 	// And the new preset values should be send to the backend.
 	var tags = edit_tags_input.val();
-	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
-		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
+	editingpreset.tags = tags;
 }
 
 /**

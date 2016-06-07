@@ -1,21 +1,22 @@
 /**
 * Preset object to store all information the client has about a preset.
+* @param object is the json object send by the backend.
 */
-function Preset(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, image, id, tags, cameraid) {
-	this.pan = pan;
-	this.tilt = tilt;
-	this.zoom = zoom;
-	this.focus = focus;
-	this.iris = iris;
-	this.autofocus = autofocus;
-	this.panspeed = panspeed;
-	this.tiltspeed = tiltspeed;
-	this.autoIris = autoiris;
-	this.image = image;
-	this.id = id;
-	this.img = $('<img src="/api/backend' + image + '" >');
-	this.tags = tags;
-	this.cameraid = cameraid;
+function Preset(object) {
+	this.pan = object.pan;
+	this.tilt = object.tilt;
+	this.zoom = object.zoom;
+	this.focus = object.focus;
+	this.iris = object.iris;
+	this.autofocus = object.autofocus;
+	this.panspeed = object.panspeed;
+	this.tiltspeed = object.tiltspeed;
+	this.autoIris = object.autoiris;
+	this.image = object.image;
+	this.id = object.id;
+	this.img = $('<img src="/api/backend' + this.image + '" >');
+	this.tags = object.tags;
+	this.cameraid = object.cameraid;
 }
 
 Preset.prototype = {
@@ -25,6 +26,7 @@ Preset.prototype = {
 	loadEdit: function() {
 		loadPresetEditModal(this);
 	},
+	
 	/**
 	* Show this preset in the preset area.
 	*/
@@ -52,17 +54,18 @@ Preset.prototype = {
 	
 	/**
 	* Update this preset with these new values.
+	* @newpreset is the information this preset should contain.
 	*/
-	update: function(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, tags) {
-		this.pan = pan;
-		this.tilt = tilt;
-		this.zoom = zoom;
-		this.focus = focus;
-		this.iris = iris;
-		this.autofocus = autofocus;
-		this.panspeed = panspeed;
-		this.tiltspeed = tiltspeed;
-		this.autoIris = autoiris;
-		this.tags = tags;
+	update: function(newpreset) {
+		this.pan = newpreset.pan;
+		this.tilt = newpreset.tilt;
+		this.zoom = newpreset.zoom;
+		this.focus = newpreset.focus;
+		this.iris = newpreset.iris;
+		this.autofocus = newpreset.autofocus;
+		this.panspeed = newpreset.panspeed;
+		this.tiltspeed = newpreset.tiltspeed;
+		this.autoIris = newpreset.autoiris;
+		this.tags = newpreset.tags;
 	}
 };
