@@ -24,7 +24,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Before
   public void initialize() throws CameraConnectionException {
     when(cam.getPosition()).thenReturn(new Position(0, 180));
-    when(cam.getZoomPosition()).thenReturn(0);
+    when(cam.getZoom()).thenReturn(0);
   }
 
   @Test
@@ -32,7 +32,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
           throws CameraConnectionException {
     Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0).generatePositions(cam);
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
-    expectedPositions.add(new ZoomPosition(cam.getPosition(), cam.getZoomPosition()));
+    expectedPositions.add(new ZoomPosition(cam.getPosition(), cam.getZoom()));
 
     Assert.assertEquals(expectedPositions, actualPositons);
   }
@@ -44,10 +44,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 
@@ -58,10 +58,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
             180.0,
-            cam.getZoomPosition()));
+            cam.getZoom()));
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/4),
             180.0,
-            cam.getZoomPosition()));
+            cam.getZoom()));
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 
@@ -72,16 +72,16 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/4),
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX/4),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
-            cam.getZoomPosition()));
+            cam.getZoom()));
     Assert.assertTrue(expectedPositions.containsAll(actualPositons));
     Assert.assertTrue(actualPositons.containsAll(expectedPositions));
   }
@@ -94,39 +94,39 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()+(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt(),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
             cam.getPosition().getTilt(),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
             cam.getPosition().getTilt()+(IPCamera.VERTICAL_FOV_MAX*(1.0/3)),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan(),
             cam.getPosition().getTilt(),
-            cam.getZoomPosition()));
+            cam.getZoom()));
 
     Assert.assertTrue(expectedPositions.containsAll(actualPositons));
     Assert.assertTrue(actualPositons.containsAll(expectedPositions));

@@ -44,7 +44,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
     for (int level = 0; level < levels; level++ ) {
-      int zoomlevel = (IPCamera.MAX_ZOOM - cam.getZoomPosition()) * (level / levels);
+      int zoomlevel = (IPCamera.MAX_ZOOM - cam.getZoom()) * (level / levels);
       Collection<Position> positionsInLayer =
               generatePositionsLayer(new ZoomPosition(cam.getPosition(), zoomlevel));
       positionsInLayer.forEach( p -> positions.add(new ZoomPosition(p, zoomlevel)));

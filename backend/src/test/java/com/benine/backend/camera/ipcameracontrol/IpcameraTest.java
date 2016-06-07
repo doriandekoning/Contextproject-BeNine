@@ -255,7 +255,7 @@ public class IpcameraTest {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
+    doReturn(30).when(cam).getZoom();
 
     cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 300);
   }
@@ -265,7 +265,7 @@ public class IpcameraTest {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
+    doReturn(30).when(cam).getZoom();
 
     cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
   }
@@ -275,7 +275,7 @@ public class IpcameraTest {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
+    doReturn(30).when(cam).getZoom();
 
     cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 0), 1);
   }
@@ -285,7 +285,7 @@ public class IpcameraTest {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(2, -1)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
+    doReturn(30).when(cam).getZoom();
 
     cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
   }
@@ -296,7 +296,7 @@ public class IpcameraTest {
           throws CameraConnectionException, InterruptedException, TimeoutException {
     IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(0, 10, 30).when(cam).getZoomPosition();
+    doReturn(0, 10, 30).when(cam).getZoom();
 
     cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 700);
   }

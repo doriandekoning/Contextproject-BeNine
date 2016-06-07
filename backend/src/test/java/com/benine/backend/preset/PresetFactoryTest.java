@@ -74,7 +74,7 @@ public class PresetFactoryTest {
     IPCamera cam = mock(IPCamera.class);
     when(cam.getPosition()).thenReturn(pos);
     when(cam.getId()).thenReturn(cameraId);
-    when(cam.getZoomPosition()).thenReturn(zoom);
+    when(cam.getZoom()).thenReturn(zoom);
     when(cam.getFocusPosition()).thenReturn(focus);
     when(cam.getIrisPosition()).thenReturn(iris);
     when(cam.isAutoFocusOn()).thenReturn(autofocus);

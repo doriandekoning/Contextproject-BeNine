@@ -5,7 +5,6 @@ import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 
 import com.benine.backend.video.*;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -14,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
 
 
 /**
@@ -69,7 +67,7 @@ public class IPCameraPreset extends Preset {
   public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
           throws CameraConnectionException, IOException, StreamNotAvailableException {
     super(cam.getId());
-    this.position = cam.getPosition();
+    this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();
     this.iris = cam.getIrisPosition();
     this.autofocus = cam.isAutoFocusOn();

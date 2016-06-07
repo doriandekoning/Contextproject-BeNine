@@ -111,7 +111,7 @@ public class CreatePresetHandler extends RequestHandler {
    */
   private Preset createPreset(IPCamera camera, List<String> tagList)
           throws CameraConnectionException {
-    int zoom = camera.getZoomPosition();
+    int zoom = camera.getZoom();
     double pan = camera.getPosition().getPan();
     double tilt = camera.getPosition().getTilt();
     int focus = camera.getFocusPosition();

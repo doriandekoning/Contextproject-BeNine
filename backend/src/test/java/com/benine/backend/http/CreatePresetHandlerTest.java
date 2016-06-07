@@ -60,7 +60,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getFocusPosition()).thenReturn(33);
       when(ipcamera.getIrisPosition()).thenReturn(50);
       when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
-      when(ipcamera.getZoomPosition()).thenReturn(100);
+      when(ipcamera.getZoom()).thenReturn(100);
       when(ipcamera.isAutoFocusOn()).thenReturn(true);
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);

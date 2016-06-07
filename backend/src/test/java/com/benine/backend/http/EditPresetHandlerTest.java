@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
@@ -84,7 +83,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
   
   @Test
   public void testUpdatePosition() throws Exception{
-    when(ipcamera.getZoomPosition()).thenReturn(50);
+    when(ipcamera.getZoom()).thenReturn(50);
     
     setPath("/presets/edit");
 

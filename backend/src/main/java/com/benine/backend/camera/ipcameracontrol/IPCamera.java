@@ -5,7 +5,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.IPCameraPresetFactory;
 import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
@@ -339,7 +338,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return the current zoom position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getZoomPosition() throws CameraConnectionException {
+  public int getZoom() throws CameraConnectionException {
     String response = getValue("%23GZ", "gz");
     return Integer.valueOf(response, 16) - 1365;
   }
@@ -587,7 +586,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   @Override
   public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
-    int zoom = getZoomPosition();
+    int zoom = getZoom();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();
     int focus = getFocusPosition();
@@ -597,7 +596,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    return new IPCameraPresetFactory().createPreset(new ZoomPosition(pan, tilt, zoom), focus, iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId, tagList);
+    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris, autofocus, panspeed,
+            tiltspeed, autoiris, cameraId);
   }
 }

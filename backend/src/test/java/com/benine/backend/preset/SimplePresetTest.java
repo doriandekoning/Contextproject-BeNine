@@ -51,7 +51,6 @@ public class SimplePresetTest extends PresetTest {
 
   @Override
   public Preset getPreset() {
-    SimplePresetFactory factory = new SimplePresetFactory();
-    return factory.create();
+    return new SimplePreset(3);
   }
 }

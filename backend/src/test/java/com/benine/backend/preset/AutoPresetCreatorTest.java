@@ -5,7 +5,6 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public abstract class AutoPresetCreatorTest {
     //camera = spy(new IPCamera("test"));
     camera = mock(IPCamera.class);
     doReturn(new ZoomPosition(4, 4, 0)).when(camera).getPosition();
-    doReturn(IPCamera.MAX_ZOOM).when(camera).getZoomPosition();
+    doReturn(IPCamera.MAX_ZOOM).when(camera).getZoom();
     //doNothing().when(camera).moveTo(Matchers.any(), Matchers.any(), Matchers.any());
     apc = spy(getCreator());
     doReturn(new ArrayList<ZoomPosition>()).when(apc).generatePositions(any(IPCamera.class));
