@@ -402,3 +402,92 @@ input[type=range]:focus {
     height: 280px;
     overflow: auto;
 }
+
+#select-module {
+    height: 100%;
+}
+
+#select-left, #select-right {
+    height: 100%;
+    background-color: #999999;
+}
+
+#select-module .col-xs-9 {
+    padding: 0;
+    margin: 0;
+}
+
+#select-current {
+    height: 100%;
+    background-color: #5cb85c;
+    margin: 0;
+    padding: 0;
+}
+
+#select-left::before {
+    font-family: "Glyphicons Halflings";
+    content:"\e069";
+    color: #666666;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    padding-top: 40px;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#select-right::before {
+    font-family: "Glyphicons Halflings";
+    content:"\e077";
+    display: block;
+    font-size: 50px;
+    color: #666666;
+    text-align: center;
+    position: absolute;
+    padding-top: 40px;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#select-upnext {
+    height: 100%;
+    background-color: #f0ad4e;
+    margin: 0;
+    padding: 0;
+}
+
+#select-upnext h4, #select-current h4 {
+    color: white;
+    font-weight: bold;
+    opacity: 0.5;
+    font-size: 16px;
+
+    text-align: center;
+
+}
+
+#select-upnext .preset_title, #select-current .preset_title {
+    color: white;
+    display: block;
+    opacity: 0.5;
+    font-size: 14px;
+
+    text-align: center;
+}
+
+#select-upnext .preset_camera, #select-current .preset_camera {
+    color: white;
+    display: block;
+    opacity: 0.5;
+    font-size: 25px;
+
+    margin-top: 50px;
+    text-align: center;
+}
+
+#select-upnext .preset_camera .glyphicon, #select-current .preset_camera .glyphicon {
+    top: 4px;
+    text-align: center;
+}
