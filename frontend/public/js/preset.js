@@ -1,22 +1,22 @@
 /**
 * Preset object to store all information the client has about a preset.
-* @param object is the json object send by the backend.
+* @param newPreset is the json object send by the backend.
 */
-function Preset(object) {
-	this.pan = object.pan;
-	this.tilt = object.tilt;
-	this.zoom = object.zoom;
-	this.focus = object.focus;
-	this.iris = object.iris;
-	this.autofocus = object.autofocus;
-	this.panspeed = object.panspeed;
-	this.tiltspeed = object.tiltspeed;
-	this.autoIris = object.autoiris;
-	this.image = object.image;
-	this.id = object.id;
+function Preset(newPreset) {
+	this.pan = newPreset.pan;
+	this.tilt = newPreset.tilt;
+	this.zoom = newPreset.zoom;
+	this.focus = newPreset.focus;
+	this.iris = newPreset.iris;
+	this.autofocus = newPreset.autofocus;
+	this.panspeed = newPreset.panspeed;
+	this.tiltspeed = newPreset.tiltspeed;
+	this.autoIris = newPreset.autoiris;
+	this.image = newPreset.image;
+	this.id = newPreset.id;
 	this.img = $('<img src="/api/backend' + this.image + '" >');
-	this.tags = object.tags;
-	this.cameraid = object.cameraid;
+	this.tags = newPreset.tags;
+	this.cameraid = newPreset.cameraid;
 }
 
 Preset.prototype = {

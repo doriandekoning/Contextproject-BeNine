@@ -383,7 +383,7 @@ function newTag(val) {
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
 	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
-		console.log("create tag respone: " + data);
+		console.log("create tag response: " + data);
 	}).done();
 }
 
