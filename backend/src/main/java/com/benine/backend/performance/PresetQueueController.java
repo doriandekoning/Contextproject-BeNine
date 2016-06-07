@@ -3,12 +3,11 @@ package com.benine.backend.performance;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
-
-import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -20,7 +19,7 @@ public class PresetQueueController {
   
   private Logger logger;
   
-  private int highestIdInUse = 1;
+  private static volatile int highestIdInUse = 1;
   
   /**
    * Constructs a Preset Queue controller.
@@ -35,10 +34,35 @@ public class PresetQueueController {
    * @param presetQueue to add to this controller.
    */
   public void addPresetQueue(PresetQueue presetQueue) {
-    presetQueue.setId(highestIdInUse);
-    highestIdInUse++;
+    presetQueue = addPresetQueueID(presetQueue);
     presetQueues.add(presetQueue);
-    logger.log("Added a new presetQueue with id: " + (highestIdInUse - 1), LogEvent.Type.INFO);
+    logger.log("Added a new presetQueue with id: " + presetQueue.getId(), LogEvent.Type.INFO);
+  }
+  
+  /**
+   * Adds a list of presetQueues to this controller.
+   * @param presetQueues list of presetQueues.
+   */
+  public void addPresetQueues(ArrayList<PresetQueue> presetQueues) {
+    for (PresetQueue p : presetQueues) {
+      addPresetQueue(p);
+    }
+  }
+  
+  /**
+   * Adds the right id to this presetqueue.
+   * @param presetQueue to add the id to.
+   * @return Presetqueue with right ID.
+   */
+  private static PresetQueue addPresetQueueID(PresetQueue presetQueue) {
+    if (presetQueue.getId() == -1) {
+      presetQueue.setId(PresetQueueController.highestIdInUse);
+      PresetQueueController.highestIdInUse++;
+    } else {
+      PresetQueueController.highestIdInUse = 
+              Math.max(PresetQueueController.highestIdInUse - 1, presetQueue.getId()) + 1;
+    }
+    return presetQueue;
   }
   
   /**

@@ -41,12 +41,32 @@ public class PresetQueueControllerTest {
   }
   
   @Test
+  public void testAddPresetQueues() {  
+    ArrayList<PresetQueue> expected = new ArrayList<PresetQueue>();
+    expected.add(presetQueue1);
+    expected.add(presetQueue3);
+    presetQueueController.addPresetQueues(expected);
+    Assert.assertEquals(expected, presetQueueController.getPresetQueues());
+  }
+  
+  @Test
   public void testRemovePresetQueue() {  
     presetQueueController.addPresetQueue(presetQueue1);
     presetQueueController.addPresetQueue(presetQueue3);
     ArrayList<PresetQueue> expected = new ArrayList<PresetQueue>();
     expected.add(presetQueue1);
     presetQueueController.removePresetQueue(presetQueue3);
+    Assert.assertEquals(expected, presetQueueController.getPresetQueues());
+  }
+  
+  @Test
+  public void testUpdatePresetQueue() {  
+    presetQueueController.addPresetQueue(presetQueue3);
+    PresetQueue updatedPresetQueue = mock(PresetQueue.class);
+    when(updatedPresetQueue .getId()).thenReturn(3);
+    presetQueueController.updatePresetQueue(updatedPresetQueue );
+    ArrayList<PresetQueue> expected = new ArrayList<PresetQueue>();
+    expected.add(updatedPresetQueue);
     Assert.assertEquals(expected, presetQueueController.getPresetQueues());
   }
   
@@ -62,6 +82,12 @@ public class PresetQueueControllerTest {
   public void testgetPresetQueueById() {
     presetQueueController.addPresetQueue(presetQueue3);
     Assert.assertEquals(presetQueue3, presetQueueController.getPresetQueueById(3));
+  }
+  
+  @Test
+  public void testgetPresetQueueByIdNonExcisting() {
+    presetQueueController.addPresetQueue(presetQueue3);
+    Assert.assertEquals(null, presetQueueController.getPresetQueueById(5));
   }
   
   @Test
