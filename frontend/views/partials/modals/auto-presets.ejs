@@ -26,13 +26,15 @@
                         </div>
                     </div>
                     <div class="col-xs-4">
-                        <img class="img-responsive img-thumbnail" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                      <canvas class="previewCanvas img-responsive">
+                        Your browser does not support the HTML5 canvas tag.
+                      </canvas>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="editPreset()" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+                <button type="button" class="btn btn-success" onclick="editPreset()" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span>Create presets</button>
             </div>
         </div>
     </div>
