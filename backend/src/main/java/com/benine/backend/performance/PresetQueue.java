@@ -5,16 +5,44 @@ import com.benine.backend.preset.Preset;
 import java.util.ArrayList;
 
 
-
-
 /**
  * Class that handles making a queue of presets.
  * Created by Team BeNine.
  */
 public class PresetQueue {
   
-  private int lastValue = -1;
   private ArrayList<Preset> queue = new ArrayList<Preset>();
+  private String name;
+  private int ID;
+  
+  /**
+   * Constructor for the presetQueue with a name and ID.
+   * @param ID the ID of the queue.
+   * @param name the name of the queue.
+   * @param queue the queue to be used. 
+   */
+  public PresetQueue(int ID, String name, ArrayList<Preset> queue) {
+    this.ID = ID;
+    this.name = name;
+    this.queue = queue;
+    
+  }
+  
+  /**
+   * Getter for the ID of the queue.
+   * @return the id of the queue.
+   */
+  public int getID() {
+    return ID;
+  }
+  
+  /**
+   * Getter for the name of the queue.
+   * @return string with the name of the queue. 
+   */
+  public String getName() {
+    return name;
+  }
   
   /**
    * Returns the presetQueue.
@@ -30,7 +58,7 @@ public class PresetQueue {
    */
   public void deletePreset(int place) {
     queue.remove(place);
-    lastValue--;
+    
   }
    
   /**
@@ -48,7 +76,7 @@ public class PresetQueue {
    */
   public void addPresetEnd(Preset preset) {
     queue.add(preset);
-    lastValue++;
+   
   }
   
   /**
@@ -58,15 +86,14 @@ public class PresetQueue {
    */
   public void insertPreset(int place, Preset preset) {
     queue.add(place, preset);
-    lastValue++;
   }
 
   
   /**
    * Getter for the size of the queue.
-   * @return the last value in the arraylist.
+   * @return the last value in the ArrayList.
    */
   public int getSize() {
-    return lastValue;
+    return queue.size();
   }
 }
