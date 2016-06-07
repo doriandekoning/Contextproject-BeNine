@@ -424,9 +424,8 @@ input[type=range]:focus {
     padding: 0;
 }
 
-#select-left::before {
+#select-left::before, #select-right::before {
     font-family: "Glyphicons Halflings";
-    content:"\e069";
     color: #666666;
     font-size: 50px;
     text-align: center;
@@ -437,18 +436,12 @@ input[type=range]:focus {
     right: 0;
 }
 
+#select-left::before {
+    content:"\e069";
+}
+
 #select-right::before {
-    font-family: "Glyphicons Halflings";
     content:"\e077";
-    display: block;
-    font-size: 50px;
-    color: #666666;
-    text-align: center;
-    position: absolute;
-    padding-top: 40px;
-    top: 0;
-    left: 0;
-    right: 0;
 }
 
 #select-upnext {
@@ -458,7 +451,7 @@ input[type=range]:focus {
     padding: 0;
 }
 
-#select-upnext h4, #select-current h4 {
+#select-module h4 {
     color: white;
     font-weight: bold;
     opacity: 0.5;
@@ -468,7 +461,7 @@ input[type=range]:focus {
 
 }
 
-#select-upnext .preset_title, #select-current .preset_title {
+.preset_title {
     color: white;
     display: block;
     opacity: 0.5;
@@ -477,7 +470,7 @@ input[type=range]:focus {
     text-align: center;
 }
 
-#select-upnext .preset_camera, #select-current .preset_camera {
+.preset_camera {
     color: white;
     display: block;
     opacity: 0.5;
@@ -487,7 +480,7 @@ input[type=range]:focus {
     text-align: center;
 }
 
-#select-upnext .preset_camera .glyphicon, #select-current .preset_camera .glyphicon {
+.preset_camera .glyphicon {
     top: 4px;
     text-align: center;
 }
