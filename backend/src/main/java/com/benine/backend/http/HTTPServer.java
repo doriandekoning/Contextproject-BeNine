@@ -64,6 +64,9 @@ public class HTTPServer {
 
     ContextHandler presetContext = new ContextHandler("/presets");
     presetContext.setHandler(new PresetsHandler(this));
+    
+    ContextHandler presetQueueContext = new ContextHandler("/presetqueues");
+    presetQueueContext.setHandler(new PresetQueueHandler(this));
 
     ContextHandler fileserverContext = new ContextHandler("/static");
     ResourceHandler fileHandler = new ResourceHandler();
@@ -71,7 +74,8 @@ public class HTTPServer {
     fileserverContext.setHandler(fileHandler);
 
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] {cameraContext, presetContext, fileserverContext });
+    contexts.setHandlers(
+            new Handler[] {cameraContext, presetContext, presetQueueContext, fileserverContext });
 
     Handler logHandler = new LogHandler(this);
     HandlerList handlerList = new HandlerList();
