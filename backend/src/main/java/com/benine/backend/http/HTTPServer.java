@@ -6,6 +6,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.http.presetqueue.PresetQueueHandler;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 

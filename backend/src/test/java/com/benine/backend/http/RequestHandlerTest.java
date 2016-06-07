@@ -28,14 +28,14 @@ public abstract class RequestHandlerTest {
   private RequestHandler handler;
 
   PrintWriter out;
-  String target;
-  Request requestMock;
+  protected String target;
+  protected Request requestMock;
   CameraController cameraController = mock(CameraController.class);
   StreamController streamController = mock(StreamController.class);
   PresetController presetController = mock(PresetController.class);
-  HttpServletResponse httpresponseMock;
-  HttpServletRequest httprequestMock;
-  HTTPServer httpserver = mock(HTTPServer.class);
+  protected HttpServletResponse httpresponseMock;
+  protected HttpServletRequest httprequestMock;
+  protected HTTPServer httpserver = mock(HTTPServer.class);
 
 
   public abstract RequestHandler supplyHandler();
