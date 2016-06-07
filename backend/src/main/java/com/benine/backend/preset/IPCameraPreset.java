@@ -36,7 +36,7 @@ public class IPCameraPreset extends Preset {
 
   @Override
   public JSONObject toJSON() {
-    JSONObject json = new JSONObject();
+    JSONObject json = super.toJSON();
 
     json.put("pan", position.getPan());
     json.put("tilt", position.getTilt());
@@ -47,15 +47,6 @@ public class IPCameraPreset extends Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
-    json.put("id", getId());
-    json.put("cameraid", getCameraId());
-    json.put("image", getImage());
-    JSONArray tagsJSON = new JSONArray();
-    for (String tag : tags) {
-      tagsJSON.add(tag);
-    }
-    json.put("tags", tagsJSON);
-
     return json;
   }
   
@@ -197,7 +188,7 @@ public class IPCameraPreset extends Preset {
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof IPCameraPreset)) {
       return false;
     }
     IPCameraPreset other = (IPCameraPreset) obj;
@@ -226,17 +217,12 @@ public class IPCameraPreset extends Preset {
     if (tiltspeed != other.tiltspeed) {
       return false;
     }
-    if (tags == null) {
-      if(other.getTags() == null ) {
-        return true;
-      } else {
+    if (tags == null && other.getTags() != null) {
         return false;
-      }
-    }
-    if (!tags.equals(other.getTags())) {
+    } else if (!tags.equals(other.getTags())) {
       return false;
     }
-    return other.zoom==this.zoom;
+    return other.zoom == this.zoom;
   }
 
   @Override
