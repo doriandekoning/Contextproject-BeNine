@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.benine.backend.ServerController;
 
-public class SimplePresetTest {
+public class SimplePresetTest extends PresetTest {
   
   SimplePreset preset;
   
@@ -49,4 +49,9 @@ public class SimplePresetTest {
     Assert.assertEquals("INSERT INTO presetsdatabase.simplepresets VALUES(1,'test',1)", preset.createAddSqlQuery());
   }
 
+  @Override
+  public Preset getPreset() {
+    SimplePresetFactory factory = new SimplePresetFactory();
+    return factory.create();
+  }
 }
