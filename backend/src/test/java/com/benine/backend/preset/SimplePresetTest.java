@@ -46,7 +46,7 @@ public class SimplePresetTest {
   
   @Test
   public void testGetSQLQuery(){
-    Assert.assertEquals("INSERT INTO presetsdatabase.simplepresets VALUES(1,'test',1)", preset.createAddSqlQuery());
+    Assert.assertEquals("INSERT INTO presetsdatabase.simplepreset VALUES(1,'test',1)", preset.createAddSqlQuery());
   }
 
 }

@@ -173,7 +173,7 @@ public class IPCameraPreset extends Preset {
     if (isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + getId() + ","
+    return "INSERT INTO presetsdatabase.IPpreset VALUES(" + getId() + ","
         + getPosition().getPan() + "," + getPosition().getTilt()
         + "," + getZoom() + "," + getFocus()
         + "," + getIris() + "," + auto + "," + getPanspeed() + ","
@@ -263,7 +263,7 @@ public class IPCameraPreset extends Preset {
 
   @Override
   public String createDeleteSQL() {
-    return "DELETE FROM presets WHERE ID = " + getId();
+    return "DELETE FROM IPpreset WHERE ID = " + getId();
   }
 
 }

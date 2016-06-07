@@ -51,7 +51,7 @@ public class IPCameraPresetTest {
   
   @Test
   public void testCreateSQL() throws CameraConnectionException {
-    Assert.assertEquals("INSERT INTO presetsdatabase.presets VALUES(-1,10.0,12.0,13,40,56,1,1,2,0,'null',0)", preset.createAddSqlQuery());
+    Assert.assertEquals("INSERT INTO presetsdatabase.IPpreset VALUES(-1,10.0,12.0,13,40,56,1,1,2,0,'null',0)", preset.createAddSqlQuery());
   }
 
   @Test
