@@ -20,7 +20,6 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -478,7 +477,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
 
     @Test
     public final void testAddPresetsList() throws SQLException {
-        LinkedList<Preset> presets = new LinkedList<Preset>();
+        ArrayList<Preset> presets = new ArrayList<Preset>();
         Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
         presets.add(preset);
         database.resetDatabase();

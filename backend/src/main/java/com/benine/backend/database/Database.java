@@ -173,7 +173,7 @@ public interface Database {
    * @param queueID The ID of the concert to get the presets from
    * @return The list of presets
    */
-  LinkedList<Preset> getPresetsList(int queueID);
+  ArrayList<Preset> getPresetsList(int queueID);
 
   /**
    * Adds a list of presets to an existing queue.
@@ -181,7 +181,7 @@ public interface Database {
    * @param presets The list which needs to be added
    * @param queueID The id of the queue
    */
-  void addPresetsList(LinkedList<Preset> presets, int queueID);
+  void addPresetsList(ArrayList<Preset> presets, int queueID);
 
   /**
    * Deletes a list of presets of an existing queue.
