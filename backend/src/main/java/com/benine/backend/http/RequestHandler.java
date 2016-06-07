@@ -1,9 +1,12 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.preset.PresetController;
+import com.benine.backend.video.StreamController;
+
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -15,13 +18,27 @@ import javax.servlet.http.HttpServletResponse;
  * Created on 20-05-16.
  */
 public abstract class RequestHandler extends AbstractHandler {
-
+  
+  private CameraController cameraController;
+  
+  private PresetController presetController;
+  
+  private StreamController streamController;
+  
+  private Logger logger;
+  
+  private Config config;
+  
   /**
-   * Returns cameracontroller
-   * @return cameracontroller interacting with.
+   * Constructs a request handler.
+   * @param httpserver to interact with the rest of the system.
    */
-  protected CameraController getCameraController() {
-    return ServerController.getInstance().getCameraController();
+  public RequestHandler(HTTPServer httpserver) {
+    this.cameraController = httpserver.getCameraController();
+    this.presetController = httpserver.getPresetController();
+    this.streamController = httpserver.getStreamController();
+    this.logger = httpserver.getLogger();
+    this.config = httpserver.getConfig();
   }
 
   /**
@@ -65,10 +82,42 @@ public abstract class RequestHandler extends AbstractHandler {
   }
 
   /**
-   * Returns the logger.
-   * @return A Logger object.
+   * Returns the ServerController logger.
+   * @return  A Logger object.
    */
   protected Logger getLogger() {
-    return ServerController.getInstance().getLogger();
+    return logger;
+  }
+
+  /**
+   * Returns the cameraController
+   * @return A camera controller object.
+   */
+  protected CameraController getCameraController() {
+    return cameraController;
+  }
+  
+  /**
+   * Returns the streamController to get the stream
+   * @return stream Controller.
+   */
+  protected StreamController getStreamController() {
+    return streamController;
+  }
+
+  /**
+   * Returns the presetController.
+   * @return presetController to change the presets
+   */
+  protected PresetController getPresetController() {
+    return presetController;
+  }
+  
+  /**
+   * Returns the config.
+   * @return config object.
+   */
+  protected Config getConfig() {
+    return config;
   }
 }

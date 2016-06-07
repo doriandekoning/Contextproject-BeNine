@@ -18,8 +18,6 @@ import org.junit.Test;
 
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
@@ -40,7 +38,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new CreatePresetHandler();
+    return new CreatePresetHandler(httpserver);
   }
 
   @Before
@@ -48,8 +46,8 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     simpleCamera = mock(SimpleCamera.class);
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
-    when(cameracontroller.getCameraById(2)).thenReturn(simpleCamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(2)).thenReturn(simpleCamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
@@ -85,9 +83,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
     setParameters(parameters);
-    PresetController presetController = mock(PresetController.class);
     when(presetController.getPresetById(0)).thenReturn(preset);
-    ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(requestMock).setHandled(true);
@@ -100,9 +96,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "2");
     setParameters(parameters);
-    PresetController presetController = mock(PresetController.class);
     when(presetController.getPresetById(0)).thenReturn(preset);
-    ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(requestMock).setHandled(true);

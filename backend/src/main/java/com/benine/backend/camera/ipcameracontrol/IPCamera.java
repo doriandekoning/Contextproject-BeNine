@@ -3,9 +3,9 @@ package com.benine.backend.camera.ipcameracontrol;
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.BasicCamera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
@@ -41,15 +41,18 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private Map<String, String> attributes = new HashMap<>();
   private Map<String, Long> timeStamps = new HashMap<>();
   private Logger logger;
+  private Config config;
 
   /**
    *  Create a new IP Camera object.
    *  @param ip address of this camera.
+   *  @param cameraController that controls this camera.
    */
-  public IPCamera(String ip) {
+  public IPCamera(String ip, CameraController cameraController) {
     super(StreamType.MJPEG);
     ipaddress = ip;
-    logger = ServerController.getInstance().getLogger();
+    logger = cameraController.getLogger();
+    config = cameraController.getConfig();
   }
   
   /**
@@ -112,7 +115,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private String getValue(String command, String verifyResponse)
                                                       throws IpcameraConnectionException {
     Date date = new Date();
-    Config config = ServerController.getInstance().getConfig();
     int timeout = Integer.parseInt(config.getValue("IPCameraTimeOut"));
     if (timeStamps.get(command) == null || date.getTime() - timeStamps.get(command) > timeout) {
       String res = sendControlCommand(command);

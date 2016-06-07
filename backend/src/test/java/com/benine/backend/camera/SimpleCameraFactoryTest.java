@@ -1,40 +1,47 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.Config;
+import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SimpleCameraFactoryTest {
   
   ServerController serverController;
+  private CameraController cameraController = mock(CameraController.class);
+  private Config config = mock(Config.class);
+  private Logger logger = mock(Logger.class);
+  SimpleCameraFactory factory;
   
   @Before
   public void setUp() {
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
-    serverController = ServerController.getInstance();
+    when(config.getValue("camera_2_type")).thenReturn("simpleCamera");
+    when(config.getValue("camera_2_address")).thenReturn("test");
+    when(config.getValue("camera_2_macaddress")).thenReturn("test");
+    when(config.getValue("camera_3_type")).thenReturn("ipcamera");
+    when(cameraController.getConfig()).thenReturn(config);
+    when(cameraController.getLogger()).thenReturn(logger);
     
-    CameraController camController = new CameraController();
-    serverController.setCameraController(camController);
+    factory = new SimpleCameraFactory(cameraController);
   }
 
   
   @Test(expected=InvalidCameraTypeException.class)
   public void createCameraNoInfo() throws InvalidCameraTypeException {
-    SimpleCameraFactory factory = new SimpleCameraFactory();
     factory.createCamera(3);
   }
   
   @Test
   public void createCamera() throws InvalidCameraTypeException {
-    SimpleCameraFactory factory = new SimpleCameraFactory();
     Camera result = factory.createCamera(2);
     SimpleCamera camera = new SimpleCamera();
-    camera.setStreamLink("http://131.180.123.51/zm/cgi-bin/nph-zms?mode=jpeg&monitor=2&scale=50&buffer=100");
-    camera.setMacAddress("simplecamera3");
+    camera.setStreamLink("test");
+    camera.setMacAddress("test");
     assertEquals(camera, result);
   }
 

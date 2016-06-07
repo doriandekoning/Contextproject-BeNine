@@ -17,7 +17,7 @@ public class LogHandlerTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new LogHandler();
+    return new LogHandler(httpserver);
   }
 
   @Before
