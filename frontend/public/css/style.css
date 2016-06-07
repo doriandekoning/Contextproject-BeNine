@@ -1,5 +1,6 @@
 body {
     height: 100vh;
+    background-color: #333333;
 }
 
 
@@ -64,7 +65,10 @@ nav img {
 
 /* Flex body container, so the page allocates the remaining viewpoint automatically*/
 .body_container {
-    height: 100%;
+    height: calc(100% - 50px);
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     background-color: #999999;
@@ -193,6 +197,7 @@ input[type=range]:focus {
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
 	height: 28vw;
+    max-height: 300px;
 	overflow: hidden;
 }
 
@@ -314,7 +319,7 @@ input[type=range]:focus {
 }
 
 #preset_area {
-    background-color: #1A1A1A;
+    background-color: #333333;
     flex-direction: column;
     width: 100%;
     margin: 0;
