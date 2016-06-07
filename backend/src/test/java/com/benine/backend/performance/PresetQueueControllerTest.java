@@ -1,5 +1,6 @@
 package com.benine.backend.performance;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
@@ -7,6 +8,8 @@ import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.benine.backend.ServerController;
 
 import static org.mockito.Mockito.*;
 
@@ -18,6 +21,8 @@ public class PresetQueueControllerTest {
   
   @Before
   public void setup() {
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
     presetQueue1 = mock(PresetQueue.class);
     when(presetQueue1.getId()).thenReturn(-1);
     JSONObject json1 = new JSONObject();
