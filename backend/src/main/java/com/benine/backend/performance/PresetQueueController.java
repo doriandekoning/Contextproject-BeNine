@@ -36,7 +36,7 @@ public class PresetQueueController {
   public void addPresetQueue(PresetQueue presetQueue) {
     presetQueue = addPresetQueueID(presetQueue);
     presetQueues.add(presetQueue);
-    logger.log("Added a new presetQueue with id: " + presetQueue.getId(), LogEvent.Type.INFO);
+    logger.log("Added a new presetQueue with id: " + presetQueue.getID(), LogEvent.Type.INFO);
   }
   
   /**
@@ -55,12 +55,12 @@ public class PresetQueueController {
    * @return Presetqueue with right ID.
    */
   private static PresetQueue addPresetQueueID(PresetQueue presetQueue) {
-    if (presetQueue.getId() == -1) {
-      presetQueue.setId(PresetQueueController.highestIdInUse);
+    if (presetQueue.getID() == -1) {
+      presetQueue.setID(PresetQueueController.highestIdInUse);
       PresetQueueController.highestIdInUse++;
     } else {
       PresetQueueController.highestIdInUse = 
-              Math.max(PresetQueueController.highestIdInUse - 1, presetQueue.getId()) + 1;
+              Math.max(PresetQueueController.highestIdInUse - 1, presetQueue.getID()) + 1;
     }
     return presetQueue;
   }
@@ -78,7 +78,7 @@ public class PresetQueueController {
    * @param presetQueue the presetqueue to update.
    */
   public void updatePresetQueue(PresetQueue presetQueue) {
-    PresetQueue old = getPresetQueueById(presetQueue.getId());
+    PresetQueue old = getPresetQueueById(presetQueue.getID());
     presetQueues.remove(old);
     presetQueues.add(presetQueue);
   }
@@ -104,7 +104,7 @@ public class PresetQueueController {
    */
   public PresetQueue getPresetQueueById(int id) {
     for (PresetQueue p : presetQueues) {
-      if (p.getId() == id) {
+      if (p.getID() == id) {
         return p;
       }
     }

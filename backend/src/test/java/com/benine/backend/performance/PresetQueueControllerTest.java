@@ -24,13 +24,13 @@ public class PresetQueueControllerTest {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
     ServerController.getInstance();
     presetQueue1 = mock(PresetQueue.class);
-    when(presetQueue1.getId()).thenReturn(-1);
+    when(presetQueue1.getID()).thenReturn(-1);
     JSONObject json1 = new JSONObject();
     json1.put("id", 1);
     json1.put("name", "testQueue");
     when(presetQueue1.toJSON()).thenReturn(json1);
     presetQueue3 = mock(PresetQueue.class);
-    when(presetQueue3.getId()).thenReturn(3);
+    when(presetQueue3.getID()).thenReturn(3);
     JSONObject json3 = new JSONObject();
     json3.put("id", 3);
     json3.put("name", "testQueue");
@@ -68,7 +68,7 @@ public class PresetQueueControllerTest {
   public void testUpdatePresetQueue() {  
     presetQueueController.addPresetQueue(presetQueue3);
     PresetQueue updatedPresetQueue = mock(PresetQueue.class);
-    when(updatedPresetQueue .getId()).thenReturn(3);
+    when(updatedPresetQueue .getID()).thenReturn(3);
     presetQueueController.updatePresetQueue(updatedPresetQueue );
     ArrayList<PresetQueue> expected = new ArrayList<PresetQueue>();
     expected.add(updatedPresetQueue);
