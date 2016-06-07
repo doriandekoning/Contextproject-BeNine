@@ -1,8 +1,8 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Config;
 import com.benine.backend.Logger;
-import com.benine.backend.PresetController;
-import com.benine.backend.ServerController;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
@@ -10,7 +10,6 @@ import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -23,38 +22,35 @@ import static org.mockito.Mockito.*;
  * Created on 4-5-16.
  */
 public abstract class RequestHandlerTest {
-
-  private ServerController serverController;
-  Logger logger;
+  
+  Logger logger = mock(Logger.class);
+  Config config = mock(Config.class);
   private RequestHandler handler;
 
   PrintWriter out;
   String target;
   Request requestMock;
-  CameraController cameracontroller;
-  StreamController streamController;
-  PresetController presetController;
+  CameraController cameraController = mock(CameraController.class);
+  StreamController streamController = mock(StreamController.class);
+  PresetController presetController = mock(PresetController.class);
   HttpServletResponse httpresponseMock;
   HttpServletRequest httprequestMock;
+  HTTPServer httpserver = mock(HTTPServer.class);
 
 
   public abstract RequestHandler supplyHandler();
 
   @Before
   public void initialize() throws IOException {
+    when(httpserver.getLogger()).thenReturn(logger);
+    when(config.getValue("stream_compression")).thenReturn("true");
+    when(httpserver.getConfig()).thenReturn(config);
+    when(httpserver.getCameraController()).thenReturn(cameraController);
+    when(httpserver.getPresetController()).thenReturn(presetController);
+    when(httpserver.getStreamController()).thenReturn(streamController);
+    
     handler = supplyHandler();
-    cameracontroller = mock(CameraController.class);
-    streamController = mock(StreamController.class);
-    presetController = mock(PresetController.class);
-    logger = mock(Logger.class);
-
-    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
-    serverController = ServerController.getInstance();
-    serverController.setLogger(logger);
-    serverController.setCameraController(cameracontroller);
-    serverController.setStreamController(streamController);
-    serverController.setPresetController(presetController);
-
+    
     out = mock(PrintWriter.class);
     target = "target";
 

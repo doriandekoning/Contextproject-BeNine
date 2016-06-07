@@ -1,7 +1,7 @@
 package com.benine.backend.camera;
 
 import com.benine.backend.ServerController;
-import com.benine.backend.database.Database;
+import com.benine.backend.database.MySQLDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,23 +21,20 @@ import static org.mockito.Mockito.when;
  */
 public class CameraControllerTest {
 
-  private final Database database = mock(Database.class);
   private CameraController controller;
-  private ServerController serverController;
 
   @Before
   public void setUp() {
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
-    serverController = ServerController.getInstance();
-    
-    serverController.setDatabase(database);
+    ServerController.getInstance();
+    ServerController.getInstance().getDatabaseController().setDatabase(mock(MySQLDatabase.class));
     controller = new CameraController();
   }
   
   @Test
   public void testLoadConfigCameras() {
     controller.loadConfigCameras();
-    assertTrue(controller.getCameras().size() == 1);
+    assertEquals(2, controller.getCameras().size());
   }
 
   @Test
@@ -65,20 +62,43 @@ public class CameraControllerTest {
   @Test
   public void testGetCamerasJSON() throws Exception {
     Camera cam1 = mock(SimpleCamera.class);
-    when(cam1.toJSON()).thenReturn("cam1JSON");
+    JSONObject ob1 = new JSONObject();
+    ob1.put("id", "cam1JSON");
+    when(cam1.toJSON()).thenReturn(ob1);
     controller.addCamera(cam1);
     Camera cam2 = mock(SimpleCamera.class);
-    when(cam2.toJSON()).thenReturn("cam2JSON");
+    JSONObject ob2 = new JSONObject();
+    ob2.put("id", "cam2JSON");
+    when(cam2.toJSON()).thenReturn(ob2);
     controller.addCamera(cam2);
 
     String actualJSON = controller.getCamerasJSON();
     JSONArray ar = new JSONArray();
-    ar.add("cam1JSON");
-    ar.add("cam2JSON");
+    ar.add(ob1);
+    ar.add(ob2);
     JSONObject obj = new JSONObject();
     obj.put("cameras", ar);
     String expectedJSON = obj.toString();
     Assert.assertEquals(actualJSON, expectedJSON);
+  }
+  
+  @Test
+  public void testGetCamerasJSONException() throws Exception {
+    Camera cam1 = mock(SimpleCamera.class);
+    when(cam1.toJSON()).thenThrow(new CameraConnectionException("camera test exception", -1));
+    when(cam1.getId()).thenReturn(1);
+    controller.addCamera(cam1);
+    
+    String actualJSON = controller.getCamerasJSON();
+    JSONArray ar = new JSONArray();
+    JSONObject jsonCamera = new JSONObject();
+    jsonCamera.put("unavailable", true);
+    jsonCamera.put("id", 1);
+    ar.add(jsonCamera);
+    JSONObject obj = new JSONObject();
+    obj.put("cameras", ar);
+    String expectedJSON = obj.toString();
+    Assert.assertEquals(expectedJSON, actualJSON);
   }
 
   @Test

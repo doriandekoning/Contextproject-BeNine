@@ -1,6 +1,11 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
+import com.benine.backend.Config;
+import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,7 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by dorian on 18-5-16.
+ * Created on 18-5-16.
  */
 public class PresetController {
   
@@ -17,6 +22,48 @@ public class PresetController {
   private ArrayList<Preset> presets = new ArrayList<Preset>();
 
   private HashSet<String> tags = new HashSet<>();
+  
+  private Database database;
+  
+  private Config config;
+  
+  /**
+   * Constructor of the presetController.
+   */
+  public PresetController() {
+    ServerController serverController = ServerController.getInstance();
+    database = serverController.getDatabaseController().getDatabase();
+    config = serverController.getConfig();
+  }
+  
+  /**
+   * Returns a json string of all the presets including available tags.
+   * @param tag the presets requested must contain.
+   * @return json string of all the presets.
+   */
+  public String getPresetsJSON(String tag) {
+    JSONObject jsonObject = new JSONObject();
+    String imagePath = config.getValue("imagepath");
+    ArrayList<Preset> resultPresets = getPresets();
+    if (tag == null) {
+      JSONArray tagsJSON = new JSONArray();
+      Collection<String> tags = getTags();
+      tags.forEach(t -> tagsJSON.add(t));
+      jsonObject.put("tags", tagsJSON);
+    } else {
+      resultPresets = getPresetsByTag(tag);
+    }
+
+    JSONArray presetsJSON = new JSONArray();
+    for (Preset p : resultPresets) {
+      JSONObject presetJson = p.toJSON();
+      presetJson.put("image", imagePath + presetJson.get("image"));
+      presetsJSON.add(presetJson);
+    }
+    jsonObject.put("presets", presetsJSON);
+    
+    return jsonObject.toString();
+  }
 
 
   /**
@@ -48,6 +95,7 @@ public class PresetController {
     return returnList;
   }
 
+
   /**
    * Removes a preset from this presetcontroller.
    * @param preset the preset to remove.
@@ -55,8 +103,7 @@ public class PresetController {
    */
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
-    Database db = ServerController.getInstance().getDatabase();
-    db.deletePreset(preset.getId());
+    database.deletePreset(preset);
   }
   
   /**
@@ -84,9 +131,21 @@ public class PresetController {
     preset = addPresetID(preset);
     presets.add(preset);
     addAllTags(preset.getTags());
-    ServerController serverContr = ServerController.getInstance();
-    serverContr.getDatabase().addPreset(preset);
+    database.addPreset(preset);
     return preset.getId();
+  }
+  
+  /**
+   * Updates a preset in preset list and database.
+   * @param preset the preset to update.
+   * @throws SQLException when an error occurs in the database.
+   */
+  public void updatePreset(Preset preset) throws SQLException {
+    Preset old = getPresetById(preset.getId());
+    presets.remove(old);
+    presets.add(preset);
+    addAllTags(preset.getTags());
+    database.updatePreset(preset);
   }
 
   /**
@@ -115,6 +174,7 @@ public class PresetController {
    */
   public void addTag(String tag) {
     tags.add(tag);
+    database.addTag(tag);
   }
 
   /**
@@ -122,6 +182,7 @@ public class PresetController {
    * @return a collection with all tags
    */
   public Collection<String> getTags() {
+    this.addAllTags(database.getTags());
     return tags;
   }
 
@@ -140,5 +201,7 @@ public class PresetController {
   public void removeTag(String tag) {
     tags.remove(tag);
     presets.forEach(p -> p.removeTag(tag));
+    presets.forEach(p -> database.deleteTagFromPreset(tag, p));
+    database.deleteTag(tag);
   }
 }

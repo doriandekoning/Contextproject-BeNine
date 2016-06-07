@@ -17,6 +17,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CameraFocusHandler extends CameraRequestHandler {
 
+  /**
+   * Constructs the cameraFocus handler.
+   * @param httpserver where this handler is for.
+   */
+  public CameraFocusHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {

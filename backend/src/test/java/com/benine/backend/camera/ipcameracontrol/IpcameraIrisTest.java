@@ -3,16 +3,18 @@ package com.benine.backend.camera.ipcameracontrol;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.benine.backend.camera.CameraBusyException;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.benine.backend.Config;
+import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 
 /**
  * Test class to test the IP Camera Iris functions class.
@@ -21,10 +23,16 @@ import com.benine.backend.camera.CameraConnectionException;
 public class IpcameraIrisTest {
 
   private IPCamera camera;
+  private CameraController cameraController = mock(CameraController.class);
+  private Config config = mock(Config.class);
+  private Logger logger = mock(Logger.class);
   
   @Before
   public final void setUp(){
-    camera = Mockito.spy(new IPCamera("test"));
+    when(config.getValue("IPCameraTimeOut")).thenReturn("2");
+    when(cameraController.getConfig()).thenReturn(config);
+    when(cameraController.getLogger()).thenReturn(logger);
+    camera = Mockito.spy(new IPCamera("test", cameraController));
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {

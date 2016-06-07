@@ -17,6 +17,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CameraIrisHandler extends CameraRequestHandler {
 
+  /**
+   * Constructs the camera iris handler for this server.
+   * @param httpserver this handler is created for.
+   */
+  public CameraIrisHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {

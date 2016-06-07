@@ -1,9 +1,9 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.video.MJPEGStreamReader;
+import com.benine.backend.video.ResizableStreamDistributer;
 import com.benine.backend.video.StreamDistributer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
@@ -21,16 +21,26 @@ import javax.servlet.http.HttpServletResponse;
  * Class responsible for handling the /camera/ route.
  */
 public class CameraStreamHandler extends CameraRequestHandler {
+  
+  /**
+   * Constructs the handler for the streams /camera/id/mjpeg.
+   * @param httpserver to construct this handler for.
+   */
+  public CameraStreamHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
 
     int camID = getCameraId(request);
+    String width = request.getParameter("width");
+    String height = request.getParameter("height");
 
     StreamReader streamReader = null;
     try {
-      streamReader = ServerController.getInstance().getStreamController().getStreamReader(camID);
+      streamReader = getStreamController().getStreamReader(camID);
     } catch (StreamNotAvailableException e) {
       getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
     }
@@ -38,7 +48,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
       MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
-      StreamDistributer distributer = new StreamDistributer(streamReaderMJPEG);
+      StreamDistributer distributer = selectDistributer(streamReader, width, height);
 
       // Set the headers
       setHeaders(streamReaderMJPEG, res);
@@ -51,6 +61,45 @@ public class CameraStreamHandler extends CameraRequestHandler {
     }
 
     request.setHandled(true);
+  }
+
+  /**
+   * Select a stream distributer based on if
+   *
+   * @param reader  The streamreader.
+   * @param width   The width of the image.
+   * @param height  The height of the image.
+   * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
+   */
+  private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
+    if (getConfig().getValue("stream_compression").equals("true")
+            && validateResizeArguments(width, height)) {
+
+      int w = Integer.parseInt(width);
+      int h = Integer.parseInt(height);
+
+      return new ResizableStreamDistributer(reader, w, h);
+    } else {
+      return new StreamDistributer(reader);
+    }
+
+  }
+
+  /**
+   * Validates the resize arguments.
+   * @param width   Width argument.
+   * @param height  Height argument.
+   * @return True if valid, false otherwise.
+   */
+  private boolean validateResizeArguments(String width, String height) {
+    try {
+      Integer.parseInt(width);
+      Integer.parseInt(height);
+
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 
   /**

@@ -1,28 +1,65 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Test;
-
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import org.json.JSONException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created on 3-5-16.
  */
-public class PresetTest {
+public class IPCameraPresetTest {
+  
+  IPCameraPreset preset;
+  
+  @Before
+  public void setup() {
+    Set<String> keywords = new HashSet<>();
+    keywords.add("foo");
+    preset = new IPCameraPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
+  }
+  
+  @Test
+  public void testExcecutePresetMoveTo() throws CameraConnectionException, CameraBusyException {
+    IPCamera camera = mock(IPCamera.class);
+    preset.excecutePreset(camera);
+    verify(camera).moveTo(new Position(10, 12), 1, 2);
+  }
+  
+  @Test(expected = CameraConnectionException.class)
+  public void testExcecutePresetException() throws CameraConnectionException {
+    SimpleCamera camera = mock(SimpleCamera.class);
+    preset.excecutePreset(camera);
+  }
+  
+  @Test
+  public void testCreateSQL() throws CameraConnectionException {
+    Assert.assertEquals("INSERT INTO presetsdatabase.presets VALUES(-1,10.0,12.0,13,40,56,1,1,2,0,'null',0)", preset.createAddSqlQuery());
+  }
 
   @Test
   public void testToJSON() throws JSONException {
     ArrayList<String> keywords = new ArrayList<String>();
     keywords.add("foo");
-    Preset preset = new PresetFactory().createPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
-    String json = preset.toJSON();
-    JSONObject jsonObject = new JSONObject(json);
+    Preset preset = new IPCameraPresetFactory().createPreset(new Position(10, 12), 13, 40, 56, true, 1, 2, false, 0, keywords);
+
+    JSONObject jsonObject = preset.toJSON();
+
     Assert.assertEquals(10.0, jsonObject.get("pan"));
     Assert.assertEquals(12.0, jsonObject.get("tilt"));
     Assert.assertEquals(13, jsonObject.get("zoom"));
@@ -32,7 +69,9 @@ public class PresetTest {
     Assert.assertEquals(1, jsonObject.get("panspeed"));
     Assert.assertEquals(2, jsonObject.get("tiltspeed"));
     Assert.assertEquals(false, jsonObject.get("autoiris"));
-    Assert.assertEquals("foo", jsonObject.getJSONArray("tags").get(0));
+    JSONArray expectedtagsJSON = new JSONArray();
+    expectedtagsJSON.add("foo");
+    Assert.assertEquals(expectedtagsJSON, jsonObject.get("tags"));
   }
 
   @Test
@@ -101,6 +140,7 @@ public class PresetTest {
   @Test
   public void testSetZoom() {
     Preset preset = getDefaultPreset();
+
     preset.setZoom(50);
     Assert.assertEquals(50, preset.getZoom());
   }
@@ -125,18 +165,11 @@ public class PresetTest {
     Preset preset2 = getDefaultPreset();
     Assert.assertEquals(preset.hashCode(), preset2.hashCode());
   }
-  
-  @Test
-  public void testHashCodefalse() {
-    Preset preset = getDefaultPreset();
-    Preset preset2 = getDefaultPreset();
-    preset.setAutofocus(true);
-    Assert.assertNotEquals(preset.hashCode(), preset2.hashCode());
-  }
-  
+
   @Test
   public void testEqualsSameObject() {
     Preset preset = getDefaultPreset();
+
     Assert.assertEquals(preset, preset);
   }
   
@@ -173,6 +206,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setZoom(34);
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -181,6 +215,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setFocus(12);
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -189,6 +224,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setIris(preset.getIris()+1);
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -197,6 +233,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setPanspeed(preset.getPanspeed()+1);
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -205,6 +242,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setTiltspeed(preset.getTiltspeed()+1);
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -213,6 +251,7 @@ public class PresetTest {
     Preset preset = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
     preset2.setAutofocus(!preset.isAutofocus());
+
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -242,6 +281,7 @@ public class PresetTest {
   @Test
   public void testAddTag() {
     Preset preset = getDefaultPreset();
+
     preset.addTag("Violin");
     preset.addTag("Piano");
     List<String> keyWords = new ArrayList<String>();
@@ -253,29 +293,45 @@ public class PresetTest {
   public void testEqualsEqualTags() {
     Preset preset1 = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
+
     preset1.addTag("Violin");
     preset2.addTag("Violin");
     Assert.assertEquals(preset1, preset2);
   }
+
   @Test
   public void testEqualsNotEqualTags() {
     Preset preset1 = getDefaultPreset();
     Preset preset2 = getDefaultPreset();
+
     preset1.addTag("Violin");
     preset1.addTag("Piano");
     Assert.assertNotEquals(preset1, preset2);
   }
+
   @Test
   public void testAddTagList() {
     Preset preset1 = getDefaultPreset();
     preset1.addTag("Overview");
-    List<String> keyWords = new ArrayList<String>();
+    Set<String> keyWords = new HashSet<>();
     keyWords.add("Violin");
     keyWords.add("Piano");
     preset1.addTags(keyWords);
     keyWords.add("Overview");
     Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
   }
+
+  @Test
+  public void testTagsConstructor() {
+    Set<String> keyWords = new HashSet<String>();
+    keyWords.add("Violin");
+    keyWords.add("Piano");
+    IPCameraPreset preset1 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, keyWords);
+    keyWords.add("Overview");
+    preset1.addTag("Overview");
+    Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
+  }
+
   @Test
   public void testRemoveTag() {
     Preset preset1 = getDefaultPreset();
@@ -286,6 +342,7 @@ public class PresetTest {
     keyWords.add("Piano");
     Assert.assertEquals(new HashSet<String>(keyWords), preset1.getTags());
   }
+
   @Test
   public void testDuplicateKeyWords() {
     Preset preset1 = getDefaultPreset();
@@ -305,7 +362,7 @@ public class PresetTest {
   }
 
   public final Preset getDefaultPreset() {
-    Preset preset = new Preset();
+    Preset preset = new IPCameraPresetFactory().createPreset();
     preset.setCameraId(34);
     preset.setPosition(new Position(4.2, 42.42));
     preset.setZoom(4);

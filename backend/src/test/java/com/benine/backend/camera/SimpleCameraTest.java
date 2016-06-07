@@ -1,11 +1,12 @@
 package com.benine.backend.camera;
 
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
+import org.json.simple.JSONObject;
 
 /**
  * Created on 5-5-16.
@@ -44,10 +45,9 @@ public class SimpleCameraTest {
     simpleCamera.setId(3);
     simpleCamera.setStreamLink("something");
     JSONObject expectedJSON = new JSONObject();
-    expectedJSON.put("streamlink", "something");
     expectedJSON.put("id", 3);
     expectedJSON.put("inuse", false);
-    Assert.assertEquals(expectedJSON.toString(), simpleCamera.toJSON());
+    Assert.assertEquals(expectedJSON, simpleCamera.toJSON());
   }
   
   @Test

@@ -1,7 +1,12 @@
 package com.benine.backend.http;
 
+<<<<<<< HEAD
 import com.benine.backend.Preset;
 import com.benine.backend.PresetFactory;
+=======
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
+>>>>>>> develop
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -28,14 +33,14 @@ public class RecallPresetTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new RecallPresetHandler();
+    return new RecallPresetHandler(httpserver);
   }
 
   @Before
   public void initialize() throws IOException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
@@ -51,7 +56,11 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
+<<<<<<< HEAD
       preset = new PresetFactory().createPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0);
+=======
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1);
+>>>>>>> develop
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | StreamNotAvailableException e) {
       e.printStackTrace();
@@ -59,21 +68,19 @@ public class RecallPresetTest extends RequestHandlerTest {
   }
 
   public void recall() {
-    setPath("/presets/recallpreset?presetid=1&currentcamera=1");
+    setPath("/presets/recallpreset?presetid=1");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("presetid", "1");
-    parameters.add("currentcamera", "1");
     setParameters(parameters);
   }
 
   @Test
   public void testRecallPresetInvalid() throws Exception {
-    setPath("/presets/recallpreset?presetid=1&currentcamera=one");
+    setPath("/presets/recallpreset?presetid=on");
 
     MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("presetid", "1");
-    parameters.add("currentcamera", "one");
+    parameters.add("presetid", "on");
     setParameters(parameters);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);

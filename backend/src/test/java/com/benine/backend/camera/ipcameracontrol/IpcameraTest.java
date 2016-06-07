@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.*;
 
-import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.*;
 import org.json.simple.JSONObject;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.InvalidCameraTypeException;
-import com.benine.backend.camera.Position;
+
+import com.benine.backend.Config;
+import com.benine.backend.Logger;
+import com.benine.backend.ServerController;
+import com.benine.backend.preset.IPCameraPreset;
+
 import org.apache.commons.io.IOUtils;
 
 import org.junit.Assert;
@@ -21,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import java.util.HashSet;
+
 /**
  * Test class to test the IP Camera class.
  * The mock server is used to simulate the camera.
@@ -28,12 +33,23 @@ import java.util.concurrent.TimeoutException;
 public class IpcameraTest {
 
   private IPCamera camera, busyCamera;
+  private CameraController cameraController = mock(CameraController.class);
+  private Config config = mock(Config.class);
+  private Logger logger = mock(Logger.class);
+  
+
   
   @Before
   public final void setUp() throws InvalidCameraTypeException {
-    camera = spy(new IPCamera("test"));
-    busyCamera = spy(new IPCamera("test"));
+    camera = spy(new IPCamera("test", cameraController));
+    busyCamera = spy(new IPCamera("test", cameraController));
     busyCamera.setBusy(true);
+
+    when(config.getValue("IPCameraTimeOut")).thenReturn("2");
+    when(cameraController.getConfig()).thenReturn(config);
+    when(cameraController.getLogger()).thenReturn(logger);
+    camera = spy(new IPCamera("test", cameraController));
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
   }
   
   public void setCameraBehaviour(String cmd, String response) throws IpcameraConnectionException {
@@ -89,6 +105,25 @@ public class IpcameraTest {
     assertEquals(180, res.getTilt(), 0.000001);
   }
   
+  @Test
+  public final void testGetPositionTwice() throws CameraConnectionException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    res = camera.getPosition();
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
+  @Test
+  public final void testGetPositionTwice3Seconds() throws CameraConnectionException, InterruptedException {
+    setCameraBehaviour("APC", "aPC80008000");
+    Position res = camera.getPosition();
+    Thread.sleep(1); 
+    res = camera.getPosition();
+    assertEquals(0, res.getPan(), 0.000001);
+    assertEquals(180, res.getTilt(), 0.000001);
+  }
+  
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetPositionException() throws CameraConnectionException {
     setCameraBehaviour("APC", "aPP80008000");
@@ -103,91 +138,102 @@ public class IpcameraTest {
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws CameraConnectionException, CameraBusyException {
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     camera.move(180, 50);
   }
 
   @Test
   public final void testGetSetId() {
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     camera.setId(4);
     Assert.assertEquals(4, camera.getId());
   }
 
   @Test
   public final void testUninitializedId(){
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     Assert.assertEquals(-1, camera.getId());
   }
   
   @Test
   public final void testNotEqualsIPAddress() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("13");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("13", cameraController);
     assertNotEquals(camera1, camera2);
   }
   
   @Test
   public final void testEquals() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     assertEquals(camera1, camera2);
   }
   
   @Test
   public final void testNotEqualsID() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     camera2.setId(5);
     assertNotEquals(camera1, camera2);
   }
   
   @Test
   public final void testHashCodeNotEqual() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     camera2.setId(5);
     assertNotEquals(camera1.hashCode(), camera2.hashCode());
   }
   
   @Test
   public final void testHashCodeEqual() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
   
-  @Test
+  @Test(expected = IpcameraConnectionException.class)
   public final void testGetJSONFails() throws CameraConnectionException {
-    IPCamera camera = new IPCamera("12");
+    IPCamera camera = new IPCamera("12", cameraController);
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
-    assertEquals(json.toString(), camera.toJSON());
+    json.put("move", true);
+    json.put("iris", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    camera.toJSON();
   }
   
   @Test
   public final void testGetJSON() throws CameraConnectionException{
+    setCameraBehaviour("D1", "d11");
+    setCameraBehaviour("D3", "d31");
+    JSONObject json = new JSONObject();
+    json.put("id", -1);
+    json.put("inuse", false);
+    json.put("move", true);
+    json.put("zoom", true);
+    json.put("focus", true);
+    json.put("autofocus", true);
+    json.put("iris", true);
+    json.put("autoiris", true);
+    json.put("busy", false);
+    
+    assertEquals(json, camera.toJSON());
+  }
+  
+  @Test
+  public final void testCreatePreset() throws CameraConnectionException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    JSONObject json = new JSONObject();
-    json.put("id", -1);
-    json.put("inuse", false);
-    json.put("pan", 0.0);
-    json.put("tilt", 180.0);
-    json.put("zoom", 256);
-    json.put("focus", 1261);
-    json.put("autofocus", true);
-    json.put("iris", 2029);
-    json.put("autoiris", true);
-    json.put("streamlink", "http://test/cgi-bin/mjpeg");
-    json.put("busy", false);
+    IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1);
     
-    assertEquals(json.toString(), camera.toJSON());
+    assertEquals(expected, camera.createPreset(new HashSet<>()));
   }
   
   @Test
@@ -197,7 +243,7 @@ public class IpcameraTest {
 
   @Test
   public void testIsSetInUse() {
-    IPCamera camera1 = new IPCamera("ip");
+    IPCamera camera1 = new IPCamera("ip", cameraController);
     Assert.assertFalse(camera1.isInUse());
     camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());
@@ -206,7 +252,7 @@ public class IpcameraTest {
   @Test
   public void testWaitUntilAlreadyAtPos()
           throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12"));
+    IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
@@ -216,7 +262,7 @@ public class IpcameraTest {
   @Test
   public void testWaitUntilTimeOutSmallAlreadyAtLoc()
           throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12"));
+    IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
@@ -226,7 +272,7 @@ public class IpcameraTest {
   @Test (expected =TimeoutException.class)
   public void testWaitUntillNotAtZoom()
           throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12"));
+    IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
@@ -236,7 +282,7 @@ public class IpcameraTest {
   @Test (expected =TimeoutException.class)
   public void testWaitUntilTimeOutNotAtLocSmallTimeout()
           throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12"));
+    IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(2, -1)).when(cam).getPosition();
     doReturn(30).when(cam).getZoomPosition();
 
@@ -247,7 +293,7 @@ public class IpcameraTest {
   @Test
   public void testWaitUntilAlreadyAtAfterMultipleTimeouts()
           throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12"));
+    IPCamera cam  = spy(new IPCamera("12", cameraController));
     doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
     doReturn(0, 10, 30).when(cam).getZoomPosition();
 
@@ -256,13 +302,13 @@ public class IpcameraTest {
 
   @Test
   public void testBusyInitializedFalse() {
-    IPCamera cam = spy(new IPCamera(("12")));
+    IPCamera cam = spy(new IPCamera("12", cameraController));
     Assert.assertFalse(cam.isBusy());
   }
 
   @Test
   public void testSetBusy() {
-    IPCamera cam = spy(new IPCamera(("12")));
+    IPCamera cam = spy(new IPCamera("12", cameraController));
     cam.setBusy(true);
     Assert.assertTrue(cam.isBusy());
   }
