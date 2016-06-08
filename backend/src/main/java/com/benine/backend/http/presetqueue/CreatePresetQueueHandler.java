@@ -40,7 +40,7 @@ public class CreatePresetQueueHandler extends PresetQueueRequestHandler {
       getLogger().log("New preset Queue created", LogEvent.Type.INFO);
     } else {
       respondFailure(request, res);
-      getLogger().log("New preset can't be created", LogEvent.Type.WARNING);
+      getLogger().log("New preset queue can't be created", LogEvent.Type.WARNING);
     }
     
     request.setHandled(true);
