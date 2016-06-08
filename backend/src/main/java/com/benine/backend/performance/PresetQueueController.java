@@ -4,6 +4,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 
+import com.benine.backend.database.Database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -20,6 +21,8 @@ public class PresetQueueController {
   private Logger logger;
   
   private static volatile int highestIdInUse = 1;
+
+  private Database database;
   
   /**
    * Constructs a Preset Queue controller.
@@ -27,6 +30,7 @@ public class PresetQueueController {
   public PresetQueueController() {
     ServerController serverController = ServerController.getInstance();
     logger = serverController.getLogger();
+    database = serverController.getDatabaseController().getDatabase();
   }
   
   /**
@@ -36,6 +40,7 @@ public class PresetQueueController {
   public void addPresetQueue(PresetQueue presetQueue) {
     presetQueue = addPresetQueueID(presetQueue);
     presetQueues.add(presetQueue);
+    database.addQueue(presetQueue);
     logger.log("Added a new presetQueue with id: " + presetQueue.getID(), LogEvent.Type.INFO);
   }
   
@@ -71,6 +76,7 @@ public class PresetQueueController {
    */
   public void removePresetQueue(PresetQueue presetQueue) {
     presetQueues.remove(presetQueue);
+    database.deleteQueue(presetQueue.getID());
   }
   
   /**
@@ -81,6 +87,8 @@ public class PresetQueueController {
     PresetQueue old = getPresetQueueById(presetQueue.getID());
     presetQueues.remove(old);
     presetQueues.add(presetQueue);
+    database.deleteQueue(old.getID());
+    database.addQueue(presetQueue);
   }
   
   /**
