@@ -1,0 +1,80 @@
+<!-- Defines the modal used for preset creation -->
+<div id="performance_edit_div" class="modal fade performance-edit-modal" tabindex="-1" role="dialog" aria-labelledby="performance-edit-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-bullhorn"></span> Performance Editor</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-3 performance-list-container">
+                        <label>Select Performance</label>
+                        <ul class="performance-list">
+                            <li>
+                                <div class="row">
+                                    <div class="col-xs-7"><input type="text" class="form-control" placeholder="Name"></div>
+                                    <div class="col-xs-5">
+                                    <div class="btn-group" style="position: absolute; padding: 0; top: -1px; right: 0">
+                                        <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button>
+                                        <button type="button" class="btn btn-success glyphicon glyphicon-ok-sign"></button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="btn btn-info"><span class="glyphicon glyphicon-bullhorn"></span>Test</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 hidden-xs hidden-sm">
+                        <label>Select Presets</label>
+                        <div class="input-group">
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
+                            <input type="text" class="form-control" placeholder="Search..." >
+                        </div>
+                        <div class="performance-preset-list-container">
+                        <ul class="performance-list" >
+                            <li class="btn btn-info"><img class="img-rounded" src="/api/backend/static/presets/2_2.jpg"><span>Preset 1</span></li>
+                            <li class="btn btn-info"><img class="img-rounded" src="/api/backend/static/presets/2_2.jpg"><span>Preset 1</span></li>
+                            <li class="btn btn-info"><img class="img-rounded" src="/api/backend/static/presets/2_2.jpg"><span>Preset 1</span></li>
+                            <li class="btn btn-info"><img class="img-rounded" src="/api/backend/static/presets/2_2.jpg"><span>Preset 1</span></li>
+                            <li class="btn btn-info"><img class="img-rounded" src="/api/backend/static/presets/2_2.jpg"><span>Preset 1</span></li>
+                        </ul>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Schedule</label>
+                        <ul class="performance-list" >
+                            <li>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default schedule-list-number">1</button>
+                                    <button type="button" class="btn btn-info schedule-preset">Test</button>
+                                    <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-menu-up"></button>
+                                    <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-menu-down"></button>
+                                    <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default schedule-list-number">2</button>
+                                    <button type="button" class="btn btn-info schedule-preset">Test</button>
+                                    <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-menu-up"></button>
+                                    <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-menu-down"></button>
+                                    <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary pull-left">Add</button>
+                <button type="button" class="btn btn-danger pull-left">Delete</button>
+
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="createPreset()"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+            </div>
+        </div>
+    </div>
+</div>

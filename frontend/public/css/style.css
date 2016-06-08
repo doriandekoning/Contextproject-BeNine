@@ -383,6 +383,11 @@ input[type=range]:focus {
     position: relative;
     height: 300px;
 }
+
+#performance_edit_div .modal-body {
+    height: 500px;
+}
+
 .preset-overlay {
     position: relative;
 	cursor: pointer;
@@ -537,4 +542,73 @@ input[type=range]:focus {
 
 .column_name {
     width: 25%;
+}
+
+.performance-list-container {
+    height: 100%;
+    overflow: scroll;
+}
+
+.performance-preset-list-container {
+    height: 400px;
+    overflow: scroll;
+}
+
+
+.performance-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.performance-list input, .input-group {
+    margin-bottom: 5px;
+}
+
+.performance-list .row, .performance-list .col-xs-2, .performance-list .col-xs-8 {
+    margin: 0;
+    padding: 0;
+}
+
+.performance-list .performance-input-button {
+    margin-bottom: 5px;
+}
+
+.performance-list .btn {
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+.performance-list span {
+    margin-right: 5px;
+}
+
+.performance-list .btn span {
+    margin-left: 10px;
+}
+
+.performance-list .btn-group .glyphicon, .input-group .glyphicon {
+    top: 0;
+}
+
+.performance_edit_div .row {
+    height: 100%;
+}
+
+.performance-list img {
+    width: 125px;
+    right: 0px;
+}
+
+.schedule-preset {
+    width: 160px;
+}
+
+.schedule-list-number {
+    width: 50px;
+}
+
+.performance-list .col-xs-7, .performance-list .col-xs-5 {
+    padding: 0;
 }
