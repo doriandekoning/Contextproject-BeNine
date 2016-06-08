@@ -2,6 +2,9 @@ package com.benine.backend.performance;
 
 import com.benine.backend.preset.Preset;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -104,18 +107,31 @@ public class PresetQueue {
     queue.add(place, preset);
   }
 
-  
   /**
-   * Getter for the size of the queue.
-   * @return the last value in the ArrayList.
-   */
-  public int getSize() {
-    return queue.size();
+  * PresetQueue toJSON. 
+  * @return a JSON object of the presetqueue.
+  */
+  public Object toJSON() {
+    JSONObject json = new JSONObject();
+    json.put("id", getID());
+    json.put("name", getName());
+    JSONArray queueJSON = new JSONArray();
+    for (Preset preset: getQueue()) {
+      queueJSON.add(preset.getId());
+    }
+    json.put("queue", queueJSON);
+
+    return json;
   }
 
-  public Object toJSON() {
-    // TODO Auto-generated method stub
-    return null;
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ID;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((queue == null) ? 0 : queue.hashCode());
+    return result;
   }
 
   /**
@@ -152,4 +168,6 @@ public class PresetQueue {
     }
     return true;
   }
+
+
 }
