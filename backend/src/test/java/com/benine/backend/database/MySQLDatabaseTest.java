@@ -508,7 +508,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.getQueues();
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT ID FROM queue");
+        verifySQLStatementExecuted("SELECT ID, name FROM queue");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();

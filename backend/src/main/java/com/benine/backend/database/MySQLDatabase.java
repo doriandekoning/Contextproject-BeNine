@@ -197,6 +197,7 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
+      deletePresetsList(ID);
       String sql = "DELETE FROM queue WHERE ID = " + ID;
       statement.executeUpdate(sql);
     } catch (Exception e) {
