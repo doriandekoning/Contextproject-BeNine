@@ -228,6 +228,7 @@ input[type=range]:focus {
     height: 50px;
     display: flex;
     background-color: #666666;
+    flex-shrink: 0;
 }
 
 #control_area, #queue_area, .control_wrapper, #right_area .row {
@@ -490,26 +491,29 @@ input[type=range]:focus {
     text-align: center;
 }
 
-#queue_area thead {
+.queue_table_title thead {
     background-color: #666666;
-    color: #999999;
+    color: #333333;
 }
-#queue_table_title thead th, #queue_table_title thead td {
+.queue_table_title .table thead th, .queue_table_title .table thead td {
     border-bottom: 2px solid #666666;
 
 }
 
-#queue_area tbody th, #queue_area tbody td {
+.queue_area .table tbody th, .queue_area .table tbody td {
     border-top: 1px solid #666666;
 }
 
-#queue_area {
+.queue_area {
     overflow: scroll;
 }
 
-#queue_table_title {
+.queue_table_title {
     width: 100%;
-    height: 40px;
+    height: 35px;
     display: flex;
     background-color: #666666;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    margin-bottom: 2px;
 }
