@@ -35,6 +35,7 @@ public class DeletePresetFromPresetQueueHandler extends PresetQueueRequestHandle
     if (presetQueue != null && request.getParameter("position") != null) {
       place = Integer.parseInt(request.getParameter("position"));
       presetQueue.deletePreset(place);
+      getPresetQueueController().updatePresetQueue(presetQueue);
       
       respondSuccess(request, res);
       getLogger().log("Preset at position " + place + " is succesfully deleted from the queue: " 

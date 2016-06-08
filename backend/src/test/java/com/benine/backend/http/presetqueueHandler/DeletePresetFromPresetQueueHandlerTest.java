@@ -45,6 +45,7 @@ public class DeletePresetFromPresetQueueHandlerTest extends PresetQueueRequestHa
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(presetQueue).deletePreset(2);
+    verify(presetQueueController).updatePresetQueue(presetQueue);
     verify(requestMock).setHandled(true);
   }
   
