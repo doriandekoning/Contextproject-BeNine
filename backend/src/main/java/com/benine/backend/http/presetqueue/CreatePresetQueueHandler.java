@@ -1,5 +1,6 @@
 package com.benine.backend.http.presetqueue;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.performance.PresetQueue;
 
@@ -35,6 +36,7 @@ public class CreatePresetQueueHandler extends PresetQueueRequestHandler {
     getPresetQueueController().addPresetQueue(presetQueue);
     
     respondSuccess(request, res);
+    getLogger().log("New preset Queue created", LogEvent.Type.INFO);
     request.setHandled(true);
   }
 

@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.http.presetqueue.CreatePresetQueueHandler;
+import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,7 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
   JSONObject jsonObject;
   CreatePresetQueueHandler createHandler;
+  DeletePresetQueueHandler deleteHandler;
 
   @Override
   public PresetQueueRequestHandler supplyHandler() {
@@ -36,7 +38,9 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     jsonObject.put("presetqueues", array);
     when(presetQueueController.getPresetQueueJSON()).thenReturn(jsonObject.toJSONString());
     createHandler = mock(CreatePresetQueueHandler.class);
+    deleteHandler = mock(DeletePresetQueueHandler.class);
     ((PresetQueueHandler) getHandler()).addHandler("/create", createHandler);
+    ((PresetQueueHandler) getHandler()).addHandler("/delete", deleteHandler);
   }
   
   @Test
@@ -46,6 +50,13 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(out).write(jsonObject.toJSONString());
     verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testRouteDelete() throws IOException, ServletException {
+    setPath("/delete");
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    verify(deleteHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
   }
   
   @Test

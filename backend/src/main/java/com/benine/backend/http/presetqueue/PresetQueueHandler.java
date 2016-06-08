@@ -32,6 +32,7 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
     this.handlers = new HashMap<>();
 
     addHandler("/create", new CreatePresetQueueHandler(httpserver));
+    addHandler("/delete", new DeletePresetQueueHandler(httpserver));
   }
 
   @Override
