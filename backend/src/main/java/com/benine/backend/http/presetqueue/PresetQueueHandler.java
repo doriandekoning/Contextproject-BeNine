@@ -33,6 +33,8 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
 
     addHandler("/create", new CreatePresetQueueHandler(httpserver));
     addHandler("/delete", new DeletePresetQueueHandler(httpserver));
+    addHandler("/add", new AddPresetToPresetQueueHandler(httpserver));
+    addHandler("/deletepreset", new DeletePresetFromPresetQueueHandler(httpserver));
   }
 
   @Override

@@ -98,11 +98,16 @@ public class PresetQueue {
   
   /**
    * Insert preset at given place.
+   * If place > size it's added to the end of the list.
    * @param place the place of the preset to be inserted.
    * @param preset the preset to be inserted in the queue. 
    */
   public void insertPreset(int place, Preset preset) {
-    queue.add(place, preset);
+    try {
+      queue.add(place, preset);
+    } catch (IndexOutOfBoundsException e) {
+      queue.add(preset);
+    }
   }
 
   /**

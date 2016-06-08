@@ -39,5 +39,16 @@ public class CreatePresetQueueHandlerTest extends PresetQueueRequestHandlerTest 
     verify(requestMock).setHandled(true);
   }
   
+  @Test
+  public void testCreatePresetQueueWithoutName() throws Exception{
+    setPath("/presetqueues/create");
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
+  }
+  
 
 }

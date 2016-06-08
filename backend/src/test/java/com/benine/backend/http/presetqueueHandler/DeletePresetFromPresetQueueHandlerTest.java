@@ -10,20 +10,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.http.presetqueue.AddPresetToPresetQueueHandler;
+import com.benine.backend.http.presetqueue.DeletePresetFromPresetQueueHandler;
 import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 
-public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
+public class DeletePresetFromPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
   PresetQueue presetQueue = mock(PresetQueue.class);
   Preset preset = mock(Preset.class);
 
   @Override
   public PresetQueueRequestHandler supplyHandler() {
-    return new AddPresetToPresetQueueHandler(httpserver);
+    return new DeletePresetFromPresetQueueHandler(httpserver);
   }
   
   @Before
@@ -34,41 +35,22 @@ public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandler
   }
   
   @Test
-  public void testAddPresetToPresetQueue() throws Exception{
-    setPath("/1/add");
+  public void testDeletePresetFromPresetQueue() throws Exception{
+    setPath("/1/deletepreset");
     
     MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("presetid", "1");
     parameters.add("position", "2");
     setParameters(parameters);
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(presetQueue).insertPreset(2, preset);
+    verify(presetQueue).deletePreset(2);
     verify(requestMock).setHandled(true);
   }
   
   @Test
-  public void testAddPresetToPresetQueueWithouthPlace() throws Exception{
-    setPath("/1/add");
-    
-    MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("presetid", "1");
-    setParameters(parameters);
-    
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(presetQueue).addPresetEnd(preset);
-    verify(requestMock).setHandled(true);
-  }
-  
-  @Test
-  public void testAddPresetToNonExcistingQueue() throws Exception{
-    setPath("/3/add");
-    
-    MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("presetid", "1");
-    setParameters(parameters);
+  public void testDeletePresetFromNonExcistingQueue() throws Exception{
+    setPath("/5/deletepreset");
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
@@ -78,12 +60,8 @@ public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandler
   }
   
   @Test
-  public void testAddPresetToNonExcistingPreset() throws Exception{
-    setPath("/1/add");
-    
-    MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("presetid", "5");
-    setParameters(parameters);
+  public void testDeletePresetFromPresetQueueWithoutPosition() throws Exception{
+    setPath("/1/deletepreset");
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
@@ -91,16 +69,6 @@ public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandler
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
-  
-  @Test
-  public void testAddPresetWithoutPresetID() throws Exception{
-    setPath("/1/add");
-    
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    String response = "{\"succes\":\"false\"}";
-    verify(out).write(response);
-    verify(requestMock).setHandled(true);
-  }
+ 
 
 }

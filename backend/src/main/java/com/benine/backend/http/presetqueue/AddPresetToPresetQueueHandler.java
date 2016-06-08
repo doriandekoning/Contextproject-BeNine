@@ -31,19 +31,24 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
   public void handle(String arg0, Request request, HttpServletRequest arg2, HttpServletResponse res)
       throws IOException, ServletException {
     int id = getPresetsQueueId(request);
-    int presetid = Integer.parseInt(request.getParameter("presetid"));
-   
-    Preset preset = getPresetController().getPresetById(presetid);   
-
+    int presetid = -1;
+    String position = request.getParameter("position");
     PresetQueue presetQueue = getPresetQueueController().getPresetQueueById(id);
+    boolean failure = false;
+    Preset preset = null;
     
-    if (presetQueue != null && preset != null) {
-      if (request.getParameter("positie") == null) {
-        presetQueue.addPresetEnd(preset);
-      } else {
-        presetQueue.insertPreset(Integer.parseInt(request.getParameter("positie")), preset);
+    if (presetQueue != null && request.getParameter("presetid") != null) {
+      presetid = Integer.parseInt(request.getParameter("presetid"));
+      preset = getPresetController().getPresetById(presetid);   
+      if (preset == null) {
+        failure = true;
       }
-      
+    } else {
+      failure = true;
+    }
+    
+    if (!failure) {
+      addPreset(position, preset, presetQueue);
       respondSuccess(request, res);
       getLogger().log("Preset " + presetid + " is succesfully added to queue: " 
                                                           + id, LogEvent.Type.INFO);
@@ -54,6 +59,21 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
     }
     
     request.setHandled(true);
+  }
+  
+  /**
+   * Adds the preset add the position specified.
+   * If no position specified it will be added to the end.
+   * @param position to add the preset to.
+   * @param preset to add to the queue.
+   * @param presetQueue where the preset will be added to.
+   */
+  private void addPreset(String position, Preset preset, PresetQueue presetQueue) {
+    if (position == null) {
+      presetQueue.addPresetEnd(preset);
+    } else {
+      presetQueue.insertPreset(Integer.parseInt(position), preset);
+    }
   }
  
 

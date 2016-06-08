@@ -31,12 +31,18 @@ public class CreatePresetQueueHandler extends PresetQueueRequestHandler {
       throws IOException, ServletException {
     String name = request.getParameter("name");
     
-    PresetQueue presetQueue = new PresetQueue(name, new ArrayList<>());
+    if (name != null) {
+      PresetQueue presetQueue = new PresetQueue(name, new ArrayList<>());
     
-    getPresetQueueController().addPresetQueue(presetQueue);
+      getPresetQueueController().addPresetQueue(presetQueue);
     
-    respondSuccess(request, res);
-    getLogger().log("New preset Queue created", LogEvent.Type.INFO);
+      respondSuccess(request, res);
+      getLogger().log("New preset Queue created", LogEvent.Type.INFO);
+    } else {
+      respondFailure(request, res);
+      getLogger().log("New preset can't be created", LogEvent.Type.WARNING);
+    }
+    
     request.setHandled(true);
   }
 
