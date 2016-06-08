@@ -33,7 +33,7 @@ public abstract class RequestHandlerTest {
   protected Request requestMock;
   CameraController cameraController = mock(CameraController.class);
   StreamController streamController = mock(StreamController.class);
-  PresetController presetController = mock(PresetController.class);
+  protected PresetController presetController = mock(PresetController.class);
   protected PresetQueueController presetQueueController = mock(PresetQueueController.class);
   protected HttpServletResponse httpresponseMock;
   protected HttpServletRequest httprequestMock;

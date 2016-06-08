@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.http.presetqueue.AddPresetToPresetQueueHandler;
 import com.benine.backend.http.presetqueue.CreatePresetQueueHandler;
 import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueHandler;
@@ -24,6 +25,7 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   JSONObject jsonObject;
   CreatePresetQueueHandler createHandler;
   DeletePresetQueueHandler deleteHandler;
+  AddPresetToPresetQueueHandler addHandler;
 
   @Override
   public PresetQueueRequestHandler supplyHandler() {
@@ -39,8 +41,10 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     when(presetQueueController.getPresetQueueJSON()).thenReturn(jsonObject.toJSONString());
     createHandler = mock(CreatePresetQueueHandler.class);
     deleteHandler = mock(DeletePresetQueueHandler.class);
+    addHandler = mock(AddPresetToPresetQueueHandler.class);
     ((PresetQueueHandler) getHandler()).addHandler("/create", createHandler);
     ((PresetQueueHandler) getHandler()).addHandler("/delete", deleteHandler);
+    ((PresetQueueHandler) getHandler()).addHandler("/add", addHandler);
   }
   
   @Test
@@ -57,6 +61,13 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     setPath("/delete");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(deleteHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
+  }
+  
+  @Test
+  public void testRouteAdd() throws IOException, ServletException {
+    setPath("/add");
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    verify(addHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
   }
   
   @Test

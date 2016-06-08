@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeletePresetQueueHandler extends PresetQueueRequestHandler {
 
   /**
-   * Constructs a handler for deleting a preset queue /presetqueues/delete
+   * Constructs a handler for deleting a preset queue /presetqueues/{id}/delete
    * @param httpserver this handler belongs to.
    */
   public DeletePresetQueueHandler(HTTPServer httpserver) {
