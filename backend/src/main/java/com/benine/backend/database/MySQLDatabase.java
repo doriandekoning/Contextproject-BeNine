@@ -6,6 +6,7 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
@@ -152,16 +153,20 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public ArrayList<Integer> getQueues() {
-    ArrayList<Integer> list = new ArrayList<Integer>();
+  public ArrayList<PresetQueue> getQueues() {
+    ArrayList<PresetQueue> list = new ArrayList<>();
     Statement statement = null;
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT ID FROM queue";
+      String sql = "SELECT ID, name FROM queue";
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(resultset.getInt("ID"));
+        int id = resultset.getInt("ID");
+        String name = resultset.getString("Name");
+        ArrayList<Preset> presets = getPresetsList(id);
+        PresetQueue queue = new PresetQueue(id, name, presets);
+        list.add(queue);
       }
     } catch (Exception e) {
       logger.log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
@@ -172,12 +177,13 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void addQueue(int ID, String name) {
+  public void addQueue(PresetQueue queue) {
     Statement statement = null;
     try {
       statement = connection.createStatement();
       final String sql = String.format("INSERT INTO queue VALUES(%s,'%s')",
-          ID, name);
+          queue.getID(), queue.getName());
+      addPresetsList(queue.getQueue(), queue.getID());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);

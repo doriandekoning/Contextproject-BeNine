@@ -1,6 +1,7 @@
 package com.benine.backend.database;
 
 import com.benine.backend.camera.Camera;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
@@ -193,17 +194,16 @@ public interface Database {
   /**
    * Gets all the queue existing in the database.
    *
-   * @return List of id's of the queues
+   * @return List of the queues
    */
-  ArrayList<Integer> getQueues();
+  ArrayList<PresetQueue> getQueues();
 
   /**
    * Adds a queue to the database.
    *
-   * @param ID The ID of the queue
-   * @param name The name of the queue
+   * @param queue the queue to be added
    */
-  void addQueue(int ID, String name);
+  void addQueue(PresetQueue queue);
 
   /**
    * Deletes a queue from the database.

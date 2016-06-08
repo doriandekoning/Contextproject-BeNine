@@ -2,6 +2,7 @@ package com.benine.backend.database;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.SimplePreset;
@@ -517,7 +518,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testAddQueue() throws SQLException {
         database.resetDatabase();
-        database.addQueue(1, "name");
+        database.addQueue(new PresetQueue(1, "name", null));
         database.closeConnection();
         verifySQLStatementExecuted("INSERT INTO queue VALUES(1,'name')");
         verifyCommitted();
@@ -584,7 +585,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         Connection connection = mock(Connection.class);
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
-        database.addQueue(1, "name");
+        database.addQueue(new PresetQueue(0, null, null));
         verify(logger).log("Queue could not be added.", LogEvent.Type.CRITICAL);
     }
 
