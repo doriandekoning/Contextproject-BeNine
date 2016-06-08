@@ -1,21 +1,22 @@
 /**
 * Preset object to store all information the client has about a preset.
+* @param newPreset is the json object send by the backend.
 */
-function Preset(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, image, id, tags, cameraid) {
-	this.pan = pan;
-	this.tilt = tilt;
-	this.zoom = zoom;
-	this.focus = focus;
-	this.iris = iris;
-	this.autofocus = autofocus;
-	this.panspeed = panspeed;
-	this.tiltspeed = tiltspeed;
-	this.autoIris = autoiris;
-	this.image = image;
-	this.id = id;
-	this.img = $('<img src="/api/backend' + image + '" >');
-	this.tags = tags;
-	this.cameraid = cameraid;
+function Preset(newPreset) {
+	this.pan = newPreset.pan;
+	this.tilt = newPreset.tilt;
+	this.zoom = newPreset.zoom;
+	this.focus = newPreset.focus;
+	this.iris = newPreset.iris;
+	this.autofocus = newPreset.autofocus;
+	this.panspeed = newPreset.panspeed;
+	this.tiltspeed = newPreset.tiltspeed;
+	this.autoIris = newPreset.autoiris;
+	this.image = newPreset.image;
+	this.id = newPreset.id;
+	this.img = $('<img src="/api/backend' + this.image + '" >');
+	this.tags = newPreset.tags;
+	this.cameraid = newPreset.cameraid;
 }
 
 Preset.prototype = {
@@ -25,6 +26,7 @@ Preset.prototype = {
 	loadEdit: function() {
 		loadPresetEditModal(this);
 	},
+	
 	/**
 	* Show this preset in the preset area.
 	*/
@@ -52,17 +54,18 @@ Preset.prototype = {
 	
 	/**
 	* Update this preset with these new values.
+	* @newpreset is the information this preset should contain.
 	*/
-	update: function(pan, tilt, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, tags) {
-		this.pan = pan;
-		this.tilt = tilt;
-		this.zoom = zoom;
-		this.focus = focus;
-		this.iris = iris;
-		this.autofocus = autofocus;
-		this.panspeed = panspeed;
-		this.tiltspeed = tiltspeed;
-		this.autoIris = autoiris;
-		this.tags = tags;
+	update: function(newpreset) {
+		this.pan = newpreset.pan;
+		this.tilt = newpreset.tilt;
+		this.zoom = newpreset.zoom;
+		this.focus = newpreset.focus;
+		this.iris = newpreset.iris;
+		this.autofocus = newpreset.autofocus;
+		this.panspeed = newpreset.panspeed;
+		this.tiltspeed = newpreset.tiltspeed;
+		this.autoIris = newpreset.autoiris;
+		this.tags = newpreset.tags;
 	}
 };
