@@ -554,6 +554,11 @@ input[type=range]:focus {
     overflow: scroll;
 }
 
+.performance-preset-schedule-container {
+    height: 440px;
+    overflow: scroll;
+}
+
 
 .performance-list {
     list-style: none;
@@ -588,7 +593,7 @@ input[type=range]:focus {
     margin-left: 10px;
 }
 
-.performance-list .btn-group .glyphicon, .input-group .glyphicon {
+.performance_edit_div .btn-group .glyphicon, .input-group .glyphicon {
     top: 0;
 }
 
