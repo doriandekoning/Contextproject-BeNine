@@ -45,8 +45,10 @@ public class EditPresetHandler extends RequestHandler {
     try {
       String overwriteTag = request.getParameter("overwritetag");
       String overwritePosition = request.getParameter("overwriteposition");
+      String overwriteName = request.getParameter("overwriteName");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
       
       Preset preset = getPresetController().getPresetById(presetID);   
       Set<String> tagList = new HashSet<>();
@@ -56,9 +58,11 @@ public class EditPresetHandler extends RequestHandler {
       if (overwriteTag.equals("true")) {
         updateTag(preset, tagList);
       }
-      
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
+      }
+      if (overwriteName.equals("true")) {
+        updateName(preset, name);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
@@ -99,11 +103,16 @@ public class EditPresetHandler extends RequestHandler {
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
-    Preset newPreset = ipcam.createPreset(preset.getTags());
+    Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
    
     createImage(preset.getCameraId(), newPreset.getId());
     getPresetController().updatePreset(newPreset);
+  }
+
+  private void updateName(Preset preset, String name) throws SQLException {
+    preset.setName(name);
+    getPresetController().updatePreset(preset);
   }
   
   /**
