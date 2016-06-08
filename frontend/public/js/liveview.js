@@ -4,6 +4,13 @@
 var tablesize = 0;
 
 /**
+ * Loads the available performances from the backend.
+ */
+function loadPerformances() {
+    
+}
+
+/**
  * Loads the table.
  */
 function loadTable() {

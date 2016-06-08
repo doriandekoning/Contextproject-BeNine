@@ -1,5 +1,6 @@
 var cameras = [];
 var presets = [];
+var performances = [];
 var currentcamera;
 var editingpreset;
 
@@ -17,6 +18,9 @@ $(document).ready(function() {
 	
 	// Load the available presets from the backend.
 	loadPresets();
+
+	// Load the available perforamnces from the backend.
+	loadPerformances();
 
 	Holder.run({});
 	console.log('Page has loaded successfully.');
