@@ -20,12 +20,10 @@ public class PresetQueue {
   
   /**
    * Constructor for the presetQueue with a name and ID.
-   * @param ID the ID of the queue.
    * @param name the name of the queue.
    * @param queue the queue to be used. 
    */
-  public PresetQueue(int ID, String name, ArrayList<Preset> queue) {
-    this.ID = ID;
+  public PresetQueue(String name, ArrayList<Preset> queue) {
     this.name = name;
     this.queue = queue;
     

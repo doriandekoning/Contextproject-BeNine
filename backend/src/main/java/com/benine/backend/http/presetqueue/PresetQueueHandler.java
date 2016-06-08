@@ -31,7 +31,7 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
     super(httpserver);
     this.handlers = new HashMap<>();
 
-    //addHandler("createpreset", new CreatePresetHandler(httpserver));
+    addHandler("/create", new CreatePresetQueueHandler(httpserver));
   }
 
   @Override
@@ -41,7 +41,6 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
     String route = getRoute(request);
 
     boolean routed = false;
-    
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);
       routed = true;
