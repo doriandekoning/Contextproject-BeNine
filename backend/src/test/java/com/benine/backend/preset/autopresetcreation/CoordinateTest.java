@@ -94,4 +94,51 @@ public class CoordinateTest {
       Assert.assertEquals(2, c.getY(), 0.05);
     }
   }
+
+  @Test
+  public void testEqual() {
+    Coordinate c1 = new Coordinate(1, 2);
+    Coordinate c2 = new Coordinate(1, 2);
+    Assert.assertEquals(c1, c2);
+  }
+
+  @Test
+  public void testEqualWithDelta() {
+    Coordinate c1 = new Coordinate(1, 2);
+    Coordinate c2 = new Coordinate(1, 2.00000000000000001);
+    Assert.assertEquals(c1, c2);
+  }
+
+  @Test
+  public void testNotEqualX() {
+    Coordinate c1 = new Coordinate(2, 2);
+    Coordinate c2 = new Coordinate(1, 2);
+    Assert.assertNotEquals(c1, c2);
+  }
+
+  @Test
+  public void testNotEqualY() {
+    Coordinate c1 = new Coordinate(2, 2);
+    Coordinate c2 = new Coordinate(2, 3);
+    Assert.assertNotEquals(c1, c2);
+  }
+
+  @Test
+  public void testNotEqualNull() {
+    Coordinate c1 = new Coordinate(2, 2);
+    Assert.assertNotEquals(c1, null);
+  }
+
+  @Test
+  public void testNotEqualDifferentObject() {
+    Coordinate c1 = new Coordinate(2, 2);
+    Assert.assertNotEquals(c1, 3);
+  }
+
+  @Test
+  public void testHashCode() {
+    Coordinate c1 = new Coordinate(2, 2);
+    Coordinate c2 = new Coordinate(2, 2);
+    Assert.assertEquals(c1.hashCode(), c2.hashCode());
+  }
 }
