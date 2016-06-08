@@ -1,9 +1,5 @@
 package com.benine.backend;
 
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.DatabaseController;
-import com.benine.backend.preset.PresetController;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
