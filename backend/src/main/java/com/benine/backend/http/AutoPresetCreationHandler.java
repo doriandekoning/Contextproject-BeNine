@@ -1,26 +1,24 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.PresetPyramidCreator;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
+import com.benine.backend.preset.PresetPyramidCreator;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 
 public class AutoPresetCreationHandler extends RequestHandler  {
@@ -52,7 +50,7 @@ public class AutoPresetCreationHandler extends RequestHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam));
+      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam, new ArrayList<>()));
       PresetController presetController = ServerController.getInstance().getPresetController();
       presetController.addPresets(presets);
       respondSuccess(request, httpServletResponse);

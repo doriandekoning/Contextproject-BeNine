@@ -72,25 +72,10 @@ public class PresetPyramidCreator extends AutoPresetCreator {
 
     for (SubView subView : subViews) {
       Coordinate center = subView.getCenter();
-      final double tilt = (curPos.getTilt() - (curHorFov/2)) + (center.getX() * curHorFov / 100);
-      final double pan = (curPos.getPan() - (curVerFov/2)) + (center.getY() * curVerFov / 100);
+      final double tilt = (curPos.getPan() - (curHorFov/2)) + (center.getX() * curHorFov / 100);
+      final double pan = (curPos.getTilt() - (curVerFov/2)) + (center.getY() * curVerFov / 100);
       positions.add(new Position(tilt, pan));
     }
-//
-//    double betweenVer = (curVerFov / (2 * rows)) - ((rows - 1) * (overlap * curVerFov));
-//    double betweenHor = (curHorFov / (2 * columns)) - ((columns - 1) * (overlap * curHorFov));
-//    // Calculate start positions
-//
-//    double startPan = curPos.getPan() - ((columns - 1) * betweenHor);
-//    double startTilt = curPos.getTilt() - ((rows - 1) * betweenVer);
-//
-//    for (int row = 0; row < rows; row++) {
-//      for (int column = 0; column < columns; column++) {
-//        positions.add(new Position(startPan + (2 * betweenHor * column),
-//                startTilt + (2 * betweenVer * row)));
-//      }
-//    }
-
 
     return positions;
   }

@@ -1,9 +1,11 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.autopresetcreation.Coordinate;
+import com.benine.backend.preset.autopresetcreation.SubView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,19 +30,36 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   }
 
   @Test
-  public void testCreatePositions1x1x1()
+  public void testCreatePositionsSingleCenter()
           throws CameraConnectionException {
-    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0).generatePositions(cam);
+    ArrayList<SubView> subViews = new ArrayList<>();
+    subViews.add(new SubView(new Coordinate(10, 90), new Coordinate(90, 10)));
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0).generatePositions(cam, subViews);
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition(), cam.getZoom()));
 
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 
+
   @Test
-  public void testCreatePositions2x1x1()
+  public void testCreatePositionsSingleOffCenter()
           throws CameraConnectionException {
-    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(2, 1, 1, 0).generatePositions(cam);
+    ArrayList<SubView> subViews = new ArrayList<>();
+    subViews.add(new SubView(new Coordinate(0, 100), new Coordinate(50, 50)));
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0).generatePositions(cam, subViews);
+    Collection<ZoomPosition> expectedPositions = new ArrayList<>();
+    expectedPositions.add(new ZoomPosition(cam.getPosition().getPan() - (IPCamera.HORIZONTAL_FOV_MAX/4),
+            cam.getPosition().getTilt() + (IPCamera.VERTICAL_FOV_MAX/4), cam.getZoom()));
+
+    Assert.assertEquals(expectedPositions, actualPositons);
+  }
+
+  @Test
+  public void testCreatePositionsMultiple()
+          throws CameraConnectionException {
+    ArrayList<SubView> subViews = new ArrayList<>();
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(2, 1, 1, 0).generatePositions(cam, new ArrayList<>());
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(0.0,
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
@@ -54,7 +73,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions1x2x1()
           throws CameraConnectionException {
-    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 2, 1, 0).generatePositions(cam);
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 2, 1, 0).generatePositions(cam, new ArrayList<>());
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
             180.0,
@@ -68,7 +87,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions2x2x1()
           throws CameraConnectionException {
-    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(2, 2, 1, 0).generatePositions(cam);
+    Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(2, 2, 1, 0).generatePositions(cam, new ArrayList<>());
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX/4),
             cam.getPosition().getTilt()-(IPCamera.VERTICAL_FOV_MAX/4),
@@ -89,7 +108,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   @Test
   public void testCreatePositions3x3x1()
           throws CameraConnectionException {
-    ArrayList<ZoomPosition> actualPositons =  new ArrayList<>(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam));
+    ArrayList<ZoomPosition> actualPositons =  new ArrayList<>(new PresetPyramidCreator(3, 3, 1, 0).generatePositions(cam, new ArrayList<>()));
     ArrayList<ZoomPosition> expectedPositions = new ArrayList<>();
 
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan()-(IPCamera.HORIZONTAL_FOV_MAX*(1.0/3)),
