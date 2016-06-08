@@ -45,7 +45,7 @@ public class EditPresetHandler extends RequestHandler {
     try {
       String overwriteTag = request.getParameter("overwritetag");
       String overwritePosition = request.getParameter("overwriteposition");
-      String overwritename = request.getParameter("overwritename");
+      String overwriteName = request.getParameter("overwritename");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
       String name = request.getParameter("name");
@@ -61,7 +61,7 @@ public class EditPresetHandler extends RequestHandler {
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
       }
-      if (overwritename.equals("true")) {
+      if (overwriteName.equals("true")) {
         updateName(preset, name);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
@@ -110,6 +110,12 @@ public class EditPresetHandler extends RequestHandler {
     getPresetController().updatePreset(newPreset);
   }
 
+  /**
+   * Updating the name only.
+   * @param preset the preset to be changed
+   * @param name the new name
+   * @throws SQLException when preset can not be updated
+   */
   private void updateName(Preset preset, String name) throws SQLException {
     preset.setName(name);
     getPresetController().updatePreset(preset);

@@ -507,7 +507,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList, String name) throws CameraConnectionException {
+  public IPCameraPreset createPreset(Set<String> tagList, String name)
+      throws CameraConnectionException {
     int zoom = getZoomPosition();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();

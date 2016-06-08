@@ -36,9 +36,10 @@ public class IPCameraPreset extends Preset {
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
+   * @param name      The name of the preset
    */
-  public IPCameraPreset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId, String name) {
+  public IPCameraPreset(Position pos, int zoom, int focus,int iris, boolean autofocus,
+                        int panspeed, int tiltspeed, boolean autoiris, int cameraId, String name) {
     super(cameraId, name);
     this.position = pos;
     this.zoom = zoom;
@@ -63,6 +64,7 @@ public class IPCameraPreset extends Preset {
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
    * @param keyWords  The keywords of this preset
+   * @param name      The name of the preset
    */
   public IPCameraPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,

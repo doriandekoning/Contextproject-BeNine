@@ -22,6 +22,7 @@ public abstract class Preset {
    * Constructs a preset.
    *
    * @param cameraId  The id of the camera associated with this preset.
+   * @param name      The name of te preset
    */
   public Preset(int cameraId, String name) {
     this.cameraId = cameraId;
@@ -140,7 +141,7 @@ public abstract class Preset {
     if (!tags.equals(preset.getTags())) {
       return false;
     }
-    if(!name.equals(preset.name)) {
+    if (!name.equals(preset.name)) {
       return false;
     }
     return true;
