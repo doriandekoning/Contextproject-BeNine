@@ -570,13 +570,13 @@ public class MySQLDatabase implements Database {
   }
   
   /**
-   * Getter for the simple presets from the list of presets.
-   *
-   * @param resultset the list with all the presets
-   * @return The preset from the resultset
-   */
-  public SimplePreset getSimplePresetsFromResultSet(ResultSet resultset) {
-    try {
+      * Getter for the simple presets from the list of presets.
+      *
+      * @param resultset the list with all the presets
+          * @return The preset from the resultset
+      */
+      public SimplePreset getSimplePresetsFromResultSet(ResultSet resultset) {
+        try {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
       SimplePreset preset = new SimplePreset(cameraId);

@@ -22,7 +22,7 @@ public class SimplePresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new SimplePreset(1, keywords);
+    preset = new SimplePreset(1, keywords, "name");
     preset.setId(1);
     preset.setImage("test");
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");

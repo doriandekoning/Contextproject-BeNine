@@ -46,6 +46,7 @@ public class CreatePresetHandler extends RequestHandler {
       
       Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
 
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
@@ -53,7 +54,7 @@ public class CreatePresetHandler extends RequestHandler {
       } 
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
-        Preset preset = presetCamera.createPreset(tagList);
+        Preset preset = presetCamera.createPreset(tagList, name);
 
         int presetID = getPresetController().addPreset(preset);
         createImage(camera.getId(), presetID);

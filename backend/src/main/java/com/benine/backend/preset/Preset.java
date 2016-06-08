@@ -16,14 +16,16 @@ public abstract class Preset {
   private int presetid = -1;
   protected Set<String> tags = new HashSet<String>();
   private int cameraId;
+  private String name;
 
   /**
    * Constructs a preset.
    *
    * @param cameraId  The id of the camera associated with this preset.
    */
-  public Preset(int cameraId) {
+  public Preset(int cameraId, String name) {
     this.cameraId = cameraId;
+    this.name = name;
   }
 
   public String getImage() {
@@ -52,6 +54,14 @@ public abstract class Preset {
 
   public Set<String> getTags() {
     return tags;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
 
@@ -128,6 +138,9 @@ public abstract class Preset {
       return false;
     }
     if (!tags.equals(preset.getTags())) {
+      return false;
+    }
+    if(!name.equals(preset.name)) {
       return false;
     }
     return true;

@@ -507,7 +507,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
+  public IPCameraPreset createPreset(Set<String> tagList, String name) throws CameraConnectionException {
     int zoom = getZoomPosition();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();
@@ -519,6 +519,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
     return new IPCameraPreset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId, tagList);
+            tiltspeed, autoiris, cameraId, tagList, name);
   }
 }

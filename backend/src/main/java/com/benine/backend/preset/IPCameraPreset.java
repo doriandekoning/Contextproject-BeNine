@@ -38,8 +38,8 @@ public class IPCameraPreset extends Preset {
    * @param cameraId  The id of the camera associated with this preset.
    */
   public IPCameraPreset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
-    super(cameraId);
+               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId, String name) {
+    super(cameraId, name);
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -66,8 +66,8 @@ public class IPCameraPreset extends Preset {
    */
   public IPCameraPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, Set<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
+                boolean autoiris, int cameraId, Set<String> keyWords, String name) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId, name);
     super.tags.addAll(keyWords);
   }
   
