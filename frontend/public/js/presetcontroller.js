@@ -235,6 +235,15 @@ function editPreset() {
 }
 
 /**
+ * Function is called when the deletion button of the edit window is clicked.
+ */
+function deletePreset() {
+	editingpreset.delete();
+	loadPresets();
+}
+
+
+/**
  * Load for the specified preset the edit modal.
  * @preset to load the edit window for.
  */

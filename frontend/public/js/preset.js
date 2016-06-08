@@ -49,7 +49,14 @@ Preset.prototype = {
 		switchCurrentView(this.cameraid);
 		console.log("Recall preset id: " + this.id);
 	},
-	
+
+	/**
+	 * Recall this preset.
+	 */
+	delete: function() {
+		$.get("/api/backend/presets/deletepreset?id=" + this.id  , function(data) {});
+	},
+
 	/**
 	* Update this preset with these new values.
 	*/
