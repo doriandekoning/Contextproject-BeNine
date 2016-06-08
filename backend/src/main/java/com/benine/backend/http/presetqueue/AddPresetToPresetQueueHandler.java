@@ -2,7 +2,6 @@ package com.benine.backend.http.presetqueue;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.http.MalformedURIException;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
 
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
 
   /**
-   * Constructs a handler for adding a preset to a preset queue /presetqueues/{id}/add
+   * Constructs a handler for adding a preset to a preset queue /presetqueues/{id}/addpreset
    * @param httpserver this handler belongs to.
    */
   public AddPresetToPresetQueueHandler(HTTPServer httpserver) {
@@ -48,7 +47,7 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
     }
     
     if (!failure) {
-      addPreset(position, preset, presetQueue);
+      getPresetQueueController().updatePresetQueue(addPreset(position, preset, presetQueue));
       respondSuccess(request, res);
       getLogger().log("Preset " + presetid + " is succesfully added to queue: " 
                                                           + id, LogEvent.Type.INFO);
@@ -67,13 +66,15 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
    * @param position to add the preset to.
    * @param preset to add to the queue.
    * @param presetQueue where the preset will be added to.
+   * @return updated presetQueue
    */
-  private void addPreset(String position, Preset preset, PresetQueue presetQueue) {
+  private PresetQueue addPreset(String position, Preset preset, PresetQueue presetQueue) {
     if (position == null) {
       presetQueue.addPresetEnd(preset);
     } else {
       presetQueue.insertPreset(Integer.parseInt(position), preset);
     }
+    return presetQueue;
   }
  
 

@@ -16,6 +16,7 @@ import com.benine.backend.http.presetqueue.AddPresetToPresetQueueHandler;
 import com.benine.backend.http.presetqueue.CreatePresetQueueHandler;
 import com.benine.backend.http.presetqueue.DeletePresetFromPresetQueueHandler;
 import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
+import com.benine.backend.http.presetqueue.EditPresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import static org.mockito.Mockito.when;
@@ -26,6 +27,7 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   JSONObject jsonObject;
   CreatePresetQueueHandler createHandler = mock(CreatePresetQueueHandler.class);
   DeletePresetQueueHandler deleteHandler = mock(DeletePresetQueueHandler.class);
+  EditPresetQueueHandler editHandler = mock(EditPresetQueueHandler.class);
   AddPresetToPresetQueueHandler addHandler = mock(AddPresetToPresetQueueHandler.class);
   DeletePresetFromPresetQueueHandler deletePresetHandler = mock(DeletePresetFromPresetQueueHandler.class);
 
@@ -44,7 +46,8 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
 
     ((PresetQueueHandler) getHandler()).addHandler("/create", createHandler);
     ((PresetQueueHandler) getHandler()).addHandler("/delete", deleteHandler);
-    ((PresetQueueHandler) getHandler()).addHandler("/add", addHandler);
+    ((PresetQueueHandler) getHandler()).addHandler("/edit", editHandler);
+    ((PresetQueueHandler) getHandler()).addHandler("/addpreset", addHandler);
     ((PresetQueueHandler) getHandler()).addHandler("/deletepreset", deletePresetHandler);
   }
   
@@ -66,7 +69,7 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
   @Test
   public void testRouteAdd() throws IOException, ServletException {
-    setPath("/add");
+    setPath("/addpreset");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(addHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
   }
@@ -76,6 +79,13 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     setPath("/create");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(createHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
+  }
+  
+  @Test
+  public void testRouteEdit() throws IOException, ServletException {
+    setPath("/edit");
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    verify(editHandler).handle(target, requestMock, httprequestMock, httpresponseMock);
   }
   
   @Test

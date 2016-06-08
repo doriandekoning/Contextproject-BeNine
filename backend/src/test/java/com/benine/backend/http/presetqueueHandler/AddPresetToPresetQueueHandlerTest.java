@@ -10,11 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.benine.backend.http.presetqueue.AddPresetToPresetQueueHandler;
-import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 
 public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
@@ -45,6 +43,7 @@ public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandler
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(presetQueue).insertPreset(2, preset);
+    verify(presetQueueController).updatePresetQueue(presetQueue);
     verify(requestMock).setHandled(true);
   }
   
@@ -59,6 +58,7 @@ public class AddPresetToPresetQueueHandlerTest extends PresetQueueRequestHandler
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(presetQueue).addPresetEnd(preset);
+    verify(presetQueueController).updatePresetQueue(presetQueue);
     verify(requestMock).setHandled(true);
   }
   
