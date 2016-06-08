@@ -518,7 +518,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testAddQueue() throws SQLException {
         database.resetDatabase();
-        database.addQueue(new PresetQueue(1, "name", null));
+        PresetQueue queue = new PresetQueue("name", null);
+        queue.setID(1);
+        database.addQueue(queue);
         database.closeConnection();
         verifySQLStatementExecuted("INSERT INTO queue VALUES(1,'name')");
         verifyCommitted();
@@ -585,7 +587,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         Connection connection = mock(Connection.class);
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
-        database.addQueue(new PresetQueue(0, null, null));
+        database.addQueue(new PresetQueue(null, null));
         verify(logger).log("Queue could not be added.", LogEvent.Type.CRITICAL);
     }
 
