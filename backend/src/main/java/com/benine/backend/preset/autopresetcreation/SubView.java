@@ -8,11 +8,30 @@ public class SubView {
   private Coordinate topLeft;
   private Coordinate bottomRight;
 
+  /**
+   * Creates a new subview object.
+   * @param topLeft coordinate specifying the top left corner
+   * @param bottomRight coordinate specifying the bottom right corner
+   */
   public SubView(Coordinate topLeft, Coordinate bottomRight) {
     assert topLeft.getY() > bottomRight.getY();
     assert bottomRight.getX() > topLeft.getX();
     this.topLeft = topLeft;
     this.bottomRight = bottomRight;
+  }
+
+  /**
+   * Creates a new subview object.
+   * @param topX x coordinate of the top left corner
+   * @param topY y coordinate of the top left corner
+   * @param bottomX x coordinate of the bottom right corner
+   * @param bottomY y coordinate of the bottom right corner
+   */
+  public SubView(double topX, double topY, double bottomX, double bottomY) {
+    assert topY > bottomY;
+    assert bottomX > topX;
+    this.topLeft = new Coordinate(topX, topY);
+    this.bottomRight = new Coordinate(bottomX, bottomY);
   }
 
 

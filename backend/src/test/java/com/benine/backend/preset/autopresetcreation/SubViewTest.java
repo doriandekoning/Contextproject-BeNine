@@ -11,6 +11,23 @@ import static org.mockito.Mockito.when;
  */
 public class SubViewTest {
 
+  @Test (expected = AssertionError.class)
+  public void testConstructorBottomHigher() {
+    new SubView(10, 40, 50, 50);
+  }
+
+  @Test (expected = AssertionError.class)
+  public void testConstructorRightBottomLeftOfLeftTop() {
+    new SubView(70, 90, 50, 50);
+  }
+
+  @Test
+  public void testConstructorNoCoordinates() {
+    SubView subView = new SubView(10, 90, 45, 55);
+    Assert.assertEquals(new Coordinate(10, 90), subView.getTopLeft());
+    Assert.assertEquals(new Coordinate(45, 55), subView.getBottomRight());
+  }
+
   @Test
   public void testGetTopLeft() {
     Coordinate c = new Coordinate (10, 90);
