@@ -16,9 +16,37 @@ function loadTable() {
     for (var key in presets) {
         table.append(createRow(presets[key]));
     }
-
 }
 
+/**
+ * Sets the setCurrent view.
+ * @param preset A preset Object.
+ */
+function setCurrent(preset) {
+    var current = $('#select-current');
+
+    current.find('img').attr("src", "/api/backend" + preset['image']);
+    current.find('.preset_title').text("Preset " + preset['id']);
+    current.find('.preset_camera_number').text(preset['cameraid']);
+}
+
+/**
+ * Sets the setUpNext view.
+ * @param preset A preset Object.
+ */
+function setUpNext(preset) {
+    var upnext = $('#select-upnext');
+
+    upnext.find('img').attr("src", "/api/backend" + preset['image']);
+    upnext.find('.preset_title').text("Preset " + preset['id']);
+    upnext.find('.preset_camera_number').text(preset['cameraid']);
+}
+
+/**
+ * Creates a row in the preset.
+ * @param preset a preset Object.
+ * @returns {*|jQuery|HTMLElement} a row which can be appended to the table.
+ */
 function createRow(preset) {
     tablesize++;
     var row = $("<tr id=\"queuepreset_" + tablesize + "\"></tr>");

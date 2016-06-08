@@ -18,7 +18,8 @@ $(document).ready(function() {
 	// Load the available presets from the backend.
 	loadPresets();
 
-    console.log('Page has loaded successfully.');
+	Holder.run({});
+	console.log('Page has loaded successfully.');
 });
 
 /**
