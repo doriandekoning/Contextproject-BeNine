@@ -1,9 +1,9 @@
 package com.benine.backend.http.presetqueue;
 
-import org.eclipse.jetty.server.Request;
-
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+
+import org.eclipse.jetty.server.Request;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

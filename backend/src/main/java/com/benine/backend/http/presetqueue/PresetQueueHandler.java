@@ -1,9 +1,9 @@
 package com.benine.backend.http.presetqueue;
 
-import org.eclipse.jetty.server.Request;
-
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+
+import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -48,9 +48,7 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
     }
 
     if (!routed) {
-      //TODO should respond all the presetqueues.
-      //String presetInfo = getPresetController().getPresetsJSON(tag);
-      String presetQueues = "";
+      String presetQueues = getPresetQueueController().getPresetQueueJSON();
       respond(request, res, presetQueues);
       request.setHandled(true);
     }
