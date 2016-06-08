@@ -1,9 +1,11 @@
-package com.benine.backend;
+package com.benine.backend.preset;
 
-import com.benine.backend.camera.*;
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.autopresetcreation.SubView;
 import com.benine.backend.video.StreamNotAvailableException;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ public abstract class AutoPresetCreator {
    * @throws IOException if exception occurs when creating the preset image.
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
    */
-  public Collection<Preset> createPresets(IPCamera cam)
+  public Collection<Preset> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException {
     if (cam.isBusy()) {
@@ -40,8 +42,8 @@ public abstract class AutoPresetCreator {
     cam.setBusy(true);
     Position camStartPos = cam.getPosition();
     ArrayList<Preset> presets = new ArrayList<Preset>();
-    System.out.println(generatePositions(cam));
-    for (ZoomPosition pos : generatePositions(cam)) {
+    System.out.println(generatePositions(cam, subViews));
+    for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setBusy(false);
       cam.moveTo(pos, 2, 30);
       System.out.println(pos);
@@ -60,7 +62,7 @@ public abstract class AutoPresetCreator {
    * @return A collection of positions.
    * @throws CameraConnectionException when the camera cannot be reached.
    */
-  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam)
+  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException;
 
 

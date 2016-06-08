@@ -40,6 +40,10 @@ public class SubView {
   }
 
 
+  public Coordinate getCenter () {
+    return new Coordinate(topLeft.getX() + (getWidth()/2), topLeft.getY() - (getHeight()/2));
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
