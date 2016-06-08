@@ -21,8 +21,8 @@ public abstract class Preset {
   /**
    * Constructs a preset.
    *
-   * @param cameraId  The id of the camera associated with this preset.
-   * @param name      The name of te preset
+   * @param cameraId The id of the camera associated with this preset.
+   * @param name     The name of te preset
    */
   public Preset(int cameraId, String name) {
     this.cameraId = cameraId;
@@ -68,6 +68,7 @@ public abstract class Preset {
 
   /**
    * Adds a new tag to this object.
+   *
    * @param tag the tag to add.
    */
   public void addTag(String tag) {
@@ -77,6 +78,7 @@ public abstract class Preset {
 
   /**
    * Adds a list of keywords to this class.
+   *
    * @param tags a list of keywords
    */
   public void addTags(Set<String> tags) {
@@ -86,19 +88,20 @@ public abstract class Preset {
 
   /**
    * Removes a keyword from this preset.
+   *
    * @param tag the keyword to remove
    */
   public void removeTag(String tag) {
     tags.remove(tag);
   }
-  
+
   /**
-   * Remove all the tags from this preset. 
+   * Remove all the tags from this preset.
    */
   public void removeTags() {
     this.tags.removeAll(getTags());
   }
-  
+
   /**
    * Returns a JSON representation of this object.
    *
@@ -119,6 +122,7 @@ public abstract class Preset {
 
   /**
    * Checking if two presets are equal.
+   *
    * @param o the object to be checked with.
    * @return true if two presets are equal, false otherwise.
    */
@@ -129,19 +133,9 @@ public abstract class Preset {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     Preset preset = (Preset) o;
-    
-    if (presetid != preset.presetid) {
-      return false;
-    }
-    if (cameraId != preset.cameraId) {
-      return false;
-    }
-    if (!tags.equals(preset.getTags())) {
-      return false;
-    }
-    if (!name.equals(preset.name)) {
+    if (presetid != preset.presetid || cameraId != preset.cameraId
+        || !tags.equals(preset.getTags()) || !name.equals(preset.name)) {
       return false;
     }
     return true;
@@ -149,19 +143,22 @@ public abstract class Preset {
 
   /**
    * Recall this preset by moving the camera to the right position.
+   *
    * @param camera used to move the camera.
    * @throws CameraConnectionException when camera can't be moved
    */
   public abstract void excecutePreset(Camera camera) throws CameraConnectionException;
-  
+
   /**
    * Creates a sql query to insert a preset in the database.
+   *
    * @return The query
    */
   public abstract String createAddSqlQuery();
-  
+
   /**
    * Creates a sql query to delete a preset in the database.
+   *
    * @return the query.
    */
   public abstract String createDeleteSQL();
