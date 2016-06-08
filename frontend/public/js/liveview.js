@@ -23,11 +23,13 @@ function loadTable() {
  * @param preset A preset Object.
  */
 function setCurrent(preset) {
-    var current = $('#select-current');
+    var view = $('#select-current');
 
-    current.find('img').attr("src", "/api/backend" + preset['image']);
-    current.find('.preset_title').text("Preset " + preset['id']);
-    current.find('.preset_camera_number').text(preset['cameraid']);
+    if (preset!== undefined) {
+        setQueueView(view, preset);
+    } else {
+        setQueueViewPlaceholder(view, "holder.js/128x77?auto=yes&text=Current&bg=85ca85");
+    }
 }
 
 /**
@@ -35,11 +37,26 @@ function setCurrent(preset) {
  * @param preset A preset Object.
  */
 function setUpNext(preset) {
-    var upnext = $('#select-upnext');
+    var view = $('#select-upnext');
 
-    upnext.find('img').attr("src", "/api/backend" + preset['image']);
-    upnext.find('.preset_title').text("Preset " + preset['id']);
-    upnext.find('.preset_camera_number').text(preset['cameraid']);
+    if (preset!== undefined) {
+        setQueueView(view, preset);
+    } else {
+        setQueueViewPlaceholder(view, "holder.js/128x77?auto=yes&text=Up Next&bg=f1bf7c");
+    }
+}
+
+function setQueueViewPlaceholder(view, image) {
+    view.find('img').replaceWith($('<img data-src=' + image + ' class="col-xs-9">'));
+    view.find('.preset_title').text("-");
+    view.find('.preset_camera_number').text("-");
+    Holder.run({});
+}
+
+function setQueueView(view, preset) {
+    view.find('img').attr("src", "/api/backend" + preset['image']);
+    view.find('.preset_title').text("Preset " + preset['id']);
+    view.find('.preset_camera_number').text(preset['cameraid']);
 }
 
 /**
