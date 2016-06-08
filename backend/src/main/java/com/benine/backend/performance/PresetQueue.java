@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class PresetQueue {
 
-  private ArrayList<Preset> queue = new ArrayList<Preset>();
+  private ArrayList<Preset> queue = new ArrayList<>();
   private String name;
   private int ID = -1;
   
