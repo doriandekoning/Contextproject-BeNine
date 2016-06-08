@@ -502,10 +502,19 @@ input[type=range]:focus {
 
 .queue_area .table tbody th, .queue_area .table tbody td {
     border-top: 1px solid #666666;
+    text-align: left;
 }
 
 .queue_area {
     overflow: scroll;
+}
+
+.id_column {
+    width: 10%;
+}
+
+.name_column, .tag_column {
+    width: 40%
 }
 
 .queue_table_title {
@@ -516,4 +525,16 @@ input[type=range]:focus {
     margin-bottom: 0;
     flex-shrink: 0;
     margin-bottom: 2px;
+}
+
+#right_area table {
+    table-layout: fixed;
+}
+
+.column_id, .column_camid {
+    width: 15%;
+}
+
+.column_name {
+    width: 25%;
 }
