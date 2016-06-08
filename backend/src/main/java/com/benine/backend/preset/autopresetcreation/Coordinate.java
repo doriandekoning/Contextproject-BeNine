@@ -1,5 +1,7 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
+import org.json.simple.JSONObject;
+
 /**
  * Represents a location in the current camera view as a Cartesian coordinate.
  */
@@ -90,10 +92,23 @@ public class Coordinate {
   }
 
   /**
-   * Checks if two coordinates are equal.
-
+   * Returns a string representation of this coordinate.
+   * @return a string of this object.s
    */
+  @Override
+  public String toString() {
+    return "("+x+","+y+")";
+  }
 
-
+  /**
+   * Returns a json object representing this object.
+   * @return JSON representation of this object.
+   */
+  public JSONObject toJSON() {
+    JSONObject obj = new JSONObject();
+    obj.put("x", x);
+    obj.put("y", y);
+    return obj;
+  }
 
 }

@@ -1,5 +1,6 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -140,5 +141,20 @@ public class CoordinateTest {
     Coordinate c1 = new Coordinate(2, 2);
     Coordinate c2 = new Coordinate(2, 2);
     Assert.assertEquals(c1.hashCode(), c2.hashCode());
+  }
+
+  @Test
+  public void testToString() {
+    Coordinate c = new Coordinate(1.3, 5.3);
+    Assert.assertEquals(c.toString(), "(1.3,5.3)");
+  }
+
+  @Test
+  public void testToJSON() {
+    Coordinate c = new Coordinate(1.3, 5.3);
+    JSONObject obj = new JSONObject();
+    obj.put("x", 1.3);
+    obj.put("y", 5.3);
+    Assert.assertEquals(c.toJSON(), obj);
   }
 }
