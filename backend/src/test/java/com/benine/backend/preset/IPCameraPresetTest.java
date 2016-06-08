@@ -55,6 +55,11 @@ public class IPCameraPresetTest {
   }
 
   @Test
+  public void testDeleteSQL() {
+    Assert.assertEquals("DELETE FROM IPpreset WHERE ID = -1", preset.createDeleteSQL());
+  }
+
+  @Test
   public void testToJSON() throws JSONException {
     JSONObject jsonObject = preset.toJSON();
     Assert.assertEquals(10.0, jsonObject.get("pan"));
@@ -81,6 +86,7 @@ public class IPCameraPresetTest {
     Assert.assertEquals(1, preset.getPanspeed());
     Assert.assertEquals(2, preset.getTiltspeed());
     Assert.assertEquals(false, preset.isAutoiris());
+    Assert.assertEquals("name", preset.getName());
   }
 
   @Test
@@ -230,7 +236,8 @@ public class IPCameraPresetTest {
 
   @Test
   public void testEqualsDifferentCameraId() {
-    IPCameraPreset preset2 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, true, 1, 2, true, 0, "name");
+    IPCameraPreset preset = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, "name");
+    IPCameraPreset preset2 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 1, "name");
     Assert.assertNotEquals(preset, preset2);
   }
   
@@ -239,6 +246,13 @@ public class IPCameraPresetTest {
     IPCameraPreset preset = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, "name");
     IPCameraPreset preset2 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, "name");
     Assert.assertEquals(preset, preset2);
+  }
+
+  @Test
+  public void testEqualsOtherName() {
+    IPCameraPreset preset = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, "name");
+    IPCameraPreset preset2 = new IPCameraPreset(new Position(0, 0), 0, 0, 0, false, 1, 2, false, 0, "name2");
+    Assert.assertNotEquals(preset, preset2);
   }
 
   @Test
@@ -314,5 +328,11 @@ public class IPCameraPresetTest {
     // Actual method to test
     preset.setCameraId(42);
     Assert.assertEquals(42, preset.getCameraId());
+  }
+
+  @Test
+  public void testSetName() {
+    preset.setName("name2");
+    Assert.assertEquals("name2", preset.getName());
   }
 }

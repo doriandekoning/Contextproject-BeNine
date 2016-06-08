@@ -49,4 +49,9 @@ public class SimplePresetTest {
     Assert.assertEquals("INSERT INTO presetsdatabase.simplepreset VALUES(1,'test',1)", preset.createAddSqlQuery());
   }
 
+  @Test
+  public void testDeleteSQL() {
+    Assert.assertEquals("DELETE FROM simplepreset WHERE ID = 1", preset.createDeleteSQL());
+  }
+
 }
