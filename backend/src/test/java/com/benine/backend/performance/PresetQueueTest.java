@@ -102,7 +102,9 @@ public class PresetQueueTest {
      assertEquals(queue,queue);
      assertEquals(queue,queue2);
      assertNotEquals(queue,null);
-     assertEquals(queue.getName(),queue2.getName());
+     
+     queue2.setName(null);
+     assertNotEquals(queue.getName(),queue2.getName());
      assertNotEquals(queue, 2);
      
      queue2.setID(3);
