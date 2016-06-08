@@ -239,6 +239,11 @@ function editPreset() {
  */
 function deletePreset() {
 	editingpreset.delete();
+
+	var editingindex = presets.indexOf(editingpreset);
+	if (editingindex !== -1) {
+		presets.splice(editingindex, 1);
+	};
 	loadPresets();
 }
 
