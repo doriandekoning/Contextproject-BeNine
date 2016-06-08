@@ -38,4 +38,32 @@ public class SubView {
   public Coordinate getBottomRight() {
     return bottomRight;
   }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    SubView subView = (SubView) o;
+
+    if (topLeft != null ? !topLeft.equals(subView.topLeft) : subView.topLeft != null) {
+      return false;
+    }
+    return bottomRight != null ?
+            bottomRight.equals(subView.bottomRight)
+            : subView.bottomRight == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = topLeft != null ? topLeft.hashCode() : 0;
+    result = 31 * result + (bottomRight != null ? bottomRight.hashCode() : 0);
+    return result;
+  }
 }
