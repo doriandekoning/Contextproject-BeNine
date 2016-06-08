@@ -111,7 +111,7 @@ public class PresetQueue {
   * PresetQueue toJSON. 
   * @return a JSON object of the presetqueue.
   */
-  public Object toJSON() {
+  public JSONObject toJSON() {
     JSONObject json = new JSONObject();
     json.put("id", getID());
     json.put("name", getName());
