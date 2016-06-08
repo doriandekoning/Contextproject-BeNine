@@ -51,7 +51,7 @@ Preset.prototype = {
 	},
 
 	/**
-	 * Recall this preset.
+	 * Delete this preset.
 	 */
 	delete: function() {
 		$.get("/api/backend/presets/deletepreset?id=" + this.id  , function(data) {});
