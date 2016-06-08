@@ -3,6 +3,7 @@ package com.benine.backend.performance;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.benine.backend.database.MySQLDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -35,6 +36,7 @@ public class PresetQueueControllerTest {
     json3.put("id", 3);
     json3.put("name", "testQueue");
     when(presetQueue3.toJSON()).thenReturn(json3);
+    ServerController.getInstance().getDatabaseController().setDatabase(mock(MySQLDatabase.class));
   }
   
   @Test

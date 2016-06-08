@@ -48,8 +48,7 @@ public class EditPresetHandler extends RequestHandler {
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
       
-      Preset preset = getPresetController().getPresetById(presetID);
-     
+      Preset preset = getPresetController().getPresetById(presetID);   
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
@@ -77,10 +76,12 @@ public class EditPresetHandler extends RequestHandler {
    * Updating the tag only.
    * @param preset the preset to be changed
    * @param tagList the tag to be added
+   * @throws SQLException when preset can not be updated.
    */
-  private void updateTag(Preset preset, Set<String> tagList) {
+  private void updateTag(Preset preset, Set<String> tagList) throws SQLException {
     preset.removeTags();
     preset.addTags(tagList);
+    getPresetController().updatePreset(preset);
   }
   
   /**
