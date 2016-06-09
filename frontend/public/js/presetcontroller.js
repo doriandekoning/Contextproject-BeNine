@@ -255,6 +255,7 @@ function loadPresetEditModal(preset) {
 	editingpreset = preset;
 	preset_edit_div.find('#presetID').text(preset.id);
 	preset_edit_div.find('img').attr("src", "/api/backend" + preset.image);
+	preset_edit_div.find('#edit_preset_name').val(preset.name);
 	edit_tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {
 		edit_tags_input.tagsinput('add', item);
