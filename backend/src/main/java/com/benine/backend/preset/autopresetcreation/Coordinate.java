@@ -16,8 +16,9 @@ public class Coordinate {
    * @param y relative y coordinate (between 0-100)
    */
   public Coordinate(double x, double y) {
-    assert x >= 0 && x <= 100;
-    assert y >= 0 && y <= 100;
+    final double delta = 0.05;
+    assert x + delta >= 0 && x - delta <= 100;
+    assert y + delta >= 0 && y - delta <= 100;
     this.x = x;
     this.y = y;
   }
