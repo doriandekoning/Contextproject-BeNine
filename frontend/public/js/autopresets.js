@@ -20,7 +20,7 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   };
   var imageWidth = canvas.width - (offset * 2);
   var imageHeight = canvas.height - (offset * 2);
-  imageObj.src = '/api/backend/camera/1/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
+  imageObj.src = '/api/backend/camera/'+currentcamera+'/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
 })
 
 
