@@ -623,3 +623,11 @@ input[type=range]:focus {
     border-color: #666666;
     color: #333333;
 }
+
+.queue_area .table .upnext {
+    background-color: rgba(240, 173, 78, 0.75);
+}
+
+.queue_area .table .current {
+    background-color: rgba(92, 184, 92, 0.75);
+}
