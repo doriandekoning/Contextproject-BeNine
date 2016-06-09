@@ -25,6 +25,39 @@ function drawPerformances() {
 }
 
 /**
+* Called on input of the preset search in the edit performance window.
+*/
+function presetSearchInput(val) {
+	if (val !== '') {
+		var matchingpresets = matchingPresets(val);
+		drawPresets(matchingpresets);
+	} else {
+		drawPresets(presets);
+	}
+}
+
+/**
+* When a tags suggestion is selected cal the tagSearchInput function.
+*/
+$('#presetsearch_input').on('typeahead:selected',function (e, val) {
+	presetSearchInput(val);
+});
+
+/**
+* Display the typahead in the search box of the performance window.
+*/
+$('#presetsearch_input').typeahead({
+		highlight: true,
+		minLength: 0
+	},
+	{
+		name: 'tags',
+		source: tagsWithDefaults,
+		limit:25
+	}
+);
+
+/**
  * Draws the schedule for a given performance.
  * @param performance A performance object.
  */
@@ -107,7 +140,7 @@ function moveScheduleDown() {
 
 function drawPresets(presetlist) {
     var list = $("#performance-preset-selector");
-
+	list.children().remove();
     for (key in presetlist) {
         var preset = presetlist[key];
 

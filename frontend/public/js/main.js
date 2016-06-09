@@ -21,7 +21,7 @@ $(document).ready(function() {
 
 	// Load the available perforamnces from the backend.
 	loadPerformances();
-
+	
 	Holder.run({});
 	console.log('Page has loaded successfully.');
 });
