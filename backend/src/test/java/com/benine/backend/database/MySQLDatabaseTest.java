@@ -141,7 +141,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO camera VALUES(?,'?')");
+        verifySQLStatementExecuted("INSERT INTO camera VALUES(?,?)");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -339,7 +339,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO tag VALUES('?')");
+        verifySQLStatementExecuted("INSERT INTO tag VALUES(?)");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -351,7 +351,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTag("tag1");
         database.deleteTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tag WHERE name = '?'");
+        verifySQLStatementExecuted("DELETE FROM tag WHERE name = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -373,7 +373,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedAddTag() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        String sql = "INSERT INTO tag VALUES('?')";
+        String sql = "INSERT INTO tag VALUES(?)";
         doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.addTag("tag1");
@@ -384,7 +384,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedDeleteTag() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        String sql = "DELETE FROM tag WHERE name = '?'";
+        String sql = "DELETE FROM tag WHERE name = ?";
         doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.deleteTag("tag1");
@@ -420,7 +420,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTagToPreset("tag1", preset);
         database.deleteTagFromPreset("tag1", preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE tag_name = '?'");
+        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE tag_name = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -508,7 +508,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addQueue(new PresetQueue(1, "name", null));
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO queue VALUES(?,'?')");
+        verifySQLStatementExecuted("INSERT INTO queue VALUES(?,?)");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();

@@ -71,7 +71,7 @@ public class MySQLDatabase implements Database {
   public void addTagToPreset(String tag, Preset preset) {
     PreparedStatement statement = null;
     try {
-      String sql = "INSERT INTO tagPreset VALUES(?,'?')";
+      String sql = "INSERT INTO tagPreset VALUES(?,?)";
       statement = connection.prepareStatement(sql);
       statement.setInt(1, preset.getId());
       statement.setString(2, tag);
@@ -87,7 +87,7 @@ public class MySQLDatabase implements Database {
   public void deleteTagFromPreset(String tag, Preset preset) {
     PreparedStatement statement = null;
     try {
-      String sql = "DELETE FROM tagPreset WHERE tag_Name = '?' AND preset_ID = ?";
+      String sql = "DELETE FROM tagPreset WHERE tag_Name = ? AND preset_ID = ?";
       statement = connection.prepareStatement(sql);
       statement.setString(1, tag);
       statement.setInt(2, preset.getId());
@@ -185,7 +185,7 @@ public class MySQLDatabase implements Database {
   public void addQueue(PresetQueue queue) {
     PreparedStatement statement = null;
     try {
-      String sql = "INSERT INTO queue VALUES(?,'?')";
+      String sql = "INSERT INTO queue VALUES(?,?)";
       statement = connection.prepareStatement(sql);
       statement.setInt(1, queue.getID());
       statement.setString(2, queue.getName());
@@ -372,7 +372,7 @@ public class MySQLDatabase implements Database {
   public void addCamera(int id, String macAddress) {
     PreparedStatement statement = null;
     try {
-      String sql = "INSERT INTO camera VALUES(?,'?')";
+      String sql = "INSERT INTO camera VALUES(?,?)";
       statement = connection.prepareStatement(sql);
       statement.setInt(1, id);
       statement.setString(2, macAddress);
@@ -500,7 +500,7 @@ public class MySQLDatabase implements Database {
   public void addTag(String name) {
     PreparedStatement statement = null;
     try {
-      String sql = "INSERT INTO tag VALUES('?')";
+      String sql = "INSERT INTO tag VALUES(?)";
       statement = connection.prepareStatement(sql);
       statement.setString(1, name);
       statement.executeUpdate();
@@ -515,7 +515,7 @@ public class MySQLDatabase implements Database {
   public void deleteTag(String name) {
     PreparedStatement statement = null;
     try {
-      String sql = "DELETE FROM tag WHERE name = '?'";
+      String sql = "DELETE FROM tag WHERE name = ?";
       statement = connection.prepareStatement(sql);
       statement.setString(1, name);
       statement.executeUpdate();
