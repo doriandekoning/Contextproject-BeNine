@@ -191,7 +191,7 @@ public class MySQLDatabase implements Database {
       statement = connection.prepareStatement(sql);
       statement.setInt(1, queue.getID());
       statement.setString(2, queue.getName());
-      statement.executeUpdate(sql);
+      statement.executeUpdate();
       addPresetsList(queue.getQueue(), queue.getID());
     } catch (Exception e) {
       logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);
