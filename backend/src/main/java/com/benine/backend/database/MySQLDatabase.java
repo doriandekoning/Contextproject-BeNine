@@ -258,9 +258,9 @@ public class MySQLDatabase implements Database {
    */
   private String createAddSqlQuery(Preset preset) {
     if (preset instanceof SimplePreset) {
-      return "INSERT INTO presetsdatabase.simplepreset VALUES(?,?,?,?)";
+      return "INSERT INTO simplepreset VALUES(?,?,?,?)";
     } else {
-      return "INSERT INTO presetsdatabase.IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      return "INSERT INTO IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
   }
 
@@ -344,9 +344,9 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
         + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
-        + " FROM presetsDatabase.IPpreset"));
+        + " FROM IPpreset"));
     list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
-        + " FROM presetsDatabase.simplepreset"));
+        + " FROM simplepreset"));
     for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
     }
@@ -402,7 +402,7 @@ public class MySQLDatabase implements Database {
       ResultSet databaseNames = connection.getMetaData().getCatalogs();
       while (databaseNames.next()) {
         String databaseName = databaseNames.getString(1);
-        if (databaseName.equals("presetsDatabase")) {
+        if (databaseName.equals("presetsdatabase")) {
           return true;
         }
       }
