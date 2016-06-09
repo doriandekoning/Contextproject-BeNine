@@ -617,3 +617,9 @@ input[type=range]:focus {
 .performance-list .col-xs-7, .performance-list .col-xs-5 {
     padding: 0;
 }
+
+#selectperformance-button {
+    background-color: #999999;
+    border-color: #666666;
+    color: #333333;
+}

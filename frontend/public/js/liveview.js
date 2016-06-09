@@ -3,11 +3,34 @@
  */
 var tablesize = 0;
 
+function livetest() {
+    performances = [];
+    performances.push(new Performance(1, "Test Performance", [1, 2]));
+
+    loadPerformanceDropdown()
+}
+
 /**
  * Loads the available performances from the backend.
  */
 function loadPerformances() {
-    
+}
+
+function loadPerformanceDropdown() {
+    var dropdown = $('#selectperformance');
+    var list = dropdown.find('.dropdown-menu');
+
+    for (i in performances) {
+        var performance = performances[i];
+
+        var li = $("<li></li>");
+        var a = $("<a></a>");
+        a.text(performance['name']);
+
+        li.append(a);
+        list.append(li);
+    }
+
 }
 
 /**
@@ -18,7 +41,6 @@ function loadTable() {
 
     table.children().remove();
     tablesize = 0;
-
 
     for (var key in presets) {
         table.append(createRow(presets[key]));
