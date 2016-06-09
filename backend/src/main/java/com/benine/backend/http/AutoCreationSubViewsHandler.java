@@ -30,16 +30,7 @@ public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    final String rowsString = request.getParameter("rows");
-    final String columnsString = request.getParameter("columns");
-    final String levelsString = request.getParameter("levels");
-    final String overlapString = request.getParameter("overlap");
-    int rows = rowsString != null ? Integer.parseInt(rowsString) : 3;
-    int columns = columnsString != null ? Integer.parseInt(columnsString) : 3;
-    int levels = levelsString != null ? Integer.parseInt(levelsString) : 3;
-    double overlap = overlapString != null ? Double.parseDouble(overlapString) : 0;
-    PresetPyramidCreator creator =
-            new PresetPyramidCreator(rows, columns, levels, overlap, getPresetController());
+    PresetPyramidCreator creator = getPyramidPresetCreator(request);
     Collection<SubView> subViews = creator.generateSubViews();
     JSONArray subViewsJSON = new JSONArray();
     subViews.forEach(sv -> subViewsJSON.add(sv.toJSON()));
