@@ -9,7 +9,7 @@ function Performance(id, name, queue) {
 }
 
 Performance.prototype = {
-	setPresets: function(queue) {
+	setPresets: function (queue) {
 		var presets = [];
 
 		for (i in queue) {
@@ -22,34 +22,30 @@ Performance.prototype = {
 		return presets;
 	},
 
-	update: function(newperformance) {
+	update: function (newperformance) {
 		this.name = newperformance.name;
 		this.queue = newperformance.queue;
+	},
+
+	delete: function () {
+		$.get("/api/backend/presetqueues/" + this.id + "/delete", function (data) {});
+	},
+
+	addpreset: function (preset) {
+		this.presets.push(preset);
+		var position = this.presets.length;
+		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {});
 	}
-};
+}
 
 function loadPerformances() {
 	$.get("/api/backend/presetqueues", function(data) {
+		performances = [];
+
 		var obj = JSON.parse(data);
 		for (var p in obj['presetqueues']) {
 			var performance = obj['presetqueues'][p];
-			checkPerformance(performance);
+			performances.push(new Performance(performance['id'], performance['name'], performance['queue']));
 		}
 	});
-}
-
-function checkPerformance(object) {
-	var exists = findPerformanceOnID(object.id);
-	if (exists === undefined) {
-		performances.push(new Performance(object['id'], object['name'], object['queue']));
-	} else {
-		exists.update(object);
-	}
-}
-
-function findPerformanceOnID(id){
-	var res = $.grep(performances, function(item, n) {
-		return parseInt(item.id) === parseInt(id);
-	});
-	return res[0];
 }

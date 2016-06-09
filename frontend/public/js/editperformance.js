@@ -47,7 +47,7 @@ function setNameEditable() {
         var element = selectedPerformance;
 
         var li = $('<li><div class="row">' +
-            '<div class="col-xs-7"><input type="text" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
+            '<div class="col-xs-7"><input type="text" id="performance-name" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
             '<div class="col-xs-5"><div class="btn-group"><button type="button" onclick="selectPerformance()" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
             '<button type="button" onclick="saveEditName()" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
             '</li>');
@@ -59,7 +59,7 @@ function setNameEditable() {
 }
 
 function saveEditName() {
-    //TODO: Save Name
+    $.get("/api/backend/presetqueues/" + nameEditingPerformance.data().id + "/edit?name=" + $("#performance-name").val(), function (data) {});
     selectPerformance();
 }
 
@@ -67,10 +67,14 @@ function deletePerformance() {
     if (selectedPerformance !== undefined) {
         var performance = selectedPerformance.data();
 
-        $.get("/api/backend/presetqueues/" + performance['id'] + "/delete", function(data) {
-            loadPerformances();
-            loadEditPerformance();
-        })
+        performance.delete();
+        selectedPerformance.remove();
+
+        var deleteindex = performances.indexOf(performance);
+        if (deleteindex !== -1) {
+            performances.splice(deleteindex, 1);
+        }
+
     }
 }
 
@@ -203,7 +207,11 @@ function drawPresets(presetlist) {
 }
 
 function addToSchedule() {
+    var preset = $(this).data();
 
+    var performance = selectedPerformance.data();
+    performance.addpreset(preset);
+    drawSchedule(performance)
 }
 
 function drawPreset(preset) {
