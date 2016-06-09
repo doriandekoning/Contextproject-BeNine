@@ -1,5 +1,7 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
+import org.json.simple.JSONObject;
+
 /**
  * Represents the subview of a current rectangle view.
  */
@@ -102,5 +104,12 @@ public class SubView {
             + "topLeft=" + topLeft
             + ", bottomRight=" + bottomRight
             + '}';
+  }
+
+  public JSONObject toJSON() {
+    JSONObject object = new JSONObject();
+    object.put("topLeft", topLeft.toJSON());
+    object.put("bottomRight", bottomRight.toJSON());
+    return object;
   }
 }

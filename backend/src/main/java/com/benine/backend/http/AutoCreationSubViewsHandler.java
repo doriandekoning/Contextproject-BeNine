@@ -40,7 +40,7 @@ public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
   // PresetPyramidCreator creator = getPyramidPresetCreator(request);
     Collection<SubView> subViews = creator.generateSubViews();
     JSONArray subViewsJSON = new JSONArray();
-    subViewsJSON.addAll(subViews);
+    subViews.forEach(sv -> subViewsJSON.add(sv.toJSON()));
     JSONObject jsonObj = new JSONObject();
     jsonObj.put("SubViews", subViewsJSON);
     respond(request, httpServletResponse, jsonObj.toJSONString());
