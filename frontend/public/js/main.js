@@ -41,6 +41,9 @@ function updateServerStatus() {
 	});
 }
 
+/**
+* Check which camera's are in use.
+*/
 function refreshCameras() {
 	$.get("/api/backend/camera", function(data) {
 		var obj = JSON.parse(data);
