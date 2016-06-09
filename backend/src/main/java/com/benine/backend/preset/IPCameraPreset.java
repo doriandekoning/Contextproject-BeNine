@@ -166,23 +166,6 @@ public class IPCameraPreset extends Preset {
    * Creates a sql query to insert a preset in the database.
    * @return The query
    */
-  public String createAddSqlQuery() {
-    int auto = 0;
-    if (isAutofocus()) {
-      auto = 1;
-    }
-    int autoir = 0;
-    if (isAutoiris()) {
-      autoir = 1;
-    }
-    return "INSERT INTO presetsdatabase.IPpreset VALUES(" + getId() + ","
-        + getPosition().getPan() + "," + getPosition().getTilt()
-        + "," + getZoom() + "," + getFocus()
-        + "," + getIris() + "," + auto + "," + getPanspeed() + ","
-        + getTiltspeed() + "," + autoir + ",'" + getImage() + "',"
-        + getCameraId() + ")";
-  }
-
 
   /**
    * Moves the camera
@@ -261,11 +244,6 @@ public class IPCameraPreset extends Preset {
       return false;
     }
     return true;
-  }
-
-  @Override
-  public String createDeleteSQL() {
-    return "DELETE FROM IPpreset WHERE ID = " + getId();
   }
 
 }
