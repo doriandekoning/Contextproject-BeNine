@@ -106,6 +106,10 @@ public class SubView {
             + '}';
   }
 
+  /**
+   * Returns a JSON representation of this object.
+   * @return JSON representation of this object.
+   */
   public JSONObject toJSON() {
     JSONObject object = new JSONObject();
     object.put("topLeft", topLeft.toJSON());

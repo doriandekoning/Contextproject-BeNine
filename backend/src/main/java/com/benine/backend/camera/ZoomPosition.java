@@ -9,11 +9,11 @@ public class ZoomPosition extends Position {
 
   @Override
   public String toString() {
-    return "ZoomPosition{" +
-            "zoom=" + zoom
+    return "ZoomPosition{"
+            + "zoom=" + zoom
             + ",pan=" + getPan()
             + ",tilt=" + getTilt()
-            +'}';
+            + '}';
   }
 
   /**

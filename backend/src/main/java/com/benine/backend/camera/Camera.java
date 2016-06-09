@@ -14,6 +14,7 @@ public interface Camera {
    *
    * @return Json object in the form of a string.
    * @throws CameraConnectionException When the information can not be retrieved.
+   * @throws CameraBusyException if the camera is busy
    */
   JSONObject toJSON() throws CameraConnectionException, CameraBusyException;
 

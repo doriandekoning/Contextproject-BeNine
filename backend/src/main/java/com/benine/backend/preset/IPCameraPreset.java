@@ -60,7 +60,8 @@ public class IPCameraPreset extends Preset {
    * @throws CameraBusyException if the camera is busy
    */
   public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
-          throws CameraConnectionException, IOException, StreamNotAvailableException, CameraBusyException {
+          throws  CameraConnectionException, IOException,
+                  StreamNotAvailableException, CameraBusyException {
     super(cam.getId());
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();

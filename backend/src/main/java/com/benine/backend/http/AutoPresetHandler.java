@@ -4,12 +4,11 @@ import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import org.eclipse.jetty.server.Request;
 
 /**
- *
+ * Handles requests that have to do with auto preset creation.
  */
 public abstract class AutoPresetHandler extends RequestHandler {
   /**
    * Constructor for a new PresetsHandler, handling the /presets/ request.
-   *
    * @param httpserver to construct this handler for.
    */
   public AutoPresetHandler(HTTPServer httpserver) {
@@ -18,6 +17,8 @@ public abstract class AutoPresetHandler extends RequestHandler {
 
   /**
    * Constructs a PresetCreator from the parameters of an request object.
+   * @param request the request to get the data from
+   * @return The created PyramidPresetCreator
    */
   public PresetPyramidCreator getPyramidPresetCreator(Request request) {
     final String rowsString = request.getParameter("rows");

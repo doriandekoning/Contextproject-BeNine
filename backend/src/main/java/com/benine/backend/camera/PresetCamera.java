@@ -14,6 +14,7 @@ public interface PresetCamera extends Camera {
    * @param tagList   The tag belonging to the preset. 
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
+   * @throws CameraBusyException if the camera is busy
    */
   Preset createPreset(Set<String> tagList) throws CameraConnectionException, CameraBusyException;
 

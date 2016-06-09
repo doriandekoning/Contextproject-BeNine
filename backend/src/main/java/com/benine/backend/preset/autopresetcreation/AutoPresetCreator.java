@@ -23,7 +23,10 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private static PresetController presetController;
-
+  /**
+   * Creates a new AutoPresetCreator object.
+   * @param presetController the presetController to add the created presets too.
+   */
   public AutoPresetCreator(PresetController presetController) {
     this.presetController = presetController;
   }
@@ -33,8 +36,6 @@ public abstract class AutoPresetCreator {
    * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
    * @param subViews the subviews to generate positions for.
-   * @param name The name of the presets.
-   * @param description of the presets.
    * @return A collection of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interupted while waiting for cam to move.
@@ -42,6 +43,7 @@ public abstract class AutoPresetCreator {
    * @throws CameraBusyException if the camera is busy.
    * @throws IOException if exception occurs when creating the preset image.
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
+   * @throws SQLException if exception occurs while writing to the database.
    */
   public Collection<Preset> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,

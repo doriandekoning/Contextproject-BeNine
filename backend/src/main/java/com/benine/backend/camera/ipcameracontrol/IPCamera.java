@@ -260,6 +260,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Request if the auto focus is on.
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy
    */
   public boolean isAutoFocusOn() throws CameraConnectionException, CameraBusyException {
     checkBusy();
@@ -283,6 +284,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Request if the auto iris is on.
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy.
    */
   public boolean isAutoIrisOn() throws CameraConnectionException, CameraBusyException {
     checkBusy();
@@ -564,7 +566,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException, CameraBusyException {
+  public IPCameraPreset createPreset(Set<String> tagList)
+          throws CameraConnectionException, CameraBusyException {
     int zoom = getZoom();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();

@@ -26,8 +26,10 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @param columns the amount of columns > 0
    * @param levels the amount of levels > 0
    * @param overlap the overlap between presets (negative allowed for space between)
+   * @param presetController the presetController to add the presets to.
    */
-  public PresetPyramidCreator(int rows, int columns, int levels, double overlap, PresetController presetController) {
+  public PresetPyramidCreator(int rows, int columns, int levels, double overlap,
+                              PresetController presetController) {
     super(presetController);
     assert rows > 0;
     assert columns > 0;
@@ -56,7 +58,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
       Coordinate center = subView.getCenter();
       final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
       final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
-      final int zoom = IPCamera.MAX_ZOOM - (int) ((subView.getWidth() / 100) * (IPCamera.MAX_ZOOM-IPCamera.MIN_ZOOM));
+      final int zoom = IPCamera.MAX_ZOOM - (int) ((subView.getWidth() / 100)
+              * (IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM));
       System.out.println("Curzoom: " + curPos.getZoom() + " zoom:   " + zoom);
 
       positions.add(new ZoomPosition(tilt, pan, zoom));
@@ -87,14 +90,24 @@ public class PresetPyramidCreator extends AutoPresetCreator {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
     PresetPyramidCreator that = (PresetPyramidCreator) o;
 
-    if (rows != that.rows) return false;
-    if (columns != that.columns) return false;
-    if (levels != that.levels) return false;
+    if (rows != that.rows) {
+      return false;
+    }
+    if (columns != that.columns) {
+      return false;
+    }
+    if (levels != that.levels) {
+      return false;
+    }
     return Double.compare(that.overlap, overlap) == 0;
 
   }
@@ -102,10 +115,10 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   @Override
   public int hashCode() {
     int result;
-    long temp;
     result = rows;
     result = 31 * result + columns;
     result = 31 * result + levels;
+    long temp;
     temp = Double.doubleToLongBits(overlap);
     result = 31 * result + (int) (temp ^ (temp >>> 32));
     return result;
