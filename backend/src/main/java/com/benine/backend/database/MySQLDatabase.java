@@ -433,8 +433,9 @@ public class MySQLDatabase implements Database {
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
-      int id = resultset.getInt("camera_ID");
-      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris, autoFocus, autoIris, id);
+      int id = resultset.getInt("id");
+      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris, autoFocus, autoIris, cameraId);
+      preset.setId(id);
       preset.setPanspeed(panspeed);
       preset.setTiltspeed(tiltspeed);
       preset.setImage(resultset.getString("image"));
