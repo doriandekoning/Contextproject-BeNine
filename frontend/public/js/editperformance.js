@@ -41,7 +41,7 @@ function selectPerformance() {
 
 function setNameEditable(element) {
     var li = $('<li><div class="row">' +
-        '<div class="col-xs-7"><input type="text" class="form-control" placeholder="Name"></div> ' +
+        '<div class="col-xs-7"><input type="text" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
         '<div class="col-xs-5"><div class="btn-group"> <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
         '<button type="button" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
         '</li>');
