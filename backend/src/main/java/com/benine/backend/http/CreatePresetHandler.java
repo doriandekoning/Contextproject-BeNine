@@ -43,10 +43,13 @@ public class CreatePresetHandler extends RequestHandler {
       if (camID == null) {
         throw new MalformedURIException("No Camera ID Specified.");
       }
-      
+
       Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
       String name = request.getParameter("name");
+      if (name == null) {
+        throw new MalformedURIException("No Name Specified.");
+      }
 
       Set<String> tagList = new HashSet<>();
       if (tags != null) {

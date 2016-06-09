@@ -45,7 +45,6 @@ public class EditPresetHandler extends RequestHandler {
     try {
       final String overwriteTag = request.getParameter("overwritetag");
       final String overwritePosition = request.getParameter("overwriteposition");
-      final String overwriteName = request.getParameter("overwritename");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
       String name = request.getParameter("name");
@@ -61,7 +60,7 @@ public class EditPresetHandler extends RequestHandler {
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
       }
-      if (overwriteName.equals("true")) {
+      if (name != null) {
         updateName(preset, name);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
