@@ -15,7 +15,6 @@ public abstract class CameraRequestHandlerTest extends RequestHandlerTest {
   public void testGetCameraID() {
     setPath("/42/test");
     int camid = ((CameraRequestHandler) getHandler()).getCameraId(requestMock);
-    System.out.println(requestMock.getPathInfo());
 
     Assert.assertEquals(42, camid, 0);
   }

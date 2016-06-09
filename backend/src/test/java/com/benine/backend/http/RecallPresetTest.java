@@ -28,14 +28,14 @@ public class RecallPresetTest extends RequestHandlerTest {
 
   @Override
   public RequestHandler supplyHandler() {
-    return new RecallPresetHandler();
+    return new RecallPresetHandler(httpserver);
   }
 
   @Before
   public void initialize() throws IOException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
@@ -51,7 +51,7 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
-      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1);
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, "name");
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | StreamNotAvailableException e) {
       e.printStackTrace();

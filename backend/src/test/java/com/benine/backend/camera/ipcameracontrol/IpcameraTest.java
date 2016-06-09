@@ -2,11 +2,16 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.json.simple.JSONObject;
 
+import com.benine.backend.Config;
+import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.InvalidCameraTypeException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.preset.IPCameraPreset;
@@ -22,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Test class to test the IP Camera class.
@@ -30,10 +36,16 @@ import java.util.ArrayList;
 public class IpcameraTest {
 
   private IPCamera camera;
+  private CameraController cameraController = mock(CameraController.class);
+  private Config config = mock(Config.class);
+  private Logger logger = mock(Logger.class);
   
   @Before
   public final void setUp() throws InvalidCameraTypeException {
-    camera = Mockito.spy(new IPCamera("test"));
+    when(config.getValue("IPCameraTimeOut")).thenReturn("2");
+    when(cameraController.getConfig()).thenReturn(config);
+    when(cameraController.getLogger()).thenReturn(logger);
+    camera = Mockito.spy(new IPCamera("test", cameraController));
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
   }
   
@@ -123,63 +135,63 @@ public class IpcameraTest {
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testNonExcistingIpAdres() throws CameraConnectionException {
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     camera.move(180, 50);
   }
 
   @Test
   public final void testGetSetId() {
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     camera.setId(4);
     Assert.assertEquals(4, camera.getId());
   }
 
   @Test
   public final void testUninitializedId(){
-    IPCamera camera = new IPCamera("1.300.3.4");
+    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     Assert.assertEquals(-1, camera.getId());
   }
   
   @Test
   public final void testNotEqualsIPAddress() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("13");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("13", cameraController);
     assertNotEquals(camera1, camera2);
   }
   
   @Test
   public final void testEquals() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     assertEquals(camera1, camera2);
   }
   
   @Test
   public final void testNotEqualsID() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     camera2.setId(5);
     assertNotEquals(camera1, camera2);
   }
   
   @Test
   public final void testHashCodeNotEqual() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     camera2.setId(5);
     assertNotEquals(camera1.hashCode(), camera2.hashCode());
   }
   
   @Test
   public final void testHashCodeEqual() {
-    IPCamera camera1 = new IPCamera("12");
-    IPCamera camera2 = new IPCamera("12");
+    IPCamera camera1 = new IPCamera("12", cameraController);
+    IPCamera camera2 = new IPCamera("12", cameraController);
     assertEquals(camera1.hashCode(), camera2.hashCode());
   }
   
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetJSONFails() throws CameraConnectionException {
-    IPCamera camera = new IPCamera("12");
+    IPCamera camera = new IPCamera("12", cameraController);
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
@@ -215,9 +227,9 @@ public class IpcameraTest {
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1);
+    IPCameraPreset expected = new IPCameraPreset(new Position(0, 180), 256, 1261, 2029, true, 15, 1, true, -1, "name");
     
-    assertEquals(expected, camera.createPreset(new ArrayList<String>()));
+    assertEquals(expected, camera.createPreset(new HashSet<>(), "name"));
   }
   
   @Test
@@ -227,7 +239,7 @@ public class IpcameraTest {
 
   @Test
   public void testIsSetInUse() {
-    IPCamera camera1 = new IPCamera("ip");
+    IPCamera camera1 = new IPCamera("ip", cameraController);
     Assert.assertFalse(camera1.isInUse());
     camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());

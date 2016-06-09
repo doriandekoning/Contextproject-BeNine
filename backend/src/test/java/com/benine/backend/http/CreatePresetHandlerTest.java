@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
@@ -17,8 +18,6 @@ import org.junit.Test;
 
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.SimpleCamera;
@@ -35,11 +34,11 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
   private Preset preset;
   private Stream stream;
   private MJPEGStreamReader streamReader;
-  private List<String> tags;
+  private Set<String> tags;
 
   @Override
   public RequestHandler supplyHandler() {
-    return new CreatePresetHandler();
+    return new CreatePresetHandler(httpserver);
   }
 
   @Before
@@ -47,13 +46,13 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     simpleCamera = mock(SimpleCamera.class);
-    when(cameracontroller.getCameraById(1)).thenReturn(ipcamera);
-    when(cameracontroller.getCameraById(2)).thenReturn(simpleCamera);
+    when(cameraController.getCameraById(1)).thenReturn(ipcamera);
+    when(cameraController.getCameraById(2)).thenReturn(simpleCamera);
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));
 
     streamReader = new MJPEGStreamReader(stream);
-    tags = Arrays.asList("violin", "piano");
+    tags = new HashSet<>(Arrays.asList("violin", "piano"));
     
 
     try {
@@ -68,7 +67,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
       
-      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags, "name");
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();
@@ -79,14 +78,12 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
   @Test
   public void testCameraID() throws Exception{
-    setPath("/presets/createpreset?camera=1");
+    setPath("/presets/createpreset");
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
     setParameters(parameters);
-    PresetController presetController = mock(PresetController.class);
     when(presetController.getPresetById(0)).thenReturn(preset);
-    ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(requestMock).setHandled(true);
@@ -99,9 +96,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "2");
     setParameters(parameters);
-    PresetController presetController = mock(PresetController.class);
     when(presetController.getPresetById(0)).thenReturn(preset);
-    ServerController.getInstance().setPresetController(presetController);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(requestMock).setHandled(true);

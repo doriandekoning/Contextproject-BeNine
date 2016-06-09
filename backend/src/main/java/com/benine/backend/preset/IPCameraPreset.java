@@ -8,7 +8,7 @@ import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * IPCamera preset which stores the data to recall this preset position.
@@ -36,10 +36,11 @@ public class IPCameraPreset extends Preset {
    * @param tiltspeed The tiltspeed of the preset
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
+   * @param name      The name of the preset
    */
-  public IPCameraPreset(Position pos, int zoom, int focus,int iris,
-               boolean autofocus, int panspeed, int tiltspeed, boolean autoiris, int cameraId) {
-    super(cameraId);
+  public IPCameraPreset(Position pos, int zoom, int focus,int iris, boolean autofocus,
+                        int panspeed, int tiltspeed, boolean autoiris, int cameraId, String name) {
+    super(cameraId, name);
     this.position = pos;
     this.zoom = zoom;
     this.focus = focus;
@@ -63,11 +64,12 @@ public class IPCameraPreset extends Preset {
    * @param panspeed  The panspeed of the preset
    * @param cameraId  The id of the camera associated with this preset.
    * @param keyWords  The keywords of this preset
+   * @param name      The name of the preset
    */
   public IPCameraPreset(Position pos, int zoom, int focus, int iris,
                 boolean autofocus, int panspeed, int tiltspeed,
-                boolean autoiris, int cameraId, List<String> keyWords) {
-    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId);
+                boolean autoiris, int cameraId, Set<String> keyWords, String name) {
+    this(pos, zoom, focus, iris, autofocus, panspeed, tiltspeed, autoiris, cameraId, name);
     super.tags.addAll(keyWords);
   }
   
@@ -86,7 +88,7 @@ public class IPCameraPreset extends Preset {
     json.put("autoiris", autoiris);
     json.put("id", getId());
     json.put("cameraid", getCameraId());
-    json.put("image", imagePath + getImage());
+    json.put("image", getImage());
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -173,7 +175,7 @@ public class IPCameraPreset extends Preset {
     if (isAutoiris()) {
       autoir = 1;
     }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + getId() + ","
+    return "INSERT INTO presetsdatabase.IPpreset VALUES(" + getId() + ","
         + getPosition().getPan() + "," + getPosition().getTilt()
         + "," + getZoom() + "," + getFocus()
         + "," + getIris() + "," + auto + "," + getPanspeed() + ","
@@ -263,7 +265,7 @@ public class IPCameraPreset extends Preset {
 
   @Override
   public String createDeleteSQL() {
-    return "DELETE FROM presets WHERE ID = " + getId();
+    return "DELETE FROM IPpreset WHERE ID = " + getId();
   }
 
 }

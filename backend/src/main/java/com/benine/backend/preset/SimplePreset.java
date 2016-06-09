@@ -6,7 +6,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * A simple preset which just contains an image and tags.
@@ -16,25 +16,27 @@ public class SimplePreset extends Preset {
   /**
    * Create a simple preset
    * @param cameraId of the camera this preset belongs to.
+   * @param name The name of the preset
    */
-  public SimplePreset(int cameraId) {
-    super(cameraId);
+  public SimplePreset(int cameraId, String name) {
+    super(cameraId, name);
   }
   
   /**
    * Create a simple preset
    * @param cameraId of the camera this preset belongs to.
    * @param tags of this preset
+   * @param name The name of the preset
    */
-  public SimplePreset(int cameraId, List<String> tags) {
-    this(cameraId);
+  public SimplePreset(int cameraId, Set<String> tags, String name) {
+    this(cameraId, name);
     super.addTags(tags);
   }
 
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
-    json.put("image", imagePath + getImage());
+    json.put("image", getImage());
     json.put("id", getId());
     json.put("cameraid", getCameraId());
     JSONArray tagsJSON = new JSONArray();
@@ -48,7 +50,7 @@ public class SimplePreset extends Preset {
 
   @Override
   public String createAddSqlQuery() {
-    return "INSERT INTO presetsdatabase.simplepresets VALUES(" + getId() + ",'" + getImage() + "',"
+    return "INSERT INTO presetsdatabase.simplepreset VALUES(" + getId() + ",'" + getImage() + "',"
         + getCameraId() + ")";
   }
 
@@ -59,6 +61,6 @@ public class SimplePreset extends Preset {
   
   @Override
   public String createDeleteSQL() {
-    return "DELETE FROM simplepresets WHERE ID = " + getId();
+    return "DELETE FROM simplepreset WHERE ID = " + getId();
   }
 }

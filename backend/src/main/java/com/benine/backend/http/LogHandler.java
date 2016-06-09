@@ -9,9 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Logs all http requests.
+ * Logs all http requests that come in.
  */
 public class LogHandler extends RequestHandler {
+
+  /**
+   * Constructs the log handler for this server.
+   * @param httpserver for which the handler is created.
+   */
+  public LogHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)

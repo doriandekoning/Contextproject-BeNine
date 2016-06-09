@@ -1,11 +1,11 @@
 package com.benine.backend;
 
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.database.Database;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -26,15 +26,17 @@ public class ServerControllerTest {
   }
   
   @Test
-  public void testGetDatabase() throws Exception {
-    Database database = mock(Database.class);
-    serverController.setDatabase(database);
-    assertEquals(database, serverController.getDatabase());
+  public void testGetDatabaseController() throws Exception {
+    assertNotEquals(null, serverController.getDatabaseController());
+  }
+  
+  @Test
+  public void testGetPresetController() throws Exception {
+    assertNotEquals(null, serverController.getPresetController());
   }
   
   @Test
   public void testStartServer() throws Exception {
-    serverController.setDatabase(mock(Database.class));
     serverController.start();  
     assertTrue(serverController.isServerRunning());
     serverController.stop();
@@ -48,21 +50,21 @@ public class ServerControllerTest {
   
   @Test
   public void testSetcameraController() {
-    CameraController camController = mock(CameraController.class);
-    serverController.setCameraController(camController);
-    assertEquals(camController, serverController.getCameraController());
+    assertNotEquals(null, serverController.getCameraController());
   }
   
   @Test
-  public void testGetLog() {  
-    Logger logger = mock(Logger.class);
-    serverController.setLogger(logger);
-    assertEquals(logger, serverController.getLogger());
+  public void testGetLog() throws IOException {  
+    Logger expected = mock(Logger.class);
+    ServerController spyServerController = Mockito.spy(serverController);
+    Mockito.doReturn(expected).when(spyServerController).getLogger();
+    assertEquals(expected, spyServerController.getLogger());
   }
   
   @Test
   public void testGetConfig() throws Exception {
-    assertEquals(ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "maintest.conf"), serverController.getConfig());
+	Config expected = ConfigReader.readConfig("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+	assertEquals(expected, serverController.getConfig());
   }
 
 }

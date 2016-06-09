@@ -2,7 +2,8 @@ package com.benine.backend.camera.ipcameracontrol;
 
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
+import com.benine.backend.Logger;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.CameraFactory;
 import com.benine.backend.camera.InvalidCameraTypeException;
 
@@ -11,6 +12,19 @@ import com.benine.backend.camera.InvalidCameraTypeException;
  */
 
 public class IPCameraFactory implements CameraFactory {
+  
+  private CameraController cameraController;
+  
+  private Logger logger;
+  
+  /**
+   * Constructs an IPCameraFactory for the specified cameracontroller.
+   * @param cameraController this factory is used for.
+   */
+  public IPCameraFactory(CameraController cameraController) {
+    this.cameraController = cameraController;
+    this.logger = cameraController.getLogger();
+  }
 
 
   /**
@@ -20,14 +34,14 @@ public class IPCameraFactory implements CameraFactory {
    * @throws InvalidCameraTypeException when specified camera type can not be created.
    */
   public IPCamera createCamera(int index) throws InvalidCameraTypeException {
-    Config config = ServerController.getInstance().getConfig();
+    Config config = cameraController.getConfig();
     String address = config.getValue("camera_" + index + "_address");
     if ( address == null) {
-      ServerController.getInstance().getLogger().log("Camera: " + index 
+      logger.log("Camera: " + index 
               + " has no address specified in the config", LogEvent.Type.CRITICAL);
       throw new InvalidCameraTypeException("Type of camera is not right specified");
     }
-    ServerController.getInstance().getLogger().log("Create IP camera object", LogEvent.Type.INFO);
+    logger.log("Create IP camera object", LogEvent.Type.INFO);
     return createIpcamera(address);
   }
   
@@ -37,7 +51,7 @@ public class IPCameraFactory implements CameraFactory {
    * @return Camera object.
    */
   public IPCamera createIpcamera(String ipaddress) {
-    return new IPCamera(ipaddress);
+    return new IPCamera(ipaddress, cameraController);
   }
   
 

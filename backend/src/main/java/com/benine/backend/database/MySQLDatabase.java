@@ -6,6 +6,7 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 
@@ -14,28 +15,30 @@ import com.ibatis.common.jdbc.ScriptRunner;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class for communicating with the MySQL Database.
  */
 public class MySQLDatabase implements Database {
+
   private Connection connection;
   private String user;
   private String password;
+  private Logger logger;
 
   /**
    * Constructor of a MySQL Database.
    *
    * @param user     username used to connect to the database.
    * @param password used to connect to the databse.
+   * @param logger   to use for the database
    */
-  public MySQLDatabase(String user, String password) {
+  public MySQLDatabase(String user, String password, Logger logger) {
     connection = null;
     this.user = user;
     this.password = password;
+    this.logger = logger;
   }
 
   @Override
@@ -44,20 +47,20 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public List<String> getTagsFromPreset(Preset preset) {
-    ArrayList<String> list = new ArrayList<String>();
+  public Set<String> getTagsFromPreset(Preset preset) {
+    Set<String> list = new HashSet<>();
     Statement statement = null;
     ResultSet resultset = null;
     try {
       statement = connection.createStatement();
-      String sql = "SELECT tag_name FROM tagPresets WHERE presets_ID = "
+      String sql = "SELECT tag_name FROM tagPreset WHERE preset_ID = "
           + preset.getId();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        list.add(resultset.getString("name"));
+        list.add(resultset.getString("tag_name"));
       }
     } catch (SQLException e) {
-      getLogger().log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
+      logger.log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -69,11 +72,11 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO tagPresets VALUES(%s,'%s')",
+      final String sql = String.format("INSERT INTO tagPreset VALUES(%s,'%s')",
           preset.getId(), tag);
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -84,11 +87,122 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM tagPresets WHERE tag_Name = " + tag + "AND preset_ID = "
-          + preset.getId();
+      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' "
+          + "AND preset_ID = %s", tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public ArrayList<Preset> getPresetsList(int queueID) {
+    ArrayList<Preset> list = new ArrayList<Preset>();
+    Statement statement = null;
+    ResultSet resultset = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT preset_ID FROM presetsList WHERE queue_ID = " + queueID
+          + " ORDER BY Sequence";
+      resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        list.add(ServerController.getInstance().getPresetController()
+            .getPresetById(resultset.getInt("ID")));
+      }
+    } catch (Exception e) {
+      logger.log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, resultset);
+    }
+    return list;
+  }
+
+  @Override
+  public void addPresetsList(ArrayList<Preset> presets, int queueID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      int sequence = 0;
+      for (Preset preset : presets) {
+        sequence++;
+        final String sql = String.format("INSERT INTO presetsList VALUES(%s,%s,%s)",
+            sequence, queueID, preset.getId());
+        statement.executeUpdate(sql);
+      }
+    } catch (Exception e) {
+      logger.log("List could not be added.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public void deletePresetsList(int queueID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "DELETE FROM presetsList WHERE queue_ID = " + queueID;
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      logger.log("List could not be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public ArrayList<PresetQueue> getQueues() {
+    ArrayList<PresetQueue> list = new ArrayList<>();
+    Statement statement = null;
+    ResultSet resultset = null;
+    try {
+      statement = connection.createStatement();
+      String sql = "SELECT ID, name FROM queue";
+      resultset = statement.executeQuery(sql);
+      while (resultset.next()) {
+        int id = resultset.getInt("ID");
+        String name = resultset.getString("Name");
+        ArrayList<Preset> presets = getPresetsList(id);
+        PresetQueue queue = new PresetQueue(name, presets);
+        queue.setID(id);
+        list.add(queue);
+      }
+    } catch (Exception e) {
+      logger.log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, resultset);
+    }
+    return list;
+  }
+
+  @Override
+  public void addQueue(PresetQueue queue) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      final String sql = String.format("INSERT INTO queue VALUES(%s,'%s')",
+          queue.getID(), queue.getName());
+      addPresetsList(queue.getQueue(), queue.getID());
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
+  }
+
+  @Override
+  public void deleteQueue(int ID) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      deletePresetsList(ID);
+      String sql = "DELETE FROM queue WHERE ID = " + ID;
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      logger.log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -106,8 +220,13 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
       statement.executeUpdate(sql);
+      sql = "INSERT INTO preset VALUES(" + preset.getId() + ")";
+      statement.executeUpdate(sql);
+      for (String tag : preset.getTags()) {
+        addTagToPreset(tag, preset);
+      }
     } catch (Exception e) {
-      getLogger().log("Presets could not be added.", LogEvent.Type.CRITICAL);
+      logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -119,11 +238,14 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       if (preset != null) {
+        deleteTagsFromPreset(preset);
         String sql = preset.createDeleteSQL();
+        statement.executeUpdate(sql);
+        sql = "DELETE FROM preset WHERE ID = " + preset.getId();
         statement.executeUpdate(sql);
       }
     } catch (Exception e) {
-      getLogger().log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
+      logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -135,11 +257,9 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       deletePreset(preset);
-      String sql = preset.createAddSqlQuery();
-      statement.executeUpdate(sql);
+      addPreset(preset);
     } catch (Exception e) {
-      e.printStackTrace();
-      getLogger().log("Presets could not be updated.", LogEvent.Type.CRITICAL);
+      logger.log("Presets could not be updated.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -149,15 +269,19 @@ public class MySQLDatabase implements Database {
   public ArrayList<Preset> getAllPresets() {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
-          + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets"));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepresets"));
+        + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
+        + " FROM presetsDatabase.IPpreset"));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
+        + " FROM presetsDatabase.simplepreset"));
+    for (Preset preset : list) {
+      preset.addTags(getTagsFromPreset(preset));
+    }
     return list;
   }
-  
+
   /**
    * Method to get all presets based on a SQL statement
+   *
    * @param sql statement to retrieve the presets.
    * @return Presets from the database.
    */
@@ -169,14 +293,14 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       resultset = statement.executeQuery(sql);
       while (resultset.next()) {
-        if (sql.contains("simplepresets")) {
+        if (sql.contains("simplepreset")) {
           list.add(getSimplePresetsFromResultSet(resultset));
         } else {
           list.add(getIPCameraPresetFromResultSet(resultset));
         }
       }
     } catch (Exception e) {
-      getLogger().log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+      logger.log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -187,10 +311,10 @@ public class MySQLDatabase implements Database {
   public ArrayList<Preset> getAllPresetsCamera(int cameraId) {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus, iris,"
-          + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.presets WHERE camera_ID = " + cameraId));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepresets WHERE camera_ID = " + cameraId));
+        + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
+        + " FROM presetsDatabase.IPpreset WHERE camera_ID = " + cameraId));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
+        + " FROM presetsDatabase.simplepreset WHERE camera_ID = " + cameraId));
     return list;
   }
 
@@ -204,7 +328,7 @@ public class MySQLDatabase implements Database {
       boolean connected = !connection.isClosed();
       return connected;
     } catch (SQLException | ClassNotFoundException e) {
-      getLogger().log("Connection with database failed.", LogEvent.Type.CRITICAL);
+      logger.log("Connection with database failed.", LogEvent.Type.CRITICAL);
       return false;
     }
   }
@@ -221,7 +345,7 @@ public class MySQLDatabase implements Database {
       }
       databaseNames.close();
     } catch (Exception e) {
-      getLogger().log("Database check failed.", LogEvent.Type.CRITICAL);
+      logger.log("Database check failed.", LogEvent.Type.CRITICAL);
     }
     return false;
   }
@@ -230,15 +354,13 @@ public class MySQLDatabase implements Database {
   public void resetDatabase() {
     try {
       ScriptRunner sr = new ScriptRunner(connection, false, false);
-      Writer w = new OutputStreamWriter(new FileOutputStream("logs"
-          + File.separator + "database-presetsdatabase.log"), "UTF-8");
-      sr.setLogWriter(new PrintWriter(w));
+      sr.setLogWriter(null);
       Reader reader = new BufferedReader(
           new InputStreamReader(new FileInputStream("database" + File.separator
               + "databasefile.sql"), "UTF-8"));
       sr.runScript(reader);
     } catch (SQLException | IOException e) {
-      getLogger().log("Database is not reset.", LogEvent.Type.CRITICAL);
+      logger.log("Database is not reset.", LogEvent.Type.CRITICAL);
     }
   }
 
@@ -248,7 +370,7 @@ public class MySQLDatabase implements Database {
       try {
         connection.close();
       } catch (Exception e) {
-        getLogger().log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
+        logger.log("Database connection couldn't be closed.", LogEvent.Type.CRITICAL);
       }
     }
   }
@@ -258,19 +380,18 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("INSERT INTO presetsdatabase.camera VALUES(%s,'%s')",
+      final String sql = String.format("INSERT INTO camera VALUES(%s,'%s')",
           id, macAddress);
       statement.executeUpdate(sql);
     } catch (SQLException e) {
-      getLogger().log("Camera couldn't be added", LogEvent.Type.CRITICAL);
+      logger.log("Camera couldn't be added", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
   }
 
   @Override
-  public void checkCameras() {
-    ArrayList<Camera> cameras = ServerController.getInstance().getCameraController().getCameras();
+  public void checkCameras(ArrayList<Camera> cameras) {
     ArrayList<String> macs = new ArrayList<String>();
     ResultSet resultset = null;
     Statement statement = null;
@@ -281,7 +402,7 @@ public class MySQLDatabase implements Database {
       checkOldCameras(resultset, cameras, macs);
       checkNewCameras(cameras, macs);
     } catch (SQLException | CameraConnectionException e) {
-      getLogger().log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
+      logger.log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -289,10 +410,11 @@ public class MySQLDatabase implements Database {
 
   /**
    * Checks if there are cameras in the database to be deleted.
-   * @param result The resultset from the query
+   *
+   * @param result  The resultset from the query
    * @param cameras The cameras
-   * @param macs The MACAddresses of the cameras in the database
-   * @throws SQLException No right connection to the database
+   * @param macs    The MACAddresses of the cameras in the database
+   * @throws SQLException              No right connection to the database
    * @throws CameraConnectionException Not able to connect to the camera
    */
   public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
@@ -315,8 +437,9 @@ public class MySQLDatabase implements Database {
 
   /**
    * Checks if there are new cameras to be added to the database.
+   *
    * @param cameras The cameras
-   * @param macs The MACAddresses of the cameras in the database
+   * @param macs    The MACAddresses of the cameras in the database
    * @throws CameraConnectionException Not able to connect to the camera
    */
   public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
@@ -340,12 +463,16 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = "DELETE FROM presets WHERE camera_ID = " + cameraID;
+      String sql = "DELETE FROM preset WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM IPpreset WHERE camera_ID = " + cameraID;
+      statement.executeUpdate(sql);
+      sql = "DELETE FROM simplepreset WHERE camera_ID = " + cameraID;
       statement.executeUpdate(sql);
       sql = "DELETE FROM camera WHERE ID = " + cameraID;
       statement.executeUpdate(sql);
     } catch (SQLException e) {
-      getLogger().log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
+      logger.log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -359,7 +486,7 @@ public class MySQLDatabase implements Database {
       String sql = "USE presetsdatabase";
       statement.executeUpdate(sql);
     } catch (Exception e) {
-      getLogger().log("Database could not be found.", LogEvent.Type.CRITICAL);
+      logger.log("Database could not be found.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -375,7 +502,7 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       statement.close();
     } catch (SQLException e) {
-      getLogger().log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -391,7 +518,7 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate(sql);
       statement.close();
     } catch (SQLException e) {
-      getLogger().log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
     }
@@ -410,7 +537,7 @@ public class MySQLDatabase implements Database {
         list.add(resultset.getString("name"));
       }
     } catch (SQLException e) {
-      getLogger().log("Tag couldn't be gotten.", LogEvent.Type.CRITICAL);
+      logger.log("Tag couldn't be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
     }
@@ -434,18 +561,19 @@ public class MySQLDatabase implements Database {
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
-      int id = resultset.getInt("camera_ID");
+      int id = resultset.getInt("ID");
+      String name = resultset.getString("name");
       IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
-                                          panspeed, tiltspeed, autoIris, cameraId);
+          panspeed, tiltspeed, autoIris, cameraId, name);
       preset.setId(id);
       preset.setImage(resultset.getString("image"));
       return preset;
     } catch (Exception e) {
-      getLogger().log("IPCamerapresets couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      logger.log("IPCamerapresets couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
-  
+
   /**
    * Getter for the simple presets from the list of presets.
    *
@@ -456,19 +584,21 @@ public class MySQLDatabase implements Database {
     try {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
-      SimplePreset preset = new SimplePreset(cameraId);
+      String name = resultset.getString("name");
+      SimplePreset preset = new SimplePreset(cameraId, name);
       int id = resultset.getInt("id");
       preset.setId(id);
       preset.setImage(image);
       return preset;
     } catch (Exception e) {
-      getLogger().log("Simple preset couldn't be retrieved.", LogEvent.Type.CRITICAL);
+      logger.log("Simple preset couldn't be retrieved.", LogEvent.Type.CRITICAL);
       return null;
     }
   }
 
   /**
    * Closes the resultset and statement.
+   *
    * @param statement the statement to be closed
    * @param resultset the resultset to be closed
    */
@@ -481,15 +611,22 @@ public class MySQLDatabase implements Database {
         resultset.close();
       }
     } catch (SQLException e) {
-      getLogger().log("Statement or resultset could not be closed", LogEvent.Type.WARNING);
+      logger.log("Statement or resultset could not be closed", LogEvent.Type.WARNING);
     }
   }
 
-  /**
-   * Get the logger of the single servercontroller.
-   * @return logger object.
-   */
-  private Logger getLogger() {
-    return ServerController.getInstance().getLogger();
+  @Override
+  public void deleteTagsFromPreset(Preset preset) {
+    Statement statement = null;
+    try {
+      statement = connection.createStatement();
+      final String sql = String.format("DELETE FROM tagPreset WHERE preset_ID = %s",
+          preset.getId());
+      statement.executeUpdate(sql);
+    } catch (Exception e) {
+      logger.log("All tags couldn't be deleted.", LogEvent.Type.CRITICAL);
+    } finally {
+      close(statement, null);
+    }
   }
 }

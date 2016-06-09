@@ -72,12 +72,13 @@ function loadCameras() {
 * @param id of the camera to switch to.
 */
 function switchCurrentView(id) {
-    var camera;
-	if(id !== currentcamera) {
+    var camera = findCameraOnID(id);
+	if(id === currentcamera || camera === undefined) {
+		console.log("Cannot switch to camera " + id + " does not exist");
+	} else {
 		toggleCamSelected(currentcamera, false);
 		currentcamera = id;
 		toggleCamSelected(currentcamera, true);
-		camera = findCameraOnID(id);
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);

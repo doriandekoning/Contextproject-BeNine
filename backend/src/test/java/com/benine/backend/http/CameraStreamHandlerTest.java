@@ -27,13 +27,13 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
 
   @Override
   public CameraRequestHandler supplyHandler() {
-    return new CameraStreamHandler();
+    return new CameraStreamHandler(httpserver);
   }
 
   @Before
   public void initialize() throws IOException {
     super.initialize();
-    when(cameracontroller.getCameraById(42)).thenReturn(cam);
+    when(cameraController.getCameraById(42)).thenReturn(cam);
 
     stream = mock(Stream.class);
     when(stream.getInputStream()).thenReturn(new BufferedInputStream(new FileInputStream("resources" + File.separator + "test" + File.separator + "testmjpeg.mjpg")));

@@ -1,12 +1,12 @@
 package com.benine.backend.database;
 
+import com.benine.backend.camera.Camera;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Interface for communication with the database.
@@ -91,8 +91,9 @@ public interface Database {
 
   /**
    * Checks if cameras are correct in database.
+   * @param cameras list of cameras to verify with database.
    */
-  void checkCameras();
+  void checkCameras(ArrayList<Camera> cameras);
 
   /**
    * deletes a camera from the database.
@@ -143,7 +144,7 @@ public interface Database {
    * @param preset The preset
    * @return The list of tags
    */
-  List<String> getTagsFromPreset(Preset preset);
+  Set<String> getTagsFromPreset(Preset preset);
 
   /**
    * Adds a tag to a preset.
@@ -160,4 +161,54 @@ public interface Database {
    * @param preset The preset
    */
   void deleteTagFromPreset(String tag, Preset preset);
+  
+  /**
+   * delete the tags from a preset.
+   * @param preset to delete the tags for.
+   */
+  void deleteTagsFromPreset(Preset preset);
+
+  /**
+   * Gets a list of presets belonging to the concert.
+   *
+   * @param queueID The ID of the concert to get the presets from
+   * @return The list of presets
+   */
+  ArrayList<Preset> getPresetsList(int queueID);
+
+  /**
+   * Adds a list of presets to an existing queue.
+   *
+   * @param presets The list which needs to be added
+   * @param queueID The id of the queue
+   */
+  void addPresetsList(ArrayList<Preset> presets, int queueID);
+
+  /**
+   * Deletes a list of presets of an existing queue.
+   *
+   * @param queueID The id of the queue
+   */
+  void deletePresetsList(int queueID);
+
+  /**
+   * Gets all the queue existing in the database.
+   *
+   * @return List of the queues
+   */
+  ArrayList<PresetQueue> getQueues();
+
+  /**
+   * Adds a queue to the database.
+   *
+   * @param queue the queue to be added
+   */
+  void addQueue(PresetQueue queue);
+
+  /**
+   * Deletes a queue from the database.
+   *
+   * @param ID The ID of the queue
+   */
+  void deleteQueue(int ID);
 }
