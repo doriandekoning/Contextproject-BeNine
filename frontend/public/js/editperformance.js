@@ -1,11 +1,17 @@
 var selectedPerformance, nameEditingPerformance;
 
+/**
+ * Loads the edit performance window.
+ */
 function loadEditPerformance() {
     drawPresets(presets);
     drawPerformancesList();
     drawSchedule();
 }
 
+/**
+ * Draws the performance list from which the performance to edit can be selected.
+ */
 function drawPerformancesList() {
     var performancelist = $('#performance-list');
     performancelist.empty();
@@ -18,6 +24,11 @@ function drawPerformancesList() {
     }
 }
 
+/**
+ * Draws one list item from the performance list.
+ * @param performance   The performance object to draw.
+ * @returns {*|jQuery|HTMLElement} a jQuery DOM element to append.
+ */
 function drawPerformanceListItem(performance) {
     var li = $("<li class='btn btn-info'></li>");
     li.data(performance);
@@ -28,6 +39,9 @@ function drawPerformanceListItem(performance) {
     return li;
 }
 
+/**
+ * Selects a performance
+ */
 function selectPerformance() {
     if (nameEditingPerformance !== undefined) {
         nameEditingPerformance.replaceWith(drawPerformanceListItem($(nameEditingPerformance).data()));
@@ -48,7 +62,7 @@ function setNameEditable() {
         var element = selectedPerformance;
 
         var li = $('<li><div class="row">' +
-            '<div class="col-xs-7"><input type="text" id="performance-name" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
+            '<div class="col-xs-7"><input type="text" id="performance-name" class="form-control" value="' + $(element).data()['name'] + '"></div> ' +
             '<div class="col-xs-5"><div class="btn-group"><button type="button" onclick="selectPerformance()" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
             '<button type="button" onclick="saveEditName()" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
             '</li>');
@@ -59,13 +73,17 @@ function setNameEditable() {
     }
 }
 
+/**
+ * Saves the edited name.
+ */
 function saveEditName() {
     var performance = nameEditingPerformance.data();
     performance.updateName($("#performance-name").val());
-
-    selectPerformance();
 }
 
+/**
+ * Deletes a performance.
+ */
 function deletePerformance() {
     if (selectedPerformance !== undefined) {
         var performance = selectedPerformance.data();
@@ -205,6 +223,10 @@ function moveScheduleDown() {
     drawSchedule(performance);
 }
 
+/**
+ * Draws the presets to select.
+ * @param presetlist a List of presets.
+ */
 function drawPresets(presetlist) {
     var list = $("#performance-preset-selector");
 	list.children().remove();
@@ -219,6 +241,9 @@ function drawPresets(presetlist) {
     }
 }
 
+/**
+ * Adds a preset to the schedule.
+ */
 function addToSchedule() {
     var preset = $(this).data();
     var performance = selectedPerformance.data();
@@ -227,6 +252,9 @@ function addToSchedule() {
     drawSchedule(performance);
 }
 
+/**
+ * Deletes a preset from the schedule.
+ */
 function deleteFromSchedule() {
     var preset = $(this);
     var li = preset.closest('preset');
@@ -236,6 +264,11 @@ function deleteFromSchedule() {
     drawSchedule(performance)
 }
 
+/**
+ * Draws a preset to the schedule list.
+ * @param preset a preset object.
+ * @returns {*|jQuery|HTMLElement} the row to draw.
+ */
 function drawPreset(preset) {
     var li = $("<li class='btn btn-info'></li>");
     var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
@@ -245,6 +278,9 @@ function drawPreset(preset) {
     return li;
 }
 
+/**
+ * Creates a new performance.
+ */
 function createPerformance() {
     $.get("/api/backend/presetqueues/create?name=New%20Performance", function(data) {
         loadPerformances();

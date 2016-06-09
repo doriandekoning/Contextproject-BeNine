@@ -60,6 +60,9 @@ Performance.prototype = {
 	}
 }
 
+/**
+ * Loads the performances from the backend server.
+ */
 function loadPerformances() {
 	$.get("/api/backend/presetqueues", function(data) {
 		performances = [];
