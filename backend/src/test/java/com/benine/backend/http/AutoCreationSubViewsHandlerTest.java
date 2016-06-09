@@ -3,6 +3,7 @@ package com.benine.backend.http;//TODO add Javadoc comment
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.preset.autopresetcreation.SubView;
+import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
 import org.eclipse.jetty.util.MultiMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,7 +29,7 @@ public class AutoCreationSubViewsHandlerTest extends AutoPresetHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"SubViews\":[SubView{topLeft=(0.0,100.0), bottomRight=(100.0,0.0)}]}");
+    verify(out).write("{\"SubViews\":[" +  new SubView(0, 100, 100, 0).toJSON().toJSONString()+"]}");
     verify(requestMock).setHandled(true);
   }
 
@@ -43,7 +44,7 @@ public class AutoCreationSubViewsHandlerTest extends AutoPresetHandlerTest {
     Collection<SubView> subViews = new PresetPyramidCreator(3, 3, 3, 0.0, mock(PresetController.class)).generateSubViews();
     JSONObject jsonObj = new JSONObject();
     JSONArray jsonArr = new JSONArray();
-    jsonArr.addAll(subViews);
+    subViews.forEach(vs -> jsonArr.add(vs.toJSON()));
     jsonObj.put("SubViews", jsonArr);
     verify(out).write(jsonObj.toJSONString());
     verify(requestMock).setHandled(true);

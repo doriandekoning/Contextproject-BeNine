@@ -34,7 +34,7 @@ public abstract class AutoPresetCreatorTest {
   @Test
   public void testSetCamBusy() throws Exception {
     apc.createPresets(camera, new ArrayList<>());
-    Mockito.verify(camera).setBusy(true);
+    Mockito.verify(camera, atLeastOnce()).setBusy(true);
   }
 
   @Test

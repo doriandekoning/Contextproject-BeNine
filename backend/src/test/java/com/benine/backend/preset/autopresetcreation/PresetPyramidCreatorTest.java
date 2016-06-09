@@ -38,7 +38,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   public void testCreatePositionsSingleCenter()
           throws CameraConnectionException {
     ArrayList<SubView> subViews = new ArrayList<>();
-    subViews.add(new SubView(new Coordinate(10, 90), new Coordinate(90, 10)));
+    subViews.add(new SubView(new Coordinate(0,100), new Coordinate(100, 0)));
     Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0, mock(PresetController.class)).generatePositions(cam, subViews);
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition(), cam.getZoom()));
@@ -56,9 +56,9 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<ZoomPosition> actualPositons =  new PresetPyramidCreator(1, 1, 1, 0, presetController).generatePositions(cam, subViews);
     Collection<ZoomPosition> expectedPositions = new ArrayList<>();
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan() - (IPCamera.HORIZONTAL_FOV_MAX/4),
-            cam.getPosition().getTilt() + (IPCamera.VERTICAL_FOV_MAX/4), cam.getZoom()));
+            cam.getPosition().getTilt() + (IPCamera.VERTICAL_FOV_MAX/4), 1910));
     expectedPositions.add(new ZoomPosition(cam.getPosition().getPan() + (IPCamera.HORIZONTAL_FOV_MAX/4),
-            cam.getPosition().getTilt() - (IPCamera.VERTICAL_FOV_MAX/4), cam.getZoom()));
+            cam.getPosition().getTilt() - (IPCamera.VERTICAL_FOV_MAX/4), 1910));
     Assert.assertEquals(expectedPositions, actualPositons);
   }
 
