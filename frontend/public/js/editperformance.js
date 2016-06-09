@@ -1,27 +1,55 @@
-var currentPerformance;
+var selectedPerformance, editingPerformance;
 
-function test() {
-    performances = [];
-    performances.push(new Performance(1, "Test Performance", [1, 2]));
-
-    currentPerformance = performances[0];
-    drawPerformances();
-    drawSchedule(currentPerformance);
+function loadEditPerformance() {
+    drawPresets(presets);
+    drawPerformancesList();
 }
 
-function drawPerformances() {
+function drawPerformancesList() {
     var performancelist = $('#performance-list');
     performancelist.empty();
 
     for (var i in performances) {
         var p = performances[i];
-        var li = $("<li class='btn btn-info'></li>");
-        var icon = $("<span class='glyphicon glyphicon-bullhorn'></span>");
 
-        li.append(icon);
-        li.text(p['name']);
+        var li = drawPerformanceListItem(p);
         performancelist.append(li);
     }
+}
+
+function drawPerformanceListItem(performance) {
+    var li = $("<li class='btn btn-info'></li>");
+    li.data(performance);
+    li.click(selectPerformance);
+    var icon = $("<span class='glyphicon glyphicon-bullhorn'></span>");
+
+    li.append(icon);
+    li.text(performance['name']);
+
+    return li;
+}
+
+function selectPerformance() {
+    if (editingPerformance !== undefined) {
+        editingPerformance.replaceWith(selectedPerformance);
+    }
+
+    selectedPerformance = $(this);
+    setNameEditable(this);
+
+    drawSchedule(selectedPerformance.data());
+}
+
+function setNameEditable(element) {
+    var li = $('<li><div class="row">' +
+        '<div class="col-xs-7"><input type="text" class="form-control" placeholder="Name"></div> ' +
+        '<div class="col-xs-5"><div class="btn-group"> <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
+        '<button type="button" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
+        '</li>');
+
+
+    editingPerformance = li;
+    $(element).replaceWith(li);
 }
 
 /**
@@ -142,15 +170,25 @@ function drawPresets(presetlist) {
     var list = $("#performance-preset-selector");
 	list.children().remove();
     for (key in presetlist) {
-        console.log(presetlist);
         var preset = presetlist[key];
 
-        var li = $("<li class='btn btn-info'></li>");
-        var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
-        var name = $("<span>Preset " + preset['id'] + "</span>");
-
-        li.append(image, name);
-        list.append(li);
+        list.append(drawPreset(preset));
     }
+}
 
+function drawPreset(preset) {
+    var li = $("<li class='btn btn-info'></li>");
+    var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
+    var name = $("<span>Preset " + preset['id'] + "</span>");
+
+    li.append(image, name);
+    return li;
+}
+
+function createPerformance() {
+    $.get("/api/backend/presetqueues/create?name=New", function(data) {
+        console.log("create performance response: " + data);
+        loadPerformances();
+        loadEditPerformance();
+    })
 }

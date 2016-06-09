@@ -554,7 +554,7 @@ input[type=range]:focus {
     overflow: scroll;
 }
 
-.performance-preset-schedule-container {
+.performance-preset-schedule-container, .performance-list-container {
     height: 440px;
     overflow: scroll;
 }
@@ -617,6 +617,13 @@ input[type=range]:focus {
 
 .performance-list .col-xs-7, .performance-list .col-xs-5 {
     padding: 0;
+}
+
+.performance-list .btn-group {
+    position: absolute;
+    padding: 0;
+    top: -1px;
+    right: 0;
 }
 
 #selectperformance-button {

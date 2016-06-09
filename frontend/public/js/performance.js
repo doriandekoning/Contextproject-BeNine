@@ -21,6 +21,36 @@ Performance.prototype = {
 		}
 
 		return presets;
+	},
+
+	update: function(newperformance) {
+		this.name = newperformance.name;
+		this.queue = newperformance.queue;
 	}
 };
 
+function loadPerformances() {
+	$.get("/api/backend/presetqueues", function(data) {
+		var obj = JSON.parse(data);
+		for (var p in obj['presetqueues']) {
+			var performance = obj['presetqueues'][p];
+			checkPerformance(performance);
+		}
+	});
+}
+
+function checkPerformance(object) {
+	var exists = findPerformanceOnID(object.id);
+	if (exists === undefined) {
+		performances.push(new Performance(object['id'], object['name'], object['queue']));
+	} else {
+		exists.update(object);
+	}
+}
+
+function findPerformanceOnID(id){
+	var res = $.grep(performances, function(item, n) {
+		return parseInt(item.id) === parseInt(id);
+	});
+	return res[0];
+}
