@@ -70,4 +70,10 @@ public class ZoomPositionTest {
     Assert.assertEquals(pos1Hash, pos1Hash);
 
   }
+
+  @Test
+  public final void testToString() {
+    ZoomPosition pos = new ZoomPosition(2, 3, 4);
+    Assert.assertEquals("ZoomPosition{zoom=4,pan=2.0,tilt=3.0}", pos.toString());
+  }
 }
