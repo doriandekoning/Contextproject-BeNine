@@ -171,8 +171,9 @@ create_tags_input.tagsinput('input').keypress(function (e) {
 */
 function createPreset() {
 	var preset_create_div = $('#preset_create_div');
-	var presetName = preset_create_div.find('#preset_name').val();
+	var presetName = preset_create_div.find('#create_preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
+	console.log(presetName);
 	if (currentcamera !== undefined) {
 		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag + "&name=" + presetName, function(data) {console.log("create preset respone: " + data);})
 		.done(loadPresets);
@@ -227,9 +228,17 @@ edit_tags_input.tagsinput('input').keypress(function (e) {
  */
 function editPreset() {
 	var tags = edit_tags_input.val();
+	var presetName = preset_edit_div.find('#edit_preset_name').val();
+	editingpreset.name = presetName;
 	editingpreset.tags = tags;
-	$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+	if (tags === []) {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=false&overwriteposition=false",
 																									function(data) {console.log("edit preset: " + data)});
+	} else {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
+	}
+	editingpreset.displayPreview();
 }
 
 /**
@@ -254,6 +263,7 @@ function loadPresetEditModal(preset) {
 	editingpreset = preset;
 	preset_edit_div.find('#presetID').text(preset.id);
 	preset_edit_div.find('img').attr("src", "/api/backend" + preset.image);
+	preset_edit_div.find('#edit_preset_name').val(preset.name);
 	edit_tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {
 		edit_tags_input.tagsinput('add', item);
