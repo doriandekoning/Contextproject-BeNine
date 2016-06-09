@@ -125,6 +125,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       int sequence = 0;
+      deletePresetsList(queueID);
       for (Preset preset : presets) {
         sequence++;
         final String sql = String.format("INSERT INTO presetsList VALUES(%s,%s,%s)",
@@ -184,8 +185,8 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       final String sql = String.format("INSERT INTO queue VALUES(%s,'%s')",
           queue.getID(), queue.getName());
-      addPresetsList(queue.getQueue(), queue.getID());
       statement.executeUpdate(sql);
+      addPresetsList(queue.getQueue(), queue.getID());
     } catch (Exception e) {
       logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);
     } finally {

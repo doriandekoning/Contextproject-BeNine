@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presetsList` (
   `Sequence` INT(11) NOT NULL,
   `queue_ID` INT(11) NOT NULL,
   `preset_ID` INT(11) NOT NULL,
-  PRIMARY KEY (`queue_ID`, `preset_ID`),
+  PRIMARY KEY (`queue_ID`, `preset_ID`, `Sequence`),
   INDEX `fk_presetsList_preset1_idx` (`preset_ID` ASC),
   CONSTRAINT `fk_presetsList_queue1`
     FOREIGN KEY (`queue_ID`)
