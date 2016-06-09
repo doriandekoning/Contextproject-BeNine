@@ -266,7 +266,7 @@ public class MySQLDatabase implements Database {
   /**
    * Sets the right parameters for an IPCameraPreset.
    * @param preset The IPPreset
-   * @param statement
+   * @param statement The statement to add the parameters
    */
   private void setIpPreset(IPCameraPreset preset, PreparedStatement statement) {
     int auto = 0;
