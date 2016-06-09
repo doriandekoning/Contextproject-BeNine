@@ -26,7 +26,7 @@ public class Coordinate {
    * Getter for x.
    * @return relative x coordinate (between 0-100)
    */
-  public double getX(){
+  public double getX() {
     return x;
   }
 
@@ -34,7 +34,7 @@ public class Coordinate {
    * Getter for y.
    * @return relative y coordinate (between 0-100)
    */
-  public double getY(){
+  public double getY() {
     return y;
   }
 
@@ -58,7 +58,7 @@ public class Coordinate {
 
 
   /**
-   * Checks if this equals o
+   * Checks if this equals o.
    * @param o the object to check this with
    * @return true if this is equal to o else otherwise
    */
@@ -97,7 +97,7 @@ public class Coordinate {
    */
   @Override
   public String toString() {
-    return "("+x+","+y+")";
+    return "(" + x + "," + y + ")";
   }
 
   /**

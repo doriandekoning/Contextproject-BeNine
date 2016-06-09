@@ -1,7 +1,8 @@
-package com.benine.backend.preset;
+package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

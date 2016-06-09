@@ -41,7 +41,7 @@ public class ZoomPosition extends Position {
   public boolean equals(Object o) {
     if (super.equals(o) && o instanceof ZoomPosition ) {
       ZoomPosition other = (ZoomPosition)o;
-      return (other.getZoom() -  this.getZoom())<5;
+      return (other.getZoom() -  this.getZoom()) < 5;
     }
     return false;
   }

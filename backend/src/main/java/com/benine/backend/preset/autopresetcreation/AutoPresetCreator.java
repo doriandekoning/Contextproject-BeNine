@@ -1,11 +1,12 @@
-package com.benine.backend.preset;
+package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.autopresetcreation.SubView;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamNotAvailableException;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public abstract class AutoPresetCreator {
    * Automatically creates presets for the selected camera.
    * Calll generatePositions to get the positions of the presets.
    * @param cam the camera to create presets for.
+   * @param subViews the subviews to generate positions for.
    * @return A collection of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interupted while waiting for cam to move.
@@ -59,10 +61,12 @@ public abstract class AutoPresetCreator {
   /**
    * Generates the positions to create pesets at.
    * @param cam the camera to create positions for.
+   * @param subViews the subviews to generate positions for.
    * @return A collection of positions.
    * @throws CameraConnectionException when the camera cannot be reached.
    */
-  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
+  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam,
+                                                                Collection<SubView> subViews)
           throws CameraConnectionException;
 
 

@@ -1,9 +1,10 @@
-package com.benine.backend.preset;//TODO add Javadoc comment
+package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
 import com.benine.backend.preset.autopresetcreation.Coordinate;
 import com.benine.backend.preset.autopresetcreation.SubView;
 
@@ -68,6 +69,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   /**
    * Generates subviews for a specific subview for a single layer.
    * @param subView the subview to generate subviews for.
+   * @return A collection of the generated subviews for the layer.
    */
   private Collection<SubView> generateSubViewLayer(SubView subView) {
     ArrayList<SubView> subViews = new ArrayList<>();
@@ -86,10 +88,13 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   /**
    * Generatates a list of positions for the presets.
    * @param curPos the current camera position.
+   * @param subViews the subviews to generate positions for
    * @return A collection of positions
    */
+  // To aid readability
   @SuppressWarnings("PMD.UselessParentheses")
-  private Collection<Position> generatePositionsLayer(ZoomPosition curPos, Collection<SubView> subViews) {
+  private Collection<Position> generatePositionsLayer(ZoomPosition curPos,
+                                                      Collection<SubView> subViews) {
     ArrayList<Position> positions = new ArrayList<>();
 
     // 1 is completely zoomed out, 0 completely zoomed in
@@ -101,8 +106,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
 
     for (SubView subView : subViews) {
       Coordinate center = subView.getCenter();
-      final double tilt = (curPos.getPan() - (curHorFov/2)) + (center.getX() * curHorFov / 100);
-      final double pan = (curPos.getTilt() - (curVerFov/2)) + (center.getY() * curVerFov / 100);
+      final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
+      final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
       positions.add(new Position(tilt, pan));
     }
 

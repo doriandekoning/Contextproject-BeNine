@@ -37,6 +37,7 @@ public class SubView {
 
   /**
    * Returns the height of this subview between 0-100 relative to superview size.
+   * @return the height of this subview.
    */
   public double getHeight() {
     return topLeft.getY() - bottomRight.getY();
@@ -44,6 +45,7 @@ public class SubView {
 
   /**
    * Returns the width of this subview between 0-100 relative to superview size.
+   * @return the width of this subview
    */
   public double getWidth() {
     return bottomRight.getX() - topLeft.getX();
@@ -59,8 +61,8 @@ public class SubView {
   }
 
 
-  public Coordinate getCenter () {
-    return new Coordinate(topLeft.getX() + (getWidth()/2), topLeft.getY() - (getHeight()/2));
+  public Coordinate getCenter() {
+    return new Coordinate(topLeft.getX() + (getWidth() / 2), topLeft.getY() - (getHeight() / 2));
   }
 
   @Override
@@ -77,8 +79,8 @@ public class SubView {
     if (topLeft != null ? !topLeft.equals(subView.topLeft) : subView.topLeft != null) {
       return false;
     }
-    return bottomRight != null ?
-            bottomRight.equals(subView.bottomRight)
+    return bottomRight != null
+            ? bottomRight.equals(subView.bottomRight)
             : subView.bottomRight == null;
 
   }

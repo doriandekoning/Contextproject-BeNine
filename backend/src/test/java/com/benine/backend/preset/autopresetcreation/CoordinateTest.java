@@ -1,4 +1,4 @@
-package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
+package com.benine.backend.preset.autopresetcreation;
 
 import org.json.simple.JSONObject;
 import org.junit.Assert;
