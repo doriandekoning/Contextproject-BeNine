@@ -226,6 +226,14 @@ public class MySQLDatabase implements Database {
     try {
       String sql = createAddSqlQuery(preset);
       statement = connection.prepareStatement(sql);
+      if (preset instanceof SimplePreset) {
+        statement.setInt(1, preset.getId());
+        statement.setString(2, preset.getImage());
+        statement.setInt(3, preset.getCameraId());
+        statement.setString(4, preset.getName());
+      } else {
+        setIpPreset((IPCameraPreset) preset, statement);
+      }
       statement.executeUpdate();
       statement.close();
       sql = "INSERT INTO preset VALUES(?)";
@@ -242,26 +250,49 @@ public class MySQLDatabase implements Database {
     }
   }
 
+  /**
+   * Create an add preset query for the instance of preset.
+   * @param preset The preset to create the add query for
+   * @return the query
+   */
   private String createAddSqlQuery(Preset preset) {
-    if(preset instanceof SimplePreset) {
-      return "INSERT INTO presetsdatabase.simplepreset VALUES(" + preset.getId() + ",'"
-          + preset.getImage() + "'," + preset.getCameraId() + "," + preset.getName() + ")";
+    if (preset instanceof SimplePreset) {
+      return "INSERT INTO presetsdatabase.simplepreset VALUES(?,?,?,?)";
     } else {
-      IPCameraPreset ippreset = (IPCameraPreset) preset;
-      int auto = 0;
-      if (ippreset.isAutofocus()) {
-        auto = 1;
-      }
-      int autoir = 0;
-      if (ippreset.isAutoiris()) {
-        autoir = 1;
-      }
-      return "INSERT INTO presetsdatabase.IPpreset VALUES(" + ippreset.getId() + ","
-          + ippreset.getPosition().getPan() + "," + ippreset.getPosition().getTilt()
-          + "," + ippreset.getZoom() + "," + ippreset.getFocus()
-          + "," + ippreset.getIris() + "," + auto + "," + ippreset.getPanspeed() + ","
-          + ippreset.getTiltspeed() + "," + autoir + ",'" + ippreset.getImage() + "',"
-          + ippreset.getCameraId() + "," + ippreset.getName() + ")";
+      return "INSERT INTO presetsdatabase.IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    }
+  }
+
+  /**
+   * Sets the right parameters for an IPCameraPreset.
+   * @param preset The IPPreset
+   * @param statement
+   */
+  private void setIpPreset(IPCameraPreset preset, PreparedStatement statement) {
+    int auto = 0;
+    if (preset.isAutofocus()) {
+      auto = 1;
+    }
+    int autoir = 0;
+    if (preset.isAutoiris()) {
+      autoir = 1;
+    }
+    try {
+      statement.setInt(1, preset.getId());
+      statement.setDouble(2, preset.getPosition().getPan());
+      statement.setDouble(3, preset.getPosition().getTilt());
+      statement.setDouble(4, preset.getZoom());
+      statement.setDouble(5, preset.getFocus());
+      statement.setDouble(6, preset.getIris());
+      statement.setInt(7, auto);
+      statement.setDouble(8, preset.getPanspeed());
+      statement.setDouble(9, preset.getTiltspeed());
+      statement.setInt(10, autoir);
+      statement.setString(11, preset.getImage());
+      statement.setInt(12, preset.getCameraId());
+      statement.setString(13, preset.getName());
+    } catch (SQLException e) {
+      logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     }
   }
 
@@ -288,6 +319,11 @@ public class MySQLDatabase implements Database {
     }
   }
 
+  /**
+   * Create a delete preset query for the instance of preset.
+   * @param preset The preset to be deleted
+   * @return the query
+   */
   private String createDeleteSQL(Preset preset) {
     if (preset instanceof SimplePreset) {
       return "DELETE FROM simplepreset WHERE ID = ?";
@@ -494,8 +530,9 @@ public class MySQLDatabase implements Database {
 
   /**
    * Deletes camera from the database.
-   * @param table The table the camera needs to be deleted from
-   * @param id The ID used for deletion
+   *
+   * @param table    The table the camera needs to be deleted from
+   * @param id       The ID used for deletion
    * @param cameraID The cameraID to be deleted
    */
   private void deleteCameraSQL(String table, String id, int cameraID) {
