@@ -1,13 +1,12 @@
 package com.benine.backend.http;
 
-import com.benine.backend.camera.ZoomPosition;
-import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.IPCameraPresetFactory;
-import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.Preset;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
@@ -50,15 +49,15 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.getFocusPosition()).thenReturn(33);
       when(ipcamera.getIrisPosition()).thenReturn(50);
       when(ipcamera.getPosition()).thenReturn(new Position(0, 0));
-      when(ipcamera.getZoomPosition()).thenReturn(100);
+      when(ipcamera.getZoom()).thenReturn(100);
       when(ipcamera.isAutoFocusOn()).thenReturn(true);
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
-      preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(0,0, 100), 33,50,true,15,1,true, 0);
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0);
       preset.setCameraId(1);
       when(presetController.getPresetById(1)).thenReturn(preset);
-    } catch (CameraConnectionException | StreamNotAvailableException e) {
+    } catch (CameraConnectionException | CameraBusyException | StreamNotAvailableException e) {
       e.printStackTrace();
     }
   }

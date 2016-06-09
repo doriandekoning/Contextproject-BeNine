@@ -58,7 +58,7 @@ public class IpcameraIrisTest {
   }
   
   @Test
-  public final void testIsAutoIrisOff() throws CameraConnectionException {
+  public final void testIsAutoIrisOff() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D3", "d30");
     boolean res = camera.isAutoIrisOn();
     
@@ -67,7 +67,7 @@ public class IpcameraIrisTest {
   }
   
   @Test
-  public final void testIsAutoIrisOn() throws CameraConnectionException {
+  public final void testIsAutoIrisOn() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D3", "d31");
 
     boolean res = camera.isAutoIrisOn();
@@ -77,7 +77,7 @@ public class IpcameraIrisTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testIsAutoIrisOnException() throws CameraConnectionException {
+  public final void testIsAutoIrisOnException() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D3", "p31");
     camera.isAutoIrisOn();
   }

@@ -1,0 +1,42 @@
+<div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
+    <div class="control_buttons">
+        <div class="btn-group">
+            <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
+            <button id="editPresets" type="button" class="btn btn-danger" onclick="loadEditablePresets()"><span class="glyphicon glyphicon-pencil"></span> Edit Presets</button>
+            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Update Tags</button>
+            <button id="autoCreatePresets" type="button" class="btn btn-success" data-toggle="modal" data-target=".auto-presets-modal" onclick="autoCreatePresets()"><span class="glyphicon glyphicon-flash"></span> Auto create presets</button>
+        </div>
+    </div>
+    <div id="control_area">
+        <div class="row">
+            <div class="control_wrapper">
+                <div class="joystick_zone"></div>
+
+                <div class="control_zone">
+
+                    <div class="control_sliders">
+                        <div class="slider" id="focus">
+                            <button id="auto_focus" type="button" class="btn btn-success">Auto</button>
+                            <input type="range" min="-10" max="10" value="0" class="focusslider"
+                                   orient="vertical" oninput="inputfocusslider(value)" onmouseup="this.value=0; releaseSlider(sendFocus, focusInput);" ontouchend="this.value=0">
+                            <span>Focus</span>
+                        </div>
+                        <div class="slider" id="iris">
+                            <button id="auto_iris" type="button" class="btn btn-success">Auto</button>
+                            <input type="range" min="-10" max="10" value="0" class="irisslider"
+                                   orient="vertical" oninput="inputirisslider(value)" onmouseup="this.value=0; releaseSlider(sendIris, irisInput);" ontouchend="this.value=0">
+                            <span>Iris</span>
+                        </div>
+                        <div class="slider" id="zoom">
+                            <input type="range" min="-10" max="10" value="0" class="zoomslider"
+                                   orient="vertical" oninput="inputzoomslider(value)" onmouseup="this.value=0; releaseSlider(sendZoom, zoomInput);" ontouchend="this.value=0">
+                            <span>Zoom</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

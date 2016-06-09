@@ -1,20 +1,12 @@
 package com.benine.backend.camera.ipcameracontrol;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.*;
-
-import com.benine.backend.camera.*;
-import com.benine.backend.preset.IPCameraPresetFactory;
-import org.json.simple.JSONObject;
-
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-
 import org.apache.commons.io.IOUtils;
-
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +15,12 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.concurrent.TimeoutException;
 
-import java.util.HashSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class to test the IP Camera class.
@@ -194,7 +189,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testGetJSONFails() throws CameraConnectionException {
+  public final void testGetJSONFails() throws CameraConnectionException, CameraBusyException {
     IPCamera camera = new IPCamera("12", cameraController);
     JSONObject json = new JSONObject();
     json.put("id", -1);
@@ -207,7 +202,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetJSON() throws CameraConnectionException{
+  public final void testGetJSON() throws CameraConnectionException, CameraBusyException{
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     JSONObject json = new JSONObject();
@@ -225,14 +220,14 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testCreatePreset() throws CameraConnectionException{
+  public final void testCreatePreset() throws CameraConnectionException, CameraBusyException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    IPCameraPreset expected = new IPCameraPresetFactory().createPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, 15, 1, true, -1);
+    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, true, -1);
     
     assertEquals(expected, camera.createPreset(new HashSet<>()));
   }
@@ -248,57 +243,6 @@ public class IpcameraTest {
     Assert.assertFalse(camera1.isInUse());
     camera1.setInUse();
     Assert.assertTrue(camera1.isInUse());
-  }
-
-  @Test
-  public void testWaitUntilAlreadyAtPos()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 300);
-  }
-
-  @Test
-  public void testWaitUntilTimeOutSmallAlreadyAtLoc()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
-  }
-
-  @Test (expected =TimeoutException.class)
-  public void testWaitUntillNotAtZoom()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 0), 1);
-  }
-
-  @Test (expected =TimeoutException.class)
-  public void testWaitUntilTimeOutNotAtLocSmallTimeout()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(2, -1)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoomPosition();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
-  }
-
-
-  @Test
-  public void testWaitUntilAlreadyAtAfterMultipleTimeouts()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(0, 10, 30).when(cam).getZoomPosition();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 700);
   }
 
   @Test

@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "request": "2.x",
-    "express": "^4.x"
+    "express": "^4.x",
+    "ejs": "2.4.2"
   },
   "devDependencies": {
     "mocha": "2.x",

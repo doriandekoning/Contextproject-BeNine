@@ -1,7 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.ZoomPosition;
-import com.benine.backend.preset.IPCameraPresetFactory;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.util.MultiMap;
 import org.json.JSONException;
@@ -38,10 +38,11 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new IPCameraPresetFactory().createPreset(new ZoomPosition(1, 1, 1), 1, 1, true, 1, 1, true, 0);
+    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, true, 0);
     ArrayList<String> keywords = new ArrayList<>();
     keywords.add("Violin");
-    Preset presetKeywords = new IPCameraPresetFactory().createPreset(new ZoomPosition(1, 1, 1), 1, 1, true, 1, 1, true, 0, keywords);
+    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, true, 0);
+    presetKeywords.addTags(keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();
     allList.add(preset);

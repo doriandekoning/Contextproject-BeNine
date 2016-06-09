@@ -1,6 +1,5 @@
 package com.benine.backend.camera;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -69,5 +68,11 @@ public class ZoomPositionTest {
     int pos2Hash = new ZoomPosition(new Position(3, 20), 50).hashCode();
     Assert.assertEquals(pos1Hash, pos1Hash);
 
+  }
+
+  @Test
+  public final void testToString() {
+    ZoomPosition pos = new ZoomPosition(2, 3, 4);
+    Assert.assertEquals("ZoomPosition{zoom=4,pan=2.0,tilt=3.0}", pos.toString());
   }
 }

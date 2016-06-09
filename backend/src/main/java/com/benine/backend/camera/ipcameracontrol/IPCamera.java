@@ -5,7 +5,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.IPCameraPresetFactory;
 import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
@@ -262,7 +261,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoFocusOn() throws CameraConnectionException {
+  public boolean isAutoFocusOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D1", "d1");
     return Integer.parseInt(response) == 1;
   }
@@ -284,7 +284,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoIrisOn() throws CameraConnectionException {
+  public boolean isAutoIrisOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D3", "d3");
     return Integer.parseInt(response) == 1;
   }
@@ -339,7 +340,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return the current zoom position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getZoomPosition() throws CameraConnectionException {
+  public int getZoom() throws CameraConnectionException {
     String response = getValue("%23GZ", "gz");
     return Integer.valueOf(response, 16) - 1365;
   }
@@ -437,7 +438,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public JSONObject toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException, CameraBusyException {
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
@@ -537,29 +538,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   /**
-   * Waits until the camera has arrived at a location or the timeout has expired.
-   * @param pos The position the camera should be at.
-   * @param timeout the timeout after which to give up waiting
-   * @throws InterruptedException when interupted when waiting to arrive at position.
-   * @throws CameraConnectionException when connection to camera is lost.
-   * @throws TimeoutException when camera moves to slow or does not move at all.
-   */
-  public void waitUntilAtPosition(ZoomPosition pos, long timeout)
-          throws InterruptedException, CameraConnectionException, TimeoutException {
-    long timedOutTime = System.currentTimeMillis() + timeout;
-    do {
-      System.out.println(getPosition().equals(pos));
-      if (getPosition().equals(pos)) {
-        return;
-      }
-      Thread.sleep(MOVE_WAIT_DURATION);
-    } while (System.currentTimeMillis() < timedOutTime );
-    System.out.println("Wanted:" + pos);
-    System.out.println("Got:" + getPosition());
-    throw new TimeoutException();
-  }
-
-  /**
    * Sets the camera busy.
    * @param busy if the camera is busy.
    */
@@ -586,18 +564,16 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
-    int zoom = getZoomPosition();
+  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException, CameraBusyException {
+    int zoom = getZoom();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();
     int focus = getFocusPosition();
     int iris = getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    return new IPCameraPresetFactory().createPreset(new ZoomPosition(pan, tilt, zoom), focus, iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId, tagList);
+    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris, autofocus,
+            autoiris, cameraId);
   }
 }

@@ -75,7 +75,7 @@ public class IpcameraFocusTest {
   }
   
   @Test
-  public final void testIsAutoFocusOn() throws CameraConnectionException {
+  public final void testIsAutoFocusOn() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D1", "d11");
     boolean res = camera.isAutoFocusOn();
     
@@ -84,7 +84,7 @@ public class IpcameraFocusTest {
   }
   
   @Test
-  public final void testIsAutoFocusOff() throws CameraConnectionException {
+  public final void testIsAutoFocusOff() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D1", "d10");
     boolean res = camera.isAutoFocusOn();
     
@@ -93,7 +93,7 @@ public class IpcameraFocusTest {
   }
   
   @Test(expected = CameraConnectionException.class)
-  public final void testIsAutoFocusOffException() throws CameraConnectionException {
+  public final void testIsAutoFocusOffException() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("D1", "K10");
     camera.isAutoFocusOn();
   }

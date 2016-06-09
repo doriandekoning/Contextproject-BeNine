@@ -7,6 +7,15 @@ public class ZoomPosition extends Position {
 
   private int zoom;
 
+  @Override
+  public String toString() {
+    return "ZoomPosition{" +
+            "zoom=" + zoom
+            + ",pan=" + getPan()
+            + ",tilt=" + getTilt()
+            +'}';
+  }
+
   /**
    * Constructor of a position object used for zoomingcamera positions.
    *
@@ -41,7 +50,7 @@ public class ZoomPosition extends Position {
   public boolean equals(Object o) {
     if (super.equals(o) && o instanceof ZoomPosition ) {
       ZoomPosition other = (ZoomPosition)o;
-      return (other.getZoom() -  this.getZoom())<5;
+      return Math.abs((other.getZoom() -  this.getZoom())) < 5;
     }
     return false;
   }

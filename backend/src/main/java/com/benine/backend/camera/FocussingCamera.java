@@ -44,6 +44,6 @@ public interface FocussingCamera extends ControllableCamera {
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  boolean isAutoFocusOn() throws CameraConnectionException;
+  boolean isAutoFocusOn() throws CameraConnectionException, CameraBusyException;
 
 }

@@ -10,7 +10,7 @@ public interface ZoomingCamera extends ControllableCamera {
    * @return the current zoom position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  int getZoomPosition() throws CameraConnectionException;
+  int getZoom() throws CameraConnectionException;
   
   /**
    * Zoom to a specified position.
