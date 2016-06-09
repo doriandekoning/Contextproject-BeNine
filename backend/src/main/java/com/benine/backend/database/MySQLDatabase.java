@@ -221,16 +221,15 @@ public class MySQLDatabase implements Database {
 
   @Override
   public void addPreset(Preset preset) {
-    Statement statement = null;
-    PreparedStatement statement2 = null;
+    PreparedStatement statement = null;
     try {
-      statement = connection.createStatement();
       String sql = preset.createAddSqlQuery();
-      statement.executeUpdate(sql);
+      statement = connection.prepareStatement(sql);
+      statement.executeUpdate();
       sql = "INSERT INTO preset VALUES(?)";
-      statement2 = connection.prepareStatement(sql);
-      statement2.setInt(1, preset.getId());
-      statement2.executeUpdate();
+      statement = connection.prepareStatement(sql);
+      statement.setInt(1, preset.getId());
+      statement.executeUpdate();
       for (String tag : preset.getTags()) {
         addTagToPreset(tag, preset);
       }
@@ -238,38 +237,27 @@ public class MySQLDatabase implements Database {
       logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
-      try {
-        statement2.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
     }
   }
 
   @Override
   public void deletePreset(Preset preset) {
-    Statement statement = null;
-    PreparedStatement statement2 = null;
+    PreparedStatement statement = null;
     try {
-      statement = connection.createStatement();
       if (preset != null) {
         deleteTagsFromPreset(preset);
         String sql = preset.createDeleteSQL();
-        statement.executeUpdate(sql);
+        statement = connection.prepareStatement(sql);
+        statement.executeUpdate();
         sql = "DELETE FROM preset WHERE ID = ?";
-        statement2 = connection.prepareStatement(sql);
-        statement2.setInt(1, preset.getId());
-        statement2.executeUpdate();
+        statement = connection.prepareStatement(sql);
+        statement.setInt(1, preset.getId());
+        statement.executeUpdate();
       }
     } catch (Exception e) {
       logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
-      try {
-        statement2.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
     }
   }
 
