@@ -3,6 +3,7 @@ var selectedPerformance, nameEditingPerformance;
 function loadEditPerformance() {
     drawPresets(presets);
     drawPerformancesList();
+    drawSchedule();
 }
 
 function drawPerformancesList() {
@@ -59,7 +60,9 @@ function setNameEditable() {
 }
 
 function saveEditName() {
-    $.get("/api/backend/presetqueues/" + nameEditingPerformance.data().id + "/edit?name=" + $("#performance-name").val(), function (data) {});
+    var performance = nameEditingPerformance.data();
+    performance.updateName($("#performance-name").val());
+
     selectPerformance();
 }
 
@@ -134,6 +137,7 @@ function addScheduleRow(preset) {
     var schedule = $("#performance-schedule");
 
     var item = $("<li></li>");
+    item.data(preset);
 
     var group = $("<div class='btn-group'></div>");
     var count = $("<button type='button' class='btn btn-default schedule-list-number'></button>");
@@ -145,6 +149,7 @@ function addScheduleRow(preset) {
 
     buttonUp.click(moveScheduleUp);
     buttonDown.click(moveScheduleDown);
+    buttonRemove.click(deleteFromSchedule);
 
     group.append(count, presetname, buttonUp, buttonDown, buttonRemove);
     item.append(group);
@@ -169,13 +174,17 @@ function updateScheduleOrder() {
  */
 function moveScheduleUp() {
     var current = $(this).closest('li');
-    var previous = current.prev('li');
+    var preset = current.data();
 
-    if (previous.length !== 0) {
-        current.insertBefore(previous);
+    var performance = selectedPerformance.data();
+    var index = current.index();
+
+    if (index > 0) {
+        performance.deletepreset(index);
+        performance.addpresetatposition(index - 1, preset);
     }
 
-    updateScheduleOrder();
+    drawSchedule(performance);
 }
 
 /**
@@ -183,13 +192,17 @@ function moveScheduleUp() {
  */
 function moveScheduleDown() {
     var current = $(this).closest('li');
-    var previous = current.next('li');
+    var preset = current.data();
 
-    if (previous.length !== 0) {
-        current.insertAfter(previous);
+    var performance = selectedPerformance.data();
+    var index = current.index();
+
+    if (index < performance.presets.length) {
+        performance.deletepreset(index);
+        performance.addpresetatposition(index + 1, preset);
     }
 
-    updateScheduleOrder();
+    drawSchedule(performance);
 }
 
 function drawPresets(presetlist) {
@@ -208,9 +221,18 @@ function drawPresets(presetlist) {
 
 function addToSchedule() {
     var preset = $(this).data();
+    var performance = selectedPerformance.data();
+
+    performance.addpreset(preset);
+    drawSchedule(performance);
+}
+
+function deleteFromSchedule() {
+    var preset = $(this);
+    var li = preset.closest('preset');
 
     var performance = selectedPerformance.data();
-    performance.addpreset(preset);
+    performance.deletepreset(li.index() + 1);
     drawSchedule(performance)
 }
 
@@ -224,9 +246,7 @@ function drawPreset(preset) {
 }
 
 function createPerformance() {
-    $.get("/api/backend/presetqueues/create?name=New", function(data) {
-        console.log("create performance response: " + data);
+    $.get("/api/backend/presetqueues/create?name=New%20Performance", function(data) {
         loadPerformances();
-        loadEditPerformance();
-    })
+    }).done(drawPerformancesList);
 }

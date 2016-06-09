@@ -27,14 +27,36 @@ Performance.prototype = {
 		this.queue = newperformance.queue;
 	},
 
-	delete: function () {
-		$.get("/api/backend/presetqueues/" + this.id + "/delete", function (data) {});
+	delete: function (index) {
+		$.get("/api/backend/presetqueues/" + this.id + "/delete", function (data) {
+			loadPerformances();
+		});
 	},
 
-	addpreset: function (preset) {
+	updateName: function (name) {
+		this.name = name;
+		$.get("/api/backend/presetqueues/" + this.id + "/edit?name=" + name, function (data) {
+			loadPerformances();
+		});
+	},
+
+	addpreset: function(preset) {
 		this.presets.push(preset);
 		var position = this.presets.length;
-		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {});
+		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
+		});
+	},
+
+	addpresetatposition: function (position, preset) {
+		this.presets.push(preset);
+		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
+		});
+	},
+
+	deletepreset: function (position) {
+		this.presets.splice(position, 1);
+		$.get("/api/backend/presetqueues/" + this.id + "/deletepreset?position=" + position, function (data) {
+		});
 	}
 }
 
@@ -47,5 +69,7 @@ function loadPerformances() {
 			var performance = obj['presetqueues'][p];
 			performances.push(new Performance(performance['id'], performance['name'], performance['queue']));
 		}
+
+		loadEditPerformance();
 	});
 }
