@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 /**
  *
  */
-public class AutoCreationSubViewsHandlerTest extends RequestHandlerTest {
+public class AutoCreationSubViewsHandlerTest extends AutoPresetHandlerTest {
 
   @Test
   public void testHandleWithParams() throws Exception {
@@ -50,7 +50,7 @@ public class AutoCreationSubViewsHandlerTest extends RequestHandlerTest {
   }
 
   @Override
-  public RequestHandler supplyHandler() {
+  public AutoPresetHandler supplyHandler() {
     return new AutoCreationSubViewsHandler(httpserver);
   }
 }

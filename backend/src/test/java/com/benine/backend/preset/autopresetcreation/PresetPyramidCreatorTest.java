@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  *
@@ -109,6 +109,59 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     Collection<SubView> generated = ppc.generateSubViews();
     Assert.assertEquals(subViews.size(), generated.size());
     Assert.assertEquals(new HashSet<>(subViews), new HashSet<>(generated));
+  }
+
+  @Test
+  public void testEqualsSameObject() {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1,1,1,0, presetController);
+    Assert.assertEquals(ppc, ppc);
+  }
+
+  @Test
+  public void testEqualsDifferentType() {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1,1,1,0, presetController);
+    Assert.assertNotEquals(ppc, 3);
+  }
+
+  @Test
+  public void testEqualsNull() {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1,1,1,0, presetController);
+    Assert.assertNotEquals(ppc, null);
+  }
+
+  @Test
+  public void testHashCode() {
+    PresetPyramidCreator ppc1 = new PresetPyramidCreator(1,1,1,0, presetController);
+    PresetPyramidCreator ppc2 = new PresetPyramidCreator(1,1,1,0, presetController);
+    Assert.assertEquals(ppc1, ppc2);
+  }
+
+  @Test
+  public void testEqualsDifferentRows() {
+    PresetPyramidCreator ppc1 = new PresetPyramidCreator(1,1,1,0, presetController);
+    PresetPyramidCreator ppc2 = new PresetPyramidCreator(2,1,1,0, presetController);
+    Assert.assertNotEquals(ppc1, ppc2);
+  }
+
+  @Test
+  public void testEqualsDifferentColumns() {
+    PresetPyramidCreator ppc1 = new PresetPyramidCreator(1,1,1,0, presetController);
+    PresetPyramidCreator ppc2 = new PresetPyramidCreator(1,2,1,0, presetController);
+    Assert.assertNotEquals(ppc1, ppc2);
+  }
+
+  @Test
+  public void testEqualsDifferentLevels() {
+    PresetPyramidCreator ppc1 = new PresetPyramidCreator(1,1,1,0, presetController);
+    PresetPyramidCreator ppc2 = new PresetPyramidCreator(1,1,2,0, presetController);
+    Assert.assertNotEquals(ppc1, ppc2);
+  }
+
+  @Test
+  public void testEqualsDifferentOverlap() {
+    PresetPyramidCreator ppc1 = new PresetPyramidCreator(1,1,1,0, presetController);
+    PresetPyramidCreator ppc2 = new PresetPyramidCreator(1,1,1,0.5, presetController);
+    Assert.assertNotEquals(ppc1, ppc2);
   }
 
   @Test(expected = AssertionError.class)

@@ -85,6 +85,32 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     return subViews;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PresetPyramidCreator that = (PresetPyramidCreator) o;
+
+    if (rows != that.rows) return false;
+    if (columns != that.columns) return false;
+    if (levels != that.levels) return false;
+    return Double.compare(that.overlap, overlap) == 0;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result;
+    long temp;
+    result = rows;
+    result = 31 * result + columns;
+    result = 31 * result + levels;
+    temp = Double.doubleToLongBits(overlap);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
   /**
    * Generates subviews for a specific subview for a single layer.
    * @param subView the subview to generate subviews for.

@@ -21,7 +21,7 @@ public class RecallPresetHandler extends RequestHandler {
    * @param httpserver this handler belongs to.
    */
   public RecallPresetHandler(HTTPServer httpserver) {
-z    super(httpserver);
+    super(httpserver);
   }
 
   @Override
