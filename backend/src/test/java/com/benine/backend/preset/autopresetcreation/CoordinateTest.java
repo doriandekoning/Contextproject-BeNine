@@ -153,8 +153,8 @@ public class CoordinateTest {
   public void testToJSON() {
     Coordinate c = new Coordinate(1.3, 5.3);
     JSONObject obj = new JSONObject();
-    obj.put("x", 1.3);
-    obj.put("y", 5.3);
+    obj.put("x", 1.300);
+    obj.put("y", 5.300);
     Assert.assertEquals(c.toJSON(), obj);
   }
 }
