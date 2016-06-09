@@ -228,9 +228,16 @@ edit_tags_input.tagsinput('input').keypress(function (e) {
  */
 function editPreset() {
 	var tags = edit_tags_input.val();
+	var presetName = preset_edit_div.find('#edit_preset_name').val();
 	editingpreset.tags = tags;
-	$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+	if (tags === []) {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=false&overwriteposition=false",
 																									function(data) {console.log("edit preset: " + data)});
+	} else {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
+	}
+	
 }
 
 /**
