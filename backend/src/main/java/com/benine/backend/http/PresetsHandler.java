@@ -33,7 +33,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("removetag", new RemoveTagHandler(httpserver));
     addHandler("edit", new EditPresetHandler(httpserver));
     addHandler("autocreatepresets", new AutoPresetCreationHandler(httpserver));
-    addHandler("autoCreateSubViews", new AutoCreationSubViewsHandler(httpserver));
+    addHandler("autocreatesubviews", new AutoCreationSubViewsHandler(httpserver));
   }
 
   @Override

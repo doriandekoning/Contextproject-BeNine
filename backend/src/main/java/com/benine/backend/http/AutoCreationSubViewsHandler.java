@@ -6,15 +6,14 @@ import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
 
 
-public class AutoCreationSubViewsHandler extends RequestHandler  {
+public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
 
 
   /**
@@ -37,8 +36,8 @@ public class AutoCreationSubViewsHandler extends RequestHandler  {
     int columns = columnsString != null ? Integer.parseInt(columnsString) : 3;
     int levels = levelsString != null ? Integer.parseInt(levelsString) : 3;
     double overlap = overlapString != null ? Double.parseDouble(overlapString) : 0;
-
-    PresetPyramidCreator creator = new PresetPyramidCreator(rows, columns, levels, overlap, getPresetController());
+    PresetPyramidCreator creator =  new PresetPyramidCreator(rows, columns, levels, overlap, getPresetController());
+  // PresetPyramidCreator creator = getPyramidPresetCreator(request);
     Collection<SubView> subViews = creator.generateSubViews();
     JSONArray subViewsJSON = new JSONArray();
     subViewsJSON.addAll(subViews);
