@@ -48,7 +48,7 @@ Performance.prototype = {
 	},
 
 	addpresetatposition: function (position, preset) {
-		this.presets.push(preset);
+		this.presets.splice(position, 0, preset);
 		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
 		});
 	},

@@ -179,7 +179,7 @@ function moveScheduleUp() {
     var performance = selectedPerformance.data();
     var index = current.index();
 
-    if (index > 0) {
+    if (index < performance.presets.length) {
         performance.deletepreset(index);
         performance.addpresetatposition(index - 1, preset);
     }
@@ -197,7 +197,7 @@ function moveScheduleDown() {
     var performance = selectedPerformance.data();
     var index = current.index();
 
-    if (index < performance.presets.length) {
+    if (index > 0) {
         performance.deletepreset(index);
         performance.addpresetatposition(index + 1, preset);
     }
