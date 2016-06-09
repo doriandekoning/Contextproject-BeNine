@@ -64,8 +64,8 @@ public class IPCameraPreset extends Preset {
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();
     this.iris = cam.getIrisPosition();
-    this.autoiris = cam.isAutoFocusOn();
-    this.autofocus = cam.isAutoIrisOn();
+    this.autoiris = cam.isAutoIrisOn();
+    this.autofocus = cam.isAutoFocusOn();
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
     try {
