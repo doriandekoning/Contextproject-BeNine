@@ -68,11 +68,6 @@ public class IPCameraPreset extends Preset {
     this.autofocus = cam.isAutoFocusOn();
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
-    try {
-      createImage(cam);
-    } catch (Exception e) {
-      ServerController.getInstance().getLogger().log("Error creating preset image", e);
-    }
   }
 
 
@@ -84,7 +79,7 @@ public class IPCameraPreset extends Preset {
    * @throws IOException  If the image cannot be written.
    * @throws SQLException if the image can not be saved in the database.
    */
-  private void createImage(IPCamera cam) throws
+  public void createImage(IPCamera cam) throws
           StreamNotAvailableException, IOException, SQLException {
 
     StreamController streamController = ServerController.getInstance().getStreamController();

@@ -52,9 +52,7 @@ public class AutoPresetCreationHandler extends RequestHandler  {
    
     try {
       Collection<SubView> subViews = creator.generateSubViews();
-      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam, subViews));
-      PresetController presetController = ServerController.getInstance().getPresetController();
-      presetController.addPresets(presets);
+      creator.createPresets(ipcam, subViews);
       JSONArray subViewsJSON = new JSONArray();
       subViewsJSON.addAll(subViews);
       JSONObject jsonObj = new JSONObject();

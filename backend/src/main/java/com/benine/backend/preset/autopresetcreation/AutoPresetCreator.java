@@ -55,8 +55,10 @@ public abstract class AutoPresetCreator {
       cam.moveTo(pos, 2, 30);
       cam.waitUntilAtPosition(pos, timeout);
       cam.setBusy(true);
-      presetController.addPreset(new IPCameraPreset(cam, 2, 30));
-      // TODO ADD TO LIST
+      IPCameraPreset preset = new IPCameraPreset(cam, 2, 30);
+      presetController.addPreset(preset);
+      preset.createImage(cam);
+      presets.add(preset);
     }
     cam.setBusy(false);
     return presets;
