@@ -18,6 +18,11 @@ app.get('/', function (req, res) {
     res.render('pages/camera-view');
 });
 
+app.get('/live', function (req, res) {
+    res.render('pages/live-view');
+});
+
+
 // Use the api module for all /api calls.
 app.use('/api', api);
 

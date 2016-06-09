@@ -56,7 +56,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testResetDatabase() {
         database.resetDatabase();
         database.closeConnection();
-        verifySQLStatementExecuted("CREATE SCHEMA IF NOT EXISTS `presetsDatabase`");
+        verifySQLStatementExecuted("CREATE SCHEMA IF NOT EXISTS `presetsdatabase`");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();

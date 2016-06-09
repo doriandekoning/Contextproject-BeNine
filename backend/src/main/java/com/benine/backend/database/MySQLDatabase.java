@@ -126,6 +126,7 @@ public class MySQLDatabase implements Database {
     PreparedStatement statement = null;
     try {
       int sequence = 0;
+      deletePresetsList(queueID);
       for (Preset preset : presets) {
         sequence++;
         String sql = "INSERT INTO presetsList VALUES(?,?,?)";
@@ -257,9 +258,9 @@ public class MySQLDatabase implements Database {
    */
   private String createAddSqlQuery(Preset preset) {
     if (preset instanceof SimplePreset) {
-      return "INSERT INTO presetsdatabase.simplepreset VALUES(?,?,?,?)";
+      return "INSERT INTO simplepreset VALUES(?,?,?,?)";
     } else {
-      return "INSERT INTO presetsdatabase.IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      return "INSERT INTO IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
   }
 
@@ -343,9 +344,9 @@ public class MySQLDatabase implements Database {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
         + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
-        + " FROM presetsDatabase.IPpreset"));
+        + " FROM IPpreset"));
     list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
-        + " FROM presetsDatabase.simplepreset"));
+        + " FROM simplepreset"));
     for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
     }

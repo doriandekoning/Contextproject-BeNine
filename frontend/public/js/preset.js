@@ -52,8 +52,15 @@ Preset.prototype = {
 		var preset_div = preset_area.find('#preset_' + this.id);
 		var title = preset_div.find('h5');
 		title.addClass("selected");
-		$.get("/api/backend/presets/recallpreset?presetid=" + this.id  , function(data) {});
+		this.recallPreset();
 		switchCurrentView(this.cameraid);
+	},
+
+	/**
+	 * Recall this preset.
+	 */
+	recallPreset: function() {
+		$.get("/api/backend/presets/recallpreset?presetid=" + this.id  , function(data) {});
 		console.log("Recall preset id: " + this.id);
 	},
 

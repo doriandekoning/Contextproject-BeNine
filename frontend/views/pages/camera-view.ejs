@@ -4,8 +4,10 @@
     <% include ../partials/header %>
 </head>
 <body>
+
+<% include ../partials/navbar %>
+
 <div class="body_container">
-    <% include ../partials/navbar %>
 
     <div id="top_area" class="row">
         <% include ../partials/modules/camera-module %>
@@ -16,6 +18,7 @@
         <% include ../partials/modules/controls-module %>
     </div>
 
+    <% include ../partials/modals/edit-performance %>
     <% include ../partials/modals/create-preset %>
     <% include ../partials/modals/edit-preset %>
     <% include ../partials/modals/edit-tags %>
