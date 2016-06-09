@@ -43,9 +43,13 @@ public class CreatePresetHandler extends RequestHandler {
       if (camID == null) {
         throw new MalformedURIException("No Camera ID Specified.");
       }
-      
+
       Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
+      if (name == null) {
+        throw new MalformedURIException("No Name Specified.");
+      }
 
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
@@ -53,7 +57,7 @@ public class CreatePresetHandler extends RequestHandler {
       } 
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
-        Preset preset = presetCamera.createPreset(tagList);
+        Preset preset = presetCamera.createPreset(tagList, name);
 
         int presetID = getPresetController().addPreset(preset);
         createImage(camera.getId(), presetID);

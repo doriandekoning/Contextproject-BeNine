@@ -22,7 +22,7 @@ public class SimplePresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new SimplePreset(1, keywords);
+    preset = new SimplePreset(1, keywords, "name");
     preset.setId(1);
     preset.setImage("test");
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
@@ -47,6 +47,11 @@ public class SimplePresetTest {
   @Test
   public void testGetSQLQuery(){
     Assert.assertEquals("INSERT INTO presetsdatabase.simplepreset VALUES(1,'test',1)", preset.createAddSqlQuery());
+  }
+
+  @Test
+  public void testDeleteSQL() {
+    Assert.assertEquals("DELETE FROM simplepreset WHERE ID = 1", preset.createDeleteSQL());
   }
 
 }

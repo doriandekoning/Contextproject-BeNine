@@ -170,7 +170,8 @@ public class MySQLDatabase implements Database {
         int id = resultset.getInt("ID");
         String name = resultset.getString("Name");
         ArrayList<Preset> presets = getPresetsList(id);
-        PresetQueue queue = new PresetQueue(id, name, presets);
+        PresetQueue queue = new PresetQueue(name, presets);
+        queue.setID(id);
         list.add(queue);
       }
     } catch (Exception e) {
@@ -273,9 +274,9 @@ public class MySQLDatabase implements Database {
   public ArrayList<Preset> getAllPresets() {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
-        + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
+        + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
         + " FROM presetsDatabase.IPpreset"));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
         + " FROM presetsDatabase.simplepreset"));
     for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
@@ -561,8 +562,9 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("ID");
+      String name = resultset.getString("name");
       IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
-          panspeed, tiltspeed, autoIris, cameraId);
+          panspeed, tiltspeed, autoIris, cameraId, name);
       preset.setId(id);
       preset.setImage(resultset.getString("image"));
       return preset;
@@ -582,7 +584,8 @@ public class MySQLDatabase implements Database {
     try {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
-      SimplePreset preset = new SimplePreset(cameraId);
+      String name = resultset.getString("name");
+      SimplePreset preset = new SimplePreset(cameraId, name);
       int id = resultset.getInt("id");
       preset.setId(id);
       preset.setImage(image);

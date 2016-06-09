@@ -50,7 +50,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     streamReader = new MJPEGStreamReader(stream);
     tags = new HashSet<>(Arrays.asList("violin", "piano"));
 
-    preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags);
+    preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, tags, "name");
     preset.setId(1);
     when(presetController.getPresetById(1)).thenReturn(preset);
     try {
@@ -68,8 +68,10 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     parameters.add("camera", "1");
     parameters.add("overwritetag", "true");
     parameters.add("overwriteposition", "false");
+    parameters.add("overwritename", "false");
     parameters.add("presetid", "1");
     parameters.add("tags", "test");
+    parameters.add("name", "name");
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
@@ -89,16 +91,40 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     parameters.add("camera", "1");
     parameters.add("overwritetag", "false");
     parameters.add("overwriteposition", "true");
+    parameters.add("overwritename", "false");
     parameters.add("presetid", "1");
     parameters.add("tags", "test");
+    parameters.add("name", "name");
     setParameters(parameters);
     
-    IPCameraPreset preset2 = new IPCameraPreset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags);
-    when(ipcamera.createPreset(tags)).thenReturn(preset2);
+    IPCameraPreset preset2 = new IPCameraPreset(new Position(0,0), 50, 33,50,true,15,1,true, 1, tags, "name");
+    when(ipcamera.createPreset(tags, "name")).thenReturn(preset2);
         
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
     verify(requestMock).setHandled(true);
     verify(presetController).updatePreset(preset2);
+  }
+
+  @Test
+  public void testUpdateName() throws Exception{
+    when(ipcamera.getZoomPosition()).thenReturn(50);
+
+    setPath("/presets/edit");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("overwritetag", "false");
+    parameters.add("overwriteposition", "false");
+    parameters.add("overwritename", "true");
+    parameters.add("presetid", "1");
+    parameters.add("tags", "test");
+    parameters.add("name", "name2");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(requestMock).setHandled(true);
+    Assert.assertEquals("name2", preset.getName());
   }
 }

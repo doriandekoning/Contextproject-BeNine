@@ -11,10 +11,11 @@ public interface PresetCamera extends Camera {
   
   /**
    * Creates a preset from a camera.
-   * @param tagList   The tag belonging to the preset. 
+   * @param tagList   The tag belonging to the preset.
+   * @param name      The name of the preset
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
    */
-  Preset createPreset(Set<String> tagList) throws CameraConnectionException;
+  Preset createPreset(Set<String> tagList, String name) throws CameraConnectionException;
 
 }
