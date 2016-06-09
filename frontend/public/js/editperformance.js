@@ -79,6 +79,8 @@ function setNameEditable() {
 function saveEditName() {
     var performance = nameEditingPerformance.data();
     performance.updateName($("#performance-name").val());
+
+    loadEditPerformance();
 }
 
 /**
@@ -140,9 +142,11 @@ function drawSchedule(performance) {
     var schedule = $("#performance-schedule");
     schedule.empty();
 
-    var performancepresets = performance.presets;
-    for (i in performancepresets) {
-        addScheduleRow(performancepresets[i]);
+    if (performance !== undefined) {
+        var performancepresets = performance.presets;
+        for (i in performancepresets) {
+            addScheduleRow(performancepresets[i]);
+        }
     }
 }
 
@@ -284,5 +288,5 @@ function drawPreset(preset) {
 function createPerformance() {
     $.get("/api/backend/presetqueues/create?name=New%20Performance", function(data) {
         loadPerformances();
-    }).done(drawPerformancesList);
+    });
 }
