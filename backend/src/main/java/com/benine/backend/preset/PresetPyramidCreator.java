@@ -56,12 +56,28 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    */
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
+    subViews.add(new SubView(0, 100, 100, 0));
+    for (int level = 1; level < levels; level++) {
+      ArrayList<SubView> newSubViews = new ArrayList<>();
+      subViews.forEach(sv -> newSubViews.addAll(generateSubViewLayer(sv)));
+      subViews.addAll(newSubViews);
+    }
+    return subViews;
+  }
 
-    for (int row = 0; row < rows; row ++) {
+  /**
+   * Generates subviews for a specific subview for a single layer.
+   * @param subView the subview to generate subviews for.
+   */
+  private Collection<SubView> generateSubViewLayer(SubView subView) {
+    ArrayList<SubView> subViews = new ArrayList<>();
+    for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        Coordinate topLeft = new Coordinate(column * (100/columns), 100 - (row * (100/rows)));
-        Coordinate bottomRight = new Coordinate((column + 1) * (100/columns), 100 - ((row+1) * (100/rows)));
-        subViews.add(new SubView(topLeft, bottomRight));
+        double topLeftX = subView.getTopLeft().getX() + (column * (subView.getWidth() / columns));
+        double topLeftY = subView.getTopLeft().getY() - (row * (subView.getHeight() / rows));
+        double bottomRightX =  topLeftX + (subView.getWidth() / columns);
+        double bottomRightY =  topLeftY - (subView.getHeight() / rows);
+        subViews.add(new SubView(topLeftX, topLeftY, bottomRightX, bottomRightY));
       }
     }
     return subViews;

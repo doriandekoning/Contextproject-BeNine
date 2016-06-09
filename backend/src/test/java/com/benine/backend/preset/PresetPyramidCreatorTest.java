@@ -68,9 +68,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   }
 
   @Test
-  public void testCreateSubViews2x2x1() {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(2, 2, 1, 0);
+  public void testCreateSubViews2x2x2() {
+    PresetPyramidCreator ppc = new PresetPyramidCreator(2, 2, 2, 0);
     ArrayList<SubView> subViews = new ArrayList<>();
+    subViews.add(new SubView(0, 100, 100, 0));
     subViews.add(new SubView(0, 100, 50, 50));
     subViews.add(new SubView(0, 50, 50, 0));
     subViews.add(new SubView(50, 100, 100, 50));
@@ -89,12 +90,14 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
 
   @Test
   public void testCreateSubViews1x2x2() {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 1, 0);
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 3, 0);
     ArrayList<SubView> subViews = new ArrayList<>();
     // First layer
+    subViews.add(new SubView(0, 100, 100, 0));
+    // Second layer
     subViews.add(new SubView(0, 100, 50, 0));
     subViews.add(new SubView(50, 100, 100, 0));
-    // Second layer
+    // Third layer
     subViews.add(new SubView(0, 100, 25, 0));
     subViews.add(new SubView(25, 100, 50, 0));
     subViews.add(new SubView(50, 100, 75, 0));
