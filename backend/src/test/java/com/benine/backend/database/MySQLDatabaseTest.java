@@ -148,6 +148,15 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
+    public final void testBadAddCamera() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addCamera(1, parameter);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
+    }
+
+    @Test
     public final void testCheckCameras() throws SQLException {
         database.resetDatabase();
         database.addCamera(1, "ip");
@@ -343,10 +352,21 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addTag("tag1");
         database.closeConnection();
+        String sql = "INSERT INTO tag VALUES(?)";
         verifySQLStatementExecuted("INSERT INTO tag VALUES(?)");
+        verifyPreparedStatementParameter(sql, 1, "tag1");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadAddTag() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addTag(parameter);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
@@ -359,6 +379,15 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadDeleteTag() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.deleteTag(parameter);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
@@ -428,6 +457,16 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadDeleteTagFromPreset() throws SQLException {
+        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.deleteTagFromPreset(parameter, preset);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
     
     @Test
@@ -517,6 +556,15 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadAddQueue() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addQueue(new PresetQueue(1, parameter, null));
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
