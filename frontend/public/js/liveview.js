@@ -7,27 +7,26 @@ var currentperformance;
 var current;
 var next;
 
-function livetest() {
-    performances = [];
-    performances.push(new Performance(1, "Test Performance", [1, 2]));
-
-    loadPerformanceDropdown()
-}
-
 function loadPerformanceDropdown() {
     var dropdown = $('#selectperformance');
     var list = dropdown.find('.dropdown-menu');
 
-    for (i in performances) {
-        var performance = performances[i];
+    list.empty();
+    if (performances.length > 0) {
+        for (i in performances) {
+            var performance = performances[i];
 
-        var li = $("<li></li>");
-        var a = $("<a></a>");
-        a.text(performance['name']);
-        a.data(performance);
-        a.click(loadPerformance);
+            var li = $("<li></li>");
+            var a = $("<a></a>");
+            a.text(performance['name']);
+            a.data(performance);
+            a.click(loadPerformance);
 
-        li.append(a);
+            li.append(a);
+            list.append(li);
+        }
+    } else {
+        var li = $("<li class='disabled'><a href='#'>No Performances Available</a></li>");
         list.append(li);
     }
 }
