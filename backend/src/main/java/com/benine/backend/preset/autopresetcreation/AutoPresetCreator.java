@@ -21,7 +21,7 @@ import java.util.concurrent.TimeoutException;
  */
 public abstract class AutoPresetCreator {
 
-  private static long timeout = 2000;
+  private static long timeout = 5000;
   private static PresetController presetController;
 
   public AutoPresetCreator(PresetController presetController) {
@@ -62,7 +62,7 @@ public abstract class AutoPresetCreator {
       Thread.sleep(200);
       cam.zoomTo(pos.getZoom());
       cam.setBusy(true);
-      cam.waitUntilAtPosition(pos, timeout);
+      Thread.sleep(timeout);
       cam.setBusy(false);
       IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId());
       cam.setBusy(true);

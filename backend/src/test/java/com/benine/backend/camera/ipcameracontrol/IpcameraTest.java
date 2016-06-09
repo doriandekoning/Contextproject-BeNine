@@ -246,57 +246,6 @@ public class IpcameraTest {
   }
 
   @Test
-  public void testWaitUntilAlreadyAtPos()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoom();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 300);
-  }
-
-  @Test
-  public void testWaitUntilTimeOutSmallAlreadyAtLoc()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoom();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
-  }
-
-  @Test (expected =TimeoutException.class)
-  public void testWaitUntillNotAtZoom()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoom();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 0), 1);
-  }
-
-  @Test (expected =TimeoutException.class)
-  public void testWaitUntilTimeOutNotAtLocSmallTimeout()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(2, -1)).when(cam).getPosition();
-    doReturn(30).when(cam).getZoom();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 1);
-  }
-
-
-  @Test
-  public void testWaitUntilAlreadyAtAfterMultipleTimeouts()
-          throws CameraConnectionException, InterruptedException, TimeoutException {
-    IPCamera cam  = spy(new IPCamera("12", cameraController));
-    doReturn(new Position(10.0, 1.0)).when(cam).getPosition();
-    doReturn(0, 10, 30).when(cam).getZoom();
-
-    cam.waitUntilAtPosition(new ZoomPosition(10.0, 1.0, 30), 700);
-  }
-
-  @Test
   public void testBusyInitializedFalse() {
     IPCamera cam = spy(new IPCamera("12", cameraController));
     Assert.assertFalse(cam.isBusy());

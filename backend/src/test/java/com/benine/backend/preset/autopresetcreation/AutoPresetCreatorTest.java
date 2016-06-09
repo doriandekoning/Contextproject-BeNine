@@ -33,21 +33,21 @@ public abstract class AutoPresetCreatorTest {
 
   @Test
   public void testSetCamBusy() throws Exception {
-    apc.createPresets(camera, new ArrayList<>(), name, description);
+    apc.createPresets(camera, new ArrayList<>());
     Mockito.verify(camera).setBusy(true);
   }
 
   @Test
   public void testCamNotBusyAfterwards() throws Exception {
     AutoPresetCreator apc = getCreator();
-    apc.createPresets(camera, new ArrayList<>(), name, description);
+    apc.createPresets(camera, new ArrayList<>());
     Assert.assertFalse(camera.isBusy());
   }
 
   @Test (expected = CameraBusyException.class)
   public void testCamBusyExceptionThrown() throws Exception {
     doReturn(true).when(camera).isBusy();
-    apc.createPresets(camera, new ArrayList<>(), name, description);
+    apc.createPresets(camera, new ArrayList<>());
   }
 
 
