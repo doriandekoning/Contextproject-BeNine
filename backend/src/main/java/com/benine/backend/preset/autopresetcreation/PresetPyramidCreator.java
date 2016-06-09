@@ -1,8 +1,6 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.PresetController;
@@ -73,10 +71,9 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    */
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
-    ArrayList<SubView> lastLayer = new ArrayList<>();
     // Level 1
     subViews.add(new SubView(0, 100, 100, 0));
-    lastLayer.addAll(subViews);
+    ArrayList<SubView> lastLayer = new ArrayList<>(subViews);
     // Other levels
     for (int level = 1; level < levels; level++) {
       ArrayList<SubView> newSubViews = new ArrayList<>();

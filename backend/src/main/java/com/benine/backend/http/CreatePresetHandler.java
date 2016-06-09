@@ -1,18 +1,20 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.MJPEGFrameResizer;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,10 +24,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -82,26 +80,6 @@ public class CreatePresetHandler extends RequestHandler {
       request.setHandled(true);
     }
   }
-
-  /**
-   * Sets a preset.
-   * @param camera                        A Camera object.
-   * @param tagList                           The tag belonging to the preset. 
-   * @throws IOException                  If the image cannot be created.
-   * @throws StreamNotAvailableException  If the camera does not have a stream.
-   * @throws SQLException                 If the preset cannot be written to the database.
-   * @throws CameraConnectionException    If the camera cannot be reached.
-   * @throws MalformedURIException        If there is an error in the request.
-   * @throws CameraBusyException          If camera is busy
-   */
-  private void setPreset(IPCamera camera, List<String> tagList)
-          throws IOException, StreamNotAvailableException, SQLException,
-          CameraConnectionException, MalformedURIException, CameraBusyException {
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    presetController.addPreset(createPreset(camera, tagList));
-
-  }
-
 
   /**
    * Creates a preset from a camera.

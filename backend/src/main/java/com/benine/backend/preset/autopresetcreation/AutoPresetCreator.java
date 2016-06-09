@@ -22,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
-  private static PresetController presetController;
+  private PresetController presetController;
   /**
    * Creates a new AutoPresetCreator object.
    * @param presetController the presetController to add the created presets too.

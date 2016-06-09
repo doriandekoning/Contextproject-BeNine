@@ -1,7 +1,6 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
 import org.json.simple.JSONObject;
-import org.xml.sax.ext.DeclHandler;
 
 import java.text.DecimalFormat;
 

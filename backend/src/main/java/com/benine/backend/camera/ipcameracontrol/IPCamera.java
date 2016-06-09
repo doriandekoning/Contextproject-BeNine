@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Class to communicate with an IP Camera from .
@@ -32,7 +31,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
   private boolean busy = false;
 
-  private static final int MOVE_WAIT_DURATION = 200;
 
   public static final double HORIZONTAL_FOV_MIN = 3.3;
   public static final double HORIZONTAL_FOV_MAX = 60.3;
