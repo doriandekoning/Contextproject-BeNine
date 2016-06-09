@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `presetsdatabase`.`IPpreset` (
   INDEX `fk_preset_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_preset_camera`
     FOREIGN KEY (`camera_ID`)
-    REFERENCES `presetsDatabase`.`camera` (`ID`)
+    REFERENCES `presetsdatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -58,9 +58,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`simplepreset`
+-- Table `presetsdatabase`.`simplepreset`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepreset` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`simplepreset` (
   `ID` INT(11) NOT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
