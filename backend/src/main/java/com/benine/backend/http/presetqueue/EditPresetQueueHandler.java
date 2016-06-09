@@ -40,7 +40,7 @@ public class EditPresetQueueHandler extends PresetQueueRequestHandler {
                                 + " is succesfully updated.", LogEvent.Type.INFO);
     } else {
       respondFailure(request, res);
-      getLogger().log("Preset queue " + id + "is not deleted.", LogEvent.Type.WARNING);
+      getLogger().log("Preset queue " + id + " is not deleted.", LogEvent.Type.WARNING);
     }
     
     request.setHandled(true);

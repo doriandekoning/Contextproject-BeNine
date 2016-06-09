@@ -33,20 +33,11 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
     int presetid = -1;
     String position = request.getParameter("position");
     PresetQueue presetQueue = getPresetQueueController().getPresetQueueById(id);
-    boolean failure = false;
-    Preset preset = null;
+    boolean correct = checkInput(request, presetQueue);
     
-    if (presetQueue != null && request.getParameter("presetid") != null) {
+    if (correct) {
       presetid = Integer.parseInt(request.getParameter("presetid"));
-      preset = getPresetController().getPresetById(presetid);   
-      if (preset == null) {
-        failure = true;
-      }
-    } else {
-      failure = true;
-    }
-    
-    if (!failure) {
+      Preset preset = getPresetController().getPresetById(presetid);   
       getPresetQueueController().updatePresetQueue(addPreset(position, preset, presetQueue));
       respondSuccess(request, res);
       getLogger().log("Preset " + presetid + " is succesfully added to queue: " 
@@ -75,6 +66,23 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
       presetQueue.insertPreset(Integer.parseInt(position), preset);
     }
     return presetQueue;
+  }
+  
+  /**
+   * Check if the input is valid.
+   * @param request to check.
+   * @param presetQueue this request if for.
+   * @return true if there is no failure.
+   */
+  private Boolean checkInput(Request request, PresetQueue presetQueue) {
+    if (presetQueue == null || request.getParameter("presetid") == null) {
+      return false;
+    }
+    int presetid = Integer.parseInt(request.getParameter("presetid"));
+    if (getPresetController().getPresetById(presetid) == null) {
+      return false;
+    }
+    return true;
   }
  
 
