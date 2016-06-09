@@ -32,10 +32,10 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
     this.handlers = new HashMap<>();
 
     addHandler("/create", new CreatePresetQueueHandler(httpserver));
-    addHandler("/delete", new DeletePresetQueueHandler(httpserver));
-    addHandler("/edit", new EditPresetQueueHandler(httpserver));
-    addHandler("/addpreset", new AddPresetToPresetQueueHandler(httpserver));
-    addHandler("/deletepreset", new DeletePresetFromPresetQueueHandler(httpserver));
+    addHandler("delete", new DeletePresetQueueHandler(httpserver));
+    addHandler("edit", new EditPresetQueueHandler(httpserver));
+    addHandler("addpreset", new AddPresetToPresetQueueHandler(httpserver));
+    addHandler("deletepreset", new DeletePresetFromPresetQueueHandler(httpserver));
   }
 
   @Override
@@ -43,7 +43,7 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
           throws IOException, ServletException {
     
     String route = getRoute(request);
-
+    System.out.println(route);
     boolean routed = false;
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);
