@@ -14,8 +14,6 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
          var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
          var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
          var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
-         console.log(canvas.width);
-         console.log("x:"+ x + ",y: " + y + ", width:" + width + ",height:"+ height);
          context.strokeRect(x, y, width, height)
        }
      });
@@ -24,3 +22,16 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var imageHeight = canvas.height - (offset * 2);
   imageObj.src = '/api/backend/camera/1/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
 })
+
+
+function autoCreatePresets() {
+  var name = $('#auto_preset_name').val();
+  var description = $('#auto_preset_description').val();
+
+  if (currentcamera !== undefined) {
+    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows=2&levels=3&columns=2&name="+name+"&description="+description, function(data) {
+
+    });
+  }
+
+}
