@@ -89,4 +89,16 @@ public class SubView {
     result = 31 * result + (bottomRight != null ? bottomRight.hashCode() : 0);
     return result;
   }
+
+  /**
+   * Creates string of this object.
+   * @return String representation of this object
+   */
+  @Override
+  public String toString() {
+    return "SubView{"
+            + "topLeft=" + topLeft
+            + ", bottomRight=" + bottomRight
+            + '}';
+  }
 }

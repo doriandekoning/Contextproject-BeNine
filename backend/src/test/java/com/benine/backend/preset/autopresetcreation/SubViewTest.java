@@ -116,4 +116,11 @@ public class SubViewTest {
     SubView subview2 = new SubView(c1, c2);
     Assert.assertEquals(subview1.hashCode(), subview2.hashCode());
   }
+
+  @Test
+  public void testToString() {
+    SubView subView = new SubView(10, 100, 20, 20);
+    String expected = "SubView{topLeft="+subView.getTopLeft().toString()+", bottomRight="+subView.getBottomRight().toString()+"}";
+    Assert.assertEquals(expected, subView.toString());
+  }
 }
