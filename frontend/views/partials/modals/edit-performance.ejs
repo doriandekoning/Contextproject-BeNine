@@ -34,8 +34,7 @@
                         <label>Select Presets</label>
                         <div class="input-group">
                             <span class="input-group-addon glyphicon glyphicon-search"></span>
-							<input id="presetsearch_input" oninput='presetSearchInput($(this).val())' type="text"
-								="form-control typeahead" placeholder="Search..." aria-describedby="sizing-addon2">
+							<input autocomplete="off" data-provide="typeahead" oninput='presetSearchInput($(this).val())' type="text" class="form-control" placeholder="Search presets..." aria-describedby="input-group-addon">
                         </div>
                         <div class="performance-preset-list-container">
                             <ul id="performance-preset-selector" class="performance-list">

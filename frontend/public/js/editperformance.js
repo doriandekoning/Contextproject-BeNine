@@ -39,7 +39,7 @@ function presetSearchInput(val) {
 /**
 * When a tags suggestion is selected cal the tagSearchInput function.
 */
-$('#presetsearch_input').on('typeahead:selected',function (e, val) {
+$('#presetsearch_input.typeahead').on('typeahead:selected',function (e, val) {
 	presetSearchInput(val);
 });
 
@@ -142,6 +142,7 @@ function drawPresets(presetlist) {
     var list = $("#performance-preset-selector");
 	list.children().remove();
     for (key in presetlist) {
+        console.log(presetlist);
         var preset = presetlist[key];
 
         var li = $("<li class='btn btn-info'></li>");
