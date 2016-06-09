@@ -39,9 +39,7 @@ public class AutoPresetCreationHandler extends RequestHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    
-    PresetPyramidCreator creator = new PresetPyramidCreator(3,3,3,0.1);
-    
+    PresetPyramidCreator creator = new PresetPyramidCreator(2,2,2,0.1, getPresetController());
     String camID = request.getParameter("camera");
     Camera cam = ServerController.getInstance().getCameraController()
         .getCameraById(Integer.parseInt(camID));

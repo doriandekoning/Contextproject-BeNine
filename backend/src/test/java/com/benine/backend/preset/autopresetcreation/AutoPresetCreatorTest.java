@@ -22,11 +22,9 @@ public abstract class AutoPresetCreatorTest {
 
   @Before
   public final void setup() throws CameraConnectionException, CameraBusyException {
-    //camera = spy(new IPCamera("test"));
     camera = mock(IPCamera.class);
     doReturn(new ZoomPosition(4, 4, 0)).when(camera).getPosition();
     doReturn(IPCamera.MAX_ZOOM).when(camera).getZoom();
-    //doNothing().when(camera).moveTo(Matchers.any(), Matchers.any(), Matchers.any());
     apc = spy(getCreator());
     doReturn(new ArrayList<ZoomPosition>()).when(apc).generatePositions(any(IPCamera.class), any(ArrayList.class));
   }

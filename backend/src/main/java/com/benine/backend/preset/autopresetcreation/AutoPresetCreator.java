@@ -2,13 +2,16 @@ package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamNotAvailableException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeoutException;
@@ -20,10 +23,15 @@ import java.util.concurrent.TimeoutException;
 public abstract class AutoPresetCreator {
 
   private static long timeout = 2000;
+  private static PresetController presetController;
 
+  public AutoPresetCreator(PresetController presetController) {
+    this.presetController = presetController;
+  }
   /**
    * Automatically creates presets for the selected camera.
-   * Calll generatePositions to get the positions of the presets.
+   * Calls generatePositions to get the positions of the presets.
+   * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
    * @param subViews the subviews to generate positions for.
    * @return A collection of the created presets.
@@ -36,7 +44,7 @@ public abstract class AutoPresetCreator {
    */
   public Collection<Preset> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
-          TimeoutException, IOException, StreamNotAvailableException {
+          TimeoutException, IOException, StreamNotAvailableException, SQLException {
     if (cam.isBusy()) {
       throw new CameraBusyException("The camera is busy.", cam.getId());
     }
@@ -47,7 +55,8 @@ public abstract class AutoPresetCreator {
       cam.moveTo(pos, 2, 30);
       cam.waitUntilAtPosition(pos, timeout);
       cam.setBusy(true);
-      presets.add(new IPCameraPreset(cam, 2, 30));
+      presetController.addPreset(new IPCameraPreset(cam, 2, 30));
+      // TODO ADD TO LIST
     }
     cam.setBusy(false);
     return presets;

@@ -42,7 +42,7 @@ public class PresetsHandler extends RequestHandler {
     String route = getRoute(request);
 
     boolean routed = false;
-    
+
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);
       routed = true;
@@ -64,7 +64,7 @@ public class PresetsHandler extends RequestHandler {
    */
   private String getRoute(Request request) {
     String path = request.getPathInfo();
-
+    System.out.println(path);
     return path.replaceFirst(".*/", "");
   }
 

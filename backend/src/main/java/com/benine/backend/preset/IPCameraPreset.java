@@ -69,7 +69,7 @@ public class IPCameraPreset extends Preset {
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
     try {
-      createImage(cam, this);
+      createImage(cam);
     } catch (Exception e) {
       ServerController.getInstance().getLogger().log("Error creating preset image", e);
     }
@@ -80,19 +80,18 @@ public class IPCameraPreset extends Preset {
   /**
    * Creates an image for a preset.
    * @param cam      The camera to take the image from.
-   * @param preset      The preset
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    * @throws SQLException if the image can not be saved in the database.
    */
-  private void createImage(IPCamera cam, Preset preset) throws
+  private void createImage(IPCamera cam) throws
           StreamNotAvailableException, IOException, SQLException {
 
     StreamController streamController = ServerController.getInstance().getStreamController();
     MJPEGStreamReader streamReader = (MJPEGStreamReader)
             streamController.getStreamReader(cam.getId());
     File path = new File("static" + File.separator + "presets" + File.separator
-            + cam.getId() + "_" + preset.getId() + ".jpg");
+            + cam.getId() + "_" + getId() + ".jpg");
 
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
@@ -102,8 +101,8 @@ public class IPCameraPreset extends Preset {
     ImageIO.write(bufferedImage, "jpg", path);
 
     PresetController presetController = ServerController.getInstance().getPresetController();
-    preset.setImage(cam.getId() + "_" + preset.getId() + ".jpg");
-    presetController.updatePreset(preset);
+    setImage(cam.getId() + "_" + getId() + ".jpg");
+    presetController.updatePreset(this);
   }
 
   @Override

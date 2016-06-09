@@ -545,15 +545,16 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    */
   public void waitUntilAtPosition(ZoomPosition pos, long timeout)
           throws InterruptedException, CameraConnectionException, TimeoutException {
-    long timedOutTime = System.currentTimeMillis() + timeout;
-    do {
-      System.out.println(getPosition().equals(pos));
-      if (getPosition().equals(pos) && getZoom() == pos.getZoom()) {
-        return;
-      }
-      Thread.sleep(MOVE_WAIT_DURATION);
-    } while (System.currentTimeMillis() < timedOutTime );
-    throw new TimeoutException();
+//    long timedOutTime = System.currentTimeMillis() + timeout;
+//    do {
+//      System.out.println(getPosition().equals(pos));
+//      if (getPosition().equals(pos) && getZoom() == pos.getZoom()) {
+//        return;
+//      }
+//      Thread.sleep(MOVE_WAIT_DURATION);
+//    } while (System.currentTimeMillis() < timedOutTime );
+//    throw new TimeoutException();
+    Thread.sleep(3000);
   }
 
   /**

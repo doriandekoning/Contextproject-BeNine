@@ -1,9 +1,11 @@
 package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
 
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.PresetController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +27,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @param levels the amount of levels > 0
    * @param overlap the overlap between presets (negative allowed for space between)
    */
-  public PresetPyramidCreator(int rows, int columns, int levels, double overlap) {
+  public PresetPyramidCreator(int rows, int columns, int levels, double overlap, PresetController presetController) {
+    super(presetController);
     assert rows > 0;
     assert columns > 0;
     assert levels > 0;
