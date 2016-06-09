@@ -64,7 +64,7 @@ public class IPCameraPreset extends Preset {
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();
     this.iris = cam.getIrisPosition();
-    this.autofocus = cam.isAutoFocusOn();
+    this.autoiris = cam.isAutoFocusOn();
     this.autofocus = cam.isAutoIrisOn();
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
@@ -282,7 +282,7 @@ public class IPCameraPreset extends Preset {
     }
     if (tags == null && other.getTags() != null) {
       return false;
-    } else if (!tags.equals(other.getTags())) {
+    } else if (tags != null && !tags.equals(other.getTags())) {
       return false;
     }
     return true;

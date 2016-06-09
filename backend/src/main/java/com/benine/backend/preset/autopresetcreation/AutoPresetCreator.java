@@ -42,12 +42,10 @@ public abstract class AutoPresetCreator {
       throw new CameraBusyException("The camera is busy.", cam.getId());
     }
     cam.setBusy(true);
-    ArrayList<Preset> presets = new ArrayList<Preset>();
-    System.out.println(generatePositions(cam, subViews));
+    ArrayList<Preset> presets = new ArrayList<>();
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setBusy(false);
       cam.moveTo(pos, 2, 30);
-      System.out.println(pos);
       cam.waitUntilAtPosition(pos, timeout);
       cam.setBusy(true);
       presets.add(new IPCameraPreset(cam, 2, 30));
@@ -71,10 +69,10 @@ public abstract class AutoPresetCreator {
 
   /**
    * Setter for timeout.
-   * @param timeout the new timeout.
+   * @param t the new timeout.
    */
-  public void setTimeout(long timeout) {
-    this.timeout = timeout;
+  public static void setTimeout(long t) {
+    timeout = t;
   }
 
 }
