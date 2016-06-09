@@ -111,9 +111,10 @@ public class MySQLDatabase implements Database {
       resultset = statement.executeQuery();
       while (resultset.next()) {
         list.add(ServerController.getInstance().getPresetController()
-            .getPresetById(resultset.getInt("ID")));
+            .getPresetById(resultset.getInt("preset_ID")));
       }
     } catch (Exception e) {
+      e.printStackTrace();
       logger.log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
