@@ -32,7 +32,7 @@ public class MySQLDatabase implements Database {
    *
    * @param user     username used to connect to the database.
    * @param password used to connect to the databse.
-   * @param logger to use for the database
+   * @param logger   to use for the database
    */
   public MySQLDatabase(String user, String password, Logger logger) {
     connection = null;
@@ -87,8 +87,8 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' " 
-                                          + "AND preset_ID = %s", tag, preset.getId());
+      final String sql = String.format("DELETE FROM tagPreset WHERE tag_Name = '%s' "
+          + "AND preset_ID = %s", tag, preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
@@ -268,18 +268,19 @@ public class MySQLDatabase implements Database {
   public ArrayList<Preset> getAllPresets() {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
-          + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.IPpreset"));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepreset"));
+        + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
+        + " FROM presetsDatabase.IPpreset"));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
+        + " FROM presetsDatabase.simplepreset"));
     for (Preset preset : list) {
       preset.addTags(getTagsFromPreset(preset));
     }
     return list;
   }
-  
+
   /**
    * Method to get all presets based on a SQL statement
+   *
    * @param sql statement to retrieve the presets.
    * @return Presets from the database.
    */
@@ -309,10 +310,10 @@ public class MySQLDatabase implements Database {
   public ArrayList<Preset> getAllPresetsCamera(int cameraId) {
     ArrayList<Preset> list = new ArrayList<Preset>();
     list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus, iris,"
-          + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID"
-          + " FROM presetsDatabase.IPpreset WHERE camera_ID = " + cameraId));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID"
-          + " FROM presetsDatabase.simplepreset WHERE camera_ID = " + cameraId));
+        + " autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
+        + " FROM presetsDatabase.IPpreset WHERE camera_ID = " + cameraId));
+    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
+        + " FROM presetsDatabase.simplepreset WHERE camera_ID = " + cameraId));
     return list;
   }
 
@@ -408,10 +409,11 @@ public class MySQLDatabase implements Database {
 
   /**
    * Checks if there are cameras in the database to be deleted.
-   * @param result The resultset from the query
+   *
+   * @param result  The resultset from the query
    * @param cameras The cameras
-   * @param macs The MACAddresses of the cameras in the database
-   * @throws SQLException No right connection to the database
+   * @param macs    The MACAddresses of the cameras in the database
+   * @throws SQLException              No right connection to the database
    * @throws CameraConnectionException Not able to connect to the camera
    */
   public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
@@ -434,8 +436,9 @@ public class MySQLDatabase implements Database {
 
   /**
    * Checks if there are new cameras to be added to the database.
+   *
    * @param cameras The cameras
-   * @param macs The MACAddresses of the cameras in the database
+   * @param macs    The MACAddresses of the cameras in the database
    * @throws CameraConnectionException Not able to connect to the camera
    */
   public void checkNewCameras(ArrayList<Camera> cameras, ArrayList<String> macs)
@@ -558,8 +561,9 @@ public class MySQLDatabase implements Database {
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("ID");
+      String name = resultset.getString("name");
       IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
-                                          panspeed, tiltspeed, autoIris, cameraId);
+          panspeed, tiltspeed, autoIris, cameraId, name);
       preset.setId(id);
       preset.setImage(resultset.getString("image"));
       return preset;
@@ -568,7 +572,7 @@ public class MySQLDatabase implements Database {
       return null;
     }
   }
-  
+
   /**
    * Getter for the simple presets from the list of presets.
    *
@@ -579,7 +583,8 @@ public class MySQLDatabase implements Database {
     try {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
-      SimplePreset preset = new SimplePreset(cameraId);
+      String name = resultset.getString("name");
+      SimplePreset preset = new SimplePreset(cameraId, name);
       int id = resultset.getInt("id");
       preset.setId(id);
       preset.setImage(image);
@@ -592,6 +597,7 @@ public class MySQLDatabase implements Database {
 
   /**
    * Closes the resultset and statement.
+   *
    * @param statement the statement to be closed
    * @param resultset the resultset to be closed
    */
@@ -614,7 +620,7 @@ public class MySQLDatabase implements Database {
     try {
       statement = connection.createStatement();
       final String sql = String.format("DELETE FROM tagPreset WHERE preset_ID = %s",
-                                                                          preset.getId());
+          preset.getId());
       statement.executeUpdate(sql);
     } catch (Exception e) {
       logger.log("All tags couldn't be deleted.", LogEvent.Type.CRITICAL);

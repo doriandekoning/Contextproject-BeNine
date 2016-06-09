@@ -43,12 +43,13 @@ public class EditPresetHandler extends RequestHandler {
           throws IOException, ServletException {
     
     try {
-      String overwriteTag = request.getParameter("overwritetag");
-      String overwritePosition = request.getParameter("overwriteposition");
+      final String overwriteTag = request.getParameter("overwritetag");
+      final String overwritePosition = request.getParameter("overwriteposition");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
       
-      Preset preset = getPresetController().getPresetById(presetID);   
+      Preset preset = getPresetController().getPresetById(presetID);
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
@@ -56,9 +57,11 @@ public class EditPresetHandler extends RequestHandler {
       if (overwriteTag.equals("true")) {
         updateTag(preset, tagList);
       }
-      
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
+      }
+      if (name != null) {
+        updateName(preset, name);
       }
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
@@ -99,11 +102,22 @@ public class EditPresetHandler extends RequestHandler {
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
   MalformedURIException {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
-    Preset newPreset = ipcam.createPreset(preset.getTags());
+    Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
    
     createImage(preset.getCameraId(), newPreset.getId());
     getPresetController().updatePreset(newPreset);
+  }
+
+  /**
+   * Updating the name only.
+   * @param preset the preset to be changed
+   * @param name the new name
+   * @throws SQLException when preset can not be updated
+   */
+  private void updateName(Preset preset, String name) throws SQLException {
+    preset.setName(name);
+    getPresetController().updatePreset(preset);
   }
   
   /**
