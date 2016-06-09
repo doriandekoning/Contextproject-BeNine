@@ -15,10 +15,6 @@ import java.util.Collection;
  */
 public class PresetPyramidCreator extends AutoPresetCreator {
 
-  private static final int HORIZONTAL_FOV = 120;
-  private static final int VERTICAL_FOV = 90;
-
-
   private int rows;
   private int columns;
   private int levels;
@@ -52,6 +48,23 @@ public class PresetPyramidCreator extends AutoPresetCreator {
       positionsInLayer.forEach( p -> positions.add(new ZoomPosition(p, zoomlevel)));
     }
     return positions;
+  }
+
+  /**
+   * Creates a collection of subviews with the specified amount of rows columns and levels.
+   * @return A collection of subviews.
+   */
+  public Collection<SubView> generateSubViews() {
+    ArrayList<SubView> subViews = new ArrayList<>();
+
+    for (int row = 0; row < rows; row ++) {
+      for (int column = 0; column < columns; column++) {
+        Coordinate topLeft = new Coordinate(column * (100/columns), 100 - (row * (100/rows)));
+        Coordinate bottomRight = new Coordinate((column + 1) * (100/columns), 100 - ((row+1) * (100/rows)));
+        subViews.add(new SubView(topLeft, bottomRight));
+      }
+    }
+    return subViews;
   }
 
   /**
