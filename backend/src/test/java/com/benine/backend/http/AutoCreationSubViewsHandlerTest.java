@@ -36,7 +36,7 @@ public class AutoCreationSubViewsHandlerTest extends AutoPresetHandlerTest {
 
   @Test
   public void testHandleNoParams() throws Exception {
-    setPath("/presets/autoCreateSubViews");
+    setPath("/presets/autocreatesubviews");
     MultiMap<String> parameters = new MultiMap<>();
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);

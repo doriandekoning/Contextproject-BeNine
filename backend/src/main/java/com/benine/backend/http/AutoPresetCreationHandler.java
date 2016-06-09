@@ -33,11 +33,11 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     PresetPyramidCreator creator = getPyramidPresetCreator(request);
     String camID = request.getParameter("camera");
-    Camera cam = ServerController.getInstance().getCameraController()
-        .getCameraById(Integer.parseInt(camID));
+    Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
       System.out.println(" not a ipcam");
       respondFailure(request, httpServletResponse);
+      request.setHandled(true);
       return;
     }
     IPCamera ipcam = (IPCamera) cam;
@@ -54,6 +54,8 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       getLogger().log("Trying to auto create presets on busy camera with id: "
               + camID, e);
       respondFailure(request, httpServletResponse);
+    } finally {
+      request.setHandled(true);
     }
 
 
