@@ -114,7 +114,6 @@ public class MySQLDatabase implements Database {
             .getPresetById(resultset.getInt("preset_ID")));
       }
     } catch (Exception e) {
-      e.printStackTrace();
       logger.log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
