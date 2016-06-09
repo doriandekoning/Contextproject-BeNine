@@ -65,7 +65,6 @@ public class PresetsHandler extends RequestHandler {
    */
   private String getRoute(Request request) {
     String path = request.getPathInfo();
-    System.out.println(path);
     return path.replaceFirst(".*/", "");
   }
 
