@@ -148,18 +148,4 @@ public abstract class Preset {
    * @throws CameraConnectionException when camera can't be moved
    */
   public abstract void excecutePreset(Camera camera) throws CameraConnectionException;
-
-  /**
-   * Creates a sql query to insert a preset in the database.
-   *
-   * @return The query
-   */
-  public abstract String createAddSqlQuery();
-
-  /**
-   * Creates a sql query to delete a preset in the database.
-   *
-   * @return the query.
-   */
-  public abstract String createDeleteSQL();
 }

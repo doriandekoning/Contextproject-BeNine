@@ -50,14 +50,6 @@ public interface Database {
   ArrayList<Preset> getAllPresets();
 
   /**
-   * Returns all the presets of the camera.
-   *
-   * @param cameraId ID of the camera
-   * @return the presets of the given camera
-   */
-  ArrayList<Preset> getAllPresetsCamera(int cameraId);
-
-  /**
    * Tries to connect to database server.
    *
    * @return True if the connection is succeeded.

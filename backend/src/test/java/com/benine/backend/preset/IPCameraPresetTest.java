@@ -48,16 +48,6 @@ public class IPCameraPresetTest {
     SimpleCamera camera = mock(SimpleCamera.class);
     preset.excecutePreset(camera);
   }
-  
-  @Test
-  public void testCreateSQL() throws CameraConnectionException {
-    Assert.assertEquals("INSERT INTO presetsdatabase.IPpreset VALUES(-1,10.0,12.0,13,40,56,1,1,2,0,'null',0)", preset.createAddSqlQuery());
-  }
-
-  @Test
-  public void testDeleteSQL() {
-    Assert.assertEquals("DELETE FROM IPpreset WHERE ID = -1", preset.createDeleteSQL());
-  }
 
   @Test
   public void testToJSON() throws JSONException {
