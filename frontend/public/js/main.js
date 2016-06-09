@@ -15,6 +15,9 @@ $(document).ready(function() {
 	// Load the available cameras.
 	loadCameras();
 	
+	//Refresh cameras inuse.
+	setInterval(refreshCameras, 2000);
+	
 	// Load the available presets from the backend.
 	loadPresets();
 
@@ -36,6 +39,24 @@ function updateServerStatus() {
 	}).fail(function() { 
 		statuslabel.attr("class", "label label-danger");
 	});
+}
+
+function refreshCameras() {
+	$.get("/api/backend/camera", function(data) {
+		var obj = JSON.parse(data);
+		for(var c in obj.cameras) {
+			var cam = obj.cameras[c];
+			var camera = findCameraOnID(cam.id);
+			if (camera !== undefined) {
+				camera.inuse = cam.inuse;
+			} 
+		}
+	}).done(function() {
+		for(var c in cameras) {
+			toggleCamInuse(cameras[c].id, cameras[c].inuse);
+		}
+	});
+	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {console.log(data);});
 }
 
 /**
@@ -71,7 +92,10 @@ function switchCurrentView(id) {
 	if(id === currentcamera || camera === undefined) {
 		console.log("Cannot switch to camera " + id + " does not exist");
 	} else {
-		toggleCamSelected(currentcamera, false);
+		if (currentcamera !== undefined) {
+			toggleCamSelected(currentcamera, false);
+			$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=false", function(data) {console.log(data);});
+		}
 		currentcamera = id;
 		toggleCamSelected(currentcamera, true);
 		camera.displayControls();
@@ -79,6 +103,7 @@ function switchCurrentView(id) {
 		$('#createPreset').prop('disabled', false);
 		var preset_create_div = $('#preset_create_div');
 		preset_create_div.find('.tags_input').tagsinput('removeAll');
+		$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {console.log(data);});
 	}
 }
 
@@ -99,12 +124,21 @@ function findCameraOnID(id){
 * @param inuse boolean to switch between in use.
 */
 function toggleCamSelected(camid, inuse) {
+	var camera_area, camera;
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
 	if (inuse === true) {
-		camera.find('.camera_status').attr('class', 'camera_status selected');
+		if (findCameraOnID(camid).inuse) {
+			camera.find('.camera_status').attr('class', 'camera_status unavailable');
+		} else {
+			camera.find('.camera_status').attr('class', 'camera_status selected');
+		}
 	} else {
-		camera.find('.camera_status').attr('class', 'camera_status available');
+		if (findCameraOnID(camid).inuse) {
+			camera.find('.camera_status').attr('class', 'camera_status unavailable');
+		} else {
+			camera.find('.camera_status').attr('class', 'camera_status available');
+		}
 	}
 }
 
@@ -114,12 +148,18 @@ function toggleCamSelected(camid, inuse) {
  * @param inuse		Boolean, true if in use, false otherwise.
  */
 function toggleCamInuse(camid, inuse) {
+	var camera_area, camera;
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
-	
 	if (inuse === true) {
-		camera.find('.camera_status').attr('class', 'camera_status unavailable');
+		if (parseInt(camid) !== parseInt(currentcamera)) {
+			camera.find('.camera_status').attr('class', 'camera_status unavailable');
+		}
 	} else {
-		camera.find('.camera_status').attr('class', 'camera_status available');
+		if (parseInt(camid) === parseInt(currentcamera)) {
+			camera.find('.camera_status').attr('class', 'camera_status selected');
+		} else {
+			camera.find('.camera_status').attr('class', 'camera_status available');
+		}
 	}
 }
