@@ -1,10 +1,27 @@
 var currentPerformance;
 
 function test() {
+    performances = [];
     performances.push(new Performance(1, "Test Performance", [1, 2]));
 
     currentPerformance = performances[0];
+    drawPerformances();
     drawSchedule(currentPerformance);
+}
+
+function drawPerformances() {
+    var performancelist = $('#performance-list');
+    performancelist.empty();
+
+    for (var i in performances) {
+        var p = performances[i];
+        var li = $("<li class='btn btn-info'></li>");
+        var icon = $("<span class='glyphicon glyphicon-bullhorn'></span>");
+
+        li.append(icon);
+        li.text(p['name']);
+        performancelist.append(li);
+    }
 }
 
 /**
