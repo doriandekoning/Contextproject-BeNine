@@ -165,7 +165,8 @@ public class MySQLDatabase implements Database {
         int id = resultset.getInt("ID");
         String name = resultset.getString("Name");
         ArrayList<Preset> presets = getPresetsList(id);
-        PresetQueue queue = new PresetQueue(id, name, presets);
+        PresetQueue queue = new PresetQueue(name, presets);
+        queue.setID(id);
         list.add(queue);
       }
     } catch (Exception e) {

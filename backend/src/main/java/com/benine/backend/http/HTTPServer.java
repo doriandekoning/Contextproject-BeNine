@@ -6,6 +6,8 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.http.presetqueue.PresetQueueHandler;
+import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
@@ -29,6 +31,8 @@ public class HTTPServer {
   
   private StreamController streamController;
   
+  private PresetQueueController presetQueueController;
+  
   private Logger logger;
   
   private Config config;
@@ -45,6 +49,7 @@ public class HTTPServer {
     this.cameraController = serverController.getCameraController();
     this.streamController = serverController.getStreamController();
     this.presetController = serverController.getPresetController();
+    this.presetQueueController = serverController.getPresetQueueController();
     this.logger = serverController.getLogger();
     this.config = serverController.getConfig();
     
@@ -64,6 +69,9 @@ public class HTTPServer {
 
     ContextHandler presetContext = new ContextHandler("/presets");
     presetContext.setHandler(new PresetsHandler(this));
+    
+    ContextHandler presetQueueContext = new ContextHandler("/presetqueues");
+    presetQueueContext.setHandler(new PresetQueueHandler(this));
 
     ContextHandler fileserverContext = new ContextHandler("/static");
     ResourceHandler fileHandler = new ResourceHandler();
@@ -71,7 +79,8 @@ public class HTTPServer {
     fileserverContext.setHandler(fileHandler);
 
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] {cameraContext, presetContext, fileserverContext });
+    contexts.setHandlers(
+            new Handler[] {cameraContext, presetContext, presetQueueContext, fileserverContext });
 
     Handler logHandler = new LogHandler(this);
     HandlerList handlerList = new HandlerList();
@@ -119,6 +128,14 @@ public class HTTPServer {
    */
   protected PresetController getPresetController() {
     return presetController;
+  }
+  
+  /**
+   * Returns the presetQueueController.
+   * @return presetQueueController to change the presets
+   */
+  protected PresetQueueController getPresetQueueController() {
+    return presetQueueController;
   }
 
   public Config getConfig() {
