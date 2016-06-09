@@ -218,9 +218,11 @@ public class MySQLDatabase implements Database {
     Statement statement = null;
     try {
       statement = connection.createStatement();
-      String sql = preset.createAddSqlQuery();
+      String sql = createAddSqlQuery(preset);
+      System.out.println(sql);
       statement.executeUpdate(sql);
       sql = "INSERT INTO preset VALUES(" + preset.getId() + ")";
+      System.out.println(sql);
       statement.executeUpdate(sql);
       for (String tag : preset.getTags()) {
         addTagToPreset(tag, preset);
@@ -232,6 +234,29 @@ public class MySQLDatabase implements Database {
     }
   }
 
+  private String createAddSqlQuery(Preset preset) {
+    if(preset instanceof SimplePreset) {
+      return "INSERT INTO presetsdatabase.simplepreset VALUES(" + preset.getId() + ",'" + preset.getImage() + "',"
+          + preset.getCameraId() + ")";
+    } else {
+      IPCameraPreset ippreset = (IPCameraPreset) preset;
+      int auto = 0;
+      if (ippreset.isAutofocus()) {
+        auto = 1;
+      }
+      int autoir = 0;
+      if (ippreset.isAutoiris()) {
+        autoir = 1;
+      }
+      return "INSERT INTO presetsdatabase.IPpreset VALUES(" + ippreset.getId() + ","
+          + ippreset.getPosition().getPan() + "," + ippreset.getPosition().getTilt()
+          + "," + ippreset.getZoom() + "," + ippreset.getFocus()
+          + "," + ippreset.getIris() + "," + auto + "," + ippreset.getPanspeed() + ","
+          + ippreset.getTiltspeed() + "," + autoir + ",'" + ippreset.getImage() + "',"
+          + ippreset.getCameraId() + ")";
+    }
+  }
+
   @Override
   public void deletePreset(Preset preset) {
     Statement statement = null;
@@ -239,7 +264,7 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       if (preset != null) {
         deleteTagsFromPreset(preset);
-        String sql = preset.createDeleteSQL();
+        String sql = createDeleteSQL(preset);
         statement.executeUpdate(sql);
         sql = "DELETE FROM preset WHERE ID = " + preset.getId();
         statement.executeUpdate(sql);
@@ -248,6 +273,14 @@ public class MySQLDatabase implements Database {
       logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
+    }
+  }
+
+  private String createDeleteSQL(Preset preset) {
+    if (preset instanceof SimplePreset) {
+      return "DELETE FROM simplepreset WHERE ID = " + preset.getId();
+    } else {
+      return "DELETE FROM IPpreset WHERE ID = " + preset.getId();
     }
   }
 
