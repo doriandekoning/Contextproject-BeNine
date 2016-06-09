@@ -21,23 +21,22 @@ function drawPerformanceListItem(performance) {
     var li = $("<li class='btn btn-info'></li>");
     li.data(performance);
     li.click(selectPerformance);
-    var icon = $("<span class='glyphicon glyphicon-bullhorn'></span>");
+    var icon = $("<span class='glyphicon glyphicon-bullhorn'> " + performance['name'] + "</span>");
 
     li.append(icon);
-    li.text(performance['name']);
-
     return li;
 }
 
 function selectPerformance() {
     if (editingPerformance !== undefined) {
-        editingPerformance.replaceWith(selectedPerformance);
+        editingPerformance.replaceWith(drawPerformanceListItem(selectedPerformance));
     }
 
-    selectedPerformance = $(this);
+    editingPerformance = $(this);
+    selectedPerformance = $(this).data();
     setNameEditable(this);
 
-    drawSchedule(selectedPerformance.data());
+    drawSchedule(selectedPerformance);
 }
 
 function setNameEditable(element) {
