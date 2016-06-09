@@ -49,18 +49,7 @@ public class SimplePreset extends Preset {
   }
 
   @Override
-  public String createAddSqlQuery() {
-    return "INSERT INTO presetsdatabase.simplepreset VALUES(" + getId() + ",'" + getImage() + "',"
-        + getCameraId() + ")";
-  }
-
-  @Override
   public void excecutePreset(Camera camera) throws CameraConnectionException {
     
-  }
-  
-  @Override
-  public String createDeleteSQL() {
-    return "DELETE FROM simplepreset WHERE ID = " + getId();
   }
 }
