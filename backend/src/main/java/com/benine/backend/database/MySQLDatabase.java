@@ -187,11 +187,11 @@ public class MySQLDatabase implements Database {
   public void addQueue(PresetQueue queue) {
     PreparedStatement statement = null;
     try {
-      String sql = String.format("INSERT INTO queue VALUES(%s,'%s')",
-              queue.getID(), queue.getName());
+      String sql = "INSERT INTO queue VALUES(?,?)";
       statement = connection.prepareStatement(sql);
+      statement.setInt(1, queue.getID());
+      statement.setString(2, queue.getName());
       statement.executeUpdate(sql);
-
       addPresetsList(queue.getQueue(), queue.getID());
     } catch (Exception e) {
       logger.log("Queue could not be added.", LogEvent.Type.CRITICAL);
