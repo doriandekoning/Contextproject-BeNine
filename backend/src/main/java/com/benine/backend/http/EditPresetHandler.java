@@ -51,6 +51,9 @@ public class EditPresetHandler extends RequestHandler {
       
       Preset preset = getPresetController().getPresetById(presetID);
       Set<String> tagList = new HashSet<>();
+      if (name != null) {
+        updateName(preset, name);
+      }
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       }
@@ -60,9 +63,7 @@ public class EditPresetHandler extends RequestHandler {
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
       }
-      if (name != null) {
-        updateName(preset, name);
-      }
+      
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
       respondFailure(request,res);
