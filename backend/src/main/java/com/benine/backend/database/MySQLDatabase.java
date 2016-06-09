@@ -236,8 +236,8 @@ public class MySQLDatabase implements Database {
 
   private String createAddSqlQuery(Preset preset) {
     if(preset instanceof SimplePreset) {
-      return "INSERT INTO presetsdatabase.simplepreset VALUES(" + preset.getId() + ",'" + preset.getImage() + "',"
-          + preset.getCameraId() + ")";
+      return "INSERT INTO presetsdatabase.simplepreset VALUES(" + preset.getId() + ",'"
+          + preset.getImage() + "'," + preset.getCameraId() + "," + preset.getName() + ")";
     } else {
       IPCameraPreset ippreset = (IPCameraPreset) preset;
       int auto = 0;
@@ -253,7 +253,7 @@ public class MySQLDatabase implements Database {
           + "," + ippreset.getZoom() + "," + ippreset.getFocus()
           + "," + ippreset.getIris() + "," + auto + "," + ippreset.getPanspeed() + ","
           + ippreset.getTiltspeed() + "," + autoir + ",'" + ippreset.getImage() + "',"
-          + ippreset.getCameraId() + ")";
+          + ippreset.getCameraId() + "," + ippreset.getName() + ")";
     }
   }
 
