@@ -148,20 +148,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testGetPresetsCamera() throws SQLException {
-        Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, false, 0);
-        database.resetDatabase();
-        database.addCamera(1, "ip");
-        database.addPreset(preset);
-        database.getAllPresetsCamera(1);
-        database.closeConnection();
-        verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
-        verifyCommitted();
-        verifyAllResultSetsClosed();
-        verifyConnectionClosed();
-    }
-
-    @Test
     public final void testCheckCameras() throws SQLException {
         database.resetDatabase();
         database.addCamera(1, "ip");
@@ -288,7 +274,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.getAllPresets();
-        database.getAllPresetsCamera(1);
         verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
@@ -445,7 +430,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTagToPreset("tag1", preset);
         database.deleteTagsFromPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE preset_ID = -1");
+        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE preset_ID = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
