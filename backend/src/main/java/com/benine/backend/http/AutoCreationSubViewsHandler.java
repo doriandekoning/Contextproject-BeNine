@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Collection;
 import javax.servlet.ServletException;
@@ -28,13 +29,24 @@ public class AutoCreationSubViewsHandler extends RequestHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    PresetPyramidCreator creator = new PresetPyramidCreator(2,2,3,0.1, getPresetController());
+    final String rowsString = request.getParameter("rows");
+    final String columnsString = request.getParameter("columns");
+    final String levelsString = request.getParameter("levels");
+    final String overlapString = request.getParameter("overlap");
+    int rows = rowsString != null ? Integer.parseInt(rowsString) : 3;
+    int columns = columnsString != null ? Integer.parseInt(columnsString) : 3;
+    int levels = levelsString != null ? Integer.parseInt(levelsString) : 3;
+    double overlap = overlapString != null ? Double.parseDouble(overlapString) : 0;
+
+    PresetPyramidCreator creator = new PresetPyramidCreator(rows, columns, levels, overlap, getPresetController());
     Collection<SubView> subViews = creator.generateSubViews();
     JSONArray subViewsJSON = new JSONArray();
     subViewsJSON.addAll(subViews);
     JSONObject jsonObj = new JSONObject();
     jsonObj.put("SubViews", subViewsJSON);
     respond(request, httpServletResponse, jsonObj.toJSONString());
+
+    request.setHandled(true);
 
   }
   
