@@ -474,8 +474,6 @@ public class MySQLDatabase implements Database {
       statement.executeUpdate();
     } catch (SQLException e) {
       logger.log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
-      e.printStackTrace();
-      System.out.println(table);
     } finally {
       close(statement, null);
     }
