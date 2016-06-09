@@ -26,10 +26,8 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
 
 function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
-  var description = $('#auto_preset_description').val();
-
   if (currentcamera !== undefined) {
-    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows=2&levels=3&columns=2&name="+name+"&description="+description, function(data) {
+    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows=2&levels=3&columns=2&name="+name, function(data) {
 
     });
   }

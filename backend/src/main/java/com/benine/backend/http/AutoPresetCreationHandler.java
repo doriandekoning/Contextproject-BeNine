@@ -51,13 +51,8 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      Collection<SubView> subViews = creator.generateSubViews();
-      creator.createPresets(ipcam, subViews);
-      JSONArray subViewsJSON = new JSONArray();
-      subViewsJSON.addAll(subViews);
-      JSONObject jsonObj = new JSONObject();
-      jsonObj.put("SubViews", subViewsJSON);
-      respond(request, httpServletResponse, jsonObj.toJSONString());
+      creator.createPresets(ipcam, creator.generateSubViews());
+      respondSuccess(request, httpServletResponse);
 
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {

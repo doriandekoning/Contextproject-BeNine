@@ -33,6 +33,8 @@ public abstract class AutoPresetCreator {
    * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
    * @param subViews the subviews to generate positions for.
+   * @param name The name of the presets.
+   * @param description of the presets.
    * @return A collection of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interupted while waiting for cam to move.

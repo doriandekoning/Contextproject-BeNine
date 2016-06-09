@@ -2,7 +2,6 @@ package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,21 +33,21 @@ public abstract class AutoPresetCreatorTest {
 
   @Test
   public void testSetCamBusy() throws Exception {
-    apc.createPresets(camera, new ArrayList<>());
+    apc.createPresets(camera, new ArrayList<>(), name, description);
     Mockito.verify(camera).setBusy(true);
   }
 
   @Test
   public void testCamNotBusyAfterwards() throws Exception {
     AutoPresetCreator apc = getCreator();
-    apc.createPresets(camera, new ArrayList<>());
+    apc.createPresets(camera, new ArrayList<>(), name, description);
     Assert.assertFalse(camera.isBusy());
   }
 
   @Test (expected = CameraBusyException.class)
   public void testCamBusyExceptionThrown() throws Exception {
     doReturn(true).when(camera).isBusy();
-    apc.createPresets(camera, new ArrayList<>());
+    apc.createPresets(camera, new ArrayList<>(), name, description);
   }
 
 
