@@ -43,7 +43,7 @@ public class PresetQueueHandler extends PresetQueueRequestHandler {
           throws IOException, ServletException {
     
     String route = getRoute(request);
-    System.out.println(route);
+
     boolean routed = false;
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);

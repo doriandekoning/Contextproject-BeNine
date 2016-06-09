@@ -133,7 +133,6 @@ public class MySQLDatabase implements Database {
         statement.executeUpdate(sql);
       }
     } catch (Exception e) {
-      e.printStackTrace();
       logger.log("List could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
@@ -228,7 +227,6 @@ public class MySQLDatabase implements Database {
         addTagToPreset(tag, preset);
       }
     } catch (Exception e) {
-      e.printStackTrace();
       logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, null);
