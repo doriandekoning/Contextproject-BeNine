@@ -16,10 +16,6 @@ import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -29,6 +25,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -119,9 +119,10 @@ public class CreatePresetHandler extends RequestHandler {
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
     int cameraId = camera.getId();
-
-    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
             autofocus, autoiris, cameraId);
+    preset.addTags(tagList);
+    return preset;
   }
 
   /**

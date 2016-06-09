@@ -217,10 +217,10 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("focus", new Object[]{1});
         result.addColumn("iris", new Object[]{1});
         result.addColumn("autofocus", new Object[]{1});
-        result.addColumn("panspeed", new Object[]{1});
+        result.addColumn("panspeed", new Object[]{15});
         result.addColumn("tiltspeed", new Object[]{1});
-        result.addColumn("autoiris", new Object[]{1});
-        result.addColumn("camera_ID", new Object[]{1});
+        result.addColumn("autoiris", new Object[]{0});
+        result.addColumn("camera_ID", new Object[]{0});
         result.addColumn("id", new Object[]{1});
         result.addColumn("image", new Object[]{"test"});
         result.next();

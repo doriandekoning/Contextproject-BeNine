@@ -1,27 +1,28 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.PresetPyramidCreator;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
+import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
+import com.benine.backend.preset.autopresetcreation.SubView;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.TimeoutException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class AutoPresetCreationHandler extends RequestHandler  {
 
@@ -52,10 +53,16 @@ public class AutoPresetCreationHandler extends RequestHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam));
+      Collection<SubView> subViews = creator.generateSubViews();
+      ArrayList<Preset> presets = new ArrayList<Preset>(creator.createPresets(ipcam, subViews));
       PresetController presetController = ServerController.getInstance().getPresetController();
       presetController.addPresets(presets);
-      respondSuccess(request, httpServletResponse);
+      JSONArray subViewsJSON = new JSONArray();
+      subViewsJSON.addAll(subViews);
+      JSONObject jsonObj = new JSONObject();
+      jsonObj.put("SubViews", subViewsJSON);
+      respond(request, httpServletResponse, jsonObj.toJSONString());
+
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);

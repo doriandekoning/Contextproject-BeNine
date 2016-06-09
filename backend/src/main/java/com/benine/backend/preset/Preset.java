@@ -152,8 +152,10 @@ public abstract class Preset {
    * Recall this preset by moving the camera to the right position.
    * @param camera used to move the camera.
    * @throws CameraConnectionException when camera can't be moved
+   * @throws CameraBusyException if the camera is busy
    */
-  public abstract void excecutePreset(Camera camera) throws CameraConnectionException, CameraBusyException;
+  public abstract void excecutePreset(Camera camera)
+          throws CameraConnectionException, CameraBusyException;
   
   /**
    * Creates a sql query to insert a preset in the database.

@@ -548,13 +548,11 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     long timedOutTime = System.currentTimeMillis() + timeout;
     do {
       System.out.println(getPosition().equals(pos));
-      if (getPosition().equals(pos)) {
+      if (getPosition().equals(pos) && getZoom() == pos.getZoom()) {
         return;
       }
       Thread.sleep(MOVE_WAIT_DURATION);
     } while (System.currentTimeMillis() < timedOutTime );
-    System.out.println("Wanted:" + pos);
-    System.out.println("Got:" + getPosition());
     throw new TimeoutException();
   }
 
@@ -591,8 +589,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     double tilt = getPosition().getTilt();
     int focus = getFocusPosition();
     int iris = getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
