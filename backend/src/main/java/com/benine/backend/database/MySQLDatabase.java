@@ -454,7 +454,6 @@ public class MySQLDatabase implements Database {
 
   @Override
   public void deleteCamera(int cameraID) {
-    deleteCameraSQL("preset", "camera_ID", cameraID);
     deleteCameraSQL("IPpreset", "camera_ID", cameraID);
     deleteCameraSQL("simplepreset", "camera_ID", cameraID);
     deleteCameraSQL("camera", "ID", cameraID);
@@ -469,14 +468,14 @@ public class MySQLDatabase implements Database {
   private void deleteCameraSQL(String table, String id, int cameraID) {
     PreparedStatement statement = null;
     try {
-      String sql = "DELETE FROM ? WHERE ? = ?";
+      String sql = "DELETE FROM " + table + " WHERE " + id + " = ?";
       statement = connection.prepareStatement(sql);
-      statement.setString(1, table);
-      statement.setString(2, id);
-      statement.setInt(3, cameraID);
+      statement.setInt(1, cameraID);
       statement.executeUpdate();
     } catch (SQLException e) {
       logger.log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
+      System.out.println(table);
     } finally {
       close(statement, null);
     }
