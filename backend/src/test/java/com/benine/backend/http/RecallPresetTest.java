@@ -51,7 +51,7 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
-      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1);
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 1, "name");
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | StreamNotAvailableException e) {
       e.printStackTrace();

@@ -67,7 +67,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
       
-      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags);
+      preset = new IPCameraPreset(new Position(0,0), 100, 33,50,true,15,1,true, 0, tags, "name");
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();

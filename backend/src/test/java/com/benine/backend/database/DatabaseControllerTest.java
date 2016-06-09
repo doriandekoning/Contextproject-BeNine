@@ -1,16 +1,15 @@
 package com.benine.backend.database;
 
+import com.benine.backend.performance.PresetQueue;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,6 +65,17 @@ public class DatabaseControllerTest {
     when(database.getAllPresets()).thenReturn(presets);
     databaseController.start();
     Assert.assertTrue(ServerController.getInstance().getPresetController().getPresets().contains(preset));
+  }
+
+  @Test
+  public void testLoadPresetQueues() {
+    when(database.checkDatabase()).thenReturn(false);
+    ArrayList<PresetQueue> queueList = new ArrayList<>();
+    PresetQueue queue = mock(PresetQueue.class);
+    queueList.add(queue);
+    when(database.getQueues()).thenReturn(queueList);
+    databaseController.start();
+    Assert.assertTrue(ServerController.getInstance().getPresetQueueController().getPresetQueues().contains(queue));
   }
   
   @Test
