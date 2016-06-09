@@ -42,11 +42,24 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   protected Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
-    for (int level = 0; level < levels; level++ ) {
-      int zoomlevel = (IPCamera.MAX_ZOOM - cam.getZoom()) * (level / levels);
-      Collection<Position> positionsInLayer =
-              generatePositionsLayer(new ZoomPosition(cam.getPosition(), cam.getZoom()), subViews);
-      positionsInLayer.forEach( p -> positions.add(new ZoomPosition(p, zoomlevel)));
+
+    // 1 is completely zoomed out, 0 completely zoomed in
+    ZoomPosition curPos = new ZoomPosition(cam.getPosition(), cam.getZoom());
+
+    final double zoomCoefficient =  1 - ((curPos.getZoom() - IPCamera.MIN_ZOOM)
+            / (IPCamera.MAX_ZOOM));
+    final double curHorFov = IPCamera.HORIZONTAL_FOV_MAX * zoomCoefficient;
+    final double curVerFov = IPCamera.VERTICAL_FOV_MAX * zoomCoefficient;
+
+    for (SubView subView : subViews) {
+      System.out.println(1);
+      Coordinate center = subView.getCenter();
+      final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
+      final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
+      final int zoom = IPCamera.MAX_ZOOM - (int) ((subView.getWidth() / 100) * (IPCamera.MAX_ZOOM-IPCamera.MIN_ZOOM));
+      System.out.println("Curzoom: " + curPos.getZoom() + " zoom:   " + zoom);
+
+      positions.add(new ZoomPosition(tilt, pan, zoom));
     }
     return positions;
   }
@@ -57,11 +70,17 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    */
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
+    ArrayList<SubView> lastLayer = new ArrayList<>();
+    // Level 1
     subViews.add(new SubView(0, 100, 100, 0));
+    lastLayer.addAll(subViews);
+    // Other levels
     for (int level = 1; level < levels; level++) {
       ArrayList<SubView> newSubViews = new ArrayList<>();
-      subViews.forEach(sv -> newSubViews.addAll(generateSubViewLayer(sv)));
+      lastLayer.forEach(sv -> newSubViews.addAll(generateSubViewLayer(sv)));
       subViews.addAll(newSubViews);
+      lastLayer.clear();
+      lastLayer.addAll(newSubViews);
     }
     return subViews;
   }
@@ -83,35 +102,6 @@ public class PresetPyramidCreator extends AutoPresetCreator {
       }
     }
     return subViews;
-  }
-
-  /**
-   * Generatates a list of positions for the presets.
-   * @param curPos the current camera position.
-   * @param subViews the subviews to generate positions for
-   * @return A collection of positions
-   */
-  // To aid readability
-  @SuppressWarnings("PMD.UselessParentheses")
-  private Collection<Position> generatePositionsLayer(ZoomPosition curPos,
-                                                      Collection<SubView> subViews) {
-    ArrayList<Position> positions = new ArrayList<>();
-
-    // 1 is completely zoomed out, 0 completely zoomed in
-
-    final double zoomCoefficient =  1 - ((curPos.getZoom() - IPCamera.MIN_ZOOM)
-            / (IPCamera.MAX_ZOOM));
-    final double curHorFov = IPCamera.HORIZONTAL_FOV_MAX * zoomCoefficient;
-    final double curVerFov = IPCamera.VERTICAL_FOV_MAX * zoomCoefficient;
-
-    for (SubView subView : subViews) {
-      Coordinate center = subView.getCenter();
-      final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
-      final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
-      positions.add(new Position(tilt, pan));
-    }
-
-    return positions;
   }
 
 

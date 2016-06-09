@@ -261,7 +261,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoFocusOn() throws CameraConnectionException {
+  public boolean isAutoFocusOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D1", "d1");
     return Integer.parseInt(response) == 1;
   }
@@ -283,7 +284,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public boolean isAutoIrisOn() throws CameraConnectionException {
+  public boolean isAutoIrisOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D3", "d3");
     return Integer.parseInt(response) == 1;
   }
@@ -436,7 +438,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public JSONObject toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException, CameraBusyException {
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
@@ -554,7 +556,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 //      Thread.sleep(MOVE_WAIT_DURATION);
 //    } while (System.currentTimeMillis() < timedOutTime );
 //    throw new TimeoutException();
-    Thread.sleep(3000);
+    Thread.sleep(6000);
   }
 
   /**
@@ -584,7 +586,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   }
 
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException {
+  public IPCameraPreset createPreset(Set<String> tagList) throws CameraConnectionException, CameraBusyException {
     int zoom = getZoom();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();

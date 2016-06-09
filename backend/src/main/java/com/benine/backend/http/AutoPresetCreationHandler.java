@@ -39,7 +39,7 @@ public class AutoPresetCreationHandler extends RequestHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    PresetPyramidCreator creator = new PresetPyramidCreator(2,2,2,0.1, getPresetController());
+    PresetPyramidCreator creator = new PresetPyramidCreator(2,2,3,0.1, getPresetController());
     String camID = request.getParameter("camera");
     Camera cam = ServerController.getInstance().getCameraController()
         .getCameraById(Integer.parseInt(camID));
@@ -65,7 +65,7 @@ public class AutoPresetCreationHandler extends RequestHandler  {
       respondFailure(request, httpServletResponse);
     }  catch (CameraBusyException e) {
       getLogger().log("Trying to auto create presets on busy camera with id: "
-              + camID, LogEvent.Type.WARNING);
+              + camID, e);
       respondFailure(request, httpServletResponse);
     }
 

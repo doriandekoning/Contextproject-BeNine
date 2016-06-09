@@ -30,7 +30,7 @@ public abstract class BasicCamera implements Camera {
    * @return Json object in the form of a string.
    * @throws CameraConnectionException When the information can not be retrieved.
    */
-  public abstract JSONObject toJSON() throws CameraConnectionException;
+  public abstract JSONObject toJSON() throws CameraConnectionException, CameraBusyException;
 
   /**
    * Set the ID of this camera.

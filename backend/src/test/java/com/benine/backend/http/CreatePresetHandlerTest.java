@@ -1,9 +1,6 @@
 package com.benine.backend.http;
 
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.SimpleCamera;
-import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -72,6 +69,8 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     } catch (CameraConnectionException e) {
       e.printStackTrace();
     } catch (StreamNotAvailableException e) {
+      e.printStackTrace();
+    } catch (CameraBusyException e) {
       e.printStackTrace();
     }
   }

@@ -106,9 +106,10 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     subViews.add(new SubView(25, 100, 50, 0));
     subViews.add(new SubView(50, 100, 75, 0));
     subViews.add(new SubView(75, 100, 100, 0));
-    Assert.assertEquals(new HashSet<>(subViews), new HashSet<>(ppc.generateSubViews()));
+    Collection<SubView> generated = ppc.generateSubViews();
+    Assert.assertEquals(subViews.size(), generated.size());
+    Assert.assertEquals(new HashSet<>(subViews), new HashSet<>(generated));
   }
-
 
   @Test(expected = AssertionError.class)
   public final void testAssertRows() {

@@ -2,10 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.PresetCamera;
-import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -78,9 +75,12 @@ public class CreatePresetHandler extends RequestHandler {
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
       respondFailure(request, res);
+    } catch (CameraBusyException e) {
+      getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
+      respondFailure(request, res);
+    } finally {
+      request.setHandled(true);
     }
-
-    request.setHandled(true);
   }
 
   /**
@@ -92,10 +92,11 @@ public class CreatePresetHandler extends RequestHandler {
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
+   * @throws CameraBusyException          If camera is busy
    */
   private void setPreset(IPCamera camera, List<String> tagList)
           throws IOException, StreamNotAvailableException, SQLException,
-          CameraConnectionException, MalformedURIException {
+          CameraConnectionException, MalformedURIException, CameraBusyException {
     PresetController presetController = ServerController.getInstance().getPresetController();
     presetController.addPreset(createPreset(camera, tagList));
 
@@ -108,9 +109,10 @@ public class CreatePresetHandler extends RequestHandler {
    * @param tagList   The tag belonging to the preset.
    * @return          A Preset object.
    * @throws CameraConnectionException If the camera cannot be reached.
+   * @throws CameraBusyException if camera is busy
    */
   private Preset createPreset(IPCamera camera, List<String> tagList)
-          throws CameraConnectionException {
+          throws CameraConnectionException, CameraBusyException {
     int zoom = camera.getZoom();
     double pan = camera.getPosition().getPan();
     double tilt = camera.getPosition().getTilt();

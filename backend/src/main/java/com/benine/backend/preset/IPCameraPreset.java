@@ -57,9 +57,10 @@ public class IPCameraPreset extends Preset {
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws IOException if the preset image cannot be stored.
    * @throws StreamNotAvailableException if the camera stream cannot be reached.
+   * @throws CameraBusyException if the camera is busy
    */
   public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
-          throws CameraConnectionException, IOException, StreamNotAvailableException {
+          throws CameraConnectionException, IOException, StreamNotAvailableException, CameraBusyException {
     super(cam.getId());
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();

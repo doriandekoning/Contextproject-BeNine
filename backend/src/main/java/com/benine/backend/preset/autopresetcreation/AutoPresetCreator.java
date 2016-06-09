@@ -50,12 +50,21 @@ public abstract class AutoPresetCreator {
     }
     cam.setBusy(true);
     ArrayList<Preset> presets = new ArrayList<>();
+
+    cam.setBusy(false);
+    cam.setAutoFocusOn(true);
+    cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setBusy(false);
+      Thread.sleep(200);
       cam.moveTo(pos, 2, 30);
-      cam.waitUntilAtPosition(pos, timeout);
+      Thread.sleep(200);
+      cam.zoomTo(pos.getZoom());
       cam.setBusy(true);
-      IPCameraPreset preset = new IPCameraPreset(cam, 2, 30);
+      cam.waitUntilAtPosition(pos, timeout);
+      cam.setBusy(false);
+      IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId());
+      cam.setBusy(true);
       presetController.addPreset(preset);
       preset.createImage(cam);
       presets.add(preset);

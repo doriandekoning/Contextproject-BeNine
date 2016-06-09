@@ -189,7 +189,7 @@ public class IpcameraTest {
   }
   
   @Test(expected = IpcameraConnectionException.class)
-  public final void testGetJSONFails() throws CameraConnectionException {
+  public final void testGetJSONFails() throws CameraConnectionException, CameraBusyException {
     IPCamera camera = new IPCamera("12", cameraController);
     JSONObject json = new JSONObject();
     json.put("id", -1);
@@ -202,7 +202,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testGetJSON() throws CameraConnectionException{
+  public final void testGetJSON() throws CameraConnectionException, CameraBusyException{
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     JSONObject json = new JSONObject();
@@ -220,7 +220,7 @@ public class IpcameraTest {
   }
   
   @Test
-  public final void testCreatePreset() throws CameraConnectionException{
+  public final void testCreatePreset() throws CameraConnectionException, CameraBusyException{
     setCameraBehaviour("APC", "aPC80008000");
     setCameraBehaviour("GZ", "gz655");
     setCameraBehaviour("GF", "gfA42");

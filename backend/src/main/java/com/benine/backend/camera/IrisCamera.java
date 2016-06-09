@@ -19,7 +19,7 @@ public interface IrisCamera extends ControllableCamera {
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
    */
-  boolean isAutoIrisOn() throws CameraConnectionException;
+  boolean isAutoIrisOn() throws CameraConnectionException, CameraBusyException;
   
   /**
   * Set the iris position.
