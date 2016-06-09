@@ -1,4 +1,4 @@
-var selectedPerformance, editingPerformance;
+var selectedPerformance, nameEditingPerformance;
 
 function loadEditPerformance() {
     drawPresets(presets);
@@ -28,27 +28,50 @@ function drawPerformanceListItem(performance) {
 }
 
 function selectPerformance() {
-    if (editingPerformance !== undefined) {
-        editingPerformance.replaceWith(drawPerformanceListItem(selectedPerformance));
+    if (nameEditingPerformance !== undefined) {
+        nameEditingPerformance.replaceWith(drawPerformanceListItem($(nameEditingPerformance).data()));
     }
 
-    editingPerformance = $(this);
-    selectedPerformance = $(this).data();
-    setNameEditable(this);
+    if (selectedPerformance !== undefined) {
+        selectedPerformance.attr('class', 'btn btn-info');
+    }
 
-    drawSchedule(selectedPerformance);
+    selectedPerformance = $(this);
+    selectedPerformance.attr('class', 'btn btn-info disabled');
+
+    drawSchedule(selectedPerformance.data());
 }
 
-function setNameEditable(element) {
-    var li = $('<li><div class="row">' +
-        '<div class="col-xs-7"><input type="text" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
-        '<div class="col-xs-5"><div class="btn-group"> <button type="button" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
-        '<button type="button" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
-        '</li>');
+function setNameEditable() {
+    if (selectedPerformance !== undefined) {
+        var element = selectedPerformance;
 
+        var li = $('<li><div class="row">' +
+            '<div class="col-xs-7"><input type="text" class="form-control" placeholder="' + $(element).data()['name'] + '"></div> ' +
+            '<div class="col-xs-5"><div class="btn-group"><button type="button" onclick="selectPerformance()" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
+            '<button type="button" onclick="saveEditName()" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
+            '</li>');
 
-    editingPerformance = li;
-    $(element).replaceWith(li);
+        li.data($(element).data());
+        nameEditingPerformance = li;
+        $(element).replaceWith(li);
+    }
+}
+
+function saveEditName() {
+    //TODO: Save Name
+    selectPerformance();
+}
+
+function deletePerformance() {
+    if (selectedPerformance !== undefined) {
+        var performance = selectedPerformance.data();
+
+        $.get("/api/backend/presetqueues/" + performance['id'] + "/delete", function(data) {
+            loadPerformances();
+            loadEditPerformance();
+        })
+    }
 }
 
 /**
@@ -108,7 +131,7 @@ function addScheduleRow(preset) {
 
     var item = $("<li></li>");
 
-    var group = $("<div class='btn-group'></div>")
+    var group = $("<div class='btn-group'></div>");
     var count = $("<button type='button' class='btn btn-default schedule-list-number'></button>");
     var presetname = $("<button type='button' class='btn btn-info schedule-preset'>Preset " + preset['id'] + "</button>");
 
@@ -171,8 +194,16 @@ function drawPresets(presetlist) {
     for (key in presetlist) {
         var preset = presetlist[key];
 
-        list.append(drawPreset(preset));
+        var presetrow = $(drawPreset(preset));
+        presetrow.data(preset);
+        presetrow.click(addToSchedule);
+
+        list.append(presetrow);
     }
+}
+
+function addToSchedule() {
+
 }
 
 function drawPreset(preset) {

@@ -6,7 +6,6 @@ function Performance(id, name, queue) {
 	this.name = name;
 	this.queue = queue;
 	this.presets = this.setPresets(queue);
-
 }
 
 Performance.prototype = {
