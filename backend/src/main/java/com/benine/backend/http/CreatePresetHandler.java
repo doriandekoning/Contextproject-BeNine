@@ -119,9 +119,10 @@ public class CreatePresetHandler extends RequestHandler {
     boolean autoiris = camera.isAutoIrisOn();
     boolean autofocus = camera.isAutoFocusOn();
     int cameraId = camera.getId();
-
-    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
             autofocus, autoiris, cameraId);
+    preset.addTags(tagList);
+    return preset;
   }
 
   /**

@@ -42,7 +42,6 @@ public abstract class AutoPresetCreator {
       throw new CameraBusyException("The camera is busy.", cam.getId());
     }
     cam.setBusy(true);
-    Position camStartPos = cam.getPosition();
     ArrayList<Preset> presets = new ArrayList<Preset>();
     System.out.println(generatePositions(cam, subViews));
     for (ZoomPosition pos : generatePositions(cam, subViews)) {

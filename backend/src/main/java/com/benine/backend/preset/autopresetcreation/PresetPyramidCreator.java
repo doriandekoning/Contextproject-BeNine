@@ -4,9 +4,6 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
-import com.benine.backend.preset.autopresetcreation.Coordinate;
-import com.benine.backend.preset.autopresetcreation.SubView;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -589,8 +589,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     double tilt = getPosition().getTilt();
     int focus = getFocusPosition();
     int iris = getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
