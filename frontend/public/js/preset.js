@@ -17,6 +17,7 @@ function Preset(newPreset) {
 	this.img = $('<img src="/api/backend' + this.image + '" >');
 	this.tags = newPreset.tags;
 	this.cameraid = newPreset.cameraid;
+	this.name = newPreset.name;
 }
 
 Preset.prototype = {

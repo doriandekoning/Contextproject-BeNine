@@ -171,8 +171,9 @@ create_tags_input.tagsinput('input').keypress(function (e) {
 */
 function createPreset() {
 	var preset_create_div = $('#preset_create_div');
-	var presetName = preset_create_div.find('#preset_name').val();
+	var presetName = preset_create_div.find('#create_preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
+	console.log(presetName);
 	if (currentcamera !== undefined) {
 		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag + "&name=" + presetName, function(data) {console.log("create preset respone: " + data);})
 		.done(loadPresets);
