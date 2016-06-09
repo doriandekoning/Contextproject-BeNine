@@ -1,9 +1,32 @@
+var currentPerformance;
+
+function test() {
+    performances.push(new Performance(1, "Test Performance", [1, 2]));
+
+    currentPerformance = performances[0];
+    drawSchedule(currentPerformance);
+}
+
+/**
+ * Draws the schedule for a given performance.
+ * @param performance A performance object.
+ */
+function drawSchedule(performance) {
+    var schedule = $("#performance-schedule");
+    schedule.empty();
+
+    var performancepresets = performance.presets;
+    for (i in performancepresets) {
+        addScheduleRow(performancepresets[i]);
+    }
+}
+
 /**
  * Adds a row to the schedule
  * @param count The number in the schedule.
  * @param preset The preset to add.
  */
-function addScheduleRow(count, preset) {
+function addScheduleRow(preset) {
     var schedule = $("#performance-schedule");
 
     var item = $("<li></li>");
@@ -26,16 +49,20 @@ function addScheduleRow(count, preset) {
     updateScheduleOrder();
 }
 
+/**
+ * Updates the order of the schedule numbers.
+ */
 function updateScheduleOrder() {
     var li = $('#performance-schedule li');
-
-    console.log(li);
 
     li.each(function(index) {
         li.eq(index).find(".schedule-list-number").eq(0).text(index + 1);
     })
 }
 
+/**
+ * Moves an item up in the schedule.
+ */
 function moveScheduleUp() {
     var current = $(this).closest('li');
     var previous = current.prev('li');
@@ -47,6 +74,9 @@ function moveScheduleUp() {
     updateScheduleOrder();
 }
 
+/**
+ * Moves an item down in the schedule.
+ */
 function moveScheduleDown() {
     var current = $(this).closest('li');
     var previous = current.next('li');
