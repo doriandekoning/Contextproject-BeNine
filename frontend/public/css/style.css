@@ -623,7 +623,7 @@ input[type=range]:focus {
     padding: 0;
 }
 
-.performance-schedule .btn-group {
+.performance-schedule .btn-group, .performance-list .btn-group {
     position: absolute;
     padding: 0;
     top: -1px;

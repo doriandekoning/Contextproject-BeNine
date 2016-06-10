@@ -201,12 +201,13 @@ function moveScheduleUp() {
     var performance = selectedPerformance.data();
     var index = current.index();
 
-    if (index > 0) {
-        performance.deletepreset(index);
-        performance.addpresetatposition(index - 1, preset);
-    }
+    console.log(index)
 
-    drawSchedule(performance);
+    if (index > 0) {
+        performance.moveUp(index, preset, function() {
+            drawSchedule(performance);
+        });
+    }
 }
 
 /**
@@ -220,11 +221,10 @@ function moveScheduleDown() {
     var index = current.index();
 
     if (index < performance.presets.length) {
-        performance.deletepreset(index);
-        performance.addpresetatposition(index + 1, preset);
+        performance.moveDown(index, preset, function() {
+            drawSchedule(performance);
+        });
     }
-
-    drawSchedule(performance);
 }
 
 /**
@@ -288,5 +288,5 @@ function drawPreset(preset) {
 function createPerformance() {
     $.get("/api/backend/presetqueues/create?name=New%20Performance", function(data) {
         loadPerformances();
-    });
+    }).done(loadEditPerformance);
 }
