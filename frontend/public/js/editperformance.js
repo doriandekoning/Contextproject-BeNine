@@ -63,7 +63,7 @@ function setNameEditable() {
 
         var li = $('<li><div class="row">' +
             '<div class="col-xs-7"><input type="text" id="performance-name" class="form-control" value="' + $(element).data()['name'] + '"></div> ' +
-            '<div class="col-xs-5"><div class="btn-group"><button type="button" onclick="selectPerformance()" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
+            '<div class="col-xs-5"><div class="btn-group editname"><button type="button" onclick="selectPerformance()" class="btn btn-danger glyphicon glyphicon-remove-sign"></button> ' +
             '<button type="button" onclick="saveEditName()" class="btn btn-success glyphicon glyphicon-ok-sign"></button></div></div></div> ' +
             '</li>');
 
