@@ -287,6 +287,5 @@ function drawPreset(preset) {
  */
 function createPerformance() {
     $.get("/api/backend/presetqueues/create?name=New%20Performance", function(data) {
-        loadPerformances();
-    });
+    }).done(loadPerformances);
 }
