@@ -1,5 +1,6 @@
 package com.benine.backend.http;//TODO add Javadoc comment
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -46,9 +47,9 @@ public class AutoPresetCreationHandlerTest extends AutoPresetHandlerTest {
 
 
   @Test
-  public void testHandleBusy() throws Exception{
+  public void testNoConnection() throws Exception{
     IPCamera cam = Mockito.mock(IPCamera.class);
-    when(cam.isBusy()).thenReturn(true);
+    when(cam.getPosition()).thenThrow(CameraConnectionException.class);
     when(cameraController.getCameraById(3204)).thenReturn(cam);
     setPath("/presets/autocreatepresets");
 
@@ -64,9 +65,9 @@ public class AutoPresetCreationHandlerTest extends AutoPresetHandlerTest {
   }
 
   @Test
-  public void testNoConnection() throws Exception{
+  public void testHandleBusy() throws Exception{
     IPCamera cam = Mockito.mock(IPCamera.class);
-    when(cam.getPosition()).thenThrow(CameraConnectionException.class);
+    when(cam.getPosition()).thenThrow(CameraBusyException.class);
     when(cameraController.getCameraById(3204)).thenReturn(cam);
     setPath("/presets/autocreatepresets");
 
