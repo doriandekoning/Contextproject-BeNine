@@ -124,7 +124,7 @@ function setQueueViewPlaceholder(view, image) {
 
 function setQueueView(view, preset) {
     view.find('img').replaceWith($("<img src='/api/backend" + preset['image'] + "' class='col-xs-9'>"));
-    view.find('.preset_title').text("Preset " + preset['id']);
+    view.find('.preset_title').text(preset['name']);
     view.find('.preset_camera_number').text(preset['cameraid']);
 }
 
@@ -138,7 +138,7 @@ function createRow(preset) {
     var row = $("<tr id=\"queuepreset_" + tablesize + "\"></tr>");
     row.append("<th class='column_id'>" + preset['id'] + "</th>");
     row.append("<td class='column_camid'>" + preset['cameraid'] + "</td>");
-    row.append("<td class='column_name'>Preset " + preset['id'] + "</td>");
+    row.append("<td class='column_name'>" + preset['name'] + "</td>");
     row.append("<td>" + preset['tags'] + "</td>");
 
     return row;
@@ -155,7 +155,6 @@ function nextPreset() {
 
 function prevPreset() {
     var performance_presets = currentperformance['presets'];
-
 
     if (position > -1) {
         position = position - 1;
