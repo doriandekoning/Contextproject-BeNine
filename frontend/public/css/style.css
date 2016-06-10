@@ -643,3 +643,7 @@ input[type=range]:focus {
 .queue_area .table .current {
     background-color: rgba(92, 184, 92, 0.75);
 }
+
+#auto_preset_name {
+  width: 80%;
+}
