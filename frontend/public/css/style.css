@@ -88,7 +88,7 @@ nav img {
 	top: 150px;
 }
 
-input[type=range] {	
+input[type=range] {
 	position: absolute;
 	z-index: 0;
 	display: block;
@@ -190,8 +190,12 @@ input[type=range]:focus {
 
 .tt-menu {
 	text-align: left;
-	max-height: 200px;  
+	max-height: 200px;
 	overflow-y: auto;
+}
+
+#previewCanvas {
+  width: 100%;
 }
 
 /* Top block consisting of the camera views, and the editing camera view.*/

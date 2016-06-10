@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
+import com.benine.backend.camera.CameraBusyException;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Before;
@@ -37,7 +39,7 @@ public class PresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   }
   
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     jsonObject = new JSONObject();
     JSONArray array = new JSONArray();

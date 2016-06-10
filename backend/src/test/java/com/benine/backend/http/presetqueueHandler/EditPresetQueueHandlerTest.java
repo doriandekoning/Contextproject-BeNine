@@ -5,7 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 
+import com.benine.backend.camera.CameraBusyException;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +26,7 @@ public class EditPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   }
   
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     when(presetQueueController.getPresetQueueById(1)).thenReturn(presetQueue);
   }

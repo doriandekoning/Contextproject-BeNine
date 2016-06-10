@@ -1,7 +1,9 @@
 package com.benine.backend.preset;
 
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
@@ -107,7 +109,20 @@ public abstract class Preset {
    *
    * @return JSON representation of this object.
    */
-  public abstract JSONObject toJSON();
+  public JSONObject toJSON() {
+    JSONObject json = new JSONObject();
+
+    json.put("id", getId());
+    json.put("cameraid", getCameraId());
+    json.put("image", getImage());
+    JSONArray tagsJSON = new JSONArray();
+    for (String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
+
+    return json;
+  }
 
 
   @Override
@@ -146,6 +161,8 @@ public abstract class Preset {
    *
    * @param camera used to move the camera.
    * @throws CameraConnectionException when camera can't be moved
+   * @throws CameraBusyException if the camera is busy
    */
-  public abstract void excecutePreset(Camera camera) throws CameraConnectionException;
+  public abstract void excecutePreset(Camera camera)
+          throws CameraConnectionException, CameraBusyException;
 }

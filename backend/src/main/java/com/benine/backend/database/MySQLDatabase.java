@@ -5,11 +5,10 @@ import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.Position;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-
 import com.benine.backend.preset.SimplePreset;
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -282,7 +281,7 @@ public class MySQLDatabase implements Database {
       statement.setInt(1, preset.getId());
       statement.setDouble(2, preset.getPosition().getPan());
       statement.setDouble(3, preset.getPosition().getTilt());
-      statement.setDouble(4, preset.getZoom());
+      statement.setDouble(4, preset.getPosition().getZoom());
       statement.setDouble(5, preset.getFocus());
       statement.setDouble(6, preset.getIris());
       statement.setInt(7, auto);
@@ -622,8 +621,8 @@ public class MySQLDatabase implements Database {
    */
   public IPCameraPreset getIPCameraPresetFromResultSet(ResultSet resultset) {
     try {
-      Position pos = new Position(resultset.getInt("pan"), resultset.getInt("tilt"));
-      int zoom = resultset.getInt("zoom");
+      ZoomPosition pos = new ZoomPosition(resultset.getInt("pan"),
+              resultset.getInt("tilt"), resultset.getInt("zoom"));
       int focus = resultset.getInt("focus");
       int iris = resultset.getInt("iris");
       boolean autoFocus = resultset.getInt("autofocus") == 1;
@@ -633,9 +632,11 @@ public class MySQLDatabase implements Database {
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("ID");
       String name = resultset.getString("name");
-      IPCameraPreset preset = new IPCameraPreset(pos, zoom, focus, iris, autoFocus,
-          panspeed, tiltspeed, autoIris, cameraId, name);
+      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris,
+              autoFocus, autoIris, cameraId, name);
       preset.setId(id);
+      preset.setPanspeed(panspeed);
+      preset.setTiltspeed(tiltspeed);
       preset.setImage(resultset.getString("image"));
       return preset;
     } catch (Exception e) {

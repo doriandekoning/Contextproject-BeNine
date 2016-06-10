@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.benine.backend.ServerController;
 
-public class SimplePresetTest {
+public class SimplePresetTest extends PresetTest {
   
   SimplePreset preset;
   
@@ -44,4 +44,8 @@ public class SimplePresetTest {
     Assert.assertEquals(expectedtagsJSON, jsonObject.get("tags"));
   }
 
+  @Override
+  public Preset getPreset() {
+    return new SimplePreset(3, "Name");
+  }
 }

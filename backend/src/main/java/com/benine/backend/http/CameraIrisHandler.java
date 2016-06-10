@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.IrisCamera;
 import org.eclipse.jetty.server.Request;
@@ -43,6 +44,8 @@ public class CameraIrisHandler extends CameraRequestHandler {
     } catch (NumberFormatException e) {
       getLogger().log(e.toString(), LogEvent.Type.WARNING);
       respondFailure(request, res);
+    } catch (CameraBusyException e) {
+      getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
     }
 
     request.setHandled(true);
@@ -55,10 +58,11 @@ public class CameraIrisHandler extends CameraRequestHandler {
    * @param setPos    The setPos parameter
    * @param speed     The speed of the focus movement.
    * @throws CameraConnectionException if the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   private void setIris(IrisCamera iriscam,
                        String autoOn, String setPos, String speed)
-          throws CameraConnectionException {
+          throws CameraConnectionException, CameraBusyException {
     if (autoOn != null) {
       boolean autoOnBool = Boolean.parseBoolean(autoOn);
       iriscam.setAutoIrisOn(autoOnBool);

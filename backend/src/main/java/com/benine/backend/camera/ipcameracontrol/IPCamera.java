@@ -3,18 +3,10 @@ package com.benine.backend.camera.ipcameracontrol;
 import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
-import com.benine.backend.camera.BasicCamera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.CameraController;
-import com.benine.backend.camera.FocussingCamera;
-import com.benine.backend.camera.IrisCamera;
-import com.benine.backend.camera.MovingCamera;
-import com.benine.backend.camera.Position;
-import com.benine.backend.camera.PresetCamera;
-import com.benine.backend.camera.ZoomingCamera;
+import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamType;
-
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -37,6 +29,21 @@ public class IPCamera extends BasicCamera implements MovingCamera,
         IrisCamera, ZoomingCamera, FocussingCamera, PresetCamera {
 
   private String ipaddress;
+
+  private boolean busy = false;
+
+
+  public static final double HORIZONTAL_FOV_MIN = 3.3;
+  public static final double HORIZONTAL_FOV_MAX = 60.3;
+  public static final double VERTICAL_FOV_MIN = 1.9;
+  public static final double VERTICAL_FOV_MAX = 36.2;
+
+  public static final int MIN_ZOOM = 0;
+  public static final int MAX_ZOOM = 2730;
+
+  public static final int HOME_TILT = 180;
+  public static final int HOME_PAN = 0;
+
   
   private Map<String, String> attributes = new HashMap<>();
   private Map<String, Long> timeStamps = new HashMap<>();
@@ -65,10 +72,12 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @param panSpeed integer to specify the speed of the pan movement.
    * @param tiltSpeed integer to specify the speed of the tilt movement.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
   @Override
-  public void moveTo(Position pos, int panSpeed, int tiltSpeed) 
-                                                                throws CameraConnectionException {
+  public void moveTo(Position pos, int panSpeed, int tiltSpeed)
+          throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String panSp = convertPanSpeedtoHex(panSpeed).toUpperCase();
     panSp = ("00" + panSp).substring(panSp.length());
     String res = sendControlCommand("%23APS" + convertPanToHex(pos.getPan()).toUpperCase() 
@@ -77,7 +86,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
                     + convertTiltSpeed(tiltSpeed));
     verifyResponse(res, "aPS");
   }
-  
+
   /**
    * Values must be between 1 and 99 otherwise they will be rounded.
    * Hereby is 1 max speed to left or downward.
@@ -85,9 +94,11 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @param pan movement direction over horizontal axis.
    * @param tilt movement direction over vertical axis.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
   @Override
-  public void move(int pan, int tilt) throws CameraConnectionException {
+  public void move(int pan, int tilt) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     pan = Math.max(1, pan);
     pan = Math.min(99, pan);
     tilt = Math.max(1, tilt);
@@ -204,8 +215,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Set the focus position
    * @param pos position of the focus to move to.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void setFocusPosition(int pos) throws CameraConnectionException {
+  public void setFocusPosition(int pos) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
     String res = sendControlCommand("%23AXF" + Integer.toHexString(pos + 1365).toUpperCase());
@@ -219,8 +232,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * 99 is focus further with max speed
    * @param speed value with which speed is focusing.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void moveFocus(int speed) throws CameraConnectionException {
+  public void moveFocus(int speed) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     NumberFormat formatter = new DecimalFormat("00");
@@ -232,8 +247,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Turn auto focus on or off.
    * @param on true for auto focus on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void setAutoFocusOn(boolean on) throws CameraConnectionException {
+  public void setAutoFocusOn(boolean on) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = sendControlCommand("%23D1" + Boolean.compare(on, false));
     verifyResponse(response, "d1");
   }
@@ -242,8 +259,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Request if the auto focus is on.
    * @return true if auto focus is on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy
    */
-  public boolean isAutoFocusOn() throws CameraConnectionException {
+  public boolean isAutoFocusOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D1", "d1");
     return Integer.parseInt(response) == 1;
   }
@@ -252,8 +271,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Set the control of the iris to on.
    * @param on true for auto iris on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void setAutoIrisOn(boolean on) throws CameraConnectionException {
+  public void setAutoIrisOn(boolean on) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = sendControlCommand("%23D3" + Boolean.compare(on, false));
     verifyResponse(response, "d3");
   }
@@ -262,8 +283,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * Request if the auto iris is on.
    * @return true if the auto iris is on.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if the camera is busy.
    */
-  public boolean isAutoIrisOn() throws CameraConnectionException {
+  public boolean isAutoIrisOn() throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     String response = getValue("%23D3", "d3");
     return Integer.parseInt(response) == 1;
   }
@@ -275,8 +298,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   * 2730 is open iris.
   * @param pos to set the iris to.
   * @throws CameraConnectionException when command can not be completed.
+  * @throws CameraBusyException if camera is busy.
   */
-  public void setIrisPosition(int pos) throws CameraConnectionException {
+  public void setIrisPosition(int pos) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     pos = Math.max(0, pos);
     pos = Math.min(2730, pos);
     String response = sendControlCommand("%23AXI" + Integer.toHexString(pos + 1365).toUpperCase());
@@ -300,8 +325,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * 99 is open iris with max speed
    * @param speed value with which speed iris is changing.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void moveIris(int speed) throws CameraConnectionException {
+  public void moveIris(int speed) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     speed = Math.max(1, speed);
     speed = Math.min(99, speed);
     speed = speed - 50;
@@ -314,21 +341,23 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return the current zoom position.
    * @throws CameraConnectionException when command can not be completed.
    */
-  public int getZoomPosition() throws CameraConnectionException {
+  public int getZoom() throws CameraConnectionException {
     String response = getValue("%23GZ", "gz");
     return Integer.valueOf(response, 16) - 1365;
   }
   
   /**
    * Zoom to a specified position.
-   * Value must be between 0 and 2730.
+   * Value must be between 0 and MAX_ZOOM (2730).
    * Where 0 is completely zoomed out.
    * @param zpos position to zoom to.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException        If the camera is busy.
    */
-  public void zoomTo(int zpos) throws CameraConnectionException {
-    zpos = Math.max(0, zpos);
-    zpos = Math.min(2730, zpos);
+  public void zoomTo(int zpos) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
+    zpos = Math.max(MIN_ZOOM, zpos);
+    zpos = Math.min(MAX_ZOOM, zpos);
     String res = sendControlCommand("%23AXZ" + Integer.toHexString(zpos + 1365).toUpperCase());
     verifyResponse(res, "axz");
   }
@@ -340,8 +369,10 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * 1 is max speed in wide direction.
    * @param dir zoom direction.
    * @throws CameraConnectionException when command can not be completed.
+   * @throws CameraBusyException if camera is busy.
    */
-  public void zoom(int dir) throws CameraConnectionException {
+  public void zoom(int dir) throws CameraConnectionException, CameraBusyException {
+    checkBusy();
     dir = Math.max(1, dir);
     dir = Math.min(99, dir);
     NumberFormat formatter = new DecimalFormat("00");
@@ -408,7 +439,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return A JSON representation of this camera.
    */
   @Override
-  public JSONObject toJSON() throws CameraConnectionException {
+  public JSONObject toJSON() throws CameraConnectionException, CameraBusyException {
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
@@ -419,7 +450,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     json.put("iris", true);
     json.put("autofocus", isAutoFocusOn());
     json.put("autoiris", isAutoIrisOn());
-    return  json; 
+    json.put("busy", isBusy());
+    return  json;
   }
 
   /**
@@ -506,20 +538,47 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     }
   }
 
+  /**
+   * Sets the camera busy.
+   * @param busy if the camera is busy.
+   */
+  public void setBusy(boolean busy) {
+    this.busy = busy;
+  }
+
+  /**
+   * Returns if the camera is busy.
+   * @return true if the camera is busy false otherwise.
+   */
+  public boolean isBusy() {
+    return busy;
+  }
+
+  /**
+   * Checks if the camera is busy and throws an exception if it is.
+   * @throws CameraBusyException when the camera is busy.
+   */
+  private void checkBusy() throws CameraBusyException {
+    if (isBusy()) {
+      throw new CameraBusyException("Tried to move the camera while its busy.", getId());
+    }
+  }
+
+
   @Override
   public IPCameraPreset createPreset(Set<String> tagList, String name)
-      throws CameraConnectionException {
-    int zoom = getZoomPosition();
+          throws CameraConnectionException, CameraBusyException {
+    int zoom = getZoom();
     double pan = getPosition().getPan();
     double tilt = getPosition().getTilt();
     int focus = getFocusPosition();
     int iris = getIrisPosition();
-    int panspeed = 15;
-    int tiltspeed = 1;
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    return new IPCameraPreset(new Position(pan, tilt), zoom, focus, iris, autofocus, panspeed,
-            tiltspeed, autoiris, cameraId, tagList, name);
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus,
+            iris, autofocus, autoiris, cameraId, name);
+    preset.addTags(tagList);
+    return preset;
   }
 }
