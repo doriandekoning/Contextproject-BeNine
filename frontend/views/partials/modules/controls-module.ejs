@@ -3,7 +3,8 @@
         <div class="btn-group">
             <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
             <button id="editPresets" type="button" class="btn btn-danger" onclick="loadEditablePresets()"><span class="glyphicon glyphicon-pencil"></span> Edit Presets</button>
-            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Update Tags</button>
+            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Tags</button>
+            <button id="editPerformance" onclick="loadEditPerformance(presets)" type="button" class="btn btn-success" data-toggle="modal" data-target=".performance-edit-modal"><span class="glyphicon glyphicon-bullhorn"></span> Performances</button>
         </div>
     </div>
     <div id="control_area">

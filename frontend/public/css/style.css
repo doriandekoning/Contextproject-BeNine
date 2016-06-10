@@ -1,5 +1,6 @@
 body {
     height: 100vh;
+    background-color: #333333;
 }
 
 
@@ -64,7 +65,10 @@ nav img {
 
 /* Flex body container, so the page allocates the remaining viewpoint automatically*/
 .body_container {
-    height: 100%;
+    height: calc(100% - 50px);
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     background-color: #999999;
@@ -193,7 +197,13 @@ input[type=range]:focus {
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
 	height: 28vw;
+    max-height: 300px;
 	overflow: hidden;
+}
+
+#top_area.live-view{
+    height: 175px;
+    overflow: hidden;
 }
 
 /* Flex area to make the body area scale to the remaining viewpoint. */
@@ -218,9 +228,10 @@ input[type=range]:focus {
     height: 50px;
     display: flex;
     background-color: #666666;
+    flex-shrink: 0;
 }
 
-#control_area, .control_wrapper, #right_area .row {
+#control_area, #queue_area, .control_wrapper, #right_area .row {
     width: 100%;
     display: flex;
     flex: 1;
@@ -309,7 +320,7 @@ input[type=range]:focus {
 }
 
 #preset_area {
-    background-color: #1A1A1A;
+    background-color: #333333;
     flex-direction: column;
     width: 100%;
     margin: 0;
@@ -372,6 +383,11 @@ input[type=range]:focus {
     position: relative;
     height: 300px;
 }
+
+#performance_edit_div .modal-body {
+    height: 500px;
+}
+
 .preset-overlay {
     position: relative;
 	cursor: pointer;
@@ -396,4 +412,230 @@ input[type=range]:focus {
 .fill-tags {
     height: 280px;
     overflow: auto;
+}
+
+#select-module {
+    height: 100%;
+}
+
+#select-left, #select-right {
+    height: 100%;
+    background-color: #999999;
+}
+
+#select-module .col-xs-9 {
+    padding: 0;
+    margin: 0;
+}
+
+#select-current {
+    height: 100%;
+    background-color: #5cb85c;
+    margin: 0;
+    padding: 0;
+}
+
+#select-left::before, #select-right::before {
+    font-family: "Glyphicons Halflings";
+    color: #666666;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    padding-top: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#select-left::before {
+    content:"\e069";
+}
+
+#select-right::before {
+    content:"\e077";
+}
+
+#select-upnext {
+    height: 100%;
+    background-color: #f0ad4e;
+    margin: 0;
+    padding: 0;
+}
+
+#select-module h4 {
+    color: white;
+    font-weight: bold;
+    opacity: 0.5;
+    font-size: 16px;
+
+    text-align: center;
+
+}
+
+.preset_title {
+    color: white;
+    display: block;
+    opacity: 0.5;
+    font-size: 14px;
+
+    text-align: center;
+}
+
+.preset_camera {
+    color: white;
+    display: block;
+    opacity: 0.5;
+    font-size: 25px;
+
+    margin-top: 50px;
+    text-align: center;
+}
+
+.preset_camera .glyphicon {
+    top: 4px;
+    text-align: center;
+}
+
+.queue_table_title thead {
+    background-color: #666666;
+    color: #333333;
+}
+.queue_table_title .table thead th, .queue_table_title .table thead td {
+    border-bottom: 2px solid #666666;
+
+}
+
+.queue_area .table tbody th, .queue_area .table tbody td {
+    border-top: 1px solid #666666;
+    text-align: left;
+}
+
+.queue_area {
+    overflow: scroll;
+}
+
+.id_column {
+    width: 10%;
+}
+
+.name_column, .tag_column {
+    width: 40%
+}
+
+.queue_table_title {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    background-color: #666666;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+}
+
+#right_area table {
+    table-layout: fixed;
+}
+
+.column_id, .column_camid {
+    width: 15%;
+}
+
+.column_name {
+    width: 25%;
+}
+
+.performance-list-container {
+    height: 100%;
+    overflow: scroll;
+}
+
+.performance-preset-list-container {
+    height: 400px;
+    overflow: scroll;
+}
+
+.performance-preset-schedule-container, .performance-list-container {
+    height: 440px;
+    overflow: scroll;
+}
+
+
+.performance-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.performance-list input, .input-group {
+    margin-bottom: 5px;
+}
+
+.performance-list .row, .performance-list .col-xs-2, .performance-list .col-xs-8 {
+    margin: 0;
+    padding: 0;
+}
+
+.performance-list .performance-input-button {
+    margin-bottom: 5px;
+}
+
+.performance-list .btn {
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+.performance-list span {
+    margin-right: 5px;
+}
+
+.performance-list .btn span {
+    margin-left: 10px;
+}
+
+.performance_edit_div .btn-group .glyphicon, .performance-preset-schedule-container .btn-group .glyphicon, .input-group .glyphicon {
+    top: 0;
+}
+
+.performance_edit_div .row {
+    height: 100%;
+}
+
+.performance-list img {
+    width: 125px;
+    height: auto;
+    right: 0px;
+}
+
+.schedule-preset {
+    width: 160px;
+}
+
+.schedule-list-number {
+    width: 50px;
+}
+
+.performance-list .col-xs-7, .performance-list .col-xs-5 {
+    padding: 0;
+}
+
+.performance-schedule .btn-group {
+    position: absolute;
+    padding: 0;
+    top: -1px;
+    right: 0;
+}
+
+#selectperformance-button {
+    background-color: #999999;
+    border-color: #666666;
+    color: #333333;
+}
+
+.queue_area .table .upnext {
+    background-color: rgba(240, 173, 78, 0.75);
+}
+
+.queue_area .table .current {
+    background-color: rgba(92, 184, 92, 0.75);
 }

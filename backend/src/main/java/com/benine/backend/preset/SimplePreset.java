@@ -39,6 +39,7 @@ public class SimplePreset extends Preset {
     json.put("image", getImage());
     json.put("id", getId());
     json.put("cameraid", getCameraId());
+    json.put("name", getName());
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
