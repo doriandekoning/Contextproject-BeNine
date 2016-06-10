@@ -1,7 +1,11 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.*;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.PresetCamera;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -11,10 +15,6 @@ import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.VideoFrame;
 import org.eclipse.jetty.server.Request;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -24,6 +24,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -79,30 +83,6 @@ public class CreatePresetHandler extends RequestHandler {
     } finally {
       request.setHandled(true);
     }
-  }
-
-  /**
-   * Creates a preset from a camera.
-   * @param camera    The camera to create the preset from.
-   * @param tagList   The tag belonging to the preset.
-   * @return          A Preset object.
-   * @throws CameraConnectionException If the camera cannot be reached.
-   * @throws CameraBusyException if camera is busy
-   */
-  private Preset createPreset(IPCamera camera, List<String> tagList)
-          throws CameraConnectionException, CameraBusyException {
-    int zoom = camera.getZoom();
-    double pan = camera.getPosition().getPan();
-    double tilt = camera.getPosition().getTilt();
-    int focus = camera.getFocusPosition();
-    int iris = camera.getIrisPosition();
-    boolean autoiris = camera.isAutoIrisOn();
-    boolean autofocus = camera.isAutoFocusOn();
-    int cameraId = camera.getId();
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris,
-            autofocus, autoiris, cameraId);
-    preset.addTags(tagList);
-    return preset;
   }
 
   /**
