@@ -163,7 +163,12 @@ function addScheduleRow(preset) {
 
     var group = $("<div class='btn-group'></div>");
     var count = $("<button type='button' class='btn btn-default schedule-list-number'></button>");
-    var presetname = $("<button type='button' class='btn btn-info schedule-preset'>Preset " + preset['id'] + "</button>");
+
+    if (preset['name'] !== '') {
+        var presetname = $("<button type='button' class='btn btn-info schedule-preset'>" + preset['name'] + "</button>");
+    } else {
+        var presetname = $("<button type='button' class='btn btn-info schedule-preset'>Preset " + preset['id'] + "</button>");
+    }
 
     var buttonUp = $("<button type='button' class='btn btn-default glyphicon glyphicon glyphicon-menu-up'></button>");
     var buttonDown = $("<button type='button' class='btn btn-default glyphicon glyphicon glyphicon-menu-down'></button>");
@@ -276,7 +281,12 @@ function deleteFromSchedule() {
 function drawPreset(preset) {
     var li = $("<li class='btn btn-info'></li>");
     var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
-    var name = $("<span>Preset " + preset['id'] + "</span>");
+
+    if (preset['name'] !== '') {
+        var name = $("<span>" + preset['name'] + "</span>");
+    } else {
+        var name = $("<span>Preset " + preset['id'] + "</span>");
+    }
 
     li.append(image, name);
     return li;
