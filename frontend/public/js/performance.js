@@ -93,7 +93,5 @@ function loadPerformances() {
 			var performance = obj['presetqueues'][p];
 			performances.push(new Performance(performance['id'], performance['name'], performance['queue']));
 		}
-
-		loadEditPerformance();
-	});
+	}).done(loadEditPerformance);
 }
