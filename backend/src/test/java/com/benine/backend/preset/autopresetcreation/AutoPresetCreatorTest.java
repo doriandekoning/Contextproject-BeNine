@@ -1,22 +1,13 @@
 package com.benine.backend.preset.autopresetcreation;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.Preset;
-import com.benine.backend.video.StreamNotAvailableException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.TimeoutException;
-
 import static org.mockito.Mockito.*;
 
 /**

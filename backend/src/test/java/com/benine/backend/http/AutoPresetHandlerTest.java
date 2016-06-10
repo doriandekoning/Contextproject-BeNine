@@ -1,4 +1,4 @@
-package com.benine.backend.http;//TODO add Javadoc comment
+package com.benine.backend.http;
 
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- *
+ * Test the auto preset handler.
  */
 public abstract class AutoPresetHandlerTest extends RequestHandlerTest {
 

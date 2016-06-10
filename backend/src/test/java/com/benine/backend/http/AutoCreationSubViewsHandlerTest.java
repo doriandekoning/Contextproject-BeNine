@@ -1,9 +1,8 @@
-package com.benine.backend.http;//TODO add Javadoc comment
+package com.benine.backend.http;
 
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.preset.autopresetcreation.SubView;
-import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
 import org.eclipse.jetty.util.MultiMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

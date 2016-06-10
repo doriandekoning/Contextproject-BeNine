@@ -1,11 +1,11 @@
-package com.benine.backend.camera;//TODO add Javadoc comment
+package com.benine.backend.camera;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
+ * Test the camera busy Exception.
  */
 public class CameraBusyExceptionTest {
 

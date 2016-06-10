@@ -5,7 +5,6 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 

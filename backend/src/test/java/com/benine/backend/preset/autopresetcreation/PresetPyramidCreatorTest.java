@@ -4,20 +4,16 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
-import com.benine.backend.preset.PresetTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**

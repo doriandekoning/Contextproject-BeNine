@@ -1,4 +1,4 @@
-package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
+package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;

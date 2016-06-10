@@ -1,4 +1,4 @@
-package com.benine.backend.preset;//TODO add Javadoc comment
+package com.benine.backend.preset;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * Abstract class for testing presets
  */
 public abstract class PresetTest {
 
