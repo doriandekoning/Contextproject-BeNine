@@ -47,9 +47,30 @@ Performance.prototype = {
 		});
 	},
 
-	addpresetatposition: function (position, preset) {
-		this.presets.splice(position, 0, preset);
-		$.get("/api/backend/presetqueues/" + this.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
+	moveUp: function(position, preset, callback) {
+		var self = this;
+		console.log(self);
+
+		$.get("/api/backend/presetqueues/" + self.id + "/deletepreset?position=" + position, function (data) {
+			self.presets.splice(position, 1);
+			position = position - 1;
+			$.get("/api/backend/presetqueues/" + self.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
+				self.presets.splice(position, 0, preset);
+				callback();
+			});
+		});
+	},
+
+	moveDown: function(position, preset, callback) {
+		var self = this;
+
+		$.get("/api/backend/presetqueues/" + self.id + "/deletepreset?position=" + position, function (data) {
+			self.presets.splice(position, 1);
+			position = position + 1;
+			$.get("/api/backend/presetqueues/" + self.id + "/addpreset?position=" + position + "&presetid=" + preset.id, function (data) {
+				self.presets.splice(position, 0, preset);
+				callback();
+			});
 		});
 	},
 
