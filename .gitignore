@@ -63,9 +63,9 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-#Tag suggestions
-!tagnames.json
-
 #Images added for presets
 backend/static/presets/*
 !backend/static/presets/1_0.jpg
+
+#Exclude the generated findbugs filter
+.fbExcludeFilterFile

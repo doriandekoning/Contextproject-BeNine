@@ -11,6 +11,13 @@ import java.util.regex.Pattern;
  */
 public abstract class CameraRequestHandler extends RequestHandler {
 
+  /**
+   * CameraRequest handler for the httpserver.
+   * @param httpserver to construct the cameraHandler for.
+   */
+  public CameraRequestHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   /**
    * Defines if a camera is allowed to be used with this handler.
@@ -25,7 +32,6 @@ public abstract class CameraRequestHandler extends RequestHandler {
    * @return the id of the camera.
    */
   public int getCameraId(Request request) {
-    // Get path
     Pattern pattern = Pattern.compile("^/(\\d*)/.*");
     String path = request.getPathInfo();
 

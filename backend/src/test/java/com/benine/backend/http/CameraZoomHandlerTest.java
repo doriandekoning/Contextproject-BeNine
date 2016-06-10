@@ -1,7 +1,9 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.ZoomingCamera;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,13 +20,13 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
 
   @Override
   public CameraRequestHandler supplyHandler() {
-    return new CameraZoomHandler();
+    return new CameraZoomHandler(httpserver);
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
-    when(cameracontroller.getCameraById(42)).thenReturn(cam);
+    when(cameraController.getCameraById(42)).thenReturn(cam);
   }
 
   @Test

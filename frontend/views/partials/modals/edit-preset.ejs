@@ -1,0 +1,36 @@
+<!-- Defines the modal used for preset editing -->
+<div id="preset_edit_div" class="modal fade preset-edit-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-wrench"></span> Edit Preset</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label for="edit_preset_name">Preset name</label>
+                            <input id="edit_preset_name" class="form-control" type="text">
+                        </div>
+                        <div class="form-group preset-create-tagsinput">
+                            <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
+                            <div class="tags_input">
+                                <input id="preset-edit-tagsinput" class="form-control" type="text" data-role="tagsinput"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <img class="img-responsive img-thumbnail" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" onclick="deletePreset()" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span> Delete Preset</button>
+
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="editPreset()" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+            </div>
+        </div>
+    </div>
+</div>

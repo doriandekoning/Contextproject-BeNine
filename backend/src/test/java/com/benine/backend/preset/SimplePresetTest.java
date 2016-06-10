@@ -1,6 +1,8 @@
 package com.benine.backend.preset;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.JSONException;
 import org.json.simple.JSONArray;
@@ -10,17 +12,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SimplePresetTest {
+import com.benine.backend.ServerController;
+
+public class SimplePresetTest extends PresetTest {
   
   SimplePreset preset;
   
   @Before
   public void setup() {
-    ArrayList<String> keywords = new ArrayList<String>();
+    Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new SimplePreset(1, keywords);
+    preset = new SimplePreset(1, keywords, "name");
     preset.setId(1);
     preset.setImage("test");
+    ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
+    ServerController.getInstance();
   }
   
   @Test
@@ -32,15 +38,14 @@ public class SimplePresetTest {
   public void testToJSON() throws JSONException {
     JSONObject jsonObject = preset.toJSON();
     Assert.assertEquals(1, jsonObject.get("id"));
-    Assert.assertEquals("testtest", jsonObject.get("image"));
+    Assert.assertEquals("test", jsonObject.get("image"));
     JSONArray expectedtagsJSON = new JSONArray();
     expectedtagsJSON.add("foo");
     Assert.assertEquals(expectedtagsJSON, jsonObject.get("tags"));
   }
-  
-  @Test
-  public void testGetSQLQuery(){
-    Assert.assertEquals("INSERT INTO presetsdatabase.simplepresets VALUES(1,'test',1)", preset.createAddSqlQuery());
-  }
 
+  @Override
+  public Preset getPreset() {
+    return new SimplePreset(3, "Name");
+  }
 }

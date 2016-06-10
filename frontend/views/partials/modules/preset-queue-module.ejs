@@ -1,0 +1,29 @@
+<div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
+    <div class="control_buttons">
+        <div id="selectperformance" class="dropdown">
+            <button class="btn btn-info dropdown-toggle" onclick="loadPerformanceDropdown()" type="button" id="selectperformance-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Select a performance...
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="selectperformance-button"></ul>
+        </div>
+    </div>
+    <div class="queue_table_title">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="column_id">Preset #</th>
+                <th class="column_camid">Cam #</th>
+                <th class="column_name">Preset Name</th>
+                <th>Tags</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="queue_area">
+        <table id="queue_table" class="table">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>

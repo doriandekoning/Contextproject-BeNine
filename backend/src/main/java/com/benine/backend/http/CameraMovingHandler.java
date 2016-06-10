@@ -1,10 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.MovingCamera;
-import com.benine.backend.camera.Position;
+import com.benine.backend.camera.*;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -16,6 +13,14 @@ import javax.servlet.http.HttpServletResponse;
  * Created on 21-05-16.
  */
 public class CameraMovingHandler extends CameraRequestHandler {
+
+  /**
+   * Constructs the camera moving handler for this server.
+   * @param httpserver to create the handler for.
+   */
+  public CameraMovingHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
@@ -41,6 +46,8 @@ public class CameraMovingHandler extends CameraRequestHandler {
     } catch (NumberFormatException e) {
       getLogger().log(e.toString(), LogEvent.Type.WARNING);
       respondFailure(request, res);
+    } catch (CameraBusyException e) {
+      getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
     }
 
     request.setHandled(true);
@@ -56,10 +63,11 @@ public class CameraMovingHandler extends CameraRequestHandler {
    * @param tiltSpeed     The tiltspeed value.
    * @throws MalformedURIException      If the url contains the wrong parameters.
    * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws CameraBusyException        If the camera is busy.
    */
   public void move(MovingCamera movingCam, String moveType, String pan, String tilt,
                    String panSpeed, String tiltSpeed)
-          throws MalformedURIException, CameraConnectionException {
+          throws MalformedURIException, CameraConnectionException, CameraBusyException {
 
     if (pan == null || tilt == null || panSpeed == null || tiltSpeed == null) {
       throw new MalformedURIException("Invalid value for moveX or moveY");

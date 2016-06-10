@@ -1,21 +1,19 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.BasicCamera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import org.eclipse.jetty.server.Request;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import static org.mockito.Mockito.*;
 
 /**
@@ -24,12 +22,6 @@ import static org.mockito.Mockito.*;
 public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   private String target;
-
-  private Request request;
-
-  private HttpServletRequest httprequest;
-
-  private HttpServletResponse httpresponse;
 
   private String caminfo;
   private CameraStreamHandler streamHandler;
@@ -40,11 +32,11 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
 
   @Override
   public CameraRequestHandler supplyHandler() {
-    return new CameraInfoHandler();
+    return new CameraInfoHandler(httpserver);
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     caminfo = "testcaminfo";
 
@@ -54,10 +46,10 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     irisHandler = mock(CameraIrisHandler.class);
     zoomHandler = mock(CameraZoomHandler.class);
 
-    when(cameracontroller.getCamerasJSON()).thenReturn(caminfo);
-    when(cameracontroller.getCameraById(42)).thenReturn(new SimpleCamera());
-    when(cameracontroller.getCameraById(43)).thenReturn(null);
-    when(cameracontroller.getCameraById(44)).thenReturn(mock(BasicCamera.class));
+    when(cameraController.getCamerasJSON()).thenReturn(caminfo);
+    when(cameraController.getCameraById(42)).thenReturn(new SimpleCamera());
+    when(cameraController.getCameraById(43)).thenReturn(null);
+    when(cameraController.getCameraById(44)).thenReturn(mock(BasicCamera.class));
 
     ((CameraInfoHandler) getHandler()).addHandler("mjpeg", streamHandler);
     ((CameraInfoHandler) getHandler()).addHandler("focus", focusHandler);
@@ -95,7 +87,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     setPath("/44/mjpeg");
 
     IPCamera ipmock = mock(IPCamera.class);
-    when(cameracontroller.getCameraById(44)).thenReturn(ipmock);
+    when(cameraController.getCameraById(44)).thenReturn(ipmock);
     when(streamHandler.isAllowed(ipmock)).thenReturn(true);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
@@ -116,7 +108,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     setPath("/44/focus");
 
     FocussingCamera focusMock = mock(FocussingCamera.class);
-    when(cameracontroller.getCameraById(44)).thenReturn(focusMock);
+    when(cameraController.getCameraById(44)).thenReturn(focusMock);
     when(focusHandler.isAllowed(focusMock)).thenReturn(true);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
@@ -136,7 +128,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     setPath("/44/iris");
 
     IrisCamera irisMock = mock(IrisCamera.class);
-    when(cameracontroller.getCameraById(44)).thenReturn(irisMock);
+    when(cameraController.getCameraById(44)).thenReturn(irisMock);
     when(irisHandler.isAllowed(irisMock)).thenReturn(true);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
@@ -157,7 +149,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     setPath("/44/zoom");
 
     ZoomingCamera zoomingMock = mock(ZoomingCamera.class);
-    when(cameracontroller.getCameraById(44)).thenReturn(zoomingMock);
+    when(cameraController.getCameraById(44)).thenReturn(zoomingMock);
     when(zoomHandler.isAllowed(zoomingMock)).thenReturn(true);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
@@ -177,7 +169,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
     setPath("/44/move");
 
     MovingCamera movingMock = mock(MovingCamera.class);
-    when(cameracontroller.getCameraById(44)).thenReturn(movingMock);
+    when(cameraController.getCameraById(44)).thenReturn(movingMock);
     when(moveHandler.isAllowed(movingMock)).thenReturn(true);
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);

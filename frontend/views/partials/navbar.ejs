@@ -1,0 +1,33 @@
+<div id="top_navbar">
+    <!-- Header of the webpage with an explanation of what the user is seeing. -->
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img src="public/icons/apple-touch-icon-precomposed.png" alt="">
+                    PolyCast WebInterface
+                </a>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Edit View</a></li>
+                    <li><a href="/live">Live View</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active" onclick="loadSettings()" ><a data-toggle="modal" data-target=".settings-modal"><span class="glyphicon glyphicon-cog"></span></a></li>
+                </ul>
+                <div class="label-container hidden-xs">
+                    <span id="server_status" class="label label-warning">
+                        <span>Server Status</span>
+                        <span class="glyphicon glyphicon-dashboard"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<% include ../partials/modals/settings %>
+

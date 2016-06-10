@@ -1,8 +1,8 @@
 package com.benine.backend.http;
 
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraBusyException;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,17 +15,14 @@ import static org.mockito.Mockito.*;
  */
 public class RemoveTagHandlerTest extends RequestHandlerTest {
 
-  private PresetController presetController = mock(PresetController.class);
-
   @Override
   public RequestHandler supplyHandler() {
-    return new RemoveTagHandler();
+    return new RemoveTagHandler(httpserver);
   }
 
   @Before
-  public void initialize() throws IOException{
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
-    ServerController.getInstance().setPresetController(presetController);
   }
 
   @Test

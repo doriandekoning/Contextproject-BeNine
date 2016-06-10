@@ -1,6 +1,5 @@
 package com.benine.backend.http;
 
-import com.benine.backend.ServerController;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -14,12 +13,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AddTagHandler extends RequestHandler {
 
+  /**
+   * Constructs a addtaghandler for the htpserver.
+   * @param httpserver for this handler.
+   */
+  public AddTagHandler(HTTPServer httpserver) {
+    super(httpserver);
+  }
+
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     String tagName = request.getParameter("name");
     if (tagName != null) {
-      ServerController.getInstance().getPresetController().addTag(tagName);
+      getPresetController().addTag(tagName);
       respondSuccess(request, httpServletResponse);
     } else {
       respondFailure(request, httpServletResponse);

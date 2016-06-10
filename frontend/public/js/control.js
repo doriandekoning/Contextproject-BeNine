@@ -3,7 +3,7 @@
 */
 
 //size of joystick in pixels.
-var joysticksize = 150; 
+var joysticksize = 150;
 
 /**
 * Set the button specified to the boolean value bool.
@@ -47,7 +47,7 @@ joystick.on('move', function(evt, data){
 		moveSend = true;
 		setTimeout(function(){ sendMove(); moveSend = false;  }, 130);
 		sendMove();
-	} 
+	}
 });
 
 /**
@@ -72,6 +72,20 @@ function sendMove(){
 		lastSend.angle = angle;
 		console.log(pan + " - " + tilt);
 	}
+}
+
+/**
+*	Method to auto create presets.
+*/
+function autoCreatePresets() {
+	var preset_create_div = $('#preset_create_div');
+	var presetName = preset_create_div.find('#preset_name').val();
+	var presetTag = $('#preset_create_div .tags_input').val();
+	if (currentcamera !== undefined) {
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log("create preset respone: " + data);})
+		.done(loadPresets);
+	}
+
 }
 
 /* Variable used for the zoom slider */

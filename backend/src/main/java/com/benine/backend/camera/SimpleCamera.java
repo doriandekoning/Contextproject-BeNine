@@ -6,7 +6,7 @@ import com.benine.backend.video.StreamType;
 
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created on 5-5-16.
@@ -53,9 +53,9 @@ public class SimpleCamera extends BasicCamera implements PresetCamera {
   }
   
   @Override
-  public Preset createPreset(List<String> tagList) throws CameraConnectionException {
+  public Preset createPreset(Set<String> tagList, String name) throws CameraConnectionException {
     int cameraId = getId();
-    return new SimplePreset(cameraId, tagList);
+    return new SimplePreset(cameraId, tagList, name);
   }
   
   @Override
