@@ -1,0 +1,50 @@
+<!-- Defines the modal used for preset creation -->
+<div id="performance_edit_div" class="modal fade performance-edit-modal" tabindex="-1" role="dialog"
+     aria-labelledby="performance-edit-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-bullhorn"></span> Performance Editor</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-3 performance-list-container">
+                        <label>Select Performance</label>
+                        <ul id="performance-list" class="performance-list"></ul>
+                    </div>
+                    <div class="col-xs-4 hidden-xs hidden-sm">
+                        <label>Select Presets</label>
+                        <div class="input-group">
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
+							<input autocomplete="off" data-provide="typeahead" oninput='presetSearchInput($(this).val())' type="text" class="form-control" placeholder="Search presets..." aria-describedby="input-group-addon">
+                        </div>
+                        <div class="performance-preset-list-container">
+                            <ul id="performance-preset-selector" class="performance-list">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <label>Schedule</label>
+                        <div class="performance-preset-schedule-container">
+                            <ul id="performance-schedule" class="performance-list">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary pull-left" onclick="createPerformance()">Add</button>
+                <button type="button" class="btn btn-danger pull-left" onclick="deletePerformance()">Delete</button>
+                <button type="button" class="btn pull-left" onclick="setNameEditable()">Edit name</button>
+
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="createPreset()"><span
+                            class="glyphicon glyphicon-floppy-disk"></span> Save & Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.BasicCamera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
@@ -39,7 +40,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     caminfo = "testcaminfo";
 

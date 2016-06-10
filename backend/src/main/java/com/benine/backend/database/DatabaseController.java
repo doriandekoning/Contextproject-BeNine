@@ -3,6 +3,7 @@ package com.benine.backend.database;
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
+import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 
@@ -56,6 +57,7 @@ public class DatabaseController {
     }
     database.checkCameras(serverController.getCameraController().getCameras());
     loadPresets();
+    loadPresetQueues();
   }
   
   /**
@@ -63,8 +65,8 @@ public class DatabaseController {
    */
   public void stop() {
     database.closeConnection();
-  } 
-  
+  }
+
   /**
    * Loads the presets from the database.
    */
@@ -78,6 +80,14 @@ public class DatabaseController {
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", e);
     }
+  }
+
+  /**
+   * Loads the presetQueues from the database.
+   */
+  private void loadPresetQueues() {
+    PresetQueueController presetQueueController = serverController.getPresetQueueController();
+    presetQueueController.addPresetQueues(database.getQueues());
   }
 
   /**

@@ -227,9 +227,9 @@ public class IpcameraTest {
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, true, -1);
+    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, true, -1, "name");
     
-    assertEquals(expected, camera.createPreset(new HashSet<>()));
+    assertEquals(expected, camera.createPreset(new HashSet<>(), "name"));
   }
   
   @Test

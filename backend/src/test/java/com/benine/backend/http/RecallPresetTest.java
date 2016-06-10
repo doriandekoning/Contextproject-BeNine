@@ -35,7 +35,7 @@ public class RecallPresetTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     when(cameraController.getCameraById(1)).thenReturn(ipcamera);
@@ -54,7 +54,7 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
-      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0);
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0, "name");
       preset.setCameraId(1);
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | CameraBusyException | StreamNotAvailableException e) {

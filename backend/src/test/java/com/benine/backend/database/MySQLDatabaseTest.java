@@ -6,6 +6,7 @@ import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.SimplePreset;
@@ -55,7 +56,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testResetDatabase() {
         database.resetDatabase();
         database.closeConnection();
-        verifySQLStatementExecuted("CREATE SCHEMA IF NOT EXISTS `presetsDatabase`");
+        verifySQLStatementExecuted("CREATE SCHEMA IF NOT EXISTS `presetsdatabase`");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -64,10 +65,12 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     @Test
     public final void testAddPreset() throws SQLException {
         Preset preset = getPreset();
+
+        preset.addTag("tag");
         database.resetDatabase();
         database.addPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("insert into presets");
+        verifySQLStatementExecuted("insert into preset");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -78,20 +81,20 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addPreset(null);
         database.closeConnection();
-        verifySQLStatementNotExecuted("insert into presets");
+        verifySQLStatementNotExecuted("insert into preset");
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
     }
 
     @Test
     public final void testDeletePreset() throws SQLException {
-        Preset preset = getPreset();
+        IPCameraPreset preset = getPreset();
 
         database.resetDatabase();
         database.addPreset(preset);
         database.deletePreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM presets WHERE ID = -1");
+        verifySQLStatementExecuted("DELETE FROM preset WHERE ID = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -107,8 +110,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addPreset(preset);
         database.updatePreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM presets WHERE ID = 1");
-        verifySQLStatementExecuted("insert into presets");
+        verifySQLStatementExecuted("DELETE FROM preset WHERE ID = ?");
+        verifySQLStatementExecuted("insert into preset");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -129,9 +132,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         IPCameraPreset preset = getPreset();
         preset.setPanspeed(1);
         database.resetDatabase();
-        database.addPreset(preset);
+        database.getAllPresets();
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO presetsdatabase.presets VALUES(-1,1.0,1.0,1,1,1,1,1,1,0,'null',0)");
+        verifySQLStatementExecuted("SELECT");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -142,24 +145,19 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addCamera(1, "ip");
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO presetsdatabase.camera VALUES(1,'ip')");
+        verifySQLStatementExecuted("INSERT INTO camera VALUES(?,?)");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
     }
 
     @Test
-    public final void testGetPresetsCamera() throws SQLException {
-        Preset preset = getPreset();
+    public final void testBadAddCamera() throws SQLException {
         database.resetDatabase();
-        database.addCamera(1, "ip");
-        database.addPreset(preset);
-        database.getAllPresetsCamera(1);
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addCamera(1, parameter);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT id, pan, tilt, zoom, focus, iris, autofocus");
-        verifyCommitted();
-        verifyAllResultSetsClosed();
-        verifyConnectionClosed();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
@@ -180,8 +178,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addCamera(1, "ip");
         database.deleteCamera(1);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM presets WHERE camera_ID = 1");
-        verifySQLStatementExecuted("DELETE FROM camera WHERE ID = 1");
+        verifySQLStatementExecuted("DELETE FROM IPpreset WHERE camera_ID = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -221,8 +218,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("tiltspeed", new Object[]{1});
         result.addColumn("autoiris", new Object[]{0});
         result.addColumn("camera_ID", new Object[]{0});
-        result.addColumn("id", new Object[]{1});
+        result.addColumn("ID", new Object[]{1});
         result.addColumn("image", new Object[]{"test"});
+        result.addColumn("name", new Object[]{"Name"});
         result.next();
         IPCameraPreset preset = database.getIPCameraPresetFromResultSet(result);
         IPCameraPreset expected = getPreset();
@@ -230,7 +228,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         expected.setId(1);
         assertEquals(expected, preset);
     }
-    
+
     @Test
     public final void testGetSimplePresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
@@ -238,9 +236,10 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("camera_ID", new Object[]{1});
         result.addColumn("id", new Object[]{1});
         result.addColumn("image", new Object[]{"test"});
+        result.addColumn("name", new Object[]{"name"});
         result.next();
         SimplePreset preset = database.getSimplePresetsFromResultSet(result);
-        SimplePreset expected =new SimplePreset(1);
+        SimplePreset expected = new SimplePreset(1, "name");
         expected.setImage("test");
         expected.setId(1);
         result.addColumn("image", new Object[]{1});
@@ -254,7 +253,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         MockResultSet result = statementHandler.createResultSet();
         assertNull(database.getIPCameraPresetFromResultSet(result));
     }
-    
+
     @Test
     public final void testGetFailedSimplePresetsFromResultSet() throws SQLException {
         MockResultSet result = statementHandler.createResultSet();
@@ -265,17 +264,23 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedDeleteCamera() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        doThrow(SQLException.class).when(connection).createStatement();
+        String sql = "DELETE FROM IPpreset WHERE camera_ID = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
+        sql = "DELETE FROM simplepreset WHERE camera_ID = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
+        sql = "DELETE FROM camera WHERE ID = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.deleteCamera(1);
-        verify(logger).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
+        verify(logger, times(3)).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
     }
 
     @Test
     public final void testFailedDeletePreset() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        doThrow(SQLException.class).when(connection).createStatement();
+        String sql = "DELETE FROM preset WHERE ID = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         Preset preset = mock(Preset.class);
         database.deletePreset(preset);
@@ -289,7 +294,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.getAllPresets();
-        database.getAllPresetsCamera(1);
         verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
@@ -354,10 +358,21 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO tag VALUES('tag1')");
+        String sql = "INSERT INTO tag VALUES(?)";
+        verifySQLStatementExecuted("INSERT INTO tag VALUES(?)");
+        verifyPreparedStatementParameter(sql, 1, "tag1");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadAddTag() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addTag(parameter);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
@@ -366,10 +381,19 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTag("tag1");
         database.deleteTag("tag1");
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tag WHERE name = 'tag1'");
+        verifySQLStatementExecuted("DELETE FROM tag WHERE name = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadDeleteTag() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.deleteTag(parameter);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
     }
 
     @Test
@@ -388,7 +412,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedAddTag() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        doThrow(SQLException.class).when(connection).createStatement();
+        String sql = "INSERT INTO tag VALUES(?)";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.addTag("tag1");
         verify(logger).log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
@@ -398,7 +423,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedDeleteTag() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        doThrow(SQLException.class).when(connection).createStatement();
+        String sql = "DELETE FROM tag WHERE name = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.deleteTag("tag1");
         verify(logger).log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
@@ -420,7 +446,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.addTagToPreset("tag1", preset);
         database.closeConnection();
-        verifySQLStatementExecuted("INSERT INTO tagPresets VALUES(");
+        verifySQLStatementExecuted("INSERT INTO tagPreset VALUES(");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -433,7 +459,30 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addTagToPreset("tag1", preset);
         database.deleteTagFromPreset("tag1", preset);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM tagPresets WHERE tag_name = tag1");
+        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE tag_name = ?");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadDeleteTagFromPreset() throws SQLException {
+        Preset preset = getPreset();
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.deleteTagFromPreset(parameter, preset);
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
+    }
+    
+    @Test
+    public final void testDeleteTagsFromPreset() throws SQLException {
+        Preset preset = getPreset();
+        database.resetDatabase();
+        database.addTagToPreset("tag1", preset);
+        database.deleteTagsFromPreset(preset);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM tagPreset WHERE preset_ID = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -445,11 +494,157 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.resetDatabase();
         database.getTagsFromPreset(preset);
         database.closeConnection();
-        verifySQLStatementExecuted("SELECT tag_name FROM tagPresets");
+        verifySQLStatementExecuted("SELECT tag_name FROM tagPreset");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
         verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetPresetsList() throws SQLException {
+        database.resetDatabase();
+        database.getPresetsList(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT preset_ID FROM presetsList WHERE queue_ID = ? ORDER BY Sequence");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testAddPresetsList() throws SQLException {
+        ArrayList<Preset> presets = new ArrayList<Preset>();
+        Preset preset = getPreset();
+        presets.add(preset);
+        database.resetDatabase();
+        database.addPresetsList(presets, 2);
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO presetsList VALUES");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testDeletePresetsList() throws SQLException {
+        database.resetDatabase();
+        database.deletePresetsList(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM presetsList WHERE queue_ID = ?");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testGetQueues() throws SQLException {
+        database.resetDatabase();
+        database.getQueues();
+        database.closeConnection();
+        verifySQLStatementExecuted("SELECT ID, name FROM queue");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testAddQueue() throws SQLException {
+        database.resetDatabase();
+        PresetQueue queue = new PresetQueue("name", null);
+        queue.setID(1);
+        database.addQueue(queue);
+        database.closeConnection();
+        verifySQLStatementExecuted("INSERT INTO queue VALUES(?,?)");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testBadAddQueue() throws SQLException {
+        database.resetDatabase();
+        String parameter = "test); DROP DATABASE presetsdatabase;";
+        database.addQueue(new PresetQueue(parameter, null));
+        database.closeConnection();
+        verifySQLStatementNotExecuted("DROP DATABASE");
+    }
+
+    @Test
+    public final void testDeleteQueue() throws SQLException {
+        database.resetDatabase();
+        database.deleteQueue(1);
+        database.closeConnection();
+        verifySQLStatementExecuted("DELETE FROM queue WHERE ID = ?");
+        verifyCommitted();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public final void testFailedGetPresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getPresetsList(1);
+        verify(logger).log("Presets couldn't be gotten from list.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedAddPresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addPresetsList(null, 1);
+        verify(logger).log("List could not be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeletePresetsList() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deletePresetsList(1);
+        verify(logger).log("List could not be deleted.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedGetQueues() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.getQueues();
+        verify(logger).log("Queues could not be gotten from database.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedAddQueue() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.addQueue(new PresetQueue(null, null));
+        verify(logger).log("Queue could not be added.", LogEvent.Type.CRITICAL);
+    }
+
+    @Test
+    public final void testFailedDeleteQueue() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteQueue(1);
+        verify(logger).log("Queue could not be deleted.", LogEvent.Type.CRITICAL);
     }
 
     @Test
@@ -459,7 +654,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.addTagToPreset("tag1", null);
-        verify(logger).log("Tag couldn't be added.", LogEvent.Type.CRITICAL);
+        verify(logger).log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
     }
 
     @Test
@@ -471,19 +666,30 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.deleteTagFromPreset("tag1", null);
         verify(logger).log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
     }
+    
+    @Test
+    public final void testFailedDeleteTagsFromPreset() throws SQLException {
+        database.closeConnection();
+        Connection connection = mock(Connection.class);
+        doThrow(SQLException.class).when(connection).createStatement();
+        database.setConnection(connection);
+        database.deleteTagsFromPreset(null);
+        verify(logger).log("All tags couldn't be deleted.", LogEvent.Type.CRITICAL);
+    }
 
     @Test
     public final void testFailedGetTagsFromPreset() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        doThrow(SQLException.class).when(connection).createStatement();
+        String sql = "SELECT tag_name FROM tagPreset WHERE preset_ID = ?";
+        doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.getTagsFromPreset(null);
         verify(logger).log("Tags could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
     public IPCameraPreset getPreset() {
-        return new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, false, 0);
+        return new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, false, 0, "Name");
     }
 
 }

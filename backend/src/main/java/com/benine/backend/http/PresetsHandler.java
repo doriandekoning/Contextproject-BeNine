@@ -29,6 +29,7 @@ public class PresetsHandler extends RequestHandler {
 
     addHandler("createpreset", new CreatePresetHandler(httpserver));
     addHandler("recallpreset", new RecallPresetHandler(httpserver));
+    addHandler("deletepreset", new PresetDeletionHandler(httpserver));
     addHandler("addtag", new AddTagHandler(httpserver));
     addHandler("removetag", new RemoveTagHandler(httpserver));
     addHandler("edit", new EditPresetHandler(httpserver));

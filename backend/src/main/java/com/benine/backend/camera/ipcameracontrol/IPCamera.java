@@ -5,6 +5,7 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
 import com.benine.backend.video.StreamType;
 import org.json.simple.JSONObject;
 
@@ -563,8 +564,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     }
   }
 
+
   @Override
-  public IPCameraPreset createPreset(Set<String> tagList)
+  public IPCameraPreset createPreset(Set<String> tagList, String name)
           throws CameraConnectionException, CameraBusyException {
     int zoom = getZoom();
     double pan = getPosition().getPan();
@@ -574,7 +576,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    return new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus, iris, autofocus,
-            autoiris, cameraId);
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus,
+            iris, autofocus, autoiris, cameraId, name);
+    preset.addTags(tagList);
+    return preset;
   }
 }

@@ -38,7 +38,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     simpleCamera = mock(SimpleCamera.class);
@@ -63,8 +63,9 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0);
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0, "name");
       preset.addTags(tags);
+
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();

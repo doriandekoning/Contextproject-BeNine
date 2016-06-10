@@ -7,6 +7,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.*;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.image.BufferedImage;
@@ -37,11 +38,13 @@ public class IPCameraPreset extends Preset {
    * @param autofocus The autofocus of the preset
    * @param autoiris  The autoiris of the preset
    * @param cameraId  The id of the camera associated with this preset.
+   * @param name      The name of the preset
    */
   public IPCameraPreset(ZoomPosition pos, int focus, int iris,
                         boolean autofocus,
-                        boolean autoiris, int cameraId) {
-    super(cameraId);
+                        boolean autoiris, int cameraId, String name) {
+
+    super(cameraId, name);
     this.position = pos;
     this.focus = focus;
     this.iris = iris;
@@ -54,15 +57,16 @@ public class IPCameraPreset extends Preset {
    * @param cam IPCamera to create the preset of
    * @param panSpeed the panspeed for the preset
    * @param tiltSpeed the tiltspeed of the preset
+   * @param name the name of the preset
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws IOException if the preset image cannot be stored.
    * @throws StreamNotAvailableException if the camera stream cannot be reached.
    * @throws CameraBusyException if the camera is busy
    */
-  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
+  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed,  String name)
           throws  CameraConnectionException, IOException,
                   StreamNotAvailableException, CameraBusyException {
-    super(cam.getId());
+    super(cam.getId(), name);
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();
     this.iris = cam.getIrisPosition();
@@ -115,6 +119,15 @@ public class IPCameraPreset extends Preset {
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
     json.put("autoiris", autoiris);
+    json.put("id", getId());
+    json.put("cameraid", getCameraId());
+    json.put("image", getImage());
+    json.put("name", getName());
+    JSONArray tagsJSON = new JSONArray();
+    for (String tag : tags) {
+      tagsJSON.add(tag);
+    }
+    json.put("tags", tagsJSON);
     return json;
   }
   
@@ -200,6 +213,7 @@ public class IPCameraPreset extends Preset {
    * Moves the camera
    * @param camera  A Camera object.
    * @throws CameraConnectionException  If the camera cannot be reached.
+   * @throws CameraBusyException If the camera is busy
    */
   @Override
   public void excecutePreset(Camera camera) throws CameraConnectionException, CameraBusyException {
@@ -284,21 +298,4 @@ public class IPCameraPreset extends Preset {
     return true;
   }
 
-  @Override
-  public String createDeleteSQL() {
-    return "DELETE FROM presets WHERE ID = " + getId();
-  }
-
-  @Override
-  public String toString() {
-    return "IPCameraPreset{"
-            + "position=" + position
-            + ", focus=" + focus
-            + ", iris=" + iris
-            + ", autofocus=" + autofocus
-            + ", panspeed=" + panspeed
-            + ", tiltspeed=" + tiltspeed
-            + ", autoiris=" + autoiris
-            + '}';
-  }
 }

@@ -4,6 +4,7 @@ import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamController;
 
@@ -25,6 +26,8 @@ public abstract class RequestHandler extends AbstractHandler {
   
   private StreamController streamController;
   
+  private PresetQueueController presetQueueController;
+  
   private Logger logger;
   
   private Config config;
@@ -37,6 +40,7 @@ public abstract class RequestHandler extends AbstractHandler {
     this.cameraController = httpserver.getCameraController();
     this.presetController = httpserver.getPresetController();
     this.streamController = httpserver.getStreamController();
+    this.presetQueueController = httpserver.getPresetQueueController();
     this.logger = httpserver.getLogger();
     this.config = httpserver.getConfig();
   }
@@ -119,5 +123,13 @@ public abstract class RequestHandler extends AbstractHandler {
    */
   protected Config getConfig() {
     return config;
+  }
+
+  /**
+   * Returns the preset queue controller.
+   * @return Preset queues controller
+   */
+  protected PresetQueueController getPresetQueueController() {
+    return presetQueueController;
   }
 }

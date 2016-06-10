@@ -4,6 +4,7 @@ var deleteTags = [];
 var updatedTags = [];
 // true if the client is in preset editing mode.
 var editing = false;
+var searchTerm;
 
 /**
 * Function loads all the presets from the backend.
@@ -15,7 +16,7 @@ function loadPresets() {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
-		displayPresets(presets);
+		tagSearchInput(searchTerm);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				newTag(obj.tags[t]);
@@ -26,16 +27,14 @@ function loadPresets() {
 
 /**
 * Checks if the preset already exists if true the preset is updated otherwise it is added.
-* @param preset array with the presets to add.
+* @param object array with the presets to add.
 */
-function checkPreset(preset) {
-	var exists = findPresetOnID(preset.id);
+function checkPreset(object) {
+	var exists = findPresetOnID(object.id);
 	if (exists === undefined) {
-		presets.push(new Preset(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,
-			preset.panspeed, preset.tiltspeed, preset.autoiris, preset.image, preset.id, preset.tags, preset.cameraid));
+		presets.push(new Preset(object));
 	} else {
-		exists.update(preset.pan, preset.tilt, preset.zoom, preset.focus, preset.iris, preset.autofocus,preset.panspeed, 
-																			preset.tiltspeed, preset.autoiris, preset.tags);
+		exists.update(object);
 	}
 }
 
@@ -172,10 +171,11 @@ create_tags_input.tagsinput('input').keypress(function (e) {
 */
 function createPreset() {
 	var preset_create_div = $('#preset_create_div');
-	var presetName = preset_create_div.find('#preset_name').val();
+	var presetName = preset_create_div.find('#create_preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
+	console.log(presetName);
 	if (currentcamera !== undefined) {
-		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag , function(data) {console.log("create preset respone: " + data);})
+		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag + "&name=" + presetName, function(data) {console.log("create preset respone: " + data);})
 		.done(loadPresets);
 	}	
 }
@@ -227,12 +227,33 @@ edit_tags_input.tagsinput('input').keypress(function (e) {
  * Function is called when the save button of the edit window is clicked.
  */
 function editPreset() {
-	//TODO should be the new values from the edit window
-	// And the new preset values should be send to the backend.
 	var tags = edit_tags_input.val();
-	editingpreset.update(editingpreset.pan, editingpreset.tilt, editingpreset.zoom, editingpreset.focus, editingpreset.iris, editingpreset.autofocus,
-		editingpreset.panspeed, editingpreset.tiltspeed, editingpreset.autoiris, tags);
+	var presetName = preset_edit_div.find('#edit_preset_name').val();
+	editingpreset.name = presetName;
+	editingpreset.tags = tags;
+	if (tags === []) {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=false&overwriteposition=false",
+																									function(data) {console.log("edit preset: " + data)});
+	} else {
+		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
+	}
+	editingpreset.displayPreview();
 }
+
+/**
+ * Function is called when the deletion button of the edit window is clicked.
+ */
+function deletePreset() {
+	editingpreset.delete();
+
+	var editingindex = presets.indexOf(editingpreset);
+	if (editingindex !== -1) {
+		presets.splice(editingindex, 1);
+	};
+	loadPresets();
+}
+
 
 /**
  * Load for the specified preset the edit modal.
@@ -242,6 +263,7 @@ function loadPresetEditModal(preset) {
 	editingpreset = preset;
 	preset_edit_div.find('#presetID').text(preset.id);
 	preset_edit_div.find('img').attr("src", "/api/backend" + preset.image);
+	preset_edit_div.find('#edit_preset_name').val(preset.name);
 	edit_tags_input.tagsinput('removeAll');
 	preset.tags.forEach(function(item) {
 		edit_tags_input.tagsinput('add', item);
@@ -251,16 +273,18 @@ function loadPresetEditModal(preset) {
 
 //// Below is for the search input in the preset area.
 var tag_search_input = $('#tagsearch_input');
+
 /**
 * Handles input on the tag search field.
 */
 function tagSearchInput(val) {
-	if (val !== '') {
-		var matchingpresets = matchingPresets(val);
-		displayPresets(matchingpresets);
-	} else {
+	searchTerm = val;
+	if (val === undefined || val === '') {
 		displayPresets(presets);
-	}
+	}else {
+		var matchingpresets = matchingPresets(searchTerm);
+		displayPresets(matchingpresets);
+	} 
 }
 
 /**
@@ -383,7 +407,7 @@ function newTag(val) {
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
 	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
-				console.log("create tag respone: " + data);
+		console.log("create tag response: " + data);
 	}).done();
 }
 

@@ -38,7 +38,12 @@ Camera.prototype = {
 	*/
 	createView: function() {
 		camera_div = $('#preset_create_div');
+<<<<<<< HEAD
 		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
+=======
+		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg?width=320&height=180');
+		camera_div.find('#create_preset_name').val('');
+>>>>>>> develop
 	},
 	
 	/**
