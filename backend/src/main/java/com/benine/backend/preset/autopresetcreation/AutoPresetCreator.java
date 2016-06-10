@@ -57,25 +57,36 @@ public abstract class AutoPresetCreator {
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
-      cam.setBusy(false);
-      Thread.sleep(200);
-      cam.moveTo(pos, 2, 30);
-      Thread.sleep(200);
-      cam.zoomTo(pos.getZoom());
-      cam.setBusy(true);
-      Thread.sleep(timeout);
-      cam.setBusy(false);
-      IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId());
-      cam.setBusy(true);
-      presetController.addPreset(preset);
-      preset.createImage(cam);
-      presets.add(preset);
+      presets.add(generatePresetFromPos(pos, cam));
     }
     cam.setBusy(false);
     return presets;
   }
 
 
+  /**
+   * Creates a preset from a position for a given camera.
+   * @param pos the position to create a preset for
+   * @param cam the cam to create a preset for
+   * @return the created preset
+   * @throws InterruptedException when interrupted
+   */
+  public IPCameraPreset generatePresetFromPos(ZoomPosition pos, IPCamera cam) throws InterruptedException, CameraConnectionException,
+          CameraBusyException, SQLException, IOException, StreamNotAvailableException {
+    cam.setBusy(false);
+    Thread.sleep(200);
+    cam.moveTo(pos, 2, 30);
+    Thread.sleep(200);
+    cam.zoomTo(pos.getZoom());
+    cam.setBusy(true);
+    Thread.sleep(timeout);
+    cam.setBusy(false);
+    IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId());
+    cam.setBusy(true);
+    presetController.addPreset(preset);
+    preset.createImage(cam);
+    return preset;
+  }
   /**
    * Generates the positions to create pesets at.
    * @param cam the camera to create positions for.
