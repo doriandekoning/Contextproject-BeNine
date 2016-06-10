@@ -1,4 +1,4 @@
-package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
+package com.benine.backend.preset.autopresetcreation;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
 /**
- *
+ * Test class for the subviews.
  */
 public class SubViewTest {
 

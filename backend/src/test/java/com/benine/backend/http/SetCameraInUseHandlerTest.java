@@ -1,4 +1,4 @@
-package com.benine.backend.http;//TODO add Javadoc comment
+package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import static org.mockito.Mockito.*;
 
 /**
- *
+ * Test the setting in Use handler.
  */
 public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 

@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.EditPresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import com.benine.backend.performance.PresetQueue;

@@ -1,4 +1,4 @@
-package com.benine.backend.preset.autopresetcreation;//TODO add Javadoc comment
+package com.benine.backend.preset.autopresetcreation;
 
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
@@ -72,7 +72,6 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   // According to findbugs the subViews var is useless but we need it to hold the views temporary
   // when using the forEach call on lastLayer
   // or else this will throw an concurrentModificationException
-  @SuppressWarnings("UC_USELESS_OBJECT")
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
     // Level 1

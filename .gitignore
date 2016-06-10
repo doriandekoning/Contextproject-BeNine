@@ -66,3 +66,6 @@ jspm_packages
 #Images added for presets
 backend/static/presets/*
 !backend/static/presets/1_0.jpg
+
+#Exclude the generated findbugs filter
+.fbExcludeFilterFile
