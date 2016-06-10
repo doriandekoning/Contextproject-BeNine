@@ -70,12 +70,14 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @return A collection of subviews.
    */
   // According to findbugs the subViews var is useless but we need it to hold the views temporary
-  // when using the forEach call on lastLayer or else this will throw an concurrentModificationException
+  // when using the forEach call on lastLayer
+  // or else this will throw an concurrentModificationException
   @SuppressWarnings("UC_USELESS_OBJECT")
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
     // Level 1
     subViews.add(new SubView(0, 100, 100, 0));
+
     ArrayList<SubView> lastLayer = new ArrayList<>(subViews);
     // Other levels
     for (int level = 1; level < levels; level++) {

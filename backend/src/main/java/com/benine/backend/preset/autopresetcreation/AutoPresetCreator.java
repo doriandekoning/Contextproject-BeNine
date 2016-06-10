@@ -70,8 +70,15 @@ public abstract class AutoPresetCreator {
    * @param cam the cam to create a preset for
    * @return the created preset
    * @throws InterruptedException when interrupted
+   * @throws InterruptedException when interupted while waiting for cam to move.
+   * @throws CameraBusyException if the camera is busy.
+   * @throws IOException if exception occurs when creating the preset image.
+   * @throws StreamNotAvailableException if a camera stream cannot be reached.
+   * @throws SQLException if exception occurs while writing to the database.
+   * @throws CameraConnectionException if the camera cannot be reached.
    */
-  public IPCameraPreset generatePresetFromPos(ZoomPosition pos, IPCamera cam) throws InterruptedException, CameraConnectionException,
+  public IPCameraPreset generatePresetFromPos(ZoomPosition pos, IPCamera cam)
+          throws InterruptedException, CameraConnectionException,
           CameraBusyException, SQLException, IOException, StreamNotAvailableException {
     cam.setBusy(false);
     Thread.sleep(200);
