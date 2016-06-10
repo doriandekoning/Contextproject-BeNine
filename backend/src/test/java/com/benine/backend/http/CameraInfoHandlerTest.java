@@ -8,16 +8,12 @@ import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import org.eclipse.jetty.server.Request;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import static org.mockito.Mockito.*;
 
 /**

@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- *
+ * Test the Coordinate class.
  */
 public class CoordinateTest {
 
