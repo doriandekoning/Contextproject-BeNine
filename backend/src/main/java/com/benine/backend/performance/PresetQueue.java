@@ -20,12 +20,10 @@ public class PresetQueue {
   
   /**
    * Constructor for the presetQueue with a name and ID.
-   * @param ID the ID of the queue.
    * @param name the name of the queue.
    * @param queue the queue to be used. 
    */
-  public PresetQueue(int ID, String name, ArrayList<Preset> queue) {
-    this.ID = ID;
+  public PresetQueue(String name, ArrayList<Preset> queue) {
     this.name = name;
     this.queue = queue;
     
@@ -100,11 +98,16 @@ public class PresetQueue {
   
   /**
    * Insert preset at given place.
+   * If place > size it's added to the end of the list.
    * @param place the place of the preset to be inserted.
    * @param preset the preset to be inserted in the queue. 
    */
   public void insertPreset(int place, Preset preset) {
-    queue.add(place, preset);
+    try {
+      queue.add(place, preset);
+    } catch (IndexOutOfBoundsException e) {
+      queue.add(preset);
+    }
   }
 
   /**

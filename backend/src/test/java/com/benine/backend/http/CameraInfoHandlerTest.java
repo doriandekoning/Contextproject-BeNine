@@ -1,21 +1,19 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.BasicCamera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.FocussingCamera;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomingCamera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import org.eclipse.jetty.server.Request;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import static org.mockito.Mockito.*;
 
 /**
@@ -38,7 +36,7 @@ public class CameraInfoHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     caminfo = "testcaminfo";
 

@@ -5,8 +5,8 @@ package com.benine.backend.camera;
  */
 public class Position {
 
-  double pan;
-  double tilt;
+  private double pan;
+  private double tilt;
 
   /**
    * Constructor of a position object used for camera positions.
@@ -49,6 +49,18 @@ public class Position {
   public double getTilt() {
     return tilt;
   }
+
+  /**
+   * Returns a string representation of this position.
+   * @return string representation of this positon
+   */
+  public String toString() {
+    return "Position{"
+            + "pan=" + pan
+            + ", tilt=" + tilt + '}';
+  }
+
+
   
   @Override
   public int hashCode() {
@@ -62,12 +74,14 @@ public class Position {
     return result;
   }
 
+
   @Override
   public boolean equals(Object o) {
+    final double delta = 0.05;
     if (o instanceof Position) {
       Position that = (Position) o;
-      if (Double.compare(this.pan, that.pan) == 0
-                && Double.compare(this.tilt, that.tilt) == 0 ) {
+      if (Math.abs(this.tilt - that.tilt)  < delta
+                && Math.abs(this.pan - that.pan) < delta ) {
         return true;
       }
     }

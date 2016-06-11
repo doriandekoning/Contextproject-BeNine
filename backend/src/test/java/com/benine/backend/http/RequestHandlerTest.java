@@ -2,11 +2,14 @@ package com.benine.backend.http;
 
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.video.StreamController;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,27 +30,29 @@ public abstract class RequestHandlerTest {
   Config config = mock(Config.class);
   private RequestHandler handler;
 
-  PrintWriter out;
-  String target;
-  Request requestMock;
+  protected PrintWriter out;
+  protected String target;
+  protected Request requestMock;
   CameraController cameraController = mock(CameraController.class);
   StreamController streamController = mock(StreamController.class);
-  PresetController presetController = mock(PresetController.class);
-  HttpServletResponse httpresponseMock;
-  HttpServletRequest httprequestMock;
-  HTTPServer httpserver = mock(HTTPServer.class);
+  protected PresetController presetController = mock(PresetController.class);
+  protected PresetQueueController presetQueueController = mock(PresetQueueController.class);
+  protected HttpServletResponse httpresponseMock;
+  protected HttpServletRequest httprequestMock;
+  protected HTTPServer httpserver = mock(HTTPServer.class);
 
 
   public abstract RequestHandler supplyHandler();
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     when(httpserver.getLogger()).thenReturn(logger);
     when(config.getValue("stream_compression")).thenReturn("true");
     when(httpserver.getConfig()).thenReturn(config);
     when(httpserver.getCameraController()).thenReturn(cameraController);
     when(httpserver.getPresetController()).thenReturn(presetController);
     when(httpserver.getStreamController()).thenReturn(streamController);
+    when(httpserver.getPresetQueueController()).thenReturn(presetQueueController);
     
     handler = supplyHandler();
     

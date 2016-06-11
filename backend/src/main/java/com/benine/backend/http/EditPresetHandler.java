@@ -1,5 +1,7 @@
 package com.benine.backend.http;
 
+import com.benine.backend.LogEvent;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.Preset;
@@ -43,33 +45,39 @@ public class EditPresetHandler extends RequestHandler {
           throws IOException, ServletException {
     
     try {
-      String overwriteTag = request.getParameter("overwritetag");
-      String overwritePosition = request.getParameter("overwriteposition");
+      final String overwriteTag = request.getParameter("overwritetag");
+      final String overwritePosition = request.getParameter("overwriteposition");
       int presetID = Integer.parseInt(request.getParameter("presetid"));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
       
-      Preset preset = getPresetController().getPresetById(presetID);   
+      Preset preset = getPresetController().getPresetById(presetID);
       Set<String> tagList = new HashSet<>();
+      if (name != null) {
+        updateName(preset, name);
+      }
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       }
       if (overwriteTag.equals("true")) {
         updateTag(preset, tagList);
       }
-      
       if (overwritePosition.equals("true")) {
         updatePosition(preset);
       }
+      respondSuccess(request, res);
     } catch (MalformedURIException | SQLException | StreamNotAvailableException e) {
       getLogger().log(e.getMessage(), e);
       respondFailure(request,res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", e);
       respondFailure(request,res);
-    } 
-        
-    respondSuccess(request, res);
-    request.setHandled(true);  
+    }  catch (CameraBusyException e) {
+      getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
+      respondFailure(request, res);
+    } finally {
+      request.setHandled(true);
+    }
   }
   
   /**
@@ -94,16 +102,28 @@ public class EditPresetHandler extends RequestHandler {
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws MalformedURIException        If there is an error in the request.
+   * @throws CameraBusyException          If camera is busy
    */
   private void updatePosition(Preset preset) throws 
   IOException, StreamNotAvailableException, SQLException, CameraConnectionException, 
-  MalformedURIException {
+  MalformedURIException, CameraBusyException {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
-    Preset newPreset = ipcam.createPreset(preset.getTags());
+    Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
    
     createImage(preset.getCameraId(), newPreset.getId());
     getPresetController().updatePreset(newPreset);
+  }
+
+  /**
+   * Updating the name only.
+   * @param preset the preset to be changed
+   * @param name the new name
+   * @throws SQLException when preset can not be updated
+   */
+  private void updateName(Preset preset, String name) throws SQLException {
+    preset.setName(name);
+    getPresetController().updatePreset(preset);
   }
   
   /**

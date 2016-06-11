@@ -31,8 +31,10 @@ public class PresetQueueTest {
     list.add(preset);
     list2= new ArrayList<Preset>();
     list2.add(preset);
-    queue = new PresetQueue(1, "name", list);
-    queue2 = new PresetQueue(1, "name", list2);
+    queue = new PresetQueue("name", list);
+    queue.setID(1);
+    queue2 = new PresetQueue("name", list2);
+    queue2.setID(1);
   }
   
   @Test

@@ -1,5 +1,7 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.Config;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraConnectionException;
@@ -40,7 +42,7 @@ public class IpcameraZoomTest {
   public final void testGetZoomPosition() throws CameraConnectionException {
     setCameraBehaviour("GZ", "gz655");
 
-    int res = camera.getZoomPosition();
+    int res = camera.getZoom();
 
     Mockito.verify(camera).sendCommand("aw_ptz?cmd=%23GZ&res=1");
     assertEquals(res, 256, 0.000001);
@@ -49,11 +51,11 @@ public class IpcameraZoomTest {
   @Test(expected = IpcameraConnectionException.class)
   public final void testGetZoomPositionException() throws CameraConnectionException {
     setCameraBehaviour("GZ", "gs655");
-    camera.getZoomPosition();
+    camera.getZoom();
   }
   
   @Test
-  public final void testZoomTo() throws CameraConnectionException {
+  public final void testZoomTo() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("AXZ58F", "axz58F");
     camera.zoomTo(58);
     
@@ -61,7 +63,7 @@ public class IpcameraZoomTest {
   }
   
   @Test
-  public final void testZoom() throws CameraConnectionException {
+  public final void testZoom() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("Z80", "zS80");
     camera.zoom(80);
     
@@ -69,7 +71,7 @@ public class IpcameraZoomTest {
   }
   
   @Test
-  public final void testZoom2() throws CameraConnectionException {
+  public final void testZoom2() throws CameraConnectionException, CameraBusyException {
     setCameraBehaviour("Z02", "zS02");
     camera.zoom(2);
     

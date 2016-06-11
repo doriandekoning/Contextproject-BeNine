@@ -1,21 +1,21 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.camera.Position;
 import org.eclipse.jetty.util.MultiMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
 
@@ -33,7 +33,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
 
     createHandler = mock(CreatePresetHandler.class);
@@ -41,10 +41,11 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0);
+    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,true, 0, "name");
     Set<String> keywords = new HashSet<>();
     keywords.add("Violin");
-    Preset presetKeywords = new IPCameraPreset(new Position(1, 1), 1, 1, 1, true, 1, 1, true, 0, keywords);
+    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,  true, 0, "name");
+    presetKeywords.addTags(keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();
     allList.add(preset);
@@ -62,8 +63,8 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     JSONArray presetsJSON = new JSONArray();
     presetController.getPresets().forEach(p -> presetsJSON.add(p.toJSON()));
     jsonObject.put("presets", presetsJSON);
-    when(presetController.getPresetsJSON("Violin")).thenReturn(jsonObject.toJSONString());
-    when(presetController.getPresetsJSON(null)).thenReturn(jsonObject.toJSONString());
+    when(presetController.getPresetsJSON("Violin")).thenReturn(jsonObject.toString());
+    when(presetController.getPresetsJSON(null)).thenReturn(jsonObject.toString());
   }
 
   @Test
@@ -87,7 +88,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets/unknownroute");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write(jsonObject.toJSONString());
+    verify(out).write(jsonObject.toString());
     verify(requestMock).setHandled(true);
   }
 
@@ -96,7 +97,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     setPath("/presets");
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    verify(out).write(jsonObject.toJSONString());
+    verify(out).write(jsonObject.toString());
     verify(requestMock).setHandled(true);
   }
 
@@ -110,7 +111,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     
-    verify(out).write(jsonObject.toJSONString());
+    verify(out).write(jsonObject.toString());
     verify(requestMock).setHandled(true);
   }
 }

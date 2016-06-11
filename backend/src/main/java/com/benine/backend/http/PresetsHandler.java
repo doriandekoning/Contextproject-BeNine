@@ -5,10 +5,10 @@ import org.eclipse.jetty.server.Request;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 
 public class PresetsHandler extends RequestHandler {
@@ -26,11 +26,15 @@ public class PresetsHandler extends RequestHandler {
     super(httpserver);
     this.handlers = new HashMap<>();
 
+
     addHandler("createpreset", new CreatePresetHandler(httpserver));
     addHandler("recallpreset", new RecallPresetHandler(httpserver));
+    addHandler("deletepreset", new PresetDeletionHandler(httpserver));
     addHandler("addtag", new AddTagHandler(httpserver));
     addHandler("removetag", new RemoveTagHandler(httpserver));
     addHandler("edit", new EditPresetHandler(httpserver));
+    addHandler("autocreatepresets", new AutoPresetCreationHandler(httpserver));
+    addHandler("autocreatesubviews", new AutoCreationSubViewsHandler(httpserver));
   }
 
   @Override
@@ -40,7 +44,7 @@ public class PresetsHandler extends RequestHandler {
     String route = getRoute(request);
 
     boolean routed = false;
-    
+
     if (handlers.containsKey(route)) {
       handlers.get(route).handle(s, request, req, res);
       routed = true;
@@ -62,7 +66,6 @@ public class PresetsHandler extends RequestHandler {
    */
   private String getRoute(Request request) {
     String path = request.getPathInfo();
-
     return path.replaceFirst(".*/", "");
   }
 

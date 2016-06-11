@@ -1,9 +1,11 @@
 <div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
     <div class="control_buttons">
-        <div class="btn-group">
-            <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Create Preset</button>
+        <div class="btn-group btn-group-sm">
+            <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Add Preset</button>
             <button id="editPresets" type="button" class="btn btn-danger" onclick="loadEditablePresets()"><span class="glyphicon glyphicon-pencil"></span> Edit Presets</button>
-            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Update Tags</button>
+            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Tags</button>
+            <button id="autoCreatePresets" type="button" class="btn btn-success" data-toggle="modal" data-target=".auto-presets-modal" onclick="autoCreatePresets()"><span class="glyphicon glyphicon-flash"></span> Auto Presets</button>
+            <button id="editPerformance" onclick="loadEditPerformance(presets)" type="button" class="btn btn-success" data-toggle="modal" data-target=".performance-edit-modal"><span class="glyphicon glyphicon-bullhorn"></span> Performances</button>
         </div>
     </div>
     <div id="control_area">

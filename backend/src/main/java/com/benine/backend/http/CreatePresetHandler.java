@@ -2,6 +2,7 @@ package com.benine.backend.http;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.preset.Preset;
@@ -19,11 +20,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 public class CreatePresetHandler extends RequestHandler {
 
@@ -43,9 +45,13 @@ public class CreatePresetHandler extends RequestHandler {
       if (camID == null) {
         throw new MalformedURIException("No Camera ID Specified.");
       }
-      
+
       Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
+      String name = request.getParameter("name");
+      if (name == null) {
+        throw new MalformedURIException("No Name Specified.");
+      }
 
       Set<String> tagList = new HashSet<>();
       if (tags != null) {
@@ -53,7 +59,7 @@ public class CreatePresetHandler extends RequestHandler {
       } 
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
-        Preset preset = presetCamera.createPreset(tagList);
+        Preset preset = presetCamera.createPreset(tagList, name);
 
         int presetID = getPresetController().addPreset(preset);
         createImage(camera.getId(), presetID);
@@ -70,9 +76,12 @@ public class CreatePresetHandler extends RequestHandler {
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
       respondFailure(request, res);
+    } catch (CameraBusyException e) {
+      getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
+      respondFailure(request, res);
+    } finally {
+      request.setHandled(true);
     }
-
-    request.setHandled(true);
   }
 
   /**
@@ -90,14 +99,14 @@ public class CreatePresetHandler extends RequestHandler {
                                             getStreamController().getStreamReader(cameraID);
     File path = new File("static" + File.separator + "presets" + File.separator
         + cameraID + "_" + presetID + ".jpg");
-    
+
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
     snapShot = resizer.resize(snapShot);
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
     ImageIO.write(bufferedImage, "jpg", path);
-    
+
     Preset preset = getPresetController().getPresetById(presetID);
 
     preset.setImage(cameraID + "_" + presetID + ".jpg");

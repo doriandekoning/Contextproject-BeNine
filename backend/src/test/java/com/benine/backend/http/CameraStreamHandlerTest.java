@@ -1,9 +1,11 @@
 package com.benine.backend.http;
 
+import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +33,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException {
+  public void initialize() throws IOException, JSONException, CameraBusyException {
     super.initialize();
     when(cameraController.getCameraById(42)).thenReturn(cam);
 

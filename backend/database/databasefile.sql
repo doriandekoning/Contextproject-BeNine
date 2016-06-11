@@ -8,20 +8,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema presetsDatabase
+-- Schema presetsdatabase
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema presetsDatabase
+-- Schema presetsdatabase
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `presetsDatabase` ;
-CREATE SCHEMA IF NOT EXISTS `presetsDatabase` ;
-USE `presetsDatabase` ;
+DROP SCHEMA IF EXISTS `presetsdatabase` ;
+CREATE SCHEMA IF NOT EXISTS `presetsdatabase` ;
+USE `presetsdatabase` ;
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`camera`
+-- Table `presetsdatabase`.`camera`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`camera` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`camera` (
   `ID` INT(11) NOT NULL,
   `MACaddress` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`))
@@ -30,26 +30,27 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`IPpreset`
+-- Table `presetsdatabase`.`IPpreset`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`IPpreset` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`IPpreset` (
   `ID` INT(11) NOT NULL,
-  `Pan` INT(11) NULL DEFAULT NULL,
-  `Tilt` INT(11) NULL DEFAULT NULL,
-  `Zoom` INT(11) NULL DEFAULT NULL,
-  `Focus` INT(11) NULL DEFAULT NULL,
-  `Iris` INT(11) NULL DEFAULT NULL,
+  `Pan` DOUBLE NULL DEFAULT NULL,
+  `Tilt` DOUBLE NULL DEFAULT NULL,
+  `Zoom` DOUBLE NULL DEFAULT NULL,
+  `Focus` DOUBLE NULL DEFAULT NULL,
+  `Iris` DOUBLE NULL DEFAULT NULL,
   `Autofocus` INT(11) NULL DEFAULT NULL,
-  `Panspeed` INT(11) NULL DEFAULT NULL,
-  `Tiltspeed` INT(11) NULL DEFAULT NULL,
+  `Panspeed` DOUBLE NULL DEFAULT NULL,
+  `Tiltspeed` DOUBLE NULL DEFAULT NULL,
   `Autoiris` INT(11) NULL DEFAULT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
+  `name` CHAR(50) NULL DEFAULT '',
   PRIMARY KEY (`ID`),
   INDEX `fk_preset_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_preset_camera`
     FOREIGN KEY (`camera_ID`)
-    REFERENCES `presetsDatabase`.`camera` (`ID`)
+    REFERENCES `presetsdatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -57,17 +58,18 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`simplepreset`
+-- Table `presetsdatabase`.`simplepreset`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`simplepreset` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`simplepreset` (
   `ID` INT(11) NOT NULL,
   `Image` CHAR(50) NULL DEFAULT '',
   `camera_ID` INT(11) NOT NULL,
+  `name` CHAR(50) NULL DEFAULT '',
   PRIMARY KEY (`ID`),
   INDEX `fk_simplepreset_camera_idx` (`camera_ID` ASC),
   CONSTRAINT `fk_simplepreset_camera`
     FOREIGN KEY (`camera_ID`)
-    REFERENCES `presetsDatabase`.`camera` (`ID`)
+    REFERENCES `presetsdatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -75,27 +77,27 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`tag`
+-- Table `presetsdatabase`.`tag`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tag` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`tag` (
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`name`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`preset`
+-- Table `presetsdatabase`.`preset`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`preset` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`preset` (
   `ID` INT(11) NOT NULL,
   PRIMARY KEY (`ID`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`tagPreset`
+-- Table `presetsdatabase`.`tagPreset`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPreset` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`tagPreset` (
   `preset_ID` INT(11) NOT NULL,
   `tag_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`tag_name`, `preset_ID`),
@@ -103,21 +105,21 @@ CREATE TABLE IF NOT EXISTS `presetsDatabase`.`tagPreset` (
   INDEX `fk_tagPreset_preset1_idx` (`preset_ID` ASC),
   CONSTRAINT `fk_tagPreset_tag1`
     FOREIGN KEY (`tag_name`)
-    REFERENCES `presetsDatabase`.`tag` (`name`)
+    REFERENCES `presetsdatabase`.`tag` (`name`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tagPreset_preset1`
     FOREIGN KEY (`preset_ID`)
-    REFERENCES `presetsDatabase`.`preset` (`ID`)
+    REFERENCES `presetsdatabase`.`preset` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`queue`
+-- Table `presetsdatabase`.`queue`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`queue` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`queue` (
   `ID` INT(11) NOT NULL,
   `Name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`))
@@ -125,22 +127,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `presetsDatabase`.`presetsList`
+-- Table `presetsdatabase`.`presetsList`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `presetsDatabase`.`presetsList` (
+CREATE TABLE IF NOT EXISTS `presetsdatabase`.`presetsList` (
   `Sequence` INT(11) NOT NULL,
   `queue_ID` INT(11) NOT NULL,
   `preset_ID` INT(11) NOT NULL,
-  PRIMARY KEY (`queue_ID`, `preset_ID`),
+  PRIMARY KEY (`queue_ID`, `preset_ID`, `Sequence`),
   INDEX `fk_presetsList_preset1_idx` (`preset_ID` ASC),
   CONSTRAINT `fk_presetsList_queue1`
     FOREIGN KEY (`queue_ID`)
-    REFERENCES `presetsDatabase`.`queue` (`ID`)
+    REFERENCES `presetsdatabase`.`queue` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_presetsList_preset1`
     FOREIGN KEY (`preset_ID`)
-    REFERENCES `presetsDatabase`.`preset` (`ID`)
+    REFERENCES `presetsdatabase`.`preset` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

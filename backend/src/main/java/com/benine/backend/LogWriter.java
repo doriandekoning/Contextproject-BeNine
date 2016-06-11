@@ -47,8 +47,6 @@ public class LogWriter {
   }
 
 
-  // TODO Add write method for non event
-  // TODO remove throws from write methods
   /**
    * Creates a LogEvent (at the current system time) and writes it to a file.
    * @param description the description of the logevent
