@@ -149,29 +149,7 @@ public class IPCameraPreset extends Preset {
 
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
-  }
-  
-  /**
-   * Creates a sql query to insert a preset in the database.
-   * @return The query
-   */
-  public String createAddSqlQuery() {
-    int auto = 0;
-    if (isAutofocus()) {
-      auto = 1;
-    }
-    int autoir = 0;
-    if (isAutoiris()) {
-      autoir = 1;
-    }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + getId() + ","
-        + getPosition().getPan() + "," + getPosition().getTilt()
-        + "," + getPosition().getZoom() + "," + getFocus()
-        + "," + getIris() + "," + auto + "," + getPanspeed() + ","
-        + getTiltspeed() + "," + autoir + ",'" + getImage() + "',"
-        + getCameraId() + ")";
-  }
-
+  } 
 
   /**
    * Moves the camera

@@ -6,8 +6,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.video.StreamNotAvailableException;
-import com.benine.backend.video.StreamReader;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -55,14 +53,13 @@ public class CreatePresetHandler extends RequestHandler {
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
         Preset preset = presetCamera.createPreset(tagList, name);
-        StreamReader streamReader = getStreamController().getStreamReader(presetCamera.getId());
-        preset.createImage(streamReader);
         getPresetController().addPreset(preset);
+        getPresetController().createImage(preset);
         respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
       }
-    } catch (MalformedURIException | StreamNotAvailableException e) {
+    } catch (MalformedURIException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
       respondFailure(request, res);
     } catch (SQLException e) {

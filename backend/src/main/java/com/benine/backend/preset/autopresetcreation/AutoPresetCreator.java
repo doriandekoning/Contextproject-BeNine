@@ -92,9 +92,8 @@ public abstract class AutoPresetCreator {
     cam.setBusy(false);
     IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId(), "");
     cam.setBusy(true);
-    presetController.
-    preset.createImage(cam);
     presetController.addPreset(preset);
+    presetController.createImage(preset);
     return preset;
   }
   

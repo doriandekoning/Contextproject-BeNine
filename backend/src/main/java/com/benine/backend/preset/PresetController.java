@@ -1,16 +1,23 @@
 package com.benine.backend.preset;
 
 import com.benine.backend.Config;
+import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
+import com.benine.backend.video.StreamController;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.regex.Matcher;
 
 /**
  * Created on 18-5-16.
@@ -27,6 +34,10 @@ public class PresetController {
   
   private Config config;
   
+  private StreamController streamController;
+  
+  private Logger logger;
+  
   /**
    * Constructor of the presetController.
    */
@@ -34,6 +45,8 @@ public class PresetController {
     ServerController serverController = ServerController.getInstance();
     database = serverController.getDatabaseController().getDatabase();
     config = serverController.getConfig();
+    streamController = serverController.getStreamController();
+    logger = serverController.getLogger();
   }
   
   /**
@@ -57,7 +70,7 @@ public class PresetController {
     JSONArray presetsJSON = new JSONArray();
     for (Preset p : resultPresets) {
       JSONObject presetJson = p.toJSON();
-      presetJson.put("image", imagePath + presetJson.get("image"));
+      presetJson.put("image", "/" + imagePath + presetJson.get("image"));
       presetsJSON.add(presetJson);
     }
     jsonObject.put("presets", presetsJSON);
@@ -79,7 +92,27 @@ public class PresetController {
     }
     return null;
   }
-
+  
+  /**
+   * Create an image for this preset using camera with cameraID
+   * @param preset to create an image for.
+   */
+  public void createImage(Preset preset) {
+    StreamReader streamReader;
+    try {
+      streamReader = streamController.getStreamReader(preset.getCameraId());
+      preset.createImage(streamReader, config.getValue("imagepath")
+                            .replaceAll("/", Matcher.quoteReplacement(File.separator)));
+      updatePreset(preset);
+    } catch (StreamNotAvailableException e) {
+      logger.log("Stream is not available for creating image.", e);
+    } catch (IOException e) {
+      logger.log("Image could not be saved.", e);
+    } catch (SQLException e) {
+      logger.log("Image could not be saved in database.", e);
+    }
+  }
+  
   /**
    * Returns an list of all the presets that are tagged with the specified tag.
    * @param tag the tag with which the presets have to be tagged.

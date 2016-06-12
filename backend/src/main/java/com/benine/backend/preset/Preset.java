@@ -27,8 +27,6 @@ import javax.imageio.ImageIO;
  */
 public abstract class Preset {
   
-  private static int newImageID = 0;
-
   private String image;
   private int presetid = -1;
   protected Set<String> tags = new HashSet<String>();
@@ -174,14 +172,15 @@ public abstract class Preset {
   /**
    * Creates an image for a preset.
    * @param streamReader to get the snapShot from to save as image.
+   * @param folder to write the image to.
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    * @throws SQLException if the image can not be saved in the database.
    */
-  public void createImage(StreamReader streamReader) throws
+  public void createImage(StreamReader streamReader, String folder) throws
           StreamNotAvailableException, IOException, SQLException {
 
-    File path = getNewImagePath();
+    File path = getNewImagePath(folder);
 
     VideoFrame snapShot = streamReader.getSnapShot();
     MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
@@ -197,14 +196,15 @@ public abstract class Preset {
   
   /**
    * Find a file path which not exists.
+   * @param folder to check the files for.
    * @return non existing path to save the image to.
    */
-  private static File getNewImagePath() {
+  private File getNewImagePath(String folder) {
     File path;
+    int imageID = 0;
     do {
-      path = new File("static" + File.separator + "presets" + File.separator
-                                        + "preset_" + newImageID + ".jpg");
-      newImageID++;
+      path = new File(folder + "preset_" + imageID + ".jpg");
+      imageID++;
     } while (path.exists());
     
     return path;
