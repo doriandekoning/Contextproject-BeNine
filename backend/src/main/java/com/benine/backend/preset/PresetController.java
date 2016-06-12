@@ -1,6 +1,7 @@
 package com.benine.backend.preset;
 
 import com.benine.backend.Config;
+import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.database.Database;
@@ -137,6 +138,11 @@ public class PresetController {
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
     database.deletePreset(preset);
+    File path = new File(config.getValue("imagepath")
+        .replaceAll("/", Matcher.quoteReplacement(File.separator)) + preset.getImage());
+    if (!path.delete()) {
+      logger.log(preset.getImage() + " could not be deleted", LogEvent.Type.WARNING);
+    }
   }
   
   /**
