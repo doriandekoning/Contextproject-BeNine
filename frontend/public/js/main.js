@@ -16,8 +16,8 @@ $(document).ready(function() {
 	// Load the available cameras.
 	loadCameras();
 	
-	//Refresh cameras inuse.
-	setInterval(refreshCameras, 2000);
+	//Check cameras inuse.
+	setInterval(checkCamerasInUse, 2000);
 	
 	// Load the available presets from the backend.
 	loadPresets();
@@ -48,8 +48,9 @@ function updateServerStatus() {
 
 /**
 * Check which camera's are in use.
+* And let the backend now which camera you use.
 */
-function refreshCameras() {
+function checkCamerasInUse() {
 	$.get("/api/backend/camera", function(data) {
 		var obj = JSON.parse(data);
 		for(var c in obj.cameras) {
@@ -57,11 +58,8 @@ function refreshCameras() {
 			var camera = findCameraOnID(cam.id);
 			if (camera !== undefined) {
 				camera.inuse = cam.inuse;
+				setCameraStatus(cam.id);
 			} 
-		}
-	}).done(function() {
-		for(var c in cameras) {
-			toggleCamInuse(cameras[c].id, cameras[c].inuse);
 		}
 	});
 	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
@@ -100,12 +98,14 @@ function switchCurrentView(id) {
 	if(id === currentcamera || camera === undefined) {
 		console.log("Cannot switch to camera " + id + " does not exist or is already selected");
 	} else {
-		if (currentcamera !== undefined) {
-			toggleCamInuse(currentcamera, false);
-			$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=false", function(data) {});
-		}
+		var oldID = currentcamera;
 		currentcamera = id;
-		toggleCamSelected(currentcamera, true);
+		if (oldID !== undefined) {
+			var oldCamera = findCameraOnID(oldID);
+			setCameraStatus(oldID);
+			$.get("/api/backend/camera/" + oldID + "/inuse?inuse=false", function(data) {});
+		}
+		setCameraStatus(currentcamera);
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);
@@ -127,47 +127,18 @@ function findCameraOnID(id){
 }
 
 /**
-* Change the camera inuse color below an image.
-* @param camid the id of the camera to change the status of.
-* @param inuse boolean to switch between in use.
+* Display the right camera status below the camera with camid
+* @param camid id of the camera to display the status for.
 */
-function toggleCamSelected(camid, inuse) {
+function setCameraStatus(camid) {
 	var camera_area, camera;
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
-	if (inuse === true) {
-		if (findCameraOnID(camid).inuse) {
-			camera.find('.camera_status').attr('class', 'camera_status unavailable');
-		} else {
-			camera.find('.camera_status').attr('class', 'camera_status selected');
-		}
-	} else {
-		if (findCameraOnID(camid).inuse) {
-			camera.find('.camera_status').attr('class', 'camera_status unavailable');
-		} else {
-			camera.find('.camera_status').attr('class', 'camera_status available');
-		}
-	}
-}
-
-/**
- * Method used to toggle if the camera is in use.
- * @param camid		The id of the camera to toggle.
- * @param inuse		Boolean, true if in use, false otherwise.
- */
-function toggleCamInuse(camid, inuse) {
-	var camera_area, camera;
-	camera_area = $('#camera_area');
-	camera = camera_area.find('#camera_' + camid);
-	if (inuse === true) {
-		if (parseInt(camid) !== parseInt(currentcamera)) {
-			camera.find('.camera_status').attr('class', 'camera_status unavailable');
-		}
-	} else {
-		if (parseInt(camid) === parseInt(currentcamera)) {
-			camera.find('.camera_status').attr('class', 'camera_status selected');
-		} else {
-			camera.find('.camera_status').attr('class', 'camera_status available');
-		}
+	if(parseInt(camid) === parseInt(currentcamera)) {
+		camera.find('.camera_status').attr('class', 'camera_status selected');
+	} else if (findCameraOnID(camid).inuse) {
+		camera.find('.camera_status').attr('class', 'camera_status unavailable');
+	} else{
+		camera.find('.camera_status').attr('class', 'camera_status available');
 	}
 }
