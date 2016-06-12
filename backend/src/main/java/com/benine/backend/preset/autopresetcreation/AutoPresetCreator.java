@@ -22,6 +22,7 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private PresetController presetController;
+  
   /**
    * Creates a new AutoPresetCreator object.
    * @param presetController the presetController to add the created presets too.
@@ -29,6 +30,7 @@ public abstract class AutoPresetCreator {
   public AutoPresetCreator(PresetController presetController) {
     this.presetController = presetController;
   }
+  
   /**
    * Automatically creates presets for the selected camera.
    * Calls generatePositions to get the positions of the presets.
@@ -94,6 +96,7 @@ public abstract class AutoPresetCreator {
     preset.createImage(cam);
     return preset;
   }
+  
   /**
    * Generates the positions to create pesets at.
    * @param cam the camera to create positions for.
