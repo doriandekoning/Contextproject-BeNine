@@ -9,6 +9,7 @@ import com.benine.backend.video.MJPEGFrameResizer;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.StreamController;
 import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
 import com.benine.backend.video.VideoFrame;
 
 import org.eclipse.jetty.server.Request;
@@ -110,8 +111,8 @@ public class EditPresetHandler extends RequestHandler {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
-   
-    createImage(preset.getCameraId(), newPreset.getId());
+    StreamReader streamReader = getStreamController().getStreamReader(ipcam.getId());
+    newPreset.createImage(streamReader);
     getPresetController().updatePreset(newPreset);
   }
 
@@ -124,34 +125,5 @@ public class EditPresetHandler extends RequestHandler {
   private void updateName(Preset preset, String name) throws SQLException {
     preset.setName(name);
     getPresetController().updatePreset(preset);
-  }
-  
-  /**
-   * Creates an image for a preset.
-   * @param cameraID      The id of the camera to take the image from.
-   * @param presetID      The id of the preset used for naming.
-   * @throws StreamNotAvailableException  If the camera does not have a stream.
-   * @throws IOException  If the image cannot be written.
-   * @throws SQLException when preset can't be updated
-   */
-  private void createImage(int cameraID, int presetID) throws
-          StreamNotAvailableException, IOException, SQLException {
-    StreamController streamController = getStreamController();
-
-    MJPEGStreamReader streamReader = (MJPEGStreamReader) streamController.getStreamReader(cameraID);
-    VideoFrame snapShot = streamReader.getSnapShot();
-    MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
-    snapShot = resizer.resize(snapShot);
-
-    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
-
-    File path = new File("static" + File.separator + "presets" + File.separator
-            + cameraID + "_" + presetID + ".jpg");
-
-    ImageIO.write(bufferedImage, "jpg", path);
-    
-    Preset preset = getPresetController().getPresetById(presetID);
-    preset.setImage(cameraID + "_" + presetID + ".jpg");
-    getPresetController().updatePreset(preset);
-  }  
+  } 
 }
