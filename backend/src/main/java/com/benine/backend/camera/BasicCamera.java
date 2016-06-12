@@ -4,16 +4,22 @@ import com.benine.backend.video.StreamType;
 
 import org.json.simple.JSONObject;
 
+import java.util.Date;
+
 /**
  * Interface for communication with remote camera's.
  */
 public abstract class BasicCamera implements Camera {
+  
+  public static final int useTimeOut = 2000;
 
   private int id;
 
   private StreamType streamtype;
 
   private boolean inUse;
+  
+  private long inUseTimeOut;
 
   /**
    * Constructor for a Basic Camera.
@@ -82,12 +88,18 @@ public abstract class BasicCamera implements Camera {
 
   @Override
   public boolean isInUse() {
+    Date date = new Date();
+    if (date.getTime() > inUseTimeOut) {
+      return false;
+    }
     return inUse;
   }
 
   @Override
   public void setInUse() {
     this.inUse = true;
+    Date date = new Date();
+    inUseTimeOut = date.getTime() + useTimeOut;
   }
 
   @Override

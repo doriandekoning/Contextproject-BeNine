@@ -64,7 +64,7 @@ function refreshCameras() {
 			toggleCamInuse(cameras[c].id, cameras[c].inuse);
 		}
 	});
-	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {console.log(data);});
+	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
 }
 
 /**
@@ -98,11 +98,11 @@ function loadCameras() {
 function switchCurrentView(id) {
     var camera = findCameraOnID(id);
 	if(id === currentcamera || camera === undefined) {
-		console.log("Cannot switch to camera " + id + " does not exist");
+		console.log("Cannot switch to camera " + id + " does not exist or is already selected");
 	} else {
 		if (currentcamera !== undefined) {
-			toggleCamSelected(currentcamera, false);
-			$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=false", function(data) {console.log(data);});
+			toggleCamInuse(currentcamera, false);
+			$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=false", function(data) {});
 		}
 		currentcamera = id;
 		toggleCamSelected(currentcamera, true);
@@ -111,7 +111,7 @@ function switchCurrentView(id) {
 		$('#createPreset').prop('disabled', false);
 		var preset_create_div = $('#preset_create_div');
 		preset_create_div.find('.tags_input').tagsinput('removeAll');
-		$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {console.log(data);});
+		$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
 	}
 }
 
