@@ -109,21 +109,30 @@ nav img {
 
     border-radius: 8px;
 }
+.auto-presets-modal input[type=range] {
+  margin-right: 15px;
+}
+
+.horizontal-slider {
+	z-index: 0;
+  display: block;
+    -webkit-appearance: none;
+  background-color: #848484;
+
+  border-radius: 8px;
+}
 
 #control_area input[type="range"]::-webkit-slider-thumb {
     width: 35px;
     height: 55px;
 }
 
-.settings-modal input[type="range"]::-webkit-slider-thumb {
-    width: 15px;
-    height: 15px;
-}
-
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: #585858;
 	border-radius: 8px;
+  width: 15px;
+  height: 15px;
 }
 
 input[type="range"]::-ms-tooltip {
@@ -646,4 +655,8 @@ input[type=range]:focus {
 
 #auto_preset_name {
   width: 80%;
+}
+
+#autopreset-left-column {
+  padding: 15px;
 }
