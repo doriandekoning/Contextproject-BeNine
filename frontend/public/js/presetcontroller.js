@@ -305,6 +305,10 @@ function matchingPresets(val) {
 			var tags = preset.tags.filter(function(tag) { return tag.toLowerCase().indexOf(val.toLowerCase()) > -1;});
 			if (tags.length > 0) {
 				matchpresets.push(preset);
+			} else if(preset.name != undefined) {
+				if (preset.name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+					matchpresets.push(preset);
+				}
 			}
 		}
 	}
