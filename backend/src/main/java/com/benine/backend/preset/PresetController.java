@@ -129,6 +129,9 @@ public class PresetController {
    */
   public int addPreset(Preset preset) throws SQLException {   
     preset = addPresetID(preset);
+    if (preset.getName().equals("")) {
+      preset.setName("Preset " + preset.getId());
+    }
     presets.add(preset);
     addAllTags(preset.getTags());
     database.addPreset(preset);
