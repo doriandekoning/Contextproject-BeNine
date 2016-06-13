@@ -667,3 +667,8 @@ input[type=range]:focus {
     background-color: #3D525B;
     border-color: #4d656f;
 }
+
+.label-info, .progress-bar {
+    background-color: #4d656f;
+
+}
