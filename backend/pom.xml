@@ -95,13 +95,7 @@
       				 <descriptors>
            				 <descriptor>assembly/bin.xml</descriptor>
           			</descriptors>     			
-   					<finalName>backend-${pom.version}</finalName>
-     				<archive>
-        				<manifest>
-        					<addClasspath>true</addClasspath>
-         					<mainClass>com.benine.backend.Main</mainClass>
-       					 </manifest>
-     				 </archive>
+   					<finalName>backend-server</finalName>
     			</configuration>
     			<executions>
       				<execution>

@@ -4,6 +4,7 @@
 	<formats>
 		<format>zip</format>
 	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
 			<directory>${project.basedir}</directory>
@@ -11,7 +12,26 @@
 			<includes>
 				<include>configs/*</include>
 				<include>static/*</include>
+				<include>**/frontend/*</include>
 			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>../</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>**/frontend/app.js</include>
+				<include>**/frontend/package.json</include>
+				<include>**/frontend/config.js</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>../frontend/public</directory>
+		</fileSet>
+		<fileSet>
+			<directory>../frontend/modules</directory>
+		</fileSet>
+		<fileSet>
+			<directory>../frontend/views</directory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/site</directory>
