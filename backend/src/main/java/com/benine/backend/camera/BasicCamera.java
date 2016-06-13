@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public abstract class BasicCamera implements Camera {
   
-  public static final int useTimeOut = 5000;
+  public static final int USETIMEOUT = 6000;
 
   private int id;
 
@@ -99,7 +99,7 @@ public abstract class BasicCamera implements Camera {
   public void setInUse() {
     this.inUse = true;
     Date date = new Date();
-    inUseTimeOut = date.getTime() + useTimeOut;
+    inUseTimeOut = date.getTime() + USETIMEOUT;
   }
 
   @Override
