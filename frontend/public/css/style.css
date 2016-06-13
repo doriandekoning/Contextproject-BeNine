@@ -235,6 +235,10 @@ input[type=range]:focus {
     flex-shrink: 0;
 }
 
+.control_buttons .btn-group {
+    top: 3px;
+}
+
 #control_area, #queue_area, .control_wrapper, #right_area .row {
     width: 100%;
     display: flex;
@@ -670,5 +674,5 @@ input[type=range]:focus {
 
 .label-info, .progress-bar {
     background-color: #4d656f;
-
 }
+
