@@ -219,6 +219,7 @@ input[type=range]:focus {
 #left_area {
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     flex: 1;
     padding: 0;
     margin: 0;
@@ -296,10 +297,12 @@ input[type=range]:focus {
     margin: 0;
     padding: 0;
 	width: 100%;
+    display: flex;
     -webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	background-color: white;
+    flex-shrink: 0;
 }
 #tagsearch .twitter-typeahead {
 	width: 100%;
@@ -329,6 +332,7 @@ input[type=range]:focus {
     width: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
     overflow: scroll;
 }
 
