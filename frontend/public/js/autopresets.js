@@ -3,6 +3,7 @@ var levels = 3;
 var rows = 3;
 
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
+  $("#auto-preset-creation-preview-image").attr('src', '/api/backend/camera/' + currentcamera+ '/mjpeg?height=200&width=440');
   showSubViews();
 })
 
@@ -29,18 +30,17 @@ function updateRowSlider(newRows) {
 }
 
 function updateLevelSlider(newLevels) {
-  levels = newLevels;
+  levels = newLevels;showSubViews;
   showSubViews();
 }
 
-
 function showSubViews() {
   var offset = 1;
-  var canvas = document.getElementById('previewCanvas')
+  var canvas = document.getElementById('previewCanvas');
   var context = canvas.getContext('2d');
-  var imageObj = new Image();
-  imageObj.onload = function () {
-    context.drawImage(imageObj, offset, offset);
+//  var imageObj = new Image();
+//  imageObj.onload = function () {
+//    context.drawImage(imageObj, offset, offset);
     context.strokeStyle = "#FF0000";
     context.lineWidth=0.5;
     $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
@@ -53,8 +53,8 @@ function showSubViews() {
          context.strokeRect(x, y, width, height)
        }
      });
-  };
+//  };
   var imageWidth = canvas.width - (offset * 2);
   var imageHeight = canvas.height - (offset * 2);
-  imageObj.src = '/api/backend/camera/'+currentcamera+'/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
+//  imageObj.src = '/api/backend/camera/'+currentcamera+'/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
 }
