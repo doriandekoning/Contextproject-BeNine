@@ -660,3 +660,7 @@ input[type=range]:focus {
 #autopreset-left-column {
   padding: 15px;
 }
+
+.label-auto-preset-input {
+  width: 45%;
+}

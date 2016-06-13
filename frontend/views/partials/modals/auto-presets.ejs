@@ -13,18 +13,44 @@
                             <label for="auto_preset_name">Preset name (will be appended with a number for each preset)</label>
                             <input id="auto_preset_name" class="form-control" type="text">
                         </div>
-                        <div class="form-group preset-create-tagsinput">
-                            <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
-                            <div class="atags_input">
-                                <input id="auto_preset_tags" class="form-control" type="text" data-role="tagsinput"/>
+
+
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <div class="form-group preset-create-tagsinput">
+                                <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
+                                <div class="atags_input">
+                                    <input id="auto_preset_tags" class="form-control" type="text" data-role="tagsinput"/>
+                                </div>
                             </div>
+                          </div>
+                          <div class="col-xs-6">
+                            <div class="input-group">
+                              <span class="input-group-addon label-auto-preset-input">Columns:</span>
+                              <input class="form-control" placeholder="3"/>
+                              <div class="input-group-btn">
+                                <button type="button" class="btn btn-default"><span style="width:50%" class="glyphicon glyphicon-minus"></span></button>
+                                <button type="button" class="btn btn-default"><span style="size:80%" class="glyphicon glyphicon-plus"></span></button>
+                              </div>
+                            </div>
+                            <div class="input-group">
+                              <span class="input-group-addon label-auto-preset-input">Rows:</span>
+                              <input class="form-control" placeholder="3"/>
+                              <div class="input-group-btn">
+                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                              </div>
+                            </div>
+                            <div class="input-group">
+                              <span class="input-group-addon label-auto-preset-input">Levels:</span>
+                              <input class="form-control" placeholder="3"/>
+                              <div class="input-group-btn">
+                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <label for="columns-auto-preset">Columns</label>
-                        <input type="range" class="slider horizontal-slider" id="columns-auto-preset" min="0" max="10" value="5">
-                        <label for="rows-auto-preset">Rows</label>
-                        <input type="range" class="slider horizontal-slider" id="rows-auto-preset" min="0" max="10" value="5">
-                        <label for="levels-auto-preset">Levels</label>
-                        <input type="range" class="slider horizontal-slider" id="levels-auto-preset" min="0" max="10" value="5">
                     </div>
                     <div class="col-xs-6" style="text-align:center;">
                         <canvas id="previewCanvas" class="reviewCanvas img-responsive">
@@ -34,7 +60,7 @@
                 </div>
                 <div class="row">
                   <div class="progress" style="margin-top:15px;margin-bottom:15px">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                    <div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
                       70%
                     </div>
                   </div>
