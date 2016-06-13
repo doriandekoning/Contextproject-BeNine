@@ -141,7 +141,9 @@ create_tags_input.tagsinput({
 			source: tagsWithDefaults, 
 			limit:25
 		}
-	)
+	), 
+	maxChars: 10,
+	maxTags: 35
 });
 
 /**
@@ -196,7 +198,9 @@ edit_tags_input.tagsinput({
 			source: tagnames,
 			limit:25
 		}
-	)
+	), 
+	maxChars: 10,
+	maxTags: 35
 });
 
 
@@ -469,7 +473,7 @@ function appendEditable(input, add) {
 	if(add){
 		result += "<div>"
 	}
-	result += "<input class='new' value='" + input + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
+	result += "<input class='new' value='" + input + "' maxlength=15/><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
 	if(add) {
 		result += "</div>"
 	}
