@@ -167,7 +167,7 @@ public abstract class PresetTest {
     when(videoFrame.getImage()).thenReturn(image);
     when(videoFrame.getHeaderBytes()).thenReturn(image);
     when(streamReader.getSnapShot()).thenReturn(videoFrame);
-    preset.createImage(streamReader, "resources" + File.separator + "test" + File.separator);
+    preset.createImage(streamReader, "resources" + File.separator + "test" + File.separator, 160, 90);
     File path = new File("resources" + File.separator + "test" + File.separator + preset.getImage());
     path.delete();
     assertEquals("preset_0.jpg", preset.getImage());

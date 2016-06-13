@@ -173,17 +173,19 @@ public abstract class Preset {
    * Creates an image for a preset.
    * @param streamReader to get the snapShot from to save as image.
    * @param folder to write the image to.
+   * @param width of the image created in pixels
+   * @param height of the image created in pixels
    * @throws StreamNotAvailableException  If the camera does not have a stream.
    * @throws IOException  If the image cannot be written.
    * @throws SQLException if the image can not be saved in the database.
    */
-  public void createImage(StreamReader streamReader, String folder) throws
+  public void createImage(StreamReader streamReader, String folder, int width, int height) throws
           StreamNotAvailableException, IOException, SQLException {
 
     File path = getNewImagePath(folder);
 
     VideoFrame snapShot = streamReader.getSnapShot();
-    MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
+    MJPEGFrameResizer resizer = new MJPEGFrameResizer(width, height);
     snapShot = resizer.resize(snapShot);
 
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));

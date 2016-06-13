@@ -102,8 +102,11 @@ public class PresetController {
     StreamReader streamReader;
     try {
       streamReader = streamController.getStreamReader(preset.getCameraId());
-      preset.createImage(streamReader, config.getValue("imagepath")
-                            .replaceAll("/", Matcher.quoteReplacement(File.separator)));
+      String imagePath = config.getValue("imagepath")
+                          .replaceAll("/", Matcher.quoteReplacement(File.separator));
+      int width = Integer.parseInt(config.getValue("preset_image_width"));
+      int height = Integer.parseInt(config.getValue("preset_image_height"));
+      preset.createImage(streamReader, imagePath, width, height);
       updatePreset(preset);
     } catch (StreamNotAvailableException e) {
       logger.log("Stream is not available for creating image.", e);
