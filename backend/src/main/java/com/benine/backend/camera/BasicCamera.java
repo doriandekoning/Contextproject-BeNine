@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public abstract class BasicCamera implements Camera {
   
-  public static final int USETIMEOUT = 6000;
+  public static final int USETIMEOUT = 7000;
 
   private int id;
 
