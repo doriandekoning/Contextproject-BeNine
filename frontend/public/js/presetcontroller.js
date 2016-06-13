@@ -302,7 +302,7 @@ function matchingPresets(val) {
 	for(var p in presets) {
 		var preset = presets[p];
 		if(preset.tags != undefined) {
-			var tags = preset.tags.filter(function(tag) { return tag.indexOf(val) > -1;});
+			var tags = preset.tags.filter(function(tag) { return tag.toLowerCase().indexOf(val.toLowerCase()) > -1;});
 			if (tags.length > 0) {
 				matchpresets.push(preset);
 			}
