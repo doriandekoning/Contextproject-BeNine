@@ -16,6 +16,11 @@ Running the front-end server:
 ### Back end
 Build the back-end server using `maven install` with the supplied `pom.xml` file. 
 
+### Deployable zip
+Build the back-end server using `maven install` with the supplied `pom.xml` file. 
+The zip file containing the backend and frontend server can be found in the `backend/target/site` folder.
+The backend and frontend server can both be started using the startserver file. 
+
 ## Tool results
 ### JavaScript
 JavaScript testing on the NodeJS side of the front-end is performed using [MochaJS](http://mochajs.org) and executed using [Istanbul](https://gotwarlost.github.io/istanbul/). Test results are automatically generated on `npm test` and can be found at the `frontend/coverage/lcov-report` folder in the `index.html` file.
