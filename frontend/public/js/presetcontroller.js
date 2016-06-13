@@ -403,12 +403,14 @@ function updateTags() {
 * @param val value of the tag to add.
 */
 function newTag(val) {
-	localTags.push(val);
-	tagnames.clearPrefetchCache();
- 	tagnames.initialize(true);
-	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
-		console.log("create tag response: " + data);
-	}).done();
+	if (localTags.indexOf(val) < 0 && val != "" && val != undefined) {
+		localTags.push(val);
+		tagnames.clearPrefetchCache();
+		tagnames.initialize(true);
+		$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+			console.log("create tag response: " + data);
+		});
+	}
 }
 
 /**
