@@ -5,7 +5,6 @@ import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
-import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;

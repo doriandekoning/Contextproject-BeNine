@@ -11,7 +11,6 @@ import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +34,7 @@ public class RecallPresetTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     when(cameraController.getCameraById(1)).thenReturn(ipcamera);

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -35,7 +34,7 @@ public class SimplePresetTest extends PresetTest {
   }
   
   @Test
-  public void testToJSON() throws JSONException {
+  public void testToJSON() {
     JSONObject jsonObject = preset.toJSON();
     Assert.assertEquals(1, jsonObject.get("id"));
     Assert.assertEquals("test", jsonObject.get("image"));
