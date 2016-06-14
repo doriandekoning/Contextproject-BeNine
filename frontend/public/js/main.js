@@ -109,6 +109,7 @@ function switchCurrentView(id) {
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);
+		$('#autoCreatePresets').prop('disabled', false);
 		var preset_create_div = $('#preset_create_div');
 		preset_create_div.find('.tags_input').tagsinput('removeAll');
 		$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
