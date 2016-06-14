@@ -76,35 +76,36 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     subViews.add(new SubView(0, 50, 50, 0));
     subViews.add(new SubView(50, 100, 100, 50));
     subViews.add(new SubView(50, 50, 100, 0));
-    Assert.assertEquals(new HashSet<>(subViews), new HashSet<>(ppc.generateSubViews()));
+
+    equalSubViewCollections(subViews, ppc.generateSubViews());
   }
 
   @Test
   public void testCreateSubViews1x1x2() {
     PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 2, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
-    subViews.add(new SubView(0, 100, 100, 0));
-    subViews.add(new SubView(0, 100, 100, 0));
-    Assert.assertEquals(subViews, ppc.generateSubViews());
+    // Since cam aspect ratio is 5/3 height should be width/(5/3)=100/(5/3)=60
+    subViews.add(new SubView(0, 80, 100, 20));
+    subViews.add(new SubView(0, 80, 100, 20));
+
+    equalSubViewCollections(subViews, ppc.generateSubViews());
   }
 
   @Test
   public void testCreateSubViews1x2x2() {
-    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 3, 0, presetController);
+    PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 2, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
     // First layer
     subViews.add(new SubView(0, 100, 100, 0));
     // Second layer
-    subViews.add(new SubView(0, 100, 50, 0));
-    subViews.add(new SubView(50, 100, 100, 0));
-    // Third layer
-    subViews.add(new SubView(0, 100, 25, 0));
-    subViews.add(new SubView(25, 100, 50, 0));
-    subViews.add(new SubView(50, 100, 75, 0));
-    subViews.add(new SubView(75, 100, 100, 0));
+    // Subview width is half that of the above subview so height is (50/(5/3))=70
+    subViews.add(new SubView(0, 65, 50, 35));
+    subViews.add(new SubView(50, 65, 100, 35));
+
     Collection<SubView> generated = ppc.generateSubViews();
-    Assert.assertEquals(subViews.size(), generated.size());
-    Assert.assertEquals(new HashSet<>(subViews), new HashSet<>(generated));
+
+    equalSubViewCollections(subViews, generated);
+
   }
 
   @Test
@@ -185,4 +186,27 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     return new PresetPyramidCreator(2, 2, 2, 0, presetController);
   }
 
+
+  /**
+   * Method used to check if 2 collections of subvies are equal.
+   */
+  private void equalSubViewCollections(Collection<SubView> col1, Collection<SubView> col2) {
+    for ( SubView s1 : col1 ) {
+      int count = 0;
+      for (SubView s2 : col1) {
+        if (s1.equals(s2)) {
+          count++;
+        }
+      }
+      for (SubView s2 : col2) {
+        if (s1.equals(s2)) {
+          count--;
+        }
+      }
+      // Show what fails
+      if (0 != count || col1.size()!=col2.size()) {
+        Assert.assertEquals(col1, col2);
+      }
+    }
+  }
 }

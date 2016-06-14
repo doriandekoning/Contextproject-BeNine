@@ -132,21 +132,20 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     ArrayList<SubView> subViews = new ArrayList<>();
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        double cameraAspectRatio = IPCamera.HORIZONTAL_FOV_MAX / IPCamera.VERTICAL_FOV_MAX;
-
         double subViewWidth = subView.getWidth() / columns;
         double subViewHeight = subView.getHeight() / rows;
 
-        double subViewAspectRatio = subViewWidth / subViewHeight;
-
-        double aspectRatioRatio = cameraAspectRatio / subViewAspectRatio;
         double subViewCenterX = subView.getTopLeft().getX() + ((0.5 + (double)column) * subViewWidth );
         double subViewCenterY = subView.getTopLeft().getY() - ((0.5 + (double)row) * subViewHeight);
 
-        if (aspectRatioRatio < 1) {
-          subViewWidth = subViewWidth / aspectRatioRatio;
+        double subViewAspectRatio = subViewHeight / subViewWidth;
+        double cameraAspectRatio = IPCamera.VERTICAL_FOV_MAX / IPCamera.HORIZONTAL_FOV_MAX ;
+        if (subViewAspectRatio < cameraAspectRatio) {
+          // If subview is wider then camera view resize width
+          subViewWidth = subViewHeight / cameraAspectRatio;
         } else {
-          subViewHeight = subViewHeight / aspectRatioRatio;
+          // If subview is higher then camera view then resize height
+          subViewHeight = subViewWidth * cameraAspectRatio;
         }
         Coordinate topLeft = new Coordinate(subViewCenterX - (0.5 * subViewWidth), subViewCenterY + (0.5 * subViewHeight));
         Coordinate bottomRight = new Coordinate(subViewCenterX + (0.5 * subViewWidth), subViewCenterY - (0.5 * subViewHeight));
