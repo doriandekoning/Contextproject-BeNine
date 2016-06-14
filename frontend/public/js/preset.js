@@ -32,7 +32,6 @@ Preset.prototype = {
 	* Show this preset in the preset area.
 	*/
 	displayPreview: function() {
-		console.log(this.name);
 		var preset_area = $('#preset_area');
 		var preset_div = preset_area.find('#preset_' + this.id);
 		preset_div.attr("id", this.id);

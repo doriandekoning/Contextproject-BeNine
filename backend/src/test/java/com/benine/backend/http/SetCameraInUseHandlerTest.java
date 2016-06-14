@@ -76,25 +76,6 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
   }
 
   @Test
-  public void testInuseAlreadyInuse() throws IOException, ServletException {
-    setPath("/42/inuse?inuse=true");
-
-    when(cam.isInUse()).thenReturn(true);
-
-    MultiMap<String> parameters = new MultiMap<>();
-    parameters.add("inuse", "true");
-    setParameters(parameters);
-
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(out).write("{\"succes\":\"false\"}");
-    verify(cam, never()).setInUse();
-    verify(requestMock).setHandled(true);
-    //cleanup
-    when(cam.isInUse()).thenReturn(false);
-  }
-
-  @Test
   public void testCameraNull() throws IOException, ServletException {
     setPath("/43/inuse?inuse=true");
 

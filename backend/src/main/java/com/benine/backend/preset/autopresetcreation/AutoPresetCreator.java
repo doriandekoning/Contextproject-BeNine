@@ -59,6 +59,7 @@ public abstract class AutoPresetCreator {
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
+      cam.setInUse();
       presets.add(generatePresetFromPos(pos, cam));
     }
     cam.setBusy(false);

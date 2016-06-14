@@ -24,6 +24,7 @@ public class IPCameraPreset extends Preset {
   private int panspeed = 15;
   private int tiltspeed = 1;
   private boolean autoiris;
+  
   /**
    * Creates a new preset based on the parameters supplied.
    * @param pos       The position of this preset.
