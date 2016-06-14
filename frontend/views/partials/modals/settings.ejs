@@ -7,42 +7,42 @@
                 <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Settings</h4>
             </div>
             <div class="modal-body">
-			    <h4><span class="glyphicon glyphicon-flash"></span> Control Sensitivity</h4>
+				<h4><span class="glyphicon glyphicon-flash"></span> Control Sensitivity</h4>
                 <div class="row">
                     <div class="col-xs-2 col-dm-2 sense_block">
 						<div class="center">
 							<span>Zoom</span>
 							<label id="zoomsense_lbl"></label>
 						</div>
-                        <input type="range" class="slider" id="zoomsense" min="1" max="10" value="5">
+                        <input type="range" class="slider vertical-slider" id="zoomsense" min="1" max="10" value="5">
                     </div>
                     <div class="col-xs-2 col-dm-2 sense_block">
 						<div class="center">
 							<span>Iris</span>
 							<label id="irissense_lbl"></label>
 						</div>
-                        <input type="range" class="slider" id="irissense" min="1" max="10" value="5">
+                        <input type="range" class="slider vertical-slider" id="irissense" min="1" max="10" value="5">
                     </div>
                     <div class="col-xs-2 col-dm-2 sense_block">
 						<div class="center">
 							<span>Focus</span>
 							<label id="focussense_lbl"></label>
 						</div>
-                        <input type="range" class="slider" id="focussense" min="1" max="10" value="5">
+                        <input type="range" class="slider vertical-slider" id="focussense" min="1" max="10" value="5">
                     </div>
                     <div class="col-xs-2 col-dm-2 sense_block">
 						<div class="center">
 							<span>Joystick</span>
 							<label id="joysticksense_lbl"></label>
 						</div>
-                        <input type="range" class="slider" id="joysticksense" min="1" max="10" value="5">
+						<input type="range" class="slider vertical-slider" id="joysticksense" min="1" max="10" value="5">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="defaults()">Reset to Defaults</button>
+                <button type="button" class="btn btn-primary pull-left" onclick="defaults()">Reset to Defaults</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk"></span> Save & Close</button>
+                <button type="button" class="btn " data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span> Close</button>
             </div>
         </div>
     </div>
