@@ -311,6 +311,9 @@ input[type=range]:focus {
     flex-shrink: 0;
 }
 
+.tagsearch-container .toggle {
+    top: 7px;
+}
 
 #tagsearch .twitter-typeahead {
 	width: 100%;

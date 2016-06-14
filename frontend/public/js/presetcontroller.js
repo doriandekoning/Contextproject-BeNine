@@ -7,6 +7,13 @@ var editing = false;
 var searchTerm;
 
 /**
+ * Initialize editing toggle event.
+ */
+$(function() {
+	$('#editPresets').change(loadEditablePresets);
+});
+
+/**
 * Function loads all the presets from the backend.
 */
 function loadPresets() {
