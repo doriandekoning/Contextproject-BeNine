@@ -3,7 +3,6 @@ body {
     background-color: #333333;
 }
 
-
 img {
     width: 100%;
     height: 100%;
@@ -83,8 +82,8 @@ nav img {
 }
 
 .settings-modal input[type=range] {
-    width: 100px;
-    height: 15px;
+    width: 150px;
+    height: 25px;
 	top: 150px;
 }
 
@@ -127,6 +126,11 @@ nav img {
     height: 55px;
 }
 
+.settings-modal input[type="range"]::-webkit-slider-thumb {
+    width: 25px;
+    height: 25px;
+}
+
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: #585858;
@@ -139,14 +143,22 @@ input[type="range"]::-ms-tooltip {
 	visibility: hidden;
 }
 
-.settings-modal .slider {
-	width: 10px;
-    height: 50px;
+.settings-modal .sense_block {
+	width: 110px;
+	height: 200px;
+	text-align: center;
 }
 
-.settings-modal .settings_sense {
-    height: 200px;
-    position: relative;
+.settings-modal .slider {
+	width: 25px;
+    height: 150px;
+	margin-top: 25px;
+	left: 50%;
+}
+
+.settings-modal .center {
+	left:50%;
+	text-align: center;
 }
 
 #control_area .slider {
