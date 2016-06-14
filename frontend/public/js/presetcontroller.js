@@ -365,44 +365,22 @@ function editTags(id, isNew) {
 			var tag = $('.new').val();
 			updateTag(id, tag);
 			$(this).parent().replaceWith(appendTag(id, tag));
-			console.log("update " + id + " " + newId);
 		}
 		else {
 			var tag = $('.new').val();
 			newTag(tag);
 			$(this).parent().replaceWith(appendTag(id, tag));
-			console.log("new " + id + " " + newId);
 		}
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		if(isNew){
+		if(!isNew){
 			deleteTag(id);
-			console.log("delete " + id + " " + newId);
 		}
 	});
 }
-
-/**
-* Save the new tags in de array.
-*/
-function updateTags() {
-	for(i = 0; i < updatedTags.length; i++) {
-		if(localTags[updatedTags[i].index] != undefined){
-			//update tags
-			deleteTag(updatedTags[i].index);
-		}
-		//update/add tags
-		newTag(updatedTags[i].name);
-	}
-	//delete tags
-	for(i = 0; i < deleteTags.length; i++) {
-		deleteTag(deleteTags[i]);
-	}
-}
-
 
 /**
 * Function adds a new tag to the tag list.
