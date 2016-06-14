@@ -1,6 +1,7 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.*;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -64,7 +65,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0);
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), new FocusValue(33, true), 50, true, 0);
       preset.setName("name");
       preset.addTags(tags);
       when(ipcamera.createPreset(tags, "test")).thenReturn((IPCameraPreset) preset);

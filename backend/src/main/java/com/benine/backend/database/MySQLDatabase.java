@@ -6,6 +6,7 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -270,7 +271,7 @@ public class MySQLDatabase implements Database {
    */
   private void setIpPreset(IPCameraPreset preset, PreparedStatement statement) {
     int auto = 0;
-    if (preset.isAutofocus()) {
+    if (preset.getFocus().isAutofocus()) {
       auto = 1;
     }
     int autoir = 0;
@@ -282,7 +283,7 @@ public class MySQLDatabase implements Database {
       statement.setDouble(2, preset.getPosition().getPan());
       statement.setDouble(3, preset.getPosition().getTilt());
       statement.setDouble(4, preset.getPosition().getZoom());
-      statement.setDouble(5, preset.getFocus());
+      statement.setDouble(5, preset.getFocus().getFocus());
       statement.setDouble(6, preset.getIris());
       statement.setInt(7, auto);
       statement.setDouble(8, preset.getPanspeed());
@@ -623,17 +624,16 @@ public class MySQLDatabase implements Database {
     try {
       ZoomPosition pos = new ZoomPosition(resultset.getInt("pan"),
               resultset.getInt("tilt"), resultset.getInt("zoom"));
-      int focus = resultset.getInt("focus");
+      FocusValue focus = new FocusValue(resultset.getInt("focus"),
+                                    resultset.getInt("autofocus") == 1);
       int iris = resultset.getInt("iris");
-      boolean autoFocus = resultset.getInt("autofocus") == 1;
       int panspeed = resultset.getInt("panspeed");
       int tiltspeed = resultset.getInt("tiltspeed");
       boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("ID");
       String name = resultset.getString("name");
-      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris,
-              autoFocus, autoIris, cameraId);
+      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris, autoIris, cameraId);
       preset.setName(name);
       preset.setId(id);
       preset.setPanspeed(panspeed);

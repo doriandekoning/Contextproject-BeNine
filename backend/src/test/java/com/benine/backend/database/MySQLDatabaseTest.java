@@ -6,6 +6,7 @@ import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -690,7 +691,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     public IPCameraPreset getPreset() {
-        IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, false, 0);
+        IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), new FocusValue(1, true), 1, false, 0);
         preset.setName("Name");
         return preset;
     }
