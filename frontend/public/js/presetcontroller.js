@@ -422,7 +422,7 @@ function deleteTag(index) {
 function updateTag(index, val) {
 	if ((localTags.indexOf(val) < 0 && val != "" && val != undefined) || localTags.indexOf(val) == index)  {
 		var remove = localTags[index];
-		localTags[index] = val
+		localTags[index] = val;
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
 		updateTagInPresets(remove, val);
