@@ -131,7 +131,7 @@ input[type="range"]::-ms-tooltip {
 }
 
 .settings-modal .sense_block {
-	width: 100px;
+	width: 110px;
 	height: 200px;
 	text-align: center;
 }
