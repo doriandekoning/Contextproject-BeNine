@@ -440,7 +440,7 @@ function deleteTag(index) {
 * Create a new tag.
 */
 function addTag() {
-	$(".fill-tags").prepend(appendEditable("new", true));
+	$(".fill-tags").prepend(appendEditable("tag " + localTags.length, true));
 	editTags(newId);
 	newId++;
 }
