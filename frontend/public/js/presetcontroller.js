@@ -77,14 +77,12 @@ function loadEditablePresets() {
 	var activepresets = preset_area.find("div:has(img:not([alt]))");
 	var editButton = $('#editPresets');
 
-	if (activepresets.hasClass("preset-overlay")) {
-		activepresets.removeClass("preset-overlay");
-		setButton(editButton, false);
-		editing = false;
-	} else {
+	if (editButton.prop('checked') === true) {
 		activepresets.addClass("preset-overlay");
-		setButton(editButton, true);
-			editing = true;
+		editing = true;
+	} else {
+		activepresets.removeClass("preset-overlay");
+		editing = false;
 	}
 }	
 
