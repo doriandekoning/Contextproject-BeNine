@@ -1,7 +1,5 @@
 // Local variable to store the available tags locally.
 var localTags = [];
-var deleteTags = [];
-var updatedTags = [];
 // true if the client is in preset editing mode.
 var editing = false;
 var searchTerm;
@@ -344,8 +342,6 @@ var newId = 0;
 * Load the tags modal en fill in the tags.
 */
 function loadTags() {
-	updatedTags = [];
-	deleteTags = [];
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
 	newId = localTags.length;
@@ -355,26 +351,36 @@ $(".fill-tags").on('click', '.tag', function(e){
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith(appendEditable(tag, false));
-		editTags($(this).attr('id'));
+		editTags($(this).attr('id'), false);
 	});
 
 /**
 * Edit or delete a clicked on tag.
 * @id The id of the tag to edit
 */
-function editTags(id) {
+function editTags(id, isNew) {
 	$(".edit").click(function(e){
 		e.preventDefault();
-		var tag = $('.new').val();
-		$(this).parent().replaceWith(appendTag(id, tag));
-		updatedTags.push({index: id, name: tag});
+		if(!isNew) {
+			var tag = $('.new').val();
+			updateTag(id, tag);
+			$(this).parent().replaceWith(appendTag(id, tag));
+			console.log("update " + id + " " + newId);
+		}
+		else {
+			var tag = $('.new').val();
+			newTag(tag);
+			$(this).parent().replaceWith(appendTag(id, tag));
+			console.log("new " + id + " " + newId);
+		}
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		if(id < newId){
-			deleteTags.push(id);
+		if(isNew){
+			deleteTag(id);
+			console.log("delete " + id + " " + newId);
 		}
 	});
 }
@@ -425,12 +431,25 @@ function deleteTag(index) {
 	}).done();
 }
 
+function updateTag(index, val) {
+	var remove = localTags[index];
+	localTags[index] = val
+	tagnames.clearPrefetchCache();
+ 	tagnames.initialize(true);
+	$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
+				console.log("create tag respone: " + data);
+	}).done();
+	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+		console.log("create tag response: " + data);
+	}).done();
+}
+
 /**
 * Create a new tag.
 */
 function addTag() {
 	$(".fill-tags").append(appendEditable("tag" + localTags.length, true));
-	editTags(newId);
+	editTags(newId, true);
 	newId++;
 }
 
