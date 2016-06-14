@@ -141,7 +141,9 @@ create_tags_input.tagsinput({
 			source: tagsWithDefaults, 
 			limit:25
 		}
-	)
+	), 
+	maxChars: 10,
+	maxTags: 35
 });
 
 /**
@@ -173,7 +175,6 @@ function createPreset() {
 	var preset_create_div = $('#preset_create_div');
 	var presetName = preset_create_div.find('#create_preset_name').val();
 	var presetTag = $('#preset_create_div .tags_input').val();
-	console.log(presetName);
 	if (currentcamera !== undefined) {
 		$.get("/api/backend/presets/createpreset?camera=" + currentcamera + "&tags=" + presetTag + "&name=" + presetName, function(data) {console.log("create preset respone: " + data);})
 		.done(loadPresets);
@@ -197,7 +198,9 @@ edit_tags_input.tagsinput({
 			source: tagnames,
 			limit:25
 		}
-	)
+	), 
+	maxChars: 10,
+	maxTags: 35
 });
 
 
@@ -302,9 +305,13 @@ function matchingPresets(val) {
 	for(var p in presets) {
 		var preset = presets[p];
 		if(preset.tags != undefined) {
-			var tags = preset.tags.filter(function(tag) { return tag.indexOf(val) > -1;});
+			var tags = preset.tags.filter(function(tag) { return tag.toLowerCase().indexOf(val.toLowerCase()) > -1;});
 			if (tags.length > 0) {
 				matchpresets.push(preset);
+			} else if(preset.name != undefined) {
+				if (preset.name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+					matchpresets.push(preset);
+				}
 			}
 		}
 	}
@@ -403,12 +410,16 @@ function updateTags() {
 * @param val value of the tag to add.
 */
 function newTag(val) {
-	localTags.push(val);
-	tagnames.clearPrefetchCache();
- 	tagnames.initialize(true);
-	$.get("/api/backend/presets/addtag?name=" + val, function(data) {
-		console.log("create tag response: " + data);
-	}).done();
+	if (localTags.indexOf(val) < 0 && val != "" && val != undefined) {
+		localTags.push(val);
+		tagnames.clearPrefetchCache();
+		tagnames.initialize(true);
+		$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+			console.log("create tag response: " + data);
+		});
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -464,7 +475,7 @@ function appendEditable(input, add) {
 	if(add){
 		result += "<div>"
 	}
-	result += "<input class='new' value='" + input + "' /><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
+	result += "<input class='new' value='" + input + "' maxlength=15/><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
 	if(add) {
 		result += "</div>"
 	}
