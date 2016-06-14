@@ -5,12 +5,21 @@ var maxRows = 5;
 var maxColumns = 5;
 var maxLevels = 3;
 
+
+/**
+* Executed when the modal for auto preset creation loads. Adds the mjpeg stream to the image behind the canvas.
+*/
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
-  $("#auto-preset-creation-preview-image").attr('src', '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+$("#auto-preset-creation-preview-image").height + '&width='+$("#auto-preset-creation-preview-image").width );
+  var image = $("#auto-preset-creation-preview-image");
+  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height + '&width='+image.width;
+  $("#auto-preset-creation-preview-image").attr('src', streamURL);
   showSubViews();
 })
 
-
+/**
+* Executed when the auto create presets button is pressed.
+* Sends a command to the server to start auto creating presets with the current amount of columns,rows and levels.
+*/
 function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
 	var presetTag = $('#auto_preset_tags').val();
@@ -19,10 +28,12 @@ function autoCreatePresets() {
 
     });
   }
-
 }
 
-function updateColumnAmount(amount) {
+/**
+* Increases the amount of columns with the provided value (negative values allowed for decreasing).
+*/
+function increaseColumnAmount(amount) {
   columns+=amount;
   columns = Math.min(columns, maxColumns);
   columns = Math.max(columns, 1);
@@ -30,7 +41,10 @@ function updateColumnAmount(amount) {
   showSubViews();
 }
 
-function updateRowAmount(amount) {
+/**
+* Increases the amount of rows with the provided value (negative values allowed for decreasing).
+*/
+function increaseRowAmount(amount) {
   rows+=amount;
   rows = Math.min(rows, maxRows);
   rows = Math.max(rows, 1);
@@ -38,7 +52,10 @@ function updateRowAmount(amount) {
   showSubViews();
 }
 
-function updateLevelAmount(amount) {
+/**
+* Increases the amount of levels with the provided value  (negative values allowed for decreasing).
+*/
+function increaseLevelAmount(amount) {
   levels+=amount;
   levels = Math.min(levels, maxLevels);
   levels = Math.max(levels, 1);
@@ -46,14 +63,14 @@ function updateLevelAmount(amount) {
   showSubViews();
 }
 
+/**
+* Draws the subview rectangles on the canvas with the rectangles provided by the backend.
+*/
 function showSubViews() {
   var offset = 1;
   var canvas = document.getElementById('previewCanvas');
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
-//  var imageObj = new Image();
-//  imageObj.onload = function () {
-//    context.drawImage(imageObj, offset, offset);
     context.strokeStyle = "#FF0000";
     context.lineWidth=0.5;
     $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
@@ -66,12 +83,13 @@ function showSubViews() {
          context.strokeRect(x, y, width, height)
        }
      });
-//  };
   var imageWidth = canvas.width - (offset * 2);
   var imageHeight = canvas.height - (offset * 2);
-//  imageObj.src = '/api/backend/camera/'+currentcamera+'/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
 }
 
+/**
+* Clears the canvas from rectangles.
+*/
 function clearCanvas(canvas) {
   var context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
