@@ -46,7 +46,7 @@ public abstract class AutoPresetCreator {
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
    * @throws SQLException if exception occurs while writing to the database.
    */
-  public Collection<Integer> createPresets(IPCamera cam, Collection<SubView> subViews)
+  public ArrayList<Integer> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException, SQLException {
     if (cam.isBusy()) {
