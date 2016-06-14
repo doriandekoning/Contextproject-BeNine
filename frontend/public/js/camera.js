@@ -79,7 +79,7 @@ Camera.prototype = {
 			focus.hide();
 		} else {
 			focus.show();
-			focus.find("#auto_focys").prop('checked', this.autoFocus);
+			focus.find("#auto_focus").prop('checked', this.autoFocus);
 		}
 	}
 };
