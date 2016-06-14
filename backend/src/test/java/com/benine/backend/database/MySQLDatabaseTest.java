@@ -294,7 +294,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.getAllPresets();
-        verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+        verify(logger).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
     @Test
