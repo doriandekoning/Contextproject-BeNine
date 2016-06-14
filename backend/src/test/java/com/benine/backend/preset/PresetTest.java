@@ -1,22 +1,37 @@
 package com.benine.backend.preset;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
+import com.benine.backend.video.VideoFrame;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 /**
  * Abstract class for testing presets
  */
 public abstract class PresetTest {
+  
+  Preset preset;
 
   @Before
   public void initialize() {
-
+    preset = getPreset();
   }
 
 
@@ -50,12 +65,11 @@ public abstract class PresetTest {
   }
   @Test
   public void testEqualsEqualTags() {
-    Preset preset1 = getPreset();
     Preset preset2 = getPreset();
 
-    preset1.addTag("Violin");
+    preset.addTag("Violin");
     preset2.addTag("Violin");
-    Assert.assertEquals(preset1, preset2);
+    Assert.assertEquals(preset, preset2);
   }
 
   @Test
@@ -103,7 +117,6 @@ public abstract class PresetTest {
 
   @Test
   public void testSetId() {
-    Preset preset = getPreset();
     preset.setId(1);
     Assert.assertEquals(1, preset.getId());
   }
@@ -111,7 +124,6 @@ public abstract class PresetTest {
 
   @Test
   public void testEqualsSamePreset() {
-    Preset preset = getPreset();
     Preset preset2 = getPreset();
     Assert.assertEquals(preset, preset2);
   }
@@ -119,7 +131,6 @@ public abstract class PresetTest {
 
   @Test
   public void testEqualsDifferentCameraId() {
-    Preset preset = getPreset();
     Preset preset2 = getPreset();
     preset2.setCameraId(preset.getCameraId()+1);
     Assert.assertNotEquals(preset, preset2);
@@ -128,7 +139,6 @@ public abstract class PresetTest {
 
   @Test
   public void testEqualsOtherPresetID() {
-    Preset preset = getPreset();
     Preset preset2 = getPreset();
     preset2.setId(5);
     Assert.assertNotEquals(preset, preset2);
@@ -136,27 +146,34 @@ public abstract class PresetTest {
 
   @Test
   public void testEqualsOtherObject() {
-    Preset preset = getPreset();
     Assert.assertNotEquals(preset, 1);
   }
 
   @Test
   public void testEqualsSameObject() {
-    Preset preset = getPreset();
-
     Assert.assertEquals(preset, preset);
   }
 
   @Test
   public void testEqualsNull() {
-    Preset preset = getPreset();
     Assert.assertNotEquals(preset, null);
+  }
+  
+  @Test
+  public void testCreateImage() throws StreamNotAvailableException, IOException, SQLException{
+    StreamReader streamReader = mock(StreamReader.class);
+    VideoFrame videoFrame = mock(VideoFrame.class);
+    byte[] image = IOUtils.toByteArray(new FileInputStream("resources" + File.separator + "test" + File.separator + "firstframe.jpg"));
+    when(videoFrame.getImage()).thenReturn(image);
+    when(videoFrame.getHeaderBytes()).thenReturn(image);
+    when(streamReader.getSnapShot()).thenReturn(videoFrame);
+    preset.createImage(streamReader, "resources" + File.separator + "test" + File.separator, 160, 90);
+    File path = new File("resources" + File.separator + "test" + File.separator + preset.getImage());
+    path.delete();
+    assertEquals("preset_0.jpg", preset.getImage());
+
   }
 
 
-
   public abstract Preset getPreset();
-
-
-
 }

@@ -188,13 +188,13 @@ input[type=range]:focus {
 #preset_create_div .bootstrap-tagsinput {
 	position: absolute;
 	left: 10px;
-	font-size: 17px;
+	font-size: 16px;
 }
 
 #preset_edit_div .bootstrap-tagsinput {
 	position: absolute;
 	left: 10px;
-	font-size: 17px;
+	font-size: 16px;
 }
 
 .tt-menu {
@@ -228,6 +228,7 @@ input[type=range]:focus {
 #left_area {
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     flex: 1;
     padding: 0;
     margin: 0;
@@ -242,6 +243,10 @@ input[type=range]:focus {
     display: flex;
     background-color: #666666;
     flex-shrink: 0;
+}
+
+.control_buttons .btn-group {
+    top: 3px;
 }
 
 #control_area, #queue_area, .control_wrapper, #right_area .row {
@@ -305,10 +310,12 @@ input[type=range]:focus {
     margin: 0;
     padding: 0;
 	width: 100%;
+    display: flex;
     -webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	background-color: white;
+    flex-shrink: 0;
 }
 #tagsearch .twitter-typeahead {
 	width: 100%;
@@ -338,6 +345,7 @@ input[type=range]:focus {
     width: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
     overflow: scroll;
 }
 
@@ -678,4 +686,27 @@ input[type=range]:focus {
   left:0px;
   z-index:20;
   height:200px;
+}
+.btn-primary {
+    background-color: #4d656f;
+    border-color: #475f6a;
+}
+
+.btn-primary:hover {
+    background-color: #3D525B;
+    border-color: #465c65;
+}
+
+.btn-primary[disabled]:hover {
+    background-color: #3D525B;
+    border-color: #465c65;
+}
+
+.btn-primary:focus {
+    background-color: #3D525B;
+    border-color: #4d656f;
+}
+
+.label-info, .progress-bar {
+    background-color: #4d656f;
 }

@@ -39,6 +39,7 @@ public class RecallPresetHandler extends RequestHandler {
 
     } catch (CameraConnectionException e) {
       getLogger().log("Error connectiong to camera", e);
+      respondFailure(request, res);
     } catch (CameraBusyException e) {
       getLogger().log("Camera is busy", e);
       respondFailure(request, res);

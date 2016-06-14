@@ -5,6 +5,8 @@ import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.*;
 import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.video.StreamType;
+
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -22,9 +24,8 @@ import static org.mockito.Mockito.*;
 
 /**
  * Test class to test the IP Camera class.
- * The mock server is used to simulate the camera.
  */
-public class IpcameraTest {
+public class IpcameraTest extends BasicCameraTest {
 
   private IPCamera camera, busyCamera;
   private CameraController cameraController = mock(CameraController.class);
@@ -135,19 +136,6 @@ public class IpcameraTest {
     IPCamera camera = new IPCamera("1.300.3.4", cameraController);
     camera.move(180, 50);
   }
-
-  @Test
-  public final void testGetSetId() {
-    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
-    camera.setId(4);
-    Assert.assertEquals(4, camera.getId());
-  }
-
-  @Test
-  public final void testUninitializedId(){
-    IPCamera camera = new IPCamera("1.300.3.4", cameraController);
-    Assert.assertEquals(-1, camera.getId());
-  }
   
   @Test
   public final void testNotEqualsIPAddress() {
@@ -236,14 +224,6 @@ public class IpcameraTest {
   }
 
   @Test
-  public void testIsSetInUse() {
-    IPCamera camera1 = new IPCamera("ip", cameraController);
-    Assert.assertFalse(camera1.isInUse());
-    camera1.setInUse();
-    Assert.assertTrue(camera1.isInUse());
-  }
-
-  @Test
   public void testBusyInitializedFalse() {
     IPCamera cam = spy(new IPCamera("12", cameraController));
     Assert.assertFalse(cam.isBusy());
@@ -304,6 +284,16 @@ public class IpcameraTest {
   @Test (expected = CameraBusyException.class)
   public void testBusyZoomTo() throws CameraBusyException, CameraConnectionException {
     busyCamera.zoomTo(30);
+  }
+  
+  @Test
+  public void testGetStreamType() {
+    assertEquals(StreamType.MJPEG, camera.getStreamType());
+  }
+
+  @Override
+  public BasicCamera getCamera() {
+    return new IPCamera("test", mock(CameraController.class));
   }
 
 }
