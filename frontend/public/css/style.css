@@ -88,7 +88,7 @@ nav img {
 	top: 150px;
 }
 
-input[type=range] {
+.vertical-slider {
 	position: absolute;
 	z-index: 0;
 	display: block;
@@ -109,21 +109,30 @@ input[type=range] {
 
     border-radius: 8px;
 }
+.auto-presets-modal input[type=range] {
+  margin-right: 15px;
+}
+
+.horizontal-slider {
+	z-index: 0;
+  display: block;
+    -webkit-appearance: none;
+  background-color: #848484;
+
+  border-radius: 8px;
+}
 
 #control_area input[type="range"]::-webkit-slider-thumb {
     width: 35px;
     height: 55px;
 }
 
-.settings-modal input[type="range"]::-webkit-slider-thumb {
-    width: 15px;
-    height: 15px;
-}
-
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: #585858;
 	border-radius: 8px;
+  width: 15px;
+  height: 15px;
 }
 
 input[type="range"]::-ms-tooltip {
@@ -656,6 +665,28 @@ input[type=range]:focus {
   width: 80%;
 }
 
+#autopreset-left-column {
+  padding: 15px;
+}
+
+.label-auto-preset-input {
+  width: 45%;
+}
+
+#auto-preset-creation-preview-image {
+  z-index:1;
+  position:absolute;top:0px;
+  left:0px;
+  height:200px;
+}
+
+#previewCanvas {
+  position:absolute;
+  top:0px;
+  left:0px;
+  z-index:20;
+  height:200px;
+}
 .btn-primary {
     background-color: #4d656f;
     border-color: #475f6a;
@@ -679,4 +710,3 @@ input[type=range]:focus {
 .label-info, .progress-bar {
     background-color: #4d656f;
 }
-
