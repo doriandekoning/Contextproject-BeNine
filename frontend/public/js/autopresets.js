@@ -3,7 +3,7 @@ var levels = 3;
 var rows = 3;
 
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
-  $("#auto-preset-creation-preview-image").attr('src', '/api/backend/camera/' + currentcamera+ '/mjpeg?height=200&width=440');
+  $("#auto-preset-creation-preview-image").attr('src', '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+$("#auto-preset-creation-preview-image").height + '&width='+$("#auto-preset-creation-preview-image").width );
   showSubViews();
 })
 

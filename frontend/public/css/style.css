@@ -664,3 +664,18 @@ input[type=range]:focus {
 .label-auto-preset-input {
   width: 45%;
 }
+
+#auto-preset-creation-preview-image {
+  z-index:1;
+  position:absolute;top:0px;
+  left:0px;
+  height:200px;
+}
+
+#previewCanvas {
+  position:absolute;
+  top:0px;
+  left:0px;
+  z-index:20;
+  height:200px;
+}
