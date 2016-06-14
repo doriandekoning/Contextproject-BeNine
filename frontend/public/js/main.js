@@ -6,25 +6,25 @@ var editingpreset;
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
-	
+
 	// Update server status ever 10 seconds
 	setInterval(updateServerStatus, 10 * 1000);
-	
+
 	// Reload presets every 5 seconds.
 	setInterval(loadPresets, 5 * 1000);
-	
+
 	// Load the available cameras.
 	loadCameras();
-	
+
 	//Check cameras inuse.
 	setInterval(checkCamerasInUse, 2000);
-	
+
 	// Load the available presets from the backend.
 	loadPresets();
 
 	// Load the available perforamnces from the backend.
 	loadPerformances();
-	
+
 	Holder.run({});
 	console.log('Page has loaded successfully.');
 });
@@ -41,7 +41,7 @@ function updateServerStatus() {
 		} else {
 			statuslabel.attr("class", "label label-danger");
 		}
-	}).fail(function() { 
+	}).fail(function() {
 		statuslabel.attr("class", "label label-danger");
 	});
 }
@@ -59,7 +59,7 @@ function checkCamerasInUse() {
 			if (camera !== undefined) {
 				camera.inuse = cam.inuse;
 				setCameraStatus(cam.id);
-			} 
+			}
 		}
 	});
 	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
