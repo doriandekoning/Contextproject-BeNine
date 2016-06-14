@@ -1,6 +1,9 @@
 var columns = 3;
 var levels = 3;
 var rows = 3;
+var maxRows = 5;
+var maxColumns = 5;
+var maxLevels = 3;
 
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   $("#auto-preset-creation-preview-image").attr('src', '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+$("#auto-preset-creation-preview-image").height + '&width='+$("#auto-preset-creation-preview-image").width );
@@ -21,16 +24,22 @@ function autoCreatePresets() {
 
 function updateColumnAmount(amount) {
   columns+=amount;
+  columns = Math.min(columns, maxColumns);
+  columns = Math.max(columns, 1);
   showSubViews();
 }
 
 function updateRowAmount(amount) {
   rows+=amount;
+  rows = Math.min(rows, maxRows);
+  rows = Math.max(rows, 1);
   showSubViews();
 }
 
 function updateLevelAmount(amount) {
   levels+=amount;
+  levels = Math.min(levels, maxLevels);
+  levels = Math.max(levels, 1);
   showSubViews();
 }
 
