@@ -236,6 +236,10 @@ input[type=range]:focus {
     flex-shrink: 0;
 }
 
+.control_buttons .btn-group {
+    top: 3px;
+}
+
 #control_area, #queue_area, .control_wrapper, #right_area .row {
     width: 100%;
     display: flex;
@@ -651,3 +655,28 @@ input[type=range]:focus {
 #auto_preset_name {
   width: 80%;
 }
+
+.btn-primary {
+    background-color: #4d656f;
+    border-color: #475f6a;
+}
+
+.btn-primary:hover {
+    background-color: #3D525B;
+    border-color: #465c65;
+}
+
+.btn-primary[disabled]:hover {
+    background-color: #3D525B;
+    border-color: #465c65;
+}
+
+.btn-primary:focus {
+    background-color: #3D525B;
+    border-color: #4d656f;
+}
+
+.label-info, .progress-bar {
+    background-color: #4d656f;
+}
+
