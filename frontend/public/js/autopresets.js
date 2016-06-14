@@ -19,18 +19,18 @@ function autoCreatePresets() {
 
 }
 
-function updateColumnSlider(newColumns) {
-  columns = newColumns;
+function updateColumnAmount(amount) {
+  columns+=amount;
   showSubViews();
 }
 
-function updateRowSlider(newRows) {
-  rows = newRows;
+function updateRowAmount(amount) {
+  rows+=amount;
   showSubViews();
 }
 
-function updateLevelSlider(newLevels) {
-  levels = newLevels;showSubViews;
+function updateLevelAmount(amount) {
+  levels+=amount;
   showSubViews();
 }
 
@@ -38,6 +38,7 @@ function showSubViews() {
   var offset = 1;
   var canvas = document.getElementById('previewCanvas');
   var context = canvas.getContext('2d');
+  clearCanvas(canvas);
 //  var imageObj = new Image();
 //  imageObj.onload = function () {
 //    context.drawImage(imageObj, offset, offset);
@@ -57,4 +58,9 @@ function showSubViews() {
   var imageWidth = canvas.width - (offset * 2);
   var imageHeight = canvas.height - (offset * 2);
 //  imageObj.src = '/api/backend/camera/'+currentcamera+'/mjpeg?width='+ imageWidth + '&height=' + imageHeight;
+}
+
+function clearCanvas(canvas) {
+  var context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
 }
