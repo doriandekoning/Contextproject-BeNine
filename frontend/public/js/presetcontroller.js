@@ -443,7 +443,7 @@ function updateTag(index, val) {
 * Create a new tag.
 */
 function addTag() {
-	$(".fill-tags").prepend(appendEditable("new", true));
+	$(".fill-tags").prepend(appendEditable("tag " + localTags.length, true));
 	editTags(newId, true);
 	newId++;
 }
