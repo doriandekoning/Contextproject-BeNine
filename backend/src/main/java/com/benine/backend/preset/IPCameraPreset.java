@@ -1,6 +1,5 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
@@ -10,12 +9,7 @@ import com.benine.backend.video.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
-import javax.imageio.ImageIO;
 
 
 /**
@@ -74,36 +68,6 @@ public class IPCameraPreset extends Preset {
     this.autofocus = cam.isAutoFocusOn();
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
-  }
-
-
-
-  /**
-   * Creates an image for a preset.
-   * @param cam      The camera to take the image from.
-   * @throws StreamNotAvailableException  If the camera does not have a stream.
-   * @throws IOException  If the image cannot be written.
-   * @throws SQLException if the image can not be saved in the database.
-   */
-  public void createImage(IPCamera cam) throws
-          StreamNotAvailableException, IOException, SQLException {
-
-    StreamController streamController = ServerController.getInstance().getStreamController();
-    MJPEGStreamReader streamReader = (MJPEGStreamReader)
-            streamController.getStreamReader(cam.getId());
-    File path = new File("static" + File.separator + "presets" + File.separator
-            + cam.getId() + "_" + getId() + ".jpg");
-
-    VideoFrame snapShot = streamReader.getSnapShot();
-    MJPEGFrameResizer resizer = new MJPEGFrameResizer(160, 90);
-    snapShot = resizer.resize(snapShot);
-
-    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(snapShot.getImage()));
-    ImageIO.write(bufferedImage, "jpg", path);
-
-    PresetController presetController = ServerController.getInstance().getPresetController();
-    setImage(cam.getId() + "_" + getId() + ".jpg");
-    presetController.updatePreset(this);
   }
 
   @Override
@@ -185,29 +149,7 @@ public class IPCameraPreset extends Preset {
 
   public void setAutoiris(boolean autoiris) {
     this.autoiris = autoiris;
-  }
-  
-  /**
-   * Creates a sql query to insert a preset in the database.
-   * @return The query
-   */
-  public String createAddSqlQuery() {
-    int auto = 0;
-    if (isAutofocus()) {
-      auto = 1;
-    }
-    int autoir = 0;
-    if (isAutoiris()) {
-      autoir = 1;
-    }
-    return "INSERT INTO presetsdatabase.presets VALUES(" + getId() + ","
-        + getPosition().getPan() + "," + getPosition().getTilt()
-        + "," + getPosition().getZoom() + "," + getFocus()
-        + "," + getIris() + "," + auto + "," + getPanspeed() + ","
-        + getTiltspeed() + "," + autoir + ",'" + getImage() + "',"
-        + getCameraId() + ")";
-  }
-
+  } 
 
   /**
    * Moves the camera

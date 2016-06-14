@@ -33,7 +33,7 @@ public class CameraZoomHandler extends CameraRequestHandler {
     ZoomingCamera zoomingCam = (ZoomingCamera) getCameraController().getCameraById(camID);
     String zoomType = request.getParameter("zoomType");
     String zoom = request.getParameter("zoom");
-
+    
     try {
       zoom(zoomingCam, zoomType, zoom);
     } catch (MalformedURIException e) {
@@ -44,8 +44,9 @@ public class CameraZoomHandler extends CameraRequestHandler {
       respondFailure(request, res);
     } catch (CameraBusyException e) {
       getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
+      respondFailure(request, res);
     }
-
+    respondSuccess(request, res);
     request.setHandled(true);
   }
 

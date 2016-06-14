@@ -52,13 +52,11 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     final double curVerFov = IPCamera.VERTICAL_FOV_MAX * zoomCoefficient;
 
     for (SubView subView : subViews) {
-      System.out.println(1);
       Coordinate center = subView.getCenter();
       final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
       final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
       final int zoom = IPCamera.MAX_ZOOM - (int) ((subView.getWidth() / 100)
               * (IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM));
-      System.out.println("Curzoom: " + curPos.getZoom() + " zoom:   " + zoom);
 
       positions.add(new ZoomPosition(tilt, pan, zoom));
     }

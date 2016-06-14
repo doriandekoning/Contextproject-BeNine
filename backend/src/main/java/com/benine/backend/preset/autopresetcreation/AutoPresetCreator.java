@@ -22,6 +22,7 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private PresetController presetController;
+  
   /**
    * Creates a new AutoPresetCreator object.
    * @param presetController the presetController to add the created presets too.
@@ -29,6 +30,7 @@ public abstract class AutoPresetCreator {
   public AutoPresetCreator(PresetController presetController) {
     this.presetController = presetController;
   }
+  
   /**
    * Automatically creates presets for the selected camera.
    * Calls generatePositions to get the positions of the presets.
@@ -91,9 +93,10 @@ public abstract class AutoPresetCreator {
     IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId(), "");
     cam.setBusy(true);
     presetController.addPreset(preset);
-    preset.createImage(cam);
+    presetController.createImage(preset);
     return preset;
   }
+  
   /**
    * Generates the positions to create pesets at.
    * @param cam the camera to create positions for.
