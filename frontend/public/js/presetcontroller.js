@@ -368,26 +368,17 @@ $(".fill-tags").on('click', '.tag', function(e){
 function editTags(id, isNew) {
 	$(".edit").click(function(e){
 		e.preventDefault();
-		if(!isNew) {
-			var tag = $('.new').val();
-			if (updateTag(id, tag) == true) {
-				$(this).parent().replaceWith(appendTag(id, tag));
-			}
-		}
-		else {
-			var tag = $('.new').val();
-			if (newTag(id, tag) == true) {
-				$(this).parent().replaceWith(appendTag(id, tag));
-			}
+		var tag = $('.new').val();
+		var updated = updateTag(id, tag);
+		if (updated) {
+			$(this).parent().replaceWith(appendTag(id, tag));
 		}
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		if(!isNew){
-			deleteTag(id);
-		}
+		deleteTag(id);
 	});
 }
 
@@ -417,17 +408,24 @@ function deleteTag(index) {
 	localTags.splice(index,1);
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
+	deleteTagFromPresets(remove);
 	$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
 				console.log("create tag respone: " + data);
 	}).done();
 }
 
+/**
+* Function updates a tag in the tag list.
+* @param index the index of the updated tag
+* @val the updated version of the tag
+*/
 function updateTag(index, val) {
-	if (localTags.indexOf(val) < 0 && val != "" && val != undefined) {
+	if ((localTags.indexOf(val) < 0 && val != "" && val != undefined) || localTags.indexOf(val) == index)  {
 		var remove = localTags[index];
 		localTags[index] = val
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
+		updateTagInPresets(remove, val);
 		$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
 					console.log("create tag respone: " + data);
 		}).done();
@@ -440,10 +438,43 @@ function updateTag(index, val) {
 }
 
 /**
+* Delete a the tags from all the presets containing the tag.
+* @param val The tag to be deleted
+*/
+function deleteTagFromPresets(val) {
+	for(i = 0; i < presets.length; i++) {
+		var tagIndex = presets[i].tags.indexOf(val);
+		if (tagIndex > -1) {
+			presets[i].tags.splice(tagIndex, 1);
+			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
+		}
+	}
+}
+
+/**
+* Updates a the tags in all the presets containing the old tag.
+* @param old The old tag
+* @param fresh The new tag
+*/
+function updateTagInPresets(old, fresh) {
+	for(i = 0; i < presets.length; i++) {
+		var tagIndex = presets[i].tags.indexOf(old);
+		if (tagIndex > -1) {
+			presets[i].tags[tagIndex] = fresh;
+			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
+																									function(data) {console.log("edit preset: " + data)});
+		}
+	}
+}
+
+/**
 * Create a new tag.
 */
 function addTag() {
-	$(".fill-tags").prepend(appendEditable("tag " + localTags.length, true));
+	var add = "tag " + localTags.length;
+	$(".fill-tags").prepend(appendEditable(add, true));
+	newTag(add)
 	editTags(newId, true);
 	newId++;
 }
