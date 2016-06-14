@@ -26,6 +26,7 @@ function updateColumnAmount(amount) {
   columns+=amount;
   columns = Math.min(columns, maxColumns);
   columns = Math.max(columns, 1);
+  $("#columns-amount").val(columns);
   showSubViews();
 }
 
@@ -33,6 +34,7 @@ function updateRowAmount(amount) {
   rows+=amount;
   rows = Math.min(rows, maxRows);
   rows = Math.max(rows, 1);
+  $("#rows-amount").val(rows);
   showSubViews();
 }
 
@@ -40,6 +42,7 @@ function updateLevelAmount(amount) {
   levels+=amount;
   levels = Math.min(levels, maxLevels);
   levels = Math.max(levels, 1);
+  $("#levels-amount").val(levels);
   showSubViews();
 }
 
