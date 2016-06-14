@@ -54,6 +54,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
       setHeaders(streamReaderMJPEG, res);
 
       // Stream to the client
+      res.setStatus(HttpServletResponse.SC_OK);
       stream(request, res, distributer);
 
     } else {
@@ -132,7 +133,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
   private void stream(Request request, HttpServletResponse res, StreamDistributer distributer) {
     int camID = getCameraId(request);
 
-    byte[] bytes = new byte[16384];
+    byte[] bytes = new byte[8192];
     int bytesRead;
 
     try (PipedInputStream in = new PipedInputStream(distributer.getStream());
