@@ -11,7 +11,7 @@ var maxLevels = 3;
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var image = $("#auto-preset-creation-preview-image");
-  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height + '&width='+image.width;
+  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height() + '&width='+image.width();
   $("#auto-preset-creation-preview-image").attr('src', streamURL);
   showSubViews();
 })
