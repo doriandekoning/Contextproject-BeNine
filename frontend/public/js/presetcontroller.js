@@ -434,11 +434,10 @@ function updateTag(index, val) {
 		tagnames.initialize(true);
 		updateTagInPresets(remove, val);
 		$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
-					console.log("create tag respone: " + data);
-		}).done();
-		$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+			console.log("create tag respone: " + data);
+		}).done($.get("/api/backend/presets/addtag?name=" + val, function(data) {
 			console.log("create tag response: " + data);
-		}).done();
+		}).done());
 		return true;
 	}
 	return false;
@@ -479,12 +478,14 @@ function updateTagInPresets(old, fresh) {
 * Create a new tag.
 */
 function addTag() {
-	var add = "tag " + localTags.length;
-	$(".fill-tags").prepend(appendEditable(add, true));
-	newTag(add);
-	editable = false;
-	editTags(newId, true);
-	newId++;
+	if(editable) {
+		var add = "tag " + localTags.length;
+		$(".fill-tags").prepend(appendEditable(add, true));
+		newTag(add);
+		editable = false;
+		editTags(newId, true);
+		newId++;
+	}
 }
 
 /**
