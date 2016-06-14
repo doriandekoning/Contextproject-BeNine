@@ -18,6 +18,7 @@
 			<directory>${project.basedir}</directory>
 			<includes>
 				<include>startserver.cmd</include>
+				<include>startserver.sh</include>
 			</includes>
 		</fileSet>
 		<fileSet>
