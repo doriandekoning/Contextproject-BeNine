@@ -6,11 +6,14 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.video.StreamNotAvailableException;
+
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,9 +45,10 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      creator.createPresets(ipcam, creator.generateSubViews());
-      respondSuccess(request, httpServletResponse);
-
+      ArrayList<Integer> presetIDs = creator.createPresets(ipcam, creator.generateSubViews());
+      String presetIDList = presetIDs.toString();
+      respond(request, httpServletResponse, presetIDList);
+      
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);
