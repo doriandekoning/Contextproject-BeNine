@@ -45,6 +45,8 @@ public class CameraStreamHandler extends CameraRequestHandler {
       getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
     }
 
+    request.setHandled(true);
+
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
       MJPEGStreamReader streamReaderMJPEG = (MJPEGStreamReader) streamReader;
@@ -60,8 +62,6 @@ public class CameraStreamHandler extends CameraRequestHandler {
     } else {
       res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
-
-    request.setHandled(true);
   }
 
   /**
