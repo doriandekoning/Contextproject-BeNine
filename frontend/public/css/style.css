@@ -152,14 +152,7 @@ input[type=range]:focus {
 	outline: none;
 }
 
-.slider button {
-    height: 40px;
-    top: 0;
-    position: relative;
-    border-radius: 8px;
-}
-
-.slider span {
+.slider .slider-label {
     height: 20px;
     width: 100%;
     position: absolute;
