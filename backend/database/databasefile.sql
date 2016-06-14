@@ -14,6 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema presetsdatabase
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `presetsdatabase` ;
 CREATE SCHEMA IF NOT EXISTS `presetsdatabase` ;
 USE `presetsdatabase` ;
 
