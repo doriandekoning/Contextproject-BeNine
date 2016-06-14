@@ -18,8 +18,8 @@ Build the back-end server using `maven install` with the supplied `pom.xml` file
 
 ### Deployable zip
 Build the back-end server using `maven install` with the supplied `pom.xml` file. 
-The zip file containing the backend and frontend server can be found in the `backend/target/site` folder.
-The backend and frontend server can both be started using the startserver file. 
+The zip file containing the backend and frontend server can be found in the `backend/target` folder.
+When unzipped the backend and frontend server can both be started using one of the startserver scripts, the batch file (.cmd) or the bash script (.sh).
 
 ## Tool results
 ### JavaScript
