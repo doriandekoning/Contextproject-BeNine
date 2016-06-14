@@ -61,6 +61,7 @@ public class DatabaseControllerTest {
     Set<String> tags = new HashSet<>();
     tags.add("test");
     Preset preset = mock(Preset.class);
+    when(preset.getName()).thenReturn("");
     presets.add(preset);
     when(database.getAllPresets()).thenReturn(presets);
     databaseController.start();

@@ -179,13 +179,13 @@ input[type=range]:focus {
 #preset_create_div .bootstrap-tagsinput {
 	position: absolute;
 	left: 10px;
-	font-size: 17px;
+	font-size: 16px;
 }
 
 #preset_edit_div .bootstrap-tagsinput {
 	position: absolute;
 	left: 10px;
-	font-size: 17px;
+	font-size: 16px;
 }
 
 .tt-menu {
