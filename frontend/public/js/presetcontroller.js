@@ -417,7 +417,9 @@ function newTag(val) {
 		$.get("/api/backend/presets/addtag?name=" + val, function(data) {
 			console.log("create tag response: " + data);
 		});
+		return true;
 	}
+	return false;
 }
 
 /**
