@@ -633,7 +633,8 @@ public class MySQLDatabase implements Database {
       int id = resultset.getInt("ID");
       String name = resultset.getString("name");
       IPCameraPreset preset = new IPCameraPreset(pos, focus, iris,
-              autoFocus, autoIris, cameraId, name);
+              autoFocus, autoIris, cameraId);
+      preset.setName(name);
       preset.setId(id);
       preset.setPanspeed(panspeed);
       preset.setTiltspeed(tiltspeed);
@@ -656,7 +657,8 @@ public class MySQLDatabase implements Database {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
       String name = resultset.getString("name");
-      SimplePreset preset = new SimplePreset(cameraId, name);
+      SimplePreset preset = new SimplePreset(cameraId);
+      preset.setName(name);
       int id = resultset.getInt("id");
       preset.setId(id);
       preset.setImage(image);

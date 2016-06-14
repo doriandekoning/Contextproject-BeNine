@@ -239,7 +239,8 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         result.addColumn("name", new Object[]{"name"});
         result.next();
         SimplePreset preset = database.getSimplePresetsFromResultSet(result);
-        SimplePreset expected = new SimplePreset(1, "name");
+        SimplePreset expected = new SimplePreset(1);
+        expected.setName("name");
         expected.setImage("test");
         expected.setId(1);
         result.addColumn("image", new Object[]{1});
@@ -689,7 +690,9 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     public IPCameraPreset getPreset() {
-        return new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, false, 0, "Name");
+        IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true, false, 0);
+        preset.setName("Name");
+        return preset;
     }
 
 }

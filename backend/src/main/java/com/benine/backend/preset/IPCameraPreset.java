@@ -33,13 +33,12 @@ public class IPCameraPreset extends Preset {
    * @param autofocus The autofocus of the preset
    * @param autoiris  The autoiris of the preset
    * @param cameraId  The id of the camera associated with this preset.
-   * @param name      The name of the preset
    */
   public IPCameraPreset(ZoomPosition pos, int focus, int iris,
                         boolean autofocus,
-                        boolean autoiris, int cameraId, String name) {
+                        boolean autoiris, int cameraId) {
 
-    super(cameraId, name);
+    super(cameraId);
     this.position = pos;
     this.focus = focus;
     this.iris = iris;
@@ -52,16 +51,15 @@ public class IPCameraPreset extends Preset {
    * @param cam IPCamera to create the preset of
    * @param panSpeed the panspeed for the preset
    * @param tiltSpeed the tiltspeed of the preset
-   * @param name the name of the preset
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws IOException if the preset image cannot be stored.
    * @throws StreamNotAvailableException if the camera stream cannot be reached.
    * @throws CameraBusyException if the camera is busy
    */
-  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed,  String name)
+  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
           throws  CameraConnectionException, IOException,
                   StreamNotAvailableException, CameraBusyException {
-    super(cam.getId(), name);
+    super(cam.getId());
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
     this.focus = cam.getFocusPosition();
     this.iris = cam.getIrisPosition();

@@ -62,7 +62,8 @@ public class PresetDeletionHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), 40,50,true, true, 0, "name");
+      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), 40,50,true, true, 0);
+      preset.setName("name");
       preset.addTags(tags);
 
     } catch (CameraConnectionException | StreamNotAvailableException e) {

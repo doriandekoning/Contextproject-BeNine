@@ -41,10 +41,12 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,true, 0, "name");
+    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,true, 0);
+    preset.setName("name");
     Set<String> keywords = new HashSet<>();
     keywords.add("Violin");
-    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,  true, 0, "name");
+    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,  true, 0);
+    presetKeywords.setName("name");
     presetKeywords.addTags(keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();

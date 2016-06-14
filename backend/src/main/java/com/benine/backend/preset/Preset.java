@@ -31,17 +31,15 @@ public abstract class Preset {
   private int presetid = -1;
   protected Set<String> tags = new HashSet<String>();
   private int cameraId;
-  private String name;
+  private String name = "";
 
   /**
    * Constructs a preset.
    *
    * @param cameraId The id of the camera associated with this preset.
-   * @param name     The name of te preset
    */
-  public Preset(int cameraId, String name) {
+  public Preset(int cameraId) {
     this.cameraId = cameraId;
-    this.name = name;
   }
 
   public String getImage() {

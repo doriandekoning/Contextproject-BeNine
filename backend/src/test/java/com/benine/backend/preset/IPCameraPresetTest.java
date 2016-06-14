@@ -25,14 +25,17 @@ public class IPCameraPresetTest extends PresetTest {
   IPCameraPreset preset;
 
   public IPCameraPreset getPreset() {
-    return new IPCameraPreset(new ZoomPosition(4.2, 42.42, 4), 2, 5, false, true, 34, "name");
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(4.2, 42.42, 4), 2, 5, false, true, 34);
+    preset.setName("name");
+    return preset;
   }
   
   @Before
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new IPCameraPreset(new ZoomPosition(10, 12, 13), 40, 56, true, false, 0, "name");
+    preset = new IPCameraPreset(new ZoomPosition(10, 12, 13), 40, 56, true, false, 0);
+    preset.setName("name");
     preset.addTags(keywords);
   }
   
@@ -149,7 +152,8 @@ public class IPCameraPresetTest extends PresetTest {
   public void testHashCodefalse() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    Preset preset2 = new IPCameraPreset(new ZoomPosition(10, 12, 13), 40, 56, true, false, 0, "name");
+    Preset preset2 = new IPCameraPreset(new ZoomPosition(10, 12, 13), 40, 56, true, false, 0);
+    preset2.setName("name");
     Assert.assertNotEquals(preset.hashCode(), preset2.hashCode());
   }
 
@@ -250,22 +254,23 @@ public class IPCameraPresetTest extends PresetTest {
 
   @Test
   public void testEqualsDifferentCameraId() {
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0, "name");
-    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 1, "name");
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0);
+    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 1);
     Assert.assertNotEquals(preset, preset2);
   }
   
   @Test
   public void testEqualsSamePreset() {
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0, "name");
-    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0, "name");
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0);
+    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0);
     Assert.assertEquals(preset, preset2);
   }
 
   @Test
   public void testEqualsOtherName() {
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0, "name");
-    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0, "name2");
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0);
+    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0, 0, 0), 0, 0, false, false, 0);
+    preset2.setName("name");
     Assert.assertNotEquals(preset, preset2);
   }
 
