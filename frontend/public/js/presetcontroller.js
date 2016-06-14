@@ -415,7 +415,6 @@ function deleteTag(index) {
 	localTags.splice(index,1);
 	tagnames.clearPrefetchCache();
  	tagnames.initialize(true);
-	deleteTagFromPresets(remove);
 	$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
 				console.log("create tag respone: " + data);
 	}).done();
@@ -441,21 +440,6 @@ function updateTag(index, val) {
 		return true;
 	}
 	return false;
-}
-
-/**
-* Delete a the tags from all the presets containing the tag.
-* @param val The tag to be deleted
-*/
-function deleteTagFromPresets(val) {
-	for(i = 0; i < presets.length; i++) {
-		var tagIndex = presets[i].tags.indexOf(val);
-		if (tagIndex > -1) {
-			presets[i].tags.splice(tagIndex, 1);
-			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
-																									function(data) {console.log("edit preset: " + data)});
-		}
-	}
 }
 
 /**
