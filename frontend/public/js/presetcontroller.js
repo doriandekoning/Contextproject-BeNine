@@ -344,6 +344,7 @@ function findPresetOnID(id){
 
 //Below everything for the tag modal.
 var newId = 0;
+var editable = true;
 
 /**
 * Load the tags modal en fill in the tags.
@@ -352,14 +353,18 @@ function loadTags() {
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
 	newId = localTags.length;
+	editable = true;
 }
 
 $(".fill-tags").on('click', '.tag', function(e){
+	if(editable) {
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith(appendEditable(tag, false));
+		editable = false;
 		editTags($(this).attr('id'), false);
-	});
+	}
+});
 
 /**
 * Edit or delete a clicked on tag.
@@ -373,12 +378,14 @@ function editTags(id, isNew) {
 		if (updated) {
 			$(this).parent().replaceWith(appendTag(id, tag));
 		}
+		editable = true;
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
 		deleteTag(id);
+		editable = true;
 	});
 }
 
@@ -474,7 +481,8 @@ function updateTagInPresets(old, fresh) {
 function addTag() {
 	var add = "tag " + localTags.length;
 	$(".fill-tags").prepend(appendEditable(add, true));
-	newTag(add)
+	newTag(add);
+	editable = false;
 	editTags(newId, true);
 	newId++;
 }
