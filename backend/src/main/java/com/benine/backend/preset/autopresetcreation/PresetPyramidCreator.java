@@ -149,7 +149,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
         double subViewWidth = subView.getWidth() / columns;
         double subViewHeight = subView.getHeight() / rows;
 
-        double subViewCenterX = subView.getTopLeft().getX() + ((0.5 + (double)column) * subViewWidth );
+        double subViewCenterX = subView.getTopLeft().getX()
+                + ((0.5 + (double)column) * subViewWidth );
         double subViewCenterY = subView.getTopLeft().getY() - ((0.5 + (double)row) * subViewHeight);
 
         double subViewAspectRatio = subViewHeight / subViewWidth;
@@ -161,8 +162,10 @@ public class PresetPyramidCreator extends AutoPresetCreator {
           // If subview is higher then camera view then resize height
           subViewHeight = subViewWidth * cameraAspectRatio;
         }
-        Coordinate topLeft = new Coordinate(subViewCenterX - (0.5 * subViewWidth), subViewCenterY + (0.5 * subViewHeight));
-        Coordinate bottomRight = new Coordinate(subViewCenterX + (0.5 * subViewWidth), subViewCenterY - (0.5 * subViewHeight));
+        Coordinate topLeft = new Coordinate(subViewCenterX - (0.5 * subViewWidth),
+                subViewCenterY + (0.5 * subViewHeight));
+        Coordinate bottomRight = new Coordinate(subViewCenterX + (0.5 * subViewWidth),
+                subViewCenterY - (0.5 * subViewHeight));
         subViews.add(new SubView(topLeft, bottomRight));
       }
     }
