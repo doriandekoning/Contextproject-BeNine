@@ -10,7 +10,7 @@ img {
 }
 
 /* Elements requiring a reset for positioning */
-.navbar, .row, .col-xs-3, .col-xs-6, .col-xs-4 {
+.navbar, .row, .col-xs-3, .col-xs-6 {
     padding: 0;
     margin: 0;
     border: 0;
