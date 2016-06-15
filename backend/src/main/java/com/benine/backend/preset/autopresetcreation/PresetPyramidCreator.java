@@ -72,8 +72,22 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   // or else this will throw an concurrentModificationException
   public Collection<SubView> generateSubViews() {
     ArrayList<SubView> subViews = new ArrayList<>();
+
+    double cameraAspectRatio = IPCamera.VERTICAL_FOV_MAX / IPCamera.HORIZONTAL_FOV_MAX ;
     // Level 1
-    subViews.add(new SubView(0, 100, 100, 0));
+    double height = 100;
+    double width = 100;
+    if (1 < cameraAspectRatio) {
+      // If subview is wider then camera view resize width
+      width = height / cameraAspectRatio;
+    } else {
+      // If subview is higher then camera view then resize height
+      height = width * cameraAspectRatio;
+    }
+
+    Coordinate topLeft = new Coordinate(50 - (0.5 * width), 50 + (0.5 * height));
+    Coordinate bottomRight = new Coordinate(50 + (0.5 * width), 50 - (0.5 * height));
+    subViews.add(new SubView(topLeft, bottomRight));
 
     ArrayList<SubView> lastLayer = new ArrayList<>(subViews);
     // Other levels
@@ -132,11 +146,27 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     ArrayList<SubView> subViews = new ArrayList<>();
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        double topLeftX = subView.getTopLeft().getX() + (column * (subView.getWidth() / columns));
-        double topLeftY = subView.getTopLeft().getY() - (row * (subView.getHeight() / rows));
-        double bottomRightX =  topLeftX + (subView.getWidth() / columns);
-        double bottomRightY =  topLeftY - (subView.getHeight() / rows);
-        subViews.add(new SubView(topLeftX, topLeftY, bottomRightX, bottomRightY));
+        double subViewWidth = subView.getWidth() / columns;
+        double subViewHeight = subView.getHeight() / rows;
+
+        double subViewCenterX = subView.getTopLeft().getX()
+                + ((0.5 + (double)column) * subViewWidth );
+        double subViewCenterY = subView.getTopLeft().getY() - ((0.5 + (double)row) * subViewHeight);
+
+        double subViewAspectRatio = subViewHeight / subViewWidth;
+        double cameraAspectRatio = IPCamera.VERTICAL_FOV_MAX / IPCamera.HORIZONTAL_FOV_MAX ;
+        if (subViewAspectRatio < cameraAspectRatio) {
+          // If subview is wider then camera view resize width
+          subViewWidth = subViewHeight / cameraAspectRatio;
+        } else {
+          // If subview is higher then camera view then resize height
+          subViewHeight = subViewWidth * cameraAspectRatio;
+        }
+        Coordinate topLeft = new Coordinate(subViewCenterX - (0.5 * subViewWidth),
+                subViewCenterY + (0.5 * subViewHeight));
+        Coordinate bottomRight = new Coordinate(subViewCenterX + (0.5 * subViewWidth),
+                subViewCenterY - (0.5 * subViewHeight));
+        subViews.add(new SubView(topLeft, bottomRight));
       }
     }
     return subViews;
