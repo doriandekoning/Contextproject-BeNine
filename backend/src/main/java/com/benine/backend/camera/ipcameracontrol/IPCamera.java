@@ -575,8 +575,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus,
-            iris, autofocus, autoiris, cameraId, name);
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom),
+        new FocusValue(focus, autofocus), new IrisValue(iris, autoiris), cameraId);
+    preset.setName(name);
     preset.addTags(tagList);
     return preset;
   }
