@@ -189,41 +189,21 @@ function releaseSlider(fun, input) {
 }
 
 /**
-* On click of the auto focus button change the color of the button.
-* And send the http request to change to auto focus.
-*/
-$('#auto_focus').click(function() {
-	var on = false;
-	if($(this).hasClass("btn-danger")){
-		on = true;
-	}
-	setButton($(this), on);
-	$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + on, function(data) {});
+ * Initialize auto focus toggle event.
+ */
+$(function() {
+	var toggle = $('#auto_focus');
+	toggle.change(function() {
+		$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + toggle.prop('checked'), function(data) {});
+	});
 });
 
 /**
-* On click of the auto iris button change the color of the button.
-* And send the http request to change to auto iris.
-*/
-$('#auto_iris').click(function() {
-	var on = false;
-	if($(this).hasClass("btn-danger")){
-		on = true;
-	}
-	setButton($(this), on);
-	$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + on , function(data) {});
+ * Initialize auto iris toggle event.
+ */
+$(function() {
+	var toggle = $('#auto_iris');
+	toggle.change(function() {
+		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + toggle.prop('checked'), function(data) {});
+	});
 });
-
-/**
-* Toggle the color of the button between green and red.
-* @param btn the button to change.
-*/
-function toggleButton(btn){
-	if(btn.attr("class") === "btn btn-success") {
-		btn.addClass("btn-danger");
-		btn.removeClass("btn-success");
-	} else {
-		btn.addClass("btn-success");
-		btn.removeClass("btn-danger");
-	}
-}
