@@ -28,12 +28,38 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   showSubViews();
 })
 
+/**
+ * Resets the modal.
+ */
 function resetModal() {
   switchTab(1);
 
   $('#auto_presets_div .close').prop('disabled', false);
-  $('#auto_presets_div #cancelbutton').prop('disabled', false);
-  $('#auto_presets_div #startbutton').prop('disabled', false);
+  $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', false);
+  $('#auto_presets_div #autopreset_startbutton').prop('disabled', false);
+
+  $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn');
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
+}
+
+/**
+ * Prepares the generating tab showing the progress bar.
+ */
+function switchGenerateTab() {
+  switchTab(2);
+
+  $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn hidden');
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
+  $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', true);
+}
+
+/**
+ * Prepares the final tab.
+ */
+function switchFinalTab(generatedPresets) {
+  switchTab(3);
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
+  $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
 
 }
 
@@ -43,9 +69,7 @@ function resetModal() {
  */
 function switchTab(stepnumber) {
   $('#auto_presets_div .close').prop('disabled', true);
-  $('#auto_presets_div #cancelbutton').prop('disabled', true);
-  $('#auto_presets_div #startbutton').prop('disabled', true);
-
+  $('#auto_presets_div #autopreset_savebutton').prop('disabled', true);
 
   var tabs = $('#autopreset-tabs');
   tabs.children().attr('class', 'disabled');
@@ -69,11 +93,11 @@ function autoCreatePresets() {
   var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
     // Switch to generating view.
-    switchTab(2);
+    switchGenerateTab();
 
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       // If done switch to final screen.
-      switchTab(3);
+      switchFinalTab(data);
     });
   }
 }
