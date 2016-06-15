@@ -91,7 +91,6 @@ public class MySQLDatabase implements Database {
       statement.setString(1, tag);
       statement.setInt(2, preset.getId());
       statement.executeUpdate();
-      System.out.println("DELETED TAG FROM PRESET");
     } catch (Exception e) {
       logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
     } finally {
@@ -294,7 +293,6 @@ public class MySQLDatabase implements Database {
       }
     } catch (Exception e) {
       logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
-      e.printStackTrace();
     } finally {
       close(statement, null);
     }
