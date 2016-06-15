@@ -330,7 +330,7 @@ input[type=range]:focus {
 }
 
 .tagsearch-container .toggle {
-    top: 7px;
+    top: 9px;
 }
 
 #tagsearch .twitter-typeahead {
