@@ -72,8 +72,8 @@ public class MySQLDatabase implements Database {
     try {
       String sql = "INSERT INTO tagPreset VALUES(?,?)";
       statement = connection.prepareStatement(sql);
-      statement.setInt(1, preset.getId());
-      statement.setString(2, tag);
+      statement.setString(1, tag);
+      statement.setInt(2, preset.getId());
       statement.executeUpdate();
     } catch (Exception e) {
       logger.log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
@@ -91,6 +91,7 @@ public class MySQLDatabase implements Database {
       statement.setString(1, tag);
       statement.setInt(2, preset.getId());
       statement.executeUpdate();
+      System.out.println("DELETED TAG FROM PRESET");
     } catch (Exception e) {
       logger.log("Tag couldn't be deleted.", LogEvent.Type.CRITICAL);
     } finally {
@@ -281,7 +282,7 @@ public class MySQLDatabase implements Database {
     try {
       if (preset != null) {
         deleteTagsFromPreset(preset);
-        String sql = "DELETE FROM IPpreset WHERE ID = ?";
+        String sql = "DELETE FROM IPpreset WHERE preset_ID = ?";
         statement = connection.prepareStatement(sql);
         statement.setInt(1, preset.getId());
         statement.executeUpdate();
@@ -293,6 +294,7 @@ public class MySQLDatabase implements Database {
       }
     } catch (Exception e) {
       logger.log("Presets could not be deleted.", LogEvent.Type.CRITICAL);
+      e.printStackTrace();
     } finally {
       close(statement, null);
     }
@@ -319,7 +321,7 @@ public class MySQLDatabase implements Database {
       }
       sql = "SELECT preset.id, IPpreset.pan, IPpreset.tilt, IPpreset.zoom, IPpreset.focus, "
           + "IPpreset.iris, IPpreset.autofocus, IPpreset.panspeed, IPpreset.tiltspeed, "
-          + "IPpreset.autoiris, preset.image, preset,camera_ID, preset,name "
+          + "IPpreset.autoiris, preset.image, preset.camera_ID, preset.name "
           + "FROM preset INNER JOIN IPpreset ON preset.ID = IPpreset.preset_ID";
       statement = connection.prepareStatement(sql);
       resultset = statement.executeQuery();
@@ -480,8 +482,7 @@ public class MySQLDatabase implements Database {
 
   @Override
   public void deleteCamera(int cameraID) {
-    deleteCameraSQL("IPpreset", "camera_ID", cameraID);
-    deleteCameraSQL("simplepreset", "camera_ID", cameraID);
+    deleteCameraSQL("preset", "camera_ID", cameraID);
     deleteCameraSQL("camera", "ID", cameraID);
   }
 
