@@ -315,8 +315,10 @@ public class MySQLDatabase implements Database {
       statement = connection.prepareStatement(sql);
       resultset = statement.executeQuery();
       while (resultset.next()) {
-          list.add(getSimplePresetsFromResultSet(resultset));
+        list.add(getSimplePresetsFromResultSet(resultset));
       }
+      resultset.close();
+      statement.close();
       sql = "SELECT preset.id, IPpreset.pan, IPpreset.tilt, IPpreset.zoom, IPpreset.focus, "
           + "IPpreset.iris, IPpreset.autofocus, IPpreset.panspeed, IPpreset.tiltspeed, "
           + "IPpreset.autoiris, preset.image, preset.camera_ID, preset.name "
