@@ -74,7 +74,7 @@ function loadCameras() {
 		for(var c in obj.cameras) {
 			var cam = obj.cameras[c];
 			if (cam.unavailable === undefined) {
-				cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.move));
+				cameras.push(new Camera(cam));
 			}
 		}
 	}).done(function() {
