@@ -52,9 +52,7 @@ public class CreatePresetHandler extends PresetRequestHandler {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       } 
       PresetCamera presetCamera = null;
-      if (camID != null) {
-        presetCamera = getPresetCamera(Integer.parseInt(camID));
-      }
+      presetCamera = getPresetCamera(Integer.parseInt(camID));
       
       if (presetCamera != null) {
         Preset preset = presetCamera.createPreset(tagList, name);

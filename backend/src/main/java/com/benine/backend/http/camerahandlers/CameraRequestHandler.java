@@ -1,6 +1,5 @@
 package com.benine.backend.http.camerahandlers;
 
-import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
@@ -11,7 +10,6 @@ import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
 
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

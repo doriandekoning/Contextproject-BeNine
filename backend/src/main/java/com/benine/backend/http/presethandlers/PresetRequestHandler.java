@@ -2,6 +2,7 @@ package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
@@ -16,6 +17,8 @@ public abstract class PresetRequestHandler extends RequestHandler {
   private Logger logger;
   
   private PresetController presetController;
+  
+  private CameraController cameraController;
 
   /**
    * PresetRequesthandler, for request with presets.
@@ -25,6 +28,16 @@ public abstract class PresetRequestHandler extends RequestHandler {
     super(httpserver);
     this.logger = httpserver.getLogger();
     this.presetController = httpserver.getPresetController();
+    this.cameraController = httpserver.getCameraController();
+  }
+  
+  /**
+   * Get the right camera.
+   * @param camID to find the camera.
+   * @return right camera.
+   */
+  protected Camera getCameraById(int camID) {
+    return cameraController.getCameraById(camID);
   }
   
   /**
@@ -33,7 +46,7 @@ public abstract class PresetRequestHandler extends RequestHandler {
    * @return presetcamera.
    */
   protected PresetCamera getPresetCamera(int camID) {
-    Camera camera = getCameraController().getCameraById(camID);
+    Camera camera = getCameraById(camID);
     if (camera instanceof PresetCamera) {
       return (PresetCamera) camera;
     }

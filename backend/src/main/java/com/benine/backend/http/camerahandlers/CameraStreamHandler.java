@@ -7,7 +7,6 @@ import com.benine.backend.http.MJPEGHeader;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.ResizableStreamDistributer;
 import com.benine.backend.video.StreamDistributer;
-import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
 import com.benine.backend.video.StreamType;
 import org.eclipse.jetty.server.Request;

@@ -32,7 +32,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     PresetPyramidCreator creator = getPyramidPresetCreator(request);
     String camID = request.getParameter("camera");
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
+    Camera cam = getCameraById(Integer.parseInt(camID));
     boolean succes = false;
     
     if (!(cam instanceof IPCamera )) {

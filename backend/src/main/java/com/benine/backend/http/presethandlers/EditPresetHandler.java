@@ -98,7 +98,7 @@ public class EditPresetHandler extends PresetRequestHandler {
    */
   private Preset updatePosition(Preset preset) throws
             CameraConnectionException, CameraBusyException, SQLException {
-    IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
+    IPCamera ipcam = (IPCamera) getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
     return newPreset;

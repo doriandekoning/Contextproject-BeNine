@@ -37,7 +37,7 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
     boolean succes = false;
     if (correct) {
       presetid = Integer.parseInt(request.getParameter("presetid"));
-      Preset preset = getPresetController().getPresetById(presetid);   
+      Preset preset = getPresetById(presetid);   
       getPresetQueueController().updatePresetQueue(addPreset(position, preset, presetQueue));
       succes = true;
       getLogger().log("Preset " + presetid + " is succesfully added to queue: " 
@@ -79,7 +79,7 @@ public class AddPresetToPresetQueueHandler extends PresetQueueRequestHandler {
       return false;
     }
     int presetid = Integer.parseInt(request.getParameter("presetid"));
-    if (getPresetController().getPresetById(presetid) == null) {
+    if (getPresetById(presetid) == null) {
       return false;
     }
     return true;

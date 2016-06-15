@@ -136,7 +136,7 @@ public class HTTPServer {
    * Returns the presetQueueController.
    * @return presetQueueController to change the presets
    */
-  protected PresetQueueController getPresetQueueController() {
+  public PresetQueueController getPresetQueueController() {
     return presetQueueController;
   }
 
