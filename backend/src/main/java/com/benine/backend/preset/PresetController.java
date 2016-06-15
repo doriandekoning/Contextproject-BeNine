@@ -168,10 +168,9 @@ public class PresetController {
   /**
    * Adds a preset.
    * @param preset the preset to add.
-   * @return ID of the preset just created.
    * @throws SQLException when an error occures in the database.
    */
-  public int addPreset(Preset preset) throws SQLException {   
+  public void addPreset(Preset preset) throws SQLException {   
     preset = addPresetID(preset);
     if (preset.getName().equals("")) {
       preset.setName("Preset " + preset.getId());
@@ -179,7 +178,6 @@ public class PresetController {
     presets.add(preset);
     addAllTags(preset.getTags());
     database.addPreset(preset);
-    return preset.getId();
   }
   
   /**

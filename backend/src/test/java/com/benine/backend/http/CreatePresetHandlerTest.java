@@ -167,7 +167,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
     parameters.add("name", "test");
     setParameters(parameters);
     Exception exception = new SQLException();
-    when(presetController.addPreset(any())).thenThrow(exception);
+    doThrow(exception).when(presetController).addPreset(any());
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(out).write("{\"succes\":\"false\"}");

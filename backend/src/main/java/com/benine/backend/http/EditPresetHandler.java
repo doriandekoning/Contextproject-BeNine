@@ -53,7 +53,7 @@ public class EditPresetHandler extends RequestHandler {
         updateTag(preset, tagList);
       }
       if (overwritePosition.equals("true")) {
-        updatePosition(preset);
+        preset = updatePosition(preset);
         getPresetController().createImage(preset);
       }
       getPresetController().updatePreset(preset);
@@ -88,14 +88,16 @@ public class EditPresetHandler extends RequestHandler {
    * preset with the same preset and camera id. It also creates a new image that belongs to the 
    * preset and updates the database.
    * @param preset                        The preset to be updated.
+   * @return updated preset
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws CameraBusyException          If camera is busy
    */
-  private void updatePosition(Preset preset) throws
+  private Preset updatePosition(Preset preset) throws
             CameraConnectionException, CameraBusyException, SQLException {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
+    return newPreset;
   }
 }
