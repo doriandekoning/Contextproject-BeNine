@@ -20,6 +20,7 @@
 				<include>startserver.cmd</include>
 				<include>startserver.sh</include>
 			</includes>
+			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
 			<directory>../frontend</directory>
