@@ -2,7 +2,6 @@ package com.benine.backend.http.camerahandlers;
 
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 import com.benine.backend.http.camerahandlers.SetCameraInUseHandler;
 
 import org.eclipse.jetty.util.MultiMap;

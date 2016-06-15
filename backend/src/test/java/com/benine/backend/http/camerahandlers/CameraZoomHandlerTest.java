@@ -3,7 +3,6 @@ package com.benine.backend.http.camerahandlers;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 import com.benine.backend.http.camerahandlers.CameraZoomHandler;
 
 import org.eclipse.jetty.util.MultiMap;

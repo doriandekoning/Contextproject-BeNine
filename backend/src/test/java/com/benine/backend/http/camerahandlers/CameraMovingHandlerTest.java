@@ -5,7 +5,6 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
 import com.benine.backend.http.camerahandlers.CameraMovingHandler;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.json.JSONException;

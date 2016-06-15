@@ -5,7 +5,6 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.http.HTTPServer;
-
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.server.Request;
 
@@ -36,7 +35,7 @@ public class RecallPresetHandler extends PresetRequestHandler {
 
       Preset preset = getPreset(presetID);
       
-      Camera camera = getCameraController().getCameraById(preset.getCameraId());
+      Camera camera = getPresetCamera(preset.getCameraId());
 
       preset.excecutePreset(camera);
       succes = true;

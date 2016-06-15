@@ -4,7 +4,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.IrisCamera;
 import com.benine.backend.http.camerahandlers.CameraIrisHandler;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.json.JSONException;

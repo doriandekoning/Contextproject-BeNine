@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.benine.backend.http.RequestHandlerTest;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 
 /**
  * Created on 22-05-16.

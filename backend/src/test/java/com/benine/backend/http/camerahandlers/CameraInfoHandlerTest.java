@@ -12,7 +12,6 @@ import com.benine.backend.http.camerahandlers.CameraFocusHandler;
 import com.benine.backend.http.camerahandlers.CameraInfoHandler;
 import com.benine.backend.http.camerahandlers.CameraIrisHandler;
 import com.benine.backend.http.camerahandlers.CameraMovingHandler;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 import com.benine.backend.http.camerahandlers.CameraStreamHandler;
 import com.benine.backend.http.camerahandlers.CameraZoomHandler;
 

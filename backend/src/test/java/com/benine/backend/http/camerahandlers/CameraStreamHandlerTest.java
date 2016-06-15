@@ -2,7 +2,6 @@ package com.benine.backend.http.camerahandlers;
 
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.camerahandlers.CameraRequestHandler;
 import com.benine.backend.http.camerahandlers.CameraStreamHandler;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;

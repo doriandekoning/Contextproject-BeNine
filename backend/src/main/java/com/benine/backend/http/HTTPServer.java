@@ -104,7 +104,7 @@ public class HTTPServer {
    * Returns the ServerController logger.
    * @return  A Logger object.
    */
-  protected Logger getLogger() {
+  public Logger getLogger() {
     return logger;
   }
 
@@ -112,7 +112,7 @@ public class HTTPServer {
    * Returns the cameraController
    * @return  A cameracontroller object.
    */
-  protected CameraController getCameraController() {
+  public CameraController getCameraController() {
     return cameraController;
   }
   
@@ -128,7 +128,7 @@ public class HTTPServer {
    * Returns the presetController.
    * @return presetController to change the presets
    */
-  protected PresetController getPresetController() {
+  public PresetController getPresetController() {
     return presetController;
   }
   

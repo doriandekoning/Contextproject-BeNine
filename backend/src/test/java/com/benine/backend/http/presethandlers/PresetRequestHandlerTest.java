@@ -29,19 +29,14 @@ public abstract class PresetRequestHandlerTest extends RequestHandlerTest {
   public void testGetPresetCamera() {
     IPCamera ipcamera = mock(IPCamera.class);
     when(cameraController.getCameraById(1)).thenReturn(ipcamera);
-    Assert.assertEquals(ipcamera, ((PresetRequestHandler) getHandler()).getPresetCamera("1"));
-  }
-  
-  @Test
-  public void testGetPresetCameraNull() {
-    Assert.assertEquals(null, ((PresetRequestHandler) getHandler()).getPresetCamera(null));
+    Assert.assertEquals(ipcamera, ((PresetRequestHandler) getHandler()).getPresetCamera(1));
   }
   
   @Test
   public void testGetPresetnotpresetcamera() {
     Camera camera = mock(Camera.class);
     when(cameraController.getCameraById(2)).thenReturn(camera);
-    Assert.assertEquals(null, ((PresetRequestHandler) getHandler()).getPresetCamera("2"));
+    Assert.assertEquals(null, ((PresetRequestHandler) getHandler()).getPresetCamera(2));
   }
 
 }
