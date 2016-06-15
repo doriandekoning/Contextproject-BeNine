@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.concurrent.TimeoutException;
 
 
+
 /**
  * Abstract class used for auto-creating presets.
  */
@@ -37,7 +38,7 @@ public abstract class AutoPresetCreator {
    * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
    * @param subViews the sub-views to generate positions for.
-   * @return A collection of the ids of the created presets.
+   * @return A collection of the id's of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interrupted while waiting for cam to move.
    * @throws TimeoutException if the camera is moving too slow or not at all.
@@ -60,8 +61,9 @@ public abstract class AutoPresetCreator {
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
-      presetIDs.add(generatePresetFromPos(pos,cam).getId());
-      presets.add(generatePresetFromPos(pos, cam));
+      IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
+      presetIDs.add(currentPreset.getId());
+      presets.add(currentPreset);
     }
     cam.setBusy(false);
     return presetIDs;
