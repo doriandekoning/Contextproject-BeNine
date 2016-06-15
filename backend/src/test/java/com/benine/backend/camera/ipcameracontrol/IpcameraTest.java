@@ -213,8 +213,8 @@ public class IpcameraTest extends BasicCameraTest {
     setCameraBehaviour("D1", "d11");
     setCameraBehaviour("D3", "d31");
     setCameraBehaviour("GI", "giD421");
-    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), 1261, 2029, true, true, -1, "name");
-    
+    IPCameraPreset expected = new IPCameraPreset(new ZoomPosition(0, 180, 256), new FocusValue(1261, true), new IrisValue(2029, true), -1);
+    expected.setName("name");
     assertEquals(expected, camera.createPreset(new HashSet<>(), "name"));
   }
   

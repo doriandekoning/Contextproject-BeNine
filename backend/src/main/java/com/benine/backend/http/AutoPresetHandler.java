@@ -59,6 +59,15 @@ public abstract class AutoPresetHandler extends RequestHandler {
     int rows = rowsString != null ? Integer.parseInt(rowsString) : 3;
     int columns = columnsString != null ? Integer.parseInt(columnsString) : 3;
     int levels = levelsString != null ? Integer.parseInt(levelsString) : 3;
+    if (rows < 1 || rows > 5) {
+      throw new IllegalArgumentException();
+    }
+    if (columns < 1 || columns > 5) {
+      throw new IllegalArgumentException();
+    }
+    if (levels < 1 || levels > 4) {
+      throw new IllegalArgumentException();
+    }
     double overlap = overlapString != null ? Double.parseDouble(overlapString) : 0;
     return new PresetPyramidCreator(rows, columns, levels, overlap, getPresetController());
   }

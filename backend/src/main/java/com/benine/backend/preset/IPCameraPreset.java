@@ -4,7 +4,9 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.video.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,33 +20,24 @@ import java.io.IOException;
 public class IPCameraPreset extends Preset {
 
   private ZoomPosition position;
-  private int focus;
-  private int iris;
-  private boolean autofocus;
+  private FocusValue focus;
+  private IrisValue iris;
   private int panspeed = 15;
   private int tiltspeed = 1;
-  private boolean autoiris;
   
   /**
    * Creates a new preset based on the parameters supplied.
    * @param pos       The position of this preset.
    * @param focus     The focus of the prest
    * @param iris      The iris of the preset
-   * @param autofocus The autofocus of the preset
-   * @param autoiris  The autoiris of the preset
    * @param cameraId  The id of the camera associated with this preset.
-   * @param name      The name of the preset
    */
-  public IPCameraPreset(ZoomPosition pos, int focus, int iris,
-                        boolean autofocus,
-                        boolean autoiris, int cameraId, String name) {
+  public IPCameraPreset(ZoomPosition pos, FocusValue focus, IrisValue iris, int cameraId) {
 
-    super(cameraId, name);
+    super(cameraId);
     this.position = pos;
     this.focus = focus;
     this.iris = iris;
-    this.autofocus = autofocus;
-    this.autoiris = autoiris;
   }
 
   /**
@@ -52,21 +45,18 @@ public class IPCameraPreset extends Preset {
    * @param cam IPCamera to create the preset of
    * @param panSpeed the panspeed for the preset
    * @param tiltSpeed the tiltspeed of the preset
-   * @param name the name of the preset
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws IOException if the preset image cannot be stored.
    * @throws StreamNotAvailableException if the camera stream cannot be reached.
    * @throws CameraBusyException if the camera is busy
    */
-  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed,  String name)
+  public IPCameraPreset(IPCamera cam, int panSpeed, int tiltSpeed)
           throws  CameraConnectionException, IOException,
                   StreamNotAvailableException, CameraBusyException {
-    super(cam.getId(), name);
+    super(cam.getId());
     this.position = new ZoomPosition(cam.getPosition(), cam.getZoom());
-    this.focus = cam.getFocusPosition();
-    this.iris = cam.getIrisPosition();
-    this.autoiris = cam.isAutoIrisOn();
-    this.autofocus = cam.isAutoFocusOn();
+    this.focus = new FocusValue(cam.getFocusPosition(), cam.isAutoFocusOn());
+    this.iris = new IrisValue(cam.getIrisPosition(), cam.isAutoIrisOn());
     this.panspeed = panSpeed;
     this.tiltspeed = tiltSpeed;
   }
@@ -78,16 +68,17 @@ public class IPCameraPreset extends Preset {
     json.put("pan", position.getPan());
     json.put("tilt", position.getTilt());
     json.put("zoom", position.getZoom());
-    json.put("focus", focus);
-    json.put("iris", iris);
-    json.put("autofocus", autofocus);
+    json.put("focus", focus.getFocus());
+    json.put("autofocus", focus.isAutofocus());
+    json.put("iris", iris.getIris());
+    json.put("autoiris", iris.isAutoiris());
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
-    json.put("autoiris", autoiris);
     json.put("id", presetid);
     json.put("cameraid", cameraId);
     json.put("image", image);
     json.put("name", name);
+
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -104,28 +95,20 @@ public class IPCameraPreset extends Preset {
     this.position = pos;
   }
 
-  public int getFocus() {
+  public FocusValue getFocus() {
     return focus;
   }
 
-  public void setFocus(int focus) {
+  public void setFocus(FocusValue focus) {
     this.focus = focus;
   }
 
-  public int getIris() {
+  public IrisValue getIris() {
     return iris;
   }
 
-  public void setIris(int iris) {
+  public void setIris(IrisValue iris) {
     this.iris = iris;
-  }
-
-  public boolean isAutofocus() {
-    return autofocus;
-  }
-
-  public void setAutofocus(boolean autofocus) {
-    this.autofocus = autofocus;
   }
 
   public int getPanspeed() { 
@@ -144,14 +127,6 @@ public class IPCameraPreset extends Preset {
     this.tiltspeed = tiltspeed;
   }
 
-  public boolean isAutoiris() {
-    return autoiris; 
-  }
-
-  public void setAutoiris(boolean autoiris) {
-    this.autoiris = autoiris;
-  } 
-
   /**
    * Moves the camera
    * @param camera  A Camera object.
@@ -165,10 +140,10 @@ public class IPCameraPreset extends Preset {
 
       ipcamera.moveTo(getPosition(), getPanspeed(), getTiltspeed());
       ipcamera.zoomTo(getPosition().getZoom());
-      ipcamera.setAutoFocusOn(isAutofocus());
-      ipcamera.setAutoIrisOn(isAutoiris());
-      ipcamera.moveFocus(getFocus());  
-      ipcamera.setIrisPosition(getIris());
+      ipcamera.setAutoFocusOn(focus.isAutofocus());
+      ipcamera.setAutoIrisOn(iris.isAutoiris());
+      ipcamera.moveFocus(focus.getFocus());  
+      ipcamera.setIrisPosition(iris.getIris());
     } else {
       throw new CameraConnectionException("Camera cannot be controller over IP: ", camera.getId());
     }
@@ -186,10 +161,8 @@ public class IPCameraPreset extends Preset {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + (autofocus ? 1231 : 1237);
-    result = prime * result + (autoiris ? 1231 : 1237);
-    result = prime * result + focus;
-    result = prime * result + iris;
+    result = prime * result + focus.hashCode();
+    result = prime * result + iris.hashCode();
     result = prime * result + panspeed;
     result = prime * result + ((position == null) ? 0 : position.hashCode());
     result = prime * result + tiltspeed;
@@ -208,16 +181,10 @@ public class IPCameraPreset extends Preset {
       return false;
     }
     IPCameraPreset other = (IPCameraPreset) obj;
-    if (autofocus != other.autofocus) {
+    if (!focus.equals(other.focus)) {
       return false;
     }
-    if (autoiris != other.autoiris) {
-      return false;
-    }
-    if (focus != other.focus) {
-      return false;
-    }
-    if (iris != other.iris) {
+    if (!iris.equals(other.iris)) {
       return false;
     }
     if (panspeed != other.panspeed) {
