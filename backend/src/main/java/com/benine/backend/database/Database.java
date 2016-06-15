@@ -31,9 +31,9 @@ public interface Database {
   /**
    * Delete a preset from the database.
    *
-   * @param preset to delete.
+   * @param presetID of the preset to delete.
    */
-  void deletePreset(Preset preset);
+  void deletePreset(int presetID);
 
   /**
    * Update a preset to the database.
@@ -133,32 +133,32 @@ public interface Database {
   /**
    * Get the tags from a preset.
    *
-   * @param preset The preset
+   * @param presetID of the preset to get the tags from.
    * @return The list of tags
    */
-  Set<String> getTagsFromPreset(Preset preset);
+  Set<String> getTagsFromPreset(int presetID);
 
   /**
    * Adds a tag to a preset.
    *
    * @param tag The tag
-   * @param preset The preset
+   * @param presetID of the preset to add the tag to.
    */
-  void addTagToPreset(String tag, Preset preset);
+  void addTagToPreset(String tag, int presetID);
 
   /**
    * Deletes a tag to a preset.
    *
    * @param tag The tag
-   * @param preset The preset
+   * @param presetID of the preset to delete the tag from.
    */
-  void deleteTagFromPreset(String tag, Preset preset);
+  void deleteTagFromPreset(String tag, int presetID);
   
   /**
    * delete the tags from a preset.
-   * @param preset to delete the tags for.
+   * @param presetID of the preset to delete the tags for.
    */
-  void deleteTagsFromPreset(Preset preset);
+  void deleteTagsFromPreset(int presetID);
 
   /**
    * Gets a list of presets belonging to the concert.

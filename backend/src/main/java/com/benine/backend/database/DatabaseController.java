@@ -75,7 +75,7 @@ public class DatabaseController {
     try {
       presetController.addPresets(database.getAllPresets());
       for (Preset preset : presetController.getPresets()) {
-        preset.addTags(database.getTagsFromPreset(preset));
+        preset.addTags(database.getTagsFromPreset(preset.getId()));
       }
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", e);

@@ -140,7 +140,7 @@ public class PresetController {
    */
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
-    database.deletePreset(preset);
+    database.deletePreset(preset.getId());
     File path = new File(config.getValue("imagepath")
         .replaceAll("/", Matcher.quoteReplacement(File.separator)) + preset.getImage());
     if (!path.delete()) {
@@ -246,7 +246,7 @@ public class PresetController {
   public void removeTag(String tag) {
     tags.remove(tag);
     presets.forEach(p -> p.removeTag(tag));
-    presets.forEach(p -> database.deleteTagFromPreset(tag, p));
+    presets.forEach(p -> database.deleteTagFromPreset(tag, p.getId()));
     database.deleteTag(tag);
   }
 }
