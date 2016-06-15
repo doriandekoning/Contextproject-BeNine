@@ -4,8 +4,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.RequestHandler;
-import com.benine.backend.http.RequestHandlerTest;
 import com.benine.backend.http.presethandlers.RecallPresetHandler;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -26,7 +24,7 @@ import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
 
-public class RecallPresetTest extends RequestHandlerTest {
+public class RecallPresetTest extends PresetRequestHandlerTest {
 
   private IPCamera ipcamera;
   private Preset preset;
@@ -34,7 +32,7 @@ public class RecallPresetTest extends RequestHandlerTest {
   private MJPEGStreamReader streamReader;
 
   @Override
-  public RequestHandler supplyHandler() {
+  public PresetRequestHandler supplyHandler() {
     return new RecallPresetHandler(httpserver);
   }
 

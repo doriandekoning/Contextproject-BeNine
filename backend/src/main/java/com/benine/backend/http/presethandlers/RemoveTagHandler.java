@@ -1,8 +1,6 @@
 package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.http.RequestHandler;
-
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
@@ -13,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created on 25-5-16.
  */
-public class RemoveTagHandler extends RequestHandler {
+public class RemoveTagHandler extends PresetRequestHandler {
   
   /**
    * Constructs a the RemoveTaghandler for the httpserver /presets/removetag.

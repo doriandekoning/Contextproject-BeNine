@@ -1,7 +1,9 @@
 package com.benine.backend.http.presetqueue;
 
+import com.benine.backend.Logger;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+import com.benine.backend.performance.PresetQueueController;
 
 import org.eclipse.jetty.server.Request;
 
@@ -44,6 +46,16 @@ public abstract class PresetQueueRequestHandler extends RequestHandler {
     String path = request.getPathInfo();
 
     return path.replaceFirst(".*/(\\d*)/", "");
+  }
+  
+  @Override
+  protected Logger getLogger() {
+    return super.getLogger();
+  }
+  
+  @Override
+  protected PresetQueueController getPresetQueueController() {
+    return super.getPresetQueueController();
   }
 
 }

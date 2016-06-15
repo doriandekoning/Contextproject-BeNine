@@ -1,12 +1,11 @@
 package com.benine.backend.http.presethandlers;
 
-import org.eclipse.jetty.server.Request;
-
-import com.benine.backend.http.AddTagHandler;
 import com.benine.backend.http.AutoCreationSubViewsHandler;
 import com.benine.backend.http.AutoPresetCreationHandler;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+
+import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-public class PresetsHandler extends RequestHandler {
+public class PresetsHandler extends PresetRequestHandler {
 
   /**
    * Map containing the handlers, (route, handler).

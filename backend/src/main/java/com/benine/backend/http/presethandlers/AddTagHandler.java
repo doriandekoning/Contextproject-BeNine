@@ -1,4 +1,6 @@
-package com.benine.backend.http;
+package com.benine.backend.http.presethandlers;
+
+import com.benine.backend.http.HTTPServer;
 
 import org.eclipse.jetty.server.Request;
 
@@ -11,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by BeNine on 25-5-16.
  */
-public class AddTagHandler extends RequestHandler {
+public class AddTagHandler extends PresetRequestHandler {
 
   /**
    * Constructs a addtaghandler for the htpserver.

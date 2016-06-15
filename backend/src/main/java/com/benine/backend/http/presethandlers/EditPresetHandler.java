@@ -5,7 +5,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.http.RequestHandler;
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.server.Request;
 
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Class that handles editing presets.
  */
-public class EditPresetHandler extends RequestHandler {
+public class EditPresetHandler extends PresetRequestHandler {
   
   /**
    * Constructor for a new editPresetHandler that handles editing a preset.
@@ -43,7 +42,7 @@ public class EditPresetHandler extends RequestHandler {
       String tags = request.getParameter("tags");
       String name = request.getParameter("name");
       
-      Preset preset = getPresetController().getPresetById(presetID);
+      Preset preset = getPreset(presetID);
       Set<String> tagList = new HashSet<>();
       if (name != null) {
         preset.setName(name);
@@ -59,6 +58,7 @@ public class EditPresetHandler extends RequestHandler {
         getPresetController().createImage(preset);
       }
       getPresetController().updatePreset(preset);
+      
       succes = false;
     } catch (SQLException e) {
       getLogger().log(e.getMessage(), e);

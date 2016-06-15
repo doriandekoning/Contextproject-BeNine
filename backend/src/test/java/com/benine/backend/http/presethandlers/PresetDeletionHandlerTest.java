@@ -5,8 +5,6 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.RequestHandler;
-import com.benine.backend.http.RequestHandlerTest;
 import com.benine.backend.http.presethandlers.PresetDeletionHandler;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -29,7 +27,7 @@ import java.util.Set;
 import static org.mockito.Mockito.*;
 
 
-public class PresetDeletionHandlerTest extends RequestHandlerTest {
+public class PresetDeletionHandlerTest extends PresetRequestHandlerTest {
 
   private IPCamera ipcamera;
   private SimpleCamera simpleCamera;
@@ -39,7 +37,7 @@ public class PresetDeletionHandlerTest extends RequestHandlerTest {
   private Set<String> tags;
 
   @Override
-  public RequestHandler supplyHandler() {
+  public PresetRequestHandler supplyHandler() {
     return new PresetDeletionHandler(httpserver);
   }
 

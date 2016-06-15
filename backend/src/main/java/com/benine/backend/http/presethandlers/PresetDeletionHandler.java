@@ -2,7 +2,6 @@ package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.LogEvent;
 import com.benine.backend.http.HTTPServer;
-import com.benine.backend.http.RequestHandler;
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.server.Request;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Class that handles editing presets.
  */
-public class PresetDeletionHandler extends RequestHandler {
+public class PresetDeletionHandler extends PresetRequestHandler {
 
   /**
    * Constructor for a new editPresetHandler that handles editing a preset.
@@ -32,7 +31,7 @@ public class PresetDeletionHandler extends RequestHandler {
     
     try {
       int presetID = Integer.parseInt(request.getParameter("id"));
-      Preset preset = getPresetController().getPresetById(presetID);
+      Preset preset = getPreset(presetID);
 
       if (preset != null) {
         getPresetController().removePreset(preset);

@@ -1,13 +1,11 @@
 package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.PresetCamera;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.MalformedURIException;
-import com.benine.backend.http.RequestHandler;
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.server.Request;
 
@@ -23,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Handler to create presets.
  */
-public class CreatePresetHandler extends RequestHandler {
+public class CreatePresetHandler extends PresetRequestHandler {
 
   /**
    * Constructs a create preset handler.
@@ -43,7 +41,6 @@ public class CreatePresetHandler extends RequestHandler {
         throw new MalformedURIException("No Camera ID Specified.");
       }
 
-      Camera camera = getCameraController().getCameraById(Integer.parseInt(camID));
       String tags = request.getParameter("tags");
       String name = request.getParameter("name");
       if (name == null) {
@@ -55,8 +52,9 @@ public class CreatePresetHandler extends RequestHandler {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       } 
       
-      if (camera instanceof PresetCamera) {
-        PresetCamera presetCamera = (PresetCamera) camera;
+      PresetCamera presetCamera = getPresetCamera(camID);
+      
+      if (presetCamera != null) {
         Preset preset = presetCamera.createPreset(tagList, name);
         getPresetController().addPreset(preset);
         getPresetController().createImage(preset);

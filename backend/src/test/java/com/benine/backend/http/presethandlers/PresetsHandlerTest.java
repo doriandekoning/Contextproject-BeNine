@@ -2,8 +2,6 @@ package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.ZoomPosition;
-import com.benine.backend.http.RequestHandler;
-import com.benine.backend.http.RequestHandlerTest;
 import com.benine.backend.http.presethandlers.CreatePresetHandler;
 import com.benine.backend.http.presethandlers.PresetsHandler;
 import com.benine.backend.http.presethandlers.RecallPresetHandler;
@@ -24,7 +22,7 @@ import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
-public class PresetsHandlerTest extends RequestHandlerTest {
+public class PresetsHandlerTest extends PresetRequestHandlerTest {
 
   private CreatePresetHandler createHandler;
 
@@ -33,7 +31,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   private JSONObject jsonObject;
 
   @Override
-  public RequestHandler supplyHandler() {
+  public PresetRequestHandler supplyHandler() {
     return new PresetsHandler(httpserver);
   }
 

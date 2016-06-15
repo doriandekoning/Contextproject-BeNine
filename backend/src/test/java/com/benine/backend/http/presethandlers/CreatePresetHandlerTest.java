@@ -27,7 +27,7 @@ import java.util.Set;
 import static org.mockito.Mockito.*;
 
 
-public class CreatePresetHandlerTest extends RequestHandlerTest {
+public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
 
   private IPCamera ipcamera;
   private SimpleCamera simpleCamera;
@@ -37,7 +37,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
   private Set<String> tags;
 
   @Override
-  public RequestHandler supplyHandler() {
+  public PresetRequestHandler supplyHandler() {
     return new CreatePresetHandler(httpserver);
   }
 

@@ -1,6 +1,8 @@
 package com.benine.backend.http.camerahandlers;
 
+import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
 
@@ -52,5 +54,15 @@ public abstract class CameraRequestHandler extends RequestHandler {
     String path = request.getPathInfo();
 
     return path.replaceFirst(".*/(\\d*)/", "");
+  }
+  
+  @Override
+  public Logger getLogger() {
+    return super.getLogger();
+  }
+  
+  @Override
+  protected CameraController getCameraController() {
+    return super.getCameraController();
   }
 }

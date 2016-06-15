@@ -4,8 +4,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.RequestHandler;
-import com.benine.backend.http.RequestHandlerTest;
 import com.benine.backend.http.presethandlers.EditPresetHandler;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -30,7 +28,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
-public class EditPresetHandlerTest extends RequestHandlerTest {
+public class EditPresetHandlerTest extends PresetRequestHandlerTest {
 
   private IPCamera ipcamera= mock(IPCamera.class);
   private IPCameraPreset preset;
@@ -39,7 +37,7 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
   private Set<String> tags;
   
   @Override
-   public RequestHandler supplyHandler() {
+   public PresetRequestHandler supplyHandler() {
      return new EditPresetHandler(httpserver);
    }
  

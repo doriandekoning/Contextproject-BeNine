@@ -1,10 +1,6 @@
 package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.http.AddTagHandler;
-import com.benine.backend.http.RequestHandler;
-import com.benine.backend.http.RequestHandlerTest;
-
 import org.eclipse.jetty.util.MultiMap;
 import org.json.JSONException;
 import org.junit.Before;
@@ -18,10 +14,10 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 /**
  * Created by BeNine on 25-5-16.
  */
-public class AddTagHandlerTest extends RequestHandlerTest {
+public class AddTagHandlerTest extends PresetRequestHandlerTest {
 
   @Override
-  public RequestHandler supplyHandler() {
+  public PresetRequestHandler supplyHandler() {
     return new AddTagHandler(httpserver);
   }
 
