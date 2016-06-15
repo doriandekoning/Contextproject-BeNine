@@ -37,6 +37,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public static final double VERTICAL_FOV_MIN = 1.9;
   public static final double VERTICAL_FOV_MAX = 36.2;
 
+  private double aspectratio;
+
   public static final int MIN_ZOOM = 0;
   public static final int MAX_ZOOM = 2730;
 
@@ -59,6 +61,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     ipaddress = ip;
     logger = cameraController.getLogger();
     config = cameraController.getConfig();
+
   }
   
   /**
@@ -581,4 +584,5 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     preset.addTags(tagList);
     return preset;
   }
+
 }
