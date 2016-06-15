@@ -11,7 +11,7 @@ var maxLevels = 3;
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var image = $("#auto-preset-creation-preview-image");
-  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height() + '&width='+image.width();
+  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
   $("#auto-preset-creation-preview-image").attr('src', streamURL);
   showSubViews();
 })
@@ -67,7 +67,6 @@ function increaseLevelAmount(amount) {
 * Draws the subview rectangles on the canvas with the rectangles provided by the backend.
 */
 function showSubViews() {
-  var offset = 1;
   var canvas = document.getElementById('previewCanvas');
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
@@ -83,8 +82,6 @@ function showSubViews() {
          context.strokeRect(x, y, width, height)
        }
      });
-  var imageWidth = canvas.width - (offset * 2);
-  var imageHeight = canvas.height - (offset * 2);
 }
 
 /**
