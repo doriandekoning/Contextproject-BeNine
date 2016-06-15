@@ -1,5 +1,5 @@
 <!-- Defines the modal used for automatically creating presets -->
-<div id="auto_presets_div" class="modal fade auto-presets-modal" tabindex="-1" role="dialog">
+<div id="auto_presets_div" class="modal fade auto-presets-modal" tabindex="-1" role="dialog"  data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,8 +128,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn" onclick="autoCreatePresets()" href="#autopreset_step2"><span
+                <button id="cancelbutton" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="startbutton" type="button" class="btn" onclick="autoCreatePresets()" href="#autopreset_step2"><span
                             class="glyphicon glyphicon-ok"></span> Create presets
                 </button>
             </div>

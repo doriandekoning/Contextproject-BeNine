@@ -17,7 +17,7 @@ $(".auto-presets-modal .disabled").click(function (e) {
 * Executed when the modal for auto preset creation loads. Adds the mjpeg stream to the image behind the canvas.
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
-  switchTab(1);
+  resetModal();
   var image = $("#auto-preset-creation-preview-image");
   var liveimage = $("#auto-preset-creation-live-image");
 
@@ -28,11 +28,25 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   showSubViews();
 })
 
+function resetModal() {
+  switchTab(1);
+
+  $('#auto_presets_div .close').prop('disabled', false);
+  $('#auto_presets_div #cancelbutton').prop('disabled', false);
+  $('#auto_presets_div #startbutton').prop('disabled', false);
+
+}
+
 /**
  * Allows tab switching.
  * @param stepnumber The tab to switch to.
  */
 function switchTab(stepnumber) {
+  $('#auto_presets_div .close').prop('disabled', true);
+  $('#auto_presets_div #cancelbutton').prop('disabled', true);
+  $('#auto_presets_div #startbutton').prop('disabled', true);
+
+
   var tabs = $('#autopreset-tabs');
   tabs.children().attr('class', 'disabled');
   tabs.children().click(function (e) {
