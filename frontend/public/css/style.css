@@ -415,11 +415,6 @@ input[type=range]:focus {
     position: relative;
 }
 
-.modal-body {
-    position: relative;
-    height: 300px;
-}
-
 #performance_edit_div .modal-body {
     height: 500px;
 }

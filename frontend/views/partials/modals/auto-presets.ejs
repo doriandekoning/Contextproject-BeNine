@@ -7,65 +7,82 @@
                 <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-flash"></span> Automatically generate presets</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-6" id="autopreset-left-column">
-                        <div class="form-group">
-                            <label for="auto_preset_name">Preset name (will be appended with a number for each preset)</label>
-                            <input id="auto_preset_name" class="form-control" type="text">
-                        </div>
+                <div>
 
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#autopreset_step1" aria-controls="autopreset_step1" role="tab">Step 1</a></li>
+                        <li role="presentation" class="disabled"><a href="#autopreset_step2" aria-controls="autopreset_step2" role="tab">Step 2</a></li>
+                        <li role="presentation" class="disabled" ><a href="#autopreset_step3" aria-controls="autopreset_step3" role="tab" >Step 3</a></li>
+                    </ul>
 
-                        <div class="row">
-                          <div class="col-xs-6">
-                            <div class="form-group preset-create-tagsinput">
-                                <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
-                                <div class="atags_input">
-                                    <input id="auto_preset_tags" class="form-control" type="text" data-role="tagsinput"/>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="autopreset_step1">
+                            <div class="row">
+                                <div class="col-xs-6" id="autopreset-left-column">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="auto_preset_name">Preset name (will be appended with a number for each preset)</label>
+                                            <input id="auto_preset_name" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="form-group preset-create-tagsinput">
+                                                <label for="preset-create-tagsinput"><span class="glyphicon glyphicon-tags"></span> Tags</label><br>
+                                                <div class="atags_input">
+                                                    <input id="auto_preset_tags" class="form-control" type="text" data-role="tagsinput"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon label-auto-preset-input">Columns:</span>
+                                                <input type="text" class="form-control" id="columns-amount" value="2" readonly/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="increaseColumnAmount(-1)"><span data-bind="label" class="glyphicon glyphicon-minus"></span></button>
+                                                    <button type="button" class="btn btn-default" onclick="increaseColumnAmount(1)"><span data-bind="label" class="glyphicon glyphicon-plus"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon label-auto-preset-input">Rows:</span>
+                                                <input type="text" class="form-control" id="rows-amount" value="2" readonly/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="increaseRowAmount(-1)"><span data-bind="label"  class="glyphicon glyphicon-minus"></span></button>
+                                                    <button type="button" class="btn btn-default" onclick="increaseRowAmount(1)"><span data-bind="label" class="glyphicon glyphicon-plus"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon label-auto-preset-input">Levels:</span>
+                                                <input type="text" class="form-control" id="levels-amount" value="2" readonly/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="increaseLevelAmount(-1)"><span class="glyphicon glyphicon-minus"></span></button>
+                                                    <button type="button" class="btn btn-default" onclick="increaseLevelAmount(1)"><span class="glyphicon glyphicon-plus"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" style="text-align:center;display:inline-block;position:relative;">
+                                    <img id="auto-preset-creation-preview-image" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b"></img>
+                                    <canvas id="previewCanvas" class="reviewCanvas img-responsive">
+                                        Your browser does not support the HTML5 canvas tag.
+                                    </canvas>
                                 </div>
                             </div>
-                          </div>
-                          <div class="col-xs-6">
-                            <div class="input-group">
-                              <span class="input-group-addon label-auto-preset-input">Columns:</span>
-                              <input type="text" class="form-control" id="columns-amount" value="2" readonly/>
-                              <div class="input-group-btn">
-                                <button type="button" class="btn btn-default" onclick="increaseColumnAmount(-1)"><span data-bind="label" class="glyphicon glyphicon-minus"></span></button>
-                                <button type="button" class="btn btn-default" onclick="increaseColumnAmount(1)"><span data-bind="label" class="glyphicon glyphicon-plus"></span></button>
-                              </div>
+                            <div class="row">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                                        70%
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-group">
-                              <span class="input-group-addon label-auto-preset-input">Rows:</span>
-                              <input type="text" class="form-control" id="rows-amount" value="2" readonly/>
-                              <div class="input-group-btn">
-                                <button type="button" class="btn btn-default" onclick="increaseRowAmount(-1)"><span data-bind="label"  class="glyphicon glyphicon-minus"></span></button>
-                                <button type="button" class="btn btn-default" onclick="increaseRowAmount(1)"><span data-bind="label" class="glyphicon glyphicon-plus"></span></button>
-                              </div>
-                            </div>
-                            <div class="input-group">
-                              <span class="input-group-addon label-auto-preset-input">Levels:</span>
-                              <input type="text" class="form-control" id="levels-amount" value="2" readonly/>
-                              <div class="input-group-btn">
-                                <button type="button" class="btn btn-default" onclick="increaseLevelAmount(-1)"><span class="glyphicon glyphicon-minus"></span></button>
-                                <button type="button" class="btn btn-default" onclick="increaseLevelAmount(1)"><span class="glyphicon glyphicon-plus"></span></button>
-                              </div>
-                            </div>
-                          </div>
                         </div>
+                        <div role="tabpanel" class="tab-pane" id="autopreset_step2">Test2</div>
+                        <div role="tabpanel" class="tab-pane" id="autopreset_step3">Test3</div>
                     </div>
-                    <div class="col-xs-6" style="text-align:center;display:inline-block;position:relative;">
 
-                        <img id="auto-preset-creation-preview-image" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b"></img>
-                        <canvas id="previewCanvas" class="reviewCanvas img-responsive">
-                          Your browser does not support the HTML5 canvas tag.
-                        </canvas>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="progress" style="margin-top:15px;margin-bottom:15px">
-                    <div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                      70%
-                    </div>
-                  </div>
                 </div>
             </div>
             <div class="modal-footer">
