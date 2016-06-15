@@ -12,15 +12,15 @@
                 <div>
 
                     <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs" id="autopreset-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#autopreset_step1"
-                                                                  aria-controls="autopreset_step1" role="tab">Step 1</a>
+                                                                  aria-controls="autopreset_step1" role="tab" data-toggle="tab">Step 1</a>
                         </li>
                         <li role="presentation" class="disabled"><a href="#autopreset_step2"
-                                                                    aria-controls="autopreset_step2" role="tab">Step
+                                                                    aria-controls="autopreset_step2" role="tab" data-toggle="tab">Step
                                 2</a></li>
                         <li role="presentation" class="disabled"><a href="#autopreset_step3"
-                                                                    aria-controls="autopreset_step3" role="tab">Step
+                                                                    aria-controls="autopreset_step3" role="tab" data-toggle="tab">Step
                                 3</a></li>
                     </ul>
 
@@ -118,7 +118,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn" onclick="autoCreatePresets()" data-dismiss="modal"><span
+                <button type="button" class="btn" onclick="autoCreatePresets()" href="#autopreset_step2"><span
                             class="glyphicon glyphicon-ok"></span> Create presets
                 </button>
             </div>

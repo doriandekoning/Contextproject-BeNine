@@ -5,16 +5,42 @@ var maxRows = 5;
 var maxColumns = 5;
 var maxLevels = 3;
 
+/**
+ * Disables default tab click behavior.
+ */
+$(".auto-presets-modal .disabled").click(function (e) {
+  e.preventDefault();
+  return false;
+});
 
 /**
 * Executed when the modal for auto preset creation loads. Adds the mjpeg stream to the image behind the canvas.
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
+  switchTab(1);
   var image = $("#auto-preset-creation-preview-image");
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
-  $("#auto-preset-creation-preview-image").attr('src', streamURL);
+  image.attr('src', streamURL);
   showSubViews();
 })
+
+/**
+ * Allows tab switching.
+ * @param stepnumber The tab to switch to.
+ */
+function switchTab(stepnumber) {
+  var tabs = $('#autopreset-tabs');
+  tabs.children().attr('class', 'disabled');
+  tabs.children().click(function (e) {
+    e.preventDefault();
+    return false;
+  });
+
+  var newTab = tabs.find('a[href="#autopreset_step' + stepnumber + '"]');
+  newTab.attr('class', 'active');
+  newTab.tab('show');
+
+}
 
 /**
 * Executed when the auto create presets button is pressed.
@@ -22,8 +48,9 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
 */
 function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
-	var presetTag = $('#auto_preset_tags').val();
+  var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
+    switchTab(2);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
 
     });
