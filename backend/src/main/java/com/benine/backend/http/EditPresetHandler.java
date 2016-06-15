@@ -44,7 +44,7 @@ public class EditPresetHandler extends RequestHandler {
       Preset preset = getPresetController().getPresetById(presetID);
       Set<String> tagList = new HashSet<>();
       if (name != null) {
-        updateName(preset, name);
+        preset.setName(name);
       }
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
@@ -56,6 +56,7 @@ public class EditPresetHandler extends RequestHandler {
         updatePosition(preset);
         getPresetController().createImage(preset);
       }
+      getPresetController().updatePreset(preset);
       respondSuccess(request, res);
     } catch (SQLException e) {
       getLogger().log(e.getMessage(), e);
@@ -80,7 +81,6 @@ public class EditPresetHandler extends RequestHandler {
   private void updateTag(Preset preset, Set<String> tagList) throws SQLException {
     preset.removeTags();
     preset.addTags(tagList);
-    getPresetController().updatePreset(preset);
   }
   
   /**
@@ -97,17 +97,5 @@ public class EditPresetHandler extends RequestHandler {
     IPCamera ipcam = (IPCamera) getCameraController().getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
     newPreset.setId(preset.getId());
-    getPresetController().updatePreset(newPreset);
   }
-
-  /**
-   * Updating the name only.
-   * @param preset the preset to be changed
-   * @param name the new name
-   * @throws SQLException when preset can not be updated
-   */
-  private void updateName(Preset preset, String name) throws SQLException {
-    preset.setName(name);
-    getPresetController().updatePreset(preset);
-  } 
 }

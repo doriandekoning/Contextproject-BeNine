@@ -141,10 +141,11 @@ public class PresetController {
   public void removePreset(Preset preset) throws SQLException {
     presets.remove(preset);
     database.deletePreset(preset.getId());
+    String presetImage = preset.getImage();
     File path = new File(config.getValue("imagepath")
-        .replaceAll("/", Matcher.quoteReplacement(File.separator)) + preset.getImage());
+        .replaceAll("/", Matcher.quoteReplacement(File.separator)) + presetImage);
     if (!path.delete()) {
-      logger.log(preset.getImage() + " could not be deleted", LogEvent.Type.WARNING);
+      logger.log(presetImage + " could not be deleted", LogEvent.Type.WARNING);
     }
   }
   
@@ -154,11 +155,12 @@ public class PresetController {
    * @return Preset with right ID.
    */
   private static Preset addPresetID(Preset preset) {
-    if (preset.getId() == -1) {
+    int presetID = preset.getId();
+    if (presetID == -1) {
       preset.setId(PresetController.newID);
       PresetController.newID++;
     } else {
-      PresetController.newID = Math.max(PresetController.newID - 1, preset.getId()) + 1;
+      PresetController.newID = Math.max(PresetController.newID - 1, presetID) + 1;
     }
     return preset;
   }

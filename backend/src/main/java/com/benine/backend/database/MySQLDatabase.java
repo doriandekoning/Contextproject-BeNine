@@ -224,9 +224,10 @@ public class MySQLDatabase implements Database {
   public void addPreset(Preset preset) {
     PreparedStatement statement = null;
     try {
+      int presetID = preset.getId();
       String sql = "INSERT INTO preset VALUES(?,?,?,?)";
       statement = connection.prepareStatement(sql);
-      statement.setInt(1, preset.getId());
+      statement.setInt(1, presetID);
       statement.setString(2, preset.getImage());
       statement.setInt(3, preset.getCameraId());
       statement.setString(4, preset.getName());
@@ -236,7 +237,7 @@ public class MySQLDatabase implements Database {
         statement.executeUpdate();
       }
       for (String tag : preset.getTags()) {
-        addTagToPreset(tag, preset.getId());
+        addTagToPreset(tag, presetID);
       }
     } catch (Exception e) {
       logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
@@ -260,9 +261,10 @@ public class MySQLDatabase implements Database {
       autoir = 1;
     }
     try {
-      statement.setDouble(1, preset.getPosition().getPan());
-      statement.setDouble(2, preset.getPosition().getTilt());
-      statement.setDouble(3, preset.getPosition().getZoom());
+      ZoomPosition position = preset.getPosition();
+      statement.setDouble(1, position.getPan());
+      statement.setDouble(2, position.getTilt());
+      statement.setDouble(3, position.getZoom());
       statement.setDouble(4, preset.getFocus());
       statement.setDouble(5, preset.getIris());
       statement.setInt(6, auto);
