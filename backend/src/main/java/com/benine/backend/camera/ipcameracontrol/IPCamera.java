@@ -37,8 +37,6 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   public static final double VERTICAL_FOV_MIN = 1.9;
   public static final double VERTICAL_FOV_MAX = 36.2;
 
-  private double aspectratio;
-
   public static final int MIN_ZOOM = 0;
   public static final int MAX_ZOOM = 2730;
 
@@ -50,6 +48,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private Map<String, Long> timeStamps = new HashMap<>();
   private Logger logger;
   private Config config;
+  private Double aspectRatio = 16.0/9;
 
   /**
    *  Create a new IP Camera object.
@@ -585,4 +584,20 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     return preset;
   }
 
+
+  /**
+   * Sets the Aspectratio for this camera
+   * @param ratio the new Aspectratio
+   */
+  public void setAspectRatio(double ratio) {
+    this.aspectRatio = ratio;
+  }
+
+  /**
+   * Getter for aspectratio.
+   * @return The aspectratio of this camera.
+   */
+  public double getAspectRatio() {
+    return aspectRatio;
+  }
 }
