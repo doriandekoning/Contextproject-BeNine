@@ -85,5 +85,7 @@ Preset.prototype = {
 		this.tiltspeed = newpreset.tiltspeed;
 		this.autoIris = newpreset.autoiris;
 		this.tags = newpreset.tags;
+		this.image = newpreset.image;
+		this.img = $('<img src="/api/backend' + this.image + '" >');
 	}
 };

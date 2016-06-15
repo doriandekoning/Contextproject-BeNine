@@ -1,7 +1,5 @@
 // Local variable to store the available tags locally.
 var localTags = [];
-var deleteTags = [];
-var updatedTags = [];
 // true if the client is in preset editing mode.
 var editing = false;
 var searchTerm;
@@ -346,64 +344,50 @@ function findPresetOnID(id){
 
 //Below everything for the tag modal.
 var newId = 0;
+var editable = true;
 
 /**
 * Load the tags modal en fill in the tags.
 */
 function loadTags() {
-	updatedTags = [];
-	deleteTags = [];
 	$(".fill-tags").empty();
 	$(".fill-tags").append(getTags());
 	newId = localTags.length;
+	editable = true;
 }
 
 $(".fill-tags").on('click', '.tag', function(e){
+	if(editable) {
         e.preventDefault();
         var tag = $(this).html();
         $(this).replaceWith(appendEditable(tag, false));
-		editTags($(this).attr('id'));
-	});
+		editable = false;
+		editTags($(this).attr('id'), false);
+	}
+});
 
 /**
 * Edit or delete a clicked on tag.
 * @id The id of the tag to edit
 */
-function editTags(id) {
+function editTags(id, isNew) {
 	$(".edit").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
-		$(this).parent().replaceWith(appendTag(id, tag));
-		updatedTags.push({index: id, name: tag});
+		var updated = updateTag(id, tag);
+		if (updated) {
+			$(this).parent().replaceWith(appendTag(id, tag));
+		}
+		editable = true;
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
 		$(this).parent().remove();
-		if(id < newId){
-			deleteTags.push(id);
-		}
+		deleteTag(id);
+		editable = true;
 	});
 }
-
-/**
-* Save the new tags in de array.
-*/
-function updateTags() {
-	for(i = 0; i < updatedTags.length; i++) {
-		if(localTags[updatedTags[i].index] != undefined){
-			//update tags
-			deleteTag(updatedTags[i].index);
-		}
-		//update/add tags
-		newTag(updatedTags[i].name);
-	}
-	//delete tags
-	for(i = 0; i < deleteTags.length; i++) {
-		deleteTag(deleteTags[i]);
-	}
-}
-
 
 /**
 * Function adds a new tag to the tag list.
@@ -433,16 +417,59 @@ function deleteTag(index) {
  	tagnames.initialize(true);
 	$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
 				console.log("create tag respone: " + data);
-	}).done();
+	});
+}
+
+/**
+* Function updates a tag in the tag list.
+* @param index the index of the updated tag
+* @val the updated version of the tag
+*/
+function updateTag(index, val) {
+	if ((localTags.indexOf(val) < 0 && val != "" && val != undefined) || localTags.indexOf(val) == index)  {
+		var remove = localTags[index];
+		localTags[index] = val;
+		tagnames.clearPrefetchCache();
+		tagnames.initialize(true);
+		updateTagInPresets(remove, val, function() {
+			$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
+				$.get("/api/backend/presets/addtag?name=" + val, function(data) {});
+			});
+		});
+		return true;
+	}
+	return false;
+}
+
+/**
+* Updates a the tags in all the presets containing the old tag.
+* @param old The old tag
+* @param fresh The new tag
+* @param done callback
+*/
+function updateTagInPresets(old, fresh, done) {
+	for(i = 0; i < presets.length; i++) {
+		var tagIndex = presets[i].tags.indexOf(old);
+		if (tagIndex > -1) {
+			presets[i].tags[tagIndex] = fresh;
+			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
+																									function(data) {console.log("edit preset: " + data); done();});
+		}
+	}
 }
 
 /**
 * Create a new tag.
 */
 function addTag() {
-	$(".fill-tags").prepend(appendEditable("tag " + localTags.length, true));
-	editTags(newId);
-	newId++;
+	if(editable) {
+		var add = "tag " + localTags.length;
+		$(".fill-tags").prepend(appendEditable(add, true));
+		newTag(add);
+		editable = false;
+		editTags(newId, true);
+		newId++;
+	}
 }
 
 /**
@@ -462,7 +489,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<div><button class='tag btn btn-info glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
+	return "<div><button class='tag btn btn-primary glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
 }
 
 /**

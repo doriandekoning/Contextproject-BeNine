@@ -3,7 +3,9 @@ package com.benine.backend.http;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
@@ -52,7 +54,8 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     streamReader = new MJPEGStreamReader(stream);
     tags = new HashSet<>(Arrays.asList("violin", "piano"));
 
-    preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 1, "name");
+    preset = new IPCameraPreset(new ZoomPosition(0,0, 100), new FocusValue(33, true), new IrisValue(50,true), 1);
+    preset.setName("name");
     preset.addTags(tags);
     preset.setId(1);
 
@@ -101,7 +104,8 @@ public class EditPresetHandlerTest extends RequestHandlerTest {
     parameters.add("name", "name");
     setParameters(parameters);
 
-    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0,0, 50), 33,50,true,true, 1, "name");
+    IPCameraPreset preset2 = new IPCameraPreset(new ZoomPosition(0,0, 50), new FocusValue(33, true), new IrisValue(50,true), 1);
+    preset2.setName("name");
     preset2.addTags(tags);
     when(ipcamera.createPreset(tags, "name")).thenReturn(preset2);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
