@@ -30,6 +30,9 @@ public class LogWriter {
 
   private volatile ArrayList<LogEvent> buffer = new ArrayList<LogEvent>();
 
+  // Semaphore for flushing
+  private volatile boolean flushing = false;
+
   /**
    * Creates a new LogWriter, should be deleted by calling the destoy method.
    * @param logLocation Writes to a file
@@ -106,11 +109,17 @@ public class LogWriter {
    * Flushes the buffer of this logwriter.
    */
   public void flush() {
+    if (flushing) {
+      // Because someone else is already flushing we can simply exit.
+      return;
+    }
+    flushing = true;
     while (!buffer.isEmpty()) {
       hardWrite(buffer.get(0));
       buffer.remove(0);
     }
     writer.flush();
+    flushing = false;
   }
 
   /**
