@@ -68,9 +68,12 @@ function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
   var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
+    // Switch to generating view.
     switchTab(2);
-    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
 
+    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
+      // If done switch to final screen.
+      switchTab(3);
     });
   }
 }
@@ -136,3 +139,4 @@ function clearCanvas(canvas) {
   var context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
 }
+
