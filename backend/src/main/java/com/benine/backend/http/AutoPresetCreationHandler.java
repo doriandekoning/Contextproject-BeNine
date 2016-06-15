@@ -33,30 +33,27 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     PresetPyramidCreator creator = getPyramidPresetCreator(request);
     String camID = request.getParameter("camera");
     Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
+    boolean succes = false;
+    
     if (!(cam instanceof IPCamera )) {
-      respondFailure(request, httpServletResponse);
       request.setHandled(true);
+      respond(request, httpServletResponse, succes);
       return;
     }
     IPCamera ipcam = (IPCamera) cam;
    
     try {
       creator.createPresets(ipcam, creator.generateSubViews());
-      respondSuccess(request, httpServletResponse);
-
+      succes = true;
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);
-      respondFailure(request, httpServletResponse);
     }  catch (CameraBusyException e) {
       getLogger().log("Trying to auto create presets on busy camera with id: "
               + camID, e);
-      respondFailure(request, httpServletResponse);
     } finally {
+      respond(request, httpServletResponse, succes);
       request.setHandled(true);
     }
-
-
   }
-  
 }

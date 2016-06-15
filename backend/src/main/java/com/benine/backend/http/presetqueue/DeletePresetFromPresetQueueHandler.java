@@ -31,21 +31,20 @@ public class DeletePresetFromPresetQueueHandler extends PresetQueueRequestHandle
     int place = -1;
     
     PresetQueue presetQueue = getPresetQueueController().getPresetQueueById(id);
-    
+    boolean succes = false;
     if (presetQueue != null && request.getParameter("position") != null) {
       place = Integer.parseInt(request.getParameter("position"));
       presetQueue.deletePreset(place);
       getPresetQueueController().updatePresetQueue(presetQueue);
       
-      respondSuccess(request, res);
+      succes = true;
       getLogger().log("Preset at position " + place + " is succesfully deleted from the queue: " 
                                                           + id, LogEvent.Type.INFO);
     } else {
-      respondFailure(request, res);
       getLogger().log("Preset at position " + place + " is not deleted from the queue: " 
                                                           + id, LogEvent.Type.WARNING);
     }
-    
+    respond(request, res, succes);
     request.setHandled(true);
   }
  

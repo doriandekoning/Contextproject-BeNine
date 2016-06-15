@@ -71,18 +71,15 @@ public abstract class RequestHandler extends AbstractHandler {
    * Responds a success true JSON.
    * @param request   The request to respond to.
    * @param response  The response
+   * @param succes true if request is finished.
    */
-  public void respondSuccess(Request request, HttpServletResponse response) {
-    respond(request, response, "{\"succes\":\"true\"}");
-  }
-
-  /**
-   * Responds a success false JSON.
-   * @param request   The request to respond to.
-   * @param response  The response
-   */
-  public void respondFailure(Request request, HttpServletResponse response) {
-    respond(request, response, "{\"succes\":\"false\"}");
+  public void respond(Request request, HttpServletResponse response, Boolean succes) {
+    if (succes) {
+      respond(request, response, "{\"succes\":\"true\"}");
+    } else {
+      respond(request, response, "{\"succes\":\"false\"}");
+    }
+  
   }
 
   /**

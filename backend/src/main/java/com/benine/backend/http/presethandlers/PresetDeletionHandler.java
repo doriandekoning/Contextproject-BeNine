@@ -28,16 +28,16 @@ public class PresetDeletionHandler extends RequestHandler {
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
-
+    boolean succes = true;
+    
     try {
       int presetID = Integer.parseInt(request.getParameter("id"));
       Preset preset = getPresetController().getPresetById(presetID);
 
       if (preset != null) {
         getPresetController().removePreset(preset);
-        respondSuccess(request, res);
       } else {
-        respondFailure(request, res);
+        succes = false;
       }
 
     } catch (NumberFormatException e) {
@@ -46,7 +46,7 @@ public class PresetDeletionHandler extends RequestHandler {
       getLogger().log("An SQL Exception occured", LogEvent.Type.INFO);
     }
 
-    respondFailure(request, res);
+    respond(request, res, succes);
     request.setHandled(true);
   }
 }

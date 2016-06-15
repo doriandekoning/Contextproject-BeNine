@@ -36,20 +36,21 @@ public class CameraZoomHandler extends CameraRequestHandler {
     ZoomingCamera zoomingCam = (ZoomingCamera) getCameraController().getCameraById(camID);
     String zoomType = request.getParameter("zoomType");
     String zoom = request.getParameter("zoom");
+    Boolean succes = true;
     
     try {
       zoom(zoomingCam, zoomType, zoom);
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + request.getRequestURI(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + zoomingCam.getId(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraBusyException e) {
       getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     }
-    respondSuccess(request, res);
+    respond(request, res, succes);
     request.setHandled(true);
   }
 

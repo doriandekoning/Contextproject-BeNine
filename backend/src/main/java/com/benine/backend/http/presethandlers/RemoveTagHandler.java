@@ -1,9 +1,9 @@
 package com.benine.backend.http.presethandlers;
 
-import org.eclipse.jetty.server.Request;
-
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+
+import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -27,10 +27,12 @@ public class RemoveTagHandler extends RequestHandler {
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     String tagName = request.getParameter("name");
+    Boolean succes = false;
     if (tagName != null) {
       getPresetController().removeTag(tagName);
+      succes = true;
     }
-    respondSuccess(request, httpServletResponse);
+    respond(request, httpServletResponse, succes);
     request.setHandled(true);
 
   }

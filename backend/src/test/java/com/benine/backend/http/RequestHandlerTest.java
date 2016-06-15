@@ -111,27 +111,27 @@ public abstract class RequestHandlerTest {
 
   @Test
   public void testResponseMessageTrueStatus() throws Exception {
-    handler.respondSuccess(requestMock, httpresponseMock);
+    handler.respond(requestMock, httpresponseMock, true);
     verify(httpresponseMock).setStatus(200);
   }
   
   @Test
   public void testResponseMessageFalseStatus() throws Exception {
-    handler.respondFailure(requestMock, httpresponseMock);
+    handler.respond(requestMock, httpresponseMock, false);
     verify(httpresponseMock).setStatus(200);
   }
 
   @Test
   public void testResponseMessageTrueMessage() throws Exception {
     String response = "{\"succes\":\"true\"}";
-    handler.respondSuccess(requestMock, httpresponseMock);
+    handler.respond(requestMock, httpresponseMock, true);
     verify(out).write(response);
   }
 
   @Test
   public void testResponseMessageFalseMessage() throws Exception {
     String response = "{\"succes\":\"false\"}";
-    handler.respondFailure(requestMock, httpresponseMock);
+    handler.respond(requestMock, httpresponseMock, false);
     verify(out).write(response);
   }
 }

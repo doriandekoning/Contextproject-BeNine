@@ -36,6 +36,7 @@ public class CreatePresetHandler extends RequestHandler {
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
+    Boolean succes = true;
     try {
       String camID = request.getParameter("camera");
       if (camID == null) {
@@ -53,28 +54,29 @@ public class CreatePresetHandler extends RequestHandler {
       if (tags != null) {
         tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
       } 
+      
       if (camera instanceof PresetCamera) {
         PresetCamera presetCamera = (PresetCamera) camera;
         Preset preset = presetCamera.createPreset(tagList, name);
         getPresetController().addPreset(preset);
         getPresetController().createImage(preset);
-        respondSuccess(request, res);
       } else {
         throw new MalformedURIException("Camera does not support presets or is nonexistent.");
       }
     } catch (MalformedURIException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (SQLException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraBusyException e) {
       getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } finally {
+      respond(request, res, succes);
       request.setHandled(true);
     }
   }

@@ -25,13 +25,13 @@ public class AddTagHandler extends RequestHandler {
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     String tagName = request.getParameter("name");
+    boolean succes = false;
     if (tagName != null) {
       getPresetController().addTag(tagName);
-      respondSuccess(request, httpServletResponse);
-    } else {
-      respondFailure(request, httpServletResponse);
+      succes = true;
     }
+    
+    respond(request, httpServletResponse, succes);
     request.setHandled(true);
-
   }
 }

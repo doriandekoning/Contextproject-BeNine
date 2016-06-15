@@ -36,23 +36,24 @@ public class CameraMovingHandler extends CameraRequestHandler {
     String tilt = request.getParameter("tilt");
     String panSpeed = request.getParameter("panSpeed");
     String tiltSpeed = request.getParameter("tiltSpeed");
-
+    Boolean succes = true;
+    
     try {
       move(movingCam, moveType, pan, tilt, panSpeed, tiltSpeed);
-      respondSuccess(request, res);
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + request.getRequestURI(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (NumberFormatException e) {
       getLogger().log(e.toString(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraBusyException e) {
       getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
+      succes = false;
     }
-
+    respond(request, res, succes);
     request.setHandled(true);
   }
 

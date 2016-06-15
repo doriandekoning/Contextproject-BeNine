@@ -36,20 +36,19 @@ public class CameraIrisHandler extends CameraRequestHandler {
     String autoOn = request.getParameter("autoIrisOn");
     String setPos = request.getParameter("position");
     String speed = request.getParameter("speed");
-
+    Boolean succes = true;
     try {
       setIris(irisCam, autoOn, setPos, speed);
-      respondSuccess(request, res);
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + irisCam.getId(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (NumberFormatException e) {
       getLogger().log(e.toString(), LogEvent.Type.WARNING);
-      respondFailure(request, res);
+      succes = false;
     } catch (CameraBusyException e) {
       getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
     }
-
+    respond(request, res, succes);
     request.setHandled(true);
   }
 
