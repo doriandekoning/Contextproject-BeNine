@@ -10,6 +10,9 @@ var maxLevels = 3;
 * Executed when the modal for auto preset creation loads. Adds the mjpeg stream to the image behind the canvas.
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
+  $("#columns-amount").val(columns);
+  $("#rows-amount").val(rows);
+  $("#levels-amount").val(levels);
   var image = $("#auto-preset-creation-preview-image");
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height() + '&width='+image.width();
   $("#auto-preset-creation-preview-image").attr('src', streamURL);
