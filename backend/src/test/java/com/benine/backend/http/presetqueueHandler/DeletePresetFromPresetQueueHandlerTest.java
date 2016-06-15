@@ -10,13 +10,10 @@ import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.http.presetqueue.AddPresetToPresetQueueHandler;
 import com.benine.backend.http.presetqueue.DeletePresetFromPresetQueueHandler;
-import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.Preset;
-import com.benine.backend.preset.PresetController;
 
 public class DeletePresetFromPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   

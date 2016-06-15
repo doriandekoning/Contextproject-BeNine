@@ -21,7 +21,8 @@ public class SimplePresetTest extends PresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new SimplePreset(1, keywords, "name");
+    preset = new SimplePreset(1, keywords);
+    preset.setName("name");
     preset.setId(1);
     preset.setImage("test");
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
@@ -45,6 +46,8 @@ public class SimplePresetTest extends PresetTest {
 
   @Override
   public Preset getPreset() {
-    return new SimplePreset(3, "Name");
+    Preset preset = new SimplePreset(3);
+    preset.setName("Name");
+    return preset;
   }
 }

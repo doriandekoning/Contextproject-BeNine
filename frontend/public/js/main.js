@@ -6,22 +6,25 @@ var editingpreset;
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
-	
+
 	// Update server status ever 10 seconds
 	setInterval(updateServerStatus, 10 * 1000);
-	
+
 	// Reload presets every 5 seconds.
 	setInterval(loadPresets, 5 * 1000);
-	
+
 	// Load the available cameras.
 	loadCameras();
-	
+
+	//Check cameras inuse.
+	setInterval(checkCamerasInUse, 2000);
+
 	// Load the available presets from the backend.
 	loadPresets();
 
 	// Load the available perforamnces from the backend.
 	loadPerformances();
-	
+
 	Holder.run({});
 	console.log('Page has loaded successfully.');
 });
@@ -38,9 +41,28 @@ function updateServerStatus() {
 		} else {
 			statuslabel.attr("class", "label label-danger");
 		}
-	}).fail(function() { 
+	}).fail(function() {
 		statuslabel.attr("class", "label label-danger");
 	});
+}
+
+/**
+* Check which camera's are in use.
+* And let the backend now which camera you use.
+*/
+function checkCamerasInUse() {
+	$.get("/api/backend/camera", function(data) {
+		var obj = JSON.parse(data);
+		for(var c in obj.cameras) {
+			var cam = obj.cameras[c];
+			var camera = findCameraOnID(cam.id);
+			if (camera !== undefined) {
+				camera.inuse = cam.inuse;
+				setCameraStatus(cam.id);
+			}
+		}
+	});
+	$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
 }
 
 /**
@@ -52,7 +74,7 @@ function loadCameras() {
 		for(var c in obj.cameras) {
 			var cam = obj.cameras[c];
 			if (cam.unavailable === undefined) {
-				cameras.push(new Camera(cam.id, cam.inuse, cam.autofocus, cam.autoiris, cam.zoom, cam.move));
+				cameras.push(new Camera(cam));
 			}
 		}
 	}).done(function() {
@@ -74,16 +96,23 @@ function loadCameras() {
 function switchCurrentView(id) {
     var camera = findCameraOnID(id);
 	if(id === currentcamera || camera === undefined) {
-		console.log("Cannot switch to camera " + id + " does not exist");
+		console.log("Cannot switch to camera " + id + " does not exist or is already selected");
 	} else {
-		toggleCamSelected(currentcamera, false);
+		var oldID = currentcamera;
 		currentcamera = id;
-		toggleCamSelected(currentcamera, true);
+		if (oldID !== undefined) {
+			var oldCamera = findCameraOnID(oldID);
+			setCameraStatus(oldID);
+			$.get("/api/backend/camera/" + oldID + "/inuse?inuse=false", function(data) {});
+		}
+		setCameraStatus(currentcamera);
 		camera.displayControls();
 		camera.bigView();
 		$('#createPreset').prop('disabled', false);
+		$('#autoCreatePresets').prop('disabled', false);
 		var preset_create_div = $('#preset_create_div');
 		preset_create_div.find('.tags_input').tagsinput('removeAll');
+		$.get("/api/backend/camera/" + currentcamera + "/inuse?inuse=true", function(data) {});
 	}
 }
 
@@ -99,32 +128,18 @@ function findCameraOnID(id){
 }
 
 /**
-* Change the camera inuse color below an image.
-* @param camid the id of the camera to change the status of.
-* @param inuse boolean to switch between in use.
+* Display the right camera status below the camera with camid
+* @param camid id of the camera to display the status for.
 */
-function toggleCamSelected(camid, inuse) {
+function setCameraStatus(camid) {
+	var camera_area, camera;
 	camera_area = $('#camera_area');
 	camera = camera_area.find('#camera_' + camid);
-	if (inuse === true) {
+	if(parseInt(camid) === parseInt(currentcamera)) {
 		camera.find('.camera_status').attr('class', 'camera_status selected');
-	} else {
-		camera.find('.camera_status').attr('class', 'camera_status available');
-	}
-}
-
-/**
- * Method used to toggle if the camera is in use.
- * @param camid		The id of the camera to toggle.
- * @param inuse		Boolean, true if in use, false otherwise.
- */
-function toggleCamInuse(camid, inuse) {
-	camera_area = $('#camera_area');
-	camera = camera_area.find('#camera_' + camid);
-	
-	if (inuse === true) {
+	} else if (findCameraOnID(camid).inuse) {
 		camera.find('.camera_status').attr('class', 'camera_status unavailable');
-	} else {
+	} else{
 		camera.find('.camera_status').attr('class', 'camera_status available');
 	}
 }

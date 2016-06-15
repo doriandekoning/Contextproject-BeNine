@@ -3,7 +3,9 @@ package com.benine.backend.preset.autopresetcreation;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamNotAvailableException;
@@ -22,6 +24,7 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private PresetController presetController;
+  
   /**
    * Creates a new AutoPresetCreator object.
    * @param presetController the presetController to add the created presets too.
@@ -29,6 +32,7 @@ public abstract class AutoPresetCreator {
   public AutoPresetCreator(PresetController presetController) {
     this.presetController = presetController;
   }
+  
   /**
    * Automatically creates presets for the selected camera.
    * Calls generatePositions to get the positions of the presets.
@@ -57,6 +61,7 @@ public abstract class AutoPresetCreator {
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
+      cam.setInUse();
       presets.add(generatePresetFromPos(pos, cam));
     }
     cam.setBusy(false);
@@ -88,12 +93,14 @@ public abstract class AutoPresetCreator {
     cam.setBusy(true);
     Thread.sleep(timeout);
     cam.setBusy(false);
-    IPCameraPreset preset = new IPCameraPreset(pos, 0, 0, true, true, cam.getId(), "");
+    IPCameraPreset preset = new IPCameraPreset(pos, new FocusValue(0, true),
+                                          new IrisValue(0, true), cam.getId());
     cam.setBusy(true);
     presetController.addPreset(preset);
-    preset.createImage(cam);
+    presetController.createImage(preset);
     return preset;
   }
+  
   /**
    * Generates the positions to create pesets at.
    * @param cam the camera to create positions for.

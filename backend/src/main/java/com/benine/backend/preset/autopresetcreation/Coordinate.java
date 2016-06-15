@@ -69,6 +69,7 @@ public class Coordinate {
    */
   @Override
   public boolean equals(Object o) {
+    double delta = 0.1;
     if (this == o) {
       return true;
     }
@@ -78,10 +79,10 @@ public class Coordinate {
 
     Coordinate that = (Coordinate) o;
 
-    if (Double.compare(that.x, x) != 0) {
+    if (Math.abs(that.x - x) > delta) {
       return false;
     }
-    return Double.compare(that.y, y) == 0;
+    return Math.abs(that.y - y) < delta;
 
   }
 
