@@ -6,6 +6,7 @@ import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -63,7 +64,7 @@ public class PresetDeletionHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), new FocusValue(40, true), 50, true, 0);
+      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), new FocusValue(40, true), new IrisValue(50, true), 0);
       preset.setName("name");
       preset.addTags(tags);
 

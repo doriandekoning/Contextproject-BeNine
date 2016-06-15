@@ -5,6 +5,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.PresetController;
 import com.benine.backend.video.StreamNotAvailableException;
@@ -92,7 +93,8 @@ public abstract class AutoPresetCreator {
     cam.setBusy(true);
     Thread.sleep(timeout);
     cam.setBusy(false);
-    IPCameraPreset preset = new IPCameraPreset(pos, new FocusValue(0, true), 0, true, cam.getId());
+    IPCameraPreset preset = new IPCameraPreset(pos, new FocusValue(0, true),
+                                          new IrisValue(0, true), cam.getId());
     cam.setBusy(true);
     presetController.addPreset(preset);
     presetController.createImage(preset);
