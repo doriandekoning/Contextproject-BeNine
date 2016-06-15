@@ -436,11 +436,11 @@ function updateTag(index, val) {
 		localTags[index] = val;
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
-		updateTagInPresets(remove, val, function() {
-			$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
-				$.get("/api/backend/presets/addtag?name=" + val, function(data) {});
+		$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
+				$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+					updateTagInPresets(remove, val);
+				});
 			});
-		});
 		return true;
 	}
 	return false;
@@ -452,13 +452,14 @@ function updateTag(index, val) {
 * @param fresh The new tag
 * @param done callback
 */
-function updateTagInPresets(old, fresh, done) {
+function updateTagInPresets(old, fresh) {
 	for(i = 0; i < presets.length; i++) {
 		var tagIndex = presets[i].tags.indexOf(old);
 		if (tagIndex > -1) {
 			presets[i].tags[tagIndex] = fresh;
 			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
-																									function(data) {console.log("edit preset: " + data); done();});
+				function(data) {console.log("edit preset: " + data); 
+				});
 		}
 	}
 }
