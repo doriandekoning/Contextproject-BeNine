@@ -446,6 +446,8 @@ input[type=range]:focus {
 }
 
 .fill-tags {
+    margin: 0;
+    padding: 0;
     height: 280px;
     overflow: auto;
 }
@@ -615,10 +617,17 @@ input[type=range]:focus {
     margin-bottom: 5px;
 }
 
-.performance-list .btn {
+.performance-list .btn, .fill-tags .btn {
     margin-bottom: 5px;
     display: block;
     text-align: left;
+}
+
+.fill-tags .edittagrow .col-xs-8, .fill-tags .edittagrow .col-xs-4 {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 5px;
+    padding: 0;
 }
 
 .performance-list span {

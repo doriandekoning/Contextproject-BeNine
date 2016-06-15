@@ -381,14 +381,14 @@ function editTags(id, isNew) {
 		var tag = $('.new').val();
 		var updated = updateTag(id, tag);
 		if (updated) {
-			$(this).parent().replaceWith(appendTag(id, tag));
+			$(this).closest('.edittagrow').replaceWith(appendTag(id, tag));
 		}
 		editable = true;
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
-		$(this).parent().remove();
+		$(this).closest('.edittagrow').remove();
 		deleteTag(id);
 		editable = true;
 	});
@@ -494,7 +494,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<div><button class='tag btn btn-primary glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
+	return "<li class='tag btn btn-primary glyphicon glyphicon-tag' id=" + id + "> " + name + "</li>"
 }
 
 /**
@@ -504,12 +504,11 @@ function appendTag(id, name) {
 */
 function appendEditable(input, add) {
 	var result = "";
-	if(add){
-		result += "<div>"
-	}
-	result += "<input class='new' value='" + input + "' maxlength=15/><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
-	if(add) {
-		result += "</div>"
-	}
+
+	result += "<div class='row edittagrow'>";
+	result += "<div class='col-xs-8'><input class='new form-control' value='" + input + "' maxlength=15/></div>";
+	result += "<div class='col-xs-4'><div class='btn-group editname'><button class='delete btn btn-danger glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success glyphicon glyphicon-ok-sign' type='button'></button></div></div>";
+	result += "</div>";
+
 	return result
 }
