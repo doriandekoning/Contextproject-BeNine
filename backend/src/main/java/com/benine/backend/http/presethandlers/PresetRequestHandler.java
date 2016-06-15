@@ -1,7 +1,5 @@
 package com.benine.backend.http.presethandlers;
 
-import org.eclipse.jetty.server.handler.AbstractHandler;
-
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.PresetCamera;
@@ -15,8 +13,6 @@ import com.benine.backend.preset.PresetController;
  */
 public abstract class PresetRequestHandler extends RequestHandler {
   
-  private HTTPServer httpserver;
-  
   private Logger logger;
   
   private PresetController presetController;
@@ -27,7 +23,6 @@ public abstract class PresetRequestHandler extends RequestHandler {
    */
   public PresetRequestHandler(HTTPServer httpserver) {
     super(httpserver);
-    this.httpserver = httpserver;
     this.logger = httpserver.getLogger();
     this.presetController = httpserver.getPresetController();
   }
@@ -38,7 +33,7 @@ public abstract class PresetRequestHandler extends RequestHandler {
    * @return presetcamera.
    */
   protected PresetCamera getPresetCamera(int camID) {
-    Camera camera = httpserver.getCameraController().getCameraById(camID);
+    Camera camera = getCameraController().getCameraById(camID);
     if (camera instanceof PresetCamera) {
       return (PresetCamera) camera;
     }

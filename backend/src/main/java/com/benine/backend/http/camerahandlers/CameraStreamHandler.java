@@ -40,12 +40,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
     String width = request.getParameter("width");
     String height = request.getParameter("height");
 
-    StreamReader streamReader = null;
-    try {
-      streamReader = getStreamController().getStreamReader(camID);
-    } catch (StreamNotAvailableException e) {
-      getLogger().log("No stream available for this camera.", LogEvent.Type.WARNING);
-    }
+    StreamReader streamReader = getStreamReader(camID);
 
     // We need an MJPEG streamreader to stream MJPEG.
     if (streamReader instanceof MJPEGStreamReader) {
@@ -74,9 +69,7 @@ public class CameraStreamHandler extends CameraRequestHandler {
    * @return  A ResizableStreamDistributer if valid width and height, else a StreamDistributer.
    */
   private StreamDistributer selectDistributer(StreamReader reader, String width, String height) {
-    if (getConfig().getValue("stream_compression").equals("true")
-            && validateResizeArguments(width, height)) {
-
+    if (isStreamCompression() && validateResizeArguments(width, height)) {
       int w = Integer.parseInt(width);
       int h = Integer.parseInt(height);
 

@@ -1,12 +1,17 @@
 package com.benine.backend.http.camerahandlers;
 
+import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
+import com.benine.backend.video.StreamController;
+import com.benine.backend.video.StreamNotAvailableException;
+import com.benine.backend.video.StreamReader;
 
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +20,14 @@ import java.util.regex.Pattern;
  * Handles all requests requiring the camera ID.
  */
 public abstract class CameraRequestHandler extends RequestHandler {
+  
+  private Logger logger;
+  
+  private CameraController cameraController;
+  
+  private StreamController streamController;
+  
+  private Boolean streamCompression;
 
   /**
    * CameraRequest handler for the httpserver.
@@ -22,6 +35,10 @@ public abstract class CameraRequestHandler extends RequestHandler {
    */
   public CameraRequestHandler(HTTPServer httpserver) {
     super(httpserver);
+    logger = httpserver.getLogger();
+    cameraController = httpserver.getCameraController();
+    streamController = httpserver.getStreamController();
+    streamCompression = httpserver.getConfig().getValue("stream_compression").equals("true");
   }
 
   /**
@@ -56,13 +73,30 @@ public abstract class CameraRequestHandler extends RequestHandler {
     return path.replaceFirst(".*/(\\d*)/", "");
   }
   
-  @Override
-  public Logger getLogger() {
-    return super.getLogger();
+  /**
+   * Get the stream reader of the camera with camID.
+   * @param camID of the stream to find.
+   * @return the right streamreader.
+   */
+  public StreamReader getStreamReader(int camID) {
+    try {
+      return streamController.getStreamReader(camID);
+    } catch (StreamNotAvailableException e) {
+      getLogger().log("No stream available for this camera.", e);
+    }
+    return null;
   }
   
-  @Override
-  protected CameraController getCameraController() {
-    return super.getCameraController();
+  public Logger getLogger() {
+    return logger;
   }
+  
+  protected CameraController getCameraController() {
+    return cameraController;
+  }
+
+  public Boolean isStreamCompression() {
+    return streamCompression;
+  }
+
 }

@@ -1,13 +1,10 @@
 package com.benine.backend.http;
 
-import com.benine.backend.Config;
 import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.camera.CameraController;
 import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.PresetController;
-import com.benine.backend.video.StreamController;
-
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -24,13 +21,9 @@ public abstract class RequestHandler extends AbstractHandler {
   
   private PresetController presetController;
   
-  private StreamController streamController;
-  
   private PresetQueueController presetQueueController;
   
   private Logger logger;
-  
-  private Config config;
   
   /**
    * Constructs a request handler.
@@ -39,10 +32,8 @@ public abstract class RequestHandler extends AbstractHandler {
   public RequestHandler(HTTPServer httpserver) {
     this.cameraController = httpserver.getCameraController();
     this.presetController = httpserver.getPresetController();
-    this.streamController = httpserver.getStreamController();
     this.presetQueueController = httpserver.getPresetQueueController();
     this.logger = httpserver.getLogger();
-    this.config = httpserver.getConfig();
   }
 
   /**
@@ -97,14 +88,6 @@ public abstract class RequestHandler extends AbstractHandler {
   protected CameraController getCameraController() {
     return cameraController;
   }
-  
-  /**
-   * Returns the streamController to get the stream
-   * @return stream Controller.
-   */
-  protected StreamController getStreamController() {
-    return streamController;
-  }
 
   /**
    * Returns the presetController.
@@ -112,14 +95,6 @@ public abstract class RequestHandler extends AbstractHandler {
    */
   protected PresetController getPresetController() {
     return presetController;
-  }
-  
-  /**
-   * Returns the config.
-   * @return config object.
-   */
-  protected Config getConfig() {
-    return config;
   }
 
   /**

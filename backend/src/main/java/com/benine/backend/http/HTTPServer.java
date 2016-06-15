@@ -120,7 +120,7 @@ public class HTTPServer {
    * Returns the streamController to get the stream
    * @return stream Controller.
    */
-  protected StreamController getStreamController() {
+  public StreamController getStreamController() {
     return streamController;
   }
 
