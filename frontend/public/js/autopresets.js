@@ -19,8 +19,12 @@ $(".auto-presets-modal .disabled").click(function (e) {
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   switchTab(1);
   var image = $("#auto-preset-creation-preview-image");
+  var liveimage = $("#auto-preset-creation-live-image");
+
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
   image.attr('src', streamURL);
+  liveimage.attr('src', streamURL);
+
   showSubViews();
 })
 

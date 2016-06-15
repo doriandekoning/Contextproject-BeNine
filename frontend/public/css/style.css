@@ -689,6 +689,20 @@ input[type=range]:focus {
     height: auto;
 }
 
+#auto-preset-creation-live-image {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    width: 60%;
+    height: auto;
+}
+
+#auto_presets_div .progress {
+    width: 80%;
+}
+
 #previewCanvas {
     top: 0;
     left: 0;
