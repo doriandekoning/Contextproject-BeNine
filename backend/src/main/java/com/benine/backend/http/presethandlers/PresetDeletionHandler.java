@@ -34,7 +34,7 @@ public class PresetDeletionHandler extends PresetRequestHandler {
       Preset preset = getPreset(presetID);
 
       if (preset != null) {
-        getPresetController().removePreset(preset);
+        getPresetController().removePreset(presetID);
       } else {
         succes = false;
       }

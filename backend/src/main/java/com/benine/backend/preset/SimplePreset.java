@@ -37,9 +37,9 @@ public class SimplePreset extends Preset {
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
     json.put("image", getImage());
-    json.put("id", getId());
-    json.put("cameraid", getCameraId());
-    json.put("name", getName());
+    json.put("id", presetid);
+    json.put("cameraid", cameraId);
+    json.put("name", name);
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -50,7 +50,5 @@ public class SimplePreset extends Preset {
   }
 
   @Override
-  public void excecutePreset(Camera camera) throws CameraConnectionException {
-    
-  }
+  public void excecutePreset(Camera camera) throws CameraConnectionException {}
 }

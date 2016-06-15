@@ -27,11 +27,11 @@ import javax.imageio.ImageIO;
  */
 public abstract class Preset {
   
-  private String image;
-  private int presetid = -1;
-  protected Set<String> tags = new HashSet<String>();
-  private int cameraId;
-  private String name;
+  String image;
+  int presetid = -1;
+  Set<String> tags = new HashSet<String>();
+  int cameraId;
+  String name;
 
   /**
    * Constructs a preset.

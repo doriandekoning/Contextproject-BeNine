@@ -135,12 +135,13 @@ public class PresetController {
 
   /**
    * Removes a preset from this presetcontroller.
-   * @param preset the preset to remove.
+   * @param presetID the preset to remove.
    * @throws SQLException if error with database occures.
    */
-  public void removePreset(Preset preset) throws SQLException {
+  public void removePreset(int presetID) throws SQLException {
+    Preset preset = getPresetById(presetID);
     presets.remove(preset);
-    database.deletePreset(preset.getId());
+    database.deletePreset(presetID);
     String presetImage = preset.getImage();
     File path = new File(config.getValue("imagepath")
         .replaceAll("/", Matcher.quoteReplacement(File.separator)) + presetImage);
@@ -151,32 +152,31 @@ public class PresetController {
   
   /**
    * Adds the right id to this preset.
-   * @param preset to add the id to.
-   * @return Preset with right ID.
+   * @param presetID to start with.
+   * @return PresetID that is not used.
    */
-  private static Preset addPresetID(Preset preset) {
-    int presetID = preset.getId();
+  private static int determinePresetID(int presetID) {
     if (presetID == -1) {
-      preset.setId(PresetController.newID);
+      presetID = PresetController.newID;
       PresetController.newID++;
     } else {
       PresetController.newID = Math.max(PresetController.newID - 1, presetID) + 1;
     }
-    return preset;
+    return presetID;
   }
  
   /**
    * Adds a preset.
    * @param preset the preset to add.
-   * @throws SQLException when an error occures in the database.
+   * @throws SQLException when an error occurs in the database.
    */
   public void addPreset(Preset preset) throws SQLException {   
-    preset = addPresetID(preset);
+    preset.setId(determinePresetID(preset.getId()));
     if (preset.getName().equals("")) {
       preset.setName("Preset " + preset.getId());
     }
     presets.add(preset);
-    addAllTags(preset.getTags());
+    addAllTags(preset);
     database.addPreset(preset);
   }
   
@@ -189,7 +189,7 @@ public class PresetController {
     Preset old = getPresetById(preset.getId());
     presets.remove(old);
     presets.add(preset);
-    addAllTags(preset.getTags());
+    addAllTags(preset);
     database.updatePreset(preset);
   }
 
@@ -237,6 +237,14 @@ public class PresetController {
    */
   public void addAllTags(Collection<String> tags) {
     this.tags.addAll(tags);
+  }
+  
+  /**
+   * Adds a collection of tags.
+   * @param preset to add the tags from.
+   */
+  public void addAllTags(Preset preset) {
+    this.tags.addAll(preset.getTags());
   }
 
   /**
