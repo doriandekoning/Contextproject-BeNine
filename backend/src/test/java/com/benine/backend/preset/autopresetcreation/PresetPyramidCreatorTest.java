@@ -74,8 +74,8 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     subViews.add(new SubView(0, 100, 100, 0));
     subViews.add(new SubView(0, 100, 50, 50));
     subViews.add(new SubView(0, 50, 50, 0));
-    subViews.add(new SubView(50, 80, 100, 50));
-    subViews.add(new SubView(50, 50, 100, 100));
+    subViews.add(new SubView(50, 100, 100, 50));
+    subViews.add(new SubView(50, 50, 100, 0));
 
     equalSubViewCollections(subViews, ppc.generateSubViews());
   }
