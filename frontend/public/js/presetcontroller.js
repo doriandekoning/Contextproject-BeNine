@@ -5,6 +5,13 @@ var editing = false;
 var searchTerm;
 
 /**
+ * Initialize editing toggle event.
+ */
+$(function() {
+	$('#editPresets').change(loadEditablePresets);
+});
+
+/**
 * Function loads all the presets from the backend.
 */
 function loadPresets() {
@@ -75,14 +82,12 @@ function loadEditablePresets() {
 	var activepresets = preset_area.find("div:has(img:not([alt]))");
 	var editButton = $('#editPresets');
 
-	if (activepresets.hasClass("preset-overlay")) {
-		activepresets.removeClass("preset-overlay");
-		setButton(editButton, false);
-		editing = false;
-	} else {
+	if (editButton.prop('checked') === true) {
 		activepresets.addClass("preset-overlay");
-		setButton(editButton, true);
-			editing = true;
+		editing = true;
+	} else {
+		activepresets.removeClass("preset-overlay");
+		editing = false;
 	}
 }	
 

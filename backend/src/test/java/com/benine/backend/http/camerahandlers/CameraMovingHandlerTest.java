@@ -7,7 +7,6 @@ import com.benine.backend.camera.Position;
 import com.benine.backend.http.camerahandlers.CameraMovingHandler;
 
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +29,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     when(cameraController.getCameraById(42)).thenReturn(cam);
   }

@@ -4,13 +4,19 @@ import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.video.StreamNotAvailableException;
+
 import org.eclipse.jetty.server.Request;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.concurrent.TimeoutException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +49,16 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      creator.createPresets(ipcam, creator.generateSubViews());
       succes = true;
+
+      Collection<IPCameraPreset> presets = creator.createPresets(ipcam, creator.generateSubViews());
+      
+      JSONObject jsonObject = new JSONObject();
+      JSONArray idsJson = new JSONArray();
+      
+      presets.forEach(preset -> idsJson.add(preset.getId()));
+      jsonObject.put("presetIDs", idsJson);
+      respond(request, httpServletResponse, jsonObject.toJSONString());
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);

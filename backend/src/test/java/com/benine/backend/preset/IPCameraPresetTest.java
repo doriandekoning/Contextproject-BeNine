@@ -5,7 +5,6 @@ import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.camera.ipcameracontrol.IrisValue;
 
-import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -56,7 +55,7 @@ public class IPCameraPresetTest extends PresetTest {
   }
 
   @Test
-  public void testToJSON() throws JSONException {
+  public void testToJSON() {
     ArrayList<String> keywords = new ArrayList<String>();
     keywords.add("foo");
     IPCameraPreset preset = getPreset();

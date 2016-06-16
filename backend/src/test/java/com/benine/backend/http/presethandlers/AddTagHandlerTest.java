@@ -3,7 +3,6 @@ package com.benine.backend.http.presethandlers;
 import com.benine.backend.camera.CameraBusyException;
 
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class AddTagHandlerTest extends PresetRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
   }
 

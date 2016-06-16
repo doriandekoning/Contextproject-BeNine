@@ -234,7 +234,10 @@ public class MySQLDatabase implements Database {
       statement.setInt(3, preset.getCameraId());
       statement.setString(4, preset.getName());
       statement.executeUpdate();
+      statement.close();
       if (preset instanceof IPCameraPreset) {
+        sql = "INSERT INTO IPpreset VALUES(?,?,?,?,?,?,?,?,?,?)";
+        statement = connection.prepareStatement(sql);
         setIpPreset((IPCameraPreset) preset, statement);
         statement.executeUpdate();
       }

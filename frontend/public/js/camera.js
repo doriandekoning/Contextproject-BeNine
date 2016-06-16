@@ -5,8 +5,8 @@
 function Camera(newCam) {
 	this.id = newCam.id;
 	this.inuse = newCam.inuse;
-	this.autoFocus = newCam.autoFocus;
-	this.autoIris = newCam.autoIris;
+	this.autoFocus = newCam.autofocus;
+	this.autoIris = newCam.autoiris;
 	this.zoom = newCam.zoom;
 	this.move = newCam.move;
 	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
@@ -74,13 +74,13 @@ Camera.prototype = {
 			iris.hide();
 		} else {
 			iris.show();
-			setButton(iris.find("#auto_iris"), this.autoIris);
+			iris.find("#auto_iris").prop('checked', this.autoIris);
 		}
 		if (this.autoFocus === undefined) {
 			focus.hide();
 		} else {
 			focus.show();
-			setButton(focus.find("#auto_focus"), this.autofocus);
+			focus.find("#auto_focus").prop('checked', this.autoFocus);
 		}
 	}
 };

@@ -6,7 +6,6 @@ import com.benine.backend.http.camerahandlers.CameraStreamHandler;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ public class CameraStreamHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     when(cameraController.getCameraById(42)).thenReturn(cam);
 
