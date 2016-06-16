@@ -121,7 +121,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="autopreset_step3">Test3</div>
+                        <div role="tabpanel" class="tab-pane" id="autopreset_step3">
+                            <h5>Select Presets</h5>
+                            <small>Unselected presets will be discarded permanently</small>
+                            <ul id="autopreset-generated">
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,7 +135,7 @@
                 <button id="autopreset_startbutton" type="button" class="btn" onclick="autoCreatePresets()"><span
                             class="glyphicon glyphicon-ok"></span> Create presets
                 </button>
-                <button id="autopreset_savebutton" type="button" class="btn hidden"><span
+                <button id="autopreset_savebutton" type="button" class="btn hidden" data-dismiss="modal"><span
                             class="glyphicon glyphicon-ok"></span> Save presets
                 </button>
             </div>

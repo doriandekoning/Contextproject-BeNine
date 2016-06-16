@@ -187,3 +187,48 @@ function clearCanvas(canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+/**
+ * Creates toggleable checkbox buttons.
+ */
+$('.button-checkbox').on('click', function () {
+  var checkbox = $(this).find('input:checkbox')
+
+});
+
+function check() {
+  var checkbox = $(this).find('input:checkbox');
+  var state = checkbox.is(':checked');
+
+  checkbox.prop('checked', !state);
+  updateState($(this), !state);
+}
+
+function updateState(button, checked) {
+  var checkicon = button.find('.checkicon');
+
+  if (checked) {
+    button.attr('class', 'button-checkbox btn btn-primary active');
+    checkicon.attr('class', 'checkicon glyphicon glyphicon-check');
+  } else {
+    button.attr('class', 'button-checkbox btn btn-primary');
+    checkicon.attr('class', 'checkicon glyphicon glyphicon-unchecked');
+  }
+}
+
+function drawGeneratedPreset() {
+  var list = $('#autopreset-generated');
+  var li = $('<li></li>');
+  var button = $('<div class="button-checkbox btn btn-primary"></div>');
+
+  button
+      .append('<img class="img-rounded" src="/api/backend/static/presets/preset_32.jpg">')
+      .append('<span>Text</span>')
+      .append('<span class="checkicon glyphicon glyphicon-unchecked"></span>')
+      .append('<input type="checkbox" class="hidden" />');
+
+  button.click(check);
+  li.append(button);
+  list.append(li);
+}
+
+

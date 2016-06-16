@@ -740,11 +740,51 @@ input[type=range]:focus {
     border-color: #465c65;
 }
 
-.btn-primary:focus {
-    background-color: #3D525B;
-    border-color: #4d656f;
+.btn-primary:focus, .btn-primary:active {
+    background-color: #3D525B !important;
+    border-color: #3D525B !important;
+}
+
+.btn-primary.active, .btn-primary:active {
+    background-color: #30414a !important;
+    border-color: #4d656f !important;
 }
 
 .label-info, .progress-bar {
     background-color: #4d656f;
+}
+
+#autopreset-generated {
+    margin: 15px 0 0 0;
+    padding: 0;
+    list-style-type: none;
+    height: 300px;
+    overflow: scroll;
+}
+
+#autopreset-generated li {
+    width: 33%;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+#autopreset-generated .btn {
+    margin-bottom: 15px;
+    width: 95%;
+    position: relative;
+    text-align: left;
+}
+
+#autopreset-generated img {
+    width: 125px;
+    height: auto;
+    margin-right: 10px;
+    left: 0;
+}
+
+#autopreset-generated .checkicon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
