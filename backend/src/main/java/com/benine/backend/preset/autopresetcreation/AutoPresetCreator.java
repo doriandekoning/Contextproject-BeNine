@@ -26,6 +26,7 @@ public abstract class AutoPresetCreator {
   private static long timeout = 5000;
   private PresetController presetController;
   private int generatedPresets;
+  private int totalAmountPresets;
   
   /**
    * Creates a new AutoPresetCreator object.
@@ -131,5 +132,12 @@ public abstract class AutoPresetCreator {
   public int getGeneratedPresetsAmount() {
     return generatedPresets;
   }
+
+
+  /**
+   * Returns total amount of presets this creator will create when the create method is run.
+   * @return amount of created presets.
+   */
+  public abstract int getTotalAmountPresets();
 
 }

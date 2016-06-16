@@ -64,6 +64,15 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     return positions;
   }
 
+  @Override
+  public int getTotalAmountPresets() {
+    int total = 0;
+    for (int i = 0; i < levels; i++) {
+      total+= (int)Math.pow(rows*columns, i);
+    }
+    return total;
+  }
+
   /**
    * Creates a collection of subviews with the specified amount of rows columns and levels.
    * @return A collection of subviews.

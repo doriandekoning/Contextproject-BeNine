@@ -28,11 +28,11 @@ function autoCreatePresets() {
 	var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
     var done = false;
-    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
-      done = true;
-    });
     // Update statusbar ever 2sec (2000ms)
-    setInterval(updateProgressbar, 2*1000);
+    var interval = setInterval(updateProgressbar, 2*1000);
+    $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
+      clearInterval(interval);
+    });
 
   }
 }
@@ -42,7 +42,14 @@ function autoCreatePresets() {
 */
 function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
-    console.log(data);
+    var dataJSON = JSON.parse(data);
+    if ( dataJSON.succes == undefined ) {
+      console.log(dataJSON.amount_created);
+      var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
+      $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
+                                            .attr("aria-valuenow", percentage_done)
+                                            .text(dataJSON.amount_created + "/" +  dataJSON.amount_total);
+    }
   });
 }
 
