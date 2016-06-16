@@ -2,6 +2,7 @@ package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.http.AutoCreationSubViewsHandler;
 import com.benine.backend.http.AutoPresetCreationHandler;
+import com.benine.backend.http.AutoPresetCreationStatusHandler;
 import com.benine.backend.http.HTTPServer;
 import com.benine.backend.http.RequestHandler;
 
@@ -38,6 +39,7 @@ public class PresetsHandler extends PresetRequestHandler {
     addHandler("edit", new EditPresetHandler(httpserver));
     addHandler("autocreatepresets", new AutoPresetCreationHandler(httpserver));
     addHandler("autocreatesubviews", new AutoCreationSubViewsHandler(httpserver));
+    addHandler("autocreatepresetsstatus", new AutoPresetCreationStatusHandler(httpserver));
   }
 
   @Override

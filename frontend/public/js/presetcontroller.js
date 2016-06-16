@@ -364,7 +364,7 @@ function loadTags() {
 $(".fill-tags").on('click', '.tag', function(e){
 	if(editable) {
         e.preventDefault();
-        var tag = $(this).html();
+        var tag = $(this).attr('value');
         $(this).replaceWith(appendEditable(tag, false));
 		editable = false;
 		editTags($(this).attr('id'), false);
@@ -381,14 +381,14 @@ function editTags(id, isNew) {
 		var tag = $('.new').val();
 		var updated = updateTag(id, tag);
 		if (updated) {
-			$(this).parent().replaceWith(appendTag(id, tag));
+			$(this).closest('.edittagrow').replaceWith(appendTag(id, tag));
 		}
 		editable = true;
 	});
 	$(".delete").click(function(e){
 		e.preventDefault();
 		var tag = $('.new').val();
-		$(this).parent().remove();
+		$(this).closest('.edittagrow').remove();
 		deleteTag(id);
 		editable = true;
 	});
@@ -436,11 +436,11 @@ function updateTag(index, val) {
 		localTags[index] = val;
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
-		updateTagInPresets(remove, val, function() {
-			$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
-				$.get("/api/backend/presets/addtag?name=" + val, function(data) {});
+		$.get("/api/backend/presets/removetag?name=" + remove, function(data) {
+				$.get("/api/backend/presets/addtag?name=" + val, function(data) {
+					updateTagInPresets(remove, val);
+				});
 			});
-		});
 		return true;
 	}
 	return false;
@@ -452,13 +452,14 @@ function updateTag(index, val) {
 * @param fresh The new tag
 * @param done callback
 */
-function updateTagInPresets(old, fresh, done) {
+function updateTagInPresets(old, fresh) {
 	for(i = 0; i < presets.length; i++) {
 		var tagIndex = presets[i].tags.indexOf(old);
 		if (tagIndex > -1) {
 			presets[i].tags[tagIndex] = fresh;
 			$.get("/api/backend/presets/edit?presetid=" + presets[i].id + "&overwritetag=true&overwriteposition=false&tags=" + presets[i].tags.join(","),
-																									function(data) {console.log("edit preset: " + data); done();});
+				function(data) {console.log("edit preset: " + data); 
+				});
 		}
 	}
 }
@@ -468,7 +469,7 @@ function updateTagInPresets(old, fresh, done) {
 */
 function addTag() {
 	if(editable) {
-		var add = "tag " + localTags.length;
+		var add = "Tag " + localTags.length;
 		$(".fill-tags").prepend(appendEditable(add, true));
 		newTag(add);
 		editable = false;
@@ -494,7 +495,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<div><button class='tag btn btn-primary glyphicon glyphicon-tag' id=" + id + "> " + name + "</button><br></div>"
+	return "<button id=" + id + " class='tag btn btn-primary' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span><span>" + name + "</span></button>"
 }
 
 /**
@@ -504,12 +505,11 @@ function appendTag(id, name) {
 */
 function appendEditable(input, add) {
 	var result = "";
-	if(add){
-		result += "<div>"
-	}
-	result += "<input class='new' value='" + input + "' maxlength=15/><button class='delete btn btn-danger btn-xs glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success btn-xs glyphicon glyphicon-ok-sign' type='button'></button>"
-	if(add) {
-		result += "</div>"
-	}
+
+	result += "<div class='row edittagrow'>";
+	result += "<div class='col-xs-8'><input class='new form-control' value='" + input + "' maxlength=15/></div>";
+	result += "<div class='col-xs-4'><div class='btn-group editname'><button class='delete btn btn-danger glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success glyphicon glyphicon-ok-sign' type='button'></button></div></div>";
+	result += "</div>";
+
 	return result
 }

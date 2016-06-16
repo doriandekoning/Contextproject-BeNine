@@ -446,6 +446,8 @@ input[type=range]:focus {
 }
 
 .fill-tags {
+    margin: 0;
+    padding: 0;
     height: 280px;
     overflow: auto;
 }
@@ -615,18 +617,25 @@ input[type=range]:focus {
     margin-bottom: 5px;
 }
 
-.performance-list .btn {
+.performance-list .btn, .fill-tags .btn {
     margin-bottom: 5px;
     display: block;
     text-align: left;
 }
 
-.performance-list span {
-    margin-right: 5px;
+.fill-tags .edittagrow .col-xs-8, .fill-tags .edittagrow .col-xs-4 {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 5px;
+    padding: 0;
 }
 
-.performance-list .btn span {
-    margin-left: 10px;
+.fill-tags .tag {
+    width: 100%;
+}
+
+.performance-list span, .fill-tags span, .btn span {
+    margin-right: 7px;
 }
 
 .performance_edit_div .btn-group .glyphicon, .performance-preset-schedule-container .btn-group .glyphicon, .input-group .glyphicon {
@@ -641,6 +650,7 @@ input[type=range]:focus {
     width: 125px;
     height: auto;
     right: 0px;
+    margin-right: 10px;
 }
 
 .schedule-preset {

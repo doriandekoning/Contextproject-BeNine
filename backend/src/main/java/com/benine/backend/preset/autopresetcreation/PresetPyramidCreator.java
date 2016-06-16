@@ -18,6 +18,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   private int levels;
   private double overlap;
 
+
   /**
    * Constructs a PresetPyramidCreator.
    * @param rows the amount of rows > 0
@@ -39,7 +40,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   }
 
   @Override
-  protected Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
+  protected ArrayList<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
 
@@ -61,6 +62,15 @@ public class PresetPyramidCreator extends AutoPresetCreator {
       positions.add(new ZoomPosition(tilt, pan, zoom));
     }
     return positions;
+  }
+
+  @Override
+  public int getTotalAmountPresets() {
+    int total = 0;
+    for (int i = 0; i < levels; i++) {
+      total += (int) Math.pow(rows * columns, i);
+    }
+    return total;
   }
 
   /**
