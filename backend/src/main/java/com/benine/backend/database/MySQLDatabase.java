@@ -463,33 +463,6 @@ public class MySQLDatabase implements Database {
   }
 
   @Override
-  public void deleteCamera(int cameraID) {
-    deleteCameraSQL("preset", "camera_ID", cameraID);
-    deleteCameraSQL("camera", "ID", cameraID);
-  }
-
-  /**
-   * Deletes camera from the database.
-   *
-   * @param table    The table the camera needs to be deleted from
-   * @param id       The ID used for deletion
-   * @param cameraID The cameraID to be deleted
-   */
-  private void deleteCameraSQL(String table, String id, int cameraID) {
-    PreparedStatement statement = null;
-    try {
-      String sql = "DELETE FROM " + table + " WHERE " + id + " = ?";
-      statement = connection.prepareStatement(sql);
-      statement.setInt(1, cameraID);
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logger.log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
-    } finally {
-      close(statement, null);
-    }
-  }
-
-  @Override
   public void useDatabase() {
     Statement statement = null;
     try {
