@@ -27,10 +27,23 @@ function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
 	var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
+    var done = false;
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
-
+      done = true;
     });
+    // Update statusbar ever 2sec (2000ms)
+    setInterval(updateProgressbar, 2*1000);
+
   }
+}
+
+/**
+* Updates the progressbar
+*/
+function updateProgressbar() {
+  $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
+    console.log(data);
+  });
 }
 
 /**
