@@ -22,9 +22,6 @@ import java.util.concurrent.TimeoutException;
 
 public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
 
-
-  private static HashMap<Integer, AutoPresetCreator> creators = new HashMap<>();
-
   /**
    * Constructs a request handler.
    * @param httpserver to interact with the rest of the system.
@@ -49,19 +46,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_created", creator.getGeneratedPresetsAmount());
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
-      creators.remove(cam.getId());
+      AutoPresetCreationHandler.getCreators().get(cam.getId());
     } else {
       respondFailure(request, httpServletResponse);
     }
     request.setHandled(true);
 
-  }
-
-
-  /**
-   * Returns the auto preset creators currently running.
-   */
-  public Map<Integer, AutoPresetCreator> getCreators() {
-    return creators;
   }
 }
