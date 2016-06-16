@@ -26,7 +26,6 @@ public abstract class AutoPresetCreator {
   private static long timeout = 5000;
   private PresetController presetController;
   private int generatedPresets;
-  private int totalAmountPresets;
   
   /**
    * Creates a new AutoPresetCreator object.
