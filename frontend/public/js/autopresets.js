@@ -1,8 +1,8 @@
-var columns = 3;
-var levels = 3;
-var rows = 3;
-var maxRows = 5;
-var maxColumns = 5;
+var columns = 2;
+var levels = 2;
+var rows = 2;
+var maxRows = 3;
+var maxColumns = 3;
 var maxLevels = 3;
 
 /**
