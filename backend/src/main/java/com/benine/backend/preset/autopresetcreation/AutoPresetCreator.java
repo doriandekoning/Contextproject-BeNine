@@ -1,6 +1,5 @@
 package com.benine.backend.preset.autopresetcreation;
 
-import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
@@ -60,10 +59,9 @@ public abstract class AutoPresetCreator {
     cam.setBusy(false);
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
-    PresetController control = ServerController.getInstance().getPresetController();
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
-      control.addPreset(currentPreset);
+      presetController.addPreset(currentPreset);
       presets.add(currentPreset);
     }
     cam.setBusy(false);
