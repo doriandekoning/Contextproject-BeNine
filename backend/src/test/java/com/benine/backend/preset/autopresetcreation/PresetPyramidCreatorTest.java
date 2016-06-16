@@ -63,7 +63,7 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   public void testCreateSubViews() {
     PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 1, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
-    subViews.add(new SubView(0, 80, 100, 20));
+    subViews.add(new SubView(0, 100, 100, 0));
     Assert.assertEquals(subViews, ppc.generateSubViews());
   }
 
@@ -71,11 +71,11 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
   public void testCreateSubViews2x2x2() {
     PresetPyramidCreator ppc = new PresetPyramidCreator(2, 2, 2, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
-    subViews.add(new SubView(0, 80, 100, 20));
-    subViews.add(new SubView(0, 80, 50, 50));
-    subViews.add(new SubView(0, 50, 50, 20));
-    subViews.add(new SubView(50, 80, 100, 50));
-    subViews.add(new SubView(50, 50, 100, 20));
+    subViews.add(new SubView(0, 100, 100, 0));
+    subViews.add(new SubView(0, 100, 50, 50));
+    subViews.add(new SubView(0, 50, 50, 0));
+    subViews.add(new SubView(50, 100, 100, 50));
+    subViews.add(new SubView(50, 50, 100, 0));
 
     equalSubViewCollections(subViews, ppc.generateSubViews());
   }
@@ -85,8 +85,8 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     PresetPyramidCreator ppc = new PresetPyramidCreator(1, 1, 2, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
     // Since cam aspect ratio is 5/3 height should be width/(5/3)=100/(5/3)=60
-    subViews.add(new SubView(0, 80, 100, 20));
-    subViews.add(new SubView(0, 80, 100, 20));
+    subViews.add(new SubView(0, 100, 100, 0));
+    subViews.add(new SubView(0, 100, 100, 0));
 
     equalSubViewCollections(subViews, ppc.generateSubViews());
   }
@@ -96,11 +96,11 @@ public class PresetPyramidCreatorTest extends AutoPresetCreatorTest {
     PresetPyramidCreator ppc = new PresetPyramidCreator(1, 2, 2, 0, presetController);
     ArrayList<SubView> subViews = new ArrayList<>();
     // First layer
-    subViews.add(new SubView(0, 80, 100, 20));
+    subViews.add(new SubView(0, 100, 100, 0));
     // Second layer
     // Subview width is half that of the above subview so height is (50/(5/3))=70
-    subViews.add(new SubView(0, 65, 50, 35));
-    subViews.add(new SubView(50, 65, 100, 35));
+    subViews.add(new SubView(0, 75, 50, 25));
+    subViews.add(new SubView(50, 75, 100, 25));
 
     Collection<SubView> generated = ppc.generateSubViews();
 
