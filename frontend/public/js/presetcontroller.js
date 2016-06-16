@@ -38,7 +38,9 @@ function loadPresets() {
 function checkPreset(object) {
 	var exists = findPresetOnID(object.id);
 	if (exists === undefined) {
-		presets.push(new Preset(object));
+		if (findCameraOnID(object.cameraid) !== undefined) {
+			presets.push(new Preset(object));
+		}
 	} else {
 		exists.update(object);
 	}
