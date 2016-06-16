@@ -1,4 +1,5 @@
 var selectedPerformance, nameEditingPerformance;
+var editingname = false;
 
 /**
  * Loads the edit performance window.
@@ -57,7 +58,8 @@ function selectPerformance() {
 }
 
 function setNameEditable() {
-    if (selectedPerformance !== undefined) {
+    if (selectedPerformance !== undefined && editingname != true) {
+        editingname = true;
         var element = selectedPerformance;
 
         var li = $('<li><div class="row">' +
@@ -76,10 +78,13 @@ function setNameEditable() {
  * Saves the edited name.
  */
 function saveEditName() {
-    var performance = nameEditingPerformance.data();
-    performance.updateName($("#performance-name").val());
+    if (selectedPerformance !== undefined) {
+        editingname = false;
+        var performance = nameEditingPerformance.data();
+        performance.updateName($("#performance-name").val());
 
-    loadEditPerformance();
+        loadEditPerformance();
+    }
 }
 
 /**
@@ -87,6 +92,7 @@ function saveEditName() {
  */
 function deletePerformance() {
     if (selectedPerformance !== undefined) {
+        editingname = false;
         var performance = selectedPerformance.data();
 
         performance.delete();
