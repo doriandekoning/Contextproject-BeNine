@@ -18,6 +18,7 @@ function Preset(newPreset) {
 	this.tags = newPreset.tags;
 	this.cameraid = newPreset.cameraid;
 	this.name = newPreset.name;
+	addCameraTag(this);
 }
 
 Preset.prototype = {
@@ -87,5 +88,16 @@ Preset.prototype = {
 		this.tags = newpreset.tags;
 		this.image = newpreset.image;
 		this.img = $('<img src="/api/backend' + this.image + '" >');
+		addCameraTag(this);
 	}
 };
+
+/**
+* Adds the camera tag to this preset.
+* @param preset to add the camera tag to.
+*/
+function addCameraTag(preset) {
+	 if (preset.tags.indexOf("camera " + preset.cameraid) < 0) {		
+		preset.tags.push("camera " + preset.cameraid);
+	}
+ }

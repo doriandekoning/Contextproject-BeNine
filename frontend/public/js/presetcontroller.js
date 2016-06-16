@@ -21,12 +21,13 @@ function loadPresets() {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
-		tagSearchInput(searchTerm);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				newTag(obj.tags[t]);
 			}
 		}
+	}).done(function() {
+		tagSearchInput(searchTerm);
 	});
 }
 
