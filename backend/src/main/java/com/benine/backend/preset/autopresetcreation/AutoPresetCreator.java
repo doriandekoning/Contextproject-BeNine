@@ -18,8 +18,9 @@ import java.util.Collection;
 import java.util.concurrent.TimeoutException;
 
 
+
 /**
- * Abstract class used for autocreating presets.
+ * Abstract class used for auto-creating presets.
  */
 public abstract class AutoPresetCreator {
 
@@ -35,16 +36,16 @@ public abstract class AutoPresetCreator {
   public AutoPresetCreator(PresetController presetController) {
     this.presetController = presetController;
   }
-  
+
   /**
    * Automatically creates presets for the selected camera.
    * Calls generatePositions to get the positions of the presets.
    * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
-   * @param subViews the subviews to generate positions for.
-   * @return A collection of the created presets.
+   * @param subViews the sub-views to generate positions for.
+   * @return A collection of the ids of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
-   * @throws InterruptedException when interupted while waiting for cam to move.
+   * @throws InterruptedException when interrupted while waiting for cam to move.
    * @throws TimeoutException if the camera is moving too slow or not at all.
    * @throws CameraBusyException if the camera is busy.
    * @throws IOException if exception occurs when creating the preset image.
@@ -59,13 +60,15 @@ public abstract class AutoPresetCreator {
     }
     cam.setBusy(true);
     ArrayList<IPCameraPreset> presets = new ArrayList<>();
-
+   
     cam.setBusy(false);
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setInUse();
-      presets.add(generatePresetFromPos(pos, cam));
+      IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
+      presetController.addPreset(currentPreset);
+      presets.add(currentPreset);
       generatedPresets++;
     }
     cam.setBusy(false);
@@ -76,10 +79,10 @@ public abstract class AutoPresetCreator {
   /**
    * Creates a preset from a position for a given camera.
    * @param pos the position to create a preset for
-   * @param cam the cam to create a preset for
+   * @param cam the camera to create a preset for
    * @return the created preset
    * @throws InterruptedException when interrupted
-   * @throws InterruptedException when interupted while waiting for cam to move.
+   * @throws InterruptedException when interrupted while waiting for cam to move.
    * @throws CameraBusyException if the camera is busy.
    * @throws IOException if exception occurs when creating the preset image.
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
@@ -106,9 +109,9 @@ public abstract class AutoPresetCreator {
   }
   
   /**
-   * Generates the positions to create pesets at.
+   * Generates the positions to create presets at.
    * @param cam the camera to create positions for.
-   * @param subViews the subviews to generate positions for.
+   * @param subViews the sub-views to generate positions for.
    * @return A collection of positions.
    * @throws CameraConnectionException when the camera cannot be reached.
    */

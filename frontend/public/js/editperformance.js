@@ -1,4 +1,5 @@
 var selectedPerformance, nameEditingPerformance;
+var editingname = false;
 
 /**
  * Loads the edit performance window.
@@ -30,11 +31,10 @@ function drawPerformancesList() {
  * @returns {*|jQuery|HTMLElement} a jQuery DOM element to append.
  */
 function drawPerformanceListItem(performance) {
-    var li = $("<li class='btn btn-primary'></li>");
+    var li = $("<div class='btn btn-primary'></div>");
     li.data(performance);
     li.click(selectPerformance);
-    var icon = $("<span class='glyphicon glyphicon-bullhorn'> " + performance['name'] + "</span>");
-
+    var icon = $("<span class='glyphicon glyphicon-bullhorn'></span><span>" + performance['name'] + "</span>");
     li.append(icon);
     return li;
 }
@@ -43,6 +43,8 @@ function drawPerformanceListItem(performance) {
  * Selects a performance
  */
 function selectPerformance() {
+    editingname = false;
+
     if (nameEditingPerformance !== undefined) {
         nameEditingPerformance.replaceWith(drawPerformanceListItem($(nameEditingPerformance).data()));
     }
@@ -58,7 +60,8 @@ function selectPerformance() {
 }
 
 function setNameEditable() {
-    if (selectedPerformance !== undefined) {
+    if (selectedPerformance !== undefined && editingname != true) {
+        editingname = true;
         var element = selectedPerformance;
 
         var li = $('<li><div class="row">' +
@@ -77,10 +80,13 @@ function setNameEditable() {
  * Saves the edited name.
  */
 function saveEditName() {
-    var performance = nameEditingPerformance.data();
-    performance.updateName($("#performance-name").val());
+    if (selectedPerformance !== undefined) {
+        editingname = false;
+        var performance = nameEditingPerformance.data();
+        performance.updateName($("#performance-name").val());
 
-    loadEditPerformance();
+        loadEditPerformance();
+    }
 }
 
 /**
