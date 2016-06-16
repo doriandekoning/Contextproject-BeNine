@@ -43,18 +43,17 @@ public class EditPresetHandler extends PresetRequestHandler {
       String name = request.getParameter("name");
       
       Preset preset = getPreset(presetID);
-      Set<String> tagList = new HashSet<>();
       if (name != null) {
         preset.setName(name);
       }
       if (tags != null) {
-        tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*"))); 
-      }
-      if (overwriteTag.equals("true")) {
-        updateTag(preset, tagList);
+        Set<String> tagList = new HashSet<>(Arrays.asList(tags.split("\\s*,\\s*")));
+        if (overwriteTag.equals("true")) {
+          preset.setTags(tagList);
+        }
       }
       if (overwritePosition.equals("true")) {
-        preset = updatePosition(preset);
+        preset = updatePosition(preset, presetID);
         getPresetController().createImage(preset);
       }
       getPresetController().updatePreset(preset);
@@ -76,31 +75,21 @@ public class EditPresetHandler extends PresetRequestHandler {
   }
   
   /**
-   * Updating the tag only.
-   * @param preset the preset to be changed
-   * @param tagList the tag to be added
-   * @throws SQLException when preset can not be updated.
-   */
-  private void updateTag(Preset preset, Set<String> tagList) throws SQLException {
-    preset.removeTags();
-    preset.addTags(tagList);
-  }
-  
-  /**
    * Editing an already existing preset by removing the old preset and creating a new 
    * preset with the same preset and camera id. It also creates a new image that belongs to the 
    * preset and updates the database.
    * @param preset                        The preset to be updated.
+   * @param presetID of the preset to update.
    * @return updated preset
    * @throws SQLException                 If the preset cannot be written to the database.
    * @throws CameraConnectionException    If the camera cannot be reached.
    * @throws CameraBusyException          If camera is busy
    */
-  private Preset updatePosition(Preset preset) throws
+  private Preset updatePosition(Preset preset, int presetID) throws
             CameraConnectionException, CameraBusyException, SQLException {
     IPCamera ipcam = (IPCamera) getCameraById(preset.getCameraId());   
     Preset newPreset = ipcam.createPreset(preset.getTags(), preset.getName());
-    newPreset.setId(preset.getId());
+    newPreset.setId(presetID);
     return newPreset;
   }
 }

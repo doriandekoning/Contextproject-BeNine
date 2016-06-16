@@ -69,5 +69,9 @@ public abstract class PresetRequestHandler extends RequestHandler {
   protected PresetController getPresetController() {
     return presetController;
   }
+  
+  protected CameraController getCameraController() {
+    return cameraController;
+  }
 
 }

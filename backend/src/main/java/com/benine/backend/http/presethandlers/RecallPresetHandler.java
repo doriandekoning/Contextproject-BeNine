@@ -1,7 +1,6 @@
 package com.benine.backend.http.presethandlers;
 
 import com.benine.backend.LogEvent;
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.http.HTTPServer;
@@ -34,10 +33,8 @@ public class RecallPresetHandler extends PresetRequestHandler {
       int presetID = Integer.parseInt(request.getParameter("presetid"));
 
       Preset preset = getPreset(presetID);
-      
-      Camera camera = getPresetCamera(preset.getCameraId());
 
-      preset.excecutePreset(camera);
+      preset.excecutePreset(getCameraController());
       succes = true;
 
     } catch (CameraConnectionException e) {

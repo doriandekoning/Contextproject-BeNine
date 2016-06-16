@@ -1,9 +1,9 @@
 package com.benine.backend.preset;
 
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.video.MJPEGFrameResizer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
@@ -40,6 +40,17 @@ public abstract class Preset {
    */
   public Preset(int cameraId) {
     this.cameraId = cameraId;
+  }
+  
+  /**
+   * Constructs a preset.
+   * @param cameraId The id of the camera associated with this preset.
+   * @param tags belonging to this preset.
+   */
+  public Preset(int cameraId, Set<String> tags) {
+    this(cameraId);
+    this.tags = tags;
+    
   }
 
   public String getImage() {
@@ -86,6 +97,15 @@ public abstract class Preset {
    */
   public void addTag(String tag) {
     tags.add(tag);
+  }
+  
+  /**
+   * Sets the tags of this preset.
+   *
+   * @param tags the tags set to set
+   */
+  public void setTags(Set<String> tags) {
+    this.tags = tags;
   }
 
 
@@ -213,10 +233,10 @@ public abstract class Preset {
   /**
    * Recall this preset by moving the camera to the right position.
    *
-   * @param camera used to move the camera.
+   * @param cameraController used to move the right camera.
    * @throws CameraConnectionException when camera can't be moved
    * @throws CameraBusyException if the camera is busy
    */
-  public abstract void excecutePreset(Camera camera)
+  public abstract void excecutePreset(CameraController cameraController)
           throws CameraConnectionException, CameraBusyException;
 }

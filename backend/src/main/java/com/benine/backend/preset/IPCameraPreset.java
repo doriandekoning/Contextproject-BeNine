@@ -3,6 +3,7 @@ package com.benine.backend.preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -129,12 +130,14 @@ public class IPCameraPreset extends Preset {
 
   /**
    * Moves the camera
-   * @param camera  A Camera object.
+   * @param cameraController to retrieve the right camera for this preset.
    * @throws CameraConnectionException  If the camera cannot be reached.
    * @throws CameraBusyException If the camera is busy
    */
   @Override
-  public void excecutePreset(Camera camera) throws CameraConnectionException, CameraBusyException {
+  public void excecutePreset(CameraController cameraController) 
+                        throws CameraConnectionException, CameraBusyException {
+    Camera camera = cameraController.getCameraById(cameraId);
     if (camera instanceof IPCamera) {
       IPCamera ipcamera = (IPCamera) camera;
 

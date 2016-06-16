@@ -1,7 +1,7 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,8 +27,7 @@ public class SimplePreset extends Preset {
    * @param tags of this preset
    */
   public SimplePreset(int cameraId, Set<String> tags) {
-    this(cameraId);
-    super.addTags(tags);
+    super(cameraId, tags);
   }
 
   @Override
@@ -48,5 +47,5 @@ public class SimplePreset extends Preset {
   }
 
   @Override
-  public void excecutePreset(Camera camera) throws CameraConnectionException {}
+  public void excecutePreset(CameraController cameraController) throws CameraConnectionException {}
 }

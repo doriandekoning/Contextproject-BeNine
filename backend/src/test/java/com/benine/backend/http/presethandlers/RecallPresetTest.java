@@ -98,14 +98,14 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
   public void testRecallPreset() throws IOException, ServletException, CameraConnectionException, CameraBusyException {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-    verify(preset).excecutePreset(ipcamera);
+    verify(preset).excecutePreset(cameraController);
     verify(out).write("{\"succes\":\"true\"}");
     verify(requestMock).setHandled(true);
   }
   
   @Test
   public void testRecallCameraConnectionException() throws Exception {
-    doThrow(new CameraConnectionException("test", 0)).when(preset).excecutePreset(ipcamera);
+    doThrow(new CameraConnectionException("test", 0)).when(preset).excecutePreset(cameraController);
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
@@ -115,7 +115,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
   
   @Test
   public void testRecallCameraBussyException() throws Exception {
-    doThrow(new CameraBusyException("test", 0)).when(preset).excecutePreset(ipcamera);
+    doThrow(new CameraBusyException("test", 0)).when(preset).excecutePreset(cameraController);
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
