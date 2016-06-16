@@ -97,7 +97,9 @@ Preset.prototype = {
 * @param preset to add the camera tag to.
 */
 function addCameraTag(preset) {
-	 if (preset.tags.indexOf("camera " + preset.cameraid) < 0) {		
-		preset.tags.push("camera " + preset.cameraid);
+	var cameratag = "camera " + preset.cameraid;
+	 if (preset.tags.indexOf(cameratag) < 0) {	
+		preset.tags.push(cameratag);
+		newTag(cameratag);
 	}
  }
