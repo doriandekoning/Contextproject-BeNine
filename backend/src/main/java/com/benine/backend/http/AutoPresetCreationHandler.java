@@ -59,6 +59,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
               + camID, e);
       respondFailure(request, httpServletResponse);
     } finally {
+      creators.remove(cam.getId());
       request.setHandled(true);
     }
 
