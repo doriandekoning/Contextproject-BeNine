@@ -7,8 +7,8 @@ var editingpreset;
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 
-	// Update server status ever 10 seconds
-	setInterval(updateServerStatus, 10 * 1000);
+	// Update server status every 2 seconds
+	setInterval(updateServerStatus, 2 * 1000);
 
 	// Reload presets every 5 seconds.
 	setInterval(loadPresets, 5 * 1000);
