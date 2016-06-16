@@ -43,6 +43,8 @@ function drawPerformanceListItem(performance) {
  * Selects a performance
  */
 function selectPerformance() {
+    editingname = false;
+
     if (nameEditingPerformance !== undefined) {
         nameEditingPerformance.replaceWith(drawPerformanceListItem($(nameEditingPerformance).data()));
     }
@@ -92,7 +94,6 @@ function saveEditName() {
  */
 function deletePerformance() {
     if (selectedPerformance !== undefined) {
-        editingname = false;
         var performance = selectedPerformance.data();
 
         performance.delete();
