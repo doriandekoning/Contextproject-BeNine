@@ -1,18 +1,20 @@
 package com.benine.backend.preset.autopresetcreation;
 
-import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.camera.CameraConnectionException;
-import com.benine.backend.camera.ZoomPosition;
-import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPreset;
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.video.StreamNotAvailableException;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeoutException;
+
+import com.benine.backend.ServerController;
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.Preset;
+import com.benine.backend.preset.PresetController;
+import com.benine.backend.video.StreamNotAvailableException;
 
 
 
@@ -47,7 +49,7 @@ public abstract class AutoPresetCreator {
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
    * @throws SQLException if exception occurs while writing to the database.
    */
-  public Collection<Integer> createPresets(IPCamera cam, Collection<SubView> subViews)
+  public Collection<IPCameraPreset> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException, SQLException {
     if (cam.isBusy()) {
@@ -55,18 +57,18 @@ public abstract class AutoPresetCreator {
     }
     cam.setBusy(true);
     ArrayList<IPCameraPreset> presets = new ArrayList<>();
-    ArrayList<Integer> presetIDs = new ArrayList<>();
-
+   
     cam.setBusy(false);
     cam.setAutoFocusOn(true);
     cam.setBusy(true);
+    PresetController control = ServerController.getInstance().getPresetController();
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
-      presetIDs.add(currentPreset.getId());
+      control.addPreset(currentPreset);
       presets.add(currentPreset);
     }
     cam.setBusy(false);
-    return presetIDs;
+    return presets;
   }
 
 
