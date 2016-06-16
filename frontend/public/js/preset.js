@@ -36,7 +36,7 @@ Preset.prototype = {
 		var preset_area = $('#preset_area');
 		var preset_div = preset_area.find('#preset_' + this.id);
 		preset_div.attr("id", this.id);
-		if (this.name != undefined && this.name !== '') {
+		if (this.name !== undefined && this.name !== '') {
 			preset_div.find('h5').text(this.name);
 		}
 		var preset_img = preset_div.find('img');

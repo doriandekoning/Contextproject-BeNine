@@ -12,7 +12,7 @@ Performance.prototype = {
 	setPresets: function (queue) {
 		var presets = [];
 
-		for (i in queue) {
+		for (var i in queue) {
 			var preset = findPresetOnID(queue[i]);
 			if (preset !== undefined) {
 				presets.push(preset);
@@ -79,7 +79,7 @@ Performance.prototype = {
 		$.get("/api/backend/presetqueues/" + this.id + "/deletepreset?position=" + position, function (data) {
 		});
 	}
-}
+};
 
 /**
  * Loads the performances from the backend server.
