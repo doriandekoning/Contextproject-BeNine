@@ -18,7 +18,8 @@ Build the back-end server using `maven install` with the supplied `pom.xml` file
 
 ### Deployable zip
 #####Unix systems:
-Run the `install.sh` script, this generates a zip file, extract this zip file to the desired location on your system. The servers can then be started by executing the `install.sh` script.
+Run the `install.sh` script, this generates a zip file, extract this zip file to the desired location on your system. The servers can then be started by executing the `startserver.sh` script. If maven is not installed on your system, run the `other systems` install instructions. 
+
 #####Other systems:
 First, fetch the dependencies for the front-end server using `npm install`, then build the back-end server using `maven install` with the supplied `pom.xml` file. 
 The zip file containing the backend and frontend server can be found in the `backend/target` folder.
