@@ -31,16 +31,16 @@ public class DeletePresetQueueHandler extends PresetQueueRequestHandler {
     int id = getPresetsQueueId(request);
 
     PresetQueue presetQueue = getPresetQueueController().getPresetQueueById(id);
-    
+    boolean succes = false;
     if (presetQueue != null) {
       getPresetQueueController().removePresetQueue(presetQueue);
-      respondSuccess(request, res);
+      succes = true;
       getLogger().log("Preset queue " + id + "is succesfully deleted.", LogEvent.Type.INFO);
     } else {
-      respondFailure(request, res);
       getLogger().log("Preset queue " + id + "is not deleted.", LogEvent.Type.WARNING);
     }
     
+    respond(request, res, succes);
     request.setHandled(true);
   }
 

@@ -15,10 +15,10 @@ $(document).ready(function() {
     // On left swipe, next slide.
     swipemanager.on('swipeleft', function (e) {
         carousel.carousel("next");
-    })
+    });
 
     // On right swipe, previous slide.
     swipemanager.on('swiperight', function (e) {
         carousel.carousel("prev");
-    })
+    });
 });

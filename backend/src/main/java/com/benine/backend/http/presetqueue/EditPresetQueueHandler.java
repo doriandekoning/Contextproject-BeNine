@@ -31,18 +31,17 @@ public class EditPresetQueueHandler extends PresetQueueRequestHandler {
     int id = getPresetsQueueId(request);
     String name = request.getParameter("name");
     PresetQueue presetQueue = getPresetQueueController().getPresetQueueById(id);
-    
+    boolean succes = false;
     if (presetQueue != null && name != null) {
       presetQueue.setName(name);
       getPresetQueueController().updatePresetQueue(presetQueue);
-      respondSuccess(request, res);
+      succes = true;
       getLogger().log("The name of Preset queue " + id 
                                 + " is succesfully updated.", LogEvent.Type.INFO);
     } else {
-      respondFailure(request, res);
       getLogger().log("Preset queue " + id + " is not deleted.", LogEvent.Type.WARNING);
     }
-    
+    respond(request, res, succes);
     request.setHandled(true);
   }
 

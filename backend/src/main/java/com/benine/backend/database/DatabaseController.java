@@ -4,7 +4,6 @@ import com.benine.backend.Config;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.performance.PresetQueueController;
-import com.benine.backend.preset.Preset;
 import com.benine.backend.preset.PresetController;
 
 import java.sql.SQLException;
@@ -74,9 +73,6 @@ public class DatabaseController {
     PresetController presetController = serverController.getPresetController();
     try {
       presetController.addPresets(database.getAllPresets());
-      for (Preset preset : presetController.getPresets()) {
-        preset.addTags(database.getTagsFromPreset(preset));
-      }
     } catch (SQLException e) {
       logger.log("Cannot read presets from database", e);
     }

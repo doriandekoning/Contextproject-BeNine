@@ -5,7 +5,7 @@ var blockcounter = 0;
  * Sets the backend server status.
  */
 function setServerStatus() {
-    var statuslabel = $('#server_status')
+    var statuslabel = $('#server_status');
 
     $.get("/api/getinfo", function (data) {
         if (data.backend.status === "online") {
@@ -18,7 +18,7 @@ function setServerStatus() {
         }
     }).fail(function () {
         statuslabel.attr('class', 'label label-danger');
-    })
+    });
 
 }
 

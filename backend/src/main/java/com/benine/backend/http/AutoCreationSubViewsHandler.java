@@ -12,10 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
 public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
-
 
   /**
    * Constructs a request handler.
@@ -25,7 +22,6 @@ public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
   public AutoCreationSubViewsHandler(HTTPServer httpserver) {
     super(httpserver);
   }
-
 
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
@@ -39,7 +35,5 @@ public class AutoCreationSubViewsHandler extends AutoPresetHandler  {
     respond(request, httpServletResponse, jsonObj.toJSONString());
 
     request.setHandled(true);
-
   }
-  
 }

@@ -27,7 +27,7 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   liveimage.attr('src', streamURL);
 
   showSubViews();
-})
+});
 
 /**
  * Resets the modal.
@@ -108,7 +108,7 @@ function autoCreatePresets() {
     switchGenerateTab();
 
     // Update statusbar ever 2sec (2000ms)
-    var interval = setInterval(updateProgressbar, 2*1000);
+    var interval = setInterval(updateProgressbar, 2 * 1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       clearInterval(interval);
       switchFinalTab(data);
@@ -123,7 +123,7 @@ function autoCreatePresets() {
 function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
     var dataJSON = JSON.parse(data);
-    if ( dataJSON.succes == undefined ) {
+    if ( dataJSON.succes === undefined ) {
       console.log(dataJSON.amount_created);
       var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
@@ -182,7 +182,7 @@ function showSubViews() {
          var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
          var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
          var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
-         context.strokeRect(x, y, width, height)
+         context.strokeRect(x, y, width, height);
        }
      });
 }

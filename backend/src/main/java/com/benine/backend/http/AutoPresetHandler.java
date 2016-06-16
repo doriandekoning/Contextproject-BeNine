@@ -1,5 +1,9 @@
 package com.benine.backend.http;
 
+import com.benine.backend.Logger;
+import com.benine.backend.camera.Camera;
+import com.benine.backend.camera.CameraController;
+import com.benine.backend.preset.PresetController;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import org.eclipse.jetty.server.Request;
 
@@ -7,12 +11,39 @@ import org.eclipse.jetty.server.Request;
  * Handles requests that have to do with auto preset creation.
  */
 public abstract class AutoPresetHandler extends RequestHandler {
+  
+  private CameraController cameraController;
+  
+  private PresetController presetController;
+  
+  private Logger logger;
+  
   /**
    * Constructor for a new PresetsHandler, handling the /presets/ request.
    * @param httpserver to construct this handler for.
    */
   public AutoPresetHandler(HTTPServer httpserver) {
     super(httpserver);
+    this.cameraController = httpserver.getCameraController();
+    this.presetController = httpserver.getPresetController();
+    this.logger = httpserver.getLogger();
+  }
+  
+  /**
+   * Get the right camera.
+   * @param camID to find the camera.
+   * @return right camera.
+   */
+  protected Camera getCameraById(int camID) {
+    return cameraController.getCameraById(camID);
+  }
+  
+  protected Logger getLogger() {
+    return logger;
+  }
+  
+  protected PresetController getPresetController() {
+    return presetController;
   }
 
   /**

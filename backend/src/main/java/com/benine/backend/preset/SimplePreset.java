@@ -1,7 +1,7 @@
 package com.benine.backend.preset;
 
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,17 +27,16 @@ public class SimplePreset extends Preset {
    * @param tags of this preset
    */
   public SimplePreset(int cameraId, Set<String> tags) {
-    this(cameraId);
-    super.addTags(tags);
+    super(cameraId, tags);
   }
 
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
     json.put("image", getImage());
-    json.put("id", getId());
-    json.put("cameraid", getCameraId());
-    json.put("name", getName());
+    json.put("id", presetid);
+    json.put("cameraid", cameraId);
+    json.put("name", name);
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -48,7 +47,5 @@ public class SimplePreset extends Preset {
   }
 
   @Override
-  public void excecutePreset(Camera camera) throws CameraConnectionException {
-    
-  }
+  public void excecutePreset(CameraController cameraController) throws CameraConnectionException {}
 }

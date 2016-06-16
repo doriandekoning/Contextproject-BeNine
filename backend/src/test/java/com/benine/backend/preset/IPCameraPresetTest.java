@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created on 3-5-16.
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 public class IPCameraPresetTest extends PresetTest {
   
   IPCameraPreset preset;
+  CameraController cameraController;
 
   public IPCameraPreset getPreset() {
     IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(4.2, 42.42, 4), new FocusValue(2, false), new IrisValue(5, true), 34);
@@ -39,19 +41,22 @@ public class IPCameraPresetTest extends PresetTest {
     preset = new IPCameraPreset(new ZoomPosition(10, 12, 13), new FocusValue(40, true), new IrisValue(56, false), 0);
     preset.setName("name");
     preset.addTags(keywords);
+    cameraController = mock(CameraController.class);
   }
   
   @Test
   public void testExcecutePresetMoveTo() throws CameraConnectionException, CameraBusyException {
     IPCamera camera = mock(IPCamera.class);
-    preset.excecutePreset(camera);
+    when(cameraController.getCameraById(0)).thenReturn(camera);
+    preset.excecutePreset(cameraController);
     verify(camera).moveTo(new Position(10, 12), 15, 1);
   }
   
   @Test(expected = CameraConnectionException.class)
   public void testExcecutePresetException() throws CameraConnectionException, CameraBusyException {
     SimpleCamera camera = mock(SimpleCamera.class);
-    preset.excecutePreset(camera);
+    when(cameraController.getCameraById(0)).thenReturn(camera);
+    preset.excecutePreset(cameraController);
   }
 
   @Test
