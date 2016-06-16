@@ -330,21 +330,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testOldCameras() throws CameraConnectionException, SQLException {
-        Camera camera = mock(Camera.class);
-        when(camera.getMacAddress()).thenReturn("mas");
-        ArrayList<Camera> list = new ArrayList<Camera>();
-        ArrayList<String> macs = new ArrayList<String>();
-        list.add(camera);
-        MockResultSet result = statementHandler.createResultSet();
-        statementHandler.prepareGlobalResultSet(result);
-        result.addColumn("MACAddress", new Object[]{"mac"});
-        result.addColumn("ID", new Object[]{1});
-        database.checkOldCameras(result, list, macs);
-        verifySQLStatementExecuted("DELETE FROM");
-    }
-
-    @Test
     public final void testFailedUseDatabase() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);

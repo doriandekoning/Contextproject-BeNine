@@ -427,39 +427,15 @@ public class MySQLDatabase implements Database {
       statement = connection.createStatement();
       String sql = "SELECT ID, MACaddress FROM camera";
       resultset = statement.executeQuery(sql);
-      checkOldCameras(resultset, cameras, macs);
+      while (resultset.next()) {
+        String mac = resultset.getString("MACAddress");
+        macs.add(mac);
+      }
       checkNewCameras(cameras, macs);
     } catch (SQLException | CameraConnectionException e) {
       logger.log("Cameras could not be gotten from database.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
-    }
-  }
-
-  /**
-   * Checks if there are cameras in the database to be deleted.
-   *
-   * @param result  The resultset from the query
-   * @param cameras The cameras
-   * @param macs    The MACAddresses of the cameras in the database
-   * @throws SQLException              No right connection to the database
-   * @throws CameraConnectionException Not able to connect to the camera
-   */
-  public void checkOldCameras(ResultSet result, ArrayList<Camera> cameras, ArrayList<String> macs)
-      throws SQLException, CameraConnectionException {
-    while (result.next()) {
-      boolean contains = false;
-      String mac = result.getString("MACAddress");
-      macs.add(mac);
-      for (Camera camera : cameras) {
-        if (camera.getMacAddress().equals(mac)) {
-          contains = true;
-          break;
-        }
-      }
-      if (!contains) {
-        deleteCamera(result.getInt("ID"));
-      }
     }
   }
 
