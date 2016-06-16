@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS `presetsdatabase`.`preset` (
   `camera_ID` INT(11) NOT NULL,
   `name` CHAR(50) NULL DEFAULT '',
   PRIMARY KEY (`ID`),
-  INDEX `fk_simplepreset_camera_idx` (`camera_ID` ASC),
-  CONSTRAINT `fk_simplepreset_camera`
+  INDEX `fk_preset_camera_idx` (`camera_ID` ASC),
+  CONSTRAINT `fk_preset_camera`
     FOREIGN KEY (`camera_ID`)
     REFERENCES `presetsdatabase`.`camera` (`ID`)
     ON DELETE NO ACTION
