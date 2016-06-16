@@ -34,7 +34,7 @@ public class CameraControllerTest {
   @Test
   public void testLoadConfigCameras() {
     controller.loadConfigCameras();
-    assertEquals(2, controller.getCameras().size());
+    assertEquals(1, controller.getCameras().size());
   }
 
   @Test
