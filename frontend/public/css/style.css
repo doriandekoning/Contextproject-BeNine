@@ -678,13 +678,14 @@ input[type=range]:focus {
     background-color: rgba(92, 184, 92, 0.75);
 }
 
-#auto_preset_name {
-    width: 80%;
-}
-
 .autopreset-left-column, .autopreset-right-column, .autopreset-canvas-row {
+    width: 100%;
     margin-top: 15px;
     margin-left: 5px;
+}
+
+.autopreset-left-column .bootstrap-tagsinput {
+    width: 100%;
 }
 
 .label-auto-preset-input {
