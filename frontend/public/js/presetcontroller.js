@@ -364,7 +364,7 @@ function loadTags() {
 $(".fill-tags").on('click', '.tag', function(e){
 	if(editable) {
         e.preventDefault();
-        var tag = $(this).html();
+        var tag = $(this).attr('value');
         $(this).replaceWith(appendEditable(tag, false));
 		editable = false;
 		editTags($(this).attr('id'), false);
@@ -469,7 +469,7 @@ function updateTagInPresets(old, fresh) {
 */
 function addTag() {
 	if(editable) {
-		var add = "tag " + localTags.length;
+		var add = "Tag " + localTags.length;
 		$(".fill-tags").prepend(appendEditable(add, true));
 		newTag(add);
 		editable = false;
@@ -495,7 +495,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<li class='tag btn btn-primary glyphicon glyphicon-tag' id=" + id + "> " + name + "</li>"
+	return "<button id=" + id + " class='tag btn btn-primary' style='width: 100%' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span> " + name + "</button>"
 }
 
 /**
