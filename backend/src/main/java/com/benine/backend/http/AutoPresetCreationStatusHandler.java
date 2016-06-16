@@ -8,34 +8,34 @@ import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
+import org.json.simple.JSONObject;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeoutException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 
-public class AutoPresetCreationHandler extends AutoPresetHandler  {
+public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
 
 
-  private static ConcurrentHashMap<Integer, AutoPresetCreator> creators = new ConcurrentHashMap<>();
+  private static HashMap<Integer, AutoPresetCreator> creators = new HashMap<>();
 
   /**
    * Constructs a request handler.
    * @param httpserver to interact with the rest of the system.
    */
-  public AutoPresetCreationHandler(HTTPServer httpserver) {
+  public AutoPresetCreationStatusHandler(HTTPServer httpserver) {
     super(httpserver);
   }
 
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    PresetPyramidCreator creator = getPyramidPresetCreator(request);
     String camID = request.getParameter("camera");
     Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
@@ -43,26 +43,16 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       request.setHandled(true);
       return;
     }
-    creators.put(cam.getId(), creator);
-    IPCamera ipcam = (IPCamera) cam;
-   
-    try {
-      creator.createPresets(ipcam, creator.generateSubViews());
-      respondSuccess(request, httpServletResponse);
-
-    } catch (CameraConnectionException | InterruptedException
-            | TimeoutException | StreamNotAvailableException | SQLException e ) {
-      getLogger().log("Exception occured while trying to auto create presets", e);
-      respondFailure(request, httpServletResponse);
-    }  catch (CameraBusyException e) {
-      getLogger().log("Trying to auto create presets on busy camera with id: "
-              + camID, e);
-      respondFailure(request, httpServletResponse);
-    } finally {
+    AutoPresetCreator creator = AutoPresetCreationHandler.getCreators().get(cam.getId());
+    if ( creator != null) {
+      JSONObject object = new JSONObject();
+      object.put("amount-created", creator.getGeneratedPresetsAmount());
+      respond(request, httpServletResponse, object.toString());
       creators.remove(cam.getId());
-      request.setHandled(true);
+    } else {
+      respondFailure(request, httpServletResponse);
     }
-
+    request.setHandled(true);
 
   }
 
@@ -70,7 +60,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
   /**
    * Returns the auto preset creators currently running.
    */
-  public static ConcurrentMap<Integer, AutoPresetCreator> getCreators() {
+  public Map<Integer, AutoPresetCreator> getCreators() {
     return creators;
   }
 }

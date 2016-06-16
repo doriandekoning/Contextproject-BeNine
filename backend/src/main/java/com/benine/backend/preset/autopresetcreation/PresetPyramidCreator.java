@@ -17,7 +17,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   private int columns;
   private int levels;
   private double overlap;
-  private ArrayList<SubView> generatedSubViews = new ArrayList<>();
+
 
   /**
    * Constructs a PresetPyramidCreator.
@@ -40,7 +40,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   }
 
   @Override
-  protected Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
+  protected ArrayList<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
 
@@ -144,6 +144,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
    * @return A collection of the generated subviews for the layer.
    */
   private Collection<SubView> generateSubViewLayer(SubView subView) {
+    ArrayList<SubView> subViews = new ArrayList<>();
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         double subViewWidth = subView.getWidth() / columns;
@@ -166,10 +167,10 @@ public class PresetPyramidCreator extends AutoPresetCreator {
                 subViewCenterY + (0.5 * subViewHeight));
         Coordinate bottomRight = new Coordinate(subViewCenterX + (0.5 * subViewWidth),
                 subViewCenterY - (0.5 * subViewHeight));
-        generatedSubViews.add(new SubView(topLeft, bottomRight));
+        subViews.add(new SubView(topLeft, bottomRight));
       }
     }
-    return generatedSubViews;
+    return subViews;
   }
 
 
