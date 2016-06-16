@@ -5,8 +5,8 @@
 function Camera(newCam) {
 	this.id = newCam.id;
 	this.inuse = newCam.inuse;
-	this.autoFocus = newCam.autoFocus;
-	this.autoIris = newCam.autoIris;
+	this.autoFocus = newCam.autofocus;
+	this.autoIris = newCam.autoiris;
 	this.zoom = newCam.zoom;
 	this.move = newCam.move;
 	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');

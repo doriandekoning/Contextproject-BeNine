@@ -18,6 +18,7 @@ $(".auto-presets-modal .disabled").click(function (e) {
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   resetModal();
+
   var image = $("#auto-preset-creation-preview-image");
   var liveimage = $("#auto-preset-creation-live-image");
 
@@ -33,6 +34,9 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
  */
 function resetModal() {
   switchTab(1);
+  $("#columns-amount").val(columns);
+  $("#rows-amount").val(rows);
+  $("#levels-amount").val(levels);
 
   $('#auto_presets_div .close').prop('disabled', false);
   $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', false);
@@ -95,11 +99,30 @@ function autoCreatePresets() {
     // Switch to generating view.
     switchGenerateTab();
 
+    // Update statusbar ever 2sec (2000ms)
+    var interval = setInterval(updateProgressbar, 2*1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
-      // If done switch to final screen.
+      clearInterval(interval);
       switchFinalTab(data);
     });
+
   }
+}
+
+/**
+* Updates the progressbar
+*/
+function updateProgressbar() {
+  $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
+    var dataJSON = JSON.parse(data);
+    if ( dataJSON.succes == undefined ) {
+      console.log(dataJSON.amount_created);
+      var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
+      $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
+                                            .attr("aria-valuenow", percentage_done)
+                                            .text(dataJSON.amount_created + "/" +  dataJSON.amount_total);
+    }
+  });
 }
 
 /**
