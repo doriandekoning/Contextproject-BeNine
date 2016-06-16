@@ -153,8 +153,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
 
         // Calculate the aspect ratio of this subview
         double subViewAspectRatio = subViewHeight / subViewWidth;
-        double cameraAspectRatio = IPCamera.VERTICAL_FOV_MAX / IPCamera.HORIZONTAL_FOV_MAX ;
-        if (subViewAspectRatio < cameraAspectRatio) {
+        if (subViewAspectRatio < 1) {
           // If subview is wider then camera view resize width
           subViewWidth = subViewHeight;
         } else {
