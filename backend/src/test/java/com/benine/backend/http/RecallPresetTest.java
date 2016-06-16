@@ -3,7 +3,6 @@ package com.benine.backend.http;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
-import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -11,7 +10,6 @@ import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +17,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
 
@@ -35,7 +35,7 @@ public class RecallPresetTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     when(cameraController.getCameraById(1)).thenReturn(ipcamera);
@@ -54,8 +54,8 @@ public class RecallPresetTest extends RequestHandlerTest {
       when(ipcamera.isAutoIrisOn()).thenReturn(true);
       when(ipcamera.getId()).thenReturn(1);
 
-      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0, "name");
-      preset.setCameraId(1);
+      preset = mock(IPCameraPreset.class);
+      when(preset.getCameraId()).thenReturn(1);
       when(presetController.getPresetById(1)).thenReturn(preset);
     } catch (CameraConnectionException | CameraBusyException | StreamNotAvailableException e) {
       e.printStackTrace();
@@ -94,51 +94,32 @@ public class RecallPresetTest extends RequestHandlerTest {
   }
 
   @Test
-  public void testRecallPresetMove() throws Exception {
+  public void testRecallPreset() throws IOException, ServletException, CameraConnectionException, CameraBusyException {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(ipcamera).moveTo(new Position(0, 0), 15, 1);
+    verify(preset).excecutePreset(ipcamera);
+    verify(out).write("{\"succes\":\"true\"}");
+    verify(requestMock).setHandled(true);
   }
-
+  
   @Test
-  public void testRecallPresetZoom() throws Exception {
+  public void testRecallCameraConnectionException() throws Exception {
+    doThrow(new CameraConnectionException("test", 0)).when(preset).excecutePreset(ipcamera);
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(ipcamera).zoomTo(100);
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
   }
-
+  
   @Test
-  public void testRecallPresetMoveFocus() throws Exception {
+  public void testRecallCameraBussyException() throws Exception {
+    doThrow(new CameraBusyException("test", 0)).when(preset).excecutePreset(ipcamera);
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(ipcamera).moveFocus(33);
-  }
-
-  @Test
-  public void testRecallPresetAutoFocus() throws Exception {
-    recall();
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(ipcamera).setAutoFocusOn(true);
-  }
-
-  @Test
-  public void testRecallPresetAutoIris() throws Exception {
-    recall();
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(ipcamera).setAutoIrisOn(true);
-  }
-
-  @Test
-  public void testRecallPresetIrisPosition() throws Exception {
-    recall();
-    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
-
-    verify(ipcamera).setIrisPosition(50);
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
   }
 
 }

@@ -1,6 +1,5 @@
 package com.benine.backend;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +8,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;

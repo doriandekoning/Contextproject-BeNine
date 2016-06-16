@@ -40,7 +40,6 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     String camID = request.getParameter("camera");
     Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
-      System.out.println(" not a ipcam");
       respondFailure(request, httpServletResponse);
       request.setHandled(true);
       return;
