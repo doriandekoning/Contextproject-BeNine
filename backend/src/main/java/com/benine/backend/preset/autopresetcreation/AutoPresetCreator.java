@@ -38,7 +38,7 @@ public abstract class AutoPresetCreator {
    * Automatically adds the presets to the presetcontroller.
    * @param cam the camera to create presets for.
    * @param subViews the sub-views to generate positions for.
-   * @return A collection of the id's of the created presets.
+   * @return A collection of the ids of the created presets.
    * @throws CameraConnectionException when camera cannot be reached.
    * @throws InterruptedException when interrupted while waiting for cam to move.
    * @throws TimeoutException if the camera is moving too slow or not at all.
@@ -47,7 +47,7 @@ public abstract class AutoPresetCreator {
    * @throws StreamNotAvailableException if a camera stream cannot be reached.
    * @throws SQLException if exception occurs while writing to the database.
    */
-  public ArrayList<Integer> createPresets(IPCamera cam, Collection<SubView> subViews)
+  public Collection<Integer> createPresets(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException, CameraBusyException, InterruptedException,
           TimeoutException, IOException, StreamNotAvailableException, SQLException {
     if (cam.isBusy()) {
