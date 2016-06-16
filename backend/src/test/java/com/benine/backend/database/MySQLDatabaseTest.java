@@ -175,18 +175,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testDeleteCamera() throws SQLException {
-        database.resetDatabase();
-        database.addCamera(1, "ip");
-        database.deleteCamera(1);
-        database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM preset WHERE camera_ID = ?");
-        verifyCommitted();
-        verifyAllResultSetsClosed();
-        verifyConnectionClosed();
-    }
-
-    @Test
     public final void testUseDatabase() throws SQLException {
         database.resetDatabase();
         database.useDatabase();
@@ -264,19 +252,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public final void testFailedDeleteCamera() throws SQLException {
-        database.closeConnection();
-        Connection connection = mock(Connection.class);
-        String sql = "DELETE FROM preset WHERE camera_ID = ?";
-        doThrow(SQLException.class).when(connection).prepareStatement(sql);
-        sql = "DELETE FROM camera WHERE ID = ?";
-        doThrow(SQLException.class).when(connection).prepareStatement(sql);
-        database.setConnection(connection);
-        database.deleteCamera(1);
-        verify(logger, times(2)).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
-    }
-
-    @Test
     public final void testFailedDeletePreset() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
@@ -327,21 +302,6 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         macs.add("mac");
         database.checkNewCameras(list, macs);
         verifySQLStatementExecuted("INSERT INTO");
-    }
-
-    @Test
-    public final void testOldCameras() throws CameraConnectionException, SQLException {
-        Camera camera = mock(Camera.class);
-        when(camera.getMacAddress()).thenReturn("mas");
-        ArrayList<Camera> list = new ArrayList<Camera>();
-        ArrayList<String> macs = new ArrayList<String>();
-        list.add(camera);
-        MockResultSet result = statementHandler.createResultSet();
-        statementHandler.prepareGlobalResultSet(result);
-        result.addColumn("MACAddress", new Object[]{"mac"});
-        result.addColumn("ID", new Object[]{1});
-        database.checkOldCameras(result, list, macs);
-        verifySQLStatementExecuted("DELETE FROM");
     }
 
     @Test

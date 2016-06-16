@@ -88,13 +88,6 @@ public interface Database {
   void checkCameras(ArrayList<Camera> cameras);
 
   /**
-   * deletes a camera from the database.
-   *
-   * @param cameraID the camera to be deleted
-   */
-  void deleteCamera(int cameraID);
-
-  /**
    * Makes sure the right database is used.
    */
   void useDatabase();
