@@ -180,7 +180,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         database.addCamera(1, "ip");
         database.deleteCamera(1);
         database.closeConnection();
-        verifySQLStatementExecuted("DELETE FROM IPpreset WHERE camera_ID = ?");
+        verifySQLStatementExecuted("DELETE FROM preset WHERE camera_ID = ?");
         verifyCommitted();
         verifyAllResultSetsClosed();
         verifyConnectionClosed();
@@ -267,15 +267,13 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
     public final void testFailedDeleteCamera() throws SQLException {
         database.closeConnection();
         Connection connection = mock(Connection.class);
-        String sql = "DELETE FROM IPpreset WHERE camera_ID = ?";
-        doThrow(SQLException.class).when(connection).prepareStatement(sql);
-        sql = "DELETE FROM simplepreset WHERE camera_ID = ?";
+        String sql = "DELETE FROM preset WHERE camera_ID = ?";
         doThrow(SQLException.class).when(connection).prepareStatement(sql);
         sql = "DELETE FROM camera WHERE ID = ?";
         doThrow(SQLException.class).when(connection).prepareStatement(sql);
         database.setConnection(connection);
         database.deleteCamera(1);
-        verify(logger, times(3)).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
+        verify(logger, times(2)).log("Cameras could not be deleted from database.", LogEvent.Type.CRITICAL);
     }
 
     @Test
@@ -297,7 +295,7 @@ public class MySQLDatabaseTest extends BasicJDBCTestCaseAdapter {
         doThrow(SQLException.class).when(connection).createStatement();
         database.setConnection(connection);
         database.getAllPresets();
-        verify(logger, atLeast(2)).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
+        verify(logger).log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     }
 
     @Test
