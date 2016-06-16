@@ -5,9 +5,9 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.IPCameraPreset;
+import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
 import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
 import com.benine.backend.video.StreamNotAvailableException;
-
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +15,8 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletException;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AutoPresetCreationHandler extends AutoPresetHandler  {
 
+
+  private static ConcurrentHashMap<Integer, AutoPresetCreator> creators = new ConcurrentHashMap<>();
 
   /**
    * Constructs a request handler.
@@ -44,6 +48,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       request.setHandled(true);
       return;
     }
+    creators.put(cam.getId(), creator);
     IPCamera ipcam = (IPCamera) cam;
    
     try {
@@ -65,10 +70,18 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
               + camID, e);
       respondFailure(request, httpServletResponse);
     } finally {
+      creators.remove(cam.getId());
       request.setHandled(true);
     }
 
 
   }
-  
+
+
+  /**
+   * Returns the auto preset creators currently running.
+   */
+  public static ConcurrentMap<Integer, AutoPresetCreator> getCreators() {
+    return creators;
+  }
 }

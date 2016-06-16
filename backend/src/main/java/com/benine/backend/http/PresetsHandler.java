@@ -35,6 +35,7 @@ public class PresetsHandler extends RequestHandler {
     addHandler("edit", new EditPresetHandler(httpserver));
     addHandler("autocreatepresets", new AutoPresetCreationHandler(httpserver));
     addHandler("autocreatesubviews", new AutoCreationSubViewsHandler(httpserver));
+    addHandler("autocreatepresetsstatus", new AutoPresetCreationStatusHandler(httpserver));
   }
 
   @Override
