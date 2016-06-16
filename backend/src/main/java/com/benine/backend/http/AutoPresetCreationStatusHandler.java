@@ -7,17 +7,12 @@ import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
-
-
-  private static HashMap<Integer, AutoPresetCreator> creators = new HashMap<>();
 
   /**
    * Constructs a request handler.
@@ -44,20 +39,12 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_created", creator.getGeneratedPresetsAmount());
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
-      creators.remove(cam.getId());
+      AutoPresetCreationHandler.getCreators().get(cam.getId());
       succes = true;
-    } 
-    
+    }
+    AutoPresetCreationHandler.getCreators().remove(cam.getId());
     respond(request, httpServletResponse, succes);
     request.setHandled(true);
   }
 
-
-  /**
-   * Returns the auto preset creators currently running.
-   * @return creators map.
-   */
-  public Map<Integer, AutoPresetCreator> getCreators() {
-    return creators;
-  }
 }

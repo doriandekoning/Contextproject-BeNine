@@ -156,13 +156,16 @@ public class PresetPyramidCreator extends AutoPresetCreator {
     ArrayList<SubView> subViews = new ArrayList<>();
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
+        // Calculate width and height that can be used
         double subViewWidth = subView.getWidth() / columns;
         double subViewHeight = subView.getHeight() / rows;
 
+        // Calculate the center of this subview
         double subViewCenterX = subView.getTopLeft().getX()
                 + ((0.5 + (double)column) * subViewWidth );
         double subViewCenterY = subView.getTopLeft().getY() - ((0.5 + (double)row) * subViewHeight);
 
+        // Calculate the aspect ratio of this subview
         double subViewAspectRatio = subViewHeight / subViewWidth;
         double cameraAspectRatio = IPCamera.VERTICAL_FOV_MAX / IPCamera.HORIZONTAL_FOV_MAX ;
         if (subViewAspectRatio < cameraAspectRatio) {

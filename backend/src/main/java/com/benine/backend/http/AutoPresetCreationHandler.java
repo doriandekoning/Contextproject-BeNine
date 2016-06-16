@@ -61,6 +61,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       
       presets.forEach(preset -> idsJson.add(preset.getId()));
       jsonObject.put("presetIDs", idsJson);
+      creators.remove(cam.getId());
       respond(request, httpServletResponse, jsonObject.toJSONString());
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
@@ -77,7 +78,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
 
   /**
    * Returns the auto preset creators currently running.
-   * @return map of creators.
+   * @return a concurrenthashmap with all the creators currently running.
    */
   public static ConcurrentMap<Integer, AutoPresetCreator> getCreators() {
     return creators;
