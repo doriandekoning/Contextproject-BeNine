@@ -28,7 +28,7 @@ public class AutoCreationStatusHandlerTest extends AutoPresetHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write(matches("\\{\"amount_total\":1,\"amount_created\":\"0\"}"));
+    verify(out).write("{\"succes\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -43,7 +43,7 @@ public class AutoCreationStatusHandlerTest extends AutoPresetHandlerTest {
 
     Collection<SubView> subViews = new PresetPyramidCreator(3, 3, 3, 0.0, mock(PresetController.class)).generateSubViews();
 
-    verify(out).write("\\{\"amount_total\":1,\"amount_created\":\"0\"}");
+    verify(out).write("{\"succes\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
