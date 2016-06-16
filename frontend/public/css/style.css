@@ -630,12 +630,12 @@ input[type=range]:focus {
     padding: 0;
 }
 
-.performance-list span {
-    margin-right: 5px;
+.fill-tags .tag {
+    width: 100%;
 }
 
-.performance-list .btn span {
-    margin-left: 10px;
+.performance-list span, .fill-tags span, .btn span {
+    margin-right: 7px;
 }
 
 .performance_edit_div .btn-group .glyphicon, .performance-preset-schedule-container .btn-group .glyphicon, .input-group .glyphicon {
@@ -650,6 +650,7 @@ input[type=range]:focus {
     width: 125px;
     height: auto;
     right: 0px;
+    margin-right: 10px;
 }
 
 .schedule-preset {

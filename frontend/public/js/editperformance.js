@@ -30,11 +30,10 @@ function drawPerformancesList() {
  * @returns {*|jQuery|HTMLElement} a jQuery DOM element to append.
  */
 function drawPerformanceListItem(performance) {
-    var li = $("<li class='btn btn-primary'></li>");
+    var li = $("<div class='btn btn-primary'></div>");
     li.data(performance);
     li.click(selectPerformance);
-    var icon = $("<span class='glyphicon glyphicon-bullhorn'> " + performance['name'] + "</span>");
-
+    var icon = $("<span class='glyphicon glyphicon-bullhorn'></span><span>" + performance['name'] + "</span>");
     li.append(icon);
     return li;
 }

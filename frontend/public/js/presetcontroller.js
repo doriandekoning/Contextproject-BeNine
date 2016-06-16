@@ -495,7 +495,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<button id=" + id + " class='tag btn btn-primary' style='width: 100%' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span> " + name + "</button>"
+	return "<button id=" + id + " class='tag btn btn-primary' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span><span>" + name + "</span></button>"
 }
 
 /**
