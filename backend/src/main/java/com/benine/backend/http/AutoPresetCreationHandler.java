@@ -49,8 +49,6 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      succes = true;
-
       Collection<IPCameraPreset> presets = creator.createPresets(ipcam, creator.generateSubViews());
       
       JSONObject jsonObject = new JSONObject();
