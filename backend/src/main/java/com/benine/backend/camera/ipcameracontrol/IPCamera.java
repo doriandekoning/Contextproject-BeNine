@@ -48,7 +48,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private Map<String, Long> timeStamps = new HashMap<>();
   private Logger logger;
   private Config config;
-  private Double aspectRatio = 16.0/9;
+  private Double aspectRatio = 16.0 / 9;
 
   /**
    *  Create a new IP Camera object.
@@ -586,7 +586,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
 
 
   /**
-   * Sets the Aspectratio for this camera
+   * Sets the Aspectratio for this camera.
    * @param ratio the new Aspectratio
    */
   public void setAspectRatio(double ratio) {
