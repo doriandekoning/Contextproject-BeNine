@@ -1,0 +1,25 @@
+{
+  "name": "polycast-webinterface",
+  "description": "Web interface to communicate with the backend server controlling the cameras.",
+  "main": "app.js",
+  "license": "MIT",
+  "homepage": "https://github.com/Kingdorian/Contextproject-BeNine",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-tagsinput": "^0.8.0",
+    "bootstrap-toggle": "^2.2.2",
+    "bootstrap": "^3.3.6",
+    "holderjs": "^2.9.3",
+    "js-cookie": "^2.1.2",
+    "hammerjs": "^2.0.8",
+    "nipplejs": "^0.6.3",
+    "typeahead.js": "^0.11.1"
+  }
+}
