@@ -2,12 +2,13 @@ package com.benine.backend.http;
 
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class PresetsHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
 
     createHandler = mock(CreatePresetHandler.class);
@@ -41,10 +42,12 @@ public class PresetsHandlerTest extends RequestHandlerTest {
     ((PresetsHandler) getHandler()).addHandler("createpreset", createHandler);
     ((PresetsHandler) getHandler()).addHandler("recallpreset", recallHandler);
 
-    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,true, 0, "name");
+    Preset preset = new IPCameraPreset(new ZoomPosition(1, 1, 1), new FocusValue(1, true), new IrisValue(1, true), 0);
+    preset.setName("name");
     Set<String> keywords = new HashSet<>();
     keywords.add("Violin");
-    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), 1, 1, true,  true, 0, "name");
+    Preset presetKeywords = new IPCameraPreset(new ZoomPosition(1, 1, 1), new FocusValue(1, true), new IrisValue(1, true), 0);
+    presetKeywords.setName("name");
     presetKeywords.addTags(keywords);
 
     ArrayList<Preset> allList = new ArrayList<>();

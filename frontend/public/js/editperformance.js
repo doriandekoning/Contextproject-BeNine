@@ -1,4 +1,5 @@
 var selectedPerformance, nameEditingPerformance;
+var editingname = false;
 
 /**
  * Loads the edit performance window.
@@ -30,11 +31,10 @@ function drawPerformancesList() {
  * @returns {*|jQuery|HTMLElement} a jQuery DOM element to append.
  */
 function drawPerformanceListItem(performance) {
-    var li = $("<li class='btn btn-info'></li>");
+    var li = $("<div class='btn btn-primary'></div>");
     li.data(performance);
     li.click(selectPerformance);
-    var icon = $("<span class='glyphicon glyphicon-bullhorn'> " + performance['name'] + "</span>");
-
+    var icon = $("<span class='glyphicon glyphicon-bullhorn'></span><span>" + performance['name'] + "</span>");
     li.append(icon);
     return li;
 }
@@ -43,22 +43,25 @@ function drawPerformanceListItem(performance) {
  * Selects a performance
  */
 function selectPerformance() {
+    editingname = false;
+
     if (nameEditingPerformance !== undefined) {
         nameEditingPerformance.replaceWith(drawPerformanceListItem($(nameEditingPerformance).data()));
     }
 
     if (selectedPerformance !== undefined) {
-        selectedPerformance.attr('class', 'btn btn-info');
+        selectedPerformance.attr('class', 'btn btn-primary');
     }
 
     selectedPerformance = $(this);
-    selectedPerformance.attr('class', 'btn btn-info disabled');
+    selectedPerformance.attr('class', 'btn btn-primary disabled');
 
     drawSchedule(selectedPerformance.data());
 }
 
 function setNameEditable() {
-    if (selectedPerformance !== undefined) {
+    if (selectedPerformance !== undefined && editingname != true) {
+        editingname = true;
         var element = selectedPerformance;
 
         var li = $('<li><div class="row">' +
@@ -77,10 +80,13 @@ function setNameEditable() {
  * Saves the edited name.
  */
 function saveEditName() {
-    var performance = nameEditingPerformance.data();
-    performance.updateName($("#performance-name").val());
+    if (selectedPerformance !== undefined) {
+        editingname = false;
+        var performance = nameEditingPerformance.data();
+        performance.updateName($("#performance-name").val());
 
-    loadEditPerformance();
+        loadEditPerformance();
+    }
 }
 
 /**
@@ -165,9 +171,9 @@ function addScheduleRow(preset) {
     var count = $("<button type='button' class='btn btn-default schedule-list-number'></button>");
 
     if (preset['name'] !== '') {
-        var presetname = $("<button type='button' class='btn btn-info schedule-preset'>" + preset['name'] + "</button>");
+        var presetname = $("<button type='button' class='btn btn-primary schedule-preset'>" + preset['name'] + "</button>");
     } else {
-        var presetname = $("<button type='button' class='btn btn-info schedule-preset'>Preset " + preset['id'] + "</button>");
+        var presetname = $("<button type='button' class='btn btn-primary schedule-preset'>Preset " + preset['id'] + "</button>");
     }
 
     var buttonUp = $("<button type='button' class='btn btn-default glyphicon glyphicon glyphicon-menu-up'></button>");
@@ -279,7 +285,7 @@ function deleteFromSchedule() {
  * @returns {*|jQuery|HTMLElement} the row to draw.
  */
 function drawPreset(preset) {
-    var li = $("<li class='btn btn-info'></li>");
+    var li = $("<li class='btn btn-primary'></li>");
     var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
 
     if (preset['name'] !== '') {

@@ -4,14 +4,15 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.SimpleCamera;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class PresetDeletionHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, CameraBusyException, JSONException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     simpleCamera = mock(SimpleCamera.class);
@@ -62,7 +63,8 @@ public class PresetDeletionHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), 40,50,true, true, 0, "name");
+      preset = new IPCameraPreset(new ZoomPosition(0, 0, 100), new FocusValue(40, true), new IrisValue(50, true), 0);
+      preset.setName("name");
       preset.addTags(tags);
 
     } catch (CameraConnectionException | StreamNotAvailableException e) {

@@ -3,6 +3,8 @@ package com.benine.backend.preset.autopresetcreation;
 import org.json.simple.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Represents a location in the current camera view as a Cartesian coordinate.
@@ -67,6 +69,7 @@ public class Coordinate {
    */
   @Override
   public boolean equals(Object o) {
+    double delta = 0.1;
     if (this == o) {
       return true;
     }
@@ -76,10 +79,10 @@ public class Coordinate {
 
     Coordinate that = (Coordinate) o;
 
-    if (Double.compare(that.x, x) != 0) {
+    if (Math.abs(that.x - x) > delta) {
       return false;
     }
-    return Double.compare(that.y, y) == 0;
+    return Math.abs(that.y - y) < delta;
 
   }
 
@@ -108,7 +111,8 @@ public class Coordinate {
    * @return JSON representation of this object.
    */
   public JSONObject toJSON() {
-    DecimalFormat df = new DecimalFormat(".000");
+    NumberFormat df = DecimalFormat.getInstance(Locale.US);
+    df.setMaximumFractionDigits(3);
     JSONObject obj = new JSONObject();
     obj.put("x", Double.parseDouble(df.format(x)));
     obj.put("y", Double.parseDouble(df.format(y)));

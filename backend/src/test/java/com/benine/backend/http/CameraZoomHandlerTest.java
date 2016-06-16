@@ -1,9 +1,9 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     when(cameraController.getCameraById(42)).thenReturn(cam);
   }
@@ -56,6 +56,40 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(cam).zoom(2);
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testZoomCameraConnectionException() throws Exception {
+    setPath("/42/zoom");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("zoomType", "relative");
+    parameters.add("zoom", "2");
+    Exception exception = new CameraConnectionException("connection exception occured", 42);
+    doThrow(exception).when(cam).zoom(2);
+    setParameters(parameters);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testZoomCameraBusyException() throws Exception {
+    setPath("/42/zoom");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("zoomType", "relative");
+    parameters.add("zoom", "2");
+    Exception exception = new CameraBusyException("connection exception occured", 42);
+    doThrow(exception).when(cam).zoom(2);
+    setParameters(parameters);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    String response = "{\"succes\":\"false\"}";
+    verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
 

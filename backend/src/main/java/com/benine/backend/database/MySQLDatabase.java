@@ -6,6 +6,8 @@ import com.benine.backend.ServerController;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.performance.PresetQueue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
@@ -72,8 +74,8 @@ public class MySQLDatabase implements Database {
     try {
       String sql = "INSERT INTO tagPreset VALUES(?,?)";
       statement = connection.prepareStatement(sql);
-      statement.setInt(1, preset.getId());
-      statement.setString(2, tag);
+      statement.setString(1, tag);
+      statement.setInt(2, preset.getId());
       statement.executeUpdate();
     } catch (Exception e) {
       logger.log("Tag couldn't be added to preset.", LogEvent.Type.CRITICAL);
@@ -224,22 +226,20 @@ public class MySQLDatabase implements Database {
   public void addPreset(Preset preset) {
     PreparedStatement statement = null;
     try {
-      String sql = createAddSqlQuery(preset);
-      statement = connection.prepareStatement(sql);
-      if (preset instanceof SimplePreset) {
-        statement.setInt(1, preset.getId());
-        statement.setString(2, preset.getImage());
-        statement.setInt(3, preset.getCameraId());
-        statement.setString(4, preset.getName());
-      } else {
-        setIpPreset((IPCameraPreset) preset, statement);
-      }
-      statement.executeUpdate();
-      statement.close();
-      sql = "INSERT INTO preset VALUES(?)";
+      String sql = "INSERT INTO preset VALUES(?,?,?,?)";
       statement = connection.prepareStatement(sql);
       statement.setInt(1, preset.getId());
+      statement.setString(2, preset.getImage());
+      statement.setInt(3, preset.getCameraId());
+      statement.setString(4, preset.getName());
       statement.executeUpdate();
+      statement.close();
+      if (preset instanceof IPCameraPreset) {
+        sql = "INSERT INTO IPpreset VALUES(?,?,?,?,?,?,?,?,?,?)";
+        statement = connection.prepareStatement(sql);
+        setIpPreset((IPCameraPreset) preset, statement);
+        statement.executeUpdate();
+      }
       for (String tag : preset.getTags()) {
         addTagToPreset(tag, preset);
       }
@@ -251,46 +251,30 @@ public class MySQLDatabase implements Database {
   }
 
   /**
-   * Create an add preset query for the instance of preset.
-   * @param preset The preset to create the add query for
-   * @return the query
-   */
-  private String createAddSqlQuery(Preset preset) {
-    if (preset instanceof SimplePreset) {
-      return "INSERT INTO simplepreset VALUES(?,?,?,?)";
-    } else {
-      return "INSERT INTO IPpreset VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    }
-  }
-
-  /**
    * Sets the right parameters for an IPCameraPreset.
    * @param preset The IPPreset
    * @param statement The statement to add the parameters
    */
   private void setIpPreset(IPCameraPreset preset, PreparedStatement statement) {
     int auto = 0;
-    if (preset.isAutofocus()) {
+    if (preset.getFocus().isAutofocus()) {
       auto = 1;
     }
     int autoir = 0;
-    if (preset.isAutoiris()) {
+    if (preset.getIris().isAutoiris()) {
       autoir = 1;
     }
     try {
-      statement.setInt(1, preset.getId());
-      statement.setDouble(2, preset.getPosition().getPan());
-      statement.setDouble(3, preset.getPosition().getTilt());
-      statement.setDouble(4, preset.getPosition().getZoom());
-      statement.setDouble(5, preset.getFocus());
-      statement.setDouble(6, preset.getIris());
-      statement.setInt(7, auto);
-      statement.setDouble(8, preset.getPanspeed());
-      statement.setDouble(9, preset.getTiltspeed());
-      statement.setInt(10, autoir);
-      statement.setString(11, preset.getImage());
-      statement.setInt(12, preset.getCameraId());
-      statement.setString(13, preset.getName());
+      statement.setDouble(1, preset.getPosition().getPan());
+      statement.setDouble(2, preset.getPosition().getTilt());
+      statement.setDouble(3, preset.getPosition().getZoom());
+      statement.setDouble(4, preset.getFocus().getFocus());
+      statement.setDouble(5, preset.getIris().getIris());
+      statement.setInt(6, auto);
+      statement.setDouble(7, preset.getPanspeed());
+      statement.setDouble(8, preset.getTiltspeed());
+      statement.setInt(9, autoir);
+      statement.setInt(10, preset.getId());
     } catch (SQLException e) {
       logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     }
@@ -302,7 +286,7 @@ public class MySQLDatabase implements Database {
     try {
       if (preset != null) {
         deleteTagsFromPreset(preset);
-        String sql = createDeleteSQL(preset);
+        String sql = "DELETE FROM IPpreset WHERE preset_ID = ?";
         statement = connection.prepareStatement(sql);
         statement.setInt(1, preset.getId());
         statement.executeUpdate();
@@ -319,19 +303,6 @@ public class MySQLDatabase implements Database {
     }
   }
 
-  /**
-   * Create a delete preset query for the instance of preset.
-   * @param preset The preset to be deleted
-   * @return the query
-   */
-  private String createDeleteSQL(Preset preset) {
-    if (preset instanceof SimplePreset) {
-      return "DELETE FROM simplepreset WHERE ID = ?";
-    } else {
-      return "DELETE FROM IPpreset WHERE ID = ?";
-    }
-  }
-
   @Override
   public void updatePreset(Preset preset) {
     deletePreset(preset);
@@ -341,41 +312,34 @@ public class MySQLDatabase implements Database {
   @Override
   public ArrayList<Preset> getAllPresets() {
     ArrayList<Preset> list = new ArrayList<Preset>();
-    list.addAll(getAllPresetsSQL("SELECT id, pan, tilt, zoom, focus,"
-        + " iris, autofocus, panspeed, tiltspeed, autoiris, image, camera_ID, name"
-        + " FROM IPpreset"));
-    list.addAll(getAllPresetsSQL("SELECT id, image, camera_ID, name"
-        + " FROM simplepreset"));
-    for (Preset preset : list) {
-      preset.addTags(getTagsFromPreset(preset));
-    }
-    return list;
-  }
-
-  /**
-   * Method to get all presets based on a SQL statement
-   *
-   * @param sql statement to retrieve the presets.
-   * @return Presets from the database.
-   */
-  private ArrayList<Preset> getAllPresetsSQL(String sql) {
-    ArrayList<Preset> list = new ArrayList<Preset>();
     PreparedStatement statement = null;
     ResultSet resultset = null;
     try {
+      String sql = "SELECT id, image, camera_ID, name FROM preset WHERE NOT EXISTS "
+          + "(SELECT 1 FROM IPpreset WHERE preset.ID = IPpreset.preset_ID)";
       statement = connection.prepareStatement(sql);
       resultset = statement.executeQuery();
       while (resultset.next()) {
-        if (sql.contains("simplepreset")) {
-          list.add(getSimplePresetsFromResultSet(resultset));
-        } else {
-          list.add(getIPCameraPresetFromResultSet(resultset));
-        }
+        list.add(getSimplePresetsFromResultSet(resultset));
+      }
+      resultset.close();
+      statement.close();
+      sql = "SELECT preset.id, IPpreset.pan, IPpreset.tilt, IPpreset.zoom, IPpreset.focus, "
+          + "IPpreset.iris, IPpreset.autofocus, IPpreset.panspeed, IPpreset.tiltspeed, "
+          + "IPpreset.autoiris, preset.image, preset.camera_ID, preset.name "
+          + "FROM preset INNER JOIN IPpreset ON preset.ID = IPpreset.preset_ID";
+      statement = connection.prepareStatement(sql);
+      resultset = statement.executeQuery();
+      while (resultset.next()) {
+        list.add(getIPCameraPresetFromResultSet(resultset));
       }
     } catch (Exception e) {
       logger.log("Presets could not be gotten.", LogEvent.Type.CRITICAL);
     } finally {
       close(statement, resultset);
+    }
+    for (Preset preset : list) {
+      preset.addTags(getTagsFromPreset(preset));
     }
     return list;
   }
@@ -523,8 +487,7 @@ public class MySQLDatabase implements Database {
 
   @Override
   public void deleteCamera(int cameraID) {
-    deleteCameraSQL("IPpreset", "camera_ID", cameraID);
-    deleteCameraSQL("simplepreset", "camera_ID", cameraID);
+    deleteCameraSQL("preset", "camera_ID", cameraID);
     deleteCameraSQL("camera", "ID", cameraID);
   }
 
@@ -623,17 +586,17 @@ public class MySQLDatabase implements Database {
     try {
       ZoomPosition pos = new ZoomPosition(resultset.getInt("pan"),
               resultset.getInt("tilt"), resultset.getInt("zoom"));
-      int focus = resultset.getInt("focus");
-      int iris = resultset.getInt("iris");
-      boolean autoFocus = resultset.getInt("autofocus") == 1;
+      FocusValue focus = new FocusValue(resultset.getInt("focus"),
+                                    resultset.getInt("autofocus") == 1);
+      IrisValue iris = new IrisValue(resultset.getInt("iris"),
+                                      resultset.getInt("autoiris") == 1);
       int panspeed = resultset.getInt("panspeed");
       int tiltspeed = resultset.getInt("tiltspeed");
-      boolean autoIris = resultset.getInt("autoiris") == 1;
       int cameraId = resultset.getInt("camera_ID");
       int id = resultset.getInt("ID");
       String name = resultset.getString("name");
-      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris,
-              autoFocus, autoIris, cameraId, name);
+      IPCameraPreset preset = new IPCameraPreset(pos, focus, iris, cameraId);
+      preset.setName(name);
       preset.setId(id);
       preset.setPanspeed(panspeed);
       preset.setTiltspeed(tiltspeed);
@@ -656,7 +619,8 @@ public class MySQLDatabase implements Database {
       String image = resultset.getString("image");
       int cameraId = resultset.getInt("camera_ID");
       String name = resultset.getString("name");
-      SimplePreset preset = new SimplePreset(cameraId, name);
+      SimplePreset preset = new SimplePreset(cameraId);
+      preset.setName(name);
       int id = resultset.getInt("id");
       preset.setId(id);
       preset.setImage(image);

@@ -20,7 +20,7 @@ public class LogWriter {
 
   private long maxLogSize = 1000000;
 
-  private int minLogLevel = 4;
+  private volatile int minLogLevel = 4;
 
   private String logLocation;
 
@@ -29,6 +29,7 @@ public class LogWriter {
   private volatile PrintWriter writer;
 
   private volatile ArrayList<LogEvent> buffer = new ArrayList<LogEvent>();
+  
 
   /**
    * Creates a new LogWriter, should be deleted by calling the destoy method.
@@ -70,7 +71,7 @@ public class LogWriter {
    * Writes LogEvent to file.
    * @param event event to write.
    */
-  public void write(LogEvent event) {
+  public synchronized void write(LogEvent event) {
     try {
       if (event.getType().getValue() > minLogLevel) {
         return;
@@ -105,7 +106,7 @@ public class LogWriter {
   /**
    * Flushes the buffer of this logwriter.
    */
-  public void flush() {
+  public synchronized void flush() {
     while (!buffer.isEmpty()) {
       hardWrite(buffer.get(0));
       buffer.remove(0);
@@ -141,6 +142,9 @@ public class LogWriter {
    * @param event event to write.
    */
   private synchronized void hardWrite(LogEvent event) {
+    if ( event == null) {
+      return;
+    }
     writer.write(event.toString() + "\n");
     logSize++;
     // Every 100 log items check log file size

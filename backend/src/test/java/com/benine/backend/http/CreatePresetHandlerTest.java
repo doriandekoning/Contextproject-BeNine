@@ -1,14 +1,15 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.*;
+import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.camera.ipcameracontrol.IrisValue;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
 import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +40,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
   }
 
   @Before
-  public void initialize() throws IOException, JSONException, CameraBusyException {
+  public void initialize() throws IOException, CameraBusyException {
     super.initialize();
     ipcamera = mock(IPCamera.class);
     simpleCamera = mock(SimpleCamera.class);
@@ -63,9 +65,10 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
       when(ipcamera.getId()).thenReturn(1);
       when(simpleCamera.getId()).thenReturn(2);
 
-      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), 33,50,true,true, 0, "name");
+      preset = new IPCameraPreset(new ZoomPosition(0,0, 100), new FocusValue(33, true), new IrisValue(50, true), 0);
+      preset.setName("name");
       preset.addTags(tags);
-
+      when(ipcamera.createPreset(tags, "test")).thenReturn((IPCameraPreset) preset);
 
     } catch (CameraConnectionException e) {
       e.printStackTrace();
@@ -82,10 +85,26 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "1");
+    parameters.add("name", "test");
     setParameters(parameters);
     when(presetController.getPresetById(0)).thenReturn(preset);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testCameraIDTags() throws Exception{
+    setPath("/presets/createpreset");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("name", "test");
+    parameters.add("tags", "violin,piano");
+    setParameters(parameters);
+    when(presetController.getPresetById(0)).thenReturn(preset);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+    verify(presetController).addPreset(preset);
     verify(requestMock).setHandled(true);
   }
   
@@ -95,6 +114,7 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "2");
+    parameters.add("name", "test");
     setParameters(parameters);
     when(presetController.getPresetById(0)).thenReturn(preset);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
@@ -108,8 +128,78 @@ public class CreatePresetHandlerTest extends RequestHandlerTest {
 
     MultiMap<String> parameters = new MultiMap<>();
     parameters.add("camera", "3");
+    parameters.add("name", "test");
     setParameters(parameters);
 
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testNoName() throws Exception{
+    setPath("/presets/createpreset");
+
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "3");
+    setParameters(parameters);
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testNoCamera() throws Exception{
+    setPath("/presets/createpreset");
+
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testDatabaseException() throws Exception{
+    setPath("/presets/createpreset");
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("name", "test");
+    setParameters(parameters);
+    Exception exception = new SQLException();
+    when(presetController.addPreset(any())).thenThrow(exception);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testCameraConnectionException() throws Exception{
+    setPath("/presets/createpreset");
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("name", "test");
+    setParameters(parameters);
+    Exception exception = new CameraConnectionException("camera can not connect", 1);
+    when(ipcamera.createPreset(any(), any())).thenThrow(exception);
+    getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
+
+    verify(out).write("{\"succes\":\"false\"}");
+    verify(requestMock).setHandled(true);
+  }
+  
+  @Test
+  public void testCameraBusyException() throws Exception{
+    setPath("/presets/createpreset");
+    MultiMap<String> parameters = new MultiMap<>();
+    parameters.add("camera", "1");
+    parameters.add("name", "test");
+    setParameters(parameters);
+    Exception exception = new CameraBusyException("camera can not connect", 1);
+    when(ipcamera.createPreset(any(), any())).thenThrow(exception);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     verify(out).write("{\"succes\":\"false\"}");

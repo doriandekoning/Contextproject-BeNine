@@ -134,7 +134,7 @@ public class ServerController {
     try {
       return ConfigReader.readConfig(configPath);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.log("No config specified, use default", e);
     }
     return null;
   }

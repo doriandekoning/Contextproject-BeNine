@@ -16,20 +16,18 @@ public class SimplePreset extends Preset {
   /**
    * Create a simple preset
    * @param cameraId of the camera this preset belongs to.
-   * @param name The name of the preset
    */
-  public SimplePreset(int cameraId, String name) {
-    super(cameraId, name);
+  public SimplePreset(int cameraId) {
+    super(cameraId);
   }
   
   /**
    * Create a simple preset
    * @param cameraId of the camera this preset belongs to.
    * @param tags of this preset
-   * @param name The name of the preset
    */
-  public SimplePreset(int cameraId, Set<String> tags, String name) {
-    this(cameraId, name);
+  public SimplePreset(int cameraId, Set<String> tags) {
+    this(cameraId);
     super.addTags(tags);
   }
 
