@@ -1,23 +1,16 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
-import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
-import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
+
 
 
 public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {

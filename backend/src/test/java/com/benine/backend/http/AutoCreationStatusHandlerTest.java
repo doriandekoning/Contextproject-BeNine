@@ -34,7 +34,6 @@ public class AutoCreationStatusHandlerTest extends AutoPresetHandlerTest {
     verify(out).write("{\"succes\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
-  
 
   @Test
   public void testCreatorNull() throws Exception {
