@@ -61,7 +61,6 @@ function switchGenerateTab() {
  * Prepares the final tab.
  */
 function switchFinalTab(generatedPresets) {
-  generatedPresets = {"presetIDs": [1, 2]};
   var presetIDs = generatedPresets['presetIDs'];
 
   for (key in presetIDs) {
@@ -204,6 +203,9 @@ $('.button-checkbox').on('click', function () {
 
 });
 
+/**
+ * Checks a checkbox button.
+ */
 function check() {
   var checkbox = $(this).find('input:checkbox');
   var state = checkbox.is(':checked');
@@ -212,6 +214,11 @@ function check() {
   updateState($(this), !state);
 }
 
+/**
+ * Updates a checkbox state.
+ * @param button  jQuery button
+ * @param checked Value representing the current button state.
+ */
 function updateState(button, checked) {
   var checkicon = button.find('.checkicon');
 
@@ -224,6 +231,10 @@ function updateState(button, checked) {
   }
 }
 
+/**
+ * Draws a preset to the list of generated presets.
+ * @param preset
+ */
 function drawGeneratedPreset(preset) {
   var list = $('#autopreset-generated');
   var li = $('<li></li>');
@@ -238,6 +249,21 @@ function drawGeneratedPreset(preset) {
   button.click(check);
   li.append(button);
   list.append(li);
+}
+
+/**
+ * Deletes unselected presets.
+ */
+function deleteUnselectedPresets() {
+  $('#autopreset-generated').children().each(function() {
+    var checkbox = $(this).find('input');
+    var presetid = checkbox.attr('presetid');
+
+    if (!checkbox.is(':checked')) {
+      findPresetOnID(presetid).delete();
+    };
+  });
+  $('#autopreset-generated').empty();
 }
 
 
