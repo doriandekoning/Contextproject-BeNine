@@ -61,11 +61,20 @@ function switchGenerateTab() {
  * Prepares the final tab.
  */
 function switchFinalTab(generatedPresets) {
+  generatedPresets = {"presetIDs": [1, 2]};
+  var presetIDs = generatedPresets['presetIDs'];
+
+  for (key in presetIDs) {
+    var preset = findPresetOnID(presetIDs[key]);
+    drawGeneratedPreset(preset);
+  }
+
   switchTab(3);
   $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
   $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
-
 }
+
+
 
 /**
  * Allows tab switching.
@@ -215,16 +224,16 @@ function updateState(button, checked) {
   }
 }
 
-function drawGeneratedPreset() {
+function drawGeneratedPreset(preset) {
   var list = $('#autopreset-generated');
   var li = $('<li></li>');
   var button = $('<div class="button-checkbox btn btn-primary"></div>');
 
   button
-      .append('<img class="img-rounded" src="/api/backend/static/presets/preset_32.jpg">')
-      .append('<span>Text</span>')
+      .append('<img class="img-rounded" src="api/backend' + preset['image'] + '">')
+      .append('<span>' + preset['name'] + '</span>')
       .append('<span class="checkicon glyphicon glyphicon-unchecked"></span>')
-      .append('<input type="checkbox" class="hidden" />');
+      .append('<input presetid="' + preset['id'] + '" type="checkbox" class="hidden" />');
 
   button.click(check);
   li.append(button);
