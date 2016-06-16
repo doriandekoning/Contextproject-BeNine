@@ -1,5 +1,6 @@
 body {
     height: 100vh;
+    min-height: 700px;
     background-color: #333333;
 }
 
@@ -9,7 +10,7 @@ img {
 }
 
 /* Elements requiring a reset for positioning */
-.navbar, .row, .col-xs-3, .col-xs-6{
+.navbar, .row, .col-xs-3, .col-xs-6 {
     padding: 0;
     margin: 0;
     border: 0;
@@ -78,47 +79,48 @@ nav img {
 #control_area input[type=range] {
     width: 200px;
     height: 55px;
-   	top:250px;
+    top: 250px;
 }
 
 .settings-modal input[type=range] {
     width: 150px;
     height: 25px;
-	top: 150px;
+    top: 150px;
 }
 
 .vertical-slider {
-	position: absolute;
-	z-index: 0;
-	display: block;
+    position: absolute;
+    z-index: 0;
+    display: block;
     -webkit-appearance: none;
     background-color: #848484;
 
-    -webkit-transform:rotate(90deg);
+    -webkit-transform: rotate(90deg);
     -webkit-transform-origin: 0 0;
-    -moz-transform:rotate(90deg);
+    -moz-transform: rotate(90deg);
     -moz-transform-origin: 0 0;
-    -o-transform:rotate(90deg);
+    -o-transform: rotate(90deg);
     -o-transform-origin: 0 0;
-    -ms-transform:rotate(90deg);
+    -ms-transform: rotate(90deg);
     -ms-transform-origin: 0 0;
 
-    transform:rotate(-90deg);
+    transform: rotate(-90deg);
     transform-origin: 0 0;
 
     border-radius: 8px;
 }
+
 .auto-presets-modal input[type=range] {
-  margin-right: 15px;
+    margin-right: 15px;
 }
 
 .horizontal-slider {
-	z-index: 0;
-  display: block;
+    z-index: 0;
+    display: block;
     -webkit-appearance: none;
-  background-color: #848484;
+    background-color: #848484;
 
-  border-radius: 8px;
+    border-radius: 8px;
 }
 
 #control_area input[type="range"]::-webkit-slider-thumb {
@@ -134,43 +136,43 @@ nav img {
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: #585858;
-	border-radius: 8px;
-  width: 15px;
-  height: 15px;
+    border-radius: 8px;
+    width: 15px;
+    height: 15px;
 }
 
 input[type="range"]::-ms-tooltip {
-	visibility: hidden;
+    visibility: hidden;
 }
 
 .settings-modal .sense_block {
-	width: 110px;
-	height: 200px;
-	text-align: center;
+    width: 110px;
+    height: 200px;
+    text-align: center;
 }
 
 .settings-modal .slider {
-	width: 25px;
+    width: 25px;
     height: 150px;
-	margin-top: 25px;
-	left: 50%;
+    margin-top: 25px;
+    left: 50%;
 }
 
 .settings-modal .center {
-	left:50%;
-	text-align: center;
+    left: 50%;
+    text-align: center;
 }
 
 #control_area .slider {
     width: 55px;
     height: 290px;
     margin-left: 20px;
-    float:left;
+    float: left;
     position: relative;
 }
 
 input[type=range]:focus {
-	outline: none;
+    outline: none;
 }
 
 .slider .slider-label {
@@ -182,7 +184,7 @@ input[type=range]:focus {
 }
 
 .btn:focus {
-	outline: none;
+    outline: none;
 }
 
 /* modals */
@@ -191,35 +193,30 @@ input[type=range]:focus {
 }
 
 #preset_create_div .bootstrap-tagsinput {
-	position: absolute;
-	left: 10px;
-	font-size: 16px;
+    position: absolute;
+    left: 10px;
+    font-size: 16px;
 }
 
 #preset_edit_div .bootstrap-tagsinput {
-	position: absolute;
-	left: 10px;
-	font-size: 16px;
+    position: absolute;
+    left: 10px;
+    font-size: 16px;
 }
 
 .tt-menu {
-	text-align: left;
-	max-height: 200px;
-	overflow-y: auto;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
 }
-
-#previewCanvas {
-  width: 100%;
-}
-
 /* Top block consisting of the camera views, and the editing camera view.*/
 #top_area {
-	height: 28vw;
+    height: 28vw;
     max-height: 300px;
-	overflow: hidden;
+    overflow: hidden;
 }
 
-#top_area.live-view{
+#top_area.live-view {
     height: 175px;
     overflow: hidden;
 }
@@ -270,7 +267,7 @@ input[type=range]:focus {
 
 /* Camera block carousel */
 #current_camera, #carousel, #camera_area, #camera_area .carousel-inner, #camera_area .carousel-inner, #camera_area img, #camera_area .col-xs-6, #camera_area .row, #camera_area .item {
-	border: 0;
+    border: 0;
     padding: 0;
     margin: 0;
     height: 100%;
@@ -282,7 +279,7 @@ input[type=range]:focus {
     position: absolute;
 }
 
-#camera_area .camera_title span, #current_camera .camera_title span  {
+#camera_area .camera_title span, #current_camera .camera_title span {
     height: 20px;
     color: white;
     opacity: 0.5;
@@ -314,11 +311,11 @@ input[type=range]:focus {
     position: relative;
     margin: 0;
     padding: 0;
-	width: 75%;
+    width: 75%;
     -webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	background-color: white;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: white;
 }
 
 .tagsearch-container {
@@ -334,7 +331,7 @@ input[type=range]:focus {
 }
 
 #tagsearch .twitter-typeahead {
-	width: 100%;
+    width: 100%;
 }
 
 #tagsearch i {
@@ -415,34 +412,29 @@ input[type=range]:focus {
     position: relative;
 }
 
-.modal-body {
-    position: relative;
-    height: 300px;
-}
-
 #performance_edit_div .modal-body {
     height: 500px;
 }
 
 .preset-overlay {
     position: relative;
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .preset-overlay::before {
-	font-family: "Glyphicons Halflings";
-	content:"\270f";
-	display: block;
-	font-size: 3em;
+    font-family: "Glyphicons Halflings";
+    content: "\270f";
+    display: block;
+    font-size: 3em;
     color: #333333;
     text-align: center;
-	position: absolute;
+    position: absolute;
     padding-top: 8px;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 20px;
-    background: rgba(78,78,78, 0.6);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    background: rgba(78, 78, 78, 0.6);
 }
 
 .fill-tags {
@@ -486,11 +478,11 @@ input[type=range]:focus {
 }
 
 #select-left::before {
-    content:"\e069";
+    content: "\e069";
 }
 
 #select-right::before {
-    content:"\e077";
+    content: "\e077";
 }
 
 #select-upnext {
@@ -538,6 +530,7 @@ input[type=range]:focus {
     background-color: #666666;
     color: #333333;
 }
+
 .queue_table_title .table thead th, .queue_table_title .table thead td {
     border-bottom: 2px solid #666666;
 
@@ -596,7 +589,6 @@ input[type=range]:focus {
     height: 440px;
     overflow: scroll;
 }
-
 
 .performance-list {
     list-style: none;
@@ -686,32 +678,54 @@ input[type=range]:focus {
     background-color: rgba(92, 184, 92, 0.75);
 }
 
-#auto_preset_name {
-  width: 80%;
+.autopreset-left-column, .autopreset-right-column, .autopreset-canvas-row {
+    width: 100%;
+    margin-top: 15px;
+    margin-left: 5px;
 }
 
-#autopreset-left-column {
-  padding: 15px;
+.autopreset-left-column .bootstrap-tagsinput {
+    width: 100%;
 }
 
 .label-auto-preset-input {
-  width: 45%;
+    width: 45%;
 }
 
 #auto-preset-creation-preview-image {
-  z-index:1;
-  position:absolute;top:0px;
-  left:0px;
-  height:200px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+}
+
+#auto-preset-creation-live-image {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    width: 60%;
+    height: auto;
+}
+
+#auto_presets_div .progress {
+    width: 80%;
 }
 
 #previewCanvas {
-  position:absolute;
-  top:0px;
-  left:0px;
-  z-index:20;
-  height:200px;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0 15px 0 15px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
 }
+
 .btn-primary {
     background-color: #4d656f;
     border-color: #475f6a;
@@ -727,11 +741,51 @@ input[type=range]:focus {
     border-color: #465c65;
 }
 
-.btn-primary:focus {
-    background-color: #3D525B;
-    border-color: #4d656f;
+.btn-primary:focus, .btn-primary:active {
+    background-color: #3D525B !important;
+    border-color: #3D525B !important;
+}
+
+.btn-primary.active, .btn-primary:active {
+    background-color: #30414a !important;
+    border-color: #4d656f !important;
 }
 
 .label-info, .progress-bar {
     background-color: #4d656f;
+}
+
+#autopreset-generated {
+    margin: 15px 0 0 0;
+    padding: 0;
+    list-style-type: none;
+    height: 300px;
+    overflow: scroll;
+}
+
+#autopreset-generated li {
+    width: 33%;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+#autopreset-generated .btn {
+    margin-bottom: 15px;
+    width: 95%;
+    position: relative;
+    text-align: left;
+}
+
+#autopreset-generated img {
+    width: 125px;
+    height: auto;
+    margin-right: 10px;
+    left: 0;
+}
+
+#autopreset-generated .checkicon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

@@ -296,4 +296,15 @@ public class IpcameraTest extends BasicCameraTest {
     return new IPCamera("test", mock(CameraController.class));
   }
 
+  @Test
+  public void testGetSetAspectRatio() {
+    camera.setAspectRatio(1.2);
+    Assert.assertEquals(1.2, camera.getAspectRatio(), 0.05);
+  }
+
+  @Test
+  public void testDefaultAspectRatio() {
+    Assert.assertEquals(16.0/9, camera.getAspectRatio(), 0.05);
+  }
+
 }

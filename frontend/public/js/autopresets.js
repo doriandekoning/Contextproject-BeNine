@@ -1,23 +1,100 @@
-var columns = 3;
-var levels = 3;
-var rows = 3;
-var maxRows = 5;
-var maxColumns = 5;
+var columns = 2;
+var levels = 2;
+var rows = 2;
+var maxRows = 3;
+var maxColumns = 3;
 var maxLevels = 3;
 
+/**
+ * Disables default tab click behavior.
+ */
+$(".auto-presets-modal .disabled").click(function (e) {
+  e.preventDefault();
+  return false;
+});
 
 /**
 * Executed when the modal for auto preset creation loads. Adds the mjpeg stream to the image behind the canvas.
 */
 $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
+  resetModal();
+
+  var image = $("#auto-preset-creation-preview-image");
+  var liveimage = $("#auto-preset-creation-live-image");
+
+  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
+  image.attr('src', streamURL);
+  liveimage.attr('src', streamURL);
+
+  showSubViews();
+});
+
+/**
+ * Resets the modal.
+ */
+function resetModal() {
+  switchTab(1);
   $("#columns-amount").val(columns);
   $("#rows-amount").val(rows);
   $("#levels-amount").val(levels);
-  var image = $("#auto-preset-creation-preview-image");
-  var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height='+image.height() + '&width='+image.width();
-  $("#auto-preset-creation-preview-image").attr('src', streamURL);
-  showSubViews();
-});
+
+  $('#auto_presets_div .close').prop('disabled', false);
+  $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', false);
+  $('#auto_presets_div #autopreset_startbutton').prop('disabled', false);
+
+  $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn');
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
+}
+
+/**
+ * Prepares the generating tab showing the progress bar.
+ */
+function switchGenerateTab() {
+  switchTab(2);
+
+  $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn hidden');
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
+  $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', true);
+}
+
+/**
+ * Prepares the final tab.
+ */
+function switchFinalTab(generatedPresets) {
+  var presetIDs = generatedPresets['presetIDs'];
+
+  for (key in presetIDs) {
+    var preset = findPresetOnID(presetIDs[key]);
+    drawGeneratedPreset(preset);
+  }
+
+  switchTab(3);
+  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
+  $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
+}
+
+
+
+/**
+ * Allows tab switching.
+ * @param stepnumber The tab to switch to.
+ */
+function switchTab(stepnumber) {
+  $('#auto_presets_div .close').prop('disabled', true);
+  $('#auto_presets_div #autopreset_savebutton').prop('disabled', true);
+
+  var tabs = $('#autopreset-tabs');
+  tabs.children().attr('class', 'disabled');
+  tabs.children().click(function (e) {
+    e.preventDefault();
+    return false;
+  });
+
+  var newTab = tabs.find('a[href="#autopreset_step' + stepnumber + '"]');
+  newTab.attr('class', 'active');
+  newTab.tab('show');
+
+}
 
 /**
 * Executed when the auto create presets button is pressed.
@@ -25,13 +102,16 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
 */
 function autoCreatePresets() {
   var name = $('#auto_preset_name').val();
-	var presetTag = $('#auto_preset_tags').val();
+  var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
-    var done = false;
+    // Switch to generating view.
+    switchGenerateTab();
+
     // Update statusbar ever 2sec (2000ms)
     var interval = setInterval(updateProgressbar, 2 * 1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       clearInterval(interval);
+      switchFinalTab(data);
     });
 
   }
@@ -90,7 +170,6 @@ function increaseLevelAmount(amount) {
 * Draws the subview rectangles on the canvas with the rectangles provided by the backend.
 */
 function showSubViews() {
-  var offset = 1;
   var canvas = document.getElementById('previewCanvas');
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
@@ -98,7 +177,6 @@ function showSubViews() {
     context.lineWidth=0.5;
     $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
       $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
-        var doneJSON = JSON.parse(doneData);
         var done = 0;
         context.lineWidth = 2;
         context.strokeStyle = "#00FF00";
@@ -117,9 +195,8 @@ function showSubViews() {
           var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
           context.strokeRect(x, y, width, height);
         }
-       });     });
-  var imageWidth = canvas.width - (offset * 2);
-  var imageHeight = canvas.height - (offset * 2);
+       });
+    });
 }
 
 /**
@@ -129,3 +206,76 @@ function clearCanvas(canvas) {
   var context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+/**
+ * Creates toggleable checkbox buttons.
+ */
+$('.button-checkbox').on('click', function () {
+  var checkbox = $(this).find('input:checkbox')
+
+});
+
+/**
+ * Checks a checkbox button.
+ */
+function check() {
+  var checkbox = $(this).find('input:checkbox');
+  var state = checkbox.is(':checked');
+
+  checkbox.prop('checked', !state);
+  updateState($(this), !state);
+}
+
+/**
+ * Updates a checkbox state.
+ * @param button  jQuery button
+ * @param checked Value representing the current button state.
+ */
+function updateState(button, checked) {
+  var checkicon = button.find('.checkicon');
+
+  if (checked) {
+    button.attr('class', 'button-checkbox btn btn-primary active');
+    checkicon.attr('class', 'checkicon glyphicon glyphicon-check');
+  } else {
+    button.attr('class', 'button-checkbox btn btn-primary');
+    checkicon.attr('class', 'checkicon glyphicon glyphicon-unchecked');
+  }
+}
+
+/**
+ * Draws a preset to the list of generated presets.
+ * @param preset
+ */
+function drawGeneratedPreset(preset) {
+  var list = $('#autopreset-generated');
+  var li = $('<li></li>');
+  var button = $('<div class="button-checkbox btn btn-primary"></div>');
+
+  button
+      .append('<img class="img-rounded" src="api/backend' + preset['image'] + '">')
+      .append('<span>' + preset['name'] + '</span>')
+      .append('<span class="checkicon glyphicon glyphicon-unchecked"></span>')
+      .append('<input presetid="' + preset['id'] + '" type="checkbox" class="hidden" />');
+
+  button.click(check);
+  li.append(button);
+  list.append(li);
+}
+
+/**
+ * Deletes unselected presets.
+ */
+function deleteUnselectedPresets() {
+  $('#autopreset-generated').children().each(function() {
+    var checkbox = $(this).find('input');
+    var presetid = checkbox.attr('presetid');
+
+    if (!checkbox.is(':checked')) {
+      findPresetOnID(presetid).delete();
+    };
+  });
+  $('#autopreset-generated').empty();
+}
+
+
