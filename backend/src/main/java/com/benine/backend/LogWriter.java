@@ -20,7 +20,7 @@ public class LogWriter {
 
   private long maxLogSize = 1000000;
 
-  private int minLogLevel = 4;
+  private volatile int minLogLevel = 4;
 
   private String logLocation;
 

@@ -1,6 +1,5 @@
 package com.benine.backend.preset.autopresetcreation;
 
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
@@ -27,7 +26,6 @@ public abstract class AutoPresetCreator {
   private static long timeout = 5000;
   private PresetController presetController;
   private int generatedPresets;
-  private int totalAmountPresets;
   
   /**
    * Creates a new AutoPresetCreator object.
