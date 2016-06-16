@@ -276,7 +276,7 @@ public class MySQLDatabase implements Database {
       statement.setInt(9, autoir);
       statement.setInt(10, preset.getId());
     } catch (SQLException e) {
-      logger.log("Presets could not be added IP.", LogEvent.Type.CRITICAL);
+      logger.log("Presets could not be added.", LogEvent.Type.CRITICAL);
     }
   }
 
