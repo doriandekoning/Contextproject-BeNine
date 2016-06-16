@@ -6,6 +6,8 @@ import com.benine.backend.LogEvent;
 import com.benine.backend.Logger;
 import com.benine.backend.ServerController;
 import com.benine.backend.camera.CameraController;
+import com.benine.backend.http.camerahandlers.CameraInfoHandler;
+import com.benine.backend.http.presethandlers.PresetsHandler;
 import com.benine.backend.http.presetqueue.PresetQueueHandler;
 import com.benine.backend.performance.PresetQueueController;
 import com.benine.backend.preset.PresetController;
@@ -102,7 +104,7 @@ public class HTTPServer {
    * Returns the ServerController logger.
    * @return  A Logger object.
    */
-  protected Logger getLogger() {
+  public Logger getLogger() {
     return logger;
   }
 
@@ -110,7 +112,7 @@ public class HTTPServer {
    * Returns the cameraController
    * @return  A cameracontroller object.
    */
-  protected CameraController getCameraController() {
+  public CameraController getCameraController() {
     return cameraController;
   }
   
@@ -118,7 +120,7 @@ public class HTTPServer {
    * Returns the streamController to get the stream
    * @return stream Controller.
    */
-  protected StreamController getStreamController() {
+  public StreamController getStreamController() {
     return streamController;
   }
 
@@ -126,7 +128,7 @@ public class HTTPServer {
    * Returns the presetController.
    * @return presetController to change the presets
    */
-  protected PresetController getPresetController() {
+  public PresetController getPresetController() {
     return presetController;
   }
   
@@ -134,7 +136,7 @@ public class HTTPServer {
    * Returns the presetQueueController.
    * @return presetQueueController to change the presets
    */
-  protected PresetQueueController getPresetQueueController() {
+  public PresetQueueController getPresetQueueController() {
     return presetQueueController;
   }
 

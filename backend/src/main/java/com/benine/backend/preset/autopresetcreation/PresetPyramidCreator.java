@@ -68,7 +68,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   public int getTotalAmountPresets() {
     int total = 0;
     for (int i = 0; i < levels; i++) {
-      total+= (int)Math.pow(rows*columns, i);
+      total += (int) Math.pow(rows * columns, i);
     }
     return total;
   }

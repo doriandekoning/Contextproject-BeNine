@@ -1,6 +1,5 @@
 package com.benine.backend.preset.autopresetcreation;
 
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;

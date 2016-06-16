@@ -3,6 +3,7 @@ package com.benine.backend.preset;
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
@@ -69,15 +70,16 @@ public class IPCameraPreset extends Preset {
     json.put("tilt", position.getTilt());
     json.put("zoom", position.getZoom());
     json.put("focus", focus.getFocus());
-    json.put("iris", iris.getIris());
     json.put("autofocus", focus.isAutofocus());
+    json.put("iris", iris.getIris());
+    json.put("autoiris", iris.isAutoiris());
     json.put("panspeed", panspeed);
     json.put("tiltspeed", tiltspeed);
-    json.put("autoiris", iris.isAutoiris());
-    json.put("id", getId());
-    json.put("cameraid", getCameraId());
-    json.put("image", getImage());
-    json.put("name", getName());
+    json.put("id", presetid);
+    json.put("cameraid", cameraId);
+    json.put("image", image);
+    json.put("name", name);
+
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -128,12 +130,14 @@ public class IPCameraPreset extends Preset {
 
   /**
    * Moves the camera
-   * @param camera  A Camera object.
+   * @param cameraController to retrieve the right camera for this preset.
    * @throws CameraConnectionException  If the camera cannot be reached.
    * @throws CameraBusyException If the camera is busy
    */
   @Override
-  public void excecutePreset(Camera camera) throws CameraConnectionException, CameraBusyException {
+  public void excecutePreset(CameraController cameraController) 
+                        throws CameraConnectionException, CameraBusyException {
+    Camera camera = cameraController.getCameraById(cameraId);
     if (camera instanceof IPCamera) {
       IPCamera ipcamera = (IPCamera) camera;
 
@@ -199,9 +203,9 @@ public class IPCameraPreset extends Preset {
     if (tiltspeed != other.tiltspeed) {
       return false;
     }
-    if (tags == null && other.getTags() != null) {
+    if (tags == null && other.tags != null) {
       return false;
-    } else if (tags != null && !tags.equals(other.getTags())) {
+    } else if (tags != null && !tags.equals(other.tags)) {
       return false;
     }
     return true;

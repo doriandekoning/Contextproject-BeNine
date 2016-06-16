@@ -120,7 +120,7 @@ public class PresetControllerTest {
     expectedPresets.add(preset);
     presetController.addPreset(preset);
     presetController.addPreset(preset2);
-    presetController.removePreset(preset2);
+    presetController.removePreset(preset2.getId());
     Assert.assertEquals(expectedPresets, presetController.getPresets());
   }
 

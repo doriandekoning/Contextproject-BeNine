@@ -1,9 +1,9 @@
 package com.benine.backend.preset;
 
 import com.benine.backend.ServerController;
-import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.CameraController;
 import com.benine.backend.video.MJPEGFrameResizer;
 import com.benine.backend.video.StreamNotAvailableException;
 import com.benine.backend.video.StreamReader;
@@ -26,12 +26,12 @@ import javax.imageio.ImageIO;
  * an abstract preset class containing the basics for a preset.
  */
 public abstract class Preset {
-  
-  private String image;
-  private int presetid = -1;
-  protected Set<String> tags = new HashSet<String>();
-  private int cameraId;
-  private String name = "";
+
+  String image;
+  int presetid = -1;
+  Set<String> tags = new HashSet<String>();
+  int cameraId;
+  String name = "";
 
   /**
    * Constructs a preset.
@@ -40,6 +40,17 @@ public abstract class Preset {
    */
   public Preset(int cameraId) {
     this.cameraId = cameraId;
+  }
+  
+  /**
+   * Constructs a preset.
+   * @param cameraId The id of the camera associated with this preset.
+   * @param tags belonging to this preset.
+   */
+  public Preset(int cameraId, Set<String> tags) {
+    this(cameraId);
+    this.tags = tags;
+    
   }
 
   public String getImage() {
@@ -87,6 +98,15 @@ public abstract class Preset {
   public void addTag(String tag) {
     tags.add(tag);
   }
+  
+  /**
+   * Sets the tags of this preset.
+   *
+   * @param tags the tags set to set
+   */
+  public void setTags(Set<String> tags) {
+    this.tags = tags;
+  }
 
 
   /**
@@ -112,7 +132,7 @@ public abstract class Preset {
    * Remove all the tags from this preset.
    */
   public void removeTags() {
-    this.tags.removeAll(getTags());
+    this.tags.clear();
   }
 
   /**
@@ -123,9 +143,9 @@ public abstract class Preset {
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
 
-    json.put("id", getId());
-    json.put("cameraid", getCameraId());
-    json.put("image", getImage());
+    json.put("id", presetid);
+    json.put("cameraid", cameraId);
+    json.put("image", image);
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
@@ -161,7 +181,7 @@ public abstract class Preset {
     }
     Preset preset = (Preset) o;
     if (presetid != preset.presetid || cameraId != preset.cameraId
-        || !tags.equals(preset.getTags()) || !name.equals(preset.name)) {
+        || !tags.equals(preset.tags) || !name.equals(preset.name)) {
       return false;
     }
     return true;
@@ -190,7 +210,7 @@ public abstract class Preset {
     ImageIO.write(bufferedImage, "jpg", path);
 
     PresetController presetController = ServerController.getInstance().getPresetController();
-    setImage(path.getName());
+    image = path.getName();
     presetController.updatePreset(this);
   }
   
@@ -213,10 +233,10 @@ public abstract class Preset {
   /**
    * Recall this preset by moving the camera to the right position.
    *
-   * @param camera used to move the camera.
+   * @param cameraController used to move the right camera.
    * @throws CameraConnectionException when camera can't be moved
    * @throws CameraBusyException if the camera is busy
    */
-  public abstract void excecutePreset(Camera camera)
+  public abstract void excecutePreset(CameraController cameraController)
           throws CameraConnectionException, CameraBusyException;
 }

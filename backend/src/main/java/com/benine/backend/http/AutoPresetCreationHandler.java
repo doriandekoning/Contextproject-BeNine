@@ -42,10 +42,12 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     PresetPyramidCreator creator = getPyramidPresetCreator(request);
     String camID = request.getParameter("camera");
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
+    Camera cam = getCameraById(Integer.parseInt(camID));
+    boolean succes = false;
+    
     if (!(cam instanceof IPCamera )) {
-      respondFailure(request, httpServletResponse);
       request.setHandled(true);
+      respond(request, httpServletResponse, succes);
       return;
     }
     creators.put(cam.getId(), creator);
@@ -60,26 +62,22 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       presets.forEach(preset -> idsJson.add(preset.getId()));
       jsonObject.put("presetIDs", idsJson);
       respond(request, httpServletResponse, jsonObject.toJSONString());
-      
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);
-      respondFailure(request, httpServletResponse);
     }  catch (CameraBusyException e) {
       getLogger().log("Trying to auto create presets on busy camera with id: "
               + camID, e);
-      respondFailure(request, httpServletResponse);
-    } finally {
+    } finally {    
       creators.remove(cam.getId());
+      respond(request, httpServletResponse, succes);
       request.setHandled(true);
     }
-
-
   }
-
 
   /**
    * Returns the auto preset creators currently running.
+   * @return map of creators.
    */
   public static ConcurrentMap<Integer, AutoPresetCreator> getCreators() {
     return creators;

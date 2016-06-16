@@ -1,24 +1,18 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
-import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
 import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
-import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
-import com.benine.backend.video.StreamNotAvailableException;
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
 
 public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
 
@@ -36,10 +30,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    Boolean succes = false;
     String camID = request.getParameter("camera");
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
+    Camera cam = getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
-      respondFailure(request, httpServletResponse);
+      respond(request, httpServletResponse, succes);
       request.setHandled(true);
       return;
     }
@@ -50,16 +45,17 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
       creators.remove(cam.getId());
-    } else {
-      respondFailure(request, httpServletResponse);
-    }
+      succes = true;
+    } 
+    
+    respond(request, httpServletResponse, succes);
     request.setHandled(true);
-
   }
 
 
   /**
    * Returns the auto preset creators currently running.
+   * @return creators map.
    */
   public Map<Integer, AutoPresetCreator> getCreators() {
     return creators;
