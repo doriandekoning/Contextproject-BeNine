@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-
 public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
 
   /**
@@ -26,10 +25,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    Boolean succes = false;
     String camID = request.getParameter("camera");
-    Camera cam = getCameraController().getCameraById(Integer.parseInt(camID));
+    Camera cam = getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
-      respondFailure(request, httpServletResponse);
+      respond(request, httpServletResponse, succes);
       request.setHandled(true);
       return;
     }
@@ -40,10 +40,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
       AutoPresetCreationHandler.getCreators().get(cam.getId());
-    } else {
-      respondFailure(request, httpServletResponse);
+      succes = true;
     }
+    AutoPresetCreationHandler.getCreators().remove(cam.getId());
+    respond(request, httpServletResponse, succes);
     request.setHandled(true);
-
   }
+
 }

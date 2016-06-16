@@ -150,7 +150,7 @@ function drawSchedule(performance) {
 
     if (performance !== undefined) {
         var performancepresets = performance.presets;
-        for (i in performancepresets) {
+        for (var i in performancepresets) {
             addScheduleRow(performancepresets[i]);
         }
     }
@@ -162,6 +162,7 @@ function drawSchedule(performance) {
  * @param preset The preset to add.
  */
 function addScheduleRow(preset) {
+	var presetname;
     var schedule = $("#performance-schedule");
 
     var item = $("<li></li>");
@@ -171,9 +172,9 @@ function addScheduleRow(preset) {
     var count = $("<button type='button' class='btn btn-default schedule-list-number'></button>");
 
     if (preset['name'] !== '') {
-        var presetname = $("<button type='button' class='btn btn-primary schedule-preset'>" + preset['name'] + "</button>");
+        presetname = $("<button type='button' class='btn btn-primary schedule-preset'>" + preset['name'] + "</button>");
     } else {
-        var presetname = $("<button type='button' class='btn btn-primary schedule-preset'>Preset " + preset['id'] + "</button>");
+        presetname = $("<button type='button' class='btn btn-primary schedule-preset'>Preset " + preset['id'] + "</button>");
     }
 
     var buttonUp = $("<button type='button' class='btn btn-default glyphicon glyphicon glyphicon-menu-up'></button>");
@@ -199,7 +200,7 @@ function updateScheduleOrder() {
 
     li.each(function(index) {
         li.eq(index).find(".schedule-list-number").eq(0).text(index + 1);
-    })
+    });
 }
 
 /**
@@ -211,8 +212,6 @@ function moveScheduleUp() {
 
     var performance = selectedPerformance.data();
     var index = current.index();
-
-    console.log(index)
 
     if (index > 0) {
         performance.moveUp(index, preset, function() {
@@ -245,7 +244,7 @@ function moveScheduleDown() {
 function drawPresets(presetlist) {
     var list = $("#performance-preset-selector");
 	list.children().remove();
-    for (key in presetlist) {
+    for (var key in presetlist) {
         var preset = presetlist[key];
 
         var presetrow = $(drawPreset(preset));
@@ -276,7 +275,7 @@ function deleteFromSchedule() {
 
     var performance = selectedPerformance.data();
     performance.deletepreset(li.index() + 1);
-    drawSchedule(performance)
+    drawSchedule(performance);
 }
 
 /**
@@ -285,13 +284,14 @@ function deleteFromSchedule() {
  * @returns {*|jQuery|HTMLElement} the row to draw.
  */
 function drawPreset(preset) {
+	var name;
     var li = $("<li class='btn btn-primary'></li>");
     var image = $("<img class='img-rounded' src='/api/backend" + preset['image'] + "'>");
 
     if (preset['name'] !== '') {
-        var name = $("<span>" + preset['name'] + "</span>");
+        name = $("<span>" + preset['name'] + "</span>");
     } else {
-        var name = $("<span>Preset " + preset['id'] + "</span>");
+        name = $("<span>Preset " + preset['id'] + "</span>");
     }
 
     li.append(image, name);

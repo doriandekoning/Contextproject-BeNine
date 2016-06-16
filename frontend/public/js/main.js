@@ -6,6 +6,11 @@ var editingpreset;
 
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
+	
+	// Load the available cameras and presets.
+	loadCameras(function() {
+		loadPresets();
+	});
 
 	// Update server status ever 10 seconds
 	setInterval(updateServerStatus, 10 * 1000);
@@ -13,14 +18,8 @@ $(document).ready(function() {
 	// Reload presets every 5 seconds.
 	setInterval(loadPresets, 5 * 1000);
 
-	// Load the available cameras.
-	loadCameras();
-
 	//Check cameras inuse.
 	setInterval(checkCamerasInUse, 2000);
-
-	// Load the available presets from the backend.
-	loadPresets();
 
 	// Load the available perforamnces from the backend.
 	loadPerformances();
@@ -68,7 +67,7 @@ function checkCamerasInUse() {
 /**
 * Load all the cameras from the backend and display them.
 */
-function loadCameras() {
+function loadCameras(done) {
 	$.get("/api/backend/camera", function(data) {
 		var obj = JSON.parse(data);
 		for(var c in obj.cameras) {
@@ -86,6 +85,7 @@ function loadCameras() {
 			item.smallView();
 		});
 		Holder.run({images:"#camera_area img"});
+		done();
 	});
 }
 

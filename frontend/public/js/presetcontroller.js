@@ -21,12 +21,13 @@ function loadPresets() {
 			var preset = obj.presets[p];
 			checkPreset(preset);
 		}
-		tagSearchInput(searchTerm);
 		for (var t in obj.tags) {
 			if (localTags.indexOf(obj.tags[t]) === -1) {
 				newTag(obj.tags[t]);
 			}
 		}
+	}).done(function() {
+		tagSearchInput(searchTerm);
 	});
 }
 
@@ -37,7 +38,9 @@ function loadPresets() {
 function checkPreset(object) {
 	var exists = findPresetOnID(object.id);
 	if (exists === undefined) {
-		presets.push(new Preset(object));
+		if (findCameraOnID(object.cameraid) !== undefined) {
+			presets.push(new Preset(object));
+		}
 	} else {
 		exists.update(object);
 	}
@@ -239,10 +242,10 @@ function editPreset() {
 	editingpreset.tags = tags;
 	if (tags === []) {
 		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=false&overwriteposition=false",
-																									function(data) {console.log("edit preset: " + data)});
+																									function(data) {console.log("edit preset: " + data);});
 	} else {
 		$.get("/api/backend/presets/edit?presetid=" + editingpreset.id + "&name=" + presetName + "&overwritetag=true&overwriteposition=false&tags=" + editingpreset.tags.join(","),
-																									function(data) {console.log("edit preset: " + data)});
+																									function(data) {console.log("edit preset: " + data);});
 	}
 	editingpreset.displayPreview();
 }
@@ -256,7 +259,7 @@ function deletePreset() {
 	var editingindex = presets.indexOf(editingpreset);
 	if (editingindex !== -1) {
 		presets.splice(editingindex, 1);
-	};
+	}
 	loadPresets();
 }
 
@@ -305,13 +308,16 @@ tag_search_input.on('typeahead:selected',function (e, val) {
 */
 function matchingPresets(val) {
 	var matchpresets = [];
-	for(var p in presets) {
+	var compareTags = function(tag) {
+		return tag.toLowerCase().indexOf(val.toLowerCase()) > -1;
+	};
+	for (var p in presets) {
 		var preset = presets[p];
-		if(preset.tags != undefined) {
-			var tags = preset.tags.filter(function(tag) { return tag.toLowerCase().indexOf(val.toLowerCase()) > -1;});
+		if (preset.tags !== undefined) {
+			var tags = preset.tags.filter(compareTags);
 			if (tags.length > 0) {
 				matchpresets.push(preset);
-			} else if(preset.name != undefined) {
+			} else if(preset.name !== undefined) {
 				if (preset.name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
 					matchpresets.push(preset);
 				}
@@ -399,7 +405,7 @@ function editTags(id, isNew) {
 * @param val value of the tag to add.
 */
 function newTag(val) {
-	if (localTags.indexOf(val) < 0 && val != "" && val != undefined) {
+	if (localTags.indexOf(val) < 0 && val !== "" && val !== undefined) {
 		localTags.push(val);
 		tagnames.clearPrefetchCache();
 		tagnames.initialize(true);
@@ -431,7 +437,7 @@ function deleteTag(index) {
 * @val the updated version of the tag
 */
 function updateTag(index, val) {
-	if ((localTags.indexOf(val) < 0 && val != "" && val != undefined) || localTags.indexOf(val) == index)  {
+	if ((localTags.indexOf(val) < 0 && val !== "" && val !== undefined) || localTags.indexOf(val) === index)  {
 		var remove = localTags[index];
 		localTags[index] = val;
 		tagnames.clearPrefetchCache();
@@ -495,7 +501,7 @@ function getTags() {
 * @name the name of the tag
 */
 function appendTag(id, name) {
-	return "<button id=" + id + " class='tag btn btn-primary' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span><span>" + name + "</span></button>"
+	return "<button id=" + id + " class='tag btn btn-primary' value='" + name + "' ><span class='glyphicon glyphicon-tag'></span><span>" + name + "</span></button>";
 }
 
 /**
@@ -511,5 +517,5 @@ function appendEditable(input, add) {
 	result += "<div class='col-xs-4'><div class='btn-group editname'><button class='delete btn btn-danger glyphicon glyphicon-remove-sign' type='button'></button><button class='edit btn btn-success glyphicon glyphicon-ok-sign' type='button'></button></div></div>";
 	result += "</div>";
 
-	return result
+	return result;
 }

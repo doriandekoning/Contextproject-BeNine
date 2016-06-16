@@ -13,7 +13,7 @@ function loadPerformanceDropdown() {
 
     list.empty();
     if (performances.length > 0) {
-        for (i in performances) {
+        for (var i in performances) {
             var performance = performances[i];
 
             var li = $("<li></li>");
@@ -149,7 +149,7 @@ function nextPreset() {
 
     if (position < (performance_presets.length - 1)) {
         position = position + 1;
-        updateCurrentUpNext(position, position + 1, performance_presets[position], performance_presets[position + 1])
+        updateCurrentUpNext(position, position + 1, performance_presets[position], performance_presets[position + 1]);
     }
 }
 
