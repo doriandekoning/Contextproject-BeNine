@@ -271,10 +271,11 @@ function addToSchedule() {
  */
 function deleteFromSchedule() {
     var preset = $(this);
-    var li = preset.closest('preset');
+    var li = preset.closest('li');
 
     var performance = selectedPerformance.data();
-    performance.deletepreset(li.index() + 1);
+
+    performance.deletepreset(li.index());
     drawSchedule(performance);
 }
 
