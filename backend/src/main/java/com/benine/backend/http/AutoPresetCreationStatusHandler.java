@@ -40,7 +40,7 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_created", creator.getGeneratedPresetsAmount());
       JSONArray presets = new JSONArray();
       creator.getGeneratedPresets().forEach(p -> presets.add(p.toJSON()));
-      object.put("created_preset_ids", creator)
+      object.put("created_preset_ids", presets);
       respond(request, httpServletResponse, object.toString());
       AutoPresetCreationHandler.getCreators().get(cam.getId());
       succes = true;

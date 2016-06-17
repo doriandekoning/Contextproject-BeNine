@@ -65,7 +65,6 @@ public abstract class AutoPresetCreator {
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setInUse();
       IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
-      presetController.addPreset(currentPreset);
       presets.add(currentPreset);
       generatedPresets.add(currentPreset);
     }
@@ -101,6 +100,7 @@ public abstract class AutoPresetCreator {
     IPCameraPreset preset = new IPCameraPreset(pos, new FocusValue(0, true),
                                           new IrisValue(0, true), cam.getId());
     cam.setBusy(true);
+    presetController.addPreset(preset);
     presetController.createImage(preset);
     return preset;
   }
@@ -129,8 +129,8 @@ public abstract class AutoPresetCreator {
    * Getter for amount subviews already created.
    * @return Amount of created presets.
    */
-  public int getGeneratedPresetsAmount() {
-    return generatedPresets.size();
+  public ArrayList<IPCameraPreset> getGeneratedPresets() {
+    return generatedPresets;
   }
 
 
