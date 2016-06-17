@@ -90,14 +90,22 @@ function switchStepThreeTab(generatedPresets) {
   clearInterval(loadSubviewsInterval);
   var presetIDs = generatedPresets['presetIDs'];
 
-  for (key in presetIDs) {
-    var preset = findPresetOnID(presetIDs[key]);
-    drawGeneratedPreset(preset);
-  }
+  $.get("/api/backend/presets/getpresets", function(data) {
+    var obj = JSON.parse(data);
+    for (var p in obj.presets) {
+      var preset = obj.presets[p];
+      checkPreset(preset);
+    }
 
-  switchTab(3);
-  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
-  $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
+    for (key in presetIDs) {
+      var preset = findPresetOnID(presetIDs[key]);
+      drawGeneratedPreset(preset);
+    }
+
+    switchTab(3);
+    $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
+    $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
+  });
 }
 
 
@@ -138,7 +146,7 @@ function autoCreatePresets() {
     var interval = setInterval(updateProgressbar, 2 * 1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       clearInterval(interval);
-      switchStepThreeTab(data);
+      switchStepThreeTab(JSON.parse(data));
     });
 
   }
@@ -210,14 +218,16 @@ function showSubViews(canvas) {
         done = doneJSON.created.length;
       }
       var subViews = JSON.parse(data);
-      for ( var i = 0; i < subViews.SubViews.length; i++) {
-        if ( i == done) {
+      var subviewlist = subViews.SubViews;
+
+      for ( var i = 0; i < subviewlist.length; i++) {
+        if ( i === done) {
           context.strokeStyle = "#FF0000";
         }
-        var height = (canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y);
-        var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
-        var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
-        var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
+        var height = (canvas.height/100) * (subviewlist[i].topLeft.y  - subviewlist[i].bottomRight.y);
+        var width = (canvas.width/100) * (subviewlist[i].bottomRight.x  - subviewlist[i].topLeft.x);
+        var x = ((canvas.width/100) * (subviewlist[i].topLeft.x));
+        var y = ((canvas.height/100) *  (100 -subviewlist[i].topLeft.y));
         context.strokeRect(x, y, width, height);
       }
      });
@@ -278,10 +288,10 @@ function drawGeneratedPreset(preset) {
   var button = $('<div class="button-checkbox btn btn-primary"></div>');
 
   button
-      .append('<img class="img-rounded" src="api/backend' + preset['image'] + '">')
-      .append('<span>' + preset['name'] + '</span>')
+      .append('<img class="img-rounded" src="api/backend' + preset.image + '">')
+      .append('<span>' + preset.name + '</span>')
       .append('<span class="checkicon glyphicon glyphicon-unchecked"></span>')
-      .append('<input presetid="' + preset['id'] + '" type="checkbox" class="hidden" />');
+      .append('<input presetid="' + preset.id + '" type="checkbox" class="hidden" />');
 
   button.click(check);
   li.append(button);
