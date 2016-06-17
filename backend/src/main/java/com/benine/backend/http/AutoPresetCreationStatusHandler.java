@@ -2,12 +2,15 @@ package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
+import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +39,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
     }
     AutoPresetCreator creator = AutoPresetCreationHandler.getCreators().get(cam.getId());
     if ( creator != null) {
-      JSONObject object = new JSONObject();
-      object.put("amount_created", creator.getGeneratedPresetsAmount());
+      JSONObject object = new JSONObject()
       JSONArray presets = new JSONArray();
       creator.getGeneratedPresets().forEach(p -> presets.add(p.toJSON()));
-      object.put("created_preset_ids", presets);
+      object.put("created", presets);
+      object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
       AutoPresetCreationHandler.getCreators().get(cam.getId());
       succes = true;
