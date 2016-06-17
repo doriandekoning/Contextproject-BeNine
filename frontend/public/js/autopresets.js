@@ -212,7 +212,7 @@ function showSubViews(canvas) {
     $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
       var done = 0;
       context.lineWidth = 2;
-      context.strokeStyle = "#00FF00";
+      context.strokeStyle = "#FF0000";
       var doneJSON = JSON.parse(doneData);
       if (doneJSON != undefined && doneJSON.created != undefined) {
         done = doneJSON.created.length;
@@ -221,7 +221,7 @@ function showSubViews(canvas) {
       var subviewlist = subViews.SubViews;
 
       for ( var i = 0; i < subviewlist.length; i++) {
-        if ( i === done) {
+        if (i === (doneJSON['amount_total'] - done)) {
           context.strokeStyle = "#FF0000";
         }
         var height = (canvas.height/100) * (subviewlist[i].topLeft.y  - subviewlist[i].bottomRight.y);
