@@ -115,13 +115,18 @@ public class PresetQueue {
   * @return a JSON object of the presetqueue.
   */
   public JSONObject toJSON() {
+    //Create a json object and add the name and id to it. 
     JSONObject json = new JSONObject();
     json.put("id", getID());
     json.put("name", getName());
+    
+    //Create a JSONArray to add the presets to. 
     JSONArray queueJSON = new JSONArray();
     for (Preset preset: getQueue()) {
       queueJSON.add(preset.getId());
     }
+    
+    //Add the presetQueue (the JSONArray) to the json object. 
     json.put("queue", queueJSON);
 
     return json;

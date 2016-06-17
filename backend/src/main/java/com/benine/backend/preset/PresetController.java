@@ -59,15 +59,19 @@ public class PresetController {
     JSONObject jsonObject = new JSONObject();
     String imagePath = config.getValue("imagepath");
     ArrayList<Preset> resultPresets = getPresets();
+    
+    //Create a JSONArray for the tags and add all of the tags to it. 
     if (tag == null) {
       JSONArray tagsJSON = new JSONArray();
       Collection<String> tags = getTags();
       tags.forEach(t -> tagsJSON.add(t));
+      //Add the JSONArray tags to the json object.
       jsonObject.put("tags", tagsJSON);
     } else {
       resultPresets = getPresetsByTag(tag);
     }
 
+    //Create a JSONArray with the presets and add it to the json object. 
     JSONArray presetsJSON = new JSONArray();
     for (Preset p : resultPresets) {
       JSONObject presetJson = p.toJSON();
