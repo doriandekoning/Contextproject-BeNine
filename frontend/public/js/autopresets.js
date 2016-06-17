@@ -66,22 +66,23 @@ function switchStepTwoTab() {
  * 
  */
  function setImage() {
-    $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
-      var jsonData = JSON.parse(data);
-      if (jsonData.created != undefined && jsonData.created.length > 0) {
-        $.get("/api/backend/presets/", function(data) {
-          var jsonArray = JSON.parse(data);
-          for ( var i in jsonArray) {
-            if(jsonArray[i].id===jsonData.created[0].id){
-                $('#auto-preset-generation-image').attr('src', jsonArray[i].image);
-                clearInterval(firstPresetCheckInterval);
-            }
+  $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
+    var jsonData = JSON.parse(data);
+    if (jsonData.created != undefined && jsonData.created.length > 0) {
+      $.get("/api/backend/presets/", function(data) {
+        var jsonArray = JSON.parse(data);
+        for ( var i in jsonArray.presets) {
+          if(jsonArray.presets[i].id===jsonData.created[0].id){
+              $('#auto-preset-creation-generation-image').attr('src', "/api/backend" + jsonArray.presets[i].image);
+              clearInterval(firstPresetCheckInterval);
+              setInterval(function() { showSubViews( document.getElementById('generatingCanvas')); }, 2000 );
+              return;
           }
         }
-      }
+      });
     }
-
- }
+ });
+}
 /**
  * Prepares the final tab.
  */
@@ -130,13 +131,13 @@ function autoCreatePresets() {
   var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
     // Switch to generating view.
-    switchGenerateTab();
+    switchStepTwoTab();
 
     // Update statusbar ever 2sec (2000ms)
     var interval = setInterval(updateProgressbar, 2 * 1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       clearInterval(interval);
-      switchFinalTab(data);
+      switchStepThreeTab(data);
     });
 
   }
@@ -149,7 +150,7 @@ function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
     var dataJSON = JSON.parse(data);
     if ( dataJSON.succes === undefined ) {
-      console.log(dataJSON.amount_created);
+      //console.log(dataJSON.amount_created);
       var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
                                             .attr("aria-valuenow", percentage_done)

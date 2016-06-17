@@ -67,7 +67,6 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       
       presets.forEach(preset -> idsJson.add(preset.getId()));
       jsonObject.put("presetIDs", idsJson);
-      creators.remove(cam.getId());
       respond(request, httpServletResponse, jsonObject.toJSONString());
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {

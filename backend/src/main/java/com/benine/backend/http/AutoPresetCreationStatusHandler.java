@@ -38,6 +38,7 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       return;
     }
     AutoPresetCreator creator = AutoPresetCreationHandler.getCreators().get(cam.getId());
+      System.out.println(AutoPresetCreationHandler.getCreators().size());
     if ( creator != null) {
       JSONObject object = new JSONObject();
       JSONArray presets = new JSONArray();
@@ -48,7 +49,6 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
     } else {
       respond(request, httpServletResponse, succes);
     }
-    AutoPresetCreationHandler.getCreators().remove(cam.getId());
     request.setHandled(true);
   }
 
