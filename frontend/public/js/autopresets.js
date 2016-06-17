@@ -27,8 +27,7 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
   image.attr('src', streamURL);
   liveimage.attr('src', streamURL);
-  var canvas = document.getElementById('previewCanvas');
-  showSubViews(canvas);
+  showSubViews($("#previewCanvas").get(0));
 });
 
 /**
@@ -168,7 +167,7 @@ function increaseColumnAmount(amount) {
   columns = Math.min(columns, maxColumns);
   columns = Math.max(columns, 1);
   $("#columns-amount").val(columns);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
@@ -179,7 +178,7 @@ function increaseRowAmount(amount) {
   rows = Math.min(rows, maxRows);
   rows = Math.max(rows, 1);
   $("#rows-amount").val(rows);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
@@ -190,7 +189,7 @@ function increaseLevelAmount(amount) {
   levels = Math.min(levels, maxLevels);
   levels = Math.max(levels, 1);
   $("#levels-amount").val(levels);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
