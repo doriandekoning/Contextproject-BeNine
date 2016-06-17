@@ -307,7 +307,15 @@ function deleteUnselectedPresets() {
     var presetid = checkbox.attr('presetid');
 
     if (!checkbox.is(':checked')) {
-      findPresetOnID(presetid).delete();
+      var p = findPresetOnID(presetid)
+      p.delete();
+
+      var index = presets.indexOf(p);
+
+      if (index > -1) {
+        presets.splice(index, 1);
+      }
+
     };
   });
   $('#autopreset-generated').empty();
