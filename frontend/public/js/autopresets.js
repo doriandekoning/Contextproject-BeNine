@@ -174,11 +174,12 @@ function showSubViews() {
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
     context.strokeStyle = "#FF0000";
-    context.lineWidth=0.5;
+    context.lineWidth=1;
     $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
       $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
+        var level = 1;
         var done = 0;
-        context.lineWidth = 2;
+        context.lineWidth = 1;
         context.strokeStyle = "#00FF00";
         var doneJSON = JSON.parse(doneData);
         if (doneJSON != undefined && doneJSON.amount_created != undefined) {
@@ -186,15 +187,22 @@ function showSubViews() {
         }
         var subViews = JSON.parse(data);
         for ( var i = 0; i < subViews.SubViews.length; i++) {
-          if ( i == done) {
-            context.strokeStyle = "#FF0000";
-          }
-          var height = (canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y);
-          var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
-          var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
-          var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
-          context.strokeRect(x, y, width, height);
-        }
+          if ( i === done) {
+           context.strokeStyle = "#FF0000";
+       }
+       var height = ((canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y)) - (2*level);
+       var width = ((canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x))  - (2*level);
+       var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x)) + level;
+       var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y)) + level;
+       context.strokeRect(x, y, width, height);
+       var subViewsNextLayer = 0;
+       for(var j = level; j >= 0; j--) {
+          subViewsNextLayer+= Math.pow(columns*rows, j)
+       }
+       if(i === subViewsNextLayer) {
+         level++;
+       }
+       }
        });
     });
 }
@@ -277,5 +285,3 @@ function deleteUnselectedPresets() {
   });
   $('#autopreset-generated').empty();
 }
-
-
