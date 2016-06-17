@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -54,10 +55,15 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     IPCamera ipcam = (IPCamera) cam;
    
     try {
-      Collection<IPCameraPreset> presets = creator.createPresets(ipcam, creator.generateSubViews());
-      
+      ArrayList<IPCameraPreset> presets =
+              new ArrayList<>(creator.createPresets(ipcam, creator.generateSubViews()));
+
+      String name = request.getParameter("name");
       JSONObject jsonObject = new JSONObject();
       JSONArray idsJson = new JSONArray();
+      for (int i = 0; i < presets.size(); i++) {
+        presets.get(i).setName(name + i);
+      }
       
       presets.forEach(preset -> idsJson.add(preset.getId()));
       jsonObject.put("presetIDs", idsJson);
@@ -66,12 +72,13 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {
       getLogger().log("Exception occured while trying to auto create presets", e);
+      respond(request, httpServletResponse, succes);
     }  catch (CameraBusyException e) {
       getLogger().log("Trying to auto create presets on busy camera with id: "
               + camID, e);
+      respond(request, httpServletResponse, succes);
     } finally {    
       creators.remove(cam.getId());
-      respond(request, httpServletResponse, succes);
       request.setHandled(true);
     }
   }
