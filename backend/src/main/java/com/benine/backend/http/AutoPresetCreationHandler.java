@@ -63,6 +63,7 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       JSONArray idsJson = new JSONArray();
       for (int i = 0; i < presets.size(); i++) {
         presets.get(i).setName(name + i);
+        getPresetController().updatePreset(presets.get(i));
       }
       
       presets.forEach(preset -> idsJson.add(preset.getId()));
