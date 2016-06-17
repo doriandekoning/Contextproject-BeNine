@@ -5,6 +5,7 @@ var maxRows = 3;
 var maxColumns = 3;
 var maxLevels = 3;
 var firstPresetCheckInterval;
+var loadSubviewsInterval;
 
 /**
  * Disables default tab click behavior.
@@ -75,7 +76,7 @@ function switchStepTwoTab() {
           if(jsonArray.presets[i].id===jsonData.created[0].id){
               $('#auto-preset-creation-generation-image').attr('src', "/api/backend" + jsonArray.presets[i].image);
               clearInterval(firstPresetCheckInterval);
-              setInterval(function() { showSubViews( document.getElementById('generatingCanvas')); }, 2000 );
+              loadSubviewsInterval = setInterval(function() { showSubViews( document.getElementById('generatingCanvas')); }, 2000 );
               return;
           }
         }
@@ -87,6 +88,7 @@ function switchStepTwoTab() {
  * Prepares the final tab.
  */
 function switchStepThreeTab(generatedPresets) {
+  clearInterval(loadSubviewsInterval);
   var presetIDs = generatedPresets['presetIDs'];
 
   for (key in presetIDs) {
@@ -150,8 +152,7 @@ function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
     var dataJSON = JSON.parse(data);
     if ( dataJSON.succes === undefined ) {
-      //console.log(dataJSON.amount_created);
-      var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
+      var percentage_done = 100*(dataJSON.created.length / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
                                             .attr("aria-valuenow", percentage_done)
                                             .text(dataJSON.created.length + "/" +  dataJSON.amount_total);
