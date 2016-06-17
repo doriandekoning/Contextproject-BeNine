@@ -111,10 +111,22 @@
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="autopreset_step2">
-                            <div class="row">
-                            <img id="auto-preset-creation-live-image" class="center-block" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                            <div class="row">  
+                                <div class="col-xs-6">
+                                    <img id="auto-preset-creation-live-image" class="center-block img-reponsive" data-src="holder.js/256x144?auto=yes&text=No Camera Selected&bg=8b8b8b">
+                                </div>
+                                <div class="col-xs-6" style="text-align:center;display:inline-block;position:relative;">
+                                   <div class="canvas-container img-responsive">
+                                        <img id="auto-preset-creation-generation-image"
+                                             data-src="holder.js/256x144?auto=yes&text=Loading Overview...&bg=8b8b8b">
+                                        <canvas id="generatingCanvas">
+                                            Your browser does not support the HTML5 canvas tag.
+                                        </canvas>
+                                    </div>  
+                                </div>
                             </div>
                             <div class="row">
+
                                 <div class="progress center-block">
                                     <div class="progress-bar progress-bar-striped active" id="auto-preset-creation-progressbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                                     </div>
@@ -122,7 +134,7 @@
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="autopreset_step3">
-                            <h5>Select Presets</h5>
+                            <h5>Select Presets to keep</h5>
                             <small>Unselected presets will be discarded permanently</small>
                             <ul id="autopreset-generated">
                             </ul>

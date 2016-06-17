@@ -33,14 +33,20 @@ public class SimplePreset extends Preset {
   @Override
   public JSONObject toJSON() {
     JSONObject json = new JSONObject();
+    
+    //Add the cameraid, the presetid, name and the image of the preset to a json object.
     json.put("image", getImage());
     json.put("id", presetid);
     json.put("cameraid", cameraId);
     json.put("name", name);
+  
+    //create a JSONArray to add the tags of the preset to. 
     JSONArray tagsJSON = new JSONArray();
     for (String tag : tags) {
       tagsJSON.add(tag);
     }
+
+    //Add the tags JSONArray to the json object. 
     json.put("tags", tagsJSON);
 
     return json;
