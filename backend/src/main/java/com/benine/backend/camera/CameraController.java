@@ -111,6 +111,8 @@ public class CameraController {
     // Create expected json object
     JSONObject json = new JSONObject();
     JSONArray array = new JSONArray();
+    
+    //Add all the camera's to the JSONArray. 
     for (Camera camera : getCameras()) {
       array.add(getCameraJSON(camera));
     }
@@ -127,6 +129,9 @@ public class CameraController {
   private JSONObject getCameraJSON(Camera camera) {
     try {
       return camera.toJSON();
+    
+      //If the camera is busy or you can't connect to it, a json object is created with the id 
+      //of the camera and a boolean unavailable that is set to true. 
     } catch (CameraConnectionException | CameraBusyException e ) {
       getLogger().log("Failed to get the JSON representation of camera: " 
           + camera.getId(), LogEvent.Type.CRITICAL);

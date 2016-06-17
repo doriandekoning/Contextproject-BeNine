@@ -18,6 +18,7 @@ function Preset(newPreset) {
 	this.tags = newPreset.tags;
 	this.cameraid = newPreset.cameraid;
 	this.name = newPreset.name;
+	addCameraTag(this);
 }
 
 Preset.prototype = {
@@ -32,11 +33,10 @@ Preset.prototype = {
 	* Show this preset in the preset area.
 	*/
 	displayPreview: function() {
-		console.log(this.name);
 		var preset_area = $('#preset_area');
 		var preset_div = preset_area.find('#preset_' + this.id);
 		preset_div.attr("id", this.id);
-		if (this.name != undefined && this.name !== '') {
+		if (this.name !== undefined && this.name !== '') {
 			preset_div.find('h5').text(this.name);
 		}
 		var preset_img = preset_div.find('img');
@@ -79,6 +79,7 @@ Preset.prototype = {
 		this.pan = newpreset.pan;
 		this.tilt = newpreset.tilt;
 		this.zoom = newpreset.zoom;
+		this.name = newpreset.name;
 		this.focus = newpreset.focus;
 		this.iris = newpreset.iris;
 		this.autofocus = newpreset.autofocus;
@@ -86,5 +87,20 @@ Preset.prototype = {
 		this.tiltspeed = newpreset.tiltspeed;
 		this.autoIris = newpreset.autoiris;
 		this.tags = newpreset.tags;
+		this.image = newpreset.image;
+		this.img = $('<img src="/api/backend' + this.image + '" >');
+		addCameraTag(this);
 	}
 };
+
+/**
+* Adds the camera tag to this preset.
+* @param preset to add the camera tag to.
+*/
+function addCameraTag(preset) {
+	var cameratag = "camera " + preset.cameraid;
+	 if (preset.tags.indexOf(cameratag) < 0) {	
+		preset.tags.push(cameratag);
+		newTag(cameratag);
+	}
+ }

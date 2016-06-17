@@ -16,6 +16,18 @@ Running the front-end server:
 ### Back end
 Build the back-end server using `maven install` with the supplied `pom.xml` file. 
 
+### Build deployable zip
+#####Unix systems:
+Run the `install.sh` script, this generates a zip file, extract this zip file to the desired location on your system. The servers can then be started by executing the `startserver.sh` script.
+
+#####Other systems:
+First, fetch the dependencies for the front-end server using `npm install`, then build the back-end server using `maven install` with the supplied `pom.xml` file. 
+The zip file containing the backend and frontend server can be found in the `backend/target` folder.
+When unzipped the backend and frontend server can both be started using the `startserver.cmd` batch file.
+
+### Run deployable zip
+If a zip file is distributed, or downloaded with a release this zip file should run out of the box. Update the config file according to your configuration details. Depending on your system, run `startserver.sh` (Unix) or `startserver.cmd` (Windows) to start the server.
+
 ## Tool results
 ### JavaScript
 JavaScript testing on the NodeJS side of the front-end is performed using [MochaJS](http://mochajs.org) and executed using [Istanbul](https://gotwarlost.github.io/istanbul/). Test results are automatically generated on `npm test` and can be found at the `frontend/coverage/lcov-report` folder in the `index.html` file.

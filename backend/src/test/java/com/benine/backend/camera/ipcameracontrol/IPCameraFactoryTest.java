@@ -1,5 +1,6 @@
 package com.benine.backend.camera.ipcameracontrol;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -32,6 +33,7 @@ public class IPCameraFactoryTest {
     when(config.getValue("camera_1_macaddress")).thenReturn("MacAddres");
     when(config.getValue("camera_2_type")).thenReturn("ipcamera");
     when(config.getValue("camera_2_address")).thenReturn("test");
+    when(config.getValue("camera_2_aspectratio")).thenReturn("32.3");
     when(config.getValue("camera_3_type")).thenReturn("ipcamera");
     when(cameraController.getConfig()).thenReturn(config);
     when(cameraController.getLogger()).thenReturn(logger);
@@ -47,5 +49,17 @@ public class IPCameraFactoryTest {
   @Test(expected = InvalidCameraTypeException.class)
   public void testCameraCreationException() throws InvalidCameraTypeException{
     handler.createCamera(3);
+  }
+
+  @Test
+  public void testDefaultAspectRatio() throws InvalidCameraTypeException {
+    IPCamera camera = handler.createCamera(1);
+    assertEquals(16.0/9, camera.getAspectRatio(), 0.05);
+  }
+
+  @Test
+  public void testAspectRatio() throws InvalidCameraTypeException {
+    IPCamera camera = handler.createCamera(2);
+    assertEquals(32.3, camera.getAspectRatio(), 0.05);
   }
 }

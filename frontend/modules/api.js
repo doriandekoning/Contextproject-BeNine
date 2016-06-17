@@ -21,13 +21,13 @@ router.use(function (req, res, next) {
  * @param callback  function accepting a string. (status)
  */
 function backend_status(callback) {
-    request(address + '/')
-        .on('error', function() {
-            callback('offline');
-        })
-        .on('response', function () {
+    request({"url": address + '/camera', "timeout": 1000}, function (error, response) {
+        if (!error && response.statusCode == 200) {
             callback('online');
-        });
+        } else {
+            callback('offline');
+        }
+    })
 }
 
 /**

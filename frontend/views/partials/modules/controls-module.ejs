@@ -1,11 +1,10 @@
 <div id="right_area" class="col-xs-6 hidden-xs hidden-sm">
     <div class="control_buttons">
         <div class="btn-group btn-group-sm">
-            <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span> Add Preset</button>
-            <button id="editPresets" type="button" class="btn btn-danger" onclick="loadEditablePresets()"><span class="glyphicon glyphicon-pencil"></span> Edit Presets</button>
-            <button id="updateTags" type="button" class="btn btn-success" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span> Tags</button>
-            <button id="autoCreatePresets" type="button" class="btn btn-success" data-toggle="modal" data-target=".auto-presets-modal" onclick="autoCreatePresets()"><span class="glyphicon glyphicon-flash"></span> Auto Presets</button>
-            <button id="editPerformance" onclick="loadEditPerformance(presets)" type="button" class="btn btn-success" data-toggle="modal" data-target=".performance-edit-modal"><span class="glyphicon glyphicon-bullhorn"></span> Performances</button>
+            <button disabled id="createPreset" type="button" class="btn btn-primary" data-toggle="modal" data-target=".preset-create-modal" onclick="loadCreatePreset()"><span class="glyphicon glyphicon-picture"></span>Add Preset</button>
+            <button id="updateTags" type="button" class="btn btn-primary" data-toggle="modal" data-target=".tags-update-modal" onclick="loadTags()"><span class="glyphicon glyphicon-tags"></span>Tags</button>
+            <button disabled id="autoCreatePresets" type="button" class="btn btn-primary" data-toggle="modal" data-target=".auto-presets-modal"><span class="glyphicon glyphicon-flash"></span>Auto Presets</button>
+            <button id="editPerformance" onclick="loadEditPerformance(presets)" type="button" class="btn btn-primary" data-toggle="modal" data-target=".performance-edit-modal"><span class="glyphicon glyphicon-bullhorn"></span>Performances</button>
         </div>
     </div>
     <div id="control_area">
@@ -17,21 +16,21 @@
 
                     <div class="control_sliders">
                         <div class="slider" id="focus">
-                            <button id="auto_focus" type="button" class="btn btn-success">Auto</button>
-                            <input type="range" min="-10" max="10" value="0" class="focusslider"
+                            <input id="auto_focus" type="checkbox" data-toggle="toggle" data-size="small" data-width="56" data-onstyle="success" data-offstyle="danger" data-on="Auto" data-off="Auto">
+                            <input type="range" min="-10" max="10" value="0" class="focusslider  vertical-slider"
                                    orient="vertical" oninput="inputfocusslider(value)" onmouseup="this.value=0; releaseSlider(sendFocus, focusInput);" ontouchend="this.value=0">
-                            <span>Focus</span>
+                            <span class="slider-label">Focus</span>
                         </div>
                         <div class="slider" id="iris">
-                            <button id="auto_iris" type="button" class="btn btn-success">Auto</button>
-                            <input type="range" min="-10" max="10" value="0" class="irisslider"
+                            <input id="auto_iris" type="checkbox" data-toggle="toggle" data-size="small" data-width="56" data-onstyle="success" data-offstyle="danger" data-on="Auto" data-off="Auto">
+                            <input type="range" min="-10" max="10" value="0" class="irisslider  vertical-slider"
                                    orient="vertical" oninput="inputirisslider(value)" onmouseup="this.value=0; releaseSlider(sendIris, irisInput);" ontouchend="this.value=0">
-                            <span>Iris</span>
+                            <span class="slider-label">Iris</span>
                         </div>
                         <div class="slider" id="zoom">
-                            <input type="range" min="-10" max="10" value="0" class="zoomslider"
+                            <input type="range" min="-10" max="10" value="0" class="zoomslider  vertical-slider"
                                    orient="vertical" oninput="inputzoomslider(value)" onmouseup="this.value=0; releaseSlider(sendZoom, zoomInput);" ontouchend="this.value=0">
-                            <span>Zoom</span>
+                            <span class="slider-label">Zoom</span>
                         </div>
                     </div>
 

@@ -48,6 +48,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
   private Map<String, Long> timeStamps = new HashMap<>();
   private Logger logger;
   private Config config;
+  private Double aspectRatio = 16.0 / 9;
 
   /**
    *  Create a new IP Camera object.
@@ -59,6 +60,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     ipaddress = ip;
     logger = cameraController.getLogger();
     config = cameraController.getConfig();
+
   }
   
   /**
@@ -575,9 +577,27 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     boolean autoiris = isAutoIrisOn();
     boolean autofocus = isAutoFocusOn();
     int cameraId = getId();
-    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom), focus,
-            iris, autofocus, autoiris, cameraId, name);
+    IPCameraPreset preset = new IPCameraPreset(new ZoomPosition(pan, tilt, zoom),
+        new FocusValue(focus, autofocus), new IrisValue(iris, autoiris), cameraId);
+    preset.setName(name);
     preset.addTags(tagList);
     return preset;
+  }
+
+
+  /**
+   * Sets the Aspectratio for this camera.
+   * @param ratio the new Aspectratio
+   */
+  public void setAspectRatio(double ratio) {
+    this.aspectRatio = ratio;
+  }
+
+  /**
+   * Getter for aspectratio.
+   * @return The aspectratio of this camera.
+   */
+  public double getAspectRatio() {
+    return aspectRatio;
   }
 }

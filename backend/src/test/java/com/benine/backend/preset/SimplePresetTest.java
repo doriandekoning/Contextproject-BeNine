@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
@@ -22,7 +21,8 @@ public class SimplePresetTest extends PresetTest {
   public void setup() {
     Set<String> keywords = new HashSet<>();
     keywords.add("foo");
-    preset = new SimplePreset(1, keywords, "name");
+    preset = new SimplePreset(1, keywords);
+    preset.setName("name");
     preset.setId(1);
     preset.setImage("test");
     ServerController.setConfigPath("resources" + File.separator + "configs" + File.separator + "maintest.conf");
@@ -35,7 +35,7 @@ public class SimplePresetTest extends PresetTest {
   }
   
   @Test
-  public void testToJSON() throws JSONException {
+  public void testToJSON() {
     JSONObject jsonObject = preset.toJSON();
     Assert.assertEquals(1, jsonObject.get("id"));
     Assert.assertEquals("test", jsonObject.get("image"));
@@ -46,6 +46,8 @@ public class SimplePresetTest extends PresetTest {
 
   @Override
   public Preset getPreset() {
-    return new SimplePreset(3, "Name");
+    Preset preset = new SimplePreset(3);
+    preset.setName("Name");
+    return preset;
   }
 }
