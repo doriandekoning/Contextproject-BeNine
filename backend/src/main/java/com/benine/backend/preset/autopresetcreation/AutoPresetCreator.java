@@ -112,7 +112,7 @@ public abstract class AutoPresetCreator {
    * @return A collection of positions.
    * @throws CameraConnectionException when the camera cannot be reached.
    */
-  protected abstract ArrayList<ZoomPosition> generatePositions(IPCamera cam,
+  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam,
                                                                 Collection<SubView> subViews)
           throws CameraConnectionException;
 

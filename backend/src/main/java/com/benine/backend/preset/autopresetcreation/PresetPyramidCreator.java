@@ -40,7 +40,7 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   }
 
   @Override
-  protected ArrayList<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
+  protected Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
 
@@ -54,8 +54,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
 
     for (SubView subView : subViews) {
       Coordinate center = subView.getCenter();
-      final double tilt = (curPos.getPan() - (curHorFov / 2)) + (center.getX() * curHorFov / 100);
-      final double pan = (curPos.getTilt() - (curVerFov / 2)) + (center.getY() * curVerFov / 100);
+      final double tilt = (curPos.getPan() + (curHorFov / 2)) - (center.getX() * curHorFov / 100);
+      final double pan = (curPos.getTilt() + (curVerFov / 2)) - (center.getY() * curVerFov / 100);
       final int zoom = IPCamera.MAX_ZOOM - (int) ((subView.getWidth() / 100)
               * (IPCamera.MAX_ZOOM - IPCamera.MIN_ZOOM));
 
