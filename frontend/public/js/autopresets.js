@@ -206,7 +206,6 @@ function increaseLevelAmount(amount) {
 function showSubViews(canvas) {
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
-<<<<<<< HEAD
     context.strokeStyle = "#FF0000";
     context.lineWidth=1;
     $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
