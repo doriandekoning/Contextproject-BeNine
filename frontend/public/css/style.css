@@ -707,8 +707,6 @@ input[type=range]:focus {
     padding: 0;
     position: relative;
     z-index: 1;
-    width: 60%;
-    height: auto;
 }
 
 #auto_presets_div .progress {

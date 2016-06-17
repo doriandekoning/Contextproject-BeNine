@@ -4,6 +4,7 @@ var rows = 2;
 var maxRows = 3;
 var maxColumns = 3;
 var maxLevels = 3;
+var firstPresetCheckInterval;
 
 /**
  * Disables default tab click behavior.
@@ -25,8 +26,8 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
   image.attr('src', streamURL);
   liveimage.attr('src', streamURL);
-
-  showSubViews();
+  var canvas = document.getElementById('previewCanvas');
+  showSubViews(canvas);
 });
 
 /**
@@ -49,18 +50,42 @@ function resetModal() {
 /**
  * Prepares the generating tab showing the progress bar.
  */
-function switchGenerateTab() {
+function switchStepTwoTab() {
   switchTab(2);
 
   $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn hidden');
   $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
   $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', true);
+
+  var canvas = document.getElementById('generatingCanvas');
+  showSubViews(canvas);
+  firstPresetCheckInterval = setInterval(setImage, 2000);
 }
 
 /**
+ * 
+ */
+ function setImage() {
+    $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
+      var jsonData = JSON.parse(data);
+      if (jsonData.created != undefined && jsonData.created.length > 0) {
+        $.get("/api/backend/presets/", function(data) {
+          var jsonArray = JSON.parse(data);
+          for ( var i in jsonArray) {
+            if(jsonArray[i].id===jsonData.created[0].id){
+                $('#auto-preset-generation-image').attr('src', jsonArray[i].image);
+                clearInterval(firstPresetCheckInterval);
+            }
+          }
+        }
+      }
+    }
+
+ }
+/**
  * Prepares the final tab.
  */
-function switchFinalTab(generatedPresets) {
+function switchStepThreeTab(generatedPresets) {
   var presetIDs = generatedPresets['presetIDs'];
 
   for (key in presetIDs) {
@@ -128,7 +153,7 @@ function updateProgressbar() {
       var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
                                             .attr("aria-valuenow", percentage_done)
-                                            .text(dataJSON.amount_created + "/" +  dataJSON.amount_total);
+                                            .text(dataJSON.created.length + "/" +  dataJSON.amount_total);
     }
   });
 }
@@ -169,33 +194,32 @@ function increaseLevelAmount(amount) {
 /**
 * Draws the subview rectangles on the canvas with the rectangles provided by the backend.
 */
-function showSubViews() {
-  var canvas = document.getElementById('previewCanvas');
+function showSubViews(canvas) {
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
-    context.strokeStyle = "#FF0000";
-    context.lineWidth=0.5;
-    $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
-      $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
-        var done = 0;
-        context.lineWidth = 2;
-        context.strokeStyle = "#00FF00";
-        var doneJSON = JSON.parse(doneData);
-        if (doneJSON != undefined && doneJSON.amount_created != undefined) {
-          done = doneJSON.amount_created;
+  context.strokeStyle = "#FF0000";
+  context.lineWidth=0.5;
+  $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
+    $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
+      var done = 0;
+      context.lineWidth = 2;
+      context.strokeStyle = "#00FF00";
+      var doneJSON = JSON.parse(doneData);
+      if (doneJSON != undefined && doneJSON.created != undefined) {
+        done = doneJSON.created.length;
+      }
+      var subViews = JSON.parse(data);
+      for ( var i = 0; i < subViews.SubViews.length; i++) {
+        if ( i == done) {
+          context.strokeStyle = "#FF0000";
         }
-        var subViews = JSON.parse(data);
-        for ( var i = 0; i < subViews.SubViews.length; i++) {
-          if ( i == done) {
-            context.strokeStyle = "#FF0000";
-          }
-          var height = (canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y);
-          var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
-          var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
-          var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
-          context.strokeRect(x, y, width, height);
-        }
-       });
+        var height = (canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y);
+        var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
+        var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
+        var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
+        context.strokeRect(x, y, width, height);
+      }
+     });
     });
 }
 
