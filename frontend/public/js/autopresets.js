@@ -4,6 +4,8 @@ var rows = 2;
 var maxRows = 3;
 var maxColumns = 3;
 var maxLevels = 3;
+var firstPresetCheckInterval;
+var loadSubviewsInterval;
 
 /**
  * Disables default tab click behavior.
@@ -25,8 +27,7 @@ $( ".auto-presets-modal").on("shown.bs.modal", function(e) {
   var streamURL = '/api/backend/camera/' + currentcamera+ '/mjpeg?height=360&width=640';
   image.attr('src', streamURL);
   liveimage.attr('src', streamURL);
-
-  showSubViews();
+  showSubViews($("#previewCanvas").get(0));
 });
 
 /**
@@ -49,28 +50,62 @@ function resetModal() {
 /**
  * Prepares the generating tab showing the progress bar.
  */
-function switchGenerateTab() {
+function switchStepTwoTab() {
   switchTab(2);
 
   $('#auto_presets_div #autopreset_startbutton').attr('class', 'btn hidden');
   $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn hidden');
   $('#auto_presets_div #autopreset_cancelbutton').prop('disabled', true);
+
+  var canvas = document.getElementById('generatingCanvas');
+  showSubViews(canvas);
+  firstPresetCheckInterval = setInterval(setImage, 2000);
 }
 
 /**
+ * 
+ */
+ function setImage() {
+  $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
+    var jsonData = JSON.parse(data);
+    if (jsonData.created != undefined && jsonData.created.length > 0) {
+      $.get("/api/backend/presets/", function(data) {
+        var jsonArray = JSON.parse(data);
+        for ( var i in jsonArray.presets) {
+          if(jsonArray.presets[i].id===jsonData.created[0].id){
+              $('#auto-preset-creation-generation-image').attr('src', "/api/backend" + jsonArray.presets[i].image);
+              clearInterval(firstPresetCheckInterval);
+              loadSubviewsInterval = setInterval(function() { showSubViews( document.getElementById('generatingCanvas')); }, 2000 );
+              return;
+          }
+        }
+      });
+    }
+ });
+}
+/**
  * Prepares the final tab.
  */
-function switchFinalTab(generatedPresets) {
+function switchStepThreeTab(generatedPresets) {
+  clearInterval(loadSubviewsInterval);
   var presetIDs = generatedPresets['presetIDs'];
 
-  for (key in presetIDs) {
-    var preset = findPresetOnID(presetIDs[key]);
-    drawGeneratedPreset(preset);
-  }
+  $.get("/api/backend/presets/getpresets", function(data) {
+    var obj = JSON.parse(data);
+    for (var p in obj.presets) {
+      var preset = obj.presets[p];
+      checkPreset(preset);
+    }
 
-  switchTab(3);
-  $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
-  $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
+    for (key in presetIDs) {
+      var preset = findPresetOnID(presetIDs[key]);
+      drawGeneratedPreset(preset);
+    }
+
+    switchTab(3);
+    $('#auto_presets_div #autopreset_savebutton').attr('class', 'btn');
+    $('#auto_presets_div #autopreset_savebutton').prop('disabled', false);
+  });
 }
 
 
@@ -105,13 +140,13 @@ function autoCreatePresets() {
   var presetTag = $('#auto_preset_tags').val();
   if (currentcamera !== undefined) {
     // Switch to generating view.
-    switchGenerateTab();
+    switchStepTwoTab();
 
     // Update statusbar ever 2sec (2000ms)
     var interval = setInterval(updateProgressbar, 2 * 1000);
     $.get("/api/backend/presets/autocreatepresets?camera="+currentcamera+"&rows="+rows+"&levels="+levels+"&columns="+columns+"&name="+name + "&tags="+presetTag, function(data) {
       clearInterval(interval);
-      switchFinalTab(data);
+      switchStepThreeTab(JSON.parse(data));
     });
 
   }
@@ -124,11 +159,10 @@ function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
     var dataJSON = JSON.parse(data);
     if ( dataJSON.succes === undefined ) {
-      console.log(dataJSON.amount_created);
-      var percentage_done = 100*(dataJSON.amount_created / dataJSON.amount_total);
+      var percentage_done = 100*(dataJSON.created.length / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
                                             .attr("aria-valuenow", percentage_done)
-                                            .text(dataJSON.amount_created + "/" +  dataJSON.amount_total);
+                                            .text(dataJSON.created.length + "/" +  dataJSON.amount_total);
     }
   });
 }
@@ -141,7 +175,7 @@ function increaseColumnAmount(amount) {
   columns = Math.min(columns, maxColumns);
   columns = Math.max(columns, 1);
   $("#columns-amount").val(columns);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
@@ -152,7 +186,7 @@ function increaseRowAmount(amount) {
   rows = Math.min(rows, maxRows);
   rows = Math.max(rows, 1);
   $("#rows-amount").val(rows);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
@@ -163,39 +197,42 @@ function increaseLevelAmount(amount) {
   levels = Math.min(levels, maxLevels);
   levels = Math.max(levels, 1);
   $("#levels-amount").val(levels);
-  showSubViews();
+  showSubViews(document.getElementById("previewCanvas"));
 }
 
 /**
 * Draws the subview rectangles on the canvas with the rectangles provided by the backend.
 */
-function showSubViews() {
-  var canvas = document.getElementById('previewCanvas');
+function showSubViews(canvas) {
   var context = canvas.getContext('2d');
   clearCanvas(canvas);
-    context.strokeStyle = "#FF0000";
-    context.lineWidth=0.5;
-    $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
-      $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
-        var done = 0;
-        context.lineWidth = 2;
-        context.strokeStyle = "#00FF00";
-        var doneJSON = JSON.parse(doneData);
-        if (doneJSON != undefined && doneJSON.amount_created != undefined) {
-          done = doneJSON.amount_created;
+  context.strokeStyle = "#FF0000";
+  context.lineWidth=0.5;
+  $.get("/api/backend/presets/autocreatesubviews?rows="+rows+"&levels="+levels+"&columns="+columns, function(data) {
+    $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(doneData) {
+      var done = 0;
+      context.lineWidth = 2;
+      context.strokeStyle = "#00FF00";
+      var doneJSON = JSON.parse(doneData);
+      if (doneJSON != undefined && doneJSON.created != undefined) {
+        done = doneJSON.created.length;
+      }
+      var subViews = JSON.parse(data);
+      var subviewlist = subViews.SubViews;
+
+      for ( var i = 0; i < subviewlist.length; i++) {
+        
+        if ( i === done) {
+          context.strokeStyle = "#FF0000";
         }
-        var subViews = JSON.parse(data);
-        for ( var i = 0; i < subViews.SubViews.length; i++) {
-          if ( i == done) {
-            context.strokeStyle = "#FF0000";
-          }
-          var height = (canvas.height/100) * (subViews.SubViews[i].topLeft.y  - subViews.SubViews[i].bottomRight.y);
-          var width = (canvas.width/100) * (subViews.SubViews[i].bottomRight.x  - subViews.SubViews[i].topLeft.x);
-          var x = ((canvas.width/100) * (subViews.SubViews[i].topLeft.x));
-          var y = ((canvas.height/100) *  (100 -subViews.SubViews[i].topLeft.y));
-          context.strokeRect(x, y, width, height);
-        }
-       });
+        
+        var height = (canvas.height/100) * (subviewlist[i].topLeft.y  - subviewlist[i].bottomRight.y);
+        var width = (canvas.width/100) * (subviewlist[i].bottomRight.x  - subviewlist[i].topLeft.x);
+        var x = ((canvas.width/100) * (subviewlist[i].topLeft.x));
+        var y = ((canvas.height/100) *  (100 -subviewlist[i].topLeft.y));
+        context.strokeRect(x, y, width, height);
+      }
+     });
     });
 }
 
@@ -253,10 +290,10 @@ function drawGeneratedPreset(preset) {
   var button = $('<div class="button-checkbox btn btn-primary"></div>');
 
   button
-      .append('<img class="img-rounded" src="api/backend' + preset['image'] + '">')
-      .append('<span>' + preset['name'] + '</span>')
+      .append('<img class="img-rounded" src="api/backend' + preset.image + '">')
+      .append('<span>' + preset.name + '</span>')
       .append('<span class="checkicon glyphicon glyphicon-unchecked"></span>')
-      .append('<input presetid="' + preset['id'] + '" type="checkbox" class="hidden" />');
+      .append('<input presetid="' + preset.id + '" type="checkbox" class="hidden" />');
 
   button.click(check);
   li.append(button);
@@ -272,7 +309,15 @@ function deleteUnselectedPresets() {
     var presetid = checkbox.attr('presetid');
 
     if (!checkbox.is(':checked')) {
-      findPresetOnID(presetid).delete();
+      var p = findPresetOnID(presetid)
+      p.delete();
+
+      var index = presets.indexOf(p);
+
+      if (index > -1) {
+        presets.splice(index, 1);
+      }
+
     };
   });
   $('#autopreset-generated').empty();

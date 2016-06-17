@@ -61,13 +61,12 @@ public class AutoPresetCreationHandler extends AutoPresetHandler  {
       JSONObject jsonObject = new JSONObject();
       JSONArray idsJson = new JSONArray();
       for (int i = 0; i < presets.size(); i++) {
-        presets.get(i).setName(name + i);
+        presets.get(i).setName(name + " " + i);
         getPresetController().updatePreset(presets.get(i));
       }
       
       presets.forEach(preset -> idsJson.add(preset.getId()));
       jsonObject.put("presetIDs", idsJson);
-      creators.remove(cam.getId());
       respond(request, httpServletResponse, jsonObject.toJSONString());
     } catch (CameraConnectionException | InterruptedException
             | TimeoutException | StreamNotAvailableException | SQLException e ) {

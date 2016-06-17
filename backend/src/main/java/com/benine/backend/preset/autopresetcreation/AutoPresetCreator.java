@@ -25,7 +25,7 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private PresetController presetController;
-  private int generatedPresets;
+  private volatile ArrayList<IPCameraPreset> generatedPresets = new ArrayList<>();
   
   /**
    * Creates a new AutoPresetCreator object.
@@ -65,9 +65,8 @@ public abstract class AutoPresetCreator {
     for (ZoomPosition pos : generatePositions(cam, subViews)) {
       cam.setInUse();
       IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
-      presetController.addPreset(currentPreset);
       presets.add(currentPreset);
-      generatedPresets++;
+      generatedPresets.add(currentPreset);
     }
     cam.setBusy(false);
     return presets;
@@ -113,7 +112,7 @@ public abstract class AutoPresetCreator {
    * @return A collection of positions.
    * @throws CameraConnectionException when the camera cannot be reached.
    */
-  protected abstract ArrayList<ZoomPosition> generatePositions(IPCamera cam,
+  protected abstract Collection<ZoomPosition> generatePositions(IPCamera cam,
                                                                 Collection<SubView> subViews)
           throws CameraConnectionException;
 
@@ -130,7 +129,7 @@ public abstract class AutoPresetCreator {
    * Getter for amount subviews already created.
    * @return Amount of created presets.
    */
-  public int getGeneratedPresetsAmount() {
+  public ArrayList<IPCameraPreset> getGeneratedPresets() {
     return generatedPresets;
   }
 

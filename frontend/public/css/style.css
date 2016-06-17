@@ -692,7 +692,7 @@ input[type=range]:focus {
     width: 45%;
 }
 
-#auto-preset-creation-preview-image {
+#auto-preset-creation-preview-image, #auto-preset-creation-generation-image {
     margin: 0;
     padding: 0;
     position: relative;
@@ -701,18 +701,28 @@ input[type=range]:focus {
     height: auto;
 }
 
-#auto-preset-creation-live-image {
-    margin-top: 15px;
-    margin-bottom: 30px;
+#auto-preset-creation-generation-image, #auto-preset-creation-live-image {
     padding: 0;
     position: relative;
     z-index: 1;
-    width: 60%;
-    height: auto;
 }
 
 #auto_presets_div .progress {
     width: 80%;
+}
+
+#autopreset_step2 .row {
+    margin-top: 15px;
+}
+
+#generatingCanvas {
+    top: 0;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
 }
 
 #previewCanvas {
