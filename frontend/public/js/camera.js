@@ -74,13 +74,21 @@ Camera.prototype = {
 			iris.hide();
 		} else {
 			iris.show();
-			iris.find("#auto_iris").prop('checked', this.autoIris);
+			if (this.autoIris) {
+				iris.find("#auto_iris").bootstrapToggle('on');
+			} else {
+				iris.find("#auto_iris").bootstrapToggle('off');
+			}
 		}
 		if (this.autoFocus === undefined) {
 			focus.hide();
 		} else {
 			focus.show();
-			focus.find("#auto_focus").prop('checked', this.autoFocus);
+			if (this.autoFocus) {
+				focus.find("#auto_focus").bootstrapToggle('on');
+			} else {
+				focus.find("#auto_focus").bootstrapToggle('off');
+			}
 		}
 	}
 };

@@ -121,8 +121,8 @@ var focusInput = {value:0, send:false, lastSend: 0};
 * @param focus value of the new input.
 */
 function inputfocusslider(f) {
-	$('#auto_focus').addClass("btn-danger");
-	$('#auto_focus').removeClass("btn-success");
+	$('#auto_focus').bootstrapToggle('off');
+	findCameraOnID(currentcamera).autoFocus = false;
 	inputRecieved(sendFocus, focusInput, f);
 }
 
@@ -150,8 +150,8 @@ var irisInput = {value:0, send:false, lastSend: 0};
 * @param iris value of the new input.
 */
 function inputirisslider(i) {
-	$('#auto_iris').addClass("btn-danger");
-	$('#auto_iris').removeClass("btn-success");
+	$('#auto_iris').bootstrapToggle('off');
+	findCameraOnID(currentcamera).autoIris = false;
 	inputRecieved(sendIris, irisInput, i);
 }
 
@@ -194,6 +194,7 @@ function releaseSlider(fun, input) {
 $(function() {
 	var toggle = $('#auto_focus');
 	toggle.change(function() {
+		findCameraOnID(currentcamera).autoFocus = false;
 		$.get("/api/backend/camera/"+ currentcamera + "/focus?autoFocusOn=" + toggle.prop('checked'), function(data) {});
 	});
 });
@@ -204,6 +205,7 @@ $(function() {
 $(function() {
 	var toggle = $('#auto_iris');
 	toggle.change(function() {
+		findCameraOnID(currentcamera).autoIris = false;
 		$.get("/api/backend/camera/"+ currentcamera + "/iris?autoIrisOn=" + toggle.prop('checked'), function(data) {});
 	});
 });
