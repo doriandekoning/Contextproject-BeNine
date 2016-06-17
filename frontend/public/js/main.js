@@ -7,9 +7,10 @@ var editingpreset;
 // Document is ready, we can now manipulate it.
 $(document).ready(function() {
 	
-	// Load the available cameras and presets.
+	// Load the available cameras, presets and performances.
 	loadCameras(function() {
 		loadPresets();
+		loadPerformances();
 	});
 
 	// Update server status every 2 seconds
@@ -19,10 +20,7 @@ $(document).ready(function() {
 	setInterval(loadPresets, 5 * 1000);
 
 	//Check cameras inuse.
-	setInterval(checkCamerasInUse, 2000);
-
-	// Load the available perforamnces from the backend.
-	loadPerformances();
+	setInterval(checkCamerasInUse, 2000);	
 
 	Holder.run({});
 	console.log('Page has loaded successfully.');
