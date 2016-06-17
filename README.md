@@ -16,13 +16,18 @@ Running the front-end server:
 ### Back end
 Build the back-end server using `maven install` with the supplied `pom.xml` file. 
 
-### Deployable zip
+### Build deployable zip
 #####Unix systems:
-Run the `install.sh` script, this generates a zip file, extract this zip file to the desired location on your system. The servers can then be started by executing the `install.sh` script.
+Run the `install.sh` script, this generates a zip file, extract this zip file to the desired location on your system. The servers can then be started by executing the `startserver.sh` script.
+
 #####Other systems:
 First, fetch the dependencies for the front-end server using `npm install`, then build the back-end server using `maven install` with the supplied `pom.xml` file. 
 The zip file containing the backend and frontend server can be found in the `backend/target` folder.
 When unzipped the backend and frontend server can both be started using the `startserver.cmd` batch file.
+
+### Run deployable zip
+If a zip file is distributed, or downloaded with a release this zip file should run out of the box.
+Depending on your system, run `startserver.sh` (Unix) or `startserver.cmd` (Windows).
 
 ## Tool results
 ### JavaScript
