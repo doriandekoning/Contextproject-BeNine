@@ -79,6 +79,7 @@ Preset.prototype = {
 		this.pan = newpreset.pan;
 		this.tilt = newpreset.tilt;
 		this.zoom = newpreset.zoom;
+		this.name = newpreset.name;
 		this.focus = newpreset.focus;
 		this.iris = newpreset.iris;
 		this.autofocus = newpreset.autofocus;
