@@ -40,6 +40,8 @@ public class PresetPyramidCreator extends AutoPresetCreator {
   }
 
   @Override
+  @SuppressWarnings("PMD.UselessParentheses")
+  //The parentheses increase the readability of the formulas.
   protected Collection<ZoomPosition> generatePositions(IPCamera cam, Collection<SubView> subViews)
           throws CameraConnectionException {
     ArrayList<ZoomPosition> positions = new ArrayList<>();
