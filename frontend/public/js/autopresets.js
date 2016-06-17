@@ -225,7 +225,7 @@ function showSubViews(canvas) {
         if ( i === done) {
           context.strokeStyle = "#FF0000";
         }
-
+        
         var height = (canvas.height/100) * (subviewlist[i].topLeft.y  - subviewlist[i].bottomRight.y);
         var width = (canvas.width/100) * (subviewlist[i].bottomRight.x  - subviewlist[i].topLeft.x);
         var x = ((canvas.width/100) * (subviewlist[i].topLeft.x));
