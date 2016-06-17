@@ -39,11 +39,10 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_created", creator.getGeneratedPresetsAmount());
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
-      AutoPresetCreationHandler.getCreators().get(cam.getId());
-      succes = true;
+    } else {
+      respond(request, httpServletResponse, succes);
     }
     AutoPresetCreationHandler.getCreators().remove(cam.getId());
-    respond(request, httpServletResponse, succes);
     request.setHandled(true);
   }
 
