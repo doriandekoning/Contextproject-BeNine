@@ -25,7 +25,7 @@ public abstract class AutoPresetCreator {
 
   private static long timeout = 5000;
   private PresetController presetController;
-  private int generatedPresets;
+  private volatile ArrayList<IPCameraPreset> generatedPresets = new ArrayList<>();
   
   /**
    * Creates a new AutoPresetCreator object.
@@ -67,7 +67,7 @@ public abstract class AutoPresetCreator {
       IPCameraPreset currentPreset = generatePresetFromPos(pos,cam);
       presetController.addPreset(currentPreset);
       presets.add(currentPreset);
-      generatedPresets++;
+      generatedPresets.add(currentPreset);
     }
     cam.setBusy(false);
     return presets;
@@ -101,7 +101,6 @@ public abstract class AutoPresetCreator {
     IPCameraPreset preset = new IPCameraPreset(pos, new FocusValue(0, true),
                                           new IrisValue(0, true), cam.getId());
     cam.setBusy(true);
-    presetController.addPreset(preset);
     presetController.createImage(preset);
     return preset;
   }
@@ -131,7 +130,7 @@ public abstract class AutoPresetCreator {
    * @return Amount of created presets.
    */
   public int getGeneratedPresetsAmount() {
-    return generatedPresets;
+    return generatedPresets.size();
   }
 
 
