@@ -26,8 +26,7 @@ The zip file containing the backend and frontend server can be found in the `bac
 When unzipped the backend and frontend server can both be started using the `startserver.cmd` batch file.
 
 ### Run deployable zip
-If a zip file is distributed, or downloaded with a release this zip file should run out of the box.
-Depending on your system, run `startserver.sh` (Unix) or `startserver.cmd` (Windows).
+If a zip file is distributed, or downloaded with a release this zip file should run out of the box. Update the config file according to your configuration details. Depending on your system, run `startserver.sh` (Unix) or `startserver.cmd` (Windows) to start the server.
 
 ## Tool results
 ### JavaScript
