@@ -27,7 +27,7 @@ public class RecallPresetHandler extends PresetRequestHandler {
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
-    boolean succes = false;
+    boolean success = false;
     
     try {
       int presetID = Integer.parseInt(request.getParameter("presetid"));
@@ -35,7 +35,7 @@ public class RecallPresetHandler extends PresetRequestHandler {
       Preset preset = getPreset(presetID);
 
       preset.excecutePreset(getCameraController());
-      succes = true;
+      success = true;
 
     } catch (CameraConnectionException e) {
       getLogger().log("Error connectiong to camera", e);
@@ -45,7 +45,7 @@ public class RecallPresetHandler extends PresetRequestHandler {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
     }
     
-    respond(request, res, succes);
+    respond(request, res, success);
     request.setHandled(true);
   }
 

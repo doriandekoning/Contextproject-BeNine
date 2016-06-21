@@ -2,15 +2,12 @@ package com.benine.backend.http;
 
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
-import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 import org.eclipse.jetty.server.Request;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,11 +26,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    Boolean succes = false;
+    Boolean success = false;
     String camID = request.getParameter("camera");
     Camera cam = getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
-      respond(request, httpServletResponse, succes);
+      respond(request, httpServletResponse, success);
       request.setHandled(true);
       return;
     }
@@ -47,7 +44,7 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
     } else {
-      respond(request, httpServletResponse, succes);
+      respond(request, httpServletResponse, success);
     }
     request.setHandled(true);
   }

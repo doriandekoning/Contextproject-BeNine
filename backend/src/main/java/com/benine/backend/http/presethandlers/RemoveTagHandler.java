@@ -26,12 +26,12 @@ public class RemoveTagHandler extends PresetRequestHandler {
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
     String tagName = request.getParameter("name");
-    Boolean succes = false;
+    Boolean success = false;
     if (tagName != null) {
       getPresetController().removeTag(tagName);
-      succes = true;
+      success = true;
     }
-    respond(request, httpServletResponse, succes);
+    respond(request, httpServletResponse, success);
     request.setHandled(true);
 
   }
