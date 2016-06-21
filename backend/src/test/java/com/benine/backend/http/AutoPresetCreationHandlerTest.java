@@ -33,7 +33,7 @@ public class AutoPresetCreationHandlerTest extends AutoPresetHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -52,7 +52,7 @@ public class AutoPresetCreationHandlerTest extends AutoPresetHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -70,7 +70,7 @@ public class AutoPresetCreationHandlerTest extends AutoPresetHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 }

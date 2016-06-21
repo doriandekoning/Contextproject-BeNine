@@ -2,14 +2,12 @@ package com.benine.backend.http.camerahandlers;
 
 import com.benine.backend.camera.Camera;
 import com.benine.backend.camera.CameraBusyException;
-import com.benine.backend.http.camerahandlers.SetCameraInUseHandler;
-
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
+import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
 
@@ -38,7 +36,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
 
-    verify(out).write("{\"succes\":\"true\"}");
+    verify(out).write("{\"success\":\"true\"}");
     verify(cam).setInUse();
     verify(requestMock).setHandled(true);
   }
@@ -57,7 +55,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
     when(cam.isInUse()).thenReturn(false);
-    verify(out).write("{\"succes\":\"true\"}");
+    verify(out).write("{\"success\":\"true\"}");
     verify(cam).setNotInUse();
     verify(requestMock).setHandled(true);
   }
@@ -71,7 +69,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(cam, never()).setInUse();
     verify(requestMock).setHandled(true);
   }
@@ -87,7 +85,7 @@ public class SetCameraInUseHandlerTest  extends CameraRequestHandlerTest {
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(cam, never()).setInUse();
     verify(requestMock).setHandled(true);
   }

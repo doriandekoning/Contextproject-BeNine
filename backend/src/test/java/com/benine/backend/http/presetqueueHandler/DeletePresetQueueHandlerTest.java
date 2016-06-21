@@ -1,17 +1,15 @@
 package com.benine.backend.http.presetqueueHandler;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-
 import com.benine.backend.camera.CameraBusyException;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.benine.backend.http.presetqueue.DeletePresetQueueHandler;
 import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
 import com.benine.backend.performance.PresetQueue;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.mockito.Mockito.*;
 
 public class DeletePresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
@@ -44,7 +42,7 @@ public class DeletePresetQueueHandlerTest extends PresetQueueRequestHandlerTest 
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }

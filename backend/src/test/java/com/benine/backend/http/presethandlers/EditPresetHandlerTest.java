@@ -5,11 +5,7 @@ import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-
-import com.benine.backend.http.presethandlers.EditPresetHandler;
-
 import com.benine.backend.camera.ipcameracontrol.IrisValue;
-
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.video.MJPEGStreamReader;
 import com.benine.backend.video.Stream;
@@ -156,7 +152,7 @@ public class EditPresetHandlerTest extends PresetRequestHandlerTest {
     doThrow(exception).when(presetController).updatePreset(any());
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -177,7 +173,7 @@ public class EditPresetHandlerTest extends PresetRequestHandlerTest {
     when(ipcamera.createPreset(any(), any())).thenThrow(exception);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -198,7 +194,7 @@ public class EditPresetHandlerTest extends PresetRequestHandlerTest {
     when(ipcamera.createPreset(any(), any())).thenThrow(exception);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 }

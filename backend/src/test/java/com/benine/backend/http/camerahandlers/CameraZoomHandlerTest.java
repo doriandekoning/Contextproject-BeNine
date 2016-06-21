@@ -3,8 +3,6 @@ package com.benine.backend.http.camerahandlers;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.ZoomingCamera;
-import com.benine.backend.http.camerahandlers.CameraZoomHandler;
-
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +71,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
@@ -90,7 +88,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
@@ -106,7 +104,7 @@ public class CameraZoomHandlerTest extends CameraRequestHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }

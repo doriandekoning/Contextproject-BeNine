@@ -4,7 +4,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.Position;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.http.presethandlers.RecallPresetHandler;
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -18,7 +17,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 
 import static org.mockito.Mockito.*;
@@ -81,7 +79,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -90,7 +88,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"true\"}");
+    verify(out).write("{\"success\":\"true\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -99,7 +97,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
     verify(preset).excecutePreset(cameraController);
-    verify(out).write("{\"succes\":\"true\"}");
+    verify(out).write("{\"success\":\"true\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -109,7 +107,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -119,7 +117,7 @@ public class RecallPresetTest extends PresetRequestHandlerTest {
     recall();
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 

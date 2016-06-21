@@ -122,14 +122,14 @@ public abstract class RequestHandlerTest {
 
   @Test
   public void testResponseMessageTrueMessage() throws Exception {
-    String response = "{\"succes\":\"true\"}";
+    String response = "{\"success\":\"true\"}";
     handler.respond(requestMock, httpresponseMock, true);
     verify(out).write(response);
   }
 
   @Test
   public void testResponseMessageFalseMessage() throws Exception {
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     handler.respond(requestMock, httpresponseMock, false);
     verify(out).write(response);
   }

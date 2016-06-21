@@ -3,8 +3,6 @@ package com.benine.backend.http.camerahandlers;
 import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.IrisCamera;
-import com.benine.backend.http.camerahandlers.CameraIrisHandler;
-
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +87,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
   }
   
@@ -104,7 +102,7 @@ public class CameraIrisHandlerTest extends CameraRequestHandlerTest {
     doThrow(new CameraConnectionException("test exception", 0)).when(cam).setIrisPosition(eq(3));
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
   }
 
