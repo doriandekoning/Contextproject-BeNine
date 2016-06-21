@@ -26,11 +26,11 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
   @Override
   public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                      HttpServletResponse httpServletResponse) throws IOException, ServletException {
-    Boolean succes = false;
+    Boolean success = false;
     String camID = request.getParameter("camera");
     Camera cam = getCameraById(Integer.parseInt(camID));
     if (!(cam instanceof IPCamera )) {
-      respond(request, httpServletResponse, succes);
+      respond(request, httpServletResponse, success);
       request.setHandled(true);
       return;
     }
@@ -43,7 +43,7 @@ public class AutoPresetCreationStatusHandler extends AutoPresetHandler  {
       object.put("amount_total", creator.getTotalAmountPresets());
       respond(request, httpServletResponse, object.toString());
     } else {
-      respond(request, httpServletResponse, succes);
+      respond(request, httpServletResponse, success);
     }
     request.setHandled(true);
   }

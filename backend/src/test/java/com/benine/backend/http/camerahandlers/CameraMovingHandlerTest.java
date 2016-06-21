@@ -4,8 +4,6 @@ import com.benine.backend.camera.CameraBusyException;
 import com.benine.backend.camera.CameraConnectionException;
 import com.benine.backend.camera.MovingCamera;
 import com.benine.backend.camera.Position;
-import com.benine.backend.http.camerahandlers.CameraMovingHandler;
-
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +83,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
@@ -100,7 +98,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
@@ -122,7 +120,7 @@ public class CameraMovingHandlerTest extends CameraRequestHandlerTest{
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }

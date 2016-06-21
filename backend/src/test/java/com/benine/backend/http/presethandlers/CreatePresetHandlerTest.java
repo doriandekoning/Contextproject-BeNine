@@ -1,13 +1,13 @@
 package com.benine.backend.http.presethandlers;
 
-import com.benine.backend.camera.*;
+import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.camera.CameraConnectionException;
+import com.benine.backend.camera.Position;
+import com.benine.backend.camera.SimpleCamera;
+import com.benine.backend.camera.ZoomPosition;
 import com.benine.backend.camera.ipcameracontrol.FocusValue;
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-
-import com.benine.backend.http.presethandlers.CreatePresetHandler;
-
 import com.benine.backend.camera.ipcameracontrol.IrisValue;
-
 import com.benine.backend.preset.IPCameraPreset;
 import com.benine.backend.preset.Preset;
 import com.benine.backend.video.MJPEGStreamReader;
@@ -137,7 +137,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -151,7 +151,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -161,7 +161,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
 
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -176,7 +176,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
     doThrow(exception).when(presetController).addPreset(any());
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -191,7 +191,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
     when(ipcamera.createPreset(any(), any())).thenThrow(exception);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
   
@@ -206,7 +206,7 @@ public class CreatePresetHandlerTest extends PresetRequestHandlerTest {
     when(ipcamera.createPreset(any(), any())).thenThrow(exception);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 }

@@ -32,7 +32,7 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
     Camera cam = getCameraController().getCameraById(camID);
 
     String using = request.getParameter("inuse");
-    Boolean succes = true;
+    Boolean success = true;
     
     if (using != null && isAllowed(cam)) {
       if (Boolean.parseBoolean(using)) {
@@ -41,10 +41,10 @@ public class SetCameraInUseHandler extends CameraRequestHandler {
         cam.setNotInUse();
       }
     } else {
-      succes = false;
+      success = false;
     }
     
-    respond(request, res, succes);
+    respond(request, res, success);
     request.setHandled(true);
   }
 

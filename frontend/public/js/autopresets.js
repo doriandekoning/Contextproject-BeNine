@@ -158,7 +158,7 @@ function autoCreatePresets() {
 function updateProgressbar() {
   $.get("/api/backend/presets/autocreatepresetsstatus?camera=" + currentcamera, function(data) {
     var dataJSON = JSON.parse(data);
-    if ( dataJSON.succes === undefined ) {
+    if ( dataJSON.success === undefined ) {
       var percentage_done = 100*(dataJSON.created.length / dataJSON.amount_total);
       $("#auto-preset-creation-progressbar").css('width', percentage_done + "%")
                                             .attr("aria-valuenow", percentage_done)

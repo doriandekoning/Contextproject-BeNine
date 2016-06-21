@@ -34,7 +34,7 @@ public class EditPresetHandler extends PresetRequestHandler {
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
-    Boolean succes = true;
+    Boolean success = true;
     try {
       final String overwriteTag = request.getParameter("overwritetag");
       final String overwritePosition = request.getParameter("overwriteposition");
@@ -58,18 +58,18 @@ public class EditPresetHandler extends PresetRequestHandler {
       }
       getPresetController().updatePreset(preset);
       
-      succes = false;
+      success = false;
     } catch (SQLException e) {
       getLogger().log(e.getMessage(), e);
-      succes = false;
+      success = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", e);
-      succes = false;
+      success = false;
     }  catch (CameraBusyException e) {
       getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } finally {
-      respond(request, res, succes);
+      respond(request, res, success);
       request.setHandled(true);
     }
   }

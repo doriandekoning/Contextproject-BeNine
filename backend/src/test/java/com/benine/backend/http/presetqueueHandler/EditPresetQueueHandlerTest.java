@@ -1,18 +1,16 @@
 package com.benine.backend.http.presetqueueHandler;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-
 import com.benine.backend.camera.CameraBusyException;
+import com.benine.backend.http.presetqueue.EditPresetQueueHandler;
+import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
+import com.benine.backend.performance.PresetQueue;
 import org.eclipse.jetty.util.MultiMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.http.presetqueue.EditPresetQueueHandler;
-import com.benine.backend.http.presetqueue.PresetQueueRequestHandler;
-import com.benine.backend.performance.PresetQueue;
+import java.io.IOException;
+
+import static org.mockito.Mockito.*;
 
 public class EditPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
   
@@ -49,7 +47,7 @@ public class EditPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }
@@ -60,7 +58,7 @@ public class EditPresetQueueHandlerTest extends PresetQueueRequestHandlerTest {
     
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    String response = "{\"succes\":\"false\"}";
+    String response = "{\"success\":\"false\"}";
     verify(out).write(response);
     verify(requestMock).setHandled(true);
   }

@@ -1,22 +1,10 @@
 package com.benine.backend.http;
 
 import com.benine.backend.camera.ipcameracontrol.IPCamera;
-import com.benine.backend.preset.PresetController;
-import com.benine.backend.preset.autopresetcreation.AutoPresetCreator;
-import com.benine.backend.preset.autopresetcreation.PresetPyramidCreator;
-import com.benine.backend.preset.autopresetcreation.SubView;
 import org.eclipse.jetty.util.MultiMap;
-import org.json.simple.JSONObject;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.mockito.Matchers.matches;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  *
@@ -31,7 +19,7 @@ public class AutoCreationStatusHandlerTest extends AutoPresetHandlerTest {
     setParameters(parameters);
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 
@@ -47,7 +35,7 @@ public class AutoCreationStatusHandlerTest extends AutoPresetHandlerTest {
     when(cameraController.getCameraById(2345345)).thenReturn(mock(IPCamera.class));
     getHandler().handle(target, requestMock, httprequestMock, httpresponseMock);
 
-    verify(out).write("{\"succes\":\"false\"}");
+    verify(out).write("{\"success\":\"false\"}");
     verify(requestMock).setHandled(true);
   }
 

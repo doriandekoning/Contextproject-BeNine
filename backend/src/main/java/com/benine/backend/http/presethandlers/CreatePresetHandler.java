@@ -34,7 +34,7 @@ public class CreatePresetHandler extends PresetRequestHandler {
   @Override
   public void handle(String s, Request request, HttpServletRequest req, HttpServletResponse res)
           throws IOException, ServletException {
-    Boolean succes = true;
+    Boolean success = true;
     try {
       String camID = request.getParameter("camera");
       if (camID == null) {
@@ -63,18 +63,18 @@ public class CreatePresetHandler extends PresetRequestHandler {
       }
     } catch (MalformedURIException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } catch (SQLException e) {
       getLogger().log(e.getMessage(), LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera.", LogEvent.Type.CRITICAL);
-      succes = false;
+      success = false;
     } catch (CameraBusyException e) {
       getLogger().log("Camera is busy.", LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } finally {
-      respond(request, res, succes);
+      respond(request, res, success);
       request.setHandled(true);
     }
   }

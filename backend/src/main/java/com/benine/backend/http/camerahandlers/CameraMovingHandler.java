@@ -31,23 +31,23 @@ public class CameraMovingHandler extends CameraRequestHandler {
     int camID = getCameraId(request);
 
     MovingCamera movingCam = (MovingCamera) getCameraController().getCameraById(camID);
-    Boolean succes = true;
+    Boolean success = true;
     try {
       move(movingCam, request);
     } catch (MalformedURIException e) {
       getLogger().log("Malformed URI: " + request.getRequestURI(), LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } catch (CameraConnectionException e) {
       getLogger().log("Cannot connect to camera: " + movingCam.getId(), LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } catch (NumberFormatException e) {
       getLogger().log(e.toString(), LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     } catch (CameraBusyException e) {
       getLogger().log("Trying to move busy camera with id: " + camID, LogEvent.Type.WARNING);
-      succes = false;
+      success = false;
     }
-    respond(request, res, succes);
+    respond(request, res, success);
     request.setHandled(true);
   }
 
