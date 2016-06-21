@@ -72,6 +72,7 @@ Logger.prototype.logMessage = function (level, message, logger_path) {
     } else {
         fs.appendFile(logger_path, this.formatLog(level, message) + '\n', function (err) {
             if (err) throw err;
+            console.log(message);
         });
     }
 };
