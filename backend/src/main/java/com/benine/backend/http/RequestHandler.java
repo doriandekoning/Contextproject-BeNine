@@ -54,9 +54,9 @@ public abstract class RequestHandler extends AbstractHandler {
    */
   public void respond(Request request, HttpServletResponse response, Boolean succes) {
     if (succes) {
-      respond(request, response, "{\"succes\":\"true\"}");
+      respond(request, response, "{\"success\":\"true\"}");
     } else {
-      respond(request, response, "{\"succes\":\"false\"}");
+      respond(request, response, "{\"success\":\"false\"}");
     }
   
   }
