@@ -194,6 +194,9 @@ public class IpcameraTest extends BasicCameraTest {
     JSONObject json = new JSONObject();
     json.put("id", -1);
     json.put("inuse", false);
+    json.put("address", "test");
+    json.put("streamaddress", "http://test/cgi-bin/mjpeg");
+    json.put("type", "ipcamera");
     json.put("move", true);
     json.put("zoom", true);
     json.put("focus", true);

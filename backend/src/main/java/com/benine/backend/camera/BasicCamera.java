@@ -21,14 +21,18 @@ public abstract class BasicCamera implements Camera {
   
   private long inUseTimeOut;
 
+  private String cameraType;
+
   /**
    * Constructor for a Basic Camera.
-   * @param type The streamType of this camera.
+   * @param streamType The streamType of this camera.
+   * @param cameraType The cameraType of this camera.
    */
-  public BasicCamera(StreamType type) {
+  public BasicCamera(String cameraType, StreamType streamType) {
     this.id = -1;
-    this.streamtype = type;
+    this.streamtype = streamType;
     this.inUse = false;
+    this.cameraType = cameraType;
   }
 
   /**
@@ -49,12 +53,19 @@ public abstract class BasicCamera implements Camera {
 
   /**
    * Get the ID of this camera.
-   * @return ID of this camra.
+   * @return ID of this camera.
    */
   public int getId() {
     return this.id;
   }
 
+  /**
+   * Get the camera type of this camera.
+   * @return ID of this camera.
+   */
+  public String getCameraType() {
+    return this.cameraType;
+  }
 
   /**
    * Get the Stream Type of this camera.

@@ -56,7 +56,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    *  @param cameraController that controls this camera.
    */
   public IPCamera(String ip, CameraController cameraController) {
-    super(StreamType.MJPEG);
+    super("ipcamera", StreamType.MJPEG);
     ipaddress = ip;
     logger = cameraController.getLogger();
     config = cameraController.getConfig();
@@ -444,6 +444,9 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     logger.log("JSON representation requested for camera " + getId(), LogEvent.Type.INFO);
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
+    json.put("type", getCameraType());
+    json.put("address", ipaddress);
+    json.put("streamaddress", getStreamLink());
     json.put("inuse", isInUse());
     json.put("move", true);
     json.put("zoom", true);

@@ -1,15 +1,13 @@
 package com.benine.backend.camera;
 
+import com.benine.backend.video.StreamType;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.benine.backend.video.StreamType;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import org.json.simple.JSONObject;
 
 /**
  * Created on 5-5-16.
@@ -47,6 +45,9 @@ public class SimpleCameraTest extends BasicCameraTest {
     JSONObject expectedJSON = new JSONObject();
     expectedJSON.put("id", 3);
     expectedJSON.put("inuse", false);
+    expectedJSON.put("address", "something");
+    expectedJSON.put("streamaddress", "something");
+    expectedJSON.put("type", "simplecamera");
     Assert.assertEquals(expectedJSON, simpleCamera.toJSON());
   }
   
