@@ -46,6 +46,7 @@ public class SimpleCameraTest extends BasicCameraTest {
     expectedJSON.put("id", 3);
     expectedJSON.put("inuse", false);
     expectedJSON.put("address", "something");
+    expectedJSON.put("streamaddress", "something");
     expectedJSON.put("type", "simplecamera");
     Assert.assertEquals(expectedJSON, simpleCamera.toJSON());
   }

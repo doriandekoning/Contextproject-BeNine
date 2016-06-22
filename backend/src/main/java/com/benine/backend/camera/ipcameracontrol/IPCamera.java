@@ -445,7 +445,8 @@ public class IPCamera extends BasicCamera implements MovingCamera,
     JSONObject json = new JSONObject();
     json.put("id", this.getId());
     json.put("type", getCameraType());
-    json.put("address", getStreamLink());
+    json.put("address", ipaddress);
+    json.put("streamaddress", getStreamLink());
     json.put("inuse", isInUse());
     json.put("move", true);
     json.put("zoom", true);

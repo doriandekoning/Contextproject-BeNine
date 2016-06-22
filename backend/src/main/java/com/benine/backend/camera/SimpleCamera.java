@@ -34,6 +34,7 @@ public class SimpleCamera extends BasicCamera implements PresetCamera {
     object.put("id", getId());
     object.put("type", getCameraType());
     object.put("address", getStreamLink());
+    object.put("streamaddress", getStreamLink());
     object.put("inuse", isInUse());
     return object;
   }
