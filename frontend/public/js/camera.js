@@ -9,7 +9,8 @@ function Camera(newCam) {
 	this.autoIris = newCam.autoiris;
 	this.zoom = newCam.zoom;
 	this.move = newCam.move;
-	this.img = $('<img src="/api/backend/camera/' + this.id + '/mjpeg" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
+	this.streamlink = newCam.streamaddress;
+	this.img = $('<img src="' + this.streamlink + '" data-src="holder.js/246x144?auto=yes&text=Camera ' + this.id + ' unavailable&bg=8b8b8b">');
 }
 Camera.prototype = {
 	
@@ -22,7 +23,7 @@ Camera.prototype = {
 		camera_div.attr("camera_number", this.id);
 		camera_div.find('.camera_status').attr('class', 'camera_status available');
 		camera_img = camera_div.find('img');
-		camera_img.attr('src', '/api/backend/camera/' + this.id + '/mjpeg');
+		camera_img.attr('src', this.streamlink );
 		camera_img.load(function() {
 			if ($(this).attr("alt") === undefined) {
 				camera_div.attr("onclick", 'switchCurrentView($(this).attr("camera_number"))');
@@ -39,7 +40,7 @@ Camera.prototype = {
 	*/
 	createView: function() {
 		camera_div = $('#preset_create_div');
-		camera_div.find('img').attr("src", '/api/backend/camera/' + this.id + '/mjpeg');
+		camera_div.find('img').attr("src", this.streamlink);
 		camera_div.find('#create_preset_name').val('');
 	},
 	
