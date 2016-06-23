@@ -128,7 +128,7 @@ public class IpcameraTest extends BasicCameraTest {
   @Test
   public final void testGetStreamLink() {
     String res = camera.getStreamLink();
-    assertEquals(res, "http://test/cgi-bin/mjpeg");
+    assertEquals(res, "http://test/cgi-bin/mjpeg?resolution=640x360&framerate=30");
   }
   
   @Test(expected = IpcameraConnectionException.class)
@@ -195,7 +195,7 @@ public class IpcameraTest extends BasicCameraTest {
     json.put("id", -1);
     json.put("inuse", false);
     json.put("address", "test");
-    json.put("streamaddress", "http://test/cgi-bin/mjpeg");
+    json.put("streamaddress", "http://test/cgi-bin/mjpeg?resolution=640x360&framerate=30");
     json.put("type", "ipcamera");
     json.put("move", true);
     json.put("zoom", true);
