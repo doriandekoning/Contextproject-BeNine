@@ -386,7 +386,7 @@ public class IPCamera extends BasicCamera implements MovingCamera,
    * @return URL in string format.
    */
   public String getStreamLink() {
-    return "http://" + ipaddress + "/cgi-bin/mjpeg";
+    return "http://" + ipaddress + "/cgi-bin/mjpeg?resolution=640x360&framerate=30";
   }
   
   /**
